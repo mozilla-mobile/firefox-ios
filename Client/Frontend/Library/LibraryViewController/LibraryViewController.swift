@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import UIKit
@@ -68,7 +68,7 @@ class LibraryViewController: UIViewController {
     }()
 
     fileprivate lazy var bottomRightButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
+        let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
         button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
         return button
     }()
@@ -154,7 +154,7 @@ class LibraryViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        ThemeManager.instance.statusBarStyle
+        LegacyThemeManager.instance.statusBarStyle
     }
 
     private func setupNotifications() {
@@ -349,7 +349,7 @@ class LibraryViewController: UIViewController {
         case .bookmarks(state: .inFolderEditMode):
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
-            topRightButton.title = Strings.SettingsAddCustomEngineSaveButtonText
+            topRightButton.title = .SettingsAddCustomEngineSaveButtonText
             navigationItem.rightBarButtonItem = topRightButton
         default:
             topRightButton.title = String.AppSettingsDone
@@ -370,7 +370,7 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: let subState):
             if subState == .inFolder {
-                bottomRightButton.title = Strings.BookmarksEdit
+                bottomRightButton.title = .BookmarksEdit
             } else if subState == .inFolderEditMode {
                 bottomRightButton.title = String.AppSettingsDone
             }
@@ -476,12 +476,11 @@ class LibraryViewController: UIViewController {
 }
 
 // MARK: UIAppearance
-extension LibraryViewController: Themeable {
+extension LibraryViewController: NotificationThemeable {
     @objc func applyTheme() {
         viewModel.panelDescriptors.forEach { item in
-            (item.viewController as? Themeable)?.applyTheme()
+            (item.viewController as? NotificationThemeable)?.applyTheme()
         }        
-        overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
 
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
@@ -499,7 +498,7 @@ extension LibraryViewController: Themeable {
         navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
         navigationToolbar.isTranslucent = false
 
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         } else {

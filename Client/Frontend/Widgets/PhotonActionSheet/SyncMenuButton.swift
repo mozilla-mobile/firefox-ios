@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 class SyncMenuButton: UIButton {
     let syncManager: SyncManager
@@ -12,7 +12,7 @@ class SyncMenuButton: UIButton {
         self.syncManager = syncManager
 
         let image = UIImage(named: "FxA-Sync")!.createScaled(iconSize)
-        self.normalImage = ThemeManager.instance.currentName == .dark ? image.tinted(withColor: .white) : image
+        self.normalImage = LegacyThemeManager.instance.currentName == .dark ? image.tinted(withColor: .white) : image
         self.syncingImage = UIImage(named: "FxA-Sync-Blue")!.createScaled(iconSize)
 
         super.init(frame: .zero)

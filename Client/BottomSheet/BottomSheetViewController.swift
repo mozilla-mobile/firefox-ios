@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import UIKit
@@ -18,12 +18,12 @@ protocol BottomSheetDelegate {
     func showBottomToolbar()
 }
 
-class BottomSheetViewController: UIViewController, Themeable {
+class BottomSheetViewController: UIViewController, NotificationThemeable {
     // Delegate
     var delegate: BottomSheetDelegate?
     private var currentState: BottomSheetState = .none
     private var isLandscape: Bool {
-        return UIApplication.shared.statusBarOrientation.isLandscape
+        return UIWindow.isLandscape
     }
     private var orientationBasedHeight: CGFloat {
         return isLandscape ? DeviceInfo.screenSizeOrientationIndependent().width : DeviceInfo.screenSizeOrientationIndependent().height
@@ -221,7 +221,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
     
     func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             panView.backgroundColor = UIColor.Photon.Grey10
         } else {
             panView.backgroundColor = UIColor.Photon.Grey90
@@ -231,7 +231,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) -> Void in
-            let orient = UIApplication.shared.statusBarOrientation
+            let orient = UIWindow.interfaceOrientation
             switch orient {
             case .portrait:
                 self.moveView(state: .partial)

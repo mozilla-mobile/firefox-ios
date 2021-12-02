@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -17,26 +17,23 @@ struct SimpleToastUX {
 }
 
 struct SimpleToast {
-    func showAlertWithText(_ text: String, bottomContainer: UIView) {
-        let toast = self.createView()
-        toast.text = text
-        bottomContainer.addSubview(toast)
-        toast.snp.makeConstraints { (make) in
-            make.width.equalTo(bottomContainer)
-            make.left.equalTo(bottomContainer)
-            make.height.equalTo(SimpleToastUX.ToastHeight)
-            make.bottom.equalTo(bottomContainer)
-        }
-        animate(toast)
+    fileprivate let toastLabel: UILabel = .build { label in
+        label.textColor = UIColor.Photon.White100
+        label.backgroundColor = SimpleToastUX.ToastDefaultColor
+        label.font = SimpleToastUX.ToastFont
+        label.textAlignment = .center
     }
 
-    fileprivate func createView() -> UILabel {
-        let toast = UILabel()
-        toast.textColor = UIColor.Photon.White100
-        toast.backgroundColor = SimpleToastUX.ToastDefaultColor
-        toast.font = SimpleToastUX.ToastFont
-        toast.textAlignment = .center
-        return toast
+    func showAlertWithText(_ text: String, bottomContainer: UIView) {
+        toastLabel.text = text
+        bottomContainer.addSubview(toastLabel)
+        NSLayoutConstraint.activate([
+            toastLabel.widthAnchor.constraint(equalTo: bottomContainer.widthAnchor),
+            toastLabel.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor),
+            toastLabel.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor),
+            toastLabel.heightAnchor.constraint(equalToConstant: SimpleToastUX.ToastHeight),
+        ])
+        animate(toastLabel)
     }
 
     fileprivate func dismiss(_ toast: UIView) {

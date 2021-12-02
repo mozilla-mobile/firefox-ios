@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -12,7 +12,7 @@ fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
       init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
           super.init(
               prefs: prefs, prefKey: PrefsKeys.KeyUseCustomFxAContentServer, defaultValue: false,
-              attributedTitleText: NSAttributedString(string: Strings.SettingsAdvancedAccountUseCustomFxAContentServerURITitle),
+              attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseCustomFxAContentServerURITitle),
               settingDidChange: settingDidChange
           )
       }
@@ -22,7 +22,7 @@ fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
       init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
           super.init(
               prefs: prefs, prefKey: PrefsKeys.KeyUseCustomSyncTokenServerOverride, defaultValue: false,
-              attributedTitleText: NSAttributedString(string: Strings.SettingsAdvancedAccountUseCustomSyncTokenServerTitle),
+              attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseCustomSyncTokenServerTitle),
               settingDidChange: settingDidChange
           )
       }
@@ -48,7 +48,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = Strings.SettingsAdvancedAccountTitle
+        title = .SettingsAdvancedAccountTitle
         self.customFxAContentURI = self.profile.prefs.stringForKey(PrefsKeys.KeyCustomFxAContentServer)
         self.customSyncTokenServerURI = self.profile.prefs.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride)
     }
@@ -69,12 +69,12 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
 
         let customFxA = CustomURLSetting(prefs: prefs,
                                          prefKey: PrefsKeys.KeyCustomFxAContentServer,
-                                         placeholder: Strings.SettingsAdvancedAccountCustomFxAContentServerURI,
+                                         placeholder: .SettingsAdvancedAccountCustomFxAContentServerURI,
                                          accessibilityIdentifier: "CustomFxAContentServer")
 
         let customSyncTokenServerURISetting = CustomURLSetting(prefs: prefs,
                                         prefKey: PrefsKeys.KeyCustomSyncTokenServerOverride,
-                                        placeholder: Strings.SettingsAdvancedAccountCustomSyncTokenServerURI,
+                                        placeholder: .SettingsAdvancedAccountCustomSyncTokenServerURI,
                                         accessibilityIdentifier: "CustomSyncTokenServerURISetting")
 
         let autoconfigSettings = [

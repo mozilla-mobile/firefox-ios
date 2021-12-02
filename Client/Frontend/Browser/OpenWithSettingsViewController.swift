@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -23,13 +23,13 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = Strings.SettingsOpenWithSectionName
+        title = .SettingsOpenWithSectionName
 
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
 
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
+        headerView.titleLabel.text = .SettingsOpenWithPageTitle.uppercased()
         let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
 
         tableView.tableHeaderView = headerView

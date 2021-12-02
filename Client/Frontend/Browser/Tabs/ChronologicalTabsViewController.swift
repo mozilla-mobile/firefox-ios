@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -21,7 +21,7 @@ struct ChronologicalTabsControllerUX {
     static let backgroundColor = UIColor.Photon.Grey10
 }
 
-class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewDelegate {
+class ChronologicalTabsViewController: UIViewController, NotificationThemeable, TabTrayViewDelegate {
     weak var delegate: TabTrayDelegate?
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
@@ -104,12 +104,10 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     }
 
     func applyTheme() {
-        overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-        bottomSheetVC?.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
         tableView.backgroundColor = UIColor.systemGroupedBackground
         emptyPrivateTabsView.titleLabel.textColor = UIColor.label
         emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
-        
+
         setNeedsStatusBarAppearanceUpdate()
         bottomSheetVC?.applyTheme()
     }
@@ -124,7 +122,7 @@ class ChronologicalTabsViewController: UIViewController, Themeable, TabTrayViewD
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if ThemeManager.instance.systemThemeIsOn {
+        if LegacyThemeManager.instance.systemThemeIsOn {
             tableView.reloadData()
         }
     }
@@ -149,8 +147,14 @@ extension ChronologicalTabsViewController {
 
     func didTapToolbarDelete(_ sender: UIBarButtonItem) {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
-        controller.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
+        controller.addAction(UIAlertAction(title: .AppMenuCloseAllTabsTitleString,
+                                           style: .default,
+                                           handler: { _ in self.viewModel.closeTabsForCurrentTray() }),
+                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
+        controller.addAction(UIAlertAction(title: .CancelString,
+                                           style: .cancel,
+                                           handler: nil),
+                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .deleteAll, object: .tab, value: viewModel.isInPrivateMode ? .privateTab : .normalTab)
@@ -246,11 +250,11 @@ extension ChronologicalTabsViewController: UITableViewDelegate {
         return section == TabSection(rawValue: section)?.rawValue && viewModel.numberOfRowsInSection(section: section) != 0 ? UITableView.automaticDimension : 0
     }
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let share = UIContextualAction(style: .normal, title: Strings.ShareContextMenuTitle, handler: { (action, view, completionHandler) in
+        let share = UIContextualAction(style: .normal, title: .ShareContextMenuTitle, handler: { (action, view, completionHandler) in
             guard let tab = self.viewModel.getTab(forIndex: indexPath), let url = tab.url else { return }
             self.presentActivityViewController(url, tab: tab)
         })
-        let more = UIContextualAction(style: .normal, title: Strings.PocketMoreStoriesText, handler: { (action, view, completionHandler) in
+        let more = UIContextualAction(style: .normal, title: .PocketMoreStoriesText, handler: { (action, view, completionHandler) in
             // Bottom toolbar
             self.navigationController?.isToolbarHidden = true
 
@@ -261,7 +265,7 @@ extension ChronologicalTabsViewController: UITableViewDelegate {
             self.bottomSheetVC?.showView()
 
         })
-        let delete = UIContextualAction(style: .destructive, title: Strings.CloseButtonTitle, handler: { (action, view, completionHandler) in
+        let delete = UIContextualAction(style: .destructive, title: .CloseButtonTitle, handler: { (action, view, completionHandler) in
             self.viewModel.removeTab(forIndex: indexPath)
         })
 

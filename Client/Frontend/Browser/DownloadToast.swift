@@ -1,10 +1,9 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Foundation
 import Shared
-import SnapKit
+import UIKit
 
 struct DownloadToastUX {
     static let ToastBackgroundColor = UIColor.Photon.Blue40
@@ -12,17 +11,15 @@ struct DownloadToastUX {
 }
 
 class DownloadToast: Toast {
-    lazy var progressView: UIView = {
-        let progressView = UIView()
-        progressView.backgroundColor = DownloadToastUX.ToastProgressColor
-        return progressView
-    }()
+    lazy var progressView: UIView = .build { view in
+        view.backgroundColor = DownloadToastUX.ToastProgressColor
+    }
 
     var percent: CGFloat = 0.0 {
         didSet {
             UIView.animate(withDuration: 0.05) {
                 self.descriptionLabel.text = self.descriptionText
-                self.progressWidthConstraint?.update(offset: self.toastView.frame.width * self.percent)
+                self.progressWidthConstraint?.constant = self.toastView.frame.width * self.percent
                 self.layoutIfNeeded()
             }
         }
@@ -43,21 +40,21 @@ class DownloadToast: Toast {
     var descriptionText: String {
         let downloadedSize = ByteCountFormatter.string(fromByteCount: combinedBytesDownloaded, countStyle: .file)
         let expectedSize = combinedTotalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: combinedTotalBytesExpected!, countStyle: .file) : nil
-        let descriptionText = expectedSize != nil ? String(format: Strings.DownloadProgressToastDescriptionText, downloadedSize, expectedSize!) : downloadedSize
+        let descriptionText = expectedSize != nil ? String(format: .DownloadProgressToastDescriptionText, downloadedSize, expectedSize!) : downloadedSize
 
         guard downloads.count > 1 else {
             return descriptionText
         }
 
-        let fileCountDescription = String(format: Strings.DownloadMultipleFilesToastDescriptionText, downloads.count)
+        let fileCountDescription = String(format: .DownloadMultipleFilesToastDescriptionText, downloads.count)
 
-        return String(format: Strings.DownloadMultipleFilesAndProgressToastDescriptionText, fileCountDescription, descriptionText)
+        return String(format: .DownloadMultipleFilesAndProgressToastDescriptionText, fileCountDescription, descriptionText)
     }
 
     var downloads: [Download] = []
 
     let descriptionLabel = UILabel()
-    var progressWidthConstraint: Constraint?
+    var progressWidthConstraint: NSLayoutConstraint?
 
     init(download: Download, completion: @escaping (_ buttonPressed: Bool) -> Void) {
         super.init(frame: .zero)
@@ -71,14 +68,16 @@ class DownloadToast: Toast {
 
         self.addSubview(createView(download.filename, descriptionText: self.descriptionText))
 
-        self.toastView.snp.makeConstraints { make in
-            make.left.right.height.equalTo(self)
-            self.animationConstraint = make.top.equalTo(self).offset(ButtonToastUX.ToastHeight).constraint
-        }
+        NSLayoutConstraint.activate([
+            toastView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toastView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toastView.heightAnchor.constraint(equalTo: heightAnchor),
 
-        self.snp.makeConstraints { make in
-            make.height.equalTo(ButtonToastUX.ToastHeight)
-        }
+            heightAnchor.constraint(equalToConstant: ButtonToastUX.ToastHeight)
+        ])
+
+        animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor, constant: ButtonToastUX.ToastHeight)
+        animationConstraint?.isActive = true
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -109,10 +108,11 @@ class DownloadToast: Toast {
     }
 
     func createView(_ labelText: String, descriptionText: String) -> UIView {
-        let horizontalStackView = UIStackView()
-        horizontalStackView.axis = .horizontal
-        horizontalStackView.alignment = .center
-        horizontalStackView.spacing = ButtonToastUX.ToastPadding
+        let horizontalStackView: UIStackView = .build { stackView in
+            stackView.axis = .horizontal
+            stackView.alignment = .center
+            stackView.spacing = ButtonToastUX.ToastPadding
+        }
 
         let icon = UIImageView(image: UIImage.templateImageNamed("download"))
         icon.tintColor = UIColor.Photon.White100
@@ -150,26 +150,26 @@ class DownloadToast: Toast {
         toastView.addSubview(progressView)
         toastView.addSubview(horizontalStackView)
 
-        progressView.snp.makeConstraints { make in
-            make.left.equalTo(toastView)
-            make.centerY.equalTo(toastView)
-            make.height.equalTo(toastView)
-            progressWidthConstraint = make.width.equalTo(0.0).constraint
-        }
+        NSLayoutConstraint.activate([
+            progressView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor),
+            progressView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
+            progressView.heightAnchor.constraint(equalTo: toastView.heightAnchor),
 
-        horizontalStackView.snp.makeConstraints { make in
-            make.centerX.equalTo(toastView)
-            make.centerY.equalTo(toastView)
-            make.width.equalTo(toastView.snp.width).offset(-2 * ButtonToastUX.ToastPadding)
-        }
+            horizontalStackView.centerXAnchor.constraint(equalTo: toastView.centerXAnchor),
+            horizontalStackView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
+            horizontalStackView.widthAnchor.constraint(equalTo: toastView.widthAnchor, constant: -2 * ButtonToastUX.ToastPadding)
+        ])
+
+        progressWidthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
+        progressWidthConstraint?.isActive = true
 
         return toastView
     }
 
     @objc func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
-        let alert = AlertController(title: Strings.CancelDownloadDialogTitle, message: Strings.CancelDownloadDialogMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: Strings.CancelDownloadDialogResume, style: .cancel, handler: nil), accessibilityIdentifier: "cancelDownloadAlert.resume")
-        alert.addAction(UIAlertAction(title: Strings.CancelDownloadDialogCancel, style: .default, handler: { action in
+        let alert = AlertController(title: .CancelDownloadDialogTitle, message: .CancelDownloadDialogMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: .CancelDownloadDialogResume, style: .cancel, handler: nil), accessibilityIdentifier: "cancelDownloadAlert.resume")
+        alert.addAction(UIAlertAction(title: .CancelDownloadDialogCancel, style: .default, handler: { action in
             self.completionHandler?(true)
             self.dismiss(true)
             TelemetryWrapper.recordEvent(category: .action, method: .cancel, object: .download)

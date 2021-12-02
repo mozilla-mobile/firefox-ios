@@ -1,23 +1,23 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
 
-class TopTabCell: UICollectionViewCell, Themeable {
+class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
 
     static let Identifier = "TopTabCellIdentifier"
     static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
 
-    var selectedTab = false {
+    var isSelectedTab = false {
         didSet {
             backgroundColor = .clear
             titleText.textColor = UIColor.theme.topTabs.tabForegroundSelected
             closeButton.tintColor = UIColor.theme.topTabs.closeButtonSelectedTab
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
-            selectedBackground.isHidden = !selectedTab
+            selectedBackground.isHidden = !isSelectedTab
         }
     }
 
@@ -43,6 +43,7 @@ class TopTabCell: UICollectionViewCell, Themeable {
         titleText.lineBreakMode = .byCharWrapping
         titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
         titleText.semanticContentAttribute = .forceLeftToRight
+        titleText.isAccessibilityElement = false
         return titleText
     }()
 
@@ -101,42 +102,25 @@ class TopTabCell: UICollectionViewCell, Themeable {
         self.clipsToBounds = false
     }
 
-    func configureWith(tab: Tab, isSelected: Bool) {
-        self.titleText.text = tab.displayTitle
+    func configureWith(tab: Tab, isSelected selected: Bool) {
+        isSelectedTab = selected
 
-        if tab.displayTitle.isEmpty {
-            if let url = tab.webView?.url, let internalScheme = InternalURL(url) {
-                self.titleText.text = Strings.AppMenuNewTabTitleString
-                self.accessibilityLabel = internalScheme.aboutComponent
-            } else {
-                self.titleText.text = tab.webView?.url?.absoluteDisplayString
-            }
-            
-            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
-        } else {
-            self.accessibilityLabel = tab.displayTitle
-            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
-        }
+        titleText.text = getTabTrayTitle(tab: tab)
+        accessibilityLabel = getA11yTitleLabel(tab: tab)
+        isAccessibilityElement = true
 
-        self.selectedTab = isSelected
+        closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
 
-        let hideCloseButton = frame.width < 148 && !isSelected
+        let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
-        if let siteURL = tab.url?.displayURL {
-            self.favicon.contentMode = .center
-            self.favicon.setImageAndBackground(forIcon: tab.displayFavicon, website: siteURL) { [weak self] in
-                guard let self = self else { return }
-                self.favicon.image = self.favicon.image?.createScaled(CGSize(width: 15, height: 15))
-                if self.favicon.backgroundColor == .clear {
-                    self.favicon.backgroundColor = .white
-                }
-            }
+        if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
+            favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
         } else {
-            self.favicon.image = UIImage(named: "defaultFavicon")
-            self.favicon.tintColor = UIColor.theme.tabTray.faviconTint
-            self.favicon.contentMode = .scaleAspectFit
-            self.favicon.backgroundColor = .clear
+            favicon.image = UIImage(named: "defaultFavicon")
+            favicon.tintColor = UIColor.theme.tabTray.faviconTint
+            favicon.contentMode = .scaleAspectFit
+            favicon.backgroundColor = .clear
         }
     }
 

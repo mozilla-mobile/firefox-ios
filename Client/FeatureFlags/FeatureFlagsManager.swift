@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 
@@ -20,6 +20,7 @@ enum FeatureFlagName: String, CaseIterable {
     case chronologicalTabs
     case inactiveTabs
     case groupedTabs
+    case historyHighlights
     case jumpBackIn
     case nimbus
     case pocket
@@ -27,6 +28,7 @@ enum FeatureFlagName: String, CaseIterable {
     case recentlySaved
     case shakeToRestore
     case startAtHome
+    case reportSiteIssue
 }
 
 /// Manages feature flags for the application.
@@ -114,7 +116,7 @@ class FeatureFlagsManager {
 
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
                                          and: profile,
-                                         enabledFor: [.developer])
+                                         enabledFor: [])
         features[.chronologicalTabs] = chronTabs
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
@@ -155,6 +157,11 @@ class FeatureFlagsManager {
                                              enabledFor: [.beta, .developer])
         features[.recentlySaved] = recentlySaved
 
+        let historyHighlights = FlaggableFeature(withID: .historyHighlights,
+                                                 and: profile,
+                                                 enabledFor: [.developer])
+        features[.historyHighlights] = historyHighlights
+
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
                                               and: profile,
                                               enabledFor: [.beta, .developer, .other])
@@ -162,7 +169,13 @@ class FeatureFlagsManager {
 
         let startAtHome = FlaggableFeature(withID: .startAtHome,
                                            and: profile,
-                                           enabledFor: [])
+                                           enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
+        
+        let reportSiteIssue = FlaggableFeature(withID: .reportSiteIssue,
+                                               and: profile,
+                                               enabledFor: [.beta, .developer])
+        
+        features[.reportSiteIssue] = reportSiteIssue
     }
 }

@@ -1,11 +1,10 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
 import WebKit
-import SwiftyJSON
 
 private let log = Logger.browserLogger
 let ReaderModeProfileKeyStyle = "readermode.style"
@@ -37,7 +36,7 @@ enum ReaderModeTheme: String {
         // Get current Firefox theme (Dark vs Normal)
         // Normal means light theme. This is the overall theme used
         // by Firefox iOS app
-        let appWideTheme = ThemeManager.instance.currentName
+        let appWideTheme = LegacyThemeManager.instance.currentName
         // We check for 3 basic themes we have Light / Dark / Sepia
         // Theme: Dark - app-wide dark overrides all
         if appWideTheme == .dark {
@@ -153,7 +152,7 @@ struct ReaderModeStyle {
 
     /// Encode the style to a JSON dictionary that can be passed to ReaderMode.js
     func encode() -> String {
-        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).stringify() ?? ""
+        return encodeAsDictionary().asString ?? ""
     }
 
     /// Encode the style to a dictionary that can be stored in the profile
@@ -237,14 +236,16 @@ struct ReadabilityResult {
 
     /// Initialize from a JSON encoded string
     init?(string: String) {
-        let object = JSON(parseJSON: string)
-        let domain = object["domain"].string
-        let url = object["url"].string
-        let content = object["content"].string
-        let textContent = object["textContent"].string
-        let excerpt = object["excerpt"].string
-        let title = object["title"].string
-        let credits = object["credits"].string
+        guard let data = string.data(using: .utf8),
+              let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: String] else { return nil }
+        
+        let domain = object["domain"]
+        let url = object["url"]
+        let content = object["content"]
+        let textContent = object["textContent"]
+        let excerpt = object["excerpt"]
+        let title = object["title"]
+        let credits = object["credits"]
 
         if domain == nil || url == nil || content == nil || title == nil || credits == nil {
             return nil
@@ -267,7 +268,7 @@ struct ReadabilityResult {
     /// Encode to a JSON encoded string
     func encode() -> String {
         let dict: [String: Any] = self.encode()
-        return JSON(dict).stringify()!
+        return dict.asString!
     }
 }
 

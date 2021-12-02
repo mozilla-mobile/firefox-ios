@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import AVFoundation
@@ -38,7 +38,7 @@ class QRCodeViewController: UIViewController {
     private let scanBorder = UIImageView(image: UIImage(named: "qrcode-scanBorder"))
     private lazy var instructionsLabel: UILabel = {
         let label = UILabel()
-        label.text = Strings.ScanQRCodeInstructionsLabel
+        label.text = .ScanQRCodeInstructionsLabel
         label.textColor = UIColor.Photon.White100
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -57,7 +57,7 @@ class QRCodeViewController: UIViewController {
             return
         }
 
-        self.navigationItem.title = Strings.ScanQRCodeViewTitle
+        self.navigationItem.title = .ScanQRCodeViewTitle
 
         // Setup the NavigationBar
         self.navigationController?.navigationBar.barTintColor = QRCodeViewControllerUX.navigationBarBackgroundColor
@@ -82,8 +82,8 @@ class QRCodeViewController: UIViewController {
             view.backgroundColor = QRCodeViewControllerUX.viewBackgroundDeniedColor
             self.navigationItem.rightBarButtonItem?.isEnabled = false
 
-            let alert = UIAlertController(title: "", message: Strings.ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: { (action) -> Void in
+            let alert = UIAlertController(title: "", message: .ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton, style: .default, handler: { (action) -> Void in
                 self.dismiss(animated: true)
             }))
             self.present(alert, animated: true, completion: nil)
@@ -275,8 +275,8 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         if metadataObjects.isEmpty {
             self.captureSession.stopRunning()
-            let alert = AlertController(title: "", message: Strings.ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: { (UIAlertAction) in
+            let alert = AlertController(title: "", message: .ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .ScanQRCodeErrorOKButton, style: .default, handler: { (UIAlertAction) in
                 self.captureSession.startRunning()
             }), accessibilityIdentifier: "qrCodeAlert.okButton")
             self.present(alert, animated: true, completion: nil)

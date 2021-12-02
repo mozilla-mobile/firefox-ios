@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import WebKit
@@ -81,7 +81,7 @@ class SecurityTests: KIFTestCase {
         // Workaround number of tabs not updated
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
-        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
 
@@ -102,7 +102,7 @@ class SecurityTests: KIFTestCase {
         // Workaround number of tabs not updated
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
-        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().wait(forTimeInterval: 5)
     }
@@ -135,7 +135,7 @@ class SecurityTests: KIFTestCase {
       func closeAllTabs() {
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.removeTabsButton")
         tester().waitForAnimationsToFinish(withTimeout: 3)
-        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         
       }
 

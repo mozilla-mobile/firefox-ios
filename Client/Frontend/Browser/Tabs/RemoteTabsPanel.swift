@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Account
@@ -36,7 +36,7 @@ protocol RemotePanelDelegate: AnyObject {
     func remotePanel(didSelectURL url: URL, visitType: VisitType)
 }
 
-class RemoteTabsPanel: UIViewController, Themeable {
+class RemoteTabsPanel: UIViewController, NotificationThemeable {
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()
@@ -105,7 +105,7 @@ enum RemoteTabsError {
         switch self {
         // This does not have a localized string because we have a whole specific screen for it.
         case .notLoggedIn: return ""
-        case .noClients: return Strings.EmptySyncedTabsPanelNullStateDescription
+        case .noClients: return .EmptySyncedTabsPanelNullStateDescription
         case .noTabs: return .RemoteTabErrorNoTabs
         case .failedToSync: return .RemoteTabErrorFailedToSync
         }
@@ -274,7 +274,7 @@ class RemoteTabsErrorCell: UITableViewCell {
         }
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
-        titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
+        titleLabel.text = .EmptySyncedTabsPanelStateTitle
         titleLabel.textAlignment = .center
         containerView.addSubview(titleLabel)
 
@@ -348,17 +348,17 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         contentView.addSubview(emptyStateImageView)
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
-        titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
+        titleLabel.text = .EmptySyncedTabsPanelStateTitle
         titleLabel.textAlignment = .center
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        instructionsLabel.text = Strings.EmptySyncedTabsPanelNotSignedInStateDescription
+        instructionsLabel.text = .EmptySyncedTabsPanelNotSignedInStateDescription
         instructionsLabel.textAlignment = .center
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
-        signInButton.setTitle(Strings.FxASignInToSync, for: [])
+        signInButton.setTitle(.FxASignInToSync, for: [])
         signInButton.setTitleColor(UIColor.Photon.White100, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
@@ -421,7 +421,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 
     override func updateConstraints() {
-        if UIApplication.shared.statusBarOrientation.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
+        if UIWindow.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
             instructionsLabel.snp.remakeConstraints { make in
                 make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)

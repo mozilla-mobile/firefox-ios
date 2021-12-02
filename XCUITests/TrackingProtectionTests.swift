@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
@@ -30,7 +30,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         // The lock icon should still be there
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
@@ -40,7 +40,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Make sure TP is also there in PBM
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.goto(SettingsScreen)
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
@@ -72,6 +72,7 @@ class TrackingProtectionTests: BaseTestCase {
     func testETPLockMenu() {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
         waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
         let switchValue = app.switches.firstMatch.value!

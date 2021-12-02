@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import XCTest
@@ -22,7 +22,6 @@ class TestFavicons: ProfileTest {
         self.waitForExpectations(timeout: 100, handler: nil)
     }
 
-    // XXX: Temporarily disabling this due to intermittent failures on BuddyBuild.
     func testFaviconFetcherParse() {
         let expectation = self.expectation(description: "Wait for Favicons to be fetched")
 

@@ -1,13 +1,12 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
-import SnapKit
 
-class ASLibraryCell: UICollectionViewCell, Themeable {
+class ASLibraryCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
 
-    var mainView = UIStackView()
+    var mainView: UIStackView = .build()
 
     struct LibraryPanel {
         let title: String
@@ -17,18 +16,30 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
 
     var libraryButtons: [LibraryShortcutView] = []
 
-    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor.Photon.Blue40)
-    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor.Photon.Violet50)
-    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor.Photon.Pink40)
-    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor.Photon.Green60)
+    let bookmarks = LibraryPanel(title: .AppMenuBookmarksTitleString,
+                                 image: UIImage.templateImageNamed("menu-Bookmark"),
+                                 color: UIColor.Photon.Blue40)
+    let history = LibraryPanel(title: .AppMenuHistoryTitleString,
+                               image: UIImage.templateImageNamed("menu-panel-History"),
+                               color: UIColor.Photon.Violet50)
+    let readingList = LibraryPanel(title: .AppMenuReadingListTitleString,
+                                   image: UIImage.templateImageNamed("menu-panel-ReadingList"),
+                                   color: UIColor.Photon.Pink40)
+    let downloads = LibraryPanel(title: .AppMenuDownloadsTitleString,
+                                 image: UIImage.templateImageNamed("menu-panel-Downloads"),
+                                 color: UIColor.Photon.Green60)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         mainView.distribution = .equalCentering
         addSubview(mainView)
-        mainView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
+
+        NSLayoutConstraint.activate([
+            mainView.topAnchor.constraint(equalTo: topAnchor),
+            mainView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mainView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            mainView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
 
         [bookmarks, history, downloads, readingList].forEach { item in
             let view = LibraryShortcutView()

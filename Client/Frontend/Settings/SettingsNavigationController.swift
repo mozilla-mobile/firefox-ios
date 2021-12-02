@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 
@@ -16,7 +16,7 @@ class ThemedNavigationController: DismissableNavigationViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return topViewController?.preferredStatusBarStyle ?? ThemeManager.instance.statusBarStyle
+        return topViewController?.preferredStatusBarStyle ?? LegacyThemeManager.instance.statusBarStyle
     }
 
     override func viewDidLoad() {
@@ -27,14 +27,26 @@ class ThemedNavigationController: DismissableNavigationViewController {
     }
 }
 
-extension ThemedNavigationController: Themeable {
-    func applyTheme() {
-        navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
+extension ThemedNavigationController: NotificationThemeable {
+    private func setupNavigationBarAppearance() {
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.backgroundColor = UIColor.theme.tableView.headerBackground
+        standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.theme.tableView.headerTextDark]
+        
+        navigationBar.standardAppearance = standardAppearance
+        navigationBar.compactAppearance = standardAppearance
+        navigationBar.scrollEdgeAppearance = standardAppearance
+        if #available(iOS 15.0, *) {
+            navigationBar.compactScrollEdgeAppearance = standardAppearance
+        }
         navigationBar.tintColor = UIColor.theme.general.controlTint
-        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextDark]
+    }
+    func applyTheme() {
+        setupNavigationBarAppearance()
         setNeedsStatusBarAppearanceUpdate()
         viewControllers.forEach {
-            ($0 as? Themeable)?.applyTheme()
+            ($0 as? NotificationThemeable)?.applyTheme()
         }
     }
 }

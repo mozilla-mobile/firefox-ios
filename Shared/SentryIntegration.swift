@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Sentry
@@ -28,6 +28,7 @@ public class Sentry {
     }
 
     private let SentryDSNKey = "SentryDSN"
+    private let SentryNightlyDSNKey = "SentryNightlyDSN"
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
     private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
     private let DeviceAppHashLength = UInt(20)
@@ -58,7 +59,14 @@ public class Sentry {
             }
         }
 
-        guard let dsn = bundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
+        var sentryDSNKey = SentryDSNKey
+
+        if AppInfo.appVersion == AppConstants.NIGHTLY_APP_VERSION, AppConstants.BuildChannel == .beta {
+            // Setup sentry for Nightly Firefox Beta
+            sentryDSNKey = SentryNightlyDSNKey
+        }
+
+        guard let dsn = bundle.object(forInfoDictionaryKey: sentryDSNKey) as? String, !dsn.isEmpty else {
             Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }
@@ -83,8 +91,8 @@ public class Sentry {
                 let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
                 event.context?.appContext?["device_app_hash"] = deviceAppHash ?? self.DefaultDeviceAppHash
 
-                var attributes = event.extra ?? [:]
-                attributes.merge(with: self.attributes)
+                let attributes = event.extra ?? [:]
+                self.attributes = attributes.merge(with: self.attributes)
                 event.extra = attributes
             }
         } catch let error {
@@ -125,10 +133,10 @@ public class Sentry {
         // Build the dictionary
         var extraEvents: [String: Any] = [:]
         if let paramEvents = extra {
-            extraEvents.merge(with: paramEvents)
+            extraEvents = extraEvents.merge(with: paramEvents)
         }
         if let extraString = description {
-            extraEvents.merge(with: ["errorDescription": extraString])
+            extraEvents = extraEvents.merge(with: ["errorDescription": extraString])
         }
         printMessage(message: message, extra: extraEvents)
 
@@ -145,10 +153,10 @@ public class Sentry {
     public func sendWithStacktrace(message: String, tag: SentryTag = .general, severity: SentrySeverity = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
         var extraEvents: [String: Any] = [:]
         if let paramEvents = extra {
-            extraEvents.merge(with: paramEvents)
+            extraEvents = extraEvents.merge(with: paramEvents)
         }
         if let extraString = description {
-            extraEvents.merge(with: ["errorDescription": extraString])
+            extraEvents = extraEvents.merge(with: ["errorDescription": extraString])
         }
         printMessage(message: message, extra: extraEvents)
 
@@ -166,7 +174,7 @@ public class Sentry {
     }
 
     public func addAttributes(_ attributes: [String: Any]) {
-        self.attributes.merge(with: attributes)
+        self.attributes = self.attributes.merge(with: attributes)
     }
 
     public func breadcrumb(category: String, message: String) {

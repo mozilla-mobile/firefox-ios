@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import UIKit
@@ -31,7 +31,7 @@ import Shared
 class ETPCoverSheetViewController: UIViewController {
     // Public constants
     let viewModel = ETPViewModel()
-    static let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
@@ -42,7 +42,7 @@ class ETPCoverSheetViewController: UIViewController {
     }
     private var doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.SettingsSearchDoneButton, for: .normal)
+        button.setTitle(.SettingsSearchDoneButton, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         button.setTitleColor(UIColor.systemBlue, for: .normal)
         return button
@@ -73,7 +73,7 @@ class ETPCoverSheetViewController: UIViewController {
     }()
     private lazy var goToSettingsButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.CoverSheetETPSettingsButton, for: .normal)
+        button.setTitle(.CoverSheetETPSettingsButton, for: .normal)
         button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
@@ -82,7 +82,7 @@ class ETPCoverSheetViewController: UIViewController {
     }()
     private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.StartBrowsingButtonTitle, for: .normal)
+        button.setTitle(.StartBrowsingButtonTitle, for: .normal)
         button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.backgroundColor = .clear

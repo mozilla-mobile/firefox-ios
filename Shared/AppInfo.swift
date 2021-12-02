@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 
@@ -78,7 +78,12 @@ open class AppInfo {
 
     // Return the MozWhatsNewTopic key from the Info.plist
     public static var whatsNewTopic: String? {
-        return Bundle.main.object(forInfoDictionaryKey: "MozWhatsNewTopic") as? String
+        let appVersionSplit = AppInfo.appVersion.components(separatedBy: ".")
+        let majorAppVersion = appVersionSplit[0]
+        var dotVersion = ""
+        if appVersionSplit.count > 1, appVersionSplit[0] != "0" { dotVersion = appVersionSplit[1] }
+        let topic = "whats-new-ios-\(majorAppVersion)\(dotVersion)"
+        return topic
     }
 
     // Return whether the currently executing code is running in an Application

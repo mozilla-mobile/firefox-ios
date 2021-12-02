@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Storage
@@ -30,7 +30,7 @@ fileprivate class CenteredDetailCell: ThemedTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         var f = detailTextLabel?.frame ?? CGRect()
-        f.center = frame.center
+        f.center = CGPoint(x: frame.center.x - safeAreaInsets.right, y: frame.center.y)
         detailTextLabel?.frame = f
     }
 }
@@ -119,7 +119,7 @@ class LoginDetailViewController: SensitiveViewController {
         let itemsToHideSeperators: [InfoItem] = [.passwordItem, .lastModifiedSeparator]
         itemsToHideSeperators.forEach { item in
             let cell = tableView.cellForRow(at: IndexPath(row: item.rawValue, section: 0))
-            cell?.separatorInset = UIEdgeInsets(top: 0, left: cell?.bounds.width ?? 0, bottom: 0, right: 0)
+            cell?.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell?.bounds.width ?? 0)
         }
 
         // Rows to display full width seperator
@@ -162,7 +162,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = .LoginDetailUsername
-            loginCell.descriptionLabel.text = login.username
+            loginCell.descriptionLabel.text = login.decryptedUsername
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
             loginCell.isEditingFieldData = isEditingFieldData
@@ -173,7 +173,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .passwordItem:
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = .LoginDetailPassword
-            loginCell.descriptionLabel.text = login.password
+            loginCell.descriptionLabel.text = login.decryptedPassword
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
             loginCell.isEditingFieldData = isEditingFieldData
@@ -253,8 +253,7 @@ extension LoginDetailViewController: UITableViewDelegate {
         cell.becomeFirstResponder()
 
         let menu = UIMenuController.shared
-        menu.setTargetRect(cell.frame, in: self.tableView)
-        menu.setMenuVisible(true, animated: true)
+        menu.showMenu(from: self.tableView, rect: cell.frame)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -319,7 +318,7 @@ extension LoginDetailViewController {
     func deleteLogin() {
         profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-                self.profile.logins.delete(id: self.login.id).uponQueue(.main) { _ in
+                self.profile.logins.deleteLogin(id: self.login.id).uponQueue(.main) { _ in
                     _ = self.navigationController?.popViewController(animated: true)
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -330,7 +329,7 @@ extension LoginDetailViewController {
 
     func onProfileDidFinishSyncing() {
         // Reload details after syncing.
-        profile.logins.get(id: login.id).uponQueue(.main) { result in
+        profile.logins.getLogin(id: login.id).uponQueue(.main) { result in
             if let successValue = result.successValue, let syncedLogin = successValue {
                 self.login = syncedLogin
             }
@@ -355,25 +354,24 @@ extension LoginDetailViewController {
 
         // Only update if user made changes
         guard let username = usernameField?.text, let password = passwordField?.text else { return }
-        guard username != login.username || password != login.password else { return }
+        
+        guard username != login.decryptedUsername || password != login.decryptedPassword else { return }
 
-        let updatedLogin = Login(
-            id: login.id,
-            hostname: login.hostname,
-            password: password,
-            username: username,
-            httpRealm: login.httpRealm,
-            formSubmitUrl: login.formSubmitUrl,
-            usernameField: login.usernameField,
-            passwordField: login.passwordField,
-            timesUsed: login.timesUsed,
-            timeCreated: login.timeCreated,
-            timeLastUsed: login.timeLastUsed,
-            timePasswordChanged: login.timePasswordChanged
+        let updatedLogin = LoginEntry(
+            fromLoginEntryFlattened: LoginEntryFlattened(
+                id: login.id,
+                hostname: login.hostname,
+                password: password,
+                username: username,
+                httpRealm: login.httpRealm,
+                formSubmitUrl: login.formSubmitUrl,
+                usernameField: login.usernameField,
+                passwordField: login.passwordField
+            )
         )
 
-        if login.isValid.isSuccess {
-            _ = profile.logins.update(login: updatedLogin)
+        if updatedLogin.isValid.isSuccess {
+            _ = profile.logins.updateLogin(id: login.id, login: updatedLogin)
         }
     }
 }

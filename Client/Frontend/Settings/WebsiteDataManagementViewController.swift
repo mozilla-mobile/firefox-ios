@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -20,8 +20,8 @@ class WebsiteDataManagementViewModel {
     
     var clearButtonTitle: String {
         switch selectedRecords.count {
-        case 0: return Strings.SettingsClearAllWebsiteDataButton
-        default: return String(format: Strings.SettingsClearSelectedWebsiteDataButton, "\(selectedRecords.count)")
+        case 0: return .SettingsClearAllWebsiteDataButton
+        default: return String(format: .SettingsClearSelectedWebsiteDataButton, "\(selectedRecords.count)")
         }
     }
     
@@ -105,13 +105,13 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     var tableView: UITableView!
     var searchController: UISearchController?
     var showMoreButtonEnabled = true
-    let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
 
     private lazy var searchResultsViewController = WebsiteDataSearchResultsViewController(viewModel: viewModel)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = Strings.SettingsWebsiteDataTitle
+        title = .SettingsWebsiteDataTitle
         navigationController?.setToolbarHidden(true, animated: false)
 
         tableView = UITableView()
@@ -161,7 +161,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
         searchController.searchResultsUpdater = searchResultsViewController
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
+        searchController.searchBar.placeholder = .SettingsFilterSitesSearchLabel
         searchController.searchBar.delegate = self
 
         if theme == .dark {
@@ -192,7 +192,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
                 }
             }
         case .showMore:
-            cell.textLabel?.text = Strings.SettingsWebsiteDataShowMoreButton
+            cell.textLabel?.text = .SettingsWebsiteDataShowMoreButton
             cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
@@ -269,7 +269,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        headerView?.titleLabel.text = section == Section.sites.rawValue ? Strings.SettingsWebsiteDataTitle : nil
+        headerView?.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
         headerView?.showBorder(for: .top, true)
         headerView?.showBorder(for: .bottom, true)

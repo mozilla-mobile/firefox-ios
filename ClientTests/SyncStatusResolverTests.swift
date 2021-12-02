@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 @testable import Client
 @testable import Sync
@@ -49,7 +49,7 @@ class SyncStatusResolverTests: XCTestCase {
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.warning(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.warning(message: .FirefoxSyncOfflineTitle))
     }
 
     func testAllCompletedExceptNotStartedBecauseOffline() {
@@ -60,7 +60,7 @@ class SyncStatusResolverTests: XCTestCase {
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: .FirefoxSyncOfflineTitle))
     }
 
     func testOfflineAndNoAccount() {
@@ -72,7 +72,7 @@ class SyncStatusResolverTests: XCTestCase {
         let maybeResults = Maybe(success: results)
 
         let resolver = SyncStatusResolver(engineResults: maybeResults)
-        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: Strings.FirefoxSyncOfflineTitle))
+        XCTAssertTrue(resolver.resolveResults() == SyncDisplayState.bad(message: .FirefoxSyncOfflineTitle))
     }
 
     func testAllPartial() {

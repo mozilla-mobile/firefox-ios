@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Storage
@@ -44,7 +44,7 @@ private struct ReadingListPanelUX {
     static let WelcomeScreenCircleSpacer = 10
 }
 
-class ReadingListTableViewCell: UITableViewCell, Themeable {
+class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
     var title: String = "Example" {
         didSet {
             titleLabel.text = title
@@ -317,22 +317,28 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard let record = records?[indexPath.row] else {
-            return []
+            return nil
         }
 
-        let delete = UITableViewRowAction(style: .default, title: .ReaderPanelRemove) { [weak self] action, index in
-            self?.deleteItem(atIndex: index)
+        let deleteAction = UIContextualAction(style: .destructive, title: .ReaderPanelRemove) { [weak self] (_, _, completion) in
+            guard let strongSelf = self else { completion(false); return }
+
+            strongSelf.deleteItem(atIndex: indexPath)
+            completion(true)
         }
 
         let toggleText: String = record.unread ? .ReaderPanelMarkAsRead : .ReaderModeBarMarkAsUnread
-        let unreadToggle = UITableViewRowAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (action, index) in
-            self?.toggleItem(atIndex: index)
-        }
-        unreadToggle.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
+        let unreadToggleAction = UIContextualAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (_, view, completion) in
+            guard let strongSelf = self else { completion(false); return }
 
-        return [unreadToggle, delete]
+            view.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
+            strongSelf.toggleItem(atIndex: indexPath)
+            completion(true)
+        }
+
+        return UISwipeActionsConfiguration(actions: [unreadToggleAction, deleteAction])
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -391,7 +397,7 @@ extension ReadingListPanel: LibraryPanelContextMenu {
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
-        let removeAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { _, _ in
+        let removeAction = PhotonActionSheetItem(title: .RemoveContextMenuTitle, iconString: "action_remove", handler: { _, _ in
             self.deleteItem(atIndex: indexPath)
         })
 
@@ -418,7 +424,7 @@ extension ReadingListPanel: UITableViewDragDelegate {
     }
 }
 
-extension ReadingListPanel: Themeable {
+extension ReadingListPanel: NotificationThemeable {
     func applyTheme() {
         tableView.separatorColor = UIColor.theme.tableView.separator
         view.backgroundColor = UIColor.theme.tableView.rowBackground

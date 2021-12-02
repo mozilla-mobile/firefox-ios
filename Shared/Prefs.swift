@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 
@@ -39,6 +39,9 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let StartAtHome = "startAtHome"
     public static let PullToRefresh = "pullToRefresh"
+    
+    // Firefox contextual hint
+    public static let ContextualHintJumpBackinKey = "ContextualHintJumpBackin"
 
     // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
@@ -58,6 +61,7 @@ public struct PrefsKeys {
     public static let KeyBlockPopups = "blockPopups"
     public static let RecentlySavedSectionEnabled = "recentlySavedSectionEnabled"
     public static let JumpBackInSectionEnabled = "jumpBackInSectionEnabled"
+    public static let HistoryHighlightsSectionEnabled = "recentlySavedSectionEnabled"
 
     // Tabs Tray
     public static let KeyEnableInactiveTabs = "KeyInactiveTabs"
@@ -69,6 +73,9 @@ public struct PrefsKeys {
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
     public static let WidgetKitSimpleTopTab = "WidgetKitSimpleTopTab"
+
+    // ThemeManager key
+    public static let ThemeManagerCustomizationKey = "ThemeManagerCustomizationKey"
 }
 
 public struct PrefsDefaults {

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import MappaMundi
 import XCTest
@@ -14,7 +14,7 @@ class L10nBaseSnapshotTests: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     var userState: FxUserState!
 
-    var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet,LaunchArguments.SkipIntro]
+    var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet,LaunchArguments.SkipIntro, LaunchArguments.SkipContextualHintJumpBackIn, LaunchArguments.ChronTabs]
 
     override func setUp() {
         super.setUp()

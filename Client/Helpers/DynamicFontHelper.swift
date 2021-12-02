@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import UIKit
@@ -68,6 +68,9 @@ class DynamicFontHelper: NSObject {
     }
     var DeviceFontLarge: UIFont {
         return UIFont.systemFont(ofSize: deviceFontSize + 3)
+    }
+    var DeviceFontExtraLarge: UIFont {
+        return UIFont.systemFont(ofSize: deviceFontSize + 4)
     }
     var DeviceFontMedium: UIFont {
         return UIFont.systemFont(ofSize: deviceFontSize + 1)
@@ -207,9 +210,29 @@ class DynamicFontHelper: NSObject {
         NotificationCenter.default.post(notification)
     }
     
-    /// Return a font with the minimum size.
+    /// Return a font that will dynamically scale up to a certain size
+    /// - Parameters:
+    ///   - textStyle: The desired textStyle for the font
+    ///   - maxSize: The maximum size the font can scale - Refer to the human interface guidelines for more information on sizes for each style
+    ///              https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
+    /// - Returns: The UIFont with the specified font size and style
     func preferredFont(withTextStyle textStyle: UIFont.TextStyle, maxSize: CGFloat) -> UIFont {
         let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
         return UIFont(descriptor: fontDescriptor, size: min(fontDescriptor.pointSize, maxSize))
+    }
+
+    /// Return a bold font that will dynamically scale up to a certain size
+    /// - Parameters:
+    ///   - textStyle: The desired textStyle for the font
+    ///   - maxSize: The maximum size the font can scale - Refer to the human interface guidelines for more information on sizes for each style
+    ///              https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
+    /// - Returns: The UIFont with the specified bold font size and style
+    func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle, maxSize: CGFloat) -> UIFont {
+        let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
+        if let boldFontDescriptor = fontDescriptor.withSymbolicTraits(.traitBold) {
+            return UIFont(descriptor: boldFontDescriptor, size: min(boldFontDescriptor.pointSize, maxSize))
+        } else {
+            return UIFont(descriptor: fontDescriptor, size: min(fontDescriptor.pointSize, maxSize))
+        }
     }
 }

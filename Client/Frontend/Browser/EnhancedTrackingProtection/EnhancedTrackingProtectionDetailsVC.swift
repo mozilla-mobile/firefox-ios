@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 
@@ -177,9 +177,9 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 }
 
 // MARK: - Themable
-extension EnhancedTrackingProtectionDetailsVC: Themeable {
+extension EnhancedTrackingProtectionDetailsVC: NotificationThemeable {
     @objc func applyTheme() {
-        overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
+        overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
         view.backgroundColor = UIColor.theme.etpMenu.background
         siteInfoSection.backgroundColor = UIColor.theme.etpMenu.sectionColor
         siteInfoURLLabel.textColor = UIColor.theme.etpMenu.subtextColor

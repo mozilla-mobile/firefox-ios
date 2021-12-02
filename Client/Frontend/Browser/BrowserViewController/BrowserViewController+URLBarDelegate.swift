@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import Storage
@@ -46,7 +46,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                 return
             }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-            let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+            let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
                 if buttonPressed {
                     self.tabManager.selectTab(tab)
                 }
@@ -61,18 +61,13 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         guard self.tabTrayViewController != nil else { return }
 
-        let controller = DismissableNavigationViewController(rootViewController: tabTrayViewController!)
-        controller.presentationController?.delegate = tabTrayViewController
-        // If we're not using the system theme, override the view's style to match
-        if !ThemeManager.instance.systemThemeIsOn {
-            controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
-        }
+        let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!)
+        navigationController.presentationController?.delegate = tabTrayViewController
 
-        self.present(controller, animated: true, completion: nil)
+        self.present(navigationController, animated: true, completion: nil)
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
-            tabManager.storeScreenshot(tab: tab)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
     }
@@ -131,7 +126,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         let successCallback: (String, ButtonToastAction) -> Void = { (successMessage, toastAction) in
             switch toastAction {
             case .removeBookmark:
-                let toast = ButtonToast(labelText: successMessage, buttonText: Strings.UndoString, textAlignment: .left) { isButtonTapped in
+                let toast = ButtonToast(labelText: successMessage, buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
                     isButtonTapped ? self.addBookmark(url: urlString) : nil
                 }
                 self.show(toast: toast)
@@ -241,7 +236,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         switch result.value {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
-            SimpleToast().showAlertWithText(Strings.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
+            SimpleToast().showAlertWithText(.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
         case .failure(let error):
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
             print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")

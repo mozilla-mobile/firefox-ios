@@ -1,12 +1,12 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
 import Storage
 
-protocol LibraryPanel: Themeable {
+protocol LibraryPanel: NotificationThemeable {
     var libraryPanelDelegate: LibraryPanelDelegate? { get set }
 }
 
@@ -31,13 +31,13 @@ enum LibraryPanelType: Int, CaseIterable {
     var title: String {
         switch self {
         case .bookmarks:
-            return Strings.AppMenuBookmarksTitleString
+            return .AppMenuBookmarksTitleString
         case .history:
-            return Strings.AppMenuHistoryTitleString
+            return .AppMenuHistoryTitleString
         case .downloads:
-            return Strings.AppMenuDownloadsTitleString
+            return .AppMenuDownloadsTitleString
         case .readingList:
-            return Strings.AppMenuReadingListTitleString
+            return .AppMenuReadingListTitleString
         }
     }
 }

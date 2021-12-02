@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Account
 import Shared
@@ -22,6 +22,16 @@ extension UILabel {
             textColor = nil
         }
         attributedText = attributed
+    }
+    
+    func heightForLabel(_ label: UILabel, width: CGFloat, text: String?) -> CGFloat {
+        guard let text = text else { return 0 }
+
+        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+        let attrs = [NSAttributedString.Key.font: label.font as Any]
+        let boundingRect = NSString(string: text).boundingRect(with: size,
+            options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
+        return boundingRect.height
     }
 }
 
@@ -266,8 +276,8 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     func writeBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
             let controlState = control.isOn ? UserFeaturePreference.enabled : UserFeaturePreference.disabled
-            featureFlags.setUserPreferenceFor(featureFlagName,
-                                              to: controlState)
+            featureFlags.setUserPreferenceFor(featureFlagName, to: controlState)
+
         } else {
             guard let key = prefKey else {
                 return
@@ -473,7 +483,7 @@ class CheckmarkSetting: Setting {
             cell.accessoryType = .checkmark
             cell.tintColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         } else {
-            let window = UIApplication.shared.keyWindow
+            let window = UIWindow.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
             cell.indentationWidth = 42 + safeAreaInsets
             cell.indentationLevel = 1
@@ -764,16 +774,6 @@ class SettingsTableViewController: ThemedTableViewController {
         if let setting = section[indexPath.row], setting.enabled {
             setting.onClick(navigationController)
         }
-    }
-
-    fileprivate func heightForLabel(_ label: UILabel, width: CGFloat, text: String?) -> CGFloat {
-        guard let text = text else { return 0 }
-
-        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs = [NSAttributedString.Key.font: label.font as Any]
-        let boundingRect = NSString(string: text).boundingRect(with: size,
-            options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
-        return boundingRect.height
     }
 
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {

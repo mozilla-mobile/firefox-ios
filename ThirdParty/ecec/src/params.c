@@ -42,7 +42,7 @@ ece_read_uint32_be(const uint8_t* bytes) {
 typedef struct ece_header_pairs_s {
   struct ece_header_pairs_s* next;
   // The name and value are pointers into the backing header value; the parser
-  // doesn't allocate new strings. Freeing the backing string will invalidate
+  // doesn't allocate new . Freeing the backing string will invalidate
   // all `name` and `value` references. Also, because these are not true C
   // strings, it's important to use them with functions that take a length, like
   // `strncmp`. Functions that assume a NUL-terminated string will read until
@@ -260,7 +260,7 @@ ece_header_parse(ece_header_parser_t* parser, const char* input) {
     if (ece_header_is_valid_pair_value(*input)) {
       // Quoted strings allow spaces and escapes, but neither `Crypto-Key` nor
       // `Encryption` accept them. We keep the parser simple by rejecting
-      // non-Base64url characters here. We also disallow empty quoted strings.
+      // non-Base64url characters here. We also disallow empty quoted .
       parser->params->pairs->value = input;
       parser->params->pairs->valueLen++;
       parser->state = ECE_HEADER_STATE_QUOTED_VALUE;

@@ -1,13 +1,13 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
 import SnapKit
 import UIKit
 
-class TabMoreMenuViewController: UIViewController, Themeable {
+class TabMoreMenuViewController: UIViewController, NotificationThemeable {
     weak var delegate: TabTrayDelegate?
     var chronTabsTrayDelegate: ChronologicalTabsDelegate?
     var bottomSheetDelegate: BottomSheetDelegate?
@@ -16,13 +16,13 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     let profile: Profile
     let tabIndex: IndexPath
 
-    let titles: [Int: [String]] = [ 1: [Strings.ShareAddToReadingList,
-                                        Strings.BookmarkContextMenuTitle,
-                                        Strings.AddToShortcutsActionTitle],
-                                    2: [Strings.CloseTabTitle],
-                                    0: [Strings.CopyAddressTitle,
-                                        Strings.ShareContextMenuTitle,
-                                        Strings.SendToDeviceTitle]
+    let titles: [Int: [String]] = [ 1: [.ShareAddToReadingList,
+                                        .BookmarkContextMenuTitle,
+                                        .AddToShortcutsActionTitle],
+                                    2: [.CloseTabTitle],
+                                    0: [.CopyAddressTitle,
+                                        .ShareContextMenuTitle,
+                                        .SendToDeviceTitle]
     ]
     let imageViews: [Int: [UIImageView]] = [ 1: [UIImageView(image: UIImage.templateImageNamed("library-readinglist")),
                                                  UIImageView(image: UIImage.templateImageNamed("bookmark")),
@@ -63,7 +63,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     }()
     
     func applyTheme() {
-        if ThemeManager.instance.currentName == .normal {
+        if LegacyThemeManager.instance.currentName == .normal {
             tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey10
         } else {
             tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey90
@@ -165,7 +165,7 @@ extension TabMoreMenuViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreMenuCell", for: indexPath)
         let lightColor = UIColor.theme.tableView.rowBackground
         let darkColor = UIColor.Photon.Grey80
-        cell.backgroundColor = ThemeManager.instance.currentName == .normal ? lightColor : darkColor
+        cell.backgroundColor = LegacyThemeManager.instance.currentName == .normal ? lightColor : darkColor
         cell.textLabel?.text = titles[indexPath.section]?[indexPath.row]
         cell.accessoryView = imageViews[indexPath.section]?[indexPath.row]
         cell.accessoryView?.tintColor = UIColor.theme.textField.textAndTint
@@ -195,7 +195,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
                 dismissMenu()
             case 1:
                 dismissMenu()

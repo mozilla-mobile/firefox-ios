@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -65,7 +65,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = Strings.SettingsDataManagementTitle
+        title = .SettingsDataManagementTitle
 
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
@@ -78,7 +78,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
         if indexPath.section == SectionArrow {
             cell.accessoryType = .disclosureIndicator
-            cell.textLabel?.text = Strings.SettingsWebsiteDataTitle
+            cell.textLabel?.text = .SettingsWebsiteDataTitle
             cell.accessibilityIdentifier = "WebsiteData"
             clearButton = cell
         } else if indexPath.section == SectionToggles {
@@ -92,7 +92,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             control.tag = indexPath.item
         } else {
             assert(indexPath.section == SectionButton)
-            cell.textLabel?.text = Strings.SettingsClearPrivateDataClearButton
+            cell.textLabel?.text = .SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             cell.accessibilityTraits = UIAccessibilityTraits.button
@@ -183,7 +183,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         var sectionTitle: String?
         if section == SectionToggles {
-            sectionTitle = Strings.SettingsClearPrivateDataTitle
+            sectionTitle = .SettingsClearPrivateDataTitle
         } else {
             sectionTitle = nil
         }

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Storage
@@ -236,8 +236,8 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         }
         self.titleLabel.text = site.title.isEmpty ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain
-        self.titleLabel.textColor = ThemeManager.instance.current.actionMenu.foreground
-        self.descriptionLabel.textColor = ThemeManager.instance.current.actionMenu.foreground
+        self.titleLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
+        self.descriptionLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
         
     }
 }

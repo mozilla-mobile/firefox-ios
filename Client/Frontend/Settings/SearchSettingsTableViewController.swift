@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import SDWebImage
@@ -50,10 +50,10 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is ThemedNavigationController) {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SettingsSearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
         }
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .plain, target: self,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: .SettingsSearchEditButton, style: .plain, target: self,
                                                                  action: #selector(beginEditing))
     }
 
@@ -121,9 +121,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.selectionStyle = .none
             } else {
                 cell.editingAccessoryType = .disclosureIndicator
-                cell.accessibilityLabel = Strings.SettingsAddCustomEngineTitle
+                cell.accessibilityLabel = .SettingsAddCustomEngineTitle
                 cell.accessibilityIdentifier = "customEngineViewButton"
-                cell.textLabel?.text = Strings.SettingsAddCustomEngine
+                cell.textLabel?.text = .SettingsAddCustomEngine
             }
         }
 
@@ -161,7 +161,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             customSearchEngineForm.profile = self.profile
             customSearchEngineForm.successCallback = {
                 guard let window = self.view.window else { return }
-                SimpleToast().showAlertWithText(Strings.ThirdPartySearchEngineAdded, bottomContainer: window)
+                SimpleToast().showAlertWithText(.ThirdPartySearchEngineAdded, bottomContainer: window)
             }
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         }
@@ -291,7 +291,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         tableView.isEditing = true
         showDeletion = editing
         UIView.performWithoutAnimation {
-            self.navigationItem.rightBarButtonItem?.title = editing ? Strings.SettingsSearchDoneButton : Strings.SettingsSearchEditButton
+            self.navigationItem.rightBarButtonItem?.title = editing ? .SettingsSearchDoneButton : .SettingsSearchEditButton
         }
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         navigationItem.rightBarButtonItem?.action = editing ?
@@ -339,7 +339,10 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             model.defaultEngine = engine
             updateSearchIcon?()
             self.tableView.reloadData()
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": "defaultSearchEngine", "to": engine.engineID ?? "custom"])
+
+            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "defaultSearchEngine",
+                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engine.engineID ?? "custom"]
+            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
         }
         _ = navigationController?.popViewController(animated: true)
     }

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import Account
@@ -10,19 +10,19 @@ extension PhotonActionSheetProtocol {
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
     func getLibraryActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
-        let bookmarks = PhotonActionSheetItem(title: Strings.AppMenuBookmarks, iconString: "menu-panel-Bookmarks") { _, _ in
+        let bookmarks = PhotonActionSheetItem(title: .AppMenuBookmarks, iconString: "menu-panel-Bookmarks") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary(panel: .bookmarks)
         }
-        let history = PhotonActionSheetItem(title: Strings.AppMenuHistory, iconString: "menu-panel-History") { _, _ in
+        let history = PhotonActionSheetItem(title: .AppMenuHistory, iconString: "menu-panel-History") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary(panel: .history)
         }
-        let downloads = PhotonActionSheetItem(title: Strings.AppMenuDownloads, iconString: "menu-panel-Downloads") { _, _ in
+        let downloads = PhotonActionSheetItem(title: .AppMenuDownloads, iconString: "menu-panel-Downloads") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary(panel: .downloads)
         }
-        let readingList = PhotonActionSheetItem(title: Strings.AppMenuReadingList, iconString: "menu-panel-ReadingList") { _, _ in
+        let readingList = PhotonActionSheetItem(title: .AppMenuReadingList, iconString: "menu-panel-ReadingList") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
             bvc?.showLibrary(panel: .readingList)
         }
@@ -34,7 +34,7 @@ extension PhotonActionSheetProtocol {
     func getHomeAction(vcDelegate: Self.PageOptionsVC) -> [PhotonActionSheetItem] {
         guard let tab = self.tabManager.selectedTab else { return [] }
         
-        let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _, _ in
+        let openHomePage = PhotonActionSheetItem(title: .AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _, _ in
             let page = NewTabAccessors.getHomePage(self.profile.prefs)
             if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
                 tab.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
@@ -53,7 +53,7 @@ extension PhotonActionSheetProtocol {
         let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
         // Get the title and icon for this feature from nimbus.
         // We need to provide defaults if Nimbus doesn't provide them.
-        let title = variables.getText("settings-title") ?? Strings.AppMenuSettingsTitleString
+        let title = variables.getText("settings-title") ?? .AppMenuSettingsTitleString
         let icon = variables.getString("settings-icon") ?? "menu-Settings"
 
         let openSettings = PhotonActionSheetItem(title: title, iconString: icon) { _, _ in
@@ -82,7 +82,7 @@ extension PhotonActionSheetProtocol {
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         var items: [PhotonActionSheetItem] = []
         let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-        let imageModeTitle = noImageEnabled ? Strings.AppMenuShowImageMode : Strings.AppMenuNoImageMode
+        let imageModeTitle: String = noImageEnabled ? .AppMenuShowImageMode : .AppMenuNoImageMode
         let iconString = noImageEnabled ? "menu-ShowImages" : "menu-NoImageMode"
         let noImageMode = PhotonActionSheetItem(title: imageModeTitle, iconString: iconString, isEnabled: noImageEnabled) { action,_ in
             NoImageModeHelper.toggle(isEnabled: action.isEnabled, profile: self.profile, tabManager: self.tabManager)
@@ -96,7 +96,7 @@ extension PhotonActionSheetProtocol {
         items.append(noImageMode)
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
-        let nightModeTitle = nightModeEnabled ? Strings.AppMenuTurnOffNightMode : Strings.AppMenuTurnOnNightMode
+        let nightModeTitle: String = nightModeEnabled ? .AppMenuTurnOffNightMode : .AppMenuTurnOnNightMode
         let nightMode = PhotonActionSheetItem(title: nightModeTitle, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { _, _ in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
 
@@ -107,13 +107,13 @@ extension PhotonActionSheetProtocol {
             }
 
             // If we've enabled night mode and the theme is normal, enable dark theme
-            if NightModeHelper.isActivated(self.profile.prefs), ThemeManager.instance.currentName == .normal {
-                ThemeManager.instance.current = DarkTheme()
+            if NightModeHelper.isActivated(self.profile.prefs), LegacyThemeManager.instance.currentName == .normal {
+                LegacyThemeManager.instance.current = DarkTheme()
                 NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: true)
             }
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
-            if !NightModeHelper.isActivated(self.profile.prefs), NightModeHelper.hasEnabledDarkTheme(self.profile.prefs), ThemeManager.instance.currentName == .dark {
-                ThemeManager.instance.current = NormalTheme()
+            if !NightModeHelper.isActivated(self.profile.prefs), NightModeHelper.hasEnabledDarkTheme(self.profile.prefs), LegacyThemeManager.instance.currentName == .dark {
+                LegacyThemeManager.instance.current = NormalTheme()
                 NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: false)
             }
         }
@@ -135,11 +135,11 @@ extension PhotonActionSheetProtocol {
         let needsReauth = rustAccount.accountNeedsReauth()
 
         guard let userProfile = rustAccount.userProfile else {
-            return PhotonActionSheetItem(title: Strings.AppMenuBackUpAndSyncData, iconString: "menu-sync", handler: action)
+            return PhotonActionSheetItem(title: .AppMenuBackUpAndSyncData, iconString: "menu-sync", handler: action)
         }
         let title: String = {
             if rustAccount.accountNeedsReauth() {
-                return Strings.FxAAccountVerifyPassword
+                return .FxAAccountVerifyPassword
             }
             return userProfile.displayName ?? userProfile.email
         }()

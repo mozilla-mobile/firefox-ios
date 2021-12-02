@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import UIKit
@@ -44,7 +44,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     var onViewDismissed: (() -> Void)? = nil
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
-    let theme = ThemeManager.instance
+    let theme = LegacyThemeManager.instance
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
@@ -111,7 +111,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
     private lazy var goToSettingsButton: UIButton = .build { [weak self] button in
         guard let self = self else { return }
-        button.setTitle(Strings.CoverSheetETPSettingsButton, for: .normal)
+        button.setTitle(.CoverSheetETPSettingsButton, for: .normal)
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 
@@ -82,7 +82,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             // Redraw the toolbar so the badge hides from the appMenu button.
             updateToolbarStateForTraitCollection(view.traitCollection)
         }
-        whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
+        whatsNewAction = PhotonActionSheetItem(title: .WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.openURLInNewTab(whatsNewURL)
@@ -97,20 +97,50 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let syncAction = syncMenuButton(showFxA: presentSignInViewController)
         let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
         let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
-            PhotonActionSheetItem(title: Strings.AppMenuPasswords, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
-            guard let navController = self.navigationController else { return }
-            let navigationHandler: ((_ url: URL?) -> Void) = { url in
-                UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
-                self.openURLInNewTab(url)
+            PhotonActionSheetItem(title: .AppMenuPasswords, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
+                guard let navController = self.navigationController else { return }
+                let navigationHandler: ((_ url: URL?) -> Void) = { url in
+                    UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+                    self.openURLInNewTab(url)
+                }
+                            
+                if AppAuthenticator.canAuthenticateDeviceOwner() {
+                    if LoginOnboarding.shouldShow() {
+                        let loginOnboardingViewController = LoginOnboardingViewController(shownFromAppMenu: true)
+                        loginOnboardingViewController.doneHandler = {
+                            loginOnboardingViewController.dismiss(animated: true)
+                        }
+                        
+                        loginOnboardingViewController.proceedHandler = {
+                            loginOnboardingViewController.dismiss(animated: true) {
+                                LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                                    guard let loginsVC = loginsVC else { return }
+                                    loginsVC.shownFromAppMenu = true
+                                    let navController = ThemedNavigationController(rootViewController: loginsVC)
+                                    self.present(navController, animated: true)
+                                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
+                                }
+                            }
+                        }
+                        
+                        let navController = ThemedNavigationController(rootViewController: loginOnboardingViewController)
+                        self.present(navController, animated: true)
+                        
+                        LoginOnboarding.setShown()
+                    } else {
+                        LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+                            guard let loginsVC = loginsVC else { return }
+                            loginsVC.shownFromAppMenu = true
+                            let navController = ThemedNavigationController(rootViewController: loginsVC)
+                            self.present(navController, animated: true)
+                            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
+                        }
+                    }
+                } else {
+                    let navController = ThemedNavigationController(rootViewController: DevicePasscodeRequiredViewController(shownFromAppMenu: true))
+                    self.present(navController, animated: true)
+                }
             }
-            LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                guard let loginsVC = loginsVC else { return }
-                loginsVC.shownFromAppMenu = true
-                let navController = ThemedNavigationController(rootViewController: loginsVC)
-                self.present(navController, animated: true)
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
-            }
-        }
         
         let section0 = getLibraryActions(vcDelegate: self)
         var section1 = getOtherPanelActions(vcDelegate: self)
@@ -148,10 +178,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             }
         }
 
-        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _, _ in
+        let privateBrowsingMode = PhotonActionSheetItem(title: .privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _, _ in
             action()
         }
-        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _, _ in
+        let normalBrowsingMode = PhotonActionSheetItem(title: .normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _, _ in
             action()
         }
 
@@ -162,16 +192,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
-        let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { _, _ in
+        let newTab = PhotonActionSheetItem(title: .NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { _, _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }
-        let newPrivateTab = PhotonActionSheetItem(title: Strings.NewPrivateTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { _, _ in
+        let newPrivateTab = PhotonActionSheetItem(title: .NewPrivateTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { _, _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}
-        let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "tab_close", iconType: .Image) { _, _ in
+        let closeTab = PhotonActionSheetItem(title: .CloseTabTitle, iconString: "tab_close", iconType: .Image) { _, _ in
             if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+                self.tabManager.removeTab(tab)
                 self.updateTabCountUsingTabManager(self.tabManager)
             }}
         if let tab = self.tabManager.selectedTab {

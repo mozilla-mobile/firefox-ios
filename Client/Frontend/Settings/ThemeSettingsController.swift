@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -29,11 +29,11 @@ class ThemeSettingsController: ThemedTableViewController {
     private let deviceBrightnessIndicatorColor = UIColor(white: 182/255, alpha: 1.0)
 
     var isAutoBrightnessOn: Bool {
-        return ThemeManager.instance.automaticBrightnessIsOn
+        return LegacyThemeManager.instance.automaticBrightnessIsOn
     }
 
     var isSystemThemeOn: Bool {
-        return ThemeManager.instance.systemThemeIsOn
+        return LegacyThemeManager.instance.systemThemeIsOn
     }
 
     private var shouldHideSystemThemeSection = false
@@ -48,7 +48,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = Strings.SettingsDisplayThemeTitle
+        title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
@@ -58,8 +58,8 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     @objc func brightnessChanged() {
-        guard ThemeManager.instance.automaticBrightnessIsOn else { return }
-        ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+        guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
+        LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         applyTheme()
     }
 
@@ -69,11 +69,11 @@ class ThemeSettingsController: ThemedTableViewController {
         headerView.titleLabel.text = {
             switch section {
             case .systemTheme:
-                return Strings.SystemThemeSectionHeader
+                return .SystemThemeSectionHeader
             case .automaticBrightness:
-                return Strings.ThemeSwitchModeSectionHeader
+                return .ThemeSwitchModeSectionHeader
             case .lightDarkPicker:
-                return isAutoBrightnessOn ? Strings.DisplayThemeBrightnessThresholdSectionHeader : Strings.ThemePickerSectionHeader
+                return isAutoBrightnessOn ? .DisplayThemeBrightnessThresholdSectionHeader : .ThemePickerSectionHeader
             }
         }()
         headerView.titleLabel.text = headerView.titleLabel.text?.uppercased()
@@ -85,16 +85,18 @@ class ThemeSettingsController: ThemedTableViewController {
         guard isAutoBrightnessOn && section == Section.lightDarkPicker.rawValue else { return nil }
 
         let footer = UIView()
-        let label = UILabel()
-        footer.addSubview(label)
-        label.text = Strings.DisplayThemeSectionFooter
-        label.numberOfLines = 0
-        label.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(4)
-            make.left.right.equalToSuperview().inset(16)
+        let label: UILabel = .build { label in
+            label.text = .DisplayThemeSectionFooter
+            label.numberOfLines = 0
+            label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
+            label.textColor = UIColor.theme.tableView.headerTextLight
         }
-        label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
-        label.textColor = UIColor.theme.tableView.headerTextLight
+        footer.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: footer.topAnchor, constant: 4),
+            label.leadingAnchor.constraint(equalTo: footer.leadingAnchor, constant: 16),
+            label.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -16),
+        ])
         return footer
     }
 
@@ -119,13 +121,15 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     @objc func systemThemeSwitchValueChanged(control: UISwitch) {
-        ThemeManager.instance.systemThemeIsOn = control.isOn
+        LegacyThemeManager.instance.systemThemeIsOn = control.isOn
     
         let userInterfaceStyle = traitCollection.userInterfaceStyle
         if control.isOn {
-            ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-        } else if ThemeManager.instance.automaticBrightnessIsOn {
-            ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+            // Reset the user interface style to the default before choosing our theme
+            UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+        } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
+            LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: .systemThemeSwitch, extras: ["to": control.isOn])
 
@@ -140,24 +144,28 @@ class ThemeSettingsController: ThemedTableViewController {
             return
         }
 
-        ThemeManager.instance.automaticBrightnessValue = control.value
+        LegacyThemeManager.instance.automaticBrightnessValue = control.value
         brightnessChanged()
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
-        let slider = UISlider()
-        parent.addSubview(slider)
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
         let images = ["menu-NightMode", "themeBrightness"].map { name in
             UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: UIColor.theme.browser.tint)
         }
-        slider.minimumValueImage = images[0]
-        slider.maximumValueImage = images[1]
 
-        slider.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.left.right.equalToSuperview().inset(UX.sliderLeftRightInset)
+        let slider: UISlider = .build { slider in
+            slider.minimumValueImage = images[0]
+            slider.maximumValueImage = images[1]
         }
+        parent.addSubview(slider)
+
+        NSLayoutConstraint.activate([
+            slider.topAnchor.constraint(equalTo: parent.topAnchor),
+            slider.bottomAnchor.constraint(equalTo: parent.bottomAnchor),
+            slider.leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: UX.sliderLeftRightInset),
+            slider.trailingAnchor.constraint(equalTo: parent.trailingAnchor, constant: -UX.sliderLeftRightInset),
+        ])
         return slider
     }
 
@@ -167,7 +175,7 @@ class ThemeSettingsController: ThemedTableViewController {
         let section = Section(rawValue: indexPath.section) ?? .automaticBrightness
         switch section {
         case .systemTheme:
-            cell.textLabel?.text = Strings.SystemThemeSectionSwitchTitle
+            cell.textLabel?.text = .SystemThemeSectionSwitchTitle
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
 
@@ -176,15 +184,15 @@ class ThemeSettingsController: ThemedTableViewController {
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
             control.onTintColor = UIColor.theme.tableView.controlTint
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
-            control.isOn = ThemeManager.instance.systemThemeIsOn
+            control.isOn = LegacyThemeManager.instance.systemThemeIsOn
             cell.accessoryView = control
         case .automaticBrightness:
             if indexPath.row == 0 {
-                cell.textLabel?.text = Strings.DisplayThemeManualSwitchTitle
-                cell.detailTextLabel?.text = Strings.DisplayThemeManualSwitchSubtitle
+                cell.textLabel?.text = .DisplayThemeManualSwitchTitle
+                cell.detailTextLabel?.text = .DisplayThemeManualSwitchSubtitle
             } else {
-                cell.textLabel?.text = Strings.DisplayThemeAutomaticSwitchTitle
-                cell.detailTextLabel?.text = Strings.DisplayThemeAutomaticSwitchSubtitle
+                cell.textLabel?.text = .DisplayThemeAutomaticSwitchTitle
+                cell.detailTextLabel?.text = .DisplayThemeAutomaticSwitchSubtitle
             }
             cell.detailTextLabel?.numberOfLines = 2
             cell.detailTextLabel?.minimumScaleFactor = 0.5
@@ -202,7 +210,7 @@ class ThemeSettingsController: ThemedTableViewController {
                 let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
                 let slider = makeSlider(parent: cell.contentView)
                 slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-                slider.value = Float(ThemeManager.instance.automaticBrightnessValue)
+                slider.value = Float(LegacyThemeManager.instance.automaticBrightnessValue)
                 deviceBrightnessIndicator.value = Float(UIScreen.main.brightness)
                 deviceBrightnessIndicator.isUserInteractionEnabled = false
                 deviceBrightnessIndicator.minimumTrackTintColor = .clear
@@ -211,12 +219,12 @@ class ThemeSettingsController: ThemedTableViewController {
                 self.slider = (slider, deviceBrightnessIndicator)
             } else {
                 if indexPath.row == 0 {
-                    cell.textLabel?.text = Strings.DisplayThemeOptionLight
+                    cell.textLabel?.text = .DisplayThemeOptionLight
                 } else {
-                    cell.textLabel?.text = Strings.DisplayThemeOptionDark
+                    cell.textLabel?.text = .DisplayThemeOptionDark
                 }
 
-                let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+                let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
                 if (indexPath.row == 0 && theme == .normal) ||
                     (indexPath.row == 1 && theme == .dark) {
                     cell.accessoryType = .checkmark
@@ -254,13 +262,13 @@ class ThemeSettingsController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == Section.automaticBrightness.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            ThemeManager.instance.automaticBrightnessIsOn = indexPath.row != 0
+            LegacyThemeManager.instance.automaticBrightnessIsOn = indexPath.row != 0
             tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
             tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            ThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
+            LegacyThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeLight : .themeDark)
         }
         applyTheme()

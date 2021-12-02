@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -49,11 +49,11 @@ enum NewTabPage: String {
     var settingTitle: String {
         switch self {
         case .blankPage:
-            return Strings.SettingsNewTabBlankPage
+            return .SettingsNewTabBlankPage
         case .homePage:
-            return Strings.SettingsNewTabHomePage
+            return .SettingsNewTabHomePage
         case .topSites:
-            return Strings.SettingsNewTabTopSites
+            return .SettingsNewTabTopSites
         }
     }
 

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import Storage
@@ -50,9 +50,9 @@ class AppSyncDelegate: SyncDelegate {
                 let notificationContent = UNMutableNotificationContent()
                 let title: String
                 if let deviceName = deviceName {
-                    title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
+                    title = String(format: .SentTab_TabArrivingNotification_WithDevice_title, deviceName)
                 } else {
-                    title = Strings.SentTab_TabArrivingNotification_NoDevice_title
+                    title = .SentTab_TabArrivingNotification_NoDevice_title
                 }
                 notificationContent.title = title
                 notificationContent.body = url.absoluteDisplayExternalString

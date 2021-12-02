@@ -1,15 +1,17 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
+    let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+
     func testPanelsEmptyState() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Bookmarks)
         snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
@@ -37,7 +39,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testURLBar() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.goto(URLBarOpen)
         snapshot("URLBar-01")
 
@@ -79,7 +81,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testPageMenuOnWebPage() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         navigator.goto(BrowserTab)
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -90,9 +92,9 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testFxASignInPage() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables.cells["menu-sync"], timeout: 5)
@@ -108,44 +110,25 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
-    func testPasscodeSettings() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-        app.buttons["urlBar-cancel"].tap()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(PasscodeSettings)
-        app.tables.cells["TurnOnPasscode"].tap()
-        snapshot("SetPasscodeScreen-1-nopasscode")
-
-        // Type "111111 passcode"
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("SetPasscodeScreen-2-typepasscode")
-        // Type incorrect passcode "111112"
-        typePasscode(n: 5, keyNumber: 2)
-        // Type once inkey "2"
-        typePasscode(n: 1, keyNumber: 1)
-        snapshot("SetPasscodeScreen-3-passcodesmustmatch")
-
-        // Confitm passcode
-        typePasscode(n: 6, keyNumber: 2)
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("SetPasscodeScreen-3")
-
-        // Go to interval settings
-        app.tables.cells["PasscodeInterval"].tap()
-        typePasscode(n: 6, keyNumber: 2)
-        snapshot("PasscodeIntervalScreen-1")
-    }
-
     func testLoginDetails() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        navigator.goto(LoginsSettings)
-        waitForExistence(app.tables["Login List"])
+        waitForExistence(app.cells["Logins"], timeout: 15)
+        app.cells["Logins"].tap()
+
+        waitForExistence(app.navigationBars.buttons.firstMatch, timeout: 15)
+        app.otherElements.buttons.element(boundBy: 2).tap()
+
+        let passcodeInput = springboard.secureTextFields.firstMatch
+        waitForExistence(passcodeInput, timeout: 20)
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
+
+        waitForExistence(app.tables["Login List"], timeout: 10)
         app.buttons.element(boundBy: 1).tap()
-        waitForExistence(app.tables["Add Credential"], timeout: 3)
+        waitForExistence(app.tables["Add Credential"], timeout: 10)
         snapshot("CreateLogin")
         app.tables["Add Credential"].cells.element(boundBy: 0).tap()
         app.keyboards.keys.element(boundBy: 3).tap()
@@ -155,7 +138,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.keyboards.keys.element(boundBy: 3).tap()
         app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).tap()
 
-        waitForExistence(app.tables["Login List"],timeout: 5)
+        waitForExistence(app.tables["Login List"],timeout: 15)
         snapshot("CreatedLoginView")
 
         app.tables["Login List"].cells.element(boundBy: 2).tap()

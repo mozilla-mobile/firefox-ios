@@ -1,10 +1,12 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import AuthenticationServices
 import SwiftKeychainWrapper
+
+let CredentialProviderAuthenticationDelay = 0.25
 
 class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
@@ -27,7 +29,7 @@ class CredentialProviderPresenter {
         if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else if let id = credentialIdentity.recordIdentifier {
-            profile.logins.get(id: id).upon { [weak self] result in
+            profile.logins.getLogin(id: id).upon { [weak self] result in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
@@ -47,7 +49,7 @@ class CredentialProviderPresenter {
     if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else {
-            profile.logins.list().upon {[weak self] result in
+            profile.logins.listLogins().upon {[weak self] result in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
@@ -72,15 +74,18 @@ class CredentialProviderPresenter {
     
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
-            switch result {
-            case .success:
-                // Move to the main thread because a state update triggers UI changes.
-                DispatchQueue.main.async { [unowned self] in
-                    self.showCredentialList(for: serviceIdentifiers)
+        // Force a short delay before we trigger authentication. See https://github.com/mozilla-mobile/firefox-ios/issues/9354
+        DispatchQueue.main.asyncAfter(deadline: .now() + CredentialProviderAuthenticationDelay) {
+            AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+                switch result {
+                case .success:
+                    // Move to the main thread because a state update triggers UI changes.
+                    DispatchQueue.main.async { [unowned self] in
+                        self.showCredentialList(for: serviceIdentifiers)
+                    }
+                case .failure:
+                    self.cancel(with: .userCanceled)
                 }
-            case .failure:
-                self.cancel(with: .userCanceled)
             }
         }
     }

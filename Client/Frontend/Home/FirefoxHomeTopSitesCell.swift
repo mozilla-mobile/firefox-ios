@@ -1,13 +1,13 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
 import SDWebImage
 import Storage
 
-private struct TopSiteCellUX {
+struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 8
@@ -25,7 +25,7 @@ private struct TopSiteCellUX {
 /*
  *  The TopSite cell that appears in the ASHorizontalScrollView.
  */
-class TopSiteItemCell: UICollectionViewCell, Themeable {
+class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
 
     var url: URL?
 
@@ -211,7 +211,7 @@ private struct ASHorizontalScrollCellUX {
 /*
  The View that describes the topSite cell that appears in the tableView.
  */
-class ASHorizontalScrollCell: UICollectionViewCell {
+class ASHorizontalScrollCell: UICollectionViewCell, ReusableCell {
 
     lazy var collectionView: UICollectionView = {
         let layout  = HorizontalFlowLayout()
@@ -412,7 +412,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         guard let traits = currentTraits else {
             return 0
         }
-        let isLandscape = UIApplication.shared.statusBarOrientation.isLandscape
+        let isLandscape = UIWindow.isLandscape
         if UIDevice.current.userInterfaceIdiom == .phone {
             if isLandscape {
                 return 8
@@ -423,7 +423,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         // On iPad
         // The number of items in a row is equal to the number of highlights in a row * 2
         var numItems = Int(FirefoxHomeUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass])
-        if UIApplication.shared.statusBarOrientation.isPortrait || (traits.horizontalSizeClass == .compact && isLandscape) {
+        if UIWindow.isLandscape || (traits.horizontalSizeClass == .compact && isLandscape) {
             numItems = numItems - 1
         }
         return numItems * 2

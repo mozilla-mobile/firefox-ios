@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -91,11 +91,11 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         generalSettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                        titleText: Strings.SettingsOfferClipboardBarTitle,
-                        statusText: Strings.SettingsOfferClipboardBarStatus),
+                        titleText: .SettingsOfferClipboardBarTitle,
+                        statusText: .SettingsOfferClipboardBarStatus),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.ContextMenuShowLinkPreviews, defaultValue: true,
-                        titleText: Strings.SettingsShowLinkPreviewsTitle,
-                        statusText: Strings.SettingsShowLinkPreviewsStatus)
+                        titleText: .SettingsShowLinkPreviewsTitle,
+                        statusText: .SettingsShowLinkPreviewsStatus)
         ]
 
         if #available(iOS 14.0, *) {
@@ -104,9 +104,9 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             ]
         }
 
-        let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
+        let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
-        let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
+        let footerText = !profile.hasAccount() ? NSAttributedString(string: .FxASyncUsageDetails) : nil
         settings += [
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
@@ -117,11 +117,10 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting )]
 
-        settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
+        settings += [ SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle), children: generalSettings)]
 
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        privacySettings.append(TouchIDPasscodeSetting(settings: self))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
 
@@ -164,6 +163,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
+                ResetJumpBackInContextualHint(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 

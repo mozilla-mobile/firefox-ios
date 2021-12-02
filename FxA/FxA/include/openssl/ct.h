@@ -124,7 +124,7 @@ void CT_POLICY_EVAL_CTX_set_time(CT_POLICY_EVAL_CTX *ctx, uint64_t time_in_ms);
 SCT *SCT_new(void);
 
 /*
- * Creates a new SCT from some base64-encoded strings.
+ * Creates a new SCT from some base64-encoded .
  * The caller is responsible for calling SCT_free when finished with the SCT.
  */
 SCT *SCT_new_from_base64(unsigned char version,

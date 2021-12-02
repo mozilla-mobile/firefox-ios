@@ -242,7 +242,7 @@ UI_METHOD *UI_OpenSSL(void);
    box, the writer can be used to build up the contents of the box, and the
    flusher to actually display the box and run the event loop until all data
    has been given, after which the reader only grabs the given data and puts
-   them back into the UI strings.
+   them back into the UI .
 
    All method functions take a UI as argument.  Additionally, the writer and
    the reader take a UI_STRING.

@@ -1,17 +1,17 @@
 /* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
-"Add to Bookmarks" = "पुस्तकचिनोमा थप्नुहोस्";
+"Add to Bookmarks" = "बुकमार्कमा थप्नुहोस्";
 
 /* Label for preview action on Tab Tray Tab to close the current tab */
 "Close Tab" = "ट्याब बन्द गर्नुहोस्";
 
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
-"Copy URL" = "यूआरएल प्रतिलिपि गर्नुहोस्";
+"Copy URL" = "URL कपि गर्नुहोस्";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
 "Menu.SendLinkToDevice" = "लिङ्कलाई उपकरणमा पठाउनुहोस्";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
-"Open Last Bookmark" = "अन्तिम पुस्तकचिनो खोल्नुहोस्";
+"Open Last Bookmark" = "अन्तिम बुकमार्क खोल्नुहोस्";
 
 /* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
 "Open Last Tab" = "अन्तिम ट्याब खोल्नुहोस्";

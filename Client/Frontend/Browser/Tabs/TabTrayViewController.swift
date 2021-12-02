@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import SnapKit
 import Shared
@@ -44,7 +44,7 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var syncTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: Strings.FxASyncNow,
+        let button = UIBarButtonItem(title: .FxASyncNow,
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapSyncTabs))
@@ -55,9 +55,9 @@ class TabTrayViewController: UIViewController {
     
     lazy var syncLoadingView: UIStackView = {
         let syncingLabel = UILabel()
-        syncingLabel.text = Strings.SyncingMessageWithEllipsis
+        syncingLabel.text = .SyncingMessageWithEllipsis
         
-        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.color = .systemGray
         activityIndicator.startAnimating()
         
@@ -112,9 +112,9 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var iPadNavigationMenuIdentifiers: UISegmentedControl = {
-        return UISegmentedControl(items: [Strings.TabTraySegmentedControlTitlesTabs,
-                                          Strings.TabTraySegmentedControlTitlesPrivateTabs,
-                                          Strings.TabTraySegmentedControlTitlesSyncedTabs])
+        return UISegmentedControl(items: [String.TabTraySegmentedControlTitlesTabs,
+                                          String.TabTraySegmentedControlTitlesPrivateTabs,
+                                          String.TabTraySegmentedControlTitlesSyncedTabs])
     }()
 
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
@@ -128,7 +128,7 @@ class TabTrayViewController: UIViewController {
         let toolbar = UIToolbar()
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
-
+        toolbar.isTranslucent = false
         return toolbar
     }()
 
@@ -136,23 +136,25 @@ class TabTrayViewController: UIViewController {
         return .lightContent
     }
 
-    var onViewDismissed: (() -> Void)? = nil
-
     // Initializers
-    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
-        self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate, profile: profile, showChronTabs: showChronTabs, tabToFocus: tabToFocus)
+    init(tabTrayDelegate: TabTrayDelegate? = nil,
+         profile: Profile,
+         showChronTabs: Bool = false,
+         tabToFocus: Tab? = nil,
+         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager) {
+
+        self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
+                                          profile: profile,
+                                          showChronTabs: showChronTabs,
+                                          tabToFocus: tabToFocus,
+                                          tabManager: tabManager)
 
         super.init(nibName: nil, bundle: nil)
+        setupNotifications()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onViewDismissed?()
-        onViewDismissed = nil
     }
 
     deinit {
@@ -162,9 +164,9 @@ class TabTrayViewController: UIViewController {
     // Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         viewSetup()
         applyTheme()
-        setupNotifications()
         updatePrivateUIState()
     }
 
@@ -186,9 +188,7 @@ class TabTrayViewController: UIViewController {
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
         }
-
-        navigationController?.navigationBar.shadowImage = UIImage()
-
+        
         if shouldUseiPadSetup {
             iPadViewSetup()
         } else {
@@ -341,7 +341,7 @@ class TabTrayViewController: UIViewController {
                 guard let self = self else { return }
                 
                 self.syncTabButton.customView = nil
-                self.syncTabButton.title = Strings.FxASyncNow
+                self.syncTabButton.title = .FxASyncNow
                 self.syncTabButton.isEnabled = true
             }
         default:
@@ -350,25 +350,18 @@ class TabTrayViewController: UIViewController {
     }
 }
 
-extension TabTrayViewController: Themeable {
+extension TabTrayViewController: NotificationThemeable {
      @objc func applyTheme() {
-         overrideUserInterfaceStyle =  ThemeManager.instance.userInterfaceStyle
          view.backgroundColor = UIColor.theme.tabTray.background
-         navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-         navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         navigationItem.rightBarButtonItem?.tintColor = UIColor.theme.tabTray.toolbarButtonTint
          navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
          navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-         let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
          if theme == .dark {
              navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
          } else {
              navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
          }
          viewModel.syncedTabsController.applyTheme()
-         setNeedsStatusBarAppearanceUpdate()
      }
  }
 

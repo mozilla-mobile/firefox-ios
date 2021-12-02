@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -19,7 +19,7 @@ private struct FirefoxHomeHighlightCellUX {
     static let BorderColor = UIColor.Photon.Grey30
 }
 
-class FirefoxHomeHighlightCell: UICollectionViewCell, Themeable {
+class FirefoxHomeHighlightCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -52,8 +52,6 @@ class FirefoxHomeHighlightCell: UICollectionViewCell, Themeable {
         siteImageView.clipsToBounds = true
         siteImageView.contentMode = .center
         siteImageView.layer.cornerRadius = FirefoxHomeHighlightCellUX.CornerRadius
-        siteImageView.layer.borderColor = FirefoxHomeHighlightCellUX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = FirefoxHomeHighlightCellUX.BorderWidth
         siteImageView.layer.masksToBounds = true
         return siteImageView
     }()

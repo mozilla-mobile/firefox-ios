@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import SnapKit
@@ -13,8 +13,9 @@ class SettingsLoadingView: UIView {
     }
 
     lazy var indicator: UIActivityIndicatorView = {
-        let isDarkTheme = ThemeManager.instance.currentName == .dark
-        let indicator = UIActivityIndicatorView(style: isDarkTheme ? .white : .gray)
+        let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.color = isDarkTheme ? .white : .systemGray
         indicator.hidesWhenStopped = false
         return indicator
     }()

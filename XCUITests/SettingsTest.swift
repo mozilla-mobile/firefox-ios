@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
@@ -31,7 +31,7 @@ class SettingsTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.OpenSiriFromSettings)
-        waitForExistence(app.buttons["Add to Siri"], timeout: 5)
+        waitForExistence(app.cells["SiriSettings"], timeout: 5)
     }
     /* Disable test since the option to set Firefox is not available in this build after issue #8513 landed, issue #8627
     func testDefaultBrowser() {

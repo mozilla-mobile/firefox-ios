@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -42,7 +42,7 @@ struct DownloadedFile: Equatable {
     }
 }
 
-class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel, UIDocumentInteractionControllerDelegate {
+class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let TwoLineImageOverlayCellIdentifier = "TwoLineImageOverlayCellIdentifier"
     let SiteTableViewHeaderIdentifier = "SiteTableViewHeaderIdentifier"
@@ -260,7 +260,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             imageView.tintColor = UIColor.Photon.Grey60
         }
         let welcomeLabel: UILabel = .build { label in
-            label.text = Strings.DownloadsPanelEmptyStateTitle
+            label.text = .DownloadsPanelEmptyStateTitle
             label.textAlignment = .center
             label.font = DynamicFontHelper.defaultHelper.DeviceFontLight
             label.textColor = UIColor.theme.homePanel.welcomeScreenText
@@ -316,13 +316,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         switch section {
         case 0:
-            header?.textLabel?.text = Strings.TableDateSectionTitleToday
+            header?.textLabel?.text = .TableDateSectionTitleToday
         case 1:
-            header?.textLabel?.text = Strings.TableDateSectionTitleYesterday
+            header?.textLabel?.text = .TableDateSectionTitleYesterday
         case 2:
-            header?.textLabel?.text = Strings.TableDateSectionTitleLastWeek
+            header?.textLabel?.text = .TableDateSectionTitleLastWeek
         case 3:
-            header?.textLabel?.text = Strings.TableDateSectionTitleLastMonth
+            header?.textLabel?.text = .TableDateSectionTitleLastMonth
         default:
             assertionFailure("Invalid Downloads section \(section)")
         }
@@ -379,42 +379,50 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // Intentionally blank. Required to use UITableViewRowActions
-    }
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: .DownloadsPanelDeleteTitle) { [weak self] (_, _, completion) in
+            guard let strongSelf = self else { completion(false); return }
 
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteTitle = Strings.DownloadsPanelDeleteTitle
-        let shareTitle = Strings.DownloadsPanelShareTitle
-        let delete = UITableViewRowAction(style: .destructive, title: deleteTitle, handler: { (action, indexPath) in
-            if let downloadedFile = self.downloadedFileForIndexPath(indexPath) {
-                if self.deleteDownloadedFile(downloadedFile) {
-                    self.tableView.beginUpdates()
-                    self.groupedDownloadedFiles.remove(downloadedFile)
-                    self.tableView.deleteRows(at: [indexPath], with: .right)
-                    self.tableView.endUpdates()
-                    self.updateEmptyPanelState()
-                    TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .download, value: .downloadsPanel)
-                }
+            if let downloadedFile = strongSelf.downloadedFileForIndexPath(indexPath),
+               strongSelf.deleteDownloadedFile(downloadedFile) {
+                strongSelf.tableView.beginUpdates()
+                strongSelf.groupedDownloadedFiles.remove(downloadedFile)
+                strongSelf.tableView.deleteRows(at: [indexPath], with: .right)
+                strongSelf.tableView.endUpdates()
+                strongSelf.updateEmptyPanelState()
+                TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .download, value: .downloadsPanel)
+                completion(true)
+            } else {
+                completion(false)
             }
-        })
-        let share = UITableViewRowAction(style: .normal, title: shareTitle, handler: { (action, indexPath) in
-            if let downloadedFile = self.downloadedFileForIndexPath(indexPath) {
-                self.shareDownloadedFile(downloadedFile, indexPath: indexPath)
+        }
+
+        let shareAction = UIContextualAction(style: .normal, title: .DownloadsPanelShareTitle) { [weak self] (_, view, completion) in
+            guard let strongSelf = self else { completion(false); return }
+
+            view.backgroundColor = strongSelf.view.tintColor
+            if let downloadedFile = strongSelf.downloadedFileForIndexPath(indexPath) {
+                strongSelf.shareDownloadedFile(downloadedFile, indexPath: indexPath)
                 TelemetryWrapper.recordEvent(category: .action, method: .share, object: .download, value: .downloadsPanel)
+                completion(true)
+            } else {
+                completion(false)
             }
-        })
-        share.backgroundColor = view.tintColor
-        return [delete, share]
-    }
-    // MARK: - UIDocumentInteractionControllerDelegate
+        }
 
+        return UISwipeActionsConfiguration(actions: [deleteAction, shareAction])
+    }
+}
+
+// MARK: - UIDocumentInteractionControllerDelegate
+extension DownloadsPanel: UIDocumentInteractionControllerDelegate {
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         return self
     }
 }
 
-extension DownloadsPanel: Themeable {
+// MARK: - NotificationThemeable
+extension DownloadsPanel: NotificationThemeable {
     func applyTheme() {
         emptyStateOverlayView.removeFromSuperview()
         emptyStateOverlayView = createEmptyStateOverlayView()

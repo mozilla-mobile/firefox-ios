@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Storage
@@ -142,8 +142,8 @@ final class LoginListViewModel {
         }
     }
     
-    public func save(loginRecord: LoginRecord) -> Deferred<Maybe<String>> {
-        return profile.logins.add(login: loginRecord)
+    public func save(loginRecord: LoginEntry) -> Deferred<Maybe<String>> {
+        return profile.logins.addLogin(login: loginRecord)
     }
 
     func setBreachIndexPath(indexPath: IndexPath) {

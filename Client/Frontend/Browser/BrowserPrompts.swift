@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import WebKit
@@ -46,7 +46,7 @@ struct MessageAlert: JSAlertInfo {
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
             preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: Strings.OKString, style: .default) { _ in
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
             self.completionHandler()
         })
         alertController.alertInfo = self
@@ -72,10 +72,10 @@ struct ConfirmPanelAlert: JSAlertInfo {
     func alertController() -> JSPromptAlertController {
         // Show JavaScript confirm dialogs.
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: Strings.OKString, style: .default) { _ in
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
             self.completionHandler(true)
         })
-        alertController.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel) { _ in
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
             self.cancel()
         })
         alertController.alertInfo = self
@@ -109,10 +109,10 @@ struct TextInputAlert: JSAlertInfo {
             input = textField
             input.text = self.defaultText
         })
-        alertController.addAction(UIAlertAction(title: Strings.OKString, style: .default) { _ in
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
             self.completionHandler(input.text)
         })
-        alertController.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel) { _ in
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
             self.cancel()
         })
         alertController.alertInfo = self

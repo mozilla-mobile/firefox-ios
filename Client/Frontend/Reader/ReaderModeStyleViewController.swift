@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -37,7 +37,7 @@ protocol ReaderModeStyleViewControllerDelegate {
 
 // MARK: -
 
-class ReaderModeStyleViewController: UIViewController, Themeable {
+class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
     var delegate: ReaderModeStyleViewControllerDelegate?
     var readerModeStyle: ReaderModeStyle = DefaultReaderModeStyle
 
@@ -348,7 +348,7 @@ class FontSizeButton: UIButton {
             setTitle(.ReaderModeStyleLargerLabel, for: [])
             accessibilityLabel = .ReaderModeStyleLargerAccessibilityLabel
         case .reset:
-            accessibilityLabel = Strings.ReaderModeResetFontSizeAccessibilityLabel
+            accessibilityLabel = .ReaderModeResetFontSizeAccessibilityLabel
         }
 
         // TODO Does this need to change with the selected font type? Not sure if makes sense for just +/-

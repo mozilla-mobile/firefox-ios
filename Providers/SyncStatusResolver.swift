@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Sync
 import Shared
@@ -68,9 +68,9 @@ public struct SyncStatusResolver {
             case .notStarted(let reason):
                 switch reason {
                 case .offline:
-                    return .bad(message: Strings.FirefoxSyncOfflineTitle)
+                    return .bad(message: .FirefoxSyncOfflineTitle)
                 case .noAccount:
-                    return .warning(message: Strings.FirefoxSyncOfflineTitle)
+                    return .warning(message: .FirefoxSyncOfflineTitle)
                 case .backoff(_):
                     return .good
                 case .engineRemotelyNotEnabled(_):
