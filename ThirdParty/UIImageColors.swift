@@ -282,12 +282,14 @@ extension UIImage {
         let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
 
         // core image filter that resamples an image down to 1x1 pixels
-        // so you can read the most dominant color in an imagage
+        // so you can read the most dominant color in an image
         guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]) else { return nil }
         guard let outputImage = filter.outputImage else { return nil }
 
         // reads each of the color values into a UIColor, and sends it back
         var bitmap = [UInt8](repeating: 0, count: 4)
+
+        guard let kCFNull = kCFNull else { return nil }
         let context = CIContext(options: [.workingColorSpace: kCFNull])
         context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
 

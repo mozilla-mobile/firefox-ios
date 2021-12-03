@@ -52,8 +52,15 @@ class FirefoxHomeRecentlySavedViewModel {
         })
 
         group.enter()
-        if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(RecentlySavedCollectionCellUX.readingListItemsLimit) {
-            updateReadingList(items: Array(readingList))
+        let maxItems = RecentlySavedCollectionCellUX.readingListItemsLimit
+        if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(maxItems) {
+            readingListItems = RecentItemsHelper.filterStaleItems(recentItems: Array(readingList), since: Date()) as! [ReadingListItem]
+
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .firefoxHomepage,
+                                         value: .recentlySavedReadingListView,
+                                         extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"])
             group.leave()
         }
 
@@ -63,7 +70,7 @@ class FirefoxHomeRecentlySavedViewModel {
     }
 
     func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
+        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: true) { image in
             completion(image)
         }
     }
@@ -82,15 +89,5 @@ class FirefoxHomeRecentlySavedViewModel {
                                          value: .recentlySavedBookmarkItemView,
                                          extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"])
         }
-    }
-
-    private func updateReadingList(items: [ReadingListItem]) {
-        readingListItems = RecentItemsHelper.filterStaleItems(recentItems: readingListItems, since: Date()) as! [ReadingListItem]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .firefoxHomepage,
-                                     value: .recentlySavedReadingListView,
-                                     extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"])
     }
 }

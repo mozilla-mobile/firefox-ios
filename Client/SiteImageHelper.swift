@@ -60,11 +60,10 @@ class SiteImageHelper {
         }
         
         throttler.throttle { [weak self] in
-            if !didCompleteFetch && imageType.peek() != nil {
-                if let updatedImageType = imageType.next() {
-                    self?.fetchImageFor(site: site, imageType: updatedImageType, shouldFallback: shouldFallback, completion: completion)
-                } else { return }
-            }
+            if !didCompleteFetch && imageType.peek() != nil,
+               let updatedImageType = imageType.next(), shouldFallback {
+                self?.fetchImageFor(site: site, imageType: updatedImageType, shouldFallback: shouldFallback, completion: completion)
+            } else { return }
         }
     }
 
