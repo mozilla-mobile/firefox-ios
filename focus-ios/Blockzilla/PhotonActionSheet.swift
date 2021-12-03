@@ -5,30 +5,6 @@
 import UIKit
 import SnapKit
 
-struct PhotonActionSheetUX {
-    static let MaxWidth: CGFloat = 414
-    static let Padding: CGFloat = 10
-    static let HeaderFooterHeight: CGFloat = 0
-    static let RowHeight: CGFloat = 50
-    static let BorderWidth: CGFloat = 0.5
-    static let BorderColor = UIColor.grey30
-    static let CornerRadius: CGFloat = 10
-    static let SiteImageViewSize = 52
-    static let IconSize = CGSize(width: 24, height: 24)
-    static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
-    static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
-    static let CloseButtonHeight: CGFloat  = 56
-    static let TablePadding: CGFloat = 6
-    static let BackgroundAlpha: CGFloat = 0.9
-    static let TitleHeaderHeight: CGFloat = 36
-    static let SeparatorHeaderHeight: CGFloat = 12
-    static let SeparatorColor = UIColor.grey10.withAlphaComponent(0.2)
-    static let SectionSeparatorColor = UIColor.grey50.withAlphaComponent(0.5)
-    static let TableViewBackgroundColor = UIColor.ink90.withAlphaComponent(PhotonActionSheetUX.BackgroundAlpha)
-    static let BlurAlpha: CGFloat = 0.7
-    static let SeparatorRowHeight: CGFloat = 8
-}
-
 // Ported with modifications from Firefox iOS (https://github.com/mozilla-mobile/firefox-ios)
 public struct PhotonActionSheetItem {
     public enum IconAlignment {
@@ -77,8 +53,9 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     weak var delegate: PhotonActionSheetDelegate?
     private(set) var actions: [[PhotonActionSheetItem]]
 
-    private var tintColor = UIColor.grey10
+    private let tintColor = UIColor.grey10
     private var tableView = UITableView(frame: .zero, style: .grouped)
+    private let titleHeaderName = "PhotonActionSheetTitleHeaderView"
 
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
@@ -130,19 +107,19 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.keyboardDismissMode = .onDrag
         tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetCell.reuseIdentifier)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
-        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
+        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: titleHeaderName)
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
-        tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
-        tableView.estimatedSectionFooterHeight = PhotonActionSheetUX.HeaderFooterHeight
-        tableView.estimatedSectionHeaderHeight = PhotonActionSheetUX.HeaderFooterHeight
+        tableView.estimatedRowHeight = UIConstants.layout.actionSheetRowHeight
+        tableView.estimatedSectionFooterHeight = UIConstants.layout.actionSheetHeaderFooterHeight
+        tableView.estimatedSectionHeaderHeight = UIConstants.layout.actionSheetHeaderFooterHeight
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
-        tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        tableView.layer.cornerRadius = UIConstants.layout.actionSheetCornerRadius
         tableView.separatorStyle = .none
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
         let origin = CGPoint(x: 0, y: 0)
-        let size = CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.Padding)
+        let size = CGSize(width: tableView.frame.width, height: UIConstants.layout.actionSheetPadding)
         let footer = UIView(frame: CGRect(origin: origin, size: size))
         tableView.tableHeaderView = footer
     }
@@ -150,14 +127,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.preferredContentSize = self.tableView.contentSize
-    }
-
-    private func applyBackgroundBlur() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        if let screenshot = appDelegate.window?.screenshot() {
-            let imageView = UIImageView(image: screenshot)
-            view.addSubview(imageView)
-        }
     }
 
     @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer? = nil) {
@@ -227,10 +196,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
 
-    func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
-        return false
-    }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetCell.reuseIdentifier, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
@@ -260,7 +225,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         if let title = title {
-            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
+            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: titleHeaderName) as! PhotonActionSheetTitleHeaderView
             header.tintColor = self.tintColor
             header.configure(with: title)
             return header
@@ -285,12 +250,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         switch section {
         case 0:
             if title != nil {
-                return PhotonActionSheetUX.TitleHeaderHeight
+                return UIConstants.layout.actionSheetTitleHeaderHeight
             } else {
                 return 1
             }
         default:
-            return PhotonActionSheetUX.SeparatorHeaderHeight
+            return UIConstants.layout.actionSheetSeparatorHeaderHeight
         }
     }
 }
@@ -308,7 +273,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
 
     lazy var separatorView: UIView = {
         let separatorLine = UIView()
-        separatorLine.backgroundColor = PhotonActionSheetUX.SeparatorColor
+        separatorLine.backgroundColor = .grey10.withAlphaComponent(0.2)
         return separatorLine
     }()
 
@@ -322,14 +287,14 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
             make.trailing.greaterThanOrEqualTo(contentView)
-            make.top.equalTo(contentView).offset(PhotonActionSheetUX.TablePadding)
+            make.top.equalTo(contentView).offset(UIConstants.layout.actionSheetTablePadding)
         }
 
         contentView.addSubview(separatorView)
 
         separatorView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheetUX.TablePadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIConstants.layout.actionSheetTablePadding)
             make.height.equalTo(0.5)
         }
     }
@@ -355,7 +320,7 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
         separatorLineView.backgroundColor = .clear
-        contentView.backgroundColor = PhotonActionSheetUX.SectionSeparatorColor
+        contentView.backgroundColor = .grey50.withAlphaComponent(0.5)
         self.contentView.addSubview(separatorLineView)
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)

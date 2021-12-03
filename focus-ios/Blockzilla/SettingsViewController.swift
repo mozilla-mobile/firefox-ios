@@ -167,13 +167,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
-    /// Used to calculate cell heights.
-    private lazy var dummyToggleCell: UITableViewCell = {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
-        cell.accessoryView = PaddedSwitch(switchView: UISwitch())
-        return cell
-    }()
-
     private var shouldScrollToSiri: Bool
     init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate, shouldScrollToSiri: Bool = false) {
         self.searchEngineManager = searchEngineManager
@@ -391,13 +384,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
-    }
-
-    private func heightForLabel(_ label: UILabel, width: CGFloat, text: String) -> CGFloat {
-        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs: [NSAttributedString.Key: Any] = [.font: label.font as Any]
-        let boundingRect = NSString(string: text).boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
-        return boundingRect.height
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

@@ -89,7 +89,6 @@ class URLBar: UIView {
     private var centeredURLConstraints = [Constraint]()
     private var fullWidthURLConstraints = [Constraint]()
     var editingURLTextConstrains = [Constraint]()
-    var pageURLTextConstrains = [Constraint]()
     var isIPadRegularDimensions = false {
         didSet {
             updateViews()
@@ -534,9 +533,6 @@ class URLBar: UIView {
             updateToolsetConstraints()
         }
     }
-
-    /// The outer view the URL bar will shrink from/to when transitioning to/from edit mode.
-    weak var shrinkFromView: UIView?
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Since the URL text field is smaller and centered on iPads, make sure

@@ -6,7 +6,6 @@ import UIKit
 
 class SettingsTableViewToggleCell: SettingsTableViewCell {
     private let newLabel = SmartLabel()
-    private let spacerView = UIView()
     var navigationController: UINavigationController?
 
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, toggle: BlockerToggle) {

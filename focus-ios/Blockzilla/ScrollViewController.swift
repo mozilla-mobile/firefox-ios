@@ -6,6 +6,8 @@ import UIKit
 
 class ScrollViewController: UIPageViewController, PageControlDelegate {
 
+    private  let cardSlides = ["onboarding_1", "onboarding_2", "onboarding_3"]
+    
     @objc func incrementPage(_ pageControl: PageControl) {
         changePage(isIncrement: true)
     }
@@ -45,7 +47,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         dataSource = self
         delegate = self
 
-        for slideName in IntroViewControllerUX.CardSlides {
+        for slideName in cardSlides {
             slides.append(UIImage(named: slideName)!)
         }
 
@@ -89,7 +91,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         let titleLabel = UILabel()
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
+        titleLabel.minimumScaleFactor = UIConstants.layout.introScreenMinimumFontScale
         titleLabel.textColor = .firstRunTitle
         titleLabel.textAlignment = NSTextAlignment.center
         titleLabel.text = title
@@ -107,7 +109,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         textLabel.numberOfLines = 5
         textLabel.attributedText = attributedStringForLabel(text)
         textLabel.adjustsFontSizeToFitWidth = true
-        textLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
+        textLabel.minimumScaleFactor = UIConstants.layout.introScreenMinimumFontScale
         textLabel.lineBreakMode = .byTruncatingTail
         textLabel.textAlignment = .center
         textLabel.textColor = .grey50
@@ -123,8 +125,8 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 
         introView.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(viewController.view)
-            make.width.equalTo(IntroViewControllerUX.Width).priority(.high)
-            make.height.equalTo(IntroViewControllerUX.Height)
+            make.width.equalTo(UIConstants.layout.introScreenWidth).priority(.high)
+            make.height.equalTo(UIConstants.layout.introScreenHeight)
             make.leading.greaterThanOrEqualTo(viewController.view).offset(UIConstants.layout.introViewOffset).priority(.required)
             make.trailing.lessThanOrEqualTo(viewController.view).offset(UIConstants.layout.introViewOffset).priority(.required)
         }
@@ -159,7 +161,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 
     private func attributedStringForLabel(_ text: String) -> NSMutableAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = IntroViewControllerUX.CardTextLineHeight
+        paragraphStyle.lineSpacing = UIConstants.layout.cardTextLineHeight
         paragraphStyle.alignment = .center
 
         let string = NSMutableAttributedString(string: text)

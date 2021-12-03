@@ -211,10 +211,6 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         navigationItem.hidesBackButton = tableView.isEditing
     }
 
-    private func getBackgroundView(bgColor: UIColor = .grey10.withAlphaComponent(0.2)) -> UIView {
-        let view = UIView()
-        return view
-    }
 }
 
 extension SearchSettingsViewController: AddSearchEngineDelegate {

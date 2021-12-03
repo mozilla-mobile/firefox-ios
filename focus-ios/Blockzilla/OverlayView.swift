@@ -28,9 +28,7 @@ class IndexedInsetButton: InsetButton {
 
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
-    private let searchButton = InsetButton()
     private let addToAutocompleteButton = InsetButton()
-    private var presented = false
     private var searchQuery = ""
     private var searchSuggestions = [String]()
     private var searchButtonGroup = [IndexedInsetButton]()

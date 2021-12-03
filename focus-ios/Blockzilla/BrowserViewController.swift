@@ -31,7 +31,6 @@ class BrowserViewController: UIViewController {
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     private let urlBarContainer = UIView()
     private var urlBar: URLBar!
-    private let requestHandler = RequestHandler()
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
     private var fillerView: UIView?
@@ -453,7 +452,6 @@ class BrowserViewController: UIViewController {
         urlBar = URLBar()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
-        urlBar.shrinkFromView = urlBarContainer
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
@@ -476,24 +474,6 @@ class BrowserViewController: UIViewController {
                 make.leading.trailing.equalToSuperview()
             }
         }
-    }
-
-    private func buildTrackingProtectionMenu(info: TPPageStats?) -> PhotonActionSheet {
-        var actions = [[PhotonActionSheetItem]]()
-        if info != nil {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, text: UIConstants.strings.trackingProtectionLabelDescription, textStyle: .subtitle, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
-            actions.append([titleItem])
-        } else {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection_off", isEnabled: false, accessory: .Switch)
-            actions.append([titleItem])
-        }
-        let totalCount = PhotonActionSheetItem(title: UIConstants.strings.trackersBlocked, accessory: .Text, accessoryText: String(info?.total ?? 0), bold: true)
-        let adCount = PhotonActionSheetItem(title: UIConstants.strings.adTrackerLabel, accessory: .Text, accessoryText: String(info?.adCount ?? 0))
-        let analyticCount = PhotonActionSheetItem(title: UIConstants.strings.analyticTrackerLabel, accessory: .Text, accessoryText: String(info?.analyticCount ?? 0))
-        let socialCount = PhotonActionSheetItem(title: UIConstants.strings.socialTrackerLabel, accessory: .Text, accessoryText: String(info?.socialCount ?? 0))
-        let contentCount = PhotonActionSheetItem(title: UIConstants.strings.contentTrackerLabel, accessory: .Text, accessoryText: String(info?.contentCount ?? 0))
-        actions.append([totalCount, adCount, analyticCount, socialCount, contentCount])
-        return PhotonActionSheet(actions: actions)
     }
 
     override func updateViewConstraints() {
@@ -791,36 +771,6 @@ class BrowserViewController: UIViewController {
         
         shortcutsBackground.snp.removeConstraints()
         addShortcutsBackgroundConstraints()
-    }
-
-    private func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {
-
-        var normalizedTitle = title
-        if title.count > UIConstants.layout.truncateCharactersLimit {
-            normalizedTitle = String("\(title.prefix(UIConstants.layout.truncateHeadCharactersCount))\(UIConstants.strings.truncateLeader)\(title.suffix(UIConstants.layout.truncateTailCharactersCount))")
-        }
-
-        let alertController = UIAlertController(title: normalizedTitle, message: nil, preferredStyle: .actionSheet)
-
-        if let link = link {
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.copyLink, style: .default) { _ in
-                UIPasteboard.general.string = link
-            })
-
-            alertController.addAction(UIAlertAction(title: UIConstants.strings.shareLink, style: .default) { _ in
-                let activityViewController = UIActivityViewController(activityItems: [link], applicationActivities: nil)
-                self.present(activityViewController, animated: true, completion: nil)
-            })
-        }
-
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.saveImage, style: .default) { _ in saveAction() })
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.copyImage, style: .default) { _ in copyAction() })
-        alertController.addAction(UIAlertAction(title: UIConstants.strings.cancel, style: .cancel))
-
-        alertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
-        alertController.popoverPresentationController?.sourceView = self.view
-        alertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
-        present(alertController, animated: true, completion: nil)
     }
 
     @objc private func selectLocationBar() {
@@ -1675,8 +1625,6 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidNavigateForward(_ controller: WebController) {
         handleNavigationForward()
     }
-
-    func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
         // Calculate the number of trackers blocked and add that to lifetime total

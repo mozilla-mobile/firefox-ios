@@ -15,7 +15,6 @@ protocol ShortcutViewDelegate: AnyObject {
 class ShortcutView: UIView {
     private var shortcut: Shortcut?
     weak var delegate: ShortcutViewDelegate?
-    private var isIpad = false
     
     init(shortcut: Shortcut, isIpad: Bool) {
         let dimension = isIpad ? UIConstants.layout.shortcutViewWidthIPad : UIConstants.layout.shortcutViewWidth

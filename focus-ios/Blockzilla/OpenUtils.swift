@@ -6,7 +6,6 @@ import UIKit
 import Telemetry
 
 class OpenUtils: NSObject {
-    private let app = UIApplication.shared
     private let selectedURL: URL
     private let webViewController: WebViewController
 

@@ -202,12 +202,6 @@ class TipManager {
     
     var numberOfTips: Int { availableTips.count }
     
-    func currentIndex(for tip: Tip) -> Int {
-        if let index = availableTips.firstIndex(where: { $0.identifier == tip.identifier }) {
-            return index
-        }
-        return 0
-    }
 }
 
 // MARK: - Home Screen Tips Strings

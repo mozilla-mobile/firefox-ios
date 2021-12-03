@@ -5,20 +5,13 @@
 import Foundation
 import UIKit
 
-private struct Color {
-    var red: CGFloat
-    var green: CGFloat
-    var blue: CGFloat
-}
+
 
 extension UIColor {
     
     static let above = UIColor(named: "Above")!
     static let accent = UIColor(named: "Accent")!
-    static let cfrFirst = UIColor(named: "CfrFirst")!
-    static let cfrSecond = UIColor(named: "CfrSecond")!
     static let defaultFont = UIColor(named: "DefaultFont")!
-    static let divider = UIColor(named: "Divider")!
     static let firstRunTitle = UIColor(named: "FirstRunTitle")!
     static let foundation = UIColor(named: "Foundation")!
     static let gradientBackground = UIColor(named: "GradientBackground")!
@@ -48,7 +41,6 @@ extension UIColor {
     static let searchGradientFourth = UIColor(named: "SearchGradientFourth")!
     static let secondaryText = UIColor(named: "SecondaryText")!
     static let secondaryButton = UIColor(named: "SecondaryButton")!
-    static let warning = UIColor(named: "Warning")!
     
     /**
      * Initializes and returns a color object for the given RGB hex integer.
@@ -61,21 +53,4 @@ extension UIColor {
             alpha: CGFloat(alpha))
     }
 
-    func lerp(toColor: UIColor, step: CGFloat) -> UIColor {
-        var fromR: CGFloat = 0
-        var fromG: CGFloat = 0
-        var fromB: CGFloat = 0
-        getRed(&fromR, green: &fromG, blue: &fromB, alpha: nil)
-
-        var toR: CGFloat = 0
-        var toG: CGFloat = 0
-        var toB: CGFloat = 0
-        toColor.getRed(&toR, green: &toG, blue: &toB, alpha: nil)
-
-        let r = fromR + (toR - fromR) * step
-        let g = fromG + (toG - fromG) * step
-        let b = fromB + (toB - fromB) * step
-
-        return UIColor(red: r, green: g, blue: b, alpha: 1)
-    }
 }

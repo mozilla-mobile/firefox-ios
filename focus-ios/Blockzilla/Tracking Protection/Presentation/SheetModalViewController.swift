@@ -40,7 +40,6 @@ class SheetModalViewController: UIViewController {
     
     private let containerViewController: UIViewController
     private let metrics: SheetMetrics
-    private let minimumDimmingAlpha: CGFloat = 0.1
     private let maximumDimmingAlpha: CGFloat = 0.5
     
     private var containerViewHeightConstraint: Constraint!

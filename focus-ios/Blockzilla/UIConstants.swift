@@ -64,9 +64,6 @@ struct UIConstants {
         static let suggestionViewWidthMultiplier: CGFloat = 0.75
         static let separatorHeight: CGFloat = 0.5
         static let homeViewLabelMinimumScale: CGFloat = 0.65
-        static let truncateCharactersLimit = 160
-        static let truncateHeadCharactersCount = (truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2
-        static let truncateTailCharactersCount = Int(ceil(Double(truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2.0))
         static let findInPageSearchTextInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
         static let findInPagePreviousButtonOffset: CGFloat = 16
         static let progressBarHeight: CGFloat = 1.5
@@ -124,6 +121,24 @@ struct UIConstants {
         static let iPhoneSEHeight: CGFloat = 568
         static let searchSuggestionsArrowButtonWidth: CGFloat = 30
         static var toolbarHeight: CGFloat = 46
+        static let introScreenWidth = 302
+        static let introScreenHeight = UIScreen.main.bounds.width <= 320 ? 420 : 460
+        static let introScreenMinimumFontScale: CGFloat = 0.5
+        static let pagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 16 : 24
+        static let cardTextLineHeight: CGFloat = UIScreen.main.bounds.width <= 320 ? 2 : 6
+        static let actionSheetCellPadding: CGFloat = 16
+        static let actionSheetCellHorizontalPadding: CGFloat = 10
+        static let actionSheetCellVerticalPadding: CGFloat = 2
+        static let actionSheetCellCornerRadius: CGFloat = 3
+        static let actionSheetPadding: CGFloat = 10
+        static let actionSheetHeaderFooterHeight: CGFloat = 0
+        static let actionSheetRowHeight: CGFloat = 50
+        static let actionSheetCornerRadius: CGFloat = 10
+        static let actionSheetIconSize = CGSize(width: 24, height: 24)
+        static let actionSheetTablePadding: CGFloat = 6
+        static let actionSheetTitleHeaderHeight: CGFloat = 36
+        static let actionSheetSeparatorHeaderHeight: CGFloat = 12
+     
     }
 
     struct strings {

@@ -7,29 +7,9 @@ import SnapKit
 import Foundation
 import Telemetry
 
-struct IntroViewControllerUX {
-    static let Width = 302
-    static let Height = UIScreen.main.bounds.width <= 320 ? 420 : 460
-    static let MinimumFontScale: CGFloat = 0.5
-
-    static let CardSlides = ["onboarding_1", "onboarding_2", "onboarding_3"]
-
-    static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 16 : 24
-
-    static let StartBrowsingButtonColor = UIColor(rgb: 0x4990E2)
-    static let StartBrowsingButtonHeight = 56
-
-    static let CardTextLineHeight: CGFloat = UIScreen.main.bounds.width <= 320 ? 2 : 6
-    static let CardTextWidth = UIScreen.main.bounds.width <= 320 ? 240 : 280
-    static let CardTitleHeight = 50
-
-    static let FadeDuration = 0.25
-}
-
 class IntroViewController: UIViewController {
 
     let pageControl = PageControl()
-    let containerView = UIView()
     let skipButton = UIButton()
     private let backgroundDark = GradientBackgroundView()
     private let backgroundBright = GradientBackgroundView(alpha: 0.8)
@@ -76,7 +56,7 @@ class IntroViewController: UIViewController {
         pageControl.backgroundColor = .clear
         pageControl.isUserInteractionEnabled = false
         pageControl.stack.snp.makeConstraints { make in
-            make.top.equalTo(pageViewController.view.snp.centerY).offset(IntroViewControllerUX.Height/2 + IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom).priority(.high)
+            make.top.equalTo(pageViewController.view.snp.centerY).offset(UIConstants.layout.introScreenHeight/2 + UIConstants.layout.pagerCenterOffsetFromScrollViewBottom).priority(.high)
             make.centerX.equalTo(self.view)
             make.bottom.lessThanOrEqualTo(self.view).offset(UIConstants.layout.introViewPageControlOffset).priority(.required)
         }
@@ -90,8 +70,8 @@ class IntroViewController: UIViewController {
         skipButton.addTarget(self, action: #selector(IntroViewController.didTapSkipButton), for: .touchUpInside)
 
         skipButton.snp.makeConstraints { make in
-            make.bottom.equalTo(pageViewController.view.snp.centerY).offset(-IntroViewControllerUX.Height/2 - IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom).priority(.high)
-            make.leading.equalTo(self.view.snp.centerX).offset(-IntroViewControllerUX.Width/2)
+            make.bottom.equalTo(pageViewController.view.snp.centerY).offset(-UIConstants.layout.introScreenHeight/2 - UIConstants.layout.pagerCenterOffsetFromScrollViewBottom).priority(.high)
+            make.leading.equalTo(self.view.snp.centerX).offset(-UIConstants.layout.introScreenWidth/2)
             make.leading.top.greaterThanOrEqualTo(self.view).offset(UIConstants.layout.introViewSkipButtonOffset).priority(.required)
         }
     }

@@ -39,7 +39,6 @@ protocol WebControllerDelegate: AnyObject {
     func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView)
     func webController(_ controller: WebController, scrollViewDidEndDragging scrollView: UIScrollView)
     func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView)
-    func webController(_ controller: WebController, stateDidChange state: BrowserState)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus)
     func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
@@ -63,9 +62,7 @@ class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
 
     var browserView: WKWebView!
-    var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
-    private var urlObserver: NSKeyValueObservation?
     private var currentBackForwardItem: WKBackForwardListItem?
     private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
