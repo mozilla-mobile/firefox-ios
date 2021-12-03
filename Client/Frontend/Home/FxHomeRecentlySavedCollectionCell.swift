@@ -7,13 +7,11 @@ import Storage
 
 struct RecentlySavedCollectionCellUX {
     static let bookmarkItemsLimit: UInt = 5
-    static let bookmarkItemsCutoff: Int = 10
     static let readingListItemsLimit: Int = 5
-    static let readingListItemsCutoff: Int = 7
     static let cellWidth: CGFloat = 150
     static let cellHeight: CGFloat = 110
     static let generalSpacing: CGFloat = 8
-    static let sectionInsetSpacing: CGFloat = 4
+    static let iPadGeneralSpacing: CGFloat = 8
 }
 
 /// A cell serving as a collectionView to hold its associated recently saved cells.
@@ -46,10 +44,6 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell, ReusableCell {
             heightDimension: .estimated(RecentlySavedCollectionCellUX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: RecentlySavedCollectionCellUX.generalSpacing,
-                                                     leading: RecentlySavedCollectionCellUX.sectionInsetSpacing,
-                                                     bottom: RecentlySavedCollectionCellUX.generalSpacing,
-                                                     trailing: RecentlySavedCollectionCellUX.sectionInsetSpacing)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(RecentlySavedCollectionCellUX.cellWidth),
@@ -58,7 +52,8 @@ class FxHomeRecentlySavedCollectionCell: UICollectionViewCell, ReusableCell {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = RecentlySavedCollectionCellUX.generalSpacing
+        let isIPad = UIDevice.current.userInterfaceIdiom == .pad
+        section.interGroupSpacing = isIPad ? RecentlySavedCollectionCellUX.iPadGeneralSpacing: RecentlySavedCollectionCellUX.generalSpacing
         section.orthogonalScrollingBehavior = .continuous
 
         return UICollectionViewCompositionalLayout(section: section)
