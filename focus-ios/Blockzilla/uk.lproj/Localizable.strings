@@ -260,7 +260,7 @@
 "Open.Safari" = "Safari";
 
 /* Description for dialog used for requesting a user to enable access to Photos. */
-"photosPermission.description" = "Це дозволяє вам зберігати зображення до своєї фотоплівки";
+"photosPermission.description" = "Це дозволить вам зберігати зображення до своєї фотоплівки";
 
 /* Title for button that takes the user to system settings */
 "photosPermission.openSettings" = "Відкрити параметри";
@@ -461,7 +461,7 @@
 "Settings.trackingProtectionOn" = "Увімкнено";
 
 /* Value for theme toggle in settings menu */
-"Settings.useSystemTheme" = "Системна світла / темна тема";
+"Settings.useSystemTheme" = "Повторювати тему системи";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Що нового";
