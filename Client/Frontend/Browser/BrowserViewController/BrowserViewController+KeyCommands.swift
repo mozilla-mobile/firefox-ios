@@ -8,24 +8,28 @@ import UIKit
 // Naming functions: use the suffix 'KeyCommand' for an additional level of namespacing (bug 1415830)
 extension BrowserViewController {
 
-    @objc private func showHistory() {
+    @objc private func openSettingsKeyCommand() {
+        openSettings()
+    }
+
+    @objc private func showHistoryKeyCommand() {
         showLibrary(panel: .history)
     }
 
-    @objc private func showDownloads() {
+    @objc private func showDownloadsKeyCommand() {
         showLibrary(panel: .downloads)
     }
 
-    @objc private func showBookmarks() {
+    @objc private func showBookmarksKeyCommand() {
         showLibrary(panel: .bookmarks)
     }
 
-    @objc private func openClearHistoryPanel() {
+    @objc private func openClearHistoryPanelKeyCommand() {
         let clearHistoryHelper = ClearHistoryHelper(profile: profile)
         clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: {})
     }
 
-    @objc private func addCurrentTabToBookmarks() {
+    @objc private func addTabKeyCommand() {
         if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
             guard let url = tab.canonicalURL?.displayURL else { return }
             addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
@@ -151,7 +155,7 @@ extension BrowserViewController {
         let commands = [
             // Settings
             // TODO: String KeyboardShortcuts.Settings
-            UIKeyCommand(action: #selector(openSettings), input: ",", modifierFlags: .command, discoverabilityTitle: "Settings"),
+            UIKeyCommand(action: #selector(openSettingsKeyCommand), input: ",", modifierFlags: .command, discoverabilityTitle: "Settings"),
 
             // File
             UIKeyCommand(action: #selector(newTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: .NewTabTitle),
@@ -172,19 +176,19 @@ extension BrowserViewController {
 
             // History
             // TODO: String KeyboardShortcuts.ShowHistory & KeyboardShortcuts.ClearRecentHistory
-            UIKeyCommand(action: #selector(showHistory), input: "y", modifierFlags: .command, discoverabilityTitle: "Show History"),
+            UIKeyCommand(action: #selector(showHistoryKeyCommand), input: "y", modifierFlags: .command, discoverabilityTitle: "Show History"),
             UIKeyCommand(action: #selector(goBackKeyCommand), input: "[", modifierFlags: .command, discoverabilityTitle: .BackTitle),
             UIKeyCommand(action: #selector(goForwardKeyCommand), input: "]", modifierFlags: .command, discoverabilityTitle: .ForwardTitle),
-            UIKeyCommand(action: #selector(openClearHistoryPanel), input: "\u{8}", modifierFlags: [.shift, .command], discoverabilityTitle: "Clear history"),
+            UIKeyCommand(action: #selector(openClearHistoryPanelKeyCommand), input: "\u{8}", modifierFlags: [.shift, .command], discoverabilityTitle: "Clear history"),
 
             // Bookmarks
             // TODO: String KeyboardShortcuts.ShowBookmarks & KeyboardShortcuts.AddBookmark
-            UIKeyCommand(action: #selector(showBookmarks), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: "Show Bookmarks"),
-            UIKeyCommand(action: #selector(addCurrentTabToBookmarks), input: "d", modifierFlags: .command, discoverabilityTitle: "Add Bookmark"),
+            UIKeyCommand(action: #selector(showBookmarksKeyCommand), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: "Show Bookmarks"),
+            UIKeyCommand(action: #selector(addTabKeyCommand), input: "d", modifierFlags: .command, discoverabilityTitle: "Add Bookmark"),
 
             // Tools
             // TODO: String KeyboardShortcuts.ShowDownloads
-            UIKeyCommand(action: #selector(showDownloads), input: "j", modifierFlags: .command, discoverabilityTitle: "Show Downloads"),
+            UIKeyCommand(action: #selector(showDownloadsKeyCommand), input: "j", modifierFlags: .command, discoverabilityTitle: "Show Downloads"),
 
             // Window
             UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift], discoverabilityTitle: .ShowNextTabTitle),
