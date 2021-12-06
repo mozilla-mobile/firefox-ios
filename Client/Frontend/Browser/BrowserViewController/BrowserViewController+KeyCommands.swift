@@ -187,12 +187,10 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(showDownloads), input: "j", modifierFlags: .command, discoverabilityTitle: "Show Downloads"),
 
             // Window
-            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift]), // Safari on macOS
-            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "[", modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "\t", modifierFlags: .control, discoverabilityTitle: .ShowNextTabTitle),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift],  discoverabilityTitle: .ShowPreviousTabTitle),
-            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate], discoverabilityTitle: .ShowTabTrayFromTabKeyCodeTitle),
+            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift], discoverabilityTitle: .ShowNextTabTitle),
+            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "[", modifierFlags: [.command, .shift], discoverabilityTitle: .ShowPreviousTabTitle),
+            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift], discoverabilityTitle: .ShowTabTrayFromTabKeyCodeTitle),
+            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate]),
             // TODO: Show tab # 1-9 - Command + 1-9
         ]
 
