@@ -59,8 +59,16 @@ extension BrowserViewController {
 
     @objc private func findInPageKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "find-in-page"])
+        findInPage(withText: "")
+    }
+
+    @objc private func findInPageAgainKeyCommand() {
+        findInPage(withText: FindInPageBar.retrieveSavedText ?? "")
+    }
+
+    private func findInPage(withText text: String) {
         if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
-            self.tab(tab, didSelectFindInPageForSelection: "")
+            self.tab(tab, didSelectFindInPageForSelection: text)
         }
     }
 
@@ -162,11 +170,11 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(newPrivateTabKeyCommand), input: "p", modifierFlags: [.command, .shift], discoverabilityTitle: .NewPrivateTabTitle),
             UIKeyCommand(action: #selector(selectLocationBarKeyCommand), input: "l", modifierFlags: .command, discoverabilityTitle: .SelectLocationBarTitle),
             UIKeyCommand(action: #selector(closeTabKeyCommand), input: "w", modifierFlags: .command, discoverabilityTitle: .CloseTabTitle),
-            // TODO: Save page as - Command + S
 
             // Edit
             UIKeyCommand(action: #selector(findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: .FindTitle),
-            // TODO: Find again - Command + G
+            // TODO: String KeyboardShortcuts.FindAgain
+            UIKeyCommand(action: #selector(findInPageAgainKeyCommand), input: "g", modifierFlags: .command, discoverabilityTitle: "Find again"),
 
             // View
             UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .ReloadPageTitle),
