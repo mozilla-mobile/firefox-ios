@@ -21,16 +21,6 @@ class BrowserToolbar: UIView {
         background.backgroundColor = .foundation
         addSubview(background)
 
-        addSubview(backgroundLoading)
-        addSubview(backgroundDark)
-
-        backgroundDark.backgroundColor = .foundation
-        backgroundBright.backgroundColor = .foundation
-
-        backgroundBright.isHidden = true
-        backgroundBright.alpha = 0
-        background.addSubview(backgroundBright)
-
         stackView.distribution = .fillEqually
 
         stackView.addArrangedSubview(toolset.backButton)
@@ -47,18 +37,6 @@ class BrowserToolbar: UIView {
 
         background.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalTo(self)
-        }
-
-        backgroundDark.snp.makeConstraints { make in
-            make.edges.equalTo(background)
-        }
-
-        backgroundBright.snp.makeConstraints { make in
-            make.edges.equalTo(background)
-        }
-
-        backgroundLoading.snp.makeConstraints { make in
-            make.edges.equalTo(background)
         }
     }
 
@@ -87,22 +65,6 @@ class BrowserToolbar: UIView {
     var canDelete: Bool = false {
         didSet {
             toolset.canDelete = canDelete
-        }
-    }
-
-    enum toolbarState {
-        case bright
-        case dark
-        case loading
-    }
-
-    var color: toolbarState = .loading {
-        didSet {
-            let duration = UIConstants.layout.urlBarTransitionAnimationDuration
-            backgroundDark.animateHidden(color != .dark, duration: duration)
-            backgroundBright.animateHidden(color != .bright, duration: duration)
-            backgroundLoading.animateHidden(currentTheme == .light ? true : color != .loading, duration: duration)
-            toolset.isLoading = color == .loading
         }
     }
 }
