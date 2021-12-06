@@ -1729,7 +1729,9 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
         guard urlBar.inBrowsingMode else { return }
-        guard popoverPresentationController.presentedViewController is PhotonActionSheet  else { return }
+        guard let menuSheet = popoverPresentationController.presentedViewController as? PhotonActionSheet, !(menuSheet.popoverPresentationController?.sourceView is ShortcutView) else {
+            return
+        }
         view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButton : browserToolbar.contextMenuButton
     }
 }
