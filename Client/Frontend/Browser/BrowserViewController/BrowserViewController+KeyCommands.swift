@@ -117,7 +117,7 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(goForwardKeyCommand), input: UIKeyCommand.inputRightArrow, modifierFlags: .command),
         ]
 
-        // In iOS 15 and later, physical keyboard events are delivered to the text input or focus systems first, unless specified otherwise
+        // In iOS 15+, certain keys events are delivered to the text input or focus systems first, unless specified otherwise
         if #available(iOS 15, *) {
             searchLocationCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
             overridesTextEditing.forEach { $0.wantsPriorityOverSystemBehavior = true }
