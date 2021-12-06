@@ -1247,6 +1247,10 @@ class BrowserViewController: UIViewController {
     @objc func openSettings() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
 
+        if let presentedViewController = self.presentedViewController {
+            presentedViewController.dismiss(animated: true, completion: nil)
+        }
+
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile
         settingsTableViewController.tabManager = tabManager
