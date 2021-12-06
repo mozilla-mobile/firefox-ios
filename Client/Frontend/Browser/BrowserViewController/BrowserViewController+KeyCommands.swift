@@ -125,7 +125,8 @@ extension BrowserViewController {
 
         let tabNavigation = [
             // Settings
-            // TODO: Open settings - Command + ,
+            // TODO: DiscoverabilityTitle for open settings - KeyboardShortcuts.Settings from Nishant's PR
+            UIKeyCommand(action: #selector(openSettings), input: ",", modifierFlags: .command, discoverabilityTitle: "KeyboardShortcuts.Settings"),
 
             // File
             UIKeyCommand(action: #selector(newTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: .NewTabTitle),

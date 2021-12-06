@@ -1242,7 +1242,7 @@ class BrowserViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc fileprivate func openSettings() {
+    @objc func openSettings() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
 
         let settingsTableViewController = AppSettingsTableViewController()
