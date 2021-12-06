@@ -23,6 +23,13 @@ class JSPromptAlertController: UIAlertController {
         super.viewDidDisappear(animated)
         delegate?.promptAlertControllerDidDismiss(self)
     }
+    
+    deinit {
+        if let alertInfo = alertInfo, !alertInfo.didComplete {
+            // Something tore us down without calling the JS completion handler, so ensure it happens now.
+            alertInfo.cancel()
+        }
+    }
 }
 
 /**
@@ -35,12 +42,33 @@ class JSPromptAlertController: UIAlertController {
 protocol JSAlertInfo {
     func alertController() -> JSPromptAlertController
     func cancel()
+    /// Informs JSPromptAlertController that the completion handler has already been called.
+    var didComplete: Bool { get }
 }
 
-struct MessageAlert: JSAlertInfo {
+class MessageAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: () -> Void
+    /// Do not access this directly. Use completionHandler()
+    private var _completionHandler: (() -> Void)?
+    
+    init(message: String, frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+        self.message = message
+        self.frame = frame
+        self._completionHandler = completionHandler
+    }
+    
+    var didComplete: Bool {
+        _completionHandler == nil
+    }
+
+    /// Calls the completion handler if it hasn't already been called.
+    func completionHandler() {
+        if let completion = _completionHandler {
+            _completionHandler = nil
+            completion()
+        }
+    }
 
     func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
@@ -58,15 +86,16 @@ struct MessageAlert: JSAlertInfo {
     }
 }
 
-struct ConfirmPanelAlert: JSAlertInfo {
+class ConfirmPanelAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: (Bool) -> Void
+    /// Do not access this directly. Use completionHandler()
+    private var _completionHandler: ((Bool) -> Void)?
 
     init(message: String, frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
         self.message = message
         self.frame = frame
-        self.completionHandler = completionHandler
+        self._completionHandler = completionHandler
     }
 
     func alertController() -> JSPromptAlertController {
@@ -82,15 +111,27 @@ struct ConfirmPanelAlert: JSAlertInfo {
         return alertController
     }
 
+    var didComplete: Bool {
+        _completionHandler == nil
+    }
+
+    /// Calls the completion handler if it hasn't already been called.
+    func completionHandler(_ result: Bool) {
+        if let completion = _completionHandler {
+            _completionHandler = nil
+            completion(result)
+        }
+    }
     func cancel() {
         completionHandler(false)
     }
 }
 
-struct TextInputAlert: JSAlertInfo {
+class TextInputAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: (String?) -> Void
+    /// Do not access this directly. Use completionHandler()
+    private var _completionHandler: ((String?) -> Void)?
     let defaultText: String?
 
     var input: UITextField!
@@ -98,7 +139,7 @@ struct TextInputAlert: JSAlertInfo {
     init(message: String, frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void, defaultText: String?) {
         self.message = message
         self.frame = frame
-        self.completionHandler = completionHandler
+        self._completionHandler = completionHandler
         self.defaultText = defaultText
     }
 
@@ -119,6 +160,18 @@ struct TextInputAlert: JSAlertInfo {
         return alertController
     }
 
+    var didComplete: Bool {
+        _completionHandler == nil
+    }
+
+    /// Calls the completion handler if it hasn't already been called.
+    func completionHandler(_ result: String?) {
+        if let completion = _completionHandler {
+            _completionHandler = nil
+            completion(result)
+        }
+    }
+    
     func cancel() {
         completionHandler(nil)
     }
