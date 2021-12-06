@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
+import UIKit
 
 // Naming functions: use the suffix 'KeyCommand' for an additional level of namespacing (bug 1415830)
 extension BrowserViewController {
@@ -22,6 +23,13 @@ extension BrowserViewController {
     @objc private func openClearHistoryPanel() {
         let clearHistoryHelper = ClearHistoryHelper(profile: profile)
         clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: {})
+    }
+
+    @objc private func addCurrentTabToBookmarks() {
+        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
+            guard let url = tab.canonicalURL?.displayURL else { return }
+            addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
+        }
     }
 
     @objc private func reloadTabKeyCommand() {
@@ -140,7 +148,7 @@ extension BrowserViewController {
             overridesTextEditing.forEach { $0.wantsPriorityOverSystemBehavior = true }
         }
 
-        let tabNavigation = [
+        let commands = [
             // Settings
             // TODO: String KeyboardShortcuts.Settings
             UIKeyCommand(action: #selector(openSettings), input: ",", modifierFlags: .command, discoverabilityTitle: "Settings"),
@@ -149,11 +157,8 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(newTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: .NewTabTitle),
             UIKeyCommand(action: #selector(newPrivateTabKeyCommand), input: "p", modifierFlags: [.command, .shift], discoverabilityTitle: .NewPrivateTabTitle),
             UIKeyCommand(action: #selector(selectLocationBarKeyCommand), input: "l", modifierFlags: .command, discoverabilityTitle: .SelectLocationBarTitle),
-            // TODO: Open link in background - Command + Tap link
-            // TODO: Open link in background - Command + Shift + Tap link
             UIKeyCommand(action: #selector(closeTabKeyCommand), input: "w", modifierFlags: .command, discoverabilityTitle: .CloseTabTitle),
             // TODO: Save page as - Command + S
-            // TODO: Download link - Option + Tap link
 
             // Edit
             UIKeyCommand(action: #selector(findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: .FindTitle),
@@ -173,9 +178,9 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(openClearHistoryPanel), input: "\u{8}", modifierFlags: [.shift, .command], discoverabilityTitle: "Clear history"),
 
             // Bookmarks
-            // TODO: String KeyboardShortcuts.ShowBookmarks
+            // TODO: String KeyboardShortcuts.ShowBookmarks & KeyboardShortcuts.AddBookmark
             UIKeyCommand(action: #selector(showBookmarks), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: "Show Bookmarks"),
-            // TODO: Add Bookmark - Command + D -> Only in overridesTextEditing?
+            UIKeyCommand(action: #selector(addCurrentTabToBookmarks), input: "d", modifierFlags: .command, discoverabilityTitle: "Add Bookmark"),
 
             // Tools
             // TODO: String KeyboardShortcuts.ShowDownloads
@@ -194,10 +199,10 @@ extension BrowserViewController {
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
         if urlBar.inOverlayMode {
-            return tabNavigation + searchLocationCommands
+            return commands + searchLocationCommands
         } else if !isEditingText {
-            return tabNavigation + overridesTextEditing
+            return commands + overridesTextEditing
         }
-        return tabNavigation
+        return commands
     }
 }
