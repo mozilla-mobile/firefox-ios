@@ -7,6 +7,18 @@ import Shared
 // Naming functions: use the suffix 'KeyCommand' for an additional level of namespacing (bug 1415830)
 extension BrowserViewController {
 
+    @objc private func showHistory() {
+        showLibrary(panel: .history)
+    }
+
+    @objc private func showDownloads() {
+        showLibrary(panel: .downloads)
+    }
+
+    @objc private func showBookmarks() {
+        showLibrary(panel: .bookmarks)
+    }
+
     @objc private func reloadTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "reload"])
         if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
@@ -125,8 +137,8 @@ extension BrowserViewController {
 
         let tabNavigation = [
             // Settings
-            // TODO: DiscoverabilityTitle for open settings - KeyboardShortcuts.Settings from Nishant's PR
-            UIKeyCommand(action: #selector(openSettings), input: ",", modifierFlags: .command, discoverabilityTitle: "KeyboardShortcuts.Settings"),
+            // TODO: String KeyboardShortcuts.Settings
+            UIKeyCommand(action: #selector(openSettings), input: ",", modifierFlags: .command, discoverabilityTitle: "Settings"),
 
             // File
             UIKeyCommand(action: #selector(newTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: .NewTabTitle),
@@ -144,23 +156,26 @@ extension BrowserViewController {
 
             // View
             UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .ReloadPageTitle),
-            // TODO: Zoom in - Command + +
-            // TODO: Zoom out - Command + -
-            // TODO: Actual size - Command + 0
+            // TODO: Zoom in - Command + + -> Only in overridesTextEditing?
+            // TODO: Zoom out - Command + - -> Only in overridesTextEditing?
+            // TODO: Actual size - Command + 0 -> Only in overridesTextEditing?
 
             // History
-            // TODO: Show history - Command + Y
+            // TODO: String KeyboardShortcuts.ShowHistory
+            UIKeyCommand(action: #selector(showHistory), input: "y", modifierFlags: .command, discoverabilityTitle: "Show History"),
             UIKeyCommand(action: #selector(goBackKeyCommand), input: "[", modifierFlags: .command, discoverabilityTitle: .BackTitle),
             UIKeyCommand(action: #selector(goForwardKeyCommand), input: "]", modifierFlags: .command, discoverabilityTitle: .ForwardTitle),
             // TODO: Add back and forward arrow keys shortcuts for goBackKeyCommand and goForwardKeyCommand
             // TODO: Clear recent history - Shift + Command + Back Arrow
 
             // Bookmarks
-            // TODO: Show bookmarks - Command + Y
-            // TODO: Add Bookmark - Command + D -> Only in overridesTextEditing
+            // TODO: String KeyboardShortcuts.ShowBookmarks
+            UIKeyCommand(action: #selector(showBookmarks), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: "Show Bookmarks"),
+            // TODO: Add Bookmark - Command + D -> Only in overridesTextEditing?
 
             // Tools
-            // TODO: Show downloads - Command + J
+            // TODO: String KeyboardShortcuts.ShowDownloads
+            UIKeyCommand(action: #selector(showDownloads), input: "j", modifierFlags: .command, discoverabilityTitle: "Show Downloads"),
 
             // Window
             UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift]), // Safari on macOS
