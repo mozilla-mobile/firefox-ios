@@ -13,15 +13,24 @@ extension BrowserViewController {
     }
 
     @objc private func showHistoryKeyCommand() {
-        showLibrary(panel: .history)
+        showPanel(.history)
     }
 
     @objc private func showDownloadsKeyCommand() {
-        showLibrary(panel: .downloads)
+        showPanel(.downloads)
     }
 
     @objc private func showBookmarksKeyCommand() {
-        showLibrary(panel: .bookmarks)
+        showPanel(.bookmarks)
+    }
+
+    private func showPanel(_ panel: LibraryPanelType) {
+        guard let libraryViewController = self.libraryViewController else {
+            showLibrary(panel: panel)
+            return
+        }
+
+        libraryViewController.selectedPanel = panel
     }
 
     @objc private func openClearHistoryPanelKeyCommand() {
