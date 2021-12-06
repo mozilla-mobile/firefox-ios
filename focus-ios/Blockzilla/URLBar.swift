@@ -771,8 +771,33 @@ class URLBar: UIView {
         (activate ? hiddenConstraints : shownConstraints)?.forEach { $0.deactivate() }
         (activate ? shownConstraints : hiddenConstraints)?.forEach { $0.activate() }
     }
+    
+    enum CollapsedState: Equatable {
+        case extended
+        case intermediate(expandAlpha: CGFloat, collapseAlpha: CGFloat)
+        case collapsed
+    }
+    
+    var collapsedState: CollapsedState = .extended {
+        didSet {
+            DispatchQueue.main.async {
+                self.updateCollapsedState()
+            }
+        }
+    }
+    
+    func updateCollapsedState() {
+        switch collapsedState {
+        case .extended:
+            collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
+        case .intermediate(expandAlpha: let expandAlpha, collapseAlpha: let collapseAlpha):
+            collapseUrlBar(expandAlpha: expandAlpha, collapseAlpha: collapseAlpha)
+        case .collapsed:
+            collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
+        }
+    }
 
-    func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
+    private func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
         urlBarBorderView.alpha = expandAlpha
         urlBarBackgroundView.alpha = expandAlpha
         truncatedUrlText.alpha = collapseAlpha
