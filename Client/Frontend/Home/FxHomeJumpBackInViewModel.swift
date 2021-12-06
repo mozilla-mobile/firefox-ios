@@ -5,7 +5,9 @@
 import Foundation
 import Storage
 
-struct JumpList {
+/// The filtered jumpBack in list to display to the user.
+/// Only one group is displayed
+struct JumpBackInList {
     let group: ASGroup<Tab>?
     let tabs: [Tab]
     var itemsToDisplay: Int {
@@ -24,8 +26,10 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // MARK: - Properties
 
-    var jumpList = JumpList(group: nil, tabs: [Tab]())
     var onTapGroup: ((Tab) -> Void)?
+    var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
+    private var recentTabs: [Tab] = [Tab]()
+    private var recentGroups: [ASGroup<Tab>]?
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private let isZeroSearch: Bool
@@ -41,39 +45,57 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         self.tabManager = tabManager
     }
 
-    var layoutVariables: JumpBackInLayoutVariables {
-        let horizontalVariables = JumpBackInLayoutVariables(columns: 2, scrollDirection: .horizontal, maxItemsToDisplay: 4)
-        let verticalVariables = JumpBackInLayoutVariables(columns: 1, scrollDirection: .vertical, maxItemsToDisplay: 2)
+    // The maximum number of items to display in the whole section
+    static var maxItemsToDisplay: Int {
+        return deviceIsiPad ? 3 : deviceIsInLandscapeMode ? 4 : 2
+    }
 
-        let deviceIsiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let deviceIsInLandscapeMode = UIWindow.isLandscape
-        let horizontalSizeClassIsCompact = UIScreen.main.traitCollection.horizontalSizeClass == .compact
+    static var maxNumberOfItemsInColumn: Int {
+        return deviceIsiPad ? 1 : 2
+    }
 
-        if deviceIsiPad {
-            if horizontalSizeClassIsCompact { return verticalVariables }
-            return horizontalVariables
-
+    var numberOfItemsInColumn: Int {
+        if FirefoxHomeJumpBackInViewModel.deviceIsiPad {
+            return 1
         } else {
-            if deviceIsInLandscapeMode { return horizontalVariables }
-            return verticalVariables
+            return jumpBackInList.itemsToDisplay > 1 ? 2 : 1
         }
     }
 
+    // The dimension of a cell
+    static var widthDimension: NSCollectionLayoutDimension {
+        if deviceIsiPad {
+            return .absolute(JumpBackInCollectionCellUX.cellWidth) // iPad
+        } else if deviceIsInLandscapeMode {
+            return .fractionalWidth(1/2) // iPhone in landscape
+        } else {
+            return .fractionalWidth(1) // iPhone in portrait
+        }
+    }
+
+    /// Update data with tab and search term group managers
     func updateData(completion: @escaping () -> Void) {
+        recentTabs = tabManager.recentlyAccessedNormalTabs
+
         if featureFlags.isFeatureActiveForBuild(.groupedTabs),
            featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled {
-            let recentTabs = tabManager.recentlyAccessedNormalTabs
             SearchTermGroupsManager.getTabGroups(with: profile,
-                                          from: recentTabs,
-                                          using: .orderedDescending) { [weak self] groups, _ in
+                                                 from: recentTabs,
+                                                 using: .orderedDescending) { [weak self] groups, _ in
                 guard let strongSelf = self else { completion(); return }
-                strongSelf.jumpList = strongSelf.createJumpList(from: recentTabs, and: groups)
+                strongSelf.recentGroups = groups
+                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(from: strongSelf.recentTabs, and: groups)
                 completion()
             }
         } else {
-            jumpList = createJumpList(from: tabManager.recentlyAccessedNormalTabs)
+            jumpBackInList = createJumpBackInList(from: recentTabs)
             completion()
         }
+    }
+
+    /// Refresh data for new layout
+    func refreshData() {
+        jumpBackInList = createJumpBackInList(from: recentTabs, and: recentGroups)
     }
 
     func switchTo(group: ASGroup<Tab>) {
@@ -117,17 +139,17 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // MARK: - Private
 
-    private func createJumpList(from tabs: [Tab], and groups: [ASGroup<Tab>]? = nil) -> JumpList {
+    private func createJumpBackInList(from tabs: [Tab], and groups: [ASGroup<Tab>]? = nil) -> JumpBackInList {
         let recentGroup = groups?.first
         let groupCount = recentGroup != nil ? 1 : 0
         let recentTabs = filter(tabs: tabs, from: recentGroup, usingGroupCount: groupCount)
 
-        return JumpList(group: recentGroup, tabs: recentTabs)
+        return JumpBackInList(group: recentGroup, tabs: recentTabs)
     }
 
     private func filter(tabs: [Tab], from recentGroup: ASGroup<Tab>?, usingGroupCount groupCount: Int) -> [Tab] {
         var recentTabs = [Tab]()
-        let maxItemCount = layoutVariables.maxItemsToDisplay - groupCount
+        let maxItemCount = FirefoxHomeJumpBackInViewModel.maxItemsToDisplay - groupCount
 
         for tab in tabs {
             // We must make sure to not include any 'solo' tabs that are also part of a group
@@ -140,5 +162,13 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
 
         return recentTabs
+    }
+
+    private static var deviceIsiPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    private static var deviceIsInLandscapeMode: Bool {
+        UIWindow.isLandscape
     }
 }

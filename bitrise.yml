@@ -302,7 +302,7 @@ workflows:
     - 5_deploy_and_slack
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
   RunSmokeXCUITestsiPad:
     steps:
@@ -319,7 +319,7 @@ workflows:
     description: This Workflow is to run SmokeTest on iPad simulator device
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -342,7 +342,7 @@ workflows:
         is_always_run: true
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -483,7 +483,7 @@ workflows:
       This Workflow is to run L10n tests in one locale and then share the bundle with the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
 
   L10nScreenshotsTests:
@@ -562,7 +562,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
 
   RunUnitTests:
@@ -578,7 +578,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -603,7 +603,7 @@ workflows:
     description: This Workflow is to run tests UI TESTS
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
   Deploy_Beta:
     steps:
@@ -740,7 +740,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   Deploy_Nightly:
     steps:
@@ -879,7 +879,7 @@ workflows:
       basis
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   Deploy_Prod_Beta:
     steps:
@@ -1045,7 +1045,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
 app:
   envs:
