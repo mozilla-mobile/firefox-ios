@@ -25,8 +25,14 @@ extension BrowserViewController {
     }
 
     @objc private func openClearHistoryPanelKeyCommand() {
-        let clearHistoryHelper = ClearHistoryHelper(profile: profile)
-        clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: {})
+        guard let libraryViewController = self.libraryViewController else {
+            let clearHistoryHelper = ClearHistoryHelper(profile: profile)
+            clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: {})
+            return
+        }
+
+        libraryViewController.selectedPanel = .history
+        NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }
 
     @objc private func addBookmarkKeyCommand() {

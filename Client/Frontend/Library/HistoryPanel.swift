@@ -103,7 +103,8 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         [ Notification.Name.FirefoxAccountChanged,
           Notification.Name.PrivateDataClearedHistory,
           Notification.Name.DynamicFontChanged,
-          Notification.Name.DatabaseWasReopened ].forEach {
+          Notification.Name.DatabaseWasReopened,
+          Notification.Name.OpenClearRecentHistory].forEach {
             NotificationCenter.default.addObserver(self, selector: #selector(onNotificationReceived), name: $0, object: nil)
         }
     }
@@ -258,6 +259,12 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         navigationController?.pushViewController(nextController, animated: true)
     }
 
+    private func showClearRecentHistory() {
+        clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] in
+            self?.reloadData()
+        })
+    }
+
     // MARK: - Cell configuration
 
     func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
@@ -340,6 +347,8 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             if let dbName = notification.object as? String, dbName == "browser.db" {
                 reloadData()
             }
+        case .OpenClearRecentHistory:
+            showClearRecentHistory()
         default:
             // no need to do anything at all
             print("Error: Received unexpected notification \(notification.name)")
@@ -426,6 +435,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
                 clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] in
                     self?.reloadData()
                 })
+                showClearRecentHistory()
 
             default:
                 navigateToRecentlyClosed()
