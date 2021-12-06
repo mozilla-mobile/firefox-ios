@@ -83,6 +83,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     var isFetchInProgress = false
 
     var clearHistoryCell: OneLineTableViewCell?
+    private let clearHistoryHelper: ClearHistoryHelper
 
     var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
@@ -96,6 +97,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     // MARK: - Lifecycle
     override init(profile: Profile) {
+        self.clearHistoryHelper = ClearHistoryHelper(profile: profile)
         super.init(profile: profile)
 
         [ Notification.Name.FirefoxAccountChanged,
@@ -254,49 +256,6 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         nextController.recentlyClosedTabsDelegate = BrowserViewController.foregroundBVC()
         refreshControl?.endRefreshing()
         navigationController?.pushViewController(nextController, animated: true)
-    }
-
-    func showClearRecentHistory() {
-        func remove(hoursAgo: Int) {
-            if let date = Calendar.current.date(byAdding: .hour, value: -hoursAgo, to: Date()) {
-                let types = WKWebsiteDataStore.allWebsiteDataTypes()
-                WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date, completionHandler: {})
-
-                self.profile.history.removeHistoryFromDate(date).uponQueue(.main) { _ in
-                    self.reloadData()
-                }
-            }
-        }
-
-        let alert = UIAlertController(title: .ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
-
-        // This will run on the iPad-only, and sets the alert to be centered with no arrow.
-        if let popoverController = alert.popoverPresentationController {
-            popoverController.sourceView = view
-            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-            popoverController.permittedArrowDirections = []
-        }
-
-        [(String.ClearHistoryMenuOptionTheLastHour, 1),
-         (String.ClearHistoryMenuOptionToday, 24),
-         (String.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {
-            (name, time) in
-            let action = UIAlertAction(title: name, style: .destructive) { _ in
-                remove(hoursAgo: time)
-            }
-            alert.addAction(action)
-        }
-        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
-            let types = WKWebsiteDataStore.allWebsiteDataTypes()
-            WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
-            self.profile.history.clearHistory().uponQueue(.main) { _ in
-                self.reloadData()
-            }
-            self.profile.recentlyClosedTabs.clearTabs()
-        }))
-        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
-        alert.addAction(cancelAction)
-        present(alert, animated: true)
     }
 
     // MARK: - Cell configuration
@@ -464,7 +423,10 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         guard indexPath.section > Section.additionalHistoryActions.rawValue else {
             switch indexPath.row {
             case 0:
-                showClearRecentHistory()
+                clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] in
+                    self?.reloadData()
+                })
+
             default:
                 navigateToRecentlyClosed()
             }

@@ -19,6 +19,11 @@ extension BrowserViewController {
         showLibrary(panel: .bookmarks)
     }
 
+    @objc private func openClearHistoryPanel() {
+        let clearHistoryHelper = ClearHistoryHelper(profile: profile)
+        clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: {})
+    }
+
     @objc private func reloadTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "reload"])
         if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
@@ -156,17 +161,16 @@ extension BrowserViewController {
 
             // View
             UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .ReloadPageTitle),
-            // TODO: Zoom in - Command + + -> Only in overridesTextEditing?
-            // TODO: Zoom out - Command + - -> Only in overridesTextEditing?
-            // TODO: Actual size - Command + 0 -> Only in overridesTextEditing?
+            // TODO: Zoom in - Command + +
+            // TODO: Zoom out - Command + -
+            // TODO: Actual size - Command + 0
 
             // History
-            // TODO: String KeyboardShortcuts.ShowHistory
+            // TODO: String KeyboardShortcuts.ShowHistory & KeyboardShortcuts.ClearRecentHistory
             UIKeyCommand(action: #selector(showHistory), input: "y", modifierFlags: .command, discoverabilityTitle: "Show History"),
             UIKeyCommand(action: #selector(goBackKeyCommand), input: "[", modifierFlags: .command, discoverabilityTitle: .BackTitle),
             UIKeyCommand(action: #selector(goForwardKeyCommand), input: "]", modifierFlags: .command, discoverabilityTitle: .ForwardTitle),
-            // TODO: Add back and forward arrow keys shortcuts for goBackKeyCommand and goForwardKeyCommand
-            // TODO: Clear recent history - Shift + Command + Back Arrow
+            UIKeyCommand(action: #selector(openClearHistoryPanel), input: "\u{8}", modifierFlags: [.shift, .command], discoverabilityTitle: "Clear history"),
 
             // Bookmarks
             // TODO: String KeyboardShortcuts.ShowBookmarks
