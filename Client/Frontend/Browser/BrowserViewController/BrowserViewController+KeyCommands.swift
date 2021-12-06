@@ -29,7 +29,7 @@ extension BrowserViewController {
         clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: {})
     }
 
-    @objc private func addTabKeyCommand() {
+    @objc private func addBookmarkKeyCommand() {
         if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
             guard let url = tab.canonicalURL?.displayURL else { return }
             addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
@@ -192,7 +192,7 @@ extension BrowserViewController {
             // Bookmarks
             // TODO: String KeyboardShortcuts.ShowBookmarks & KeyboardShortcuts.AddBookmark
             UIKeyCommand(action: #selector(showBookmarksKeyCommand), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: "Show Bookmarks"),
-            UIKeyCommand(action: #selector(addTabKeyCommand), input: "d", modifierFlags: .command, discoverabilityTitle: "Add Bookmark"),
+            UIKeyCommand(action: #selector(addBookmarkKeyCommand), input: "d", modifierFlags: .command, discoverabilityTitle: "Add Bookmark"),
 
             // Tools
             // TODO: String KeyboardShortcuts.ShowDownloads
