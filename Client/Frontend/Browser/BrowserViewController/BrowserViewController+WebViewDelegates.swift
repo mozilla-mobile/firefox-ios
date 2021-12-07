@@ -131,6 +131,7 @@ extension BrowserViewController: WKUIDelegate {
                     if currentTab.adsTelemetryUrlList.contains(adUrl) {
                         if !currentTab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName) }
                         currentTab.adsTelemetryUrlList.removeAll()
+                        currentTab.adsTelemetryRedirectUrlList.removeAll()
                         currentTab.adsProviderName = ""
                     }
                 }
@@ -289,6 +290,19 @@ extension WKNavigationAction {
 }
 
 extension BrowserViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        guard let tab = tabManager[webView] else {
+            return
+        }
+
+        if tab.adsTelemetryUrlList.count > 0, !tab.adsProviderName.isEmpty, let webUrl = webView.url {
+            tab.adsTelemetryRedirectUrlList.append(webUrl)
+//            if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName) }
+//            tab.adsTelemetryUrlList.removeAll()
+//            tab.adsProviderName = ""
+        }
+    }
+    
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         if tabManager.selectedTab?.webView !== webView {
             return
@@ -362,6 +376,7 @@ extension BrowserViewController: WKNavigationDelegate {
             if tab.adsTelemetryUrlList.contains(adUrl) {
                 if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName) }
                 tab.adsTelemetryUrlList.removeAll()
+                tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""
             }
         }
@@ -673,15 +688,26 @@ extension BrowserViewController: WKNavigationDelegate {
         guard let tab = tabManager[webView] else { return }
         searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
         tab.url = webView.url
-        // When tab url changes after web content starts loading on the page
-        // We notify the contect blocker change so that content blocker status can be correctly shown on beside the URL bar
+
+        // Only update search term data with valid search term data
         let searchTerm = tab.tabGroupData.tabAssociatedSearchTerm
         let searchUrl = tab.tabGroupData.tabAssociatedSearchUrl
         let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
         if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
+            
+            if tab.adsTelemetryRedirectUrlList.count > 0, !tab.adsProviderName.isEmpty, tab.adsTelemetryUrlList.count > 0, !tab.adsProviderName.isEmpty, let startingHost = tab.startingSearchUrlWithAds?.host, let host = tab.adsTelemetryRedirectUrlList.last?.host, host != startingHost {
+//                AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
+                tab.adsTelemetryUrlList.removeAll()
+                tab.adsTelemetryRedirectUrlList.removeAll()
+                tab.adsProviderName = ""
+                print("Google Ad")
+            }
+
             tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
         }
 
+        // When tab url changes after web content starts loading on the page
+        // We notify the contect blocker change so that content blocker status can be correctly shown on beside the URL bar
         tab.contentBlocker?.notifyContentBlockingChanged()
         self.scrollController.resetZoomState()
 
@@ -694,6 +720,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if let tab = tabManager[webView] {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
+            // Only update search term data with valid search term data
             let searchTerm = tab.tabGroupData.tabAssociatedSearchTerm
             let searchUrl = tab.tabGroupData.tabAssociatedSearchUrl
             let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
