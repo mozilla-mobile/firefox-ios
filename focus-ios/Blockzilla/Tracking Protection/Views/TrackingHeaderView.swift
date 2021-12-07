@@ -7,8 +7,8 @@ import Combine
 
 class TrackingHeaderView: UIView {
     private lazy var faviImageView: AsyncImageView = {
-        let shieldLogo = AsyncImageView()
-        return shieldLogo
+        let image = AsyncImageView()
+        return image
     }()
     
     private lazy var domainLabel: UILabel = {
@@ -48,6 +48,8 @@ class TrackingHeaderView: UIView {
     private func commonInit() {
         addSubview(separator)
         addSubview(stackView)
+        backgroundColor = .systemGroupedBackground
+        
         faviImageView.snp.makeConstraints { make in
             make.width.height.equalTo(40)
         }
@@ -56,7 +58,8 @@ class TrackingHeaderView: UIView {
             make.bottom.leading.trailing.equalToSuperview()
         }
         stackView.snp.makeConstraints { make in
-            make.top.leading.bottom.equalToSuperview().inset(16)
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).inset(16)
+            make.leading.bottom.equalToSuperview().inset(16)
         }
     }
     
