@@ -758,6 +758,7 @@
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
+		DFA51481275FFEE500266AA0 /* HistoryHighlightsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA51480275FFEE500266AA0 /* HistoryHighlightsManager.swift */; };
 		DF9845FE276A5E3A0071CCAE /* FxHomeLogoHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9845FD276A5E3A0071CCAE /* FxHomeLogoHeaderCell.swift */; };
 		DF984600276B99660071CCAE /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9845FF276B99660071CCAE /* WallpaperManager.swift */; };
 		DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF7E277B5F7B003D5F41 /* WallpaperBackgroundView.swift */; };
@@ -5866,6 +5867,7 @@
 				DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift */,
 				DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */,
 				DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */,
+				DFA51480275FFEE500266AA0 /* HistoryHighlightsManager.swift */,
 			);
 			path = HistoryHighlights;
 			sourceTree = "<group>";
@@ -8735,6 +8737,7 @@
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */,
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
+				DFA51481275FFEE500266AA0 /* HistoryHighlightsManager.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeIcon.swift in Sources */,
 				43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */,
 				43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */,
