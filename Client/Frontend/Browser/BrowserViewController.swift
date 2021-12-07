@@ -853,9 +853,11 @@ class BrowserViewController: UIViewController {
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
         controller.onViewWillDisappear = {
             self.firefoxHomeViewController?.reloadAll()
+            self.libraryViewController = nil
         }
         controller.onViewDismissed = {
             self.firefoxHomeViewController?.reloadAll()
+            self.libraryViewController = nil
         }
         self.present(controller, animated: true, completion: nil)
     }
@@ -1242,8 +1244,12 @@ class BrowserViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc fileprivate func openSettings() {
+    @objc func openSettings() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
+
+        if let presentedViewController = self.presentedViewController {
+            presentedViewController.dismiss(animated: true, completion: nil)
+        }
 
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile

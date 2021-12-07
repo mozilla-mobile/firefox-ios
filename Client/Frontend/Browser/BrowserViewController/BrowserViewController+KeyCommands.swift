@@ -3,9 +3,53 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
+import UIKit
 
 // Naming functions: use the suffix 'KeyCommand' for an additional level of namespacing (bug 1415830)
 extension BrowserViewController {
+
+    @objc private func openSettingsKeyCommand() {
+        openSettings()
+    }
+
+    @objc private func showHistoryKeyCommand() {
+        showPanel(.history)
+    }
+
+    @objc private func showDownloadsKeyCommand() {
+        showPanel(.downloads)
+    }
+
+    @objc private func showBookmarksKeyCommand() {
+        showPanel(.bookmarks)
+    }
+
+    private func showPanel(_ panel: LibraryPanelType) {
+        guard let libraryViewController = self.libraryViewController else {
+            showLibrary(panel: panel)
+            return
+        }
+
+        libraryViewController.selectedPanel = panel
+    }
+
+    @objc private func openClearHistoryPanelKeyCommand() {
+        guard let libraryViewController = self.libraryViewController else {
+            let clearHistoryHelper = ClearHistoryHelper(profile: profile)
+            clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: {})
+            return
+        }
+
+        libraryViewController.selectedPanel = .history
+        NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
+    }
+
+    @objc private func addBookmarkKeyCommand() {
+        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
+            guard let url = tab.canonicalURL?.displayURL else { return }
+            addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
+        }
+    }
 
     @objc private func reloadTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "reload"])
@@ -30,8 +74,16 @@ extension BrowserViewController {
 
     @objc private func findInPageKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "find-in-page"])
+        findInPage(withText: "")
+    }
+
+    @objc private func findInPageAgainKeyCommand() {
+        findInPage(withText: FindInPageBar.retrieveSavedText ?? "")
+    }
+
+    private func findInPage(withText text: String) {
         if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
-            self.tab(tab, didSelectFindInPageForSelection: "")
+            self.tab(tab, didSelectFindInPageForSelection: text)
         }
     }
 
@@ -105,43 +157,77 @@ extension BrowserViewController {
 
     override var keyCommands: [UIKeyCommand]? {
         let searchLocationCommands = [
-            UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
+            // Navigate the suggestions
+            UIKeyCommand(action: #selector(moveURLCompletionKeyCommand(sender:)), input: UIKeyCommand.inputDownArrow),
+            UIKeyCommand(action: #selector(moveURLCompletionKeyCommand(sender:)), input: UIKeyCommand.inputUpArrow),
         ]
-        let overidesTextEditing = [
-            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
-            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
-            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: .command, action: #selector(goBackKeyCommand)),
-            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: .command, action: #selector(goForwardKeyCommand)),
+
+        let overridesTextEditing = [
+            UIKeyCommand(action: #selector(nextTabKeyCommand), input: UIKeyCommand.inputRightArrow, modifierFlags: [.command, .shift]),
+            UIKeyCommand(action: #selector(previousTabKeyCommand), input: UIKeyCommand.inputLeftArrow, modifierFlags: [.command, .shift]),
+            UIKeyCommand(action: #selector(goBackKeyCommand), input: UIKeyCommand.inputLeftArrow, modifierFlags: .command),
+            UIKeyCommand(action: #selector(goForwardKeyCommand), input: UIKeyCommand.inputRightArrow, modifierFlags: .command),
         ]
-        let tabNavigation = [
-            UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .ReloadPageTitle),
-            UIKeyCommand(action: #selector(goBackKeyCommand), input: "[", modifierFlags: .command, discoverabilityTitle: .BackTitle),
-            UIKeyCommand(action: #selector(goForwardKeyCommand), input: "]", modifierFlags: .command, discoverabilityTitle: .ForwardTitle),
-            UIKeyCommand(action: #selector(findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: .FindTitle),
-            UIKeyCommand(action: #selector(selectLocationBarKeyCommand), input: "l", modifierFlags: .command, discoverabilityTitle: .SelectLocationBarTitle),
+
+        // In iOS 15+, certain keys events are delivered to the text input or focus systems first, unless specified otherwise
+        if #available(iOS 15, *) {
+            searchLocationCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
+            overridesTextEditing.forEach { $0.wantsPriorityOverSystemBehavior = true }
+        }
+
+        let commands = [
+            // Settings
+            // TODO: String KeyboardShortcuts.Settings
+            UIKeyCommand(action: #selector(openSettingsKeyCommand), input: ",", modifierFlags: .command, discoverabilityTitle: "Settings"),
+
+            // File
             UIKeyCommand(action: #selector(newTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: .NewTabTitle),
             UIKeyCommand(action: #selector(newPrivateTabKeyCommand), input: "p", modifierFlags: [.command, .shift], discoverabilityTitle: .NewPrivateTabTitle),
+            UIKeyCommand(action: #selector(selectLocationBarKeyCommand), input: "l", modifierFlags: .command, discoverabilityTitle: .SelectLocationBarTitle),
             UIKeyCommand(action: #selector(closeTabKeyCommand), input: "w", modifierFlags: .command, discoverabilityTitle: .CloseTabTitle),
-            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "\t", modifierFlags: .control, discoverabilityTitle: .ShowNextTabTitle),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift],  discoverabilityTitle: .ShowPreviousTabTitle),
 
-            // Switch tab to match Safari on iOS.
-            UIKeyCommand(input: "]", modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
-            UIKeyCommand(input: "[", modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
+            // Edit
+            UIKeyCommand(action: #selector(findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: .FindTitle),
+            // TODO: String KeyboardShortcuts.FindAgain
+            UIKeyCommand(action: #selector(findInPageAgainKeyCommand), input: "g", modifierFlags: .command, discoverabilityTitle: "Find again"),
 
-            UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(showTabTrayKeyCommand)), // Safari on macOS
-            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate], discoverabilityTitle: .ShowTabTrayFromTabKeyCodeTitle)
+            // View
+            UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .ReloadPageTitle),
+            // TODO: Zoom in - Command + +
+            // TODO: Zoom out - Command + -
+            // TODO: Actual size - Command + 0
 
+            // History
+            // TODO: String KeyboardShortcuts.ShowHistory & KeyboardShortcuts.ClearRecentHistory
+            UIKeyCommand(action: #selector(showHistoryKeyCommand), input: "y", modifierFlags: .command, discoverabilityTitle: "Show History"),
+            UIKeyCommand(action: #selector(goBackKeyCommand), input: "[", modifierFlags: .command, discoverabilityTitle: .BackTitle),
+            UIKeyCommand(action: #selector(goForwardKeyCommand), input: "]", modifierFlags: .command, discoverabilityTitle: .ForwardTitle),
+            UIKeyCommand(action: #selector(openClearHistoryPanelKeyCommand), input: "\u{8}", modifierFlags: [.shift, .command], discoverabilityTitle: "Clear history"),
+
+            // Bookmarks
+            // TODO: String KeyboardShortcuts.ShowBookmarks & KeyboardShortcuts.AddBookmark
+            UIKeyCommand(action: #selector(showBookmarksKeyCommand), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: "Show Bookmarks"),
+            UIKeyCommand(action: #selector(addBookmarkKeyCommand), input: "d", modifierFlags: .command, discoverabilityTitle: "Add Bookmark"),
+
+            // Tools
+            // TODO: String KeyboardShortcuts.ShowDownloads
+            UIKeyCommand(action: #selector(showDownloadsKeyCommand), input: "j", modifierFlags: .command, discoverabilityTitle: "Show Downloads"),
+
+            // Window
+            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift], discoverabilityTitle: .ShowNextTabTitle),
+            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "[", modifierFlags: [.command, .shift], discoverabilityTitle: .ShowPreviousTabTitle),
+            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift], discoverabilityTitle: .ShowTabTrayFromTabKeyCodeTitle),
+            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate]),
+            // TODO: Show tab # 1-9 - Command + 1-9
         ]
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
         if urlBar.inOverlayMode {
-            return tabNavigation + searchLocationCommands
+            return commands + searchLocationCommands
         } else if !isEditingText {
-            return tabNavigation + overidesTextEditing
+            return commands + overridesTextEditing
         }
-        return tabNavigation
+        return commands
     }
 }

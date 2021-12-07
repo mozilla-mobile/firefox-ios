@@ -59,4 +59,6 @@ extension Notification.Name {
     public static let DisplayThemeChanged = Notification.Name("DisplayThemeChanged")
 
     public static let TabClosed = Notification.Name("TabClosed")
+
+    public static let OpenClearRecentHistory = Notification.Name("OpenClearRecentHistory")
 }

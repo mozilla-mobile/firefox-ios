@@ -16,12 +16,19 @@ extension GridTabViewController {
             UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(action: #selector(didOpenNewTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: .OpenNewTabFromTabTrayKeyCodeTitle),
+        ]
 
+        let arrowKeysCommands = [
             UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
         ]
 
-        return commands
+        // In iOS 15+, certain keys events are delivered to the text input or focus systems first, unless specified otherwise
+        if #available(iOS 15, *) {
+            arrowKeysCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
+        }
+
+        return commands + arrowKeysCommands
     }
 
     @objc func didTogglePrivateModeKeyCommand() {
