@@ -28,6 +28,8 @@ class FindInPageBar: UIView {
     fileprivate let previousButton = UIButton()
     fileprivate let nextButton = UIButton()
 
+    private static let savedTextKey = "findInPageSavedTextKey"
+
     var currentResult = 0 {
         didSet {
             if totalResults > 500 {
@@ -167,11 +169,21 @@ class FindInPageBar: UIView {
 
     @objc fileprivate func didTextChange(_ sender: UITextField) {
         matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
+        saveSearchText(searchText.text)
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
 
     @objc fileprivate func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
+    }
+
+    private func saveSearchText(_ searchText: String?) {
+        guard let text = searchText, !text.isEmpty else { return }
+        UserDefaults.standard.set(text, forKey: FindInPageBar.savedTextKey)
+    }
+
+    static var retrieveSavedText: String? {
+        return UserDefaults.standard.object(forKey: FindInPageBar.savedTextKey) as? String
     }
 }
 
