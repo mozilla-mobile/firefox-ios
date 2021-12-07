@@ -15,4 +15,3 @@ pull_request_rules:
         message: Github-action[bot] 💪
       merge:
         method: squash
-        strict: false
