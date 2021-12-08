@@ -7,15 +7,6 @@ import Shared
 import Storage
 import MozillaAppServices
 
-//struct HistoryHighlightWeights {
-//    let viewTime: Double
-//    let frequency: Double
-//
-//    var asDictionary: [String: Double] {
-//        return ["view_time": viewTime, "frequency": frequency]
-//    }
-//}
-
 struct HistoryHighlight {
     let score: Double
     let placeID: Int
@@ -28,8 +19,7 @@ class HistoryHighlightsManager {
     private static let defaultViewTimeWeight = 10.0
     private static let defaultFrequencyWeight = 4.0
 
-    public static func getHistoryHighlights(with profile: Profile, using weight: HistoryHighlightWeights) {
-//    , completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
+    public static func getHighlightsForRecentlyViewed(with profile: Profile, completion: @escaping ([MozillaAppServices.HistoryHighlight]) -> Void) {
 
         profile.places.getHighlights(
             weights: HistoryHighlightWeights(viewTime: self.defaultViewTimeWeight,
@@ -37,7 +27,12 @@ class HistoryHighlightsManager {
             limit: 200
         ).uponQueue(.main) { result in
             print("ROUX!!!!")
-            print(result)
+            if let results = result.successValue {
+                print(results)
+            }
+            guard let highlights = result.successValue else { return completion([]) }
+
+            completion(highlights)
         }
     }
 
