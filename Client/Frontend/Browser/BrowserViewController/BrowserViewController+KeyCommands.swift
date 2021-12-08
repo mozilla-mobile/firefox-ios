@@ -232,4 +232,31 @@ extension BrowserViewController {
         }
         return commands
     }
+
+    // MARK: Link shortcuts
+
+    func navigateLinkShortcut(url: URL) -> Bool {
+        var shouldCancelHandler = false
+
+        // Open tab in background || Open in new tab
+        if keyboardPressesHandler.isOnlyCmdPressed || keyboardPressesHandler.isCmdAndShiftPressed {
+            guard let isPrivate = tabManager.selectedTab?.isPrivate else { return shouldCancelHandler }
+            let selectNewTab = !keyboardPressesHandler.isOnlyCmdPressed && keyboardPressesHandler.isCmdAndShiftPressed
+            homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+            shouldCancelHandler = true
+
+        // Download Link
+        } else if keyboardPressesHandler.isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
+            // This checks if download is a blob, if yes, begin blob download process
+            if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
+                // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
+                self.pendingDownloadWebView = currentTab.webView
+                let request = URLRequest(url: url)
+                currentTab.webView?.load(request)
+            }
+            shouldCancelHandler = true
+        }
+
+        return shouldCancelHandler
+    }
 }

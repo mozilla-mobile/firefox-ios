@@ -69,13 +69,19 @@ struct UXSizeClasses {
 // MARK: - Home Panel
 
 protocol HomePanelDelegate: AnyObject {
-    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
     func homePanelDidRequestToCustomizeHomeSettings()
     func homePanelDidPresentContextualHint(type: ContextualHintViewType)
     func homePanelDidDismissContextualHint(type: ContextualHintViewType)
+}
+
+extension HomePanelDelegate {
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
+        homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+    }
 }
 
 protocol HomePanel: NotificationThemeable {

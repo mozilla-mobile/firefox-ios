@@ -131,7 +131,7 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
-    var isOnlyCmdPressed = false
+    var keyboardPressesHandler = KeyboardPressesHandler()
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
@@ -1616,20 +1616,27 @@ extension BrowserViewController: HomePanelDelegate {
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
-    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
-        // If we are showing toptabs a user can just use the top tab bar
-        // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard !topTabsVisible, !self.urlBar.inOverlayMode else {
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
+        let tab = tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
+        // Select new tab automatically if needed
+        guard !selectNewTab else {
+            tabManager.selectTab(tab)
             return
         }
+
+        // If we are showing toptabs a user can just use the top tab bar
+        // If in overlay mode switching doesnt correctly dismiss the homepanels
+        guard !topTabsVisible, !urlBar.inOverlayMode else {
+            return
+        }
+
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
             }
         })
-        self.show(toast: toast)
+        show(toast: toast)
     }
 
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
@@ -2214,24 +2221,18 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        // Temporary solution to support CMD + Click to open an unselected new tab
-        if #available(iOS 13.4, *) {
-            if let event = event, event.allPresses.count > 1 {
-                isOnlyCmdPressed = false
-            } else if let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) { // GUI equates to CMD key on physical keyboard
-                isOnlyCmdPressed = true
-            }
-        }
-
+        keyboardPressesHandler.handleKeyPress(presses, with: event)
         super.pressesBegan(presses, with: event)
     }
 
+    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        keyboardPressesHandler.handleKeyRelease(presses, with: event)
+        super.pressesCancelled(presses, with: event)
+    }
+
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        super.pressesEnded(presses, with: event)
-        if #available(iOS 13.4, *) {
-            guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return }
-            isOnlyCmdPressed = false
-        }
+        keyboardPressesHandler.handleKeyRelease(presses, with: event)
+        super.pressesBegan(presses, with: event)
     }
 }
 
@@ -2395,13 +2396,13 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
     }
 }
 
-// MARK: - reopen last closed tab
+// MARK: - Reopen last closed tab
 
 extension BrowserViewController {
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if featureFlags.isFeatureActiveForBuild(.shakeToRestore) {
-                homePanelDidRequestToRestoreClosedTab(motion)
+            homePanelDidRequestToRestoreClosedTab(motion)
         }
     }
 
