@@ -1439,7 +1439,7 @@
 "Settings.Home.Option.Shortcuts" = "Lối tắt";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
-"Settings.Home.Option.StartAtHome.AfterFourHours" = "Trang chủ sau bốn giờ không hoạt động";
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Trang chủ sau bốn tiếng không hoạt động";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Always" = "Trang chủ";

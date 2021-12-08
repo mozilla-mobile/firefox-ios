@@ -914,10 +914,10 @@
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Bluccà i perseguitatori in linea";
 
 /* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Canistrelli impiegati per u spiunagiu tra i siti";
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Canistrelli impiegati per u spiunagiu intersiti";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Perseguitatori d’un situ à l’altru";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Perseguitatori intersiti";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Minatori di crittomuneta";
@@ -956,7 +956,7 @@
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Detettori d’impronta numerica";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Canistrelli di spiunagiu tra i siti bluccati";
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Canistrelli di spiunagiu intersiti bluccati";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
 "Menu.TrackingProtectionListTitle.Cryptominers" = "Minatori di crittomuneta bluccati";

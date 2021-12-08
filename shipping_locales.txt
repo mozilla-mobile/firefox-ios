@@ -6,6 +6,7 @@ ast
 az
 bg
 bn
+bo
 br
 bs
 ca
@@ -82,6 +83,7 @@ te
 th
 tl
 tr
+tt
 uk
 ur
 uz
