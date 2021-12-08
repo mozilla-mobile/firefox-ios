@@ -839,7 +839,7 @@
 "Menu.PageActions.Title" = "Akce stránky";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
-"Menu.Passwords.Label" = "Hesla";
+"Menu.Passwords.Label" = "Přihlašovací údaje";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Vložit";
