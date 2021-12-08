@@ -104,6 +104,7 @@ extension BrowserViewController {
         // when recording telemetry for key commands.
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: true)
+        keyboardPressesHandler.reset()
     }
 
     @objc private func closeTabKeyCommand() {
@@ -126,6 +127,8 @@ extension BrowserViewController {
         } else if let firstTab = tabs.first {
             tabManager.selectTab(firstTab)
         }
+
+        keyboardPressesHandler.reset()
     }
 
     @objc private func previousTabKeyCommand() {
@@ -140,6 +143,8 @@ extension BrowserViewController {
         } else if let lastTab = tabs.last {
             tabManager.selectTab(lastTab)
         }
+
+        keyboardPressesHandler.reset()
     }
 
     @objc private func showTabTrayKeyCommand() {
@@ -233,9 +238,9 @@ extension BrowserViewController {
         return commands
     }
 
-    // MARK: Link shortcuts
+    // MARK: Keyboards + Link click shortcuts
 
-    func navigateLinkShortcut(url: URL) -> Bool {
+    func navigateLinkShortcutIfNeeded(url: URL) -> Bool {
         var shouldCancelHandler = false
 
         // Open tab in background || Open in new tab

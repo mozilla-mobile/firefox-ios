@@ -1561,6 +1561,13 @@ extension BrowserViewController: LibraryPanelDelegate {
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
+
+        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            libraryDrawerViewController?.close()
+            return
+        }
+
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
         libraryDrawerViewController?.close()
     }
@@ -1613,6 +1620,12 @@ extension BrowserViewController: HomePanelDelegate {
             tab.urlType = .googleTopSite
             searchTelemetry?.shouldSetGoogleTopSiteSearch = true
         }
+
+        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            return
+        }
+
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
@@ -2221,18 +2234,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        keyboardPressesHandler.handleKeyPress(presses, with: event)
         super.pressesBegan(presses, with: event)
-    }
-
-    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        keyboardPressesHandler.handleKeyRelease(presses, with: event)
-        super.pressesCancelled(presses, with: event)
+        keyboardPressesHandler.handlePressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        keyboardPressesHandler.handleKeyRelease(presses, with: event)
-        super.pressesBegan(presses, with: event)
+        super.pressesEnded(presses, with: event)
+        keyboardPressesHandler.handlePressesEnded(presses, with: event)
     }
 }
 

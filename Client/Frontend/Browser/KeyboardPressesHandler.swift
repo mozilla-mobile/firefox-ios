@@ -17,13 +17,8 @@ class KeyboardPressesHandler {
     @available(iOS 13.4, *)
     private lazy var keysPressed: [UIKeyboardHIDUsage] = []
 
-    // When a user clicks on a cell on the home page, the navigation type isn't a WKNavigationType.link type. Since WKNavigationDelegate decidePolicyFor is
-    // called multiple times for a navigation action of type WKNavigationType.other, we need a way to only open one tab if the CMD key is still pressed.
-    // User will be able to reuse the command once the delegate calls didFinish. This edge case only applies to the homepage.
-    var enableHomePageCmdPress: Bool = true
-
     var isOnlyCmdPressed: Bool {
-        return isCmdPressed && !isShiftPressed && enableHomePageCmdPress
+        return isCmdPressed && !isShiftPressed
     }
 
     var isCmdAndShiftPressed: Bool {
@@ -34,12 +29,19 @@ class KeyboardPressesHandler {
         return isOptionPressed && !isCmdPressed
     }
 
-    func handleKeyPress(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+    func handlePressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         handlePress(presses, with: event, pressedIfFound: true)
     }
 
-    func handleKeyRelease(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+    func handlePressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         handlePress(presses, with: event, pressedIfFound: false)
+    }
+
+    // Needed on some UIKeyCommands shortcuts - when a tab changed is involved
+    func reset() {
+        if #available(iOS 13.4, *) {
+            keysPressed.removeAll()
+        }
     }
 
     // MARK: Private
