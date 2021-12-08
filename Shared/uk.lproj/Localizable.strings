@@ -62,7 +62,7 @@
 "ActivityStream.Pocket.SectionTitle" = "Популярне в Pocket";
 
 /* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle2" = "Рекомендовано Pocket";
+"ActivityStream.Pocket.SectionTitle2" = "Рекомендації від Pocket";
 
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Популярне";
@@ -315,7 +315,7 @@
 "Default Search Engine" = "Типовий засіб пошуку";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
-"Display Settings" = "Параметри відображення";
+"Display Settings" = "Параметри вигляду";
 
 /* Used as a button label for crash dialog prompt */
 "Don’t Send" = "Не надсилати";
@@ -438,7 +438,7 @@
 "FxA.NoInternetConnection" = "Немає з’єднання з Інтернетом";
 
 /* Button label to open Sync preferences */
-"FxA.OpenSyncPreferences" = "Відкрити налаштування синхронізації";
+"FxA.OpenSyncPreferences" = "Відкрити параметри синхронізації";
 
 /* Instructions shown on qr code scanning view */
 "fxa.qr-scanning-view.instructions" = "Скануйте QR-код, показаний на firefox.com/pair";
@@ -576,7 +576,7 @@
 "HomePage.Set.Dialog.Cancel" = "Скасувати";
 
 /* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Ви можете пізніше змінити це в Параметрах";
+"HomePage.Set.Dialog.Message" = "Ви можете пізніше змінити це в параметрах";
 
 /* Button accepting changes setting the home page for the first time. */
 "HomePage.Set.Dialog.OK" = "Встановити домівку";
@@ -896,7 +896,7 @@
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "На цій сторінці Firefox не виявив жодного відомого йому стеження.";
 
 /* The title for tracking protection settings */
-"Menu.TrackingProtection.ProtectionSettings.Title" = "Налаштування захисту";
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Параметри захисту";
 
 /* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
 "Menu.TrackingProtection.TitlePrefix" = "Захист для %@";
@@ -1388,7 +1388,7 @@
 "Settings.DisplayTheme.SystemTheme.SectionHeader" = "Системна тема";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Системна світла / темна тема";
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Повторювати тему системи";
 
 /* Theme picker settings section title */
 "Settings.DisplayTheme.ThemePicker.SectionHeader" = "Вибір теми";
@@ -1409,7 +1409,7 @@
 "Settings.FxA.DeviceName" = "Назва пристрою";
 
 /* Label used as a section title in the Firefox Accounts Settings screen. */
-"Settings.FxA.Sync.SectionName" = "Налаштування синхронізації";
+"Settings.FxA.Sync.SectionName" = "Параметри синхронізації";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title" = "Обліковий запис Firefox";
@@ -1424,7 +1424,7 @@
 "Settings.Home.Option.JumpBackIn" = "Назад до";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
-"Settings.Home.Option.Pocket" = "Рекомендовано Pocket";
+"Settings.Home.Option.Pocket" = "Рекомендації від Pocket";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
 "Settings.Home.Option.RecentlySaved" = "Недавно збережені";
@@ -1532,10 +1532,10 @@
 "Settings.NewTab.Option.ReadingList" = "Показувати список читання";
 
 /* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
-"Settings.NewTab.Option.RecommendedByPocket" = "Рекомендовано %@";
+"Settings.NewTab.Option.RecommendedByPocket" = "Рекомендації від %@";
 
 /* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
-"Settings.NewTab.Option.RecommendedByPocketDescription" = "Винятковий вміст, керований %1$@, що належить до родини %2$@";
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Добірні матеріали від %1$@, що належить до родини %2$@";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Нова вкладка";
