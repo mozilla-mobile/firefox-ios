@@ -19,7 +19,7 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
     let titles: [Int: [String]] = [ 1: [.ShareAddToReadingList,
                                         .BookmarkContextMenuTitle,
                                         .AddToShortcutsActionTitle],
-                                    2: [.CloseTabTitle],
+                                    2: [.KeyboardShortcuts.CloseCurrentTab],
                                     0: [.CopyAddressTitle,
                                         .ShareContextMenuTitle,
                                         .SendToDeviceTitle]

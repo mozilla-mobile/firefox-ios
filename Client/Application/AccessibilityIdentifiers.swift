@@ -34,6 +34,10 @@ public struct AccessibilityIdentifiers {
             static let topSites = "topSitesTitle"
         }
     }
+    
+    struct GeneralizedIdentifiers {
+        public static let back = "Back"
+    }
 
     struct TabTray {
         static let filteredTabs = "filteredTabs"
