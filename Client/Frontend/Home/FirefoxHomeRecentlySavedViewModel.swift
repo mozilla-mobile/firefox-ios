@@ -23,7 +23,7 @@ class FirefoxHomeRecentlySavedViewModel {
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var readingListItems = [ReadingListItem]()
     private var recentBookmarks = [BookmarkItem]()
-    private let dataQueue = DispatchQueue(label: "recentlySavedDataQueue")
+    private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
 
     init(isZeroSearch: Bool, profile: Profile) {
         self.isZeroSearch = isZeroSearch
