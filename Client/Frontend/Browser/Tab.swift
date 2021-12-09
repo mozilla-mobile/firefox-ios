@@ -678,21 +678,19 @@ class Tab: NSObject {
         // Added an async queue queue
         let queueName = "com.moz.tabscreenshot.queue"
         DispatchQueue(label: queueName).async {
-            if let val = screenshot {
-                val.averageColor(completion: { color in
-                    DispatchQueue.main.async {
-                        // check if screenshot is same color as background
-                        if let avgColor = color {
-                            let backgroundColor = LegacyThemeManager.instance.current.browser.background
-                            guard !avgColor.isEqual(backgroundColor) else {
-                                self.screenshot = nil
-                                    return
-                            }
-                            self.screenshot = screenshot
-                        }
+            guard let val = screenshot else { return }
+            val.averageColor(completion: { color in
+                DispatchQueue.main.async {
+                    // check if screenshot is same color as background
+                    guard let avgColor = color else { return }
+                    let backgroundColor = LegacyThemeManager.instance.current.browser.background
+                    guard !avgColor.isEqual(backgroundColor) else {
+                        self.screenshot = nil
+                            return
                     }
-                })
-            }
+                    self.screenshot = screenshot
+                }
+            })
         }
     }
     

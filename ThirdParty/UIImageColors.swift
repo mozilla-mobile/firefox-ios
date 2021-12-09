@@ -286,11 +286,7 @@ extension UIImage {
 
         // core image filter that resamples an image down to 1x1 pixels
         // so you can read the most dominant color in an imagage
-        guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]) else {
-            completion(nil)
-            return
-        }
-        guard let outputImage = filter.outputImage else {
+        guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]), let outputImage = filter.outputImage else {
             completion(nil)
             return
         }
