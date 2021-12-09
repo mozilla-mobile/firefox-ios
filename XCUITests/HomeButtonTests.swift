@@ -20,7 +20,12 @@ class HomeButtonTests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
-        XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+        if iPad() {
+            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Menu")
+        } else {
+            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+        }
+        
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
         waitForExistence(app.buttons["TabToolbar.homeButton"], timeout: 5)
         XCTAssertTrue(app.buttons["TabToolbar.homeButton"].exists)

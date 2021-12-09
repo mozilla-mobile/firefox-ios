@@ -8,7 +8,9 @@ import XCTest
 class DesktopModeTestsIpad: IpadOnlyTestCase {
     func testLongPressReload() {
         if skipPlatform { return }
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.performAction(Action.CloseURLBarOpen)
+        app.textFields.firstMatch.tap()
+//        navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
@@ -171,6 +173,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        waitForExistence(app.webViews.staticTexts.firstMatch, timeout: 5)
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.goto(ReloadLongPressMenu)

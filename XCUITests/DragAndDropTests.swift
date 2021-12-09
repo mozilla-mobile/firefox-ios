@@ -5,9 +5,9 @@
 import XCTest
 
 let firstWebsite = (url: path(forTestPage: "test-mozilla-org.html"), tabName: "Internet for people, not profit — Mozilla")
-let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
+let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla. Currently selected tab.")
 let exampleWebsite = (url: path(forTestPage: "test-example.html"), tabName: "Example Domain")
-let homeTabName = "Home"
+let homeTabName = "Homepage"
 let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 
 let exampleDomainTitle = "Example Domain"
@@ -101,9 +101,14 @@ class DragAndDropTests: BaseTestCase {
 fileprivate extension BaseTestCase {
     func openTwoWebsites() {
         // Open two tabs
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(firstWebsite.url)
         waitForTabsButton()
-        navigator.goto(TabTray)
+        //navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()
@@ -181,15 +186,19 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
     func testDragAndDropHomeTab() {
         if skipPlatform { return }
-
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Home tab is open and then a new website
-        navigator.openNewURL(urlString: secondWebsite.url)
+        navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
         waitForExistence(app.collectionViews.cells.element(boundBy: 1))
 
         // Drag and drop home tab from the second position to the first one
-        dragAndDrop(dragElement: app.collectionViews.cells["Home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        dragAndDrop(dragElement: app.collectionViews.cells["Homepage"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName , secondTab: homeTabName)
         // Check that focus is kept on last website open
@@ -199,7 +208,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testRearrangeTabsPrivateMode() {
         if skipPlatform { return }
 
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        app.buttons["TopTabsViewController.privateModeButton"].tap()
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         // Drag first tab on the second one
