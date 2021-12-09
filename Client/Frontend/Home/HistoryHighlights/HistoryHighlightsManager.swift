@@ -59,26 +59,31 @@ class HistoryHighlightsManager {
         }
     }
 
-//    public static func getHighlightsForHistoryPanel(
-//        with profile: Profile,
-//        completion: @escaping (HistoryPanelHighlightsData?) -> Void
-//    ) {
-//
-//        fetchData(with: profile, andLimit: 1000) { (historyHighlights, historyData) in
-//            guard let highlights = historyHighlights,
-//                  !highlights.isEmpty,
-//                  let history = historyData,
-//                  !history.isEmpty
-//            else { return completion(nil) }
-//
-//            var highlightItems = [HighlightItem]()
-//            highlightItems.append(contentsOf: history)
-//
-//            historyPanelFlow() { highlightItems in
-//                completion(highlightItems)
-//            }
-//        }
-//    }
+    public static func getHighlightsForHistoryPanel(
+        with profile: Profile,
+        completion: @escaping (HistoryPanelHighlightsData?) -> Void
+    ) {
+
+        fetchData(with: profile, andLimit: 1000) { (historyHighlights, historyData) in
+            guard let highlights = historyHighlights,
+                  !highlights.isEmpty,
+                  let history = historyData,
+                  !history.isEmpty
+            else { return completion(nil) }
+
+            var highlightItems = [HighlightItem]()
+            highlightItems.append(contentsOf: history)
+
+            historyPanelFlow() { highlightItems in
+                guard let highlightItems = highlightItems else {
+                    completion(nil)
+                    return
+                }
+
+                completion(highlightItems)
+            }
+        }
+    }
 
 
     // MARK: - Data fetching functions
@@ -149,7 +154,7 @@ class HistoryHighlightsManager {
     }
 
     private static func historyPanelFlow(
-        completion: @escaping ([HighlightItem]) -> Void
+        completion: @escaping (HistoryPanelHighlightsData?) -> Void
     ) {
 
     }
