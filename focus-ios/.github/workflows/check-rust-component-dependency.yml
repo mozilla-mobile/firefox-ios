@@ -1,4 +1,9 @@
 name: Create a PR to build the app using newest rust-component version available
+
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   schedule:
     - cron: '0 20 * * *'
