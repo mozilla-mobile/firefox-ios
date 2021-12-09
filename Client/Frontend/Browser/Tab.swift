@@ -146,7 +146,6 @@ class Tab: NSObject {
     }
 
     var userActivity: NSUserActivity?
-
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
@@ -195,6 +194,10 @@ class Tab: NSObject {
         }
         return false
     }
+
+    // Added an async queue queue
+    let queueName = "com.moz.tabscreenshot.queue"
+    let tabScreenshotQueue = OperationQueue()
 
     var mimeType: String?
     var isEditing: Bool = false
@@ -281,6 +284,8 @@ class Tab: NSObject {
         self.nightMode = false
         self.noImageMode = false
         self.browserViewController = bvc
+        self.tabScreenshotQueue.name = queueName
+        self.tabScreenshotQueue.qualityOfService = .userInteractive
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
@@ -470,6 +475,8 @@ class Tab: NSObject {
         }
         checkTabCount(failures: 0)
         #endif
+        
+        tabScreenshotQueue.cancelAllOperations()
     }
 
     func close() {
@@ -675,17 +682,23 @@ class Tab: NSObject {
     }
 
     func setScreenshot(_ screenshot: UIImage?) {
-        // check if screenshot is same color as background
-        if let val = screenshot, let avgColor = val.averageColor() {
-            let backgroundColor = LegacyThemeManager.instance.current.browser.background
-            guard !avgColor.isEqual(backgroundColor) else {
-                self.screenshot = nil
-                return
-            }
-            self.screenshot = screenshot
+        tabScreenshotQueue.addOperation {
+            guard let val = screenshot else { return }
+            val.averageColor(completion: { color in
+                DispatchQueue.main.async {
+                    // check if screenshot is same color as background
+                    guard let avgColor = color else { return }
+                    let backgroundColor = LegacyThemeManager.instance.current.browser.background
+                    guard !avgColor.isEqual(backgroundColor) else {
+                        self.screenshot = nil
+                        return
+                    }
+                    self.screenshot = screenshot
+                }
+            })
         }
     }
-
+    
     func toggleChangeUserAgent() {
         changedUserAgent = !changedUserAgent
 
