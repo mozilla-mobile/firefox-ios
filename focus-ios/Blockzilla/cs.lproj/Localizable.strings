@@ -268,6 +268,12 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "„%@“ žádá o přístup k vašim fotkám";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Spojení není zabezpečené";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Zabezpečené spojení";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Verze stránky pro počítač";
 
@@ -321,6 +327,12 @@
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla sbírá jenom ty informace, které potřebuje pro další vylepšování aplikace %@.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ může čas od času instalovat a spouštět studie.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Obecné";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Zjistit více.";
@@ -433,6 +445,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Odesílat údaje o používání";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Studie";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Použít Touch ID pro odemčení aplikace";
 
@@ -484,6 +499,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Otevřít v Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Otevřít ve výchozím prohlížeči";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Otevřít ve Firefoxu";
 
@@ -517,6 +535,15 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Otevřít URL";
 
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Zapnout Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Zapnout Touch ID";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Zkuste vypnout ochranu proti sledování";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Pro návrat do aplikace %@ použijte Touch ID";
 
@@ -531,6 +558,9 @@
 
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "Zabezpečené spojení";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Ověřil: %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Sledující obsah";
