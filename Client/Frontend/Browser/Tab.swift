@@ -686,7 +686,7 @@ class Tab: NSObject {
                     let backgroundColor = LegacyThemeManager.instance.current.browser.background
                     guard !avgColor.isEqual(backgroundColor) else {
                         self.screenshot = nil
-                            return
+                        return
                     }
                     self.screenshot = screenshot
                 }
