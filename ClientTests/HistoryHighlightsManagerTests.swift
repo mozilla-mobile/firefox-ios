@@ -48,7 +48,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         let expectation = expectation(description: "Highlights")
 
-        manager.getHighlightsForRecentlyViewed(with: profile) { highlights in
+        manager.getHighlightsDataForRecentlySaved(with: profile) { highlights in
 
             XCTAssertNil(highlights, "Highlights should be nil if the DB is empty")
             expectation.fulfill()
@@ -61,24 +61,28 @@ class HistoryHighlightsTests: XCTestCase {
         emptyDB()
 
         let site = createWebsiteEntry(named: "mozilla")
-        let siteArray = [site]
+        add(site: site)
         setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
 
         let expectation = expectation(description: "Highlights")
         let expectedCount = 1
 
-//        HistoryHighlightsManager.getHighlightsForRecentlyViewed(
-//            with: profile,
-//            usingSites: siteArray,
-//            andSearchGroups: []
-//        ) { (highlightedSites, groupedSites) in
-//
-//            XCTAssertEqual(result.count, expectedCount, "There should be one history highlight")
-//            expectation.fulfill()
-//        }
-//
-//        waitForExpectations(timeout: 5, handler: nil)
+        manager.getHighlightsDataForRecentlySaved(with: profile) { highlights in
+
+            guard let highlights = highlights else {
+                XCTFail("Highlights should not be nil.")
+                return
+            }
+
+            XCTAssertEqual(highlights.count, expectedCount, "There should be one history highlight")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
     }
+
+
+    // MARK: - Helper functions
 
     private func emptyDB() {
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess)
@@ -127,9 +131,8 @@ class HistoryHighlightsTests: XCTestCase {
         ).value.isSuccess)
     }
 
-    private func addSite(_ history: BrowserHistory, url: String, title: String) {
-        let site = Site(url: url, title: title)
+    private func add(site: Site) {
         let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
-        XCTAssertTrue(history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
+        XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
     }
 }

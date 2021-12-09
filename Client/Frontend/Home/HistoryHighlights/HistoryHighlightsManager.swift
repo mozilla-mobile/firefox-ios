@@ -20,7 +20,7 @@ struct HistoryHighlight {
     let previewImageURL: String?
 }
 
-struct HistoryHighlightsData {
+struct HistoryPanelHighlightsData {
     var todaysHighlights = [HighlightItem]()
     var yesterdaysHighlights = [HighlightItem]()
     var lastSevenDaysHighlights = [HighlightItem]()
@@ -28,18 +28,21 @@ struct HistoryHighlightsData {
 }
 
 class HistoryHighlightsManager {
+
     // MARK: - Variables
 
-    // These variables are
+    // These variables are defined by PM and Design and will be tweaked based on
+    // their requirements or input.
     private static let defaultViewTimeWeight = 10.0
     private static let defaultFrequencyWeight = 4.0
 
     // MARK: - Public interface
 
-    public static func getHighlightsForRecentlyViewed(
+    public static func getHighlightsDataForRecentlySaved(
         with profile: Profile,
-        completion: @escaping ([HighlightItem]?) -> Void)
-    {
+        completion: @escaping ([HighlightItem]?) -> Void
+    ) {
+
         fetchData(with: profile, andLimit: 1000) { (historyHighlights, historyData) in
             guard let highlights = historyHighlights,
                   !highlights.isEmpty,
@@ -47,33 +50,38 @@ class HistoryHighlightsManager {
                   !history.isEmpty
             else { return completion(nil) }
 
-        // fetch Sites with limit of highlights count
-        // build search groups
-        // remove dupe highlights
-        // map remaining Sites with highlights (keep highlight order)
-        // collate HH Sites & SG
-        // order by date
+            var highlightItems = [HighlightItem]()
+            highlightItems.append(contentsOf: history)
+
+            recentlySavedFlow() { highlightItems in
+                completion(highlightItems)
+            }
         }
     }
 
-    public static func getHighlightsForHistoryPanel(
-        with profile: Profile,
-        usingSites sites: [Site],
-        andSearchGroups searchGroups: [ASGroup<Site>],
-        completion: @escaping ([Site], _ searchGroups: [ASGroup<Site>]) -> Void
-    ) {
+//    public static func getHighlightsForHistoryPanel(
+//        with profile: Profile,
+//        completion: @escaping (HistoryPanelHighlightsData?) -> Void
+//    ) {
+//
+//        fetchData(with: profile, andLimit: 1000) { (historyHighlights, historyData) in
+//            guard let highlights = historyHighlights,
+//                  !highlights.isEmpty,
+//                  let history = historyData,
+//                  !history.isEmpty
+//            else { return completion(nil) }
+//
+//            var highlightItems = [HighlightItem]()
+//            highlightItems.append(contentsOf: history)
+//
+//            historyPanelFlow() { highlightItems in
+//                completion(highlightItems)
+//            }
+//        }
+//    }
 
-        // fetch highlights
-        // fetch Sites with limit of highlights count
-        // build search groups
-        // remove dupe highlights
-        // map remaining Sites with highlights (keep highlight order)
-        // collate HH Sites & SG
-        // order by date
 
-    }
-
-    // MARK: - Private functions
+    // MARK: - Data fetching functions
 
     private static func fetchData(
         with profile: Profile,
@@ -122,7 +130,6 @@ class HistoryHighlightsManager {
         }
     }
 
-
     private static func fetchSites(
         with profile: Profile,
         andLimit limit: Int
@@ -131,5 +138,53 @@ class HistoryHighlightsManager {
         return profile.history.getSitesByLastVisit(limit: limit, offset: 0) >>== { result in
             return deferMaybe(result)
         }
+    }
+
+    // MARK: - Flows
+
+    private static func recentlySavedFlow(
+        completion: @escaping ([HighlightItem]) -> Void
+    ) {
+
+    }
+
+    private static func historyPanelFlow(
+        completion: @escaping ([HighlightItem]) -> Void
+    ) {
+
+    }
+
+    // MARK: - Helper functions
+
+    private static func buildSearchGroups() {
+
+    }
+
+    private static func removeDuplicateHighlights() {
+
+    }
+
+    private static func map(highlights: [MozillaAppServices.HistoryHighlight], to sites: [Site]) {
+
+    }
+
+    private static func collateForRecentlySaved() {
+
+    }
+
+    private static func dropBottomFourtyPercentOf(highlights: [Site]) {
+
+    }
+
+    private static func historyPanelMerge() {
+
+    }
+
+    private static func orderByDate() {
+
+    }
+
+    private static func splitIntoDateCategories() {
+
     }
 }
