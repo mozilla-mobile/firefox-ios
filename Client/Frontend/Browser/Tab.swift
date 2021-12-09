@@ -675,17 +675,27 @@ class Tab: NSObject {
     }
 
     func setScreenshot(_ screenshot: UIImage?) {
-        // check if screenshot is same color as background
-        if let val = screenshot, let avgColor = val.averageColor() {
-            let backgroundColor = LegacyThemeManager.instance.current.browser.background
-            guard !avgColor.isEqual(backgroundColor) else {
-                self.screenshot = nil
-                return
+        // Added an async queue queue
+        let queueName = "com.moz.tabscreenshot.queue"
+        DispatchQueue(label: queueName).async {
+            if let val = screenshot {
+                val.averageColor(completion: { color in
+                    DispatchQueue.main.async {
+                        // check if screenshot is same color as background
+                        if let avgColor = color {
+                            let backgroundColor = LegacyThemeManager.instance.current.browser.background
+                            guard !avgColor.isEqual(backgroundColor) else {
+                                self.screenshot = nil
+                                    return
+                            }
+                            self.screenshot = screenshot
+                        }
+                    }
+                })
             }
-            self.screenshot = screenshot
         }
     }
-
+    
     func toggleChangeUserAgent() {
         changedUserAgent = !changedUserAgent
 
