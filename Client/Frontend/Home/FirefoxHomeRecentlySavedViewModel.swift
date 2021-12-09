@@ -23,6 +23,7 @@ class FirefoxHomeRecentlySavedViewModel {
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var readingListItems = [ReadingListItem]()
     private var recentBookmarks = [BookmarkItem]()
+    private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
 
     init(isZeroSearch: Bool, profile: Profile) {
         self.isZeroSearch = isZeroSearch
@@ -46,7 +47,7 @@ class FirefoxHomeRecentlySavedViewModel {
     func updateData(completion: @escaping () -> Void) {
         let group = DispatchGroup()
         group.enter()
-        profile.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(.main, block: { [weak self] result in
+        profile.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(dataQueue, block: { [weak self] result in
             self?.updateRecentBookmarks(bookmarks: result.successValue ?? [])
             group.leave()
         })

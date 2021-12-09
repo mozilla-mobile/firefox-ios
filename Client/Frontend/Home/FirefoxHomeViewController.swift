@@ -236,11 +236,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var isRecentlySavedSectionEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.recentlySaved),
-              homescreen.sectionsEnabled[.recentlySaved] == true,
-              featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
-        else { return false }
+        return featureFlags.isFeatureActiveForBuild(.recentlySaved)
+        && homescreen.sectionsEnabled[.recentlySaved] == true
+        && featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
+    }
 
+    // Recently saved section can be enabled but not shown if it has no data - Data is loaded asynchronously
+    var shouldShowRecentlySavedSection: Bool {
+        guard isRecentlySavedSectionEnabled else { return false }
         return recentlySavedViewModel.hasData
     }
 
@@ -714,7 +717,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .jumpBackIn:
             return isJumpBackInSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .recentlySaved:
-            return isRecentlySavedSectionEnabled ? getHeaderSize(forSection: section) : .zero
+            return shouldShowRecentlySavedSection ? getHeaderSize(forSection: section) : .zero
         case .customizeHome:
             return .zero
         }
@@ -765,7 +768,7 @@ extension FirefoxHomeViewController {
         case .jumpBackIn:
             return isJumpBackInSectionEnabled ? 1 : 0
         case .recentlySaved:
-            return isRecentlySavedSectionEnabled ? 1 : 0
+            return shouldShowRecentlySavedSection ? 1 : 0
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? 1 : 0
         case .customizeHome:
@@ -869,8 +872,13 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         // TODO: Reload with a protocol comformance once all sections are standardized
         // Idea is that each section will load it's data from it's own view model
         if shouldUpdateData {
-            recentlySavedViewModel.updateData {}
-            jumpBackInViewModel.updateData {}
+            if isRecentlySavedSectionEnabled {
+                recentlySavedViewModel.updateData {}
+            }
+
+            if isJumpBackInSectionEnabled {
+                jumpBackInViewModel.updateData {}
+            }
         }
 
         collectionView?.reloadData()
