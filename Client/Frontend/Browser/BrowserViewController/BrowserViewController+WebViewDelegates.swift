@@ -187,7 +187,7 @@ extension BrowserViewController: WKUIDelegate {
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
             })
 
-            actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed("menu-panel-Downloads"), identifier: UIAction.Identifier("linkContextMenu.download")) {_ in
+            actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed("menu-panel-Downloads"), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
                 // This checks if download is a blob, if yes, begin blob download process
                 if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
                     //if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
@@ -467,6 +467,12 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // Handle keyboard shortcuts on link presses from webpage navigation (ex: Cmd + Tap on Link)
+        if navigationAction.navigationType == .linkActivated, navigateLinkShortcutIfNeeded(url: url) {
+            decisionHandler(.cancel)
+            return
+        }
+
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
@@ -580,13 +586,6 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             tab.mimeType = response.mimeType
-        }
-        
-        if isOnlyCmdPressed {
-            guard let url = webView.url, let isPrivate = self.tabManager.selectedTab?.isPrivate else { return }
-            homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
-            isOnlyCmdPressed = false
-            decisionHandler(.cancel)
         }
 
         // If none of our helpers are responsible for handling this response,

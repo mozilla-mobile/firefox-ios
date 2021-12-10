@@ -105,6 +105,7 @@ extension BrowserViewController {
         // when recording telemetry for key commands.
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: true)
+        keyboardPressesHandler.reset()
     }
 
     @objc private func closeTabKeyCommand() {
@@ -127,6 +128,8 @@ extension BrowserViewController {
         } else if let firstTab = tabs.first {
             tabManager.selectTab(firstTab)
         }
+
+        keyboardPressesHandler.reset()
     }
 
     @objc private func previousTabKeyCommand() {
@@ -141,6 +144,8 @@ extension BrowserViewController {
         } else if let lastTab = tabs.last {
             tabManager.selectTab(lastTab)
         }
+
+        keyboardPressesHandler.reset()
     }
 
     @objc private func showTabTrayKeyCommand() {
@@ -210,11 +215,13 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(showDownloadsKeyCommand), input: "j", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowDownloads),
 
             // Window
-            // TODO: Show tab # 1-9 - Command + 1-9
             UIKeyCommand(action: #selector(nextTabKeyCommand), input: "\t", modifierFlags: .control, discoverabilityTitle: shortcuts.ShowNextTab),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift],  discoverabilityTitle: shortcuts.ShowPreviousTab),
+            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift]),
+            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift], discoverabilityTitle: shortcuts.ShowPreviousTab),
+            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "[", modifierFlags: [.command, .shift]),
             UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate], discoverabilityTitle: shortcuts.ShowTabTray),
-            UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(showTabTrayKeyCommand)), // Safari on macOS
+            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift]),
+            // TODO: Show tab # 1-9 - Command + 1-9
         ]
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
@@ -225,5 +232,32 @@ extension BrowserViewController {
             return commands + overridesTextEditing
         }
         return commands
+    }
+
+    // MARK: Keyboards + Link click shortcuts
+
+    func navigateLinkShortcutIfNeeded(url: URL) -> Bool {
+        var shouldCancelHandler = false
+
+        // Open tab in background || Open in new tab
+        if keyboardPressesHandler.isOnlyCmdPressed || keyboardPressesHandler.isCmdAndShiftPressed {
+            guard let isPrivate = tabManager.selectedTab?.isPrivate else { return shouldCancelHandler }
+            let selectNewTab = !keyboardPressesHandler.isOnlyCmdPressed && keyboardPressesHandler.isCmdAndShiftPressed
+            homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+            shouldCancelHandler = true
+
+        // Download Link
+        } else if keyboardPressesHandler.isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
+            // This checks if download is a blob, if yes, begin blob download process
+            if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
+                // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
+                self.pendingDownloadWebView = currentTab.webView
+                let request = URLRequest(url: url)
+                currentTab.webView?.load(request)
+            }
+            shouldCancelHandler = true
+        }
+
+        return shouldCancelHandler
     }
 }
