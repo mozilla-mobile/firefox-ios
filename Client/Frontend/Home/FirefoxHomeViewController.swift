@@ -880,8 +880,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                 jumpBackInViewModel.updateData {}
             }
         }
-
-        collectionView?.reloadData()
     }
 
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
