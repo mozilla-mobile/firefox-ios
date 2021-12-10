@@ -378,16 +378,6 @@ class BrowserViewController: UIViewController {
         }
 
         tabManager.startAtHomeCheck()
-
-        #if DEBUG
-        // !! WARNING !!
-        // This function opens up x number of new tabs in the background.
-        // This is meant to test memory overflows with tabs on a device.
-        // DO NOT CHANGE unless you're explicitly testing this feature.
-        if let url = URL(string: "https://www.mozilla.com") {
-            debugOpen(numberOfNewTabs: nil, at: url)
-        }
-        #endif
     }
 
     override func viewDidLoad() {
@@ -2453,17 +2443,3 @@ extension BrowserViewController {
     }
 }
 
-#if DEBUG
-extension BrowserViewController {
-    fileprivate func debugOpen(numberOfNewTabs: Int?, at url: URL) {
-        guard let numberOfNewTabs = numberOfNewTabs,
-              numberOfNewTabs > 0
-        else { return }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-            self.tabManager.addTab(URLRequest(url: url))
-            self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
-        })
-    }
-}
-#endif
