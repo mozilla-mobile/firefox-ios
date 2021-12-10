@@ -12,19 +12,9 @@ protocol HighlightItem {}
 extension Site: HighlightItem {}
 extension ASGroup: HighlightItem {}
 
-struct HistoryHighlight {
-    let score: Double
-    let placeID: Int32
-    let url: String
-    let title: String?
-    let previewImageURL: String?
-}
-
-struct HistoryPanelHighlightsData {
-    var todaysHighlights = [HighlightItem]()
-    var yesterdaysHighlights = [HighlightItem]()
-    var lastSevenDaysHighlights = [HighlightItem]()
-    var lastFourteenDaysHighlights = [HighlightItem]()
+enum HighlightDataDestination {
+    case recentlyVisited
+    case historyPanel
 }
 
 class HistoryHighlightsManager {
@@ -38,49 +28,28 @@ class HistoryHighlightsManager {
 
     // MARK: - Public interface
 
-    public static func getHighlightsDataForRecentlySaved(
+    public static func getHighlightsData(
+        for destination: HighlightDataDestination,
         with profile: Profile,
         completion: @escaping ([HighlightItem]?) -> Void
     ) {
 
-        fetchData(with: profile, andLimit: 1000) { (historyHighlights, historyData) in
-            guard let highlights = historyHighlights,
-                  !highlights.isEmpty,
-                  let history = historyData,
-                  !history.isEmpty
-            else { return completion(nil) }
-
-            var highlightItems = [HighlightItem]()
-            highlightItems.append(contentsOf: history)
-
-            recentlySavedFlow() { highlightItems in
-                completion(highlightItems)
+        commonFlow(using: profile) { groups, filteredSites in
+            guard let groups = groups,
+                  let filteredSites = filteredSites
+            else {
+                completion(nil)
+                return
             }
-        }
-    }
 
-    public static func getHighlightsForHistoryPanel(
-        with profile: Profile,
-        completion: @escaping (HistoryPanelHighlightsData?) -> Void
-    ) {
-
-        fetchData(with: profile, andLimit: 1000) { (historyHighlights, historyData) in
-            guard let highlights = historyHighlights,
-                  !highlights.isEmpty,
-                  let history = historyData,
-                  !history.isEmpty
-            else { return completion(nil) }
-
-            var highlightItems = [HighlightItem]()
-            highlightItems.append(contentsOf: history)
-
-            historyPanelFlow() { highlightItems in
-                guard let highlightItems = highlightItems else {
-                    completion(nil)
-                    return
+            switch destination {
+            case .recentlyVisited:
+                recentlyVisitedFlow(with: groups, and: filteredSites) { highlightItems in
+                    completion(Array(highlightItems.prefix(9)))
                 }
 
-                completion(highlightItems)
+            case .historyPanel:
+                print("Yoohoo")
             }
         }
     }
@@ -147,34 +116,94 @@ class HistoryHighlightsManager {
 
     // MARK: - Flows
 
-    private static func recentlySavedFlow(
+    private static func commonFlow(
+        using profile: Profile,
+        completion: @escaping ([ASGroup<Site>]?, [Site]?) -> Void
+    ) {
+        fetchData(with: profile, andLimit: 1000) { (historyHighlights, historyData) in
+            guard let highlights = historyHighlights,
+                  !highlights.isEmpty,
+                  let history = historyData,
+                  !history.isEmpty
+            else {
+                completion(nil, nil)
+                return
+            }
+
+            let highlightedSites = map(highlights: highlights, to: history)
+            buildSearchGroups(with: profile, and: highlightedSites) { groups, filteredSites in
+                completion(groups, filteredSites)
+            }
+
+            completion(nil, nil)
+        }
+
+    }
+
+    private static func recentlyVisitedFlow(
+        with groups: [ASGroup<Site>]?,
+        and sites: [Site],
         completion: @escaping ([HighlightItem]) -> Void
     ) {
 
     }
 
     private static func historyPanelFlow(
-        completion: @escaping (HistoryPanelHighlightsData?) -> Void
+        completion: @escaping ([HighlightItem]) -> Void
     ) {
 
     }
 
     // MARK: - Helper functions
 
-    private static func buildSearchGroups() {
+    private static func map(
+        highlights: [MozillaAppServices.HistoryHighlight],
+        to sites: [Site]
+    ) -> [Site] {
 
+        sites.forEach { site in
+            for highlight in highlights {
+                if site.url == highlight.url {
+                    site.highlightScore = highlight.score
+                    break
+                }
+            }
+        }
+
+        return sites
     }
 
-    private static func removeDuplicateHighlights() {
+    private static func buildSearchGroups(
+        with profile: Profile,
+        and sites: [Site],
+        completion: @escaping ([ASGroup<Site>]?, [Site]) -> Void
+    ) {
 
+        SearchTermGroupsManager.getURLGroups(
+            with: profile,
+            from: sites,
+            using: .orderedAscending
+        ) { groups, filteredItems in
+            completion(groups, filteredItems)
+        }
     }
 
-    private static func map(highlights: [MozillaAppServices.HistoryHighlight], to sites: [Site]) {
+    // not needed as search groups removes dupes
+//    private static func removeDuplicateHighlights() {
+//
+//    }
 
-    }
+    private static func collateForRecentlySaved(
+        from groups: [ASGroup<Site>]?,
+        and sites: [Site]
+    ) -> [HighlightItem] {
 
-    private static func collateForRecentlySaved() {
+        guard let groups = groups, !groups.isEmpty else { return sites }
 
+        if
+
+
+        return []
     }
 
     private static func dropBottomFourtyPercentOf(highlights: [Site]) {
@@ -186,10 +215,6 @@ class HistoryHighlightsManager {
     }
 
     private static func orderByDate() {
-
-    }
-
-    private static func splitIntoDateCategories() {
 
     }
 }
