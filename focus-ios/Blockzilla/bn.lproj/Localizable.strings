@@ -328,6 +328,9 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla এর প্রচেষ্টা হচ্ছে অত্যাবশ্যকীয় এবং প্রয়োজনীয় তথ্য ও উপাত্ত সংগ্রহ করে, সকলের জন্যে %@ এর আরও উন্নত সংস্করণ তৈরী করা।";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "কিছু দিন পর %@ স্টাডিজ ইনস্টল এবং চালাতে পারে।";
+
 /* Title for section in settings menu */
 "Settings.general" = "সাধারণ";
 
@@ -532,8 +535,56 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "খুলতে URL";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "একটি সাইট খোলা হলে %@ লক করুন:";
+
 /* Text for a label that indicates the description for biometric Face ID tip. */
 "Tip.BiometricFaceId.Description" = "ফেস আইডি চালু করুন";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Touch ID চালু করুন";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "এই সম্পর্কে আরও পড়ুন এবং %@ এর অন্যান্য আপডেট।";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "কেন হ্যাঁ, আমাদের একটি পুরোপুরি নতুন লুক আছে না!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "পেজ অ্যাকশন > ডেস্কটপ সাইট অনুরোধ করুন";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "একটি সাইটের সম্পূর্ণ ডেস্কটপ সংস্করণ দেখতে চান?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ ট্র্যাকার এখনও ব্লক আছে";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "আপনি ব্রাউজ করুন। %@ ব্লক।";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "%@ মেনু থেকে Add to Shortcuts নির্বাচন করুন";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "আপনি সবচেয়ে বেশি পরিদর্শন করেন এমন সাইটগুলির শর্টকাট তৈরি করুন:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Siri শর্টকাট যোগ করুন";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, আমার %@ সেশন মুছে দাও।”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Siri শর্টকাট যোগ করুন";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, আমার প্রিয় সাইট খোল।”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "ট্র্যাকিং সুরক্ষা বন্ধ করার চেষ্টা করুন";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "সাইটে কন্টেন্ট অনুপস্থিত বা অদ্ভুত আচরণ করছে?";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ এ ফিরে আসার জন্য Touch ID ব্যবহার করুন";
@@ -550,6 +601,9 @@
 /* Text for tracking protection screen showing the connection is secure */
 "trackingProtection.connectionSecureLabel" = "সংযোগ সুরক্ষিত";
 
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "%@ যাচাই করেছে";
+
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "কনটেন্ট ট্র্যাকার";
 
@@ -565,11 +619,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "আরও জানুন";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "আরও সেটিং";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "সামাজিক ট্র্যাকার";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "এই সেশনের জন্য সুরক্ষাগুলি বন্ধ রয়েছে";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "এই সেশনের জন্য সুরক্ষা চালু আছে";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "আপনি যতক্ষণ ERASE ট্যাপ না করছেন বা %@ বন্ধ না করছেন, ততক্ষণ পর্যন্ত নিষ্ক্রিয়।";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "উন্নত ট্র্যাকিং সুরক্ষা";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "নিজের তথ্য নিজের কাছে রাখুন। %@ আপনাকে প্রচলিত ট্র‍্যাকারগুলো যা অনলাইনে আপনি কি করেন তা অনুসরণ করে তার বেশিরভাগ থেকেই রক্ষা করে।";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "%@ থেকে ট্র্যাকার ব্লক আছে";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "ট্র্যাকার এবং স্ক্রিপ্ট ব্লক করতে";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "অটোকমপ্লিট করতে লিঙ্ক যোগ করুন";
@@ -582,6 +657,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "মুছুন";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "ব্রাউজিং ইতিহাস মুছে দেওয়া হয়েছে";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "পাতায় অনুসন্ধান: %@";
