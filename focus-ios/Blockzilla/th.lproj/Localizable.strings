@@ -553,6 +553,9 @@
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "%@ ตัวติดตามที่ถูกปิดกั้นจนถึงตอนนี้";
 
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "สร้างทางลัดไปยังเว็ปไซต์ที่คุณเข้าชมบ่อยที่สุด:";
+
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "เพิ่มทางลัด Siri";
 
