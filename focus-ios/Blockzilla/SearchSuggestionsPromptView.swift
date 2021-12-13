@@ -24,13 +24,6 @@ class SearchSuggestionsPromptView: UIView {
             updateUI(isIpadView)
         }
     }
-    var shouldShowFindInPage: Bool = false {
-        didSet {
-            if shouldShowFindInPage{
-                promptContainer.layer.maskedCorners = isIpadView ? [.layerMaxXMinYCorner, .layerMinXMinYCorner] : []
-            }
-        }
-    }
 
     init() {
         super.init(frame: CGRect.zero)
@@ -105,9 +98,10 @@ class SearchSuggestionsPromptView: UIView {
     }
     
     private func updateUI(_ isIpadView: Bool) {
-        promptContainer.backgroundColor = isIpadView ? .systemBackground.withAlphaComponent(0.95) : .foundation
+        promptContainer.backgroundColor = isIpadView ? .secondarySystemBackground.withAlphaComponent(0.95) : .foundation
         if isIpadView {
             promptContainer.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
+            promptContainer.layer.maskedCorners =  [.layerMaxXMinYCorner, .layerMinXMinYCorner]
             promptContainer.clipsToBounds = true
         } else {
             promptContainer.layer.cornerRadius = 0

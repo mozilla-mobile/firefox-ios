@@ -52,7 +52,6 @@ class OverlayView: UIView {
     
     private var shouldShowFindInPage: Bool =  false {
         didSet {
-            searchSuggestionsPrompt.shouldShowFindInPage = shouldShowFindInPage
             updateDesign(shouldShowFindInPage)
         }
     }
@@ -401,12 +400,22 @@ class OverlayView: UIView {
         searchButtonGroup.first?.layer.cornerRadius = UIConstants.layout.suggestionViewCornerRadius
         searchButtonGroup.first?.clipsToBounds = true
         
-        if searchSuggestions.count == 1 {
-            searchButtonGroup.first?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner] : [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        } else {
-            searchButtonGroup.first?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-            searchButtonGroup.last?.layer.maskedCorners = findInPageButton.isHidden ? [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] : []
+        let searchSuggestionsPromptHidden = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) || searchQuery.isEmpty
+        
+        let topCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        let bottomCorners: CACornerMask = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        let allCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        
+        var firstSearchButtonMaskedCorners = topCorners
+        
+        if !searchSuggestionsPromptHidden {
+            firstSearchButtonMaskedCorners = findInPageButton.isHidden ? bottomCorners : []
+        } else if searchSuggestions.count == 1 {
+            firstSearchButtonMaskedCorners = findInPageButton.isHidden ? allCorners : topCorners
         }
+        
+        searchButtonGroup.first?.layer.maskedCorners = firstSearchButtonMaskedCorners
+        searchButtonGroup.last?.layer.maskedCorners = findInPageButton.isHidden ? bottomCorners : []
     }
     
     private func remakeConstraintsForFindInPage() {
