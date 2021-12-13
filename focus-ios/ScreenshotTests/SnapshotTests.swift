@@ -20,7 +20,7 @@ class SnapshotTests: BaseTestCaseL10n {
     func test02Settings() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        app.collectionViews.buttons.element(boundBy: 0).tap()
         snapshot("08Settings")
         app.swipeUp()
         snapshot("9Settings")
@@ -55,7 +55,7 @@ class SnapshotTests: BaseTestCaseL10n {
     func test03About() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        app.collectionViews.buttons.element(boundBy: 0).tap()
         waitForExistence(app.cells["settingsViewController.about"])
         app.cells["settingsViewController.about"].tap()
         snapshot("13About")
@@ -68,20 +68,20 @@ class SnapshotTests: BaseTestCaseL10n {
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("WebsiteSettingsMenu")
-        waitForExistence(app.cells["icon_shortcuts_add"])
-        app.tables.cells["icon_shortcuts_add"].tap()
+        waitForExistence(app.cells.buttons.element(boundBy: 6))
+        app.cells.buttons.element(boundBy: 6).tap()
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.tables["Context Menu"].cells["icon_openwith_active"])
+        waitForExistence(app.cells.buttons.element(boundBy: 5))
         snapshot("WebsiteSettingsMenu-RemovePin")
-        app.tables["Context Menu"].cells["icon_openwith_active"].tap()
+        app.cells.buttons.element(boundBy: 5).tap()
         snapshot("14ShareMenu")
     }
 
     func test05SafariIntegration() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        app.collectionViews.buttons.element(boundBy: 0).tap()
         waitForExistence(app.tables.switches["BlockerToggle.Safari"])
         app.tables.switches["BlockerToggle.Safari"].tap()
         snapshot("15SafariIntegrationInstructions")
@@ -90,7 +90,7 @@ class SnapshotTests: BaseTestCaseL10n {
     func test06Theme() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
-        app.tables.cells["Settings"].tap()
+        app.collectionViews.buttons.element(boundBy: 0).tap()
         waitForExistence(app.cells["settingsViewController.themeCell"])
         app.cells["settingsViewController.themeCell"].tap()
         // Toggle the switch on-off to see the different menus
@@ -123,7 +123,7 @@ class SnapshotTests: BaseTestCaseL10n {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("20HomeViewSettings")
-        app.tables.cells["Settings"].tap()
+        app.collectionViews.buttons.element(boundBy: 0).tap()
         waitForExistence(app.cells["SettingsViewController.searchCell"])
         app.cells["SettingsViewController.searchCell"].tap()
         snapshot("SettingsSearchEngine")
