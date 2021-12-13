@@ -546,18 +546,22 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
 
           if (!disabledOrReadOnly && !userEnteredDifferentCase && userNameDiffers) {
             usernameField.value = selectedLogin.username;
-            // Fire 'change' event to notify client-side validation on this field.
-            usernameField.dispatchEvent(new Event("change"));
             dispatchKeyboardEvent(usernameField, "keydown", KEYCODE_ARROW_DOWN);
             dispatchKeyboardEvent(usernameField, "keyup", KEYCODE_ARROW_DOWN);
+            if (document.activeElement !== usernameField) {
+              // Fire 'change' event to notify client-side validation on this field.
+              usernameField.dispatchEvent(new Event("change"));
+            }
           }
         }
         if (passwordField.value != selectedLogin.password) {
           passwordField.value = selectedLogin.password;
-          // Fire 'change' event to notify client-side validation on this field.
-          passwordField.dispatchEvent(new Event("change"));
           dispatchKeyboardEvent(passwordField, "keydown", KEYCODE_ARROW_DOWN);
           dispatchKeyboardEvent(passwordField, "keyup", KEYCODE_ARROW_DOWN);
+          if (document.activeElement !== passwordField) {
+            // Fire 'change' event to notify client-side validation on this field.
+            passwordField.dispatchEvent(new Event("change"));
+          }
         }
         didFillForm = true;
       } else if (selectedLogin && !autofillForm) {
