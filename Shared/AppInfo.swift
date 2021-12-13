@@ -100,4 +100,7 @@ open class AppInfo {
         }
         return Locale.current.identifier == "zh_CN"
     }()
+
+    // The App Store page identifier for the Firefox iOS application
+    public static var appStoreId = "id989804926"
 }
