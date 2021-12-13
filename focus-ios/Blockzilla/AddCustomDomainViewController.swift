@@ -98,9 +98,9 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         }
 
         switch autocompleteSource.add(suggestion: domain) {
-        case .error(.duplicateDomain):
+        case .failure(.duplicateDomain):
             finish()
-        case .error(let error):
+        case .failure(let error):
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:

@@ -11,7 +11,7 @@ protocol AutocompleteSource {
     func getSuggestions() -> AutoCompleteSuggestions
 }
 
-enum CompletionSourceError {
+enum CompletionSourceError: Error {
     case invalidUrl
     case duplicateDomain
     case indexOutOfRange
@@ -42,9 +42,9 @@ class CustomCompletionSource: CustomAutocompleteSource {
     func add(suggestion: String) -> CustomCompletionResult {
         var sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSRange(location: 0, length: suggestion.count), withTemplate: "")
 
-        guard !sanitizedSuggestion.isEmpty else { return .error(.invalidUrl) }
+        guard !sanitizedSuggestion.isEmpty else { return .failure(.invalidUrl) }
 
-        guard sanitizedSuggestion.contains(".") else { return .error(.invalidUrl) }
+        guard sanitizedSuggestion.contains(".") else { return .failure(.invalidUrl) }
 
         // Drop trailing slash, otherwise URLs will end with two when added from quick add URL menu action
         if sanitizedSuggestion.suffix(1) == "/" {
@@ -54,7 +54,7 @@ class CustomCompletionSource: CustomAutocompleteSource {
         var domains = getSuggestions()
         guard !domains.contains(where: { domain in
             domain.compare(sanitizedSuggestion, options: .caseInsensitive) == .orderedSame
-        }) else { return .error(.duplicateDomain) }
+        }) else { return .failure(.duplicateDomain) }
 
         domains.append(sanitizedSuggestion)
         Settings.setCustomDomainSetting(domains: domains)
@@ -65,10 +65,10 @@ class CustomCompletionSource: CustomAutocompleteSource {
     func add(suggestion: String, atIndex: Int) -> CustomCompletionResult {
         let sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSRange(location: 0, length: suggestion.count), withTemplate: "")
 
-        guard !sanitizedSuggestion.isEmpty else { return .error(.invalidUrl) }
+        guard !sanitizedSuggestion.isEmpty else { return .failure(.invalidUrl) }
 
         var domains = getSuggestions()
-        guard !domains.contains(sanitizedSuggestion) else { return .error(.duplicateDomain) }
+        guard !domains.contains(sanitizedSuggestion) else { return .failure(.duplicateDomain) }
 
         domains.insert(sanitizedSuggestion, at: atIndex)
         Settings.setCustomDomainSetting(domains: domains)
@@ -79,7 +79,7 @@ class CustomCompletionSource: CustomAutocompleteSource {
     func remove(at index: Int) -> CustomCompletionResult {
         var domains = getSuggestions()
 
-        guard domains.count > index else { return .error(.indexOutOfRange) }
+        guard domains.count > index else { return .failure(.indexOutOfRange) }
         domains.remove(at: index)
         Settings.setCustomDomainSetting(domains: domains)
 

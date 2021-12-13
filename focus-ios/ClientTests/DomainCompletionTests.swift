@@ -39,7 +39,7 @@ class DomainCompletionTests: XCTestCase {
         Settings.setCustomDomainSetting(domains: [SIMPLE_DOMAIN])
         [WWWW_DOMAIN, TEST_CASE_INSENSITIVE].forEach {
             switch CustomCompletionSource().add(suggestion: $0) {
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertEqual(error, .duplicateDomain)
             case .success:
                 XCTFail()
@@ -50,7 +50,7 @@ class DomainCompletionTests: XCTestCase {
     func testRemoveCustomDomain() {
         Settings.setCustomDomainSetting(domains: [SIMPLE_DOMAIN])
         switch CustomCompletionSource().remove(at: 0) {
-        case .error:
+        case .failure:
             XCTFail()
         case .success:
             XCTAssertEqual(0, Settings.getCustomDomainSetting().count)
@@ -60,7 +60,7 @@ class DomainCompletionTests: XCTestCase {
     func testAddCustomDomainWithoutPeriod() {
         Settings.setCustomDomainSetting(domains: [])
         switch CustomCompletionSource().add(suggestion: TEST_NO_PERIOD) {
-        case .error(let error):
+        case .failure(let error):
             XCTAssertEqual(error, .invalidUrl)
         case .success:
             XCTFail()
@@ -70,7 +70,7 @@ class DomainCompletionTests: XCTestCase {
     private func addADomain(domain: String) {
         Settings.setCustomDomainSetting(domains: [])
         switch CustomCompletionSource().add(suggestion: domain) {
-        case .error(_):
+        case .failure:
             XCTFail()
         case .success:
             let domains = Settings.getCustomDomainSetting()

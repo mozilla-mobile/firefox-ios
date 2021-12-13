@@ -1004,9 +1004,9 @@ extension BrowserViewController: URLBarDelegate {
         let autocompleteSource = CustomCompletionSource()
 
         switch autocompleteSource.add(suggestion: url.absoluteString) {
-        case .error(.duplicateDomain):
+        case .failure(.duplicateDomain):
             break
-        case .error(let error):
+        case .failure(let error):
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
@@ -1410,9 +1410,9 @@ extension BrowserViewController: OverlayViewDelegate {
 
         let autocompleteSource = CustomCompletionSource()
         switch autocompleteSource.add(suggestion: query) {
-        case .error(.duplicateDomain):
+        case .failure(.duplicateDomain):
             Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
-        case .error(let error):
+        case .failure(let error):
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
