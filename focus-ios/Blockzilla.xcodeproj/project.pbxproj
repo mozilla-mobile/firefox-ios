@@ -122,6 +122,7 @@
 		C8CE050E2743FEC5002057C6 /* MenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE050D2743FEC5002057C6 /* MenuAction.swift */; };
 		C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD12742A00300E76AE6 /* MenuActionable.swift */; };
 		C8EADCD42742A0AB00E76AE6 /* MenuItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */; };
+		C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F3EABE2762558F00C2AF0C /* SplashView.swift */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -659,6 +660,7 @@
 		C8CE050D2743FEC5002057C6 /* MenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuAction.swift; sourceTree = "<group>"; };
 		C8EADCD12742A00300E76AE6 /* MenuActionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuActionable.swift; sourceTree = "<group>"; };
 		C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemProvider.swift; sourceTree = "<group>"; };
+		C8F3EABE2762558F00C2AF0C /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -1505,6 +1507,7 @@
 				C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */,
 				D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
+				C8F3EABE2762558F00C2AF0C /* SplashView.swift */,
 				16180DBA212F563800AFE3C2 /* Intents.intentdefinition */,
 				16D7169B2114EF72000C8A66 /* BlockerToggle.swift */,
 				D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */,
@@ -2168,6 +2171,7 @@
 				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
 				24433101219DA46F00778D02 /* Debouncer.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
+				C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
 				C8337E06271089C200093D42 /* Section.swift in Sources */,

@@ -14,8 +14,9 @@ class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
 
     class TestAppSplashController: AppSplashController {
-        var splashView = UIView()
-        func toggleSplashView(hide: Bool) {}
+        var splashView = SplashView()
+        func hideSplashView() {}
+        func showSplashView() {}
     }
 
     func testRequestReviewThreshold() {
