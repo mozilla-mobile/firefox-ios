@@ -104,15 +104,14 @@ class SearchTermGroupsManager {
             innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata {
                 if historyMetaList.contains(where: { metadata in
                     var stringURL: String = ""
+
                     if let item = item as? Site {
                         stringURL = item.url
-
                     } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
                         stringURL = url
                     }
 
                     return metadata.url == stringURL || metadata.referrerUrl == stringURL
-
                 }) {
                     itemsInGroups.append(item)
                     if itemGroupData[searchTerm] == nil {
@@ -124,7 +123,6 @@ class SearchTermGroupsManager {
                 }
             }
         }
-
         return (itemGroupData, itemsInGroups)
     }
 
