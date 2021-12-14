@@ -1233,19 +1233,11 @@ extension BrowserViewController: ShortcutViewDelegate {
         submit(url: shortcut.url)
         GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
     }
-
-    func shortcutLongPressed(shortcut: Shortcut, shortcutView: ShortcutView) {
-        let removeFromShortcutsItem = PhotonActionSheetItem(title: UIConstants.strings.removeFromShortcuts, iconString: "icon_shortcuts_remove") { action in
-            ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
-            self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
-            GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
-        }
-        
-        var actions: [[PhotonActionSheetItem]] = []
-        actions.append([removeFromShortcutsItem])
-        
-        let shortcutActionsMenu = PhotonActionSheet(actions: actions)
-        presentPhotonActionSheet(shortcutActionsMenu, from: shortcutView, arrowDirection: .up)
+    
+    func removeFromShortcutsAction(shortcut: Shortcut) {
+        ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
+        self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
+        GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }
 }
 
