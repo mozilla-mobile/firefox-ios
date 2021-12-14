@@ -12,4 +12,8 @@ extension Calendar {
         
         return numberOfDays.day ?? 0
     }
+
+    func remove(numberOfDays: Int, to date: Date) -> Date? {
+        return self.date(byAdding: .day, value: -numberOfDays, to: date)
+    }
 }

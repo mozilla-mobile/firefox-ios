@@ -10,6 +10,7 @@ import Storage
 class RatingPromptManager {
 
     private let profile: Profile
+    private let daysOfUseCounter: CumulativeDaysOfUseCounter
 
     private var hasMinimumBookmarksCount = false
     private let minimumBookmarksCount = 5
@@ -25,8 +26,10 @@ class RatingPromptManager {
         case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
     }
 
-    init(profile: Profile) {
+    init(profile: Profile, daysOfUseCounter: CumulativeDaysOfUseCounter) {
         self.profile = profile
+        self.daysOfUseCounter = daysOfUseCounter
+
         updateData()
     }
 
@@ -76,7 +79,7 @@ class RatingPromptManager {
         guard currentSessionCount >= 5 else { return false }
 
         // Required: 5 consecutive days of use in the last 7 days
-        guard hasFiveConsecutiveDaysOfUse else { return false }
+        guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
 
         // One of the followings
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
@@ -90,7 +93,7 @@ class RatingPromptManager {
 
         // Only ask once for now once the triggers are fulfilled. We can ask three times per period of 365 days.
         // Second and third time will be asked at a later point with other stories.
-        guard hasAskedOnce else { return false }
+        guard requestCount < 1 else { return false }
 
         return true
     }
@@ -118,18 +121,109 @@ class RatingPromptManager {
         }
     }
 
-    private var hasFiveConsecutiveDaysOfUse: Bool {
-        // TODO: Count the days
-        return false
-    }
-
     private var hasRequestedInTheLastTwoWeeks: Bool {
-        // TODO: hasRequestedInTheLastTwoWeeks
-        return false
+        guard let lastRequestDate = lastRequestDate else { return false }
+
+        let currentDate = Date()
+        let numberOfDays = Calendar.current.numberOfDaysBetween(currentDate, and: lastRequestDate)
+
+        return numberOfDays < 14
+    }
+}
+
+class CumulativeDaysOfUseCounter {
+
+    private let calendar = Calendar.current
+
+    private struct DayOfUse: Codable {
+        let date: Date
+        var wasUsed: Bool = true
     }
 
-    private var hasAskedOnce: Bool {
-        // TODO: hasAskedOnce
-        return false
+    private enum UserDefaultsKey: String {
+        case keyArrayDaysOfUse = "com.moz.arrayDaysOfUse.key"
+        case keyRequiredCumulativeDaysOfUseCount = "com.moz.hasRequiredCumulativeDaysOfUseCount.key"
+    }
+
+    private let maximumNumberOfDaysToCollect = 7
+    private let requiredCumulativeDaysOfUseCount = 5
+    private(set) var hasRequiredCumulativeDaysOfUse: Bool {
+        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyRequiredCumulativeDaysOfUseCount.rawValue) as? Bool ?? false }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRequiredCumulativeDaysOfUseCount.rawValue) }
+    }
+
+    private var lastSevenDaysOfUse: [DayOfUse]? {
+        get {
+            if let data = UserDefaults.standard.data(forKey: UserDefaultsKey.keyArrayDaysOfUse.rawValue) {
+                return try? PropertyListDecoder().decode([DayOfUse].self, from: data)
+            } else {
+                return nil
+            }
+        }
+
+        set {
+            if let data = try? PropertyListEncoder().encode(newValue) {
+                UserDefaults.standard.set(data, forKey: UserDefaultsKey.keyArrayDaysOfUse.rawValue)
+            }
+        }
+    }
+
+    func updateCounter(currentDate: Date = Date()) {
+        guard var lastSevenDaysOfUse = lastSevenDaysOfUse, let lastDayOfUse = lastSevenDaysOfUse.last else {
+            let dayOfUse = DayOfUse(date: currentDate)
+            lastSevenDaysOfUse = [dayOfUse]
+            return
+        }
+
+        let numberOfDaysSinceLastUse = calendar.numberOfDaysBetween(currentDate, and: lastDayOfUse.date)
+
+        // If 0 then its a consecutive day of use
+        if numberOfDaysSinceLastUse <= 0 {
+            let currentDayOfUse = DayOfUse(date: currentDate)
+            lastSevenDaysOfUse.append(currentDayOfUse)
+        }
+
+        // CDOU: Consecutive days of use
+        let numberOfCDOU = getConsecutiveDaysOfUse(daysOfUse: lastSevenDaysOfUse)
+        hasRequiredCumulativeDaysOfUse = numberOfCDOU >= requiredCumulativeDaysOfUseCount ? true : false
+
+        cleanDaysOfUseData(daysOfUse: lastSevenDaysOfUse, currentDate: currentDate)
+    }
+
+    private func getConsecutiveDaysOfUse(daysOfUse: [DayOfUse]) -> Int {
+        var daysCount = 0
+        var previousDay: DayOfUse?
+        var maxNumberOfConsecutiveDays = 0
+
+        for dayOfUse in daysOfUse {
+            if let previousDay = previousDay {
+                let countDays = calendar.numberOfDaysBetween(dayOfUse.date, and: previousDay.date)
+                daysCount = countDays == 0 ? daysCount + 1 : 0
+            } else {
+                daysCount += 1
+            }
+
+            maxNumberOfConsecutiveDays = max(daysCount, maxNumberOfConsecutiveDays)
+            previousDay = dayOfUse
+        }
+
+        return maxNumberOfConsecutiveDays
+    }
+
+    private func cleanDaysOfUseData(daysOfUse: [DayOfUse], currentDate: Date) {
+        var cleanedDaysOfUse = [DayOfUse]()
+        for dayOfUse in daysOfUse {
+            let numberOfDays = calendar.numberOfDaysBetween(currentDate, and: dayOfUse.date)
+            if numberOfDays <= maximumNumberOfDaysToCollect {
+                cleanedDaysOfUse.append(dayOfUse)
+            }
+        }
+
+        lastSevenDaysOfUse = cleanedDaysOfUse
+    }
+
+    func reset() {
+        hasRequiredCumulativeDaysOfUse = false
+        lastSevenDaysOfUse = nil
     }
 }
