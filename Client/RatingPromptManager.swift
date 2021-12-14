@@ -5,12 +5,19 @@
 import Foundation
 import StoreKit
 import Shared
+import Storage
 
 class RatingPromptManager {
 
     private let profile: Profile
-    private var hasAtLeastFiveBookmarks = false
-    private var hasAtLeastTwoPinnedShortcuts = false
+
+    private var hasMinimumBookmarksCount = false
+    private let minimumBookmarksCount = 5
+
+    private var hasMinimumPinnedShortcutsCount = false
+    private let minimumPinnedShortcutsCount = 2
+
+    private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
 
     private enum UserDefaultsKey: String {
         case keyIsBrowserDefault = "com.moz.isBrowserDefault.key"
@@ -26,12 +33,14 @@ class RatingPromptManager {
     func showRatingPromptIfNeeded() {
         if shouldShowPrompt {
             lastRequestDate = Date()
+            requestCount += 1
+
             SKStoreReviewController.requestReview()
         }
     }
 
     // TODO: Add settings RatingsPrompt.Settings.RateOnAppStore
-    func goToAppStore() {
+    static func goToAppStoreReview() {
         guard let url = URL(string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review") else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
@@ -74,21 +83,39 @@ class RatingPromptManager {
         let hasSyncAccount = profile.hasSyncableAccount()
         let engineIsGoogle = profile.searchEngines.defaultEngine.shortName == "Google"
         let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) == .strict
-        guard isBrowserDefault || hasSyncAccount || hasAtLeastFiveBookmarks || hasAtLeastTwoPinnedShortcuts || !engineIsGoogle || hasTPStrict else { return false }
+        guard isBrowserDefault || hasSyncAccount || hasMinimumBookmarksCount || hasMinimumPinnedShortcutsCount || !engineIsGoogle || hasTPStrict else { return false }
 
         // Ensure we ask again only if 2 weeks has passed
         guard !hasRequestedInTheLastTwoWeeks else { return false }
 
-        // Only ask once for now once the triggers are fulfilled
-        // Keep in mind, second and third time will be asked at a later point with other stories. We can ask three times per period of 365 days.
+        // Only ask once for now once the triggers are fulfilled. We can ask three times per period of 365 days.
+        // Second and third time will be asked at a later point with other stories.
         guard hasAskedOnce else { return false }
 
         return true
     }
 
     private func updateData() {
-        // TODO: hasAtLeastFiveBookmarks
-        // TODO: hasAtLeastTwoPinnedShortcuts
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let strongSelf = self else { return }
+
+            strongSelf.updateBookmarksCount()
+            strongSelf.updateUserPinnedSitesCount()
+        }
+    }
+
+    private func updateBookmarksCount() {
+        profile.places.getRecentBookmarks(limit: UInt(minimumBookmarksCount)).uponQueue(dataQueue, block: { [weak self] result in
+            guard let strongSelf = self, let bookmarks = result.successValue else { return }
+            strongSelf.hasMinimumBookmarksCount = bookmarks.count >= strongSelf.minimumBookmarksCount
+        })
+    }
+
+    private func updateUserPinnedSitesCount() {
+        profile.history.getPinnedTopSites().uponQueue(dataQueue) { [weak self] result in
+            guard let strongSelf = self, let userPinnedTopSites = result.successValue else { return }
+            strongSelf.hasMinimumPinnedShortcutsCount = userPinnedTopSites.count >= strongSelf.minimumPinnedShortcutsCount
+        }
     }
 
     private var hasFiveConsecutiveDaysOfUse: Bool {
