@@ -675,6 +675,13 @@ extension BrowserViewController: WKNavigationDelegate {
         tab.url = webView.url
         // When tab url changes after web content starts loading on the page
         // We notify the contect blocker change so that content blocker status can be correctly shown on beside the URL bar
+        let searchTerm = tab.tabGroupData.tabAssociatedSearchTerm
+        let searchUrl = tab.tabGroupData.tabAssociatedSearchUrl
+        let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
+        if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
+            tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
+        }
+
         tab.contentBlocker?.notifyContentBlockingChanged()
         self.scrollController.resetZoomState()
 
@@ -686,6 +693,13 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let tab = tabManager[webView] {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
+
+            let searchTerm = tab.tabGroupData.tabAssociatedSearchTerm
+            let searchUrl = tab.tabGroupData.tabAssociatedSearchUrl
+            let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
+            if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
+                tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
+            }
 
             // If this tab had previously crashed, wait 5 seconds before resetting
             // the consecutive crash counter. This allows a successful webpage load
