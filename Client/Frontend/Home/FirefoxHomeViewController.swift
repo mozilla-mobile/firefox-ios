@@ -1277,11 +1277,14 @@ extension FirefoxHomeViewController {
     }
 
     @objc func changeHomepageWallpaper() {
-        homePanelDelegate?.homePanelDidRequestToCustomizeHomeSettings()
+        // TODO: Roux - This function will with the action when wallpaper feature is
+        // added in the next ticket.
+
+        // Telemetry is commented out until button action is activated.
 //        TelemetryWrapper.recordEvent(category: .action,
 //                                     method: .tap,
 //                                     object: .firefoxHomepage,
-//                                     value: .customizeHomepageButton)
+//                                     value: .cycleWallpaperButton)
     }
 }
 

@@ -14,8 +14,10 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     let logoButton: UIButton = .build { button in
+        let resourceName = "fxHomeHeaderLogo"
+        let imageString = LegacyThemeManager.instance.currentName == .dark ? resourceName + "_dark" : resourceName
         button.setImage(
-            UIImage(imageLiteralResourceName: "fxHomeHeaderLogo"),
+            UIImage(imageLiteralResourceName: imageString),
             for: .normal)
         button.setTitle("", for: .normal)
         button.backgroundColor = .clear
