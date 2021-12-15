@@ -12,8 +12,13 @@ fileprivate struct LogoViewUX {
 class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
-    let goToSettingsButton: UIImageView = .build { imageView in
-        imageView.image
+    let logoButton: UIButton = .build { button in
+        button.setImage(
+            UIImage(imageLiteralResourceName: "fxHomeHeaderLogo"),
+            for: .normal)
+        button.setTitle("", for: .normal)
+        button.backgroundColor = .clear
+        button.accessibilityIdentifier = "FxHomeCustomizeHomeSettingButton"
     }
 
     // MARK: - Initializers
@@ -39,8 +44,13 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     // MARK: - UI Setup
     func setupView() {
         contentView.backgroundColor = .clear
+        contentView.addSubview(logoButton)
 
         NSLayoutConstraint.activate([
+            logoButton.widthAnchor.constraint(equalToConstant: LogoViewUX.imageWidth),
+            logoButton.heightAnchor.constraint(equalToConstant: LogoViewUX.imageHeight),
+            logoButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
     }
 
@@ -57,7 +67,5 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
 extension FxHomeLogoHeaderCell: NotificationThemeable {
     func applyTheme() {
-        goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
-        goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
     }
 }
