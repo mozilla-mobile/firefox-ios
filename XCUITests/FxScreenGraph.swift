@@ -104,6 +104,7 @@ let allHomePanels = [
 ]
 
 let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 
 class Action {
     static let LoadURL = "LoadURL"
@@ -587,7 +588,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
+        screenState.tap(table.cells["Logins"], to: LoginsSettings)
         screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
         screenState.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
         screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
