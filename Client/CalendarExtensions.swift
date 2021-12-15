@@ -5,6 +5,7 @@
 import Foundation
 
 extension Calendar {
+
     func numberOfDaysBetween(_ from: Date, and to: Date) -> Int {
         let fromDate = startOfDay(for: from)
         let toDate = startOfDay(for: to)
@@ -13,7 +14,7 @@ extension Calendar {
         return numberOfDays.day ?? 0
     }
 
-    func remove(numberOfDays: Int, to date: Date) -> Date? {
-        return self.date(byAdding: .day, value: -numberOfDays, to: date)
+    func add(numberOfDays: Int, to date: Date) -> Date? {
+        return self.date(byAdding: .day, value: numberOfDays, to: date)
     }
 }

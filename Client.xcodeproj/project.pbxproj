@@ -397,6 +397,7 @@
 		8A8DDEC227628A7E00E7B97A /* HomePageUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEC027628A7D00E7B97A /* HomePageUITest.swift */; };
 		8A8DDEC327628A7E00E7B97A /* CronTabsPerfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEC127628A7E00E7B97A /* CronTabsPerfTests.swift */; };
 		8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */; };
+		8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */; };
 		8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C62756BA34003207D1 /* LoginsHelper.js */; };
 		8AEE62CA2756BA34003207D1 /* TrackingProtectionStats.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C72756BA34003207D1 /* TrackingProtectionStats.js */; };
 		8AEE62CB2756BA34003207D1 /* DownloadHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C82756BA34003207D1 /* DownloadHelper.js */; };
@@ -2559,6 +2560,7 @@
 		8AAD4900BB6F4DF6056B581F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8AB04613B101195AADCC1F1B /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = "cs.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		8AD440CBBF202B15E74E186D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Search.strings; sourceTree = "<group>"; };
+		8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionsTests.swift; sourceTree = "<group>"; };
 		8AEE62C62756BA34003207D1 /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LoginsHelper.js; path = AllFrames/AtDocumentStart/LoginsHelper.js; sourceTree = "<group>"; };
 		8AEE62C72756BA34003207D1 /* TrackingProtectionStats.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = TrackingProtectionStats.js; path = AllFrames/AtDocumentStart/TrackingProtectionStats.js; sourceTree = "<group>"; };
 		8AEE62C82756BA34003207D1 /* DownloadHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = DownloadHelper.js; path = AllFrames/AtDocumentStart/DownloadHelper.js; sourceTree = "<group>"; };
@@ -6203,6 +6205,7 @@
 				43446CED2412DDB100F5C643 /* UpdateCoverSheet */,
 				8DCD3BCC1ED5B7FA00446D38 /* FxADeepLinkingTests.swift */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
+				8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */,
 				CA24B53A24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift */,
 				CA24B52024ABD7D40093848C /* LoginsListViewModelTests.swift */,
 				CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */,
@@ -8364,6 +8367,7 @@
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
+				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
 				8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */,
 				43446CF32412F9FF00F5C643 /* ETPCoverSheetTests.swift in Sources */,
