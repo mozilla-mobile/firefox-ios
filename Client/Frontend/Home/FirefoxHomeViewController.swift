@@ -26,7 +26,7 @@ struct FirefoxHomeUX {
     static let libraryShortcutsHeight: CGFloat = 90
     static let libraryShortcutsMaxWidth: CGFloat = 375
     static let customizeHomeHeight: CGFloat = 100
-    static let logoHeaderHeight: CGFloat = 50
+    static let logoHeaderHeight: CGFloat = 85
 }
 
 struct FxHomeDevStrings {
@@ -778,7 +778,12 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .pocket:
             return pocketStories.isEmpty ? .zero : getHeaderSize(forSection: section)
         case .topSites:
-            return isTopSitesSectionEnabled ? getHeaderSize(forSection: section) : .zero
+            // Only show a header for top sites if the Firefox Browser is not showing
+            if isTopSitesSectionEnabled {
+                return shouldShowFxLogoHeader ? .zero : getHeaderSize(forSection: section)
+            }
+
+            return .zero
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .jumpBackIn:
@@ -887,10 +892,10 @@ extension FirefoxHomeViewController {
 
     func configureLogoHeaderCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let logoHeaderCell = cell as! FxHomeLogoHeaderCell
-        logoHeaderCell.logoButton.addTarget(
-            self,
-            action: #selector(openCustomizeHomeSettings),
-            for: .touchUpInside)
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(changeHomepageWallpaper))
+        tap.numberOfTapsRequired = 2
+        logoHeaderCell.logoButton.addGestureRecognizer(tap)
         logoHeaderCell.setNeedsLayout()
         return logoHeaderCell
     }
@@ -1269,6 +1274,14 @@ extension FirefoxHomeViewController {
                                      method: .tap,
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
+    }
+
+    @objc func changeHomepageWallpaper() {
+        homePanelDelegate?.homePanelDidRequestToCustomizeHomeSettings()
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .firefoxHomepage,
+//                                     value: .customizeHomepageButton)
     }
 }
 

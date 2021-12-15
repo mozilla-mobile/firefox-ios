@@ -5,11 +5,12 @@
 import Foundation
 
 fileprivate struct LogoViewUX {
-    static let imageHeight: CGFloat = 36
-    static let imageWidth: CGFloat = 28
+    static let imageHeight: CGFloat = 40
+    static let imageWidth: CGFloat = 214.74
 }
 
 class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
+    typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     // MARK: - UI Elements
     let logoButton: UIButton = .build { button in
@@ -18,27 +19,17 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
             for: .normal)
         button.setTitle("", for: .normal)
         button.backgroundColor = .clear
-        button.accessibilityIdentifier = "FxHomeCustomizeHomeSettingButton"
+        button.accessibilityIdentifier = a11y.logoButton
     }
 
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        applyTheme()
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications(_:)),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - UI Setup
@@ -49,23 +40,8 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         NSLayoutConstraint.activate([
             logoButton.widthAnchor.constraint(equalToConstant: LogoViewUX.imageWidth),
             logoButton.heightAnchor.constraint(equalToConstant: LogoViewUX.imageHeight),
-            logoButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+            logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            logoButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
-    }
-
-    // MARK: - Notifications
-
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
-}
-
-extension FxHomeLogoHeaderCell: NotificationThemeable {
-    func applyTheme() {
     }
 }
