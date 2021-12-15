@@ -26,6 +26,7 @@ struct FirefoxHomeUX {
     static let libraryShortcutsHeight: CGFloat = 90
     static let libraryShortcutsMaxWidth: CGFloat = 375
     static let customizeHomeHeight: CGFloat = 100
+    static let logoHeaderHeight: CGFloat = 50
 }
 
 struct FxHomeDevStrings {
@@ -487,6 +488,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 extension FirefoxHomeViewController {
 
     enum Section: Int, CaseIterable {
+        case logoHeader
         case topSites
         case libraryShortcuts
         case jumpBackIn
@@ -497,6 +499,7 @@ extension FirefoxHomeViewController {
 
         var title: String? {
             switch self {
+            case .logoHeader: return nil
             case .pocket: return .ASPocketTitle2
             case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
             case .recentlySaved: return .RecentlySavedSectionTitle
@@ -518,7 +521,13 @@ extension FirefoxHomeViewController {
 
         var footerHeight: CGSize {
             switch self {
-            case .pocket, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome: return .zero
+            case .logoHeader,
+                    .pocket,
+                    .jumpBackIn,
+                    .recentlySaved,
+                    .historyHighlights,
+                    .customizeHome:
+                return .zero
             case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
             }
         }
@@ -532,6 +541,7 @@ extension FirefoxHomeViewController {
             case .topSites: return 0 //calculated dynamically
             case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight
             case .customizeHome: return FirefoxHomeUX.customizeHomeHeight
+            case .logoHeader: return FirefoxHomeUX.logoHeaderHeight
             }
         }
 
@@ -565,7 +575,13 @@ extension FirefoxHomeViewController {
 
                 return numItems
 
-            case .topSites,.libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+            case .topSites,
+                    .libraryShortcuts,
+                    .jumpBackIn,
+                    .recentlySaved,
+                    .historyHighlights,
+                    .customizeHome,
+                    .logoHeader:
                 return 1
             }
         }
@@ -578,7 +594,13 @@ extension FirefoxHomeViewController {
             case .pocket:
                 let numItems = numberOfItemsForRow(traits)
                 return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.minimumInsets * (numItems - 1))) / numItems), height: height)
-            case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+            case .topSites,
+                    .libraryShortcuts,
+                    .jumpBackIn,
+                    .recentlySaved,
+                    .historyHighlights,
+                    .customizeHome,
+                    .logoHeader:
                 return CGSize(width: frameWidth - inset, height: height)
             }
         }
