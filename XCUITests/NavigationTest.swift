@@ -246,10 +246,12 @@ class NavigationTest: BaseTestCase {
         
         app.textFields["address"].typeText("\n")
         waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+
         app.textFields["url"].press(forDuration:3)
         app.tables.cells["menu-Copy-Link"].tap()
         
-        sleep(3)
+        sleep(2)
         app.textFields["url"].tap()
         // Since the textField value appears all selected first time is clicked
         // this workaround is necessary

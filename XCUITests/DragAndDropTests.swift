@@ -105,7 +105,6 @@ fileprivate extension BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(firstWebsite.url)
         waitForTabsButton()
-        //navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -135,7 +134,7 @@ fileprivate extension BaseTestCase {
 
 class DragAndDropTestIpad: IpadOnlyTestCase {
 
-    let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkToURLBar","testDragAndDropBookmarkEntry","testDragAndDropHistoryEntry"]
+    let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkToURLBar","testDragAndDropBookmarkEntry","test3DragAndDropHistoryEntry"]
 
         // This DDBB contains those 4 websites listed in the name
     let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample.db"
@@ -156,7 +155,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         super.tearDown()
     }
 
-    func testRearrangeTabs() {
+    func test4RearrangeTabs() {
         if skipPlatform { return }
 
         openTwoWebsites()
@@ -205,7 +204,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
 
-    func testRearrangeTabsPrivateMode() {
+    func test2RearrangeTabsPrivateMode() {
         if skipPlatform { return }
 
         app.buttons["TopTabsViewController.privateModeButton"].tap()
@@ -251,7 +250,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssertEqual(app.webViews.searchFields.element(boundBy: 0).value as? String, websiteWithSearchField)
     }*/
 
-    func testDragAndDropHistoryEntry() {
+    func test3DragAndDropHistoryEntry() {
         if skipPlatform { return }
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app

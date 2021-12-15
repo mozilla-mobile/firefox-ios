@@ -9,8 +9,8 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
     func testLongPressReload() {
         if skipPlatform { return }
         navigator.performAction(Action.CloseURLBarOpen)
-        app.textFields.firstMatch.tap()
-//        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
@@ -27,6 +27,8 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
 
         // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
         navigator.createNewTab()
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
