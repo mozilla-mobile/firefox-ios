@@ -12,5 +12,5 @@ github "mozilla-mobile/telemetry-ios"      ~> 1.1
 github "mozilla-mobile/MappaMundi"          "master"
 github "mozilla-services/shavar-prod-lists" "89.0"
 
-# Use release version of application-services
+# Release version of application-services
 github "mozilla/application-services"      "v87.1.0"
