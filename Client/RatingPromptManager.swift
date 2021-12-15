@@ -81,6 +81,9 @@ class RatingPromptManager {
         // Required: 5 consecutive days of use in the last 7 days
         guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
 
+        // Required: has not crashed in the last session
+        guard !Sentry.crashedLastLaunch else { return false }
+
         // One of the followings
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
         let hasSyncAccount = profile.hasSyncableAccount()
