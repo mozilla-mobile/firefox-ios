@@ -22,10 +22,13 @@ class TabCounterTests: BaseTestCase {
         tabsOpen = app.buttons["Show Tabs"].value
         XCTAssertEqual("2", tabsOpen as? String)
 
-        navigator.goto(TabTray)
-        tabsOpen = app.buttons["2"].label
-        XCTAssertTrue(app.buttons["2"].isSelected)
-        XCTAssertEqual("2", tabsOpen as? String)
+        // Check only for iPhone, for iPad there is not counter in tab tray
+        if !iPad() {
+            navigator.goto(TabTray)
+            tabsOpen = app.buttons["2"].label
+            XCTAssertTrue(app.buttons["2"].isSelected)
+            XCTAssertEqual("2", tabsOpen as? String)
+        }
     }
 
     func testTabDecrement() throws {

@@ -135,15 +135,16 @@ class HomePageSettingsUITests: BaseTestCase {
         //Run test for both iPhone and iPad devices as behavior differs between the two
         if iPad() {
             // On iPad, 6 top sites per row are displayed
-            topSitesPerRow = 6
+            topSitesPerRow = 8
             //Test each of the custom row options from 1-4
             for n in 1...4 {
                 userState.numTopSitesRows = n
                 navigator.goto(HomeSettings)
-                app.tables.cells.element(boundBy: 0).tap()
+                app.tables.cells.element(boundBy: 3).tap()
                 app.tables.cells.element(boundBy: n-1).tap()
+                navigator.goto(SettingsScreen)
+                app.buttons["Settings"].tap()
                 navigator.goto(NewTabScreen)
-                app.buttons["Done"].tap()
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
         } else {
@@ -183,7 +184,7 @@ class HomePageSettingsUITests: BaseTestCase {
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         waitForExistence(app.cells["TopSitesCell"])
         XCTAssertTrue(app.cells["TopSitesCell"].exists)
-        let numberOfTopSites = app.collectionViews.cells["TopSitesCell"].cells.matching(identifier: "TopSite").count
+        let numberOfTopSites = app.cells["TopSitesCell"].collectionViews.cells.count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 

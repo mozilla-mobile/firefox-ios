@@ -41,6 +41,8 @@ class TopTabsTest: BaseTestCase {
     }
 
     func testAddTabFromContext() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(urlExample)
         // Initially there is only one tab open
         let tabsOpenInitially = app.buttons["Show Tabs"].value
@@ -57,7 +59,7 @@ class TopTabsTest: BaseTestCase {
         waitForExistence(app.cells.staticTexts["Example Domain"])
         if !app.cells.staticTexts["IANA — IANA-managed Reserved Domains"].exists {
             navigator.goto(TabTray)
-            app.cells.staticTexts["Example Domain"].tap()
+            app.cells.staticTexts["Example Domain"].firstMatch.tap()
             waitUntilPageLoad()
             navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
@@ -116,8 +118,8 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testCloseAllTabsUndo() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -133,11 +135,11 @@ class TopTabsTest: BaseTestCase {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
         }
-
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        
         if iPad() {
             navigator.goto(TabTray)
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
@@ -153,11 +155,10 @@ class TopTabsTest: BaseTestCase {
             waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
         }
 
-        navigator.goto(URLBarOpen)
-        navigator.back()
-
         if iPad() {
             navigator.goto(TabTray)
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
@@ -476,11 +477,11 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("3", numTab)
         // Remove one tab by tapping on 'x' button
-        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "Home").element(boundBy: 1).buttons["Remove page — Home"].tap()
+        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "Homepage").element(boundBy: 1).buttons["Remove page — Homepage"].tap()
         waitForExistence(app.buttons["Show Tabs"])
         let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTabAfterRemovingThirdTab)
-        app.collectionViews["Top Tabs View"].children(matching: .cell).element(boundBy: 1).buttons["Remove page — Home"].tap()
+        app.collectionViews["Top Tabs View"].children(matching: .cell).element(boundBy: 1).buttons["Remove page — Homepage"].tap()
         waitForExistence(app.buttons["Show Tabs"])
         let numTabAfterRemovingSecondTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("1", numTabAfterRemovingSecondTab)
