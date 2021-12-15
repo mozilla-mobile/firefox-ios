@@ -26,54 +26,15 @@ class RatingPromptManager {
         case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
     }
 
-    init(profile: Profile, daysOfUseCounter: CumulativeDaysOfUseCounter) {
+    init(profile: Profile,
+         daysOfUseCounter: CumulativeDaysOfUseCounter) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
 
         updateData()
     }
 
-    func showRatingPromptIfNeeded() {
-        if shouldShowPrompt {
-            lastRequestDate = Date()
-            requestCount += 1
-
-            SKStoreReviewController.requestReview()
-        }
-    }
-
-    // TODO: Add settings RatingsPrompt.Settings.RateOnAppStore
-    static func goToAppStoreReview() {
-        guard let url = URL(string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review") else { return }
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-    }
-
-    // MARK: UserDefaults
-
-    static var isBrowserDefault: Bool {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) as? Bool ?? false }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) }
-    }
-
-    private var lastRequestDate: Date? {
-        get { return Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue)) }
-        set { UserDefaults.standard.set(newValue?.timeIntervalSince1970, forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue) }
-    }
-
-    private var requestCount: Int {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue) as? Int ?? 0 }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue) }
-    }
-
-    func reset() {
-        RatingPromptManager.isBrowserDefault = false
-        lastRequestDate = nil
-        requestCount = 0
-    }
-
-    // MARK: Private
-
-    private var shouldShowPrompt: Bool {
+    var shouldShowPrompt: Bool {
         // Required: 5th launch or more
         let currentSessionCount = profile.prefs.intForKey(PrefsKeys.SessionCount) ?? 0
         guard currentSessionCount >= 5 else { return false }
@@ -82,7 +43,7 @@ class RatingPromptManager {
         guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
 
         // Required: has not crashed in the last session
-        guard !Sentry.crashedLastLaunch else { return false }
+        guard !Sentry.shared.crashedLastLaunch else { return false }
 
         // One of the followings
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
@@ -100,6 +61,44 @@ class RatingPromptManager {
 
         return true
     }
+
+    func requestRatingPrompt() {
+        lastRequestDate = Date()
+        requestCount += 1
+
+        SKStoreReviewController.requestReview()
+    }
+
+    // TODO: Add settings RatingsPrompt.Settings.RateOnAppStore
+    static func goToAppStoreReview() {
+        guard let url = URL(string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review") else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+
+    // MARK: UserDefaults
+
+    static var isBrowserDefault: Bool {
+        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) as? Bool ?? false }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) }
+    }
+
+    private var lastRequestDate: Date? {
+        get { return UserDefaults.standard.object(forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue) as? Date }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue) }
+    }
+
+    private var requestCount: Int {
+        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue) as? Int ?? 0 }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue) }
+    }
+
+    func reset() {
+        RatingPromptManager.isBrowserDefault = false
+        lastRequestDate = nil
+        requestCount = 0
+    }
+
+    // MARK: Private
 
     private func updateData() {
         DispatchQueue.global(qos: .background).async { [weak self] in
@@ -128,7 +127,7 @@ class RatingPromptManager {
         guard let lastRequestDate = lastRequestDate else { return false }
 
         let currentDate = Date()
-        let numberOfDays = Calendar.current.numberOfDaysBetween(currentDate, and: lastRequestDate)
+        let numberOfDays = Calendar.current.numberOfDaysBetween(lastRequestDate, and: currentDate)
 
         return numberOfDays < 14
     }
