@@ -40,7 +40,7 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let StartAtHome = "startAtHome"
     public static let PullToRefresh = "pullToRefresh"
-    
+
     // Firefox contextual hint
     public static let ContextualHintJumpBackinKey = "ContextualHintJumpBackin"
 
@@ -77,6 +77,9 @@ public struct PrefsKeys {
 
     // ThemeManager key
     public static let ThemeManagerCustomizationKey = "ThemeManagerCustomizationKey"
+
+    // WallpaperManager Key
+    public static let WallpaperManagerCustomizationKey = "WallpaperManagerCustomizationKey"
 }
 
 public struct PrefsDefaults {
