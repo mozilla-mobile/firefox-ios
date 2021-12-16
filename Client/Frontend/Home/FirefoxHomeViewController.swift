@@ -230,6 +230,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             && !tabManager.recentlyAccessedNormalTabs.isEmpty
     }
 
+    var shouldShowJumpBackInSection: Bool {
+        guard isJumpBackInSectionEnabled else { return false }
+        return jumpBackInViewModel.jumpBackInList.itemsToDisplay != 0
+    }
+
     var isRecentlySavedSectionEnabled: Bool {
         return featureFlags.isFeatureActiveForBuild(.recentlySaved)
         && homescreen.sectionsEnabled[.recentlySaved] == true
@@ -280,7 +285,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         collectionView?.addGestureRecognizer(longPressRecognizer)
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? collectionView?.addGestureRecognizer(tapGestureRecognizer) : nil
 
-        let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged, .DisplayThemeChanged]
+        // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
+        let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged, .DisplayThemeChanged, .TabClosed]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
     }
 
@@ -643,8 +649,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
             case .jumpBackIn:
                 if !hasSentJumpBackInSectionEvent
-                    && isJumpBackInSectionEnabled
-                    && !(jumpBackInViewModel.jumpBackInList.itemsToDisplay == 0) {
+                    && shouldShowJumpBackInSection {
                     TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
                     hasSentJumpBackInSectionEvent = true
                 }
@@ -765,7 +770,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .jumpBackIn:
-            return isJumpBackInSectionEnabled ? getHeaderSize(forSection: section) : .zero
+            return shouldShowJumpBackInSection ? getHeaderSize(forSection: section) : .zero
         case .historyHighlights:
             return isHistoryHightlightsSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .recentlySaved:
@@ -818,7 +823,7 @@ extension FirefoxHomeViewController {
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
             return pocketStories.count
         case .jumpBackIn:
-            return isJumpBackInSectionEnabled ? 1 : 0
+            return shouldShowJumpBackInSection ? 1 : 0
         case .recentlySaved:
             return shouldShowRecentlySavedSection ? 1 : 0
         case .historyHighlights:
@@ -942,16 +947,20 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
         loadTopSitesData()
 
+        if shouldUpdateData {
+            reloadSectionsData()
+        }
+    }
+
+    private func reloadSectionsData() {
         // TODO: Reload with a protocol comformance once all sections are standardized
         // Idea is that each section will load it's data from it's own view model
-        if shouldUpdateData {
-            if isRecentlySavedSectionEnabled {
-                recentlySavedViewModel.updateData {}
-            }
+        if isRecentlySavedSectionEnabled {
+            recentlySavedViewModel.updateData {}
+        }
 
-            if isJumpBackInSectionEnabled {
-                jumpBackInViewModel.updateData {}
-            }
+        if isJumpBackInSectionEnabled {
+            jumpBackInViewModel.updateData {}
         }
     }
 
