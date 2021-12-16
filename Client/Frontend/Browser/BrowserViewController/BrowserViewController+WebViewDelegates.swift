@@ -125,17 +125,30 @@ extension BrowserViewController: WKUIDelegate {
                 let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper,
                 let elements = contextHelper.elements else { return nil }
             let isPrivate = currentTab.isPrivate
+            var setAddTabAdSearchParam = false
             let addTab = { (rURL: URL, isPrivate: Bool) in
-                if currentTab == self.tabManager.selectedTab, currentTab.adsTelemetryUrlList.count > 0 {
-                    let adUrl = rURL.absoluteString
-                    if currentTab.adsTelemetryUrlList.contains(adUrl) {
-                        if !currentTab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName) }
+                if currentTab == self.tabManager.selectedTab, currentTab.adsTelemetryUrlList.count > 0,
+                    currentTab.adsTelemetryUrlList.contains(adUrl),
+                    !currentTab.adsProviderName.isEmpty {
+                    
+                    AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName) }
                         currentTab.adsTelemetryUrlList.removeAll()
                         currentTab.adsTelemetryRedirectUrlList.removeAll()
                         currentTab.adsProviderName = ""
+
+                    // Set the tab search param from current tab considering we need the values in order to cope with ad redirects
+                    } else if !currentTab.adsProviderName.isEmpty {
+                        setAddTabAdSearchParam = true
                     }
                 }
+                
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
+
+                if setAddTabAdSearchParam {
+                    tab.adsProviderName = currentTab.adsProviderName
+                    tab.adsTelemetryUrlList = currentTab.adsTelemetryUrlList
+                    tab.adsTelemetryRedirectUrlList = currentTab.adsTelemetryRedirectUrlList
+                }
                 
                 // Record Observation for Search Term Groups
                 let searchTerm = currentTab.tabGroupData.tabAssociatedSearchTerm
@@ -297,9 +310,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tab.adsTelemetryUrlList.count > 0, !tab.adsProviderName.isEmpty, let webUrl = webView.url {
             tab.adsTelemetryRedirectUrlList.append(webUrl)
-//            if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName) }
-//            tab.adsTelemetryUrlList.removeAll()
-//            tab.adsProviderName = ""
         }
     }
     
@@ -695,12 +705,18 @@ extension BrowserViewController: WKNavigationDelegate {
         let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
         if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
             
-            if tab.adsTelemetryRedirectUrlList.count > 0, !tab.adsProviderName.isEmpty, tab.adsTelemetryUrlList.count > 0, !tab.adsProviderName.isEmpty, let startingHost = tab.startingSearchUrlWithAds?.host, let host = tab.adsTelemetryRedirectUrlList.last?.host, host != startingHost {
-//                AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
+            if tab.adsTelemetryRedirectUrlList.count > 0,
+               !tab.adsProviderName.isEmpty,
+                tab.adsTelemetryUrlList.count > 0,
+               !tab.adsProviderName.isEmpty,
+                let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
+                let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
+                lastRedirectHost != startingRedirectHost {
+                
+                AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
                 tab.adsTelemetryUrlList.removeAll()
                 tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""
-                print("Google Ad")
             }
 
             tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
