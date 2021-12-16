@@ -13,7 +13,8 @@ public struct Strings {
 
 // MARK: - String last updated app version
 
-// Used as a helper enum to keep track of what app version strings were last updated in.
+// Used as a helper enum to keep track of what app version strings were last updated in. Updates
+// are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
     case v39
     case v96
@@ -199,6 +200,14 @@ extension String {
 // MARK: - Library Panel
 extension String {
     public struct LibraryPanel {
+        
+        public struct Sections {
+            public static let Today = MZLocalizedString("Today", value: "Today", comment: "This label is meant to signify the section containing a group of items from the current day.", lastUpdated: .unknown)
+            public static let Yesterday = MZLocalizedString("Yesterday", value: "Yesterday", comment: "This label is meant to signify the section containing a group of items from the past 24 hours.", lastUpdated: .unknown)
+            public static let LastWeek = MZLocalizedString("Last week", value: "Last week", comment: "This label is meant to signify the section containing a group of items from the past seven days.", lastUpdated: .unknown)
+            public static let LastMonth = MZLocalizedString("Last month", value: "Last month", comment: "This label is meant to signify the section containing a group of items from the past thirty days.", lastUpdated: .unknown)
+            public static let Older = MZLocalizedString("LibraryPanel.Section.Older", value: "Older", comment: "This label is meant to signify the section containing a group of items that are older than thirty days.", lastUpdated: .v96)
+        }
 
         public struct Bookmarks {
 
@@ -355,14 +364,6 @@ extension String {
     public static let AppStoreString = MZLocalizedString("Toasts.OpenAppStore", value: "Open App Store", comment: "Open App Store button", lastUpdated: .unknown)
     public static let UndoString = MZLocalizedString("Toasts.Undo", value: "Undo", comment: "Label for button to undo the action just performed", lastUpdated: .unknown)
     public static let OpenSettingsString = MZLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7", lastUpdated: .unknown)
-}
-
-// MARK: - Table date section titles
-extension String {
-    public static let TableDateSectionTitleToday = MZLocalizedString("Today", comment: "History tableview section header", lastUpdated: .unknown)
-    public static let TableDateSectionTitleYesterday = MZLocalizedString("Yesterday", comment: "History tableview section header", lastUpdated: .unknown)
-    public static let TableDateSectionTitleLastWeek = MZLocalizedString("Last week", comment: "History tableview section header", lastUpdated: .unknown)
-    public static let TableDateSectionTitleLastMonth = MZLocalizedString("Last month", comment: "History tableview section header", lastUpdated: .unknown)
 }
 
 // MARK: - Top Sites

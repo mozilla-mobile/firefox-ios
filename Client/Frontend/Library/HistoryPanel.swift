@@ -31,19 +31,22 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         case yesterday
         case lastWeek
         case lastMonth
+        case older
 
-        static let count = 5
+        static let count = 6
 
         var title: String? {
             switch self {
             case .today:
-                return .TableDateSectionTitleToday
+                return .LibraryPanel.Sections.Today
             case .yesterday:
-                return .TableDateSectionTitleYesterday
+                return .LibraryPanel.Sections.Yesterday
             case .lastWeek:
-                return .TableDateSectionTitleLastWeek
+                return .LibraryPanel.Sections.LastWeek
             case .lastMonth:
-                return .TableDateSectionTitleLastMonth
+                return .LibraryPanel.Sections.LastMonth
+            case .older:
+                return .LibraryPanel.Sections.Older
             default:
                 return nil
             }
