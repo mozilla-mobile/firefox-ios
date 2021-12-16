@@ -10,8 +10,6 @@ import Storage
 // Rating prompt manage when a request for an app store review to the user can be done
 class RatingPromptManager {
 
-    lazy var urlOpener: URLOpenerProtocol = UIApplication.shared
-
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter
 
@@ -40,7 +38,6 @@ class RatingPromptManager {
 
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
-        self.urlOpener = urlOpener
 
         updateData(dataLoadingCompletion: dataLoadingCompletion)
     }
@@ -80,8 +77,7 @@ class RatingPromptManager {
         SKStoreReviewController.requestReview()
     }
 
-    // TODO: Add settings RatingsPrompt.Settings.RateOnAppStore
-    func goToAppStoreReview() {
+    static func goToAppStoreReview(with urlOpener: URLOpenerProtocol = UIApplication.shared) {
         guard let url = URL(string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review") else { return }
         urlOpener.open(url)
     }

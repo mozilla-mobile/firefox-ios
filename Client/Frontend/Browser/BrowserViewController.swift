@@ -89,6 +89,7 @@ class BrowserViewController: UIViewController {
     var tabTrayViewController: TabTrayViewController?
     let profile: Profile
     let tabManager: TabManager
+    let ratingPromptManager: RatingPromptManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     var header: UIView!
@@ -139,6 +140,11 @@ class BrowserViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
+
+        let daysOfUseCounter = CumulativeDaysOfUseCounter()
+        daysOfUseCounter.updateCounter()
+        self.ratingPromptManager = RatingPromptManager(profile: profile, daysOfUseCounter: daysOfUseCounter)
+
         super.init(nibName: nil, bundle: nil)
         didInit()
     }

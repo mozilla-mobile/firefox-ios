@@ -154,11 +154,10 @@ class RatingPromptManagerTests: XCTestCase {
     }
 
     func testGoToAppStoreReview() {
-        setupEnvironment()
-        promptManager.urlOpener = urlOpenerSpy
+        RatingPromptManager.goToAppStoreReview(with: urlOpenerSpy)
 
-        promptManager.goToAppStoreReview()
         XCTAssertEqual(urlOpenerSpy.openURLCount, 1)
+        XCTAssertEqual(urlOpenerSpy.capturedURL?.absoluteString, "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review")
     }
 }
 
@@ -219,8 +218,10 @@ class CrashingMockSentryClient: Client {
 
 class URLOpenerSpy: URLOpenerProtocol {
 
+    var capturedURL: URL?
     var openURLCount = 0
     func open(_ url: URL) {
+        capturedURL = url
         openURLCount += 1
     }
 }
