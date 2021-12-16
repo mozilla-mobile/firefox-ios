@@ -946,16 +946,20 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
         loadTopSitesData()
 
+        if shouldUpdateData {
+            reloadSectionsData()
+        }
+    }
+
+    private func reloadSectionsData() {
         // TODO: Reload with a protocol comformance once all sections are standardized
         // Idea is that each section will load it's data from it's own view model
-        if shouldUpdateData {
-            if isRecentlySavedSectionEnabled {
-                recentlySavedViewModel.updateData {}
-            }
+        if isRecentlySavedSectionEnabled {
+            recentlySavedViewModel.updateData {}
+        }
 
-            if isJumpBackInSectionEnabled {
-                jumpBackInViewModel.updateData {}
-            }
+        if isJumpBackInSectionEnabled {
+            jumpBackInViewModel.updateData {}
         }
     }
 
