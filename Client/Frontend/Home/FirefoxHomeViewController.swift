@@ -778,7 +778,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .pocket:
             return pocketStories.isEmpty ? .zero : getHeaderSize(forSection: section)
         case .topSites:
-            // Only show a header for top sites if the Firefox Browser is not showing
+            // Only show a header for top sites if the Firefox Browser logo is not showing
             if isTopSitesSectionEnabled {
                 return shouldShowFxLogoHeader ? .zero : getHeaderSize(forSection: section)
             }
@@ -1277,7 +1277,7 @@ extension FirefoxHomeViewController {
     }
 
     @objc func changeHomepageWallpaper() {
-        // TODO: Roux - This function will with the action when wallpaper feature is
+        // TODO: Roux - This function will be implemented with the action when wallpaper feature is
         // added in the next ticket.
 
         // Telemetry is commented out until button action is activated.
