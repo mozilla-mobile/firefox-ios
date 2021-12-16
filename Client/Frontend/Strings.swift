@@ -206,7 +206,7 @@ extension String {
             public static let Yesterday = MZLocalizedString("Yesterday", value: "Yesterday", comment: "This label is meant to signify the section containing a group of items from the past 24 hours.", lastUpdated: .unknown)
             public static let LastWeek = MZLocalizedString("Last week", value: "Last week", comment: "This label is meant to signify the section containing a group of items from the past seven days.", lastUpdated: .unknown)
             public static let LastMonth = MZLocalizedString("Last month", value: "Last month", comment: "This label is meant to signify the section containing a group of items from the past thirty days.", lastUpdated: .unknown)
-            public static let Older = MZLocalizedString("Section.HistoryPanel.Older", value: "Older", comment: "This label is meant to signify the section containing a group of items that are older than thirty days.", lastUpdated: .v96)
+            public static let Older = MZLocalizedString("LibraryPanel.Section.Older", value: "Older", comment: "This label is meant to signify the section containing a group of items that are older than thirty days.", lastUpdated: .v96)
         }
 
         public struct Bookmarks {
