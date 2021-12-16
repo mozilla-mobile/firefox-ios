@@ -31,15 +31,10 @@ class RatingPromptManager {
     /// - Parameters:
     ///   - profile: the user's data profile
     ///   - daysOfUseCounter: the counter for the cumulative days of use of the application by the user
-    ///   - dataLoadingCompletion: complete when the loading of data from the profile is done - Used in unit tests
     init(profile: Profile,
-         daysOfUseCounter: CumulativeDaysOfUseCounter,
-         dataLoadingCompletion: (() -> Void)? = nil) {
-
+         daysOfUseCounter: CumulativeDaysOfUseCounter) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
-
-        updateData(dataLoadingCompletion: dataLoadingCompletion)
     }
 
     var shouldShowPrompt: Bool {
@@ -77,6 +72,18 @@ class RatingPromptManager {
         SKStoreReviewController.requestReview()
     }
 
+    /// Update data asynchronously
+    /// - Parameter dataLoadingCompletion: complete when the loading of data from the profile is done - Used in unit tests
+    func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
+        let group = DispatchGroup()
+        updateBookmarksCount(group: group)
+        updateUserPinnedSitesCount(group: group)
+
+        group.notify(queue: dataQueue) {
+            dataLoadingCompletion?()
+        }
+    }
+
     static func goToAppStoreReview(with urlOpener: URLOpenerProtocol = UIApplication.shared) {
         guard let url = URL(string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review") else { return }
         urlOpener.open(url)
@@ -106,20 +113,6 @@ class RatingPromptManager {
     }
 
     // MARK: Private
-
-    private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let strongSelf = self else { return }
-
-            let group = DispatchGroup()
-            strongSelf.updateBookmarksCount(group: group)
-            strongSelf.updateUserPinnedSitesCount(group: group)
-
-            group.notify(queue: .main) {
-                dataLoadingCompletion?()
-            }
-        }
-    }
 
     private func updateBookmarksCount(group: DispatchGroup) {
         group.enter()

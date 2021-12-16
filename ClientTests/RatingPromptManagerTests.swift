@@ -19,7 +19,7 @@ class RatingPromptManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        self.urlOpenerSpy = URLOpenerSpy()
+        urlOpenerSpy = URLOpenerSpy()
         mockProfile = MockProfile()
         mockProfile._reopen()
 
@@ -31,12 +31,12 @@ class RatingPromptManagerTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
-        promptManager.reset()
+        promptManager?.reset()
         promptManager = nil
         mockProfile._shutdown()
         mockProfile = nil
         Sentry.shared.client = nil
-        self.urlOpenerSpy = nil
+        urlOpenerSpy = nil
     }
 
     func testShouldShowPrompt_requiredAreFalse_returnsFalse() {
@@ -103,14 +103,20 @@ class RatingPromptManagerTests: XCTestCase {
     }
 
     func testShouldShowPrompt_hasMinimumBookmarksCount_returnsTrue() {
+        let expectation = self.expectation(description: "Rating prompt manager data is loaded")
         for i in 0...4 {
             let bookmark = ShareItem(url: "http://www.example.com/\(i)", title: "Example \(i)", favicon: nil)
             _ = mockProfile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: bookmark.url, title: bookmark.title).value
         }
 
-        let expectation = self.expectation(description: "Rating prompt manager data is loaded")
-        setupEnvironment(completion: {
-            XCTAssertTrue(self.promptManager.shouldShowPrompt)
+        setupEnvironment()
+        promptManager.updateData(dataLoadingCompletion: { [weak self] in
+            guard let promptManager = self?.promptManager else {
+                XCTFail("Should have reference to promptManager")
+                return
+            }
+
+            XCTAssertTrue(promptManager.shouldShowPrompt)
             expectation.fulfill()
         })
 
@@ -118,14 +124,20 @@ class RatingPromptManagerTests: XCTestCase {
     }
 
     func testShouldShowPrompt_hasMinimumPinnedShortcutsCount_returnsTrue() {
+        let expectation = self.expectation(description: "Rating prompt manager data is loaded")
         for i in 0...1 {
             let site = createSite(number: i)
             _ = mockProfile.history.addPinnedTopSite(site)
         }
 
-        let expectation = self.expectation(description: "Rating prompt manager data is loaded")
-        setupEnvironment(completion: {
-            XCTAssertTrue(self.promptManager.shouldShowPrompt)
+        setupEnvironment()
+        promptManager.updateData(dataLoadingCompletion: { [weak self] in
+            guard let promptManager = self?.promptManager else {
+                XCTFail("Should have reference to promptManager")
+                return 
+            }
+
+            XCTAssertTrue(promptManager.shouldShowPrompt)
             expectation.fulfill()
         })
 
@@ -168,20 +180,18 @@ private extension RatingPromptManagerTests {
     func setupEnvironment(numberOfSession: Int32 = 5,
                           hasCumulativeDaysOfUse: Bool = true,
                           isBrowserDefault: Bool = false,
-                          hasSyncAccount: Bool = false,
-                          completion: (() -> Void)? = nil) {
+                          hasSyncAccount: Bool = false) {
 
         mockProfile.hasSyncableAccountMock = hasSyncAccount
         mockProfile.prefs.setInt(numberOfSession, forKey: PrefsKeys.SessionCount)
-        setupPromptManager(hasCumulativeDaysOfUse: hasCumulativeDaysOfUse, completion: completion)
+        setupPromptManager(hasCumulativeDaysOfUse: hasCumulativeDaysOfUse)
         RatingPromptManager.isBrowserDefault = isBrowserDefault
     }
 
-    func setupPromptManager(hasCumulativeDaysOfUse: Bool, completion: (() -> Void)? = nil) {
+    func setupPromptManager(hasCumulativeDaysOfUse: Bool) {
         let mockCounter = CumulativeDaysOfUseCounterMock(hasCumulativeDaysOfUse)
         promptManager = RatingPromptManager(profile: mockProfile,
-                                            daysOfUseCounter: mockCounter,
-                                            dataLoadingCompletion: completion)
+                                            daysOfUseCounter: mockCounter)
     }
 
     func createSite(number: Int) -> Site {
