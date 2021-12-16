@@ -230,6 +230,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             && !tabManager.recentlyAccessedNormalTabs.isEmpty
     }
 
+    var shouldShowJumpBackInSection: Bool {
+        guard isJumpBackInSectionEnabled else { return false }
+        return jumpBackInViewModel.jumpBackInList.itemsToDisplay != 0
+    }
+
     var isRecentlySavedSectionEnabled: Bool {
         return featureFlags.isFeatureActiveForBuild(.recentlySaved)
         && homescreen.sectionsEnabled[.recentlySaved] == true
@@ -643,8 +648,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
             case .jumpBackIn:
                 if !hasSentJumpBackInSectionEvent
-                    && isJumpBackInSectionEnabled
-                    && !(jumpBackInViewModel.jumpBackInList.itemsToDisplay == 0) {
+                    && shouldShowJumpBackInSection {
                     TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
                     hasSentJumpBackInSectionEvent = true
                 }
@@ -765,7 +769,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .jumpBackIn:
-            return isJumpBackInSectionEnabled ? getHeaderSize(forSection: section) : .zero
+            return shouldShowJumpBackInSection ? getHeaderSize(forSection: section) : .zero
         case .historyHighlights:
             return isHistoryHightlightsSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .recentlySaved:
@@ -818,7 +822,7 @@ extension FirefoxHomeViewController {
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
             return pocketStories.count
         case .jumpBackIn:
-            return isJumpBackInSectionEnabled ? 1 : 0
+            return shouldShowJumpBackInSection ? 1 : 0
         case .recentlySaved:
             return shouldShowRecentlySavedSection ? 1 : 0
         case .historyHighlights:
