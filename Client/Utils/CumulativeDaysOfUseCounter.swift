@@ -4,17 +4,19 @@
 
 import Foundation
 
+// Counter to know how if a user has used the app a certain number of days in a row
+// Useful to manage the rating prompt trought RatingPromptManager
 class CumulativeDaysOfUseCounter {
 
     private let calendar = Calendar.current
+    private let maximumNumberOfDaysToCollect = 7
+    private let requiredCumulativeDaysOfUseCount = 5
 
     private enum UserDefaultsKey: String {
         case keyArrayDaysOfUse = "com.moz.arrayDaysOfUse.key"
         case keyRequiredCumulativeDaysOfUseCount = "com.moz.hasRequiredCumulativeDaysOfUseCount.key"
     }
 
-    private let maximumNumberOfDaysToCollect = 7
-    private let requiredCumulativeDaysOfUseCount = 5
     private(set) var hasRequiredCumulativeDaysOfUse: Bool {
         get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyRequiredCumulativeDaysOfUseCount.rawValue) as? Bool ?? false }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRequiredCumulativeDaysOfUseCount.rawValue) }
@@ -70,7 +72,7 @@ class CumulativeDaysOfUseCounter {
         var cleanedDaysOfUse = daysOfUse
         cleanedDaysOfUse.removeAll(where: {
             let numberOfDays = calendar.numberOfDaysBetween($0, and: currentDate)
-            return numberOfDays >= 7
+            return numberOfDays >= maximumNumberOfDaysToCollect
         })
 
         self.daysOfUse = cleanedDaysOfUse

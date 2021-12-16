@@ -155,6 +155,7 @@ class RatingPromptManagerTests: XCTestCase {
 
     func testGoToAppStoreReview() {
         setupEnvironment()
+        promptManager.urlOpener = urlOpenerSpy
 
         promptManager.goToAppStoreReview()
         XCTAssertEqual(urlOpenerSpy.openURLCount, 1)
@@ -181,7 +182,6 @@ private extension RatingPromptManagerTests {
         let mockCounter = CumulativeDaysOfUseCounterMock(hasCumulativeDaysOfUse)
         promptManager = RatingPromptManager(profile: mockProfile,
                                             daysOfUseCounter: mockCounter,
-                                            urlOpener: urlOpenerSpy,
                                             dataLoadingCompletion: completion)
     }
 

@@ -7,11 +7,13 @@ import StoreKit
 import Shared
 import Storage
 
+// Rating prompt manage when a request for an app store review to the user can be done
 class RatingPromptManager {
+
+    lazy var urlOpener: URLOpenerProtocol = UIApplication.shared
 
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter
-    private let urlOpener: URLOpenerProtocol
 
     private var hasMinimumBookmarksCount = false
     private let minimumBookmarksCount = 5
@@ -27,10 +29,15 @@ class RatingPromptManager {
         case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
     }
 
+    /// RatingPromptManager init
+    /// - Parameters:
+    ///   - profile: the user's data profile
+    ///   - daysOfUseCounter: the counter for the cumulative days of use of the application by the user
+    ///   - dataLoadingCompletion: complete when the loading of data from the profile is done - Used in unit tests
     init(profile: Profile,
          daysOfUseCounter: CumulativeDaysOfUseCounter,
-         urlOpener: URLOpenerProtocol = UIApplication.shared,
          dataLoadingCompletion: (() -> Void)? = nil) {
+
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
         self.urlOpener = urlOpener
