@@ -20,7 +20,7 @@
 "Intro.Slides.Fast.Search.Title" = "Ricerca rapida";
 
 /* Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
-"Intro.Slides.Firefox.Account.Sync.Description" = "Mittite l’indette, a crunulogia è e parolle d’intesa in Firefox nant’à st’apparechju.";
+"Intro.Slides.Firefox.Account.Sync.Description" = "Mittite l’indette, a cronolugia è e parolle d’intesa in Firefox nant’à st’apparechju.";
 
 /* Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices */
 "Intro.Slides.Firefox.Account.Sync.Title" = "Sincrunizate Firefox trà i vostri apparechji";
@@ -53,7 +53,7 @@
 "Intro.Slides.TrailheadSync.Description" = "Cunnittetevi à u vostu contu per lancià a sincrunizazione è accede à d’altri funzioni.";
 
 /* Title for the second panel 'Sync' in the First Run tour. */
-"Intro.Slides.TrailheadSync.Title.v2" = "Sincrunizate e vostre indette, a vostra crunulogia è e vostre parolle d’intesa cù u vostru telefonu.";
+"Intro.Slides.TrailheadSync.Title.v2" = "Sincrunizate e vostre indette, a vostra cronolugia è e vostre parolle d’intesa cù u vostru telefonu.";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
 "Intro.Slides.Welcome.Description.v2" = "Prontu, privatu è accant’à voi.";

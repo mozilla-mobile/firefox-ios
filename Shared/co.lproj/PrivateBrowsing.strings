@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Apre in una nova unghjetta privata";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ùn cunserverà alcuna crunulogia nè canistrelli, ma e nove indette seranu arregistrate.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ùn cunserverà alcuna cronolugia nè canistrelli, ma e nove indette seranu arregistrate.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Sapene di più";
