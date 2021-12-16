@@ -145,8 +145,16 @@ extension HomePanelContextMenu {
 // MARK: - HomeVC
 
 class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
+    // MARK: - Typealiases
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
+    // MARK: - UI Elements
+    lazy var imageView: UIImageView = .build { imageView in
+        imageView.image = UIImage(imageLiteralResourceName: "wallpaper1")
+        imageView.contentMode = .scaleAspectFill
+    }
+
+    // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate var hasPresentedContextualHint = false
@@ -329,6 +337,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                                  withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
+        view.addSubview(imageView)
         view.addSubviews(overlayView)
         view.addSubview(contextualSourceView)
         contextualSourceView.backgroundColor = .clear
@@ -356,8 +365,15 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             overlayView.topAnchor.constraint(equalTo: view.topAnchor),
             overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            imageView.topAnchor.constraint(equalTo: view.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+
+        view.sendSubviewToBack(imageView)
 
         profile.panelDataObservers.activityStream.delegate = self
 
@@ -434,7 +450,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     func applyTheme() {
         defaultBrowserCard.applyTheme()
-        view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        // ROUX
+        view.backgroundColor = .clear //UIColor.theme.homePanel.topSitesBackground
     }
 
     func scrollToTop(animated: Bool = false) {
