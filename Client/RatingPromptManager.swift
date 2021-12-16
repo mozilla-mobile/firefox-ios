@@ -11,6 +11,7 @@ class RatingPromptManager {
 
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter
+    private let urlOpener: URLOpenerProtocol
 
     private var hasMinimumBookmarksCount = false
     private let minimumBookmarksCount = 5
@@ -27,11 +28,14 @@ class RatingPromptManager {
     }
 
     init(profile: Profile,
-         daysOfUseCounter: CumulativeDaysOfUseCounter) {
+         daysOfUseCounter: CumulativeDaysOfUseCounter,
+         urlOpener: URLOpenerProtocol = UIApplication.shared,
+         dataLoadingCompletion: (() -> Void)? = nil) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
+        self.urlOpener = urlOpener
 
-        updateData()
+        updateData(dataLoadingCompletion: dataLoadingCompletion)
     }
 
     var shouldShowPrompt: Bool {
@@ -62,17 +66,17 @@ class RatingPromptManager {
         return true
     }
 
-    func requestRatingPrompt() {
-        lastRequestDate = Date()
+    func requestRatingPrompt(at date: Date = Date()) {
+        lastRequestDate = date
         requestCount += 1
 
         SKStoreReviewController.requestReview()
     }
 
     // TODO: Add settings RatingsPrompt.Settings.RateOnAppStore
-    static func goToAppStoreReview() {
+    func goToAppStoreReview() {
         guard let url = URL(string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review") else { return }
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        urlOpener.open(url)
     }
 
     // MARK: UserDefaults
@@ -100,26 +104,35 @@ class RatingPromptManager {
 
     // MARK: Private
 
-    private func updateData() {
+    private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let strongSelf = self else { return }
 
-            strongSelf.updateBookmarksCount()
-            strongSelf.updateUserPinnedSitesCount()
+            let group = DispatchGroup()
+            strongSelf.updateBookmarksCount(group: group)
+            strongSelf.updateUserPinnedSitesCount(group: group)
+
+            group.notify(queue: .main) {
+                dataLoadingCompletion?()
+            }
         }
     }
 
-    private func updateBookmarksCount() {
+    private func updateBookmarksCount(group: DispatchGroup) {
+        group.enter()
         profile.places.getRecentBookmarks(limit: UInt(minimumBookmarksCount)).uponQueue(dataQueue, block: { [weak self] result in
             guard let strongSelf = self, let bookmarks = result.successValue else { return }
             strongSelf.hasMinimumBookmarksCount = bookmarks.count >= strongSelf.minimumBookmarksCount
+            group.leave()
         })
     }
 
-    private func updateUserPinnedSitesCount() {
+    private func updateUserPinnedSitesCount(group: DispatchGroup) {
+        group.enter()
         profile.history.getPinnedTopSites().uponQueue(dataQueue) { [weak self] result in
             guard let strongSelf = self, let userPinnedTopSites = result.successValue else { return }
             strongSelf.hasMinimumPinnedShortcutsCount = userPinnedTopSites.count >= strongSelf.minimumPinnedShortcutsCount
+            group.leave()
         }
     }
 
@@ -129,6 +142,17 @@ class RatingPromptManager {
         let currentDate = Date()
         let numberOfDays = Calendar.current.numberOfDaysBetween(lastRequestDate, and: currentDate)
 
-        return numberOfDays < 14
+        return numberOfDays <= 14
     }
+}
+
+// MARK: URLOpenerProtocol
+extension UIApplication: URLOpenerProtocol {
+    func open(_ url: URL) {
+        open(url, options: [:], completionHandler: nil)
+    }
+}
+
+protocol URLOpenerProtocol {
+    func open(_ url: URL)
 }
