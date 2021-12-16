@@ -127,19 +127,19 @@ extension BrowserViewController: WKUIDelegate {
             let isPrivate = currentTab.isPrivate
             var setAddTabAdSearchParam = false
             let addTab = { (rURL: URL, isPrivate: Bool) in
+                let adUrl = rURL.absoluteString
                 if currentTab == self.tabManager.selectedTab, currentTab.adsTelemetryUrlList.count > 0,
                     currentTab.adsTelemetryUrlList.contains(adUrl),
                     !currentTab.adsProviderName.isEmpty {
-                    
-                    AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName) }
+
+                    AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName)
                         currentTab.adsTelemetryUrlList.removeAll()
                         currentTab.adsTelemetryRedirectUrlList.removeAll()
                         currentTab.adsProviderName = ""
 
-                    // Set the tab search param from current tab considering we need the values in order to cope with ad redirects
-                    } else if !currentTab.adsProviderName.isEmpty {
-                        setAddTabAdSearchParam = true
-                    }
+                // Set the tab search param from current tab considering we need the values in order to cope with ad redirects
+                } else if !currentTab.adsProviderName.isEmpty {
+                    setAddTabAdSearchParam = true
                 }
                 
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
