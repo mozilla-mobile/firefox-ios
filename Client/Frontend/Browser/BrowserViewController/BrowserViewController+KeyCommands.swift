@@ -175,10 +175,20 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(goForwardKeyCommand), input: UIKeyCommand.inputRightArrow, modifierFlags: .command),
         ]
 
+        let windowShortcuts = [
+            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "\t", modifierFlags: .control, discoverabilityTitle: shortcuts.ShowNextTab),
+            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift], discoverabilityTitle: shortcuts.ShowPreviousTab),
+            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift]),
+            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "[", modifierFlags: [.command, .shift]),
+            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate], discoverabilityTitle: shortcuts.ShowTabTray),
+            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift]),
+        ]
+
         // In iOS 15+, certain keys events are delivered to the text input or focus systems first, unless specified otherwise
         if #available(iOS 15, *) {
             searchLocationCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
             overridesTextEditing.forEach { $0.wantsPriorityOverSystemBehavior = true }
+            windowShortcuts.forEach { $0.wantsPriorityOverSystemBehavior = true }
         }
 
         let commands = [
@@ -214,15 +224,8 @@ extension BrowserViewController {
             // Tools
             UIKeyCommand(action: #selector(showDownloadsKeyCommand), input: "j", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowDownloads),
 
-            // Window
-            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "\t", modifierFlags: .control, discoverabilityTitle: shortcuts.ShowNextTab),
-            UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift], discoverabilityTitle: shortcuts.ShowPreviousTab),
-            UIKeyCommand(action: #selector(previousTabKeyCommand), input: "[", modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\t", modifierFlags: [.command, .alternate], discoverabilityTitle: shortcuts.ShowTabTray),
-            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift]),
             // TODO: Show tab # 1-9 - Command + 1-9
-        ]
+        ] + windowShortcuts
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
