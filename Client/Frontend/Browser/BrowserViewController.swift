@@ -74,6 +74,7 @@ class BrowserViewController: UIViewController {
     var currentMiddleButtonState: MiddleButtonState?
     fileprivate var customSearchBarButton: UIBarButtonItem?
     var updateState: TabUpdateState = .coldStart
+    var openedUrlFromExternalSource = false
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -1135,6 +1136,7 @@ class BrowserViewController: UIViewController {
             return
         }
         popToBVC()
+        openedUrlFromExternalSource = true
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
