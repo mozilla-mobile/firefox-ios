@@ -4,8 +4,7 @@
 
 import Foundation
 
-// Counter to know how if a user has used the app a certain number of days in a row
-// Useful to manage the rating prompt trought RatingPromptManager
+// Counter to know if a user has used the app a certain number of days in a row, used for `RatingPromptManager` requirements.
 class CumulativeDaysOfUseCounter {
 
     private let calendar = Calendar.current
@@ -53,7 +52,7 @@ class CumulativeDaysOfUseCounter {
         var previousDay: Date?
         var maxNumberOfConsecutiveDays = 0
 
-        for dayOfUse in daysOfUse {
+        daysOfUse.forEach { dayOfUse in
             if let previousDay = previousDay {
                 let numberOfDaysBetween = calendar.numberOfDaysBetween(previousDay, and: dayOfUse)
                 cumulativeDaysCount = numberOfDaysBetween == 1 ? cumulativeDaysCount + 1 : 0
