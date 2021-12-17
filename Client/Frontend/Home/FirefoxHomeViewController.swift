@@ -920,8 +920,9 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
         loadTopSitesData()
 
-        if shouldUpdateData {
-            reloadSectionsData()
+        guard shouldUpdateData else { return }
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.reloadSectionsData()
         }
     }
 
@@ -932,8 +933,11 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             recentlySavedViewModel.updateData {}
         }
 
-        if isJumpBackInSectionEnabled {
-            jumpBackInViewModel.updateData {}
+        // Jump back in access tabManager and this needs to be done on the main thread at the moment
+        DispatchQueue.main.async {
+            if self.isJumpBackInSectionEnabled {
+                self.jumpBackInViewModel.updateData {}
+            }
         }
 
         if isPocketSectionEnabled {
