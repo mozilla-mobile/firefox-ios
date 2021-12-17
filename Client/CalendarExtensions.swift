@@ -5,11 +5,16 @@
 import Foundation
 
 extension Calendar {
+
     func numberOfDaysBetween(_ from: Date, and to: Date) -> Int {
         let fromDate = startOfDay(for: from)
         let toDate = startOfDay(for: to)
         let numberOfDays = dateComponents([.day], from: fromDate, to: toDate)
         
         return numberOfDays.day ?? 0
+    }
+
+    func add(numberOfDays: Int, to date: Date) -> Date? {
+        return self.date(byAdding: .day, value: numberOfDays, to: date)
     }
 }

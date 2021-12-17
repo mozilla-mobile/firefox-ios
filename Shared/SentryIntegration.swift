@@ -23,8 +23,12 @@ public enum SentryTag: String {
 public class Sentry {
     public static let shared = Sentry()
 
-    public static var crashedLastLaunch: Bool {
-        return Client.shared?.crashedLastLaunch() ?? false
+    public lazy var client: Client? = {
+        return Client.shared
+    }()
+
+    public var crashedLastLaunch: Bool {
+        return client?.crashedLastLaunch() ?? false
     }
 
     private let SentryDSNKey = "SentryDSN"
@@ -75,7 +79,7 @@ public class Sentry {
 
         do {
             Client.shared = try Client(dsn: dsn)
-            try Client.shared?.startCrashHandler()
+            try client?.startCrashHandler()
             enabled = true
 
             // If we have not already for this install, generate a completely random identifier
@@ -87,7 +91,7 @@ public class Sentry {
 
             // For all outgoing reports, override the default device identifier with our own random
             // version. Default to a blank (zero) identifier in case of errors.
-            Client.shared?.beforeSerializeEvent = { event in
+            client?.beforeSerializeEvent = { event in
                 let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
                 event.context?.appContext?["device_app_hash"] = deviceAppHash ?? self.DefaultDeviceAppHash
 
@@ -105,7 +109,7 @@ public class Sentry {
     }
 
     public func crash() {
-        Client.shared?.crash()
+        client?.crash()
     }
 
     /*
@@ -147,7 +151,7 @@ public class Sentry {
         }
 
         let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
-        Client.shared?.send(event: event, completion: completion)
+        client?.send(event: event, completion: completion)
     }
 
     public func sendWithStacktrace(message: String, tag: SentryTag = .general, severity: SentrySeverity = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
@@ -165,11 +169,13 @@ public class Sentry {
             completion?(nil)
             return
         }
-        Client.shared?.snapshotStacktrace {
-            let event = self.makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
-            Client.shared?.appendStacktrace(to: event)
+
+        client?.snapshotStacktrace { [weak self] in
+            guard let strongSelf = self else { return }
+            let event = strongSelf.makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
+            strongSelf.client?.appendStacktrace(to: event)
             event.debugMeta = nil
-            Client.shared?.send(event: event, completion: completion)
+            strongSelf.client?.send(event: event, completion: completion)
         }
     }
 
@@ -178,13 +184,13 @@ public class Sentry {
     }
 
     public func breadcrumb(category: String, message: String) {
-        let b = Breadcrumb(level: .info, category: category)
-        b.message = message
-        Client.shared?.breadcrumbs.add(b)
+        let breadcrumb = Breadcrumb(level: .info, category: category)
+        breadcrumb.message = message
+        client?.breadcrumbs.add(breadcrumb)
     }
 
     public func clearBreadcrumbs() {
-        Client.shared?.breadcrumbs.clear()
+        client?.breadcrumbs.clear()
     }
 
     private func printMessage(message: String, extra: [String: Any]? = nil) {
