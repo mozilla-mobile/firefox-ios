@@ -70,7 +70,7 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell, ReusableCell {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: FxHomeHorizontalCellViewModel.widthDimension,
+            widthDimension: FirefoxHomeJumpBackInViewModel.widthDimension,
             heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
         )
 

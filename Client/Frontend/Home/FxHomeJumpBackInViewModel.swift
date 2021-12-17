@@ -44,6 +44,17 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         self.tabManager = tabManager
     }
 
+    // The dimension of a cell
+    static var widthDimension: NSCollectionLayoutDimension {
+        if deviceIsiPad {
+            return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
+        } else if deviceIsInLandscapeMode {
+            return .fractionalWidth(1/2) // iPhone in landscape
+        } else {
+            return .fractionalWidth(1) // iPhone in portrait
+        }
+    }
+
     // The maximum number of items to display in the whole section
     static var maxItemsToDisplay: Int {
         return deviceIsiPad ? 3 : deviceIsInLandscapeMode ? 4 : 2

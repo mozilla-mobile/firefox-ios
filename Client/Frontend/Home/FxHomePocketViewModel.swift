@@ -14,6 +14,7 @@ class FxHomePocketViewModel {
     private let pocketAPI = Pocket()
     private var hasSentPocketSectionEvent = false
 
+    var onTapPocketTileAction: ((PocketStory) -> Void)? = nil
     var showMorePocketAction: (() -> Void)? = nil
 
     init(profile: Profile) {
@@ -25,6 +26,18 @@ class FxHomePocketViewModel {
         return !pocketStories.isEmpty
     }
 
+    // The dimension of a cell
+    // Fractions for iPhone to only show a slight portion of the next column
+    static var widthDimension: NSCollectionLayoutDimension {
+        if deviceIsiPad {
+            return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
+        } else if deviceIsInLandscapeMode {
+            return .fractionalWidth(7/15) // iPhone in landscape
+        } else {
+            return .fractionalWidth(29/30) // iPhone in portrait
+        }
+    }
+
     var numberOfCells: Int {
         return pocketStories.count != 0 ? pocketStories.count + 1 : 0
     }
@@ -32,13 +45,6 @@ class FxHomePocketViewModel {
     func updateData(completion: @escaping () -> Void) {
         getPocketSites().uponQueue(.main) { _ in
             completion()
-        }
-    }
-
-    func getPocketSites() -> Success {
-        return pocketAPI.globalFeed(items: 11).bindQueue(.main) { pocketStory in
-            self.pocketStories = pocketStory
-            return succeed()
         }
     }
 
@@ -52,5 +58,22 @@ class FxHomePocketViewModel {
 
     func getSitesDetail(for index: Int) -> Site {
         return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+    }
+
+    // MARK: - Private
+
+    private func getPocketSites() -> Success {
+        return pocketAPI.globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
+            self.pocketStories = pocketStory
+            return succeed()
+        }
+    }
+
+    private static var deviceIsiPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    private static var deviceIsInLandscapeMode: Bool {
+        UIWindow.isLandscape
     }
 }

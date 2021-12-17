@@ -6,7 +6,9 @@ import Foundation
 
 struct FxHomePocketCollectionCellUX {
     static let numberOfItemsInColumn = 3
+    // TODO: Laurie - Test for A11y dynamic font
     static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 AX5
+    static let numberOfItemsInSection = 11
 }
 
 class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
@@ -39,6 +41,14 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Helpers
+
+    func reloadLayout() {
+        collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: layoutSection)
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.reloadData()
+    }
+
     // MARK: - Private
 
     private func setupLayout() {
@@ -60,7 +70,7 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: FxHomeHorizontalCellViewModel.widthDimension,
+            widthDimension: FxHomePocketViewModel.widthDimension,
             heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
         )
 
@@ -108,8 +118,8 @@ extension FxHomePocketCollectionCell: UICollectionViewDataSource {
 extension FxHomePocketCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let viewModel = viewModel else { return }
-        // TODO: Click action
-        // TODO: Long press
+        // TODO: Laurie - Click action
+        // TODO: Laurie - Long press
 
 //        if indexPath.row == viewModel.jumpBackInList.itemsToDisplay - 1,
 //           let group = viewModel.jumpBackInList.group {

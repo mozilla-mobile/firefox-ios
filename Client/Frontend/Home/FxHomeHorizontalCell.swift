@@ -29,25 +29,6 @@ struct FxHomeHorizontalCellViewModel {
     var hasFavicon: Bool // Pocket has no favicon
     var favIconImage: UIImage? = nil
     var heroImage: UIImage?
-
-    // The dimension of a cell
-    static var widthDimension: NSCollectionLayoutDimension {
-        if deviceIsiPad {
-            return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
-        } else if deviceIsInLandscapeMode {
-            return .fractionalWidth(1/2) // iPhone in landscape
-        } else {
-            return .fractionalWidth(1) // iPhone in portrait
-        }
-    }
-
-    private static var deviceIsiPad: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad
-    }
-
-    private static var deviceIsInLandscapeMode: Bool {
-        UIWindow.isLandscape
-    }
 }
 
 // MARK: - FxHomeHorizontalCell

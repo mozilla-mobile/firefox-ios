@@ -215,6 +215,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             homescreen.sectionsEnabled[.libraryShortcuts] == true
     }
 
+    // TODO: Laurie - Put this in the viewModels
     var isJumpBackInSectionEnabled: Bool {
         guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
               homescreen.sectionsEnabled[.jumpBackIn] == true,
@@ -851,8 +852,8 @@ extension FirefoxHomeViewController {
     private func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let pocketCell = cell as! FxHomePocketCollectionCell
         pocketCell.viewModel = pocketViewModel
-        pocketCell.collectionView.reloadData()
-        pocketCell.collectionView.setNeedsLayout()
+        pocketCell.reloadLayout()
+        pocketCell.setNeedsLayout()
 
         return pocketCell
     }
