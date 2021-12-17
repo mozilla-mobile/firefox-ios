@@ -473,6 +473,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     @objc func presentContextualOverlay() {
+        guard BrowserViewController.foregroundBVC().searchController == nil else {
+            timer?.invalidate()
+            return
+        }
         presentContextualHint()
     }
 
