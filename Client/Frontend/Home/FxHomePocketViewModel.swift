@@ -6,11 +6,9 @@ import Foundation
 import Storage
 import Shared
 
-class FxHomePocketViewModel: FXHomeHorizontalCellViewModelHelper {
+class FxHomePocketViewModel {
 
     // MARK: - Properties
-
-    lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     private let profile: Profile
     private let pocketAPI = Pocket()
@@ -49,8 +47,7 @@ class FxHomePocketViewModel: FXHomeHorizontalCellViewModelHelper {
         }
     }
 
-    func getSitesDetail(for indexPath: IndexPath) -> Site {
-        let index = indexPath.row
-        return Site(url: pocketStories[indexPath.row].url.absoluteString, title: pocketStories[indexPath.row].title)
+    func getSitesDetail(for index: Int) -> Site {
+        return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
     }
 }

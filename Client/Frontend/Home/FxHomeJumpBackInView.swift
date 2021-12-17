@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
+import Storage
 
 struct JumpBackInCollectionCellUX {
     static let cellHeight: CGFloat = 112
@@ -99,16 +100,70 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxHomeHorizontalCell
         guard let viewModel = viewModel else { return UICollectionViewCell() }
-        cell.tag = indexPath.item
 
         if indexPath.row == (viewModel.jumpBackInList.itemsToDisplay - 1),
            let group = viewModel.jumpBackInList.group {
-            viewModel.configureCellForGroups(group: group, cell: cell, indexPath: indexPath)
+            configureCellForGroups(group: group, cell: cell, indexPath: indexPath)
         } else {
-            viewModel.configureCellForTab(item: viewModel.jumpBackInList.tabs[indexPath.row], cell: cell, indexPath: indexPath)
+            configureCellForTab(item: viewModel.jumpBackInList.tabs[indexPath.row], cell: cell, indexPath: indexPath)
         }
 
         return cell
+    }
+
+    private func configureCellForGroups(group: ASGroup<Tab>, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
+        let firstGroupItem = group.groupedItems.first
+        let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
+
+        let descriptionText = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
+        let faviconImage = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
+        let cellViewModel = FxHomeHorizontalCellViewModel(titleText: group.searchTerm.localizedCapitalized,
+                                                          descriptionText: descriptionText,
+                                                          tag: indexPath.item,
+                                                          favIconImage: faviconImage)
+        cell.configure(viewModel: cellViewModel)
+
+        guard let viewModel = viewModel else { return }
+        viewModel.getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+            cell.heroImage.image = image
+        }
+    }
+
+    private func configureCellForTab(item: Tab, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
+        let itemURL = item.lastKnownUrl?.absoluteString ?? ""
+        let site = Site(url: itemURL, title: item.displayTitle)
+        let descriptionText = site.tileURL.shortDisplayString.capitalized
+
+        let cellViewModel = FxHomeHorizontalCellViewModel(titleText: site.title,
+                                                          descriptionText: descriptionText,
+                                                          tag: indexPath.item)
+        cell.configure(viewModel: cellViewModel)
+
+        guard let viewModel = viewModel else { return }
+        /// Sets a small favicon in place of the hero image in case there's no hero image
+        viewModel.getFaviconImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+            cell.faviconImage.image = image
+
+            if cell.heroImage.image == nil {
+                cell.fallbackFaviconImage.image = image
+            }
+        }
+
+        /// Replace the fallback favicon image when it's ready or available
+        viewModel.getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+
+            // If image is a square use it as a favicon
+            if image?.size.width == image?.size.height {
+                cell.fallbackFaviconImage.image = image
+                return
+            }
+
+            cell.setFallBackFaviconVisibility(isHidden: true)
+            cell.heroImage.image = image
+        }
     }
 }
 

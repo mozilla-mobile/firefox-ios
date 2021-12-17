@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Storage
 
 private struct FxHomeHorizontalCellUX {
     static let generalCornerRadius: CGFloat = 12
@@ -16,8 +17,16 @@ private struct FxHomeHorizontalCellUX {
     static let faviconSize = CGSize(width: 24, height: 24)
 }
 
+struct FxHomeHorizontalCellViewModel {
+    let titleText: String
+    let descriptionText: String
+    let tag: Int
+    var heroImage: UIImage?
+    var favIconImage: UIImage?
+}
+
 // MARK: - FxHomeHorizontalCell
-/// A cell used in FxHomeScreen's Jump Back In section.
+/// A cell used in FxHomeScreen's Jump Back In and Pocket sections
 class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
@@ -29,7 +38,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         imageView.backgroundColor = .clear
     }
 
-    let itemTitle: UILabel = .build { label in
+    private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                    maxSize: FxHomeHorizontalCellUX.titleFontSize)
@@ -48,7 +57,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         imageView.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
     }
 
-    let descriptionLabel: UILabel = .build { label in
+    private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    maxSize: FxHomeHorizontalCellUX.siteFontSize)
@@ -110,6 +119,13 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Helpers
+
+    func configure(viewModel: FxHomeHorizontalCellViewModel) {
+        tag = viewModel.tag
+        itemTitle.text = viewModel.titleText
+        descriptionLabel.text = viewModel.descriptionText
+        faviconImage.image = viewModel.favIconImage
+    }
 
     func setFallBackFaviconVisibility(isHidden: Bool) {
         fallbackFaviconBackground.isHidden = isHidden

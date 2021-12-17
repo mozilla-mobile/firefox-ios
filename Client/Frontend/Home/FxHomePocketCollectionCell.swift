@@ -82,18 +82,14 @@ extension FxHomePocketCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxHomeHorizontalCell
         guard let viewModel = viewModel else { return UICollectionViewCell() }
-        cell.tag = indexPath.item
 
         // TODO: More button -> headerView.moreButton.setTitle(.PocketMoreStoriesText, for: .normal)
-
-//        viewModel.configureCellForTab(item: <#T##Tab#>, cell: <#T##FxHomeHorizontalCell#>, indexPath: <#T##IndexPath#>)
-
-//        if indexPath.row == (viewModel.jumpBackInList.itemsToDisplay - 1),
-//           let group = viewModel.jumpBackInList.group {
-//            viewModel.configureCellForGroups(group: group, cell: cell, indexPath: indexPath)
-//        } else {
-//            viewModel.configureCellForTab(item: viewModel.jumpBackInList.tabs[indexPath.row], cell: cell, indexPath: indexPath)
-//        }
+        // TODO: Section needs to be considered
+        let pocketStory = viewModel.pocketStories[indexPath.row]
+        let cellViewModel = FxHomeHorizontalCellViewModel(titleText: pocketStory.title, descriptionText: pocketStory.domain, tag: indexPath.item)
+        cell.configure(viewModel: cellViewModel)
+        cell.setFallBackFaviconVisibility(isHidden: true)
+        cell.heroImage.sd_setImage(with: pocketStory.imageURL)
 
         return cell
     }

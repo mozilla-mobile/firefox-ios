@@ -282,7 +282,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
 
-        pocketViewModel.showMorePocketAction = { self?.showMorePocketStories() }
+        pocketViewModel.showMorePocketAction = { [weak self] in
+            self?.showMorePocketStories()
+        }
 
         collectionView?.delegate = self
         collectionView?.dataSource = self
@@ -734,7 +736,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         switch Section(section) {
         case .pocket:
-            return shouldShowPocketSection ? .zero : getHeaderSize(forSection: section)
+            return shouldShowPocketSection ? getHeaderSize(forSection: section) : .zero
         case .topSites:
             return isTopSitesSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .libraryShortcuts:
@@ -1189,7 +1191,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         switch Section(indexPath.section) {
         case .pocket:
-            return pocketViewModel.getSitesDetail(for: indexPath)
+            return pocketViewModel.getSitesDetail(for: indexPath.row)
         case .topSites:
             return topSitesManager.content[indexPath.item]
         case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
