@@ -15,7 +15,7 @@ private let log = Logger.browserLogger
 
 struct FirefoxHomeUX {
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
-    static let jumpBackInCellHeight: CGFloat = 120
+    static let homeHorizontalCellHeight: CGFloat = 120
     static let recentlySavedCellHeight: CGFloat = 136
     static let historyHighlightsCellHeight: CGFloat = 70
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
@@ -526,7 +526,7 @@ extension FirefoxHomeViewController {
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
             case .pocket: return FirefoxHomeUX.highlightCellHeight
-            case .jumpBackIn: return FirefoxHomeUX.jumpBackInCellHeight
+            case .jumpBackIn: return FirefoxHomeUX.homeHorizontalCellHeight
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .historyHighlights: return FirefoxHomeUX.historyHighlightsCellHeight
             case .topSites: return 0 //calculated dynamically
