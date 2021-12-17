@@ -19,6 +19,11 @@ public struct AccessibilityIdentifiers {
 
     struct FirefoxHomepage {
 
+        struct OtherButtons {
+            static let logoButton = "FxHomeLogoButton"
+            static let customizeHome = "FxHomeCustomizeHomeSettingButton"
+        }
+
         struct MoreButtons {
             static let recentlySaved = "recentlySavedSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"

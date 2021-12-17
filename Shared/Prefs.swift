@@ -31,6 +31,7 @@ public struct PrefsKeys {
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let ChronTabsPrefKey = "chronTabsPrefKey"
+    public static let CustomWallpaperPrefKey = "customWallpaperPrefKey"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
     public static let SessionCount = "sessionCount"

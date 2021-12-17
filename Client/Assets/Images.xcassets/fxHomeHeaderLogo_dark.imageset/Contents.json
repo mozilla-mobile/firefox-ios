@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Logo Dark.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

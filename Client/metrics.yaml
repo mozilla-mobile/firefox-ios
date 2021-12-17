@@ -734,6 +734,19 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-04-01"
+  cycle_wallpaper_button:
+    type: counter
+    description: |
+      Counts the number of times a user changes the
+      wallpaper by double-tapping on the Firefox logo
+      on the Firefox Homepage
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3500
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9643
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-06-01"
   firefox_homepage_view:
     type: counter
     description: |
