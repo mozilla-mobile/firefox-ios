@@ -272,8 +272,7 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Gant ho pajenn Firefox personelaet eo aesoc’h da adstagañ lec’h m’ho peus paouezet. Klaskit e-touez hoc’h ivinelloù nevez, sinedoù ha disoc’hoù enklask.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "An ivinelloù n’ho peus ket gwelet e-pad div sizhun a vo dilec’hiet amañ.";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */

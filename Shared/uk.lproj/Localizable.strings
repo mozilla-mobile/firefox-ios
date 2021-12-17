@@ -149,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Закладки";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "Додати";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "Закласти всі вкладки";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "Закласти поточну вкладку";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Змінити";
 
@@ -167,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "Ім’я теки";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Закладки комп’ютера";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "Останні закладки";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Нова закладка";
 
@@ -175,6 +190,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Новий розділювач";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Шукати закладки";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Заголовок";
@@ -272,9 +290,11 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Відтепер ваша персоналізована сторінка домівки Firefox полегшує продовження роботи з місця, де ви зупинилися. Знайдіть останні вкладки, закладки та результати пошуку.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Сюди переміщуються вкладки, які ви не переглядали впродовж двох тижнів.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Вимкнути у налаштуваннях";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Не вдалося додати сторінку до списку читання";
@@ -658,6 +678,78 @@
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "щойно";
+
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Дійсний розмір";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Додати закладку";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Стерти недавню історію";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "Посилання для завантаження";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Знайти знову";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "Відкрити посилання у фоновому режимі";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "Відкрити посилання в новій вкладці";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "Зберегти сторінку як…";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Закладки";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "Змінити";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "Файл";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Історія";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Інструменти";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "Вигляд";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Вікно";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Налаштування";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Показати закладки";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Показати завантаження";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Показати першу вкладку";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Показати історію";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Показати останню вкладку";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "Показати номер вкладки 1-9";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Збільшити";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Зменшити";
 
 /* History tableview section header */
 "Last month" = "Останній місяць";
@@ -1094,6 +1186,9 @@
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Швидкі засоби пошуку";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Оцінити в App Store";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "прочитане";
