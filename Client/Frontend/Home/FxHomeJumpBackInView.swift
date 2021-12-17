@@ -6,13 +6,9 @@ import UIKit
 import Storage
 
 struct JumpBackInCollectionCellUX {
-    static let cellHeight: CGFloat = 112
-    static let cellWidth: CGFloat = 350
     static let verticalCellSpacing: CGFloat = 8
     static let iPadHorizontalSpacing: CGFloat = 48
     static let iPadCellSpacing: CGFloat = 16
-    static let interGroupSpacing: CGFloat = 8
-    static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
 }
 
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell, ReusableCell {
@@ -69,20 +65,20 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell, ReusableCell {
     private var layoutSection: NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(JumpBackInCollectionCellUX.cellHeight)
+            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: FirefoxHomeJumpBackInViewModel.widthDimension,
-            heightDimension: .estimated(JumpBackInCollectionCellUX.cellHeight)
+            widthDimension: FxHomeHorizontalCellViewModel.widthDimension,
+            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
         )
 
         let subItems = Array(repeating: item, count: FirefoxHomeJumpBackInViewModel.maxNumberOfItemsInColumn)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = JumpBackInCollectionCellUX.interItemSpacing
+        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: 0, trailing: JumpBackInCollectionCellUX.interGroupSpacing)
+                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
 
@@ -120,6 +116,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         let cellViewModel = FxHomeHorizontalCellViewModel(titleText: group.searchTerm.localizedCapitalized,
                                                           descriptionText: descriptionText,
                                                           tag: indexPath.item,
+                                                          hasFavicon: true,
                                                           favIconImage: faviconImage)
         cell.configure(viewModel: cellViewModel)
 
@@ -137,7 +134,8 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
         let cellViewModel = FxHomeHorizontalCellViewModel(titleText: site.title,
                                                           descriptionText: descriptionText,
-                                                          tag: indexPath.item)
+                                                          tag: indexPath.item,
+                                                          hasFavicon: true)
         cell.configure(viewModel: cellViewModel)
 
         guard let viewModel = viewModel else { return }

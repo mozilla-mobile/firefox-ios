@@ -61,17 +61,6 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
     }
 
-    // The dimension of a cell
-    static var widthDimension: NSCollectionLayoutDimension {
-        if deviceIsiPad {
-            return .absolute(JumpBackInCollectionCellUX.cellWidth) // iPad
-        } else if deviceIsInLandscapeMode {
-            return .fractionalWidth(1/2) // iPhone in landscape
-        } else {
-            return .fractionalWidth(1) // iPhone in portrait
-        }
-    }
-
     /// Update data with tab and search term group managers
     func updateData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs

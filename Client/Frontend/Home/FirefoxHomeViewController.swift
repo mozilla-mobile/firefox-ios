@@ -936,7 +936,10 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         }
 
         if isPocketSectionEnabled {
-            pocketViewModel.updateData {}
+            pocketViewModel.updateData {
+                // TODO: Once section are standardized, reload only the pocket section when data is updated
+                self.collectionView.reloadData()
+            }
         }
     }
 

@@ -25,9 +25,12 @@ class FxHomePocketViewModel {
         return !pocketStories.isEmpty
     }
 
+    var numberOfCells: Int {
+        return pocketStories.count != 0 ? pocketStories.count + 1 : 0
+    }
+
     func updateData(completion: @escaping () -> Void) {
         getPocketSites().uponQueue(.main) { _ in
-//       Laurie - self.collectionView?.reloadData()
             completion()
         }
     }

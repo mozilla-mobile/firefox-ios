@@ -4,8 +4,13 @@
 
 import Foundation
 import Storage
+import UIKit
 
-private struct FxHomeHorizontalCellUX {
+struct FxHomeHorizontalCellUX {
+    static let cellHeight: CGFloat = 112
+    static let cellWidth: CGFloat = 350
+    static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
+    static let interGroupSpacing: CGFloat = 8
     static let generalCornerRadius: CGFloat = 12
     // TODO: Limiting font size to xxLarge until we use compositional layout in all Firefox HomePage. Should be AX5.
     static let titleFontSize: CGFloat = 19 // Style subheadline - xxLarge
@@ -21,8 +26,28 @@ struct FxHomeHorizontalCellViewModel {
     let titleText: String
     let descriptionText: String
     let tag: Int
+    var hasFavicon: Bool // Pocket has no favicon
+    var favIconImage: UIImage? = nil
     var heroImage: UIImage?
-    var favIconImage: UIImage?
+
+    // The dimension of a cell
+    static var widthDimension: NSCollectionLayoutDimension {
+        if deviceIsiPad {
+            return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
+        } else if deviceIsInLandscapeMode {
+            return .fractionalWidth(1/2) // iPhone in landscape
+        } else {
+            return .fractionalWidth(1) // iPhone in portrait
+        }
+    }
+
+    private static var deviceIsiPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    private static var deviceIsInLandscapeMode: Bool {
+        UIWindow.isLandscape
+    }
 }
 
 // MARK: - FxHomeHorizontalCell
@@ -46,8 +71,12 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }
 
     // Contains the faviconImage and descriptionLabel
-    private var descriptionContainer: UIView = .build { view in
-        view.backgroundColor = .clear
+    private var descriptionContainer: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.spacing = 8
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.distribution = .fillProportionally
     }
 
     let faviconImage: UIImageView = .build { imageView in
@@ -124,7 +153,14 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         tag = viewModel.tag
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
-        faviconImage.image = viewModel.favIconImage
+        heroImage.image = viewModel.heroImage
+
+        if viewModel.hasFavicon {
+            faviconImage.image = viewModel.favIconImage
+        } else {
+            descriptionContainer.removeArrangedSubview(faviconImage)
+            faviconImage.image = nil
+        }
     }
 
     func setFallBackFaviconVisibility(isHidden: Bool) {
@@ -145,7 +181,8 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
-        descriptionContainer.addSubviews(descriptionLabel, faviconImage)
+        descriptionContainer.addArrangedSubview(faviconImage)
+        descriptionContainer.addArrangedSubview(descriptionLabel)
         contentView.addSubviews(itemTitle, imageContainer, descriptionContainer)
 
         NSLayoutConstraint.activate([
@@ -181,15 +218,10 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
-            faviconImage.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
-            faviconImage.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
             faviconImage.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.height),
             faviconImage.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.width),
-            faviconImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
 
-            descriptionLabel.leadingAnchor.constraint(equalTo: faviconImage.trailingAnchor, constant: 8),
             descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
     }
 
