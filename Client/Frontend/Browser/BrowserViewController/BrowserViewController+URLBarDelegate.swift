@@ -72,9 +72,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
 
         // App store review in-app prompt
-        if ratingPromptManager.shouldShowPrompt {
-            ratingPromptManager.requestRatingPrompt()
-        }
+        ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     private func shouldShowChronTabs() -> Bool {

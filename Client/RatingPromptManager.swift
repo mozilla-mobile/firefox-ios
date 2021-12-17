@@ -21,7 +21,7 @@ class RatingPromptManager {
 
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
 
-    private enum UserDefaultsKey: String {
+    enum UserDefaultsKey: String {
         case keyIsBrowserDefault = "com.moz.isBrowserDefault.key"
         case keyRatingPromptLastRequestDate = "com.moz.ratingPromptLastRequestDate.key"
         case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
@@ -38,52 +38,16 @@ class RatingPromptManager {
         self.daysOfUseCounter = daysOfUseCounter
     }
 
-    var shouldShowPrompt: Bool {
-        // Required: 5th launch or more
-        let currentSessionCount = profile.prefs.intForKey(PrefsKeys.SessionCount) ?? 0
-        guard currentSessionCount >= 5 else { return false }
-
-        // Required: 5 consecutive days of use in the last 7 days
-        guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
-
-        // Required: has not crashed in the last session
-        guard !Sentry.shared.crashedLastLaunch else { return false }
-
-        // One of the following
-        let isBrowserDefault = RatingPromptManager.isBrowserDefault
-        let hasSyncAccount = profile.hasSyncableAccount()
-        let engineIsGoogle = profile.searchEngines.defaultEngine.shortName == "Google"
-        let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) == .strict
-        guard isBrowserDefault
-                || hasSyncAccount
-                || hasMinimumBookmarksCount
-                || hasMinimumPinnedShortcutsCount
-                || !engineIsGoogle
-                || hasTPStrict
-        else { return false }
-
-        // Ensure we ask again only if 2 weeks has passed
-        guard !hasRequestedInTheLastTwoWeeks else { return false }
-
-        // As per Apple's framework, an app can only present the prompt three times per period of 365 days.
-        // Because of this, Firefox will currently limit its request to show the ratings prompt to one time, given
-        // that the triggers are fulfilled. As such, requirements and attempts to further show the ratings prompt
-        // will be implemented later in the future.  
-        guard requestCount < 1 else { return false }
-
-        return true
-    }
-
-    func requestRatingPrompt(at date: Date = Date()) {
-        lastRequestDate = date
-        requestCount += 1
-
-        SKStoreReviewController.requestReview()
+    /// Show the in-app rating prompt if needed
+    /// - Parameter date: Request at a certain date - Useful for unit tests
+    func showRatingPromptIfNeeded(at date: Date = Date()) {
+        if shouldShowPrompt {
+            requestRatingPrompt(at: date)
+        }
     }
 
     /// Updates bookmark and pinned site data asynchronously.
-    ///
-    /// - Parameter dataLoadingCompletion: complete when the loading of data from the profile is done - Used in unit tests
+    /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done - Used in unit tests
     func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
         let group = DispatchGroup()
         updateBookmarksCount(group: group)
@@ -94,6 +58,8 @@ class RatingPromptManager {
         }
     }
 
+    /// Go to the App Store review page of this application
+    /// - Parameter urlOpener: Opens the App Store url
     static func goToAppStoreReview(with urlOpener: URLOpenerProtocol = UIApplication.shared) {
         guard let url = URL(string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review") else { return }
         urlOpener.open(url)
@@ -123,6 +89,49 @@ class RatingPromptManager {
     }
 
     // MARK: Private
+
+    private var shouldShowPrompt: Bool {
+        // Required: 5th launch or more
+        let currentSessionCount = profile.prefs.intForKey(PrefsKeys.SessionCount) ?? 0
+        guard currentSessionCount >= 5 else { return false }
+
+        // Required: 5 consecutive days of use in the last 7 days
+        guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
+
+        // Required: has not crashed in the last session
+        guard !Sentry.shared.crashedLastLaunch else { return false }
+
+        // One of the following
+        let isBrowserDefault = RatingPromptManager.isBrowserDefault
+        let hasSyncAccount = profile.hasSyncableAccount()
+        let engineIsGoogle = profile.searchEngines.defaultEngine.shortName == "Google"
+        let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) == .strict
+        guard isBrowserDefault
+                || hasSyncAccount
+                || hasMinimumBookmarksCount
+                || hasMinimumPinnedShortcutsCount
+                || !engineIsGoogle
+                || hasTPStrict
+        else { return false }
+
+        // Ensure we ask again only if 2 weeks has passed
+        guard !hasRequestedInTheLastTwoWeeks else { return false }
+
+        // As per Apple's framework, an app can only present the prompt three times per period of 365 days.
+        // Because of this, Firefox will currently limit its request to show the ratings prompt to one time, given
+        // that the triggers are fulfilled. As such, requirements and attempts to further show the ratings prompt
+        // will be implemented later in the future.
+        guard requestCount < 1 else { return false }
+
+        return true
+    }
+
+    private func requestRatingPrompt(at date: Date) {
+        lastRequestDate = date
+        requestCount += 1
+
+        SKStoreReviewController.requestReview()
+    }
 
     private func updateBookmarksCount(group: DispatchGroup) {
         group.enter()

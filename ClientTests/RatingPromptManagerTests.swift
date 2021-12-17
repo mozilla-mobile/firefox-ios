@@ -42,48 +42,56 @@ class RatingPromptManagerTests: XCTestCase {
     func testShouldShowPrompt_requiredAreFalse_returnsFalse() {
         setupEnvironment(numberOfSession: 0,
                          hasCumulativeDaysOfUse: false)
-        XCTAssertFalse(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
     func testShouldShowPrompt_requiredTrueWithoutOptional_returnsFalse() {
         setupEnvironment()
-        XCTAssertFalse(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
     func testShouldShowPrompt_withRequiredRequirementsAndOneOptional_returnsTrue() {
         setupEnvironment(isBrowserDefault: true)
-        XCTAssertTrue(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_lessThanSession5_returnsFalse() {
         setupEnvironment(numberOfSession: 4,
                          hasCumulativeDaysOfUse: true,
                          isBrowserDefault: true)
-        XCTAssertFalse(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
     func testShouldShowPrompt_cumulativeDaysOfUseFalse_returnsFalse() {
         setupEnvironment(numberOfSession: 5,
                          hasCumulativeDaysOfUse: false,
                          isBrowserDefault: true)
-        XCTAssertFalse(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
     func testShouldShowPrompt_sentryHasCrashedInLastSession_returnsFalse() {
         setupEnvironment(isBrowserDefault: true)
         Sentry.shared.client = try! CrashingMockSentryClient()
 
-        XCTAssertFalse(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
     func testShouldShowPrompt_isBrowserDefaultTrue_returnsTrue() {
         setupEnvironment(isBrowserDefault: true)
-        XCTAssertTrue(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_asSyncAccountTrue_returnsTrue() {
         setupEnvironment(hasSyncAccount: true)
-        XCTAssertTrue(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_searchEngineIsNotGoogle_returnsTrue() {
@@ -92,14 +100,16 @@ class RatingPromptManagerTests: XCTestCase {
         mockProfile.searchEngines.defaultEngine = fakeEngine
         setupEnvironment()
 
-        XCTAssertTrue(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_hasTPStrict_returnsTrue() {
         mockProfile.prefs.setString(BlockingStrength.strict.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
         setupEnvironment()
 
-        XCTAssertTrue(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_hasMinimumBookmarksCount_returnsTrue() {
@@ -116,7 +126,8 @@ class RatingPromptManagerTests: XCTestCase {
                 return
             }
 
-            XCTAssertTrue(promptManager.shouldShowPrompt)
+            promptManager.showRatingPromptIfNeeded()
+            XCTAssertEqual(self?.ratingPromptOpenCount, 1)
             expectation.fulfill()
         })
 
@@ -137,7 +148,8 @@ class RatingPromptManagerTests: XCTestCase {
                 return 
             }
 
-            XCTAssertTrue(promptManager.shouldShowPrompt)
+            promptManager.showRatingPromptIfNeeded()
+            XCTAssertEqual(self?.ratingPromptOpenCount, 1)
             expectation.fulfill()
         })
 
@@ -146,23 +158,22 @@ class RatingPromptManagerTests: XCTestCase {
 
     func testShouldShowPrompt_hasRequestedTwoWeeksAgo_returnsTrue() {
         setupEnvironment(isBrowserDefault: true)
-        promptManager.requestRatingPrompt(at: Date().lastTwoWeek)
-
-        XCTAssertFalse(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded(at: Date().lastTwoWeek)
+        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_hasRequestedInTheLastTwoWeeks_returnsFalse() {
         setupEnvironment()
 
-        promptManager.requestRatingPrompt(at: Date())
-        XCTAssertFalse(promptManager.shouldShowPrompt)
+        promptManager.showRatingPromptIfNeeded(at: Date().lastTwoWeek)
+        XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
-    func testRequestCount() {
-        setupEnvironment()
-
-        promptManager.requestRatingPrompt()
-        XCTAssertFalse(promptManager.shouldShowPrompt)
+    func testShouldShowPrompt_requestCountTwiceCountIsAtOne() {
+        setupEnvironment(isBrowserDefault: true)
+        promptManager.showRatingPromptIfNeeded()
+        promptManager.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testGoToAppStoreReview() {
@@ -200,6 +211,10 @@ private extension RatingPromptManagerTests {
         site.guid = "abc\(number)def"
 
         return site
+    }
+
+    var ratingPromptOpenCount: Int {
+        UserDefaults.standard.object(forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptRequestCount.rawValue) as? Int ?? 0
     }
 }
 
