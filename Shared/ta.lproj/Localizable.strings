@@ -43,6 +43,12 @@
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "சமீபத்தில் பார்வையிட்டது";
 
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "அகற்றவும்";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "குறுக்குவழிகள்";
+
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "வரிசைகள்: %d";
 

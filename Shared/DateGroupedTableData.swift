@@ -15,14 +15,16 @@ public struct DateGroupedTableData<T: Equatable> {
     let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
     let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
     let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
+    let lastMonthTimestamp = getDate(dayOffset: -30).timeIntervalSince1970
 
     var today: [(T, TimeInterval)] = []
     var yesterday: [(T, TimeInterval)] = []
     var lastWeek: [(T, TimeInterval)] = []
+    var lastMonth: [(T, TimeInterval)] = []
     var older: [(T, TimeInterval)] = []
 
     public var isEmpty: Bool {
-        return today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && older.isEmpty
+        return today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && lastMonth.isEmpty && older.isEmpty
     }
 
     public init() {}
@@ -37,9 +39,12 @@ public struct DateGroupedTableData<T: Equatable> {
         } else if timestamp > lastWeekTimestamp {
             lastWeek.append((item, timestamp))
             return IndexPath(row: lastWeek.count - 1, section: 2)
+        } else if timestamp > lastMonthTimestamp {
+            lastMonth.append((item, timestamp))
+            return IndexPath(row: lastMonth.count - 1, section: 3)
         } else {
             older.append((item, timestamp))
-            return IndexPath(row: older.count - 1, section: 3)
+            return IndexPath(row: older.count - 1, section: 4)
         }
     }
 
@@ -50,6 +55,8 @@ public struct DateGroupedTableData<T: Equatable> {
             yesterday.remove(at: index)
         } else if let index = lastWeek.firstIndex(where: { item == $0.0 }) {
             lastWeek.remove(at: index)
+        } else if let index = lastMonth.firstIndex(where: { item == $0.0 }) {
+            lastMonth.remove(at: index)
         } else if let index = older.firstIndex(where: { item == $0.0 }) {
             older.remove(at: index)
         }
@@ -63,6 +70,8 @@ public struct DateGroupedTableData<T: Equatable> {
             return yesterday.count
         case 2:
             return lastWeek.count
+        case 3:
+            return lastMonth.count
         default:
             return older.count
         }
@@ -76,6 +85,8 @@ public struct DateGroupedTableData<T: Equatable> {
             return yesterday.map({ $0.0 })
         case 2:
             return lastWeek.map({ $0.0 })
+        case 3:
+            return lastMonth.map({ $0.0 })
         default:
             return older.map({ $0.0 })
         }

@@ -8,6 +8,8 @@ import XCTest
 class DesktopModeTestsIpad: IpadOnlyTestCase {
     func testLongPressReload() {
         if skipPlatform { return }
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
@@ -25,6 +27,8 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
 
         // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
         navigator.createNewTab()
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
@@ -171,6 +175,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        waitForExistence(app.webViews.staticTexts.firstMatch, timeout: 5)
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.goto(ReloadLongPressMenu)

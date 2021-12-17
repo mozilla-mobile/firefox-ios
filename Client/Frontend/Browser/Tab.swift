@@ -89,6 +89,13 @@ class Tab: NSObject {
     // Tab Groups
     var tabGroupData: TabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
     
+    struct TabGroupLastUpdatedObservation {
+        var keyUrl: String?
+        var referrerUrl: String?
+        var searchTerm: String?
+    }
+    
+    var lastObservation: TabGroupLastUpdatedObservation = TabGroupLastUpdatedObservation()
     var tabGroupsTimerHelper = StopWatchTimer()
     var shouldResetTabGroupData: Bool = false
     
@@ -195,10 +202,6 @@ class Tab: NSObject {
         return false
     }
 
-    // Added an async queue queue
-    let queueName = "com.moz.tabscreenshot.queue"
-    let tabScreenshotQueue = OperationQueue()
-
     var mimeType: String?
     var isEditing: Bool = false
     var currentFaviconUrl: URL?
@@ -284,8 +287,6 @@ class Tab: NSObject {
         self.nightMode = false
         self.noImageMode = false
         self.browserViewController = bvc
-        self.tabScreenshotQueue.name = queueName
-        self.tabScreenshotQueue.qualityOfService = .userInteractive
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
@@ -318,7 +319,8 @@ class Tab: NSObject {
                 // reset tab group
                 tabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
                 shouldResetTabGroupData = true
-            } else if tabGroupData.tabAssociatedNextUrl.isEmpty {
+            // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
+            } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
                 let key = tabGroupData.tabHistoryMetadatakey()
                 if key.referrerUrl != nextUrl {
                     let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
@@ -475,8 +477,6 @@ class Tab: NSObject {
         }
         checkTabCount(failures: 0)
         #endif
-        
-        tabScreenshotQueue.cancelAllOperations()
     }
 
     func close() {
@@ -525,15 +525,22 @@ class Tab: NSObject {
     var displayTitle: String {
         if let title = webView?.title, !title.isEmpty {
             let key = tabGroupData.tabHistoryMetadatakey()
-            if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
+            if  lastObservation.keyUrl == key.url &&
+                    lastObservation.referrerUrl == key.referrerUrl &&
+                    lastObservation.searchTerm == key.searchTerm {
+                return title
+            } else if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
                 let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
-                updateObservationForKey(key: key, observation: observation)
+                    updateObservationForKey(key: key, observation: observation)
+                lastObservation.keyUrl = key.url
+                lastObservation.referrerUrl = key.referrerUrl
+                lastObservation.searchTerm = key.searchTerm
             }
             return title
         }
-
+        
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !restoring {
@@ -682,21 +689,7 @@ class Tab: NSObject {
     }
 
     func setScreenshot(_ screenshot: UIImage?) {
-        tabScreenshotQueue.addOperation {
-            guard let val = screenshot else { return }
-            val.averageColor(completion: { color in
-                DispatchQueue.main.async {
-                    // check if screenshot is same color as background
-                    guard let avgColor = color else { return }
-                    let backgroundColor = LegacyThemeManager.instance.current.browser.background
-                    guard !avgColor.isEqual(backgroundColor) else {
-                        self.screenshot = nil
-                        return
-                    }
-                    self.screenshot = screenshot
-                }
-            })
-        }
+        self.screenshot = screenshot
     }
     
     func toggleChangeUserAgent() {

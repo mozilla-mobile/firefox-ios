@@ -57,6 +57,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     fileprivate let tabEventHandlers: [TabEventHandler]
     fileprivate let store: TabManagerStore
     fileprivate let profile: Profile
+    fileprivate var isRestoringTabs = false
 
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -711,6 +712,8 @@ extension TabManager {
               store.hasTabsToRestoreAtStartup
         else { return }
 
+        isRestoringTabs = true
+
         var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
                                                    tabManager: self)
         if lastSessionWasPrivate, !(tabToSelect?.isPrivate ?? false) {
@@ -722,6 +725,8 @@ extension TabManager {
         for delegate in self.delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
+
+        isRestoringTabs = false
     }
 
     private func checkForSingleTab() {
@@ -737,9 +742,9 @@ extension TabManager {
     /// Public interface for checking whether the StartAtHome Feature should run.
     public func startAtHomeCheck() {
         guard !AppConstants.IsRunningTest,
-              !DebugSettingsBundleOptions.skipSessionRestore
+              !DebugSettingsBundleOptions.skipSessionRestore,
+              !isRestoringTabs
         else { return }
-
 
         if shouldStartAtHome() {
             let scannableTabs = lastSessionWasPrivate ? privateTabs : normalTabs
