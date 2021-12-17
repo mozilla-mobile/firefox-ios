@@ -1119,15 +1119,20 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         guard longPressGestureRecognizer.state == .began else { return }
 
         let point = longPressGestureRecognizer.location(in: self.collectionView)
-        guard let indexPath = self.collectionView?.indexPathForItem(at: point) else { return }
+        guard let fxHomeIndexPath = self.collectionView?.indexPathForItem(at: point) else { return }
 
-        switch Section(indexPath.section) {
+        // Here, we must be careful which `section` we're passing in, as it can be the
+        // homescreen's section, or a sub-view's section, thereby requiring a custom
+        // `IndexPath` object to be created and passed around.
+        switch Section(fxHomeIndexPath.section) {
         case .pocket:
-            presentContextMenu(for: indexPath)
+            presentContextMenu(for: fxHomeIndexPath)
         case .topSites:
-            let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
+            let topSiteCell = self.collectionView?.cellForItem(at: fxHomeIndexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
-            guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
+            guard let topSiteItemIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
+            let topSiteIndexPath = IndexPath(row: topSiteItemIndexPath.row,
+                                             section: fxHomeIndexPath.section)
             presentContextMenu(for: topSiteIndexPath)
         case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
             return
