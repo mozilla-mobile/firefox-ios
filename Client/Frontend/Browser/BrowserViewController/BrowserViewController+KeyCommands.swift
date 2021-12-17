@@ -176,7 +176,6 @@ extension BrowserViewController {
         ]
 
         let windowShortcuts = [
-            // Window
             UIKeyCommand(action: #selector(nextTabKeyCommand), input: "\t", modifierFlags: .control, discoverabilityTitle: shortcuts.ShowNextTab),
             UIKeyCommand(action: #selector(previousTabKeyCommand), input: "\t", modifierFlags: [.control, .shift], discoverabilityTitle: shortcuts.ShowPreviousTab),
             UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift]),
