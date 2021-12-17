@@ -7,7 +7,7 @@ import StoreKit
 import Shared
 import Storage
 
-// Rating prompt manage when a request for an app store review to the user can be done
+// The `RatingPromptManager` handles app store review requests and the internal logic of when they can be presented to a user.
 class RatingPromptManager {
 
     private let profile: Profile
@@ -27,10 +27,11 @@ class RatingPromptManager {
         case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
     }
 
-    /// RatingPromptManager init
+    /// Initializes the `RatingPromptManager` using the provided profile and the user's current days of use of Firefox
+    ///
     /// - Parameters:
-    ///   - profile: the user's data profile
-    ///   - daysOfUseCounter: the counter for the cumulative days of use of the application by the user
+    ///   - profile: User's profile data
+    ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
     init(profile: Profile,
          daysOfUseCounter: CumulativeDaysOfUseCounter) {
         self.profile = profile
@@ -48,18 +49,26 @@ class RatingPromptManager {
         // Required: has not crashed in the last session
         guard !Sentry.shared.crashedLastLaunch else { return false }
 
-        // One of the followings
+        // One of the following
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
         let hasSyncAccount = profile.hasSyncableAccount()
         let engineIsGoogle = profile.searchEngines.defaultEngine.shortName == "Google"
         let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) == .strict
-        guard isBrowserDefault || hasSyncAccount || hasMinimumBookmarksCount || hasMinimumPinnedShortcutsCount || !engineIsGoogle || hasTPStrict else { return false }
+        guard isBrowserDefault
+                || hasSyncAccount
+                || hasMinimumBookmarksCount
+                || hasMinimumPinnedShortcutsCount
+                || !engineIsGoogle
+                || hasTPStrict
+        else { return false }
 
         // Ensure we ask again only if 2 weeks has passed
         guard !hasRequestedInTheLastTwoWeeks else { return false }
 
-        // Only ask once for now once the triggers are fulfilled. We can ask three times per period of 365 days.
-        // Second and third time will be asked at a later point with other stories.
+        // As per Apple's framework, an app can only present the prompt three times per period of 365 days.
+        // Because of this, Firefox will currently limit its request to show the ratings prompt to one time, given
+        // that the triggers are fulfilled. As such, requirements and attempts to further show the ratings prompt
+        // will be implemented later in the future.  
         guard requestCount < 1 else { return false }
 
         return true
@@ -72,7 +81,8 @@ class RatingPromptManager {
         SKStoreReviewController.requestReview()
     }
 
-    /// Update data asynchronously
+    /// Updates bookmark and pinned site data asynchronously.
+    ///
     /// - Parameter dataLoadingCompletion: complete when the loading of data from the profile is done - Used in unit tests
     func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
         let group = DispatchGroup()
