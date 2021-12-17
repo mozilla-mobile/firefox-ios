@@ -26,6 +26,7 @@ struct FirefoxHomeUX {
     static let libraryShortcutsHeight: CGFloat = 90
     static let libraryShortcutsMaxWidth: CGFloat = 375
     static let customizeHomeHeight: CGFloat = 100
+    static let logoHeaderHeight: CGFloat = 85
 }
 
 struct FxHomeDevStrings {
@@ -210,6 +211,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     // MARK: - Section availability variables
+    var shouldShowFxLogoHeader: Bool {
+        return featureFlags.isFeatureActiveForBuild(.customWallpaper)
+    }
+
     var isTopSitesSectionEnabled: Bool {
         homescreen.sectionsEnabled[.topSites] == true
     }
@@ -487,6 +492,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 extension FirefoxHomeViewController {
 
     enum Section: Int, CaseIterable {
+        case logoHeader
         case topSites
         case libraryShortcuts
         case jumpBackIn
@@ -503,7 +509,7 @@ extension FirefoxHomeViewController {
             case .topSites: return .ASShortcutsTitle
             case .libraryShortcuts: return .AppMenuLibraryTitleString
             case .historyHighlights: return .FirefoxHomepage.HistoryHighlights.Title
-            case .customizeHome: return nil
+            default: return nil
             }
         }
 
@@ -518,8 +524,8 @@ extension FirefoxHomeViewController {
 
         var footerHeight: CGSize {
             switch self {
-            case .pocket, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome: return .zero
             case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
+            default: return .zero
             }
         }
 
@@ -532,6 +538,7 @@ extension FirefoxHomeViewController {
             case .topSites: return 0 //calculated dynamically
             case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight
             case .customizeHome: return FirefoxHomeUX.customizeHomeHeight
+            case .logoHeader: return FirefoxHomeUX.logoHeaderHeight
             }
         }
 
@@ -565,7 +572,7 @@ extension FirefoxHomeViewController {
 
                 return numItems
 
-            case .topSites,.libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+            default:
                 return 1
             }
         }
@@ -578,7 +585,7 @@ extension FirefoxHomeViewController {
             case .pocket:
                 let numItems = numberOfItemsForRow(traits)
                 return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.minimumInsets * (numItems - 1))) / numItems), height: height)
-            case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+            default:
                 return CGSize(width: frameWidth - inset, height: height)
             }
         }
@@ -591,6 +598,7 @@ extension FirefoxHomeViewController {
 
         var cellIdentifier: String {
             switch self {
+            case .logoHeader: return FxHomeLogoHeaderCell.cellIdentifier
             case .topSites: return ASHorizontalScrollCell.cellIdentifier
             case .pocket: return FirefoxHomeHighlightCell.cellIdentifier
             case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
@@ -603,6 +611,7 @@ extension FirefoxHomeViewController {
 
         var cellType: UICollectionViewCell.Type {
             switch self {
+            case .logoHeader: return FxHomeLogoHeaderCell.self
             case .topSites: return ASHorizontalScrollCell.self
             case .pocket: return FirefoxHomeHighlightCell.self
             case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
@@ -709,6 +718,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             case .customizeHome:
                 headerView.moreButton.isHidden = true
                 return headerView
+            case .logoHeader:
+                headerView.moreButton.isHidden = true
+                return headerView
         }
         default:
             return UICollectionReusableView()
@@ -755,7 +767,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
             return cellSize
 
-        case .customizeHome, .pocket, .recentlySaved:
+        default:
             return cellSize
         }
     }
@@ -766,7 +778,12 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .pocket:
             return pocketStories.isEmpty ? .zero : getHeaderSize(forSection: section)
         case .topSites:
-            return isTopSitesSectionEnabled ? getHeaderSize(forSection: section) : .zero
+            // Only show a header for top sites if the Firefox Browser logo is not showing
+            if isTopSitesSectionEnabled {
+                return shouldShowFxLogoHeader ? .zero : getHeaderSize(forSection: section)
+            }
+
+            return .zero
         case .libraryShortcuts:
             return isYourLibrarySectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .jumpBackIn:
@@ -775,7 +792,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             return isHistoryHightlightsSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .recentlySaved:
             return shouldShowRecentlySavedSection ? getHeaderSize(forSection: section) : .zero
-        case .customizeHome:
+        default:
             return .zero
         }
     }
@@ -817,6 +834,8 @@ extension FirefoxHomeViewController {
         }
 
         switch Section(section) {
+        case .logoHeader:
+            return shouldShowFxLogoHeader ? 1 : 0
         case .topSites:
             return isTopSitesSectionEnabled && !topSitesManager.content.isEmpty ? 1 : 0
         case .pocket:
@@ -840,6 +859,8 @@ extension FirefoxHomeViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
 
         switch Section(indexPath.section) {
+        case .logoHeader:
+            return configureLogoHeaderCell(cell, forIndexPath: indexPath)
         case .topSites:
             return configureTopSitesCell(cell, forIndexPath: indexPath)
         case .pocket:
@@ -867,6 +888,16 @@ extension FirefoxHomeViewController {
         libraryCell.applyTheme()
 
         return cell
+    }
+
+    func configureLogoHeaderCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        let logoHeaderCell = cell as! FxHomeLogoHeaderCell
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(changeHomepageWallpaper))
+        tap.numberOfTapsRequired = 2
+        logoHeaderCell.logoButton.addGestureRecognizer(tap)
+        logoHeaderCell.setNeedsLayout()
+        return logoHeaderCell
     }
 
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
@@ -1134,7 +1165,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             let topSiteIndexPath = IndexPath(row: topSiteItemIndexPath.row,
                                              section: fxHomeIndexPath.section)
             presentContextMenu(for: topSiteIndexPath)
-        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+        default:
             return
         }
     }
@@ -1165,7 +1196,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                                          object: .pocketStory,
                                          value: nil,
                                          extras: extras)
-        case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+        default:
             return
         }
 
@@ -1249,6 +1280,17 @@ extension FirefoxHomeViewController {
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
     }
+
+    @objc func changeHomepageWallpaper() {
+        // TODO: Roux - This function will be implemented with the action when wallpaper feature is
+        // added in the next ticket.
+
+        // Telemetry is commented out until button action is activated.
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .firefoxHomepage,
+//                                     value: .cycleWallpaperButton)
+    }
 }
 
 // MARK: - Context Menu
@@ -1268,7 +1310,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             return Site(url: pocketStories[indexPath.row].url.absoluteString, title: pocketStories[indexPath.row].title)
         case .topSites:
             return topSitesManager.content[indexPath.item]
-        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+        default:
             return nil
         }
     }
@@ -1284,7 +1326,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             }
         case .pocket:
             sourceView = self.collectionView?.cellForItem(at: indexPath)
-        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+        default:
             return nil
         }
 
@@ -1368,8 +1410,8 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
 
         switch Section(indexPath.section) {
-        case .pocket, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome: break
         case .topSites: actions.append(contentsOf: topSiteActions)
+        default: break
         }
 
         return actions

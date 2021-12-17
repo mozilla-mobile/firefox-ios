@@ -18,6 +18,7 @@ extension FeatureFlagsProtocol {
 /// Please add new features alphabetically.
 enum FeatureFlagName: String, CaseIterable {
     case chronologicalTabs
+    case customWallpaper
     case inactiveTabs
     case groupedTabs
     case historyHighlights
@@ -118,6 +119,11 @@ class FeatureFlagsManager {
                                          and: profile,
                                          enabledFor: [])
         features[.chronologicalTabs] = chronTabs
+
+        let customWallpaper = FlaggableFeature(withID: .customWallpaper,
+                                               and: profile,
+                                               enabledFor: [.developer])
+        features[.customWallpaper] = customWallpaper
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
                                             and: profile,
