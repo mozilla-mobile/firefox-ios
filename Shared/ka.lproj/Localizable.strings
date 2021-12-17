@@ -272,8 +272,7 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Firefox-ის მორგებული საწყისი გვერდით, შეძლებთ მარტივად განაგრძოთ იქიდან, სადაც შეჩერდით. იპოვეთ ბოლოს გახსნილი ჩანართები, სანიშნები და მოძიებული გვერდები.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "ორი კვირის მოუნახულებელი ჩანართები, აქ გადმოვა.";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */

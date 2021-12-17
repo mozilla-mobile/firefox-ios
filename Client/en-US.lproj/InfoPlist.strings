@@ -1,0 +1,21 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Firefox uses your camera to scan QR codes and take photos and video.";
+
+/* file, You can obtain one at http://mozilla.org/MPL/2.0 */
+"NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Firefox uses your microphone to record and upload audio.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "New Private Tab";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "New Tab";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Scan QR Code";
+

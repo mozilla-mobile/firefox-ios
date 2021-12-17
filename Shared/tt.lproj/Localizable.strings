@@ -823,20 +823,35 @@
 /* Toggle tabs syncing setting */
 "Open Tabs" = "Ачык таблар";
 
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox бу битне ача алмый, чөнки аның адресы яраксыз.";
+
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Битне ачып булмый";
 
 /* Accessibility label for the Page Options menu button */
 "Page Options Menu" = "Бит көйләүләре менюсы";
 
+/* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
+"Panel Chooser" = "Панельләрне cайлау";
+
 /* Password textbox in Authentication prompt */
 "Password" = "Серсүз";
+
+/* Error message shown in the remote tabs panel */
+"PasswordAutoFill.NoPasswordsFoundTitle" = "Firefox хисабыгыздан cинхронланган һичбер теркәлү мәгълүматы юк";
 
 /* Header for the list of credentials table */
 "PasswordAutoFill.PasswordsListTitle" = "Кулланырлык хисап мәгълүматлары:";
 
 /* Title of the extension that shows firefox passwords */
 "PasswordAutoFill.SectionTitle" = "Firefox хисап мәгълүматлары";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Бу Сезгә рәсемне фото-галереягә сакларга мөмкинлек бирә.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox сурәтләрегезгә ирешергә тели";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Ябу";
@@ -894,6 +909,9 @@
 
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "«Уку режимы»нда чагында ул режимның көйләүләрендәге «китап плюс» тамгасына басып, сәхифәләрне үзегезнең «Укыйсы битләр» исемлегендә саклагыз.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "ОК";

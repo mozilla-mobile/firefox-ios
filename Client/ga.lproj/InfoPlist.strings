@@ -8,7 +8,7 @@
 "NSMicrophoneUsageDescription" = "Ligeann seo duit físeáin a thógáil agus a uaslódáil.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
+"NSPhotoLibraryAddUsageDescription" = "Thug seo cumas duit pictiúir a shábháil.";
 
 /* (No Comment) */
 "ShortcutItemTitleNewPrivateTab" = "Cluaisín Nua Príobháideach";
@@ -17,5 +17,5 @@
 "ShortcutItemTitleNewTab" = "Cluaisín Nua";
 
 /* (No Comment) */
-"ShortcutItemTitleQRCode" = "Scan QR Code";
+"ShortcutItemTitleQRCode" = "Scan an cód QR";
 

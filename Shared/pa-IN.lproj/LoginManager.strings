@@ -5,7 +5,7 @@
 "Cancel" = "ਰੱਦ ਕਰੋ";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
-"Clear Search" = "ਖੋਜ ਸਾਫ਼ ਕਰੋ";
+"Clear Search" = "ਖੋਜ ਮਿਟਾਓ";
 
 /* Copy password text selection menu item */
 "Copy" = "ਕਾਪੀ ਕਰੋ";

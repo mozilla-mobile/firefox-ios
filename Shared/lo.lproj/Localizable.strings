@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "ກັບໄປໃນ";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "ແທັບ: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "ການຄົ້ນຫາຂອງທ່ານສໍາລັບ \"%@\"";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "ຫາກໍບັນທຶກ";
 
@@ -69,6 +75,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "ສະແດງທັງໝົດ";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "ລຶບ";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "ທາງລັດ";
@@ -140,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "ບຸກມາກ";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "ເພີ່ມ";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "ບຸກມາກແທັບທັງຫມົດ";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "ບຸກມາກແທັບປະຈຸບັນ";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "ແກ້ໄຂ";
 
@@ -158,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "ຊື່ຂອງໂຟລເດີ";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "ບຸກມາກເດສກທັອບ";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "ຫາກໍບຸກມາກມື້ກີ້ນີ້";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "ບຸກມາກໃຫມ່";
 
@@ -166,6 +190,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "ຕົວແບ່ງໃຫມ່";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "ຊອກຫາບຸກມາກ";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "ຫົວຂໍ້";
@@ -259,6 +286,9 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ແບ່ງປັນລີ້ງ";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "ປິດຢູ່ໃນການຕັ້ງຄ່າ";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "ບໍ່ສາມາດເພີ່ມຫນ້າເວັບເຂົ້າໄປໃນລາຍການອ່ານ";
@@ -393,6 +423,9 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "ຫນ້າທຳອິດຂອງ Firefox";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "ປັບແຕ່ງຫນ້າທຳອິດ";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ໄປຂ້າງຫນ້າ";
@@ -550,6 +583,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "ອຸປະກອນທີ່ Sync ແລ້ວ";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "ຫນ້າທຳອິດ";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "ຍົກເລີກ";
 
@@ -619,11 +655,95 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ສະແດງແທັບກ່ອນຫນ້ານີ້";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "ເປີດການປິດແບບອັດຕະໂນມັດ";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ຈະປິດແທັບທີ່ທ່ານບໍ່ໄດ້ເຂົ້າໄປເບິງເກີນຫນຶ່ງເດືອນຂື້ນໄປ.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "ປິດອັດຕະໂນມັດຫຼັງຈາກຫນຶ່ງເດືອນບໍ?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "ປິດແທັບທີ່ບໍ່ເຄື່ອນໄຫວທັງໝົດ";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "ເພີ່ມຂະໜາດຕົວຫນັງສື";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "ມື້ກີ້ນີ້";
+
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "ຂະໜາດຕົວຈິງ";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "ເພີ່ມບຸກມາກ";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "ລ້າງປະຫວັດການໃຊ້ງານຫລ້າສຸດ";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "ລິ້ງດາວໂຫລດ";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "ຊອກຫາອີກເທື່ອຫນຶງ";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "ເປີດລິ້ງໃນພື້ນຫຼັງ";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "ເປີດລີ້ງໃນແທັບໃຫມ່";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "ບັນທຶກຫນ້ານີ້ໄວ້ທີ່...";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "ບຸກມາກ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "ແກ້ໄຂ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "ໄຟລ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "ປະຫວັດການໃຊ້ງານ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "ເຄື່ອງມື";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "ມູມມອງ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "ຫນ້າຕ່າງ";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "ການຕັ້ງຄ່າ";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "ສະແດງບຸກມາກ";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "ສະແດງການດາວໂຫລດ";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "ສະແດງແທັບທໍາອິດ";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "ສະແດງປະຫວັດການໃຊ້ງານ";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "ສະແດງແທັບສຸດທ້າຍ";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "ສະແດງໂຕເລກແທັບ 1-9";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "ຊູມເຂົ້າ";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "ຊູມອອກ";
 
 /* History tableview section header */
 "Last month" = "ເດືອນທີ່ຜ່ານມາ";
@@ -651,6 +771,33 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "ການເຂົ້າສູ່ລະບົບ";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "ເພື່ອບັນທຶກ ແລະ ເພີ່ມການລັອກອິນ ແລະ ລະຫັດຜ່ານແບບອັດຕະໂນມັດ, ເປີດນຳໃຊ້  Face ID, Touch ID ຫລື ພາສໂຄດຂອງອຸປະກອນ.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "ດຳເນີາການຕໍ່";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "ການລັອກອິນ ແລະ ລະຫັດຜ່ານຂອງທ່ານຕອນນີ້ແມ່ນໄດ້ຮັບການປ້ອງກັນໂດຍ Face ID, Touch ID ຫຼື ພາສໂຄດຂອງອຸປະກອນ.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "ເພື່ອນຳໃຊ້ການຕື່ມໃສ່ອັດຕະໂນມັດສຳລັບ Firefox ທ່ານຕ້ອງໄດ້ເປີດນຳໃຊ້ພາສໂຄດ.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "ນຳເອົາລະຫັດຜ່ານຂອງທ່ານໄປນຳທຸກບ່ອນ";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "ປ້ອນລະຫັດຜ່ານ Firefox ແບບອັດຕະໂນມັດ";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "ເປີດການຕື່ມໃສ່ອັດຕະໂນມັດ";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "ດັດແກ້ແລ້ວ";
@@ -696,6 +843,9 @@
 
 /* Label shown when there are no logins to list */
 "LoginsList.NoLoginsFound.Description" = "ການລັອກອິນທີ່ໄດ້ບັນທຶກໄວ້ຈະສະແດງຂື້ນຢູ່ທີ່ນີ້. ເຂົ້າສູ່ລະບົບບັນຊີ Firefox ຂອງທ່ານ ຖ້າຫາກວ່າທ່ານໄດ້ບັນທຶກການລັອກອິນຂອງທ່ານໄວ້ໃນ Firefox ໃນອຸປະກອນອື່ນໆ.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "ບໍ່ພົບການລັອກອິນ";
 
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "ບໍ່ມີຜົນໄດ້ຮັບທີ່ກົງກັບການຄົ້ນຫາຂອງທ່ານ.";
@@ -825,6 +975,9 @@
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "ບັອກ";
 
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "ຢັ້ງຢືນໂດຍ %@";
+
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox ບໍ່ສາມາດກວດພົບຕົວຕິດຕາມທີ່ຮູ້ຈັກໃນໜ້ານີ້.";
 
@@ -942,6 +1095,9 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "ຕົກລົງ";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "ເລີ່ມການທ່ອງເວັບ";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Oops! Firefox ມີຂໍ້ຜິດພາດ";
@@ -1319,6 +1475,15 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ທົ່ວໄປ";
 
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "ແທັບສຸດທ້າຍ";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "ໜ້າຈໍກຳລັງເປີດຢູ່";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "ຫນ້າທຳອິດຂອງ Firefox";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "ລົບລ້າງ";
 
@@ -1489,6 +1654,18 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "ການສຶກສາ";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "ແທັບທີ່ບໍ່ໄດ້ນຳໃຊ້";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "ກຸ່ມແທັບ";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "ປັບແຕ່ງຖາດແທັບ";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "ແທັບ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ";
@@ -1728,6 +1905,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "ແທັບທີ່ຖືກເລືອກໃນປະຈຸບັນ.";
 
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "ອື່ນໆ";
+
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "ແທັບທີ່ບໍ່ໄດ້ນຳໃຊ້";
 
@@ -1745,6 +1925,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "ເປີດແທັບທີ່ເລືອກໄວ້";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "ແທັບອື່ນໆ";
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "ແທັບສ່ວນຕົວ";

@@ -38,7 +38,7 @@
 "Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Scaricamenti";
 
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
-"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Crunulogia";
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Cronolugia";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "Menu.OpenHomePageAction.Title" = "Accolta";

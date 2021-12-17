@@ -149,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "বুকমার্কসমূহ";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "যোগ করুন";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "সকল ট্যাব বুকমার্ক করুন";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "বর্তমান ট্যাব বুকমার্ক করুন";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "সম্পাদনা";
 
@@ -167,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "ফোল্ডার নাম";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "ডেস্কটপ বুকমার্ক";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "সম্প্রতি বুকমার্ক করা হয়েছে";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "নতুন বুকমার্ক";
 
@@ -175,6 +190,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "নতুন বিভাজক";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "বুকমার্ক অনুসন্ধান করুন";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "শিরনাম";
@@ -268,6 +286,9 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "লিঙ্ক শেয়ার করুন";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "সেটিংসে বন্ধ করুন";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "পেজটি রিডিং তালিকায় যোগ্ করা যায়নি";
@@ -402,6 +423,9 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefox Home Page";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "হোমপেজ কাস্টমাইজ করুন";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "পরবর্তী";
@@ -631,6 +655,9 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "পূর্ববর্তী ট্যাব দেখান";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Auto Close চালু করুন";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "টেক্সট সাইজ বাড়ান";
 
@@ -663,6 +690,9 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "লগইনগুলি";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "আরও জানুন";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "সংশোধিত";
@@ -714,6 +744,9 @@
 
 /* Placeholder text for search field */
 "LoginsList.Search.Placeholder" = "লগইন অনুসন্ধান করুন";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "পূরণ করার জন্য একটি পাসওয়ার্ড নির্বাচন করুন";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "সংরক্ষিত লগইন";
@@ -1468,6 +1501,9 @@
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "আরও জানুন।";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "কিছু দিন পর Firefox স্টাডিস ইনস্টল করতে এবং চালাতে পারে।";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "বন্ধ";

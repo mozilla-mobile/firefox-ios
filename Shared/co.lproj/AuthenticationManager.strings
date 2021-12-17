@@ -17,16 +17,16 @@
 "Change Passcode" = "Cambià u codice";
 
 /* Text displayed above the input field when changing the existing passcode */
-"Enter a new passcode" = "Scrive un novu codice d’accessu";
+"Enter a new passcode" = "Stampittà un novu codice d’accessu";
 
 /* Text displayed above the input field when entering a new passcode */
-"Enter a passcode" = "Scrive un codice d’accessu";
+"Enter a passcode" = "Stampittà un codice d’accessu";
 
 /* Text displayed above the input field when changing the existing passcode */
-"Enter passcode" = "Scrivite u codice d’accessu";
+"Enter passcode" = "Stampittate u codice d’accessu";
 
 /* Title of the dialog used to request the passcode */
-"Enter Passcode" = "Scrivite u codice d’accessu";
+"Enter Passcode" = "Stampittate u codice d’accessu";
 
 /* Label for the Face ID/Passcode item in Settings */
 "Face ID & Passcode" = "Codice d’accessu è Face ID";
@@ -56,7 +56,7 @@
 "Passcodes didn’t match. Try again." = "I codici d’accessu ùn currispondenu micca. Pruvate torna.";
 
 /* Text displayed above the input field when confirming a passcode */
-"Re-enter passcode" = "Torna à scrive u codice d’accessu";
+"Re-enter passcode" = "Torna à stampittà u codice d’accessu";
 
 /* Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately' */
 "Require Passcode" = "Dumandà u codice";
