@@ -8,25 +8,11 @@ class HomeViewToolbar: UIView {
     let toolset = BrowserToolset()
     private let stackView = UIStackView()
     
-    var isIPadRegularDimensions: Bool = false {
-        didSet {
-            guard UIDevice.current.userInterfaceIdiom == .pad else { return }
-            
-            if isIPadRegularDimensions {
-                toolset.contextMenuButton.isHidden = true
-            } else {
-                toolset.contextMenuButton.isHidden = false
-            }
-        }
-    }
 
     init() {
         super.init(frame: CGRect.zero)
         stackView.distribution = .fill
         stackView.addArrangedSubview(UIView())
-        if !URLBar().isIPadRegularDimensions {
-            stackView.addArrangedSubview(toolset.contextMenuButton)
-        }
         addSubview(stackView)
 
         stackView.snp.makeConstraints { make in
