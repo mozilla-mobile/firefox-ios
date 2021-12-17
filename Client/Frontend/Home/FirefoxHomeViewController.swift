@@ -14,7 +14,6 @@ private let log = Logger.browserLogger
 // MARK: -  UX
 
 struct FirefoxHomeUX {
-    static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let homeHorizontalCellHeight: CGFloat = 120
     static let recentlySavedCellHeight: CGFloat = 136
     static let historyHighlightsCellHeight: CGFloat = 70
@@ -151,10 +150,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var hasPresentedContextualHint = false
     fileprivate var didRotate = false
     fileprivate let profile: Profile
-    fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
     fileprivate let experiments: NimbusApi
-    fileprivate var hasSentPocketSectionEvent = false
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
     fileprivate var timer: Timer?
@@ -163,6 +160,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
     var historyHighlightsViewModel: FxHomeHistoryHightlightsVM
+    var pocketViewModel: FxHomePocketViewModel
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -197,8 +195,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     lazy var defaultBrowserCard: DefaultBrowserCard = .build { card in
         card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
-
-    var pocketStories: [PocketStory] = []
 
     var currentTab: Tab? {
         let tabManager = BrowserViewController.foregroundBVC().tabManager
@@ -269,15 +265,25 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         return true
     }
 
+    var shouldShowPocketSection: Bool {
+        guard isPocketSectionEnabled else { return false }
+        return pocketViewModel.hasData
+    }
+
     // MARK: - Initializers
     init(profile: Profile, isZeroSearch: Bool = false, experiments: NimbusApi = Experiments.shared) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM()
+        self.pocketViewModel = FxHomePocketViewModel(profile: profile)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
+
+        pocketViewModel.showMorePocketAction = { self?.showMorePocketStories() }
+
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -525,7 +531,7 @@ extension FirefoxHomeViewController {
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .pocket: return FirefoxHomeUX.highlightCellHeight
+            case .pocket: return FirefoxHomeUX.homeHorizontalCellHeight * 3
             case .jumpBackIn: return FirefoxHomeUX.homeHorizontalCellHeight
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .historyHighlights: return FirefoxHomeUX.historyHighlightsCellHeight
@@ -552,35 +558,11 @@ extension FirefoxHomeViewController {
             return insets
         }
 
-        func numberOfItemsForRow(_ traits: UITraitCollection) -> CGFloat {
-            switch self {
-            case .pocket:
-                var numItems: CGFloat = FirefoxHomeUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass]
-                if UIWindow.isPortrait {
-                    numItems = numItems - 1
-                }
-                if traits.horizontalSizeClass == .compact && UIWindow.isLandscape {
-                    numItems = numItems - 1
-                }
-
-                return numItems
-
-            case .topSites,.libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
-                return 1
-            }
-        }
-
         func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
             let height = cellHeight(traits, width: frameWidth)
             let inset = sectionInsets(traits, frameWidth: frameWidth) * 2
 
-            switch self {
-            case .pocket:
-                let numItems = numberOfItemsForRow(traits)
-                return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.minimumInsets * (numItems - 1))) / numItems), height: height)
-            case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
-                return CGSize(width: frameWidth - inset, height: height)
-            }
+            return CGSize(width: frameWidth - inset, height: height)
         }
 
         var headerView: UIView? {
@@ -592,7 +574,7 @@ extension FirefoxHomeViewController {
         var cellIdentifier: String {
             switch self {
             case .topSites: return ASHorizontalScrollCell.cellIdentifier
-            case .pocket: return FirefoxHomeHighlightCell.cellIdentifier
+            case .pocket: return FxHomePocketCollectionCell.cellIdentifier
             case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
             case .recentlySaved: return FxHomeRecentlySavedCollectionCell.cellIdentifier
             case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.cellIdentifier
@@ -604,7 +586,7 @@ extension FirefoxHomeViewController {
         var cellType: UICollectionViewCell.Type {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
-            case .pocket: return FirefoxHomeHighlightCell.self
+            case .pocket: return FxHomePocketCollectionCell.self
             case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
             case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self
             case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.self
@@ -636,14 +618,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
             switch Section(indexPath.section) {
             case .pocket:
-                // tracking pocket section shown
-                if !hasSentPocketSectionEvent {
-                    TelemetryWrapper.recordEvent(category: .action, method: .view, object: .pocketSectionImpression, value: nil, extras: nil)
-                    hasSentPocketSectionEvent = true
-                }
-                headerView.moreButton.isHidden = false
-                headerView.moreButton.setTitle(.PocketMoreStoriesText, for: .normal)
-                headerView.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
+                headerView.moreButton.isHidden = true
                 headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.pocket
                 return headerView
 
@@ -715,11 +690,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.longPressRecognizer.isEnabled = false
-        selectItemAtIndex(indexPath.item, inSection: Section(indexPath.section))
-    }
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var cellSize = Section(indexPath.section).cellSize(for: self.traitCollection, frameWidth: self.view.frame.width)
 
@@ -764,7 +734,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         switch Section(section) {
         case .pocket:
-            return pocketStories.isEmpty ? .zero : getHeaderSize(forSection: section)
+            return shouldShowPocketSection ? .zero : getHeaderSize(forSection: section)
         case .topSites:
             return isTopSitesSectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .libraryShortcuts:
@@ -820,8 +790,7 @@ extension FirefoxHomeViewController {
         case .topSites:
             return isTopSitesSectionEnabled && !topSitesManager.content.isEmpty ? 1 : 0
         case .pocket:
-            // There should always be a full row of pocket stories (numItems) otherwise don't show them
-            return pocketStories.count
+            return shouldShowPocketSection ? 1 : 0
         case .jumpBackIn:
             return shouldShowJumpBackInSection ? 1 : 0
         case .recentlySaved:
@@ -877,12 +846,13 @@ extension FirefoxHomeViewController {
         return cell
     }
 
-    func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let pocketStory = pocketStories[indexPath.row]
-        let pocketItemCell = cell as! FirefoxHomeHighlightCell
-        pocketItemCell.configureWithPocketStory(pocketStory)
+    private func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        let pocketCell = cell as! FxHomePocketCollectionCell
+        pocketCell.viewModel = pocketViewModel
+        pocketCell.collectionView.reloadData()
+        pocketCell.collectionView.setNeedsLayout()
 
-        return pocketItemCell
+        return pocketCell
     }
 
     private func configureRecentlySavedCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
@@ -962,6 +932,10 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         if isJumpBackInSectionEnabled {
             jumpBackInViewModel.updateData {}
         }
+
+        if isPocketSectionEnabled {
+            pocketViewModel.updateData {}
+        }
     }
 
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
@@ -1011,11 +985,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                 self.showSiteWithURLHandler(url as URL, isGoogleTopSite: isGoogleTopSiteUrl)
             }
 
-            self.getPocketSites().uponQueue(.main) { _ in
-                if !self.pocketStories.isEmpty {
-                    self.collectionView?.reloadData()
-                }
-            }
             // Refresh the AS data in the background so we'll have fresh data next time we show.
             self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
         }
@@ -1040,19 +1009,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                                      object: .topSiteTile,
                                      value: nil,
                                      extras: extras)
-    }
-
-    func getPocketSites() -> Success {
-
-        guard isPocketSectionEnabled else {
-            self.pocketStories = []
-            return succeed()
-        }
-
-        return pocketAPI.globalFeed(items: 10).bindQueue(.main) { pStory in
-            self.pocketStories = pStory
-            return succeed()
-        }
     }
 
     @objc func showMorePocketStories() {
@@ -1139,33 +1095,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             let isBookmarked = result.successValue ?? false
             site.setBookmarked(isBookmarked)
             completionHandler()
-        }
-    }
-
-    func selectItemAtIndex(_ index: Int, inSection section: Section) {
-        var site: Site? = nil
-        switch section {
-        case .pocket:
-            // Pocket site extra
-            site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
-            let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
-            let siteExtra = [key : "\(index)"]
-
-            // Origin extra
-            let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-            let extras = originExtra.merge(with: siteExtra)
-
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .pocketStory,
-                                         value: nil,
-                                         extras: extras)
-        case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
-            return
-        }
-
-        if let site = site {
-            showSiteWithURLHandler(URL(string: site.url)!)
         }
     }
 }
@@ -1260,7 +1189,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         switch Section(indexPath.section) {
         case .pocket:
-            return Site(url: pocketStories[indexPath.row].url.absoluteString, title: pocketStories[indexPath.row].title)
+            return pocketViewModel.getSitesDetail(for: indexPath)
         case .topSites:
             return topSitesManager.content[indexPath.item]
         case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
