@@ -13,10 +13,11 @@ private struct FxHomeHorizontalCellUX {
     static let stackViewShadowOffset: CGFloat = 2
     static let heroImageSize =  CGSize(width: 108, height: 80)
     static let fallbackFaviconSize = CGSize(width: 56, height: 56)
+    static let faviconSize = CGSize(width: 24, height: 24)
 }
 
 // MARK: - FxHomeHorizontalCell
-/// A cell used in FxHomeScreen's Jump Back In section and Recommended by Pocket section
+/// A cell used in FxHomeScreen's Jump Back In section.
 class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
@@ -35,7 +36,8 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         label.numberOfLines = 2
     }
 
-    let descriptionContainer: UIView = .build { view in
+    // Contains the faviconImage and descriptionLabel
+    private var descriptionContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
 
@@ -55,19 +57,19 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     // Used as a fallback if hero image isn't set
     let fallbackFaviconImage: UIImageView = .build { imageView in
-        imageView.backgroundColor = UIColor.clear
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
+        imageView.backgroundColor = UIColor.clear
         imageView.layer.cornerRadius = TopSiteCellUX.iconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
     private var fallbackFaviconBackground: UIView = .build { view in
-        view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
         view.layer.cornerRadius = TopSiteCellUX.cellCornerRadius
         view.layer.borderWidth = TopSiteCellUX.borderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = TopSiteCellUX.shadowRadius
+        view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
         view.layer.borderColor = TopSiteCellUX.borderColor.cgColor
         view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
@@ -75,7 +77,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     // Contains the hero image and fallback favicons
     private var imageContainer: UIView = .build { view in
-        view.backgroundColor = .red
+        view.backgroundColor = .clear
     }
 
     // MARK: - Inits
@@ -98,7 +100,6 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-
         heroImage.image = nil
         faviconImage.image = nil
         fallbackFaviconImage.image = nil
@@ -128,15 +129,15 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
-//        descriptionContainer.addSubviews(faviconImage, descriptionLabel)
-        contentView.addSubviews(itemTitle, faviconImage, descriptionContainer)
+        descriptionContainer.addSubviews(descriptionLabel, faviconImage)
+        contentView.addSubviews(itemTitle, imageContainer, descriptionContainer)
 
         NSLayoutConstraint.activate([
             itemTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             itemTitle.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: 16),
             itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
-            // Hero image, container and it's fallback
+            // Image container, hero image and fallback
             imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             imageContainer.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.heroImageSize.height),
             imageContainer.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.heroImageSize.width),
@@ -158,24 +159,21 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             fallbackFaviconImage.centerXAnchor.constraint(equalTo: fallbackFaviconBackground.centerXAnchor),
             fallbackFaviconImage.centerYAnchor.constraint(equalTo: fallbackFaviconBackground.centerYAnchor),
 
-            // Description container, it's image and description
-            descriptionContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.topAnchor, constant: 8),
+            // Description container, it's image and label
+            descriptionContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
             descriptionContainer.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
             descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
-//            faviconImage.topAnchor.constraint(greaterThanOrEqualTo: descriptionContainer.topAnchor, constant: 0),
-//            faviconImage.bottomAnchor.constraint(greaterThanOrEqualTo: descriptionContainer.bottomAnchor, constant: 0),
-//            faviconImage.leadingAnchor.constraint(equalTo: descriptionContainer.leadingAnchor),
-//            faviconImage.centerYAnchor.constraint(equalTo: descriptionContainer.centerYAnchor),
-//            faviconImage.heightAnchor.constraint(equalToConstant: 24),
-//            faviconImage.widthAnchor.constraint(equalToConstant: 24),
-//
-//            descriptionLabel.topAnchor.constraint(greaterThanOrEqualTo: descriptionContainer.topAnchor, constant: 0),
-//            descriptionLabel.bottomAnchor.constraint(greaterThanOrEqualTo: descriptionContainer.bottomAnchor, constant: 0),
-//            descriptionLabel.leadingAnchor.constraint(equalTo: faviconImage.trailingAnchor, constant: 8),
-//            descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
-//            descriptionLabel.trailingAnchor.constraint(equalTo: descriptionContainer.trailingAnchor),
+            faviconImage.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
+            faviconImage.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
+            faviconImage.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.height),
+            faviconImage.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.width),
+            faviconImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+
+            descriptionLabel.leadingAnchor.constraint(equalTo: faviconImage.trailingAnchor, constant: 8),
+            descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
     }
 

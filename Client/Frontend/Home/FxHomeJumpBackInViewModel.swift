@@ -22,16 +22,16 @@ struct JumpBackInList {
     }
 }
 
-class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
+class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol, FXHomeHorizontalCellViewModelHelper {
 
     // MARK: - Properties
 
+    lazy var siteImageHelper = SiteImageHelper(profile: profile)
     var onTapGroup: ((Tab) -> Void)?
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
+
     private var recentTabs: [Tab] = [Tab]()
     private var recentGroups: [ASGroup<Tab>]?
-
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private let isZeroSearch: Bool
     private let profile: Profile
     private let tabManager: TabManager
@@ -123,18 +123,6 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
                                      object: .firefoxHomepage,
                                      value: .jumpBackInSectionTabOpened,
                                      extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
-    }
-
-    func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
-            completion(image)
-        }
-    }
-
-    func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
-            completion(image)
-        }
     }
 
     // MARK: - Private

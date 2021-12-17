@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import Storage
 
 struct JumpBackInCollectionCellUX {
     static let cellHeight: CGFloat = 112
@@ -104,60 +103,12 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
 
         if indexPath.row == (viewModel.jumpBackInList.itemsToDisplay - 1),
            let group = viewModel.jumpBackInList.group {
-            configureCellForGroups(group: group, cell: cell, indexPath: indexPath)
+            viewModel.configureCellForGroups(group: group, cell: cell, indexPath: indexPath)
         } else {
-            configureCellForTab(item: viewModel.jumpBackInList.tabs[indexPath.row], cell: cell, indexPath: indexPath)
+            viewModel.configureCellForTab(item: viewModel.jumpBackInList.tabs[indexPath.row], cell: cell, indexPath: indexPath)
         }
 
         return cell
-    }
-
-    private func configureCellForGroups(group: ASGroup<Tab>, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
-        let firstGroupItem = group.groupedItems.first
-        let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
-
-        cell.itemTitle.text = group.searchTerm.localizedCapitalized
-        cell.faviconImage.image = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
-        cell.descriptionLabel.text = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
-
-        guard let viewModel = viewModel else { return }
-        viewModel.getHeroImage(forSite: site) { image in
-            guard cell.tag == indexPath.item else { return }
-            cell.heroImage.image = image
-        }
-    }
-
-    private func configureCellForTab(item: Tab, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
-        let itemURL = item.lastKnownUrl?.absoluteString ?? ""
-        let site = Site(url: itemURL, title: item.displayTitle)
-
-        cell.itemTitle.text = site.title
-        cell.descriptionLabel.text = site.tileURL.shortDisplayString.capitalized
-
-        guard let viewModel = viewModel else { return }
-        /// Sets a small favicon in place of the hero image in case there's no hero image
-        viewModel.getFaviconImage(forSite: site) { image in
-            guard cell.tag == indexPath.item else { return }
-            cell.faviconImage.image = image
-
-            if cell.heroImage.image == nil {
-                cell.fallbackFaviconImage.image = image
-            }
-        }
-
-        /// Replace the fallback favicon image when it's ready or available
-        viewModel.getHeroImage(forSite: site) { image in
-            guard cell.tag == indexPath.item else { return }
-
-            // If image is a square use it as a favicon
-            if image?.size.width == image?.size.height {
-                cell.fallbackFaviconImage.image = image
-                return
-            }
-
-            cell.setFallBackFaviconVisibility(isHidden: true)
-            cell.heroImage.image = image
-        }
     }
 }
 
