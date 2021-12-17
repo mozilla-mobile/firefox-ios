@@ -741,6 +741,13 @@ extension TabManager {
 
     /// Public interface for checking whether the StartAtHome Feature should run.
     public func startAtHomeCheck() {
+        // Do not open a new home page if we come from an external url source
+        guard !BrowserViewController.foregroundBVC().openedUrlFromExternalSource else {
+            // Reset the value for external url source so that
+            // after inactivity we can start at home again
+            BrowserViewController.foregroundBVC().openedUrlFromExternalSource = false
+            return
+        }
         guard !AppConstants.IsRunningTest,
               !DebugSettingsBundleOptions.skipSessionRestore,
               !isRestoringTabs
