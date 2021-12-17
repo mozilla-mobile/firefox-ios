@@ -188,13 +188,18 @@ class SearchTests: BaseTestCase {
     }
 
     func testSearchWithFirefoxOption() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         waitForExistence(app.webViews.staticTexts["cloud"], timeout: 10)
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
-        // Click on the > button to get to that option
-        app.menuItems["show.next.items.menu.button"].tap()
+        // Click on the > button to get to that option only on iPhone
+        if !iPad(){
+            app.menuItems["show.next.items.menu.button"].tap()
+        }
+        
         waitForExistence(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()
         waitUntilPageLoad()
@@ -220,7 +225,12 @@ class SearchTests: BaseTestCase {
         // Search icon is displayed.
         waitForExistence(app.buttons["TabToolbar.homeButton"])
 
-        XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+        if iPad() {
+            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Menu")
+        } else {
+            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+        }
+
         XCTAssertTrue(app.buttons["TabToolbar.homeButton"].exists)
         app.buttons["TabToolbar.homeButton"].tap()
 
@@ -235,12 +245,22 @@ class SearchTests: BaseTestCase {
         waitForExistence(app.buttons["TabToolbar.homeButton"])
 
         // Label is search but Home is shown
-        XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+        if iPad() {
+            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Menu")
+        } else {
+            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+        }
+        
         app.buttons["TabToolbar.homeButton"].tap()
 
         waitForExistence(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
-        app.buttons["TabToolbar.backButton"].tap()
+        print(app.debugDescription)
+        if iPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        }else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
 
         waitForExistence(app.buttons["TabToolbar.homeButton"])
         XCTAssertTrue(app.buttons["TabToolbar.homeButton"].exists)

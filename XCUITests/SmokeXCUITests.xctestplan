@@ -131,7 +131,6 @@
         "ReaderViewTest\/testRemoveFromReadingList()",
         "ReaderViewTest\/testRemoveFromReadingView()",
         "ReaderViewTest\/testRemoveSavedForReadingLongPress()",
-        "SaveLoginTest",
         "SaveLoginTest\/testDeleteLogin()",
         "SaveLoginTest\/testDoNotSaveLogin()",
         "SaveLoginTest\/testLoginsListFromBrowserTabMenu()",
