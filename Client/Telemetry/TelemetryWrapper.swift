@@ -41,7 +41,7 @@ class TelemetryWrapper {
     }
 
     init(profile: Profile) {
-        crashedLastLaunch = Sentry.crashedLastLaunch
+        crashedLastLaunch = Sentry.shared.crashedLastLaunch
 
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)

@@ -719,6 +719,18 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 }
 
+// Opens the App Store review page of this app
+class AppStoreReviewSetting: Setting {
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: .RatingsPrompt.Settings.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        RatingPromptManager.goToAppStoreReview()
+    }
+}
+
 // Opens about:rights page in the content view controller
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {

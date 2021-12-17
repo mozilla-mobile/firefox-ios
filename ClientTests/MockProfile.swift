@@ -213,8 +213,9 @@ open class MockProfile: Client.Profile {
         return true
     }
 
+    var hasSyncableAccountMock: Bool = true
     public func hasSyncableAccount() -> Bool {
-        return true
+        return hasSyncableAccountMock
     }
 
     public func flushAccount() {}

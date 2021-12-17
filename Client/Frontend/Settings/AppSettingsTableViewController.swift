@@ -148,6 +148,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 OpenSupportPageSetting(delegate: settingsDelegate),
             ]),
             SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
+                AppStoreReviewSetting(),
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
