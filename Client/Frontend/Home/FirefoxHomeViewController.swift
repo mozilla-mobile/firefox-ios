@@ -932,8 +932,7 @@ extension FirefoxHomeViewController {
     }
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let customizeHomeCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
-        let customizeHomeCell = cell as! FxHomeCustomizeHomeView
+        guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
         customizeHomeCell.goToSettingsButton.addTarget(self, action: #selector(openCustomizeHomeSettings), for: .touchUpInside)
         customizeHomeCell.setNeedsLayout()
 
