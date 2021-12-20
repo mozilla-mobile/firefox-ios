@@ -882,7 +882,7 @@ extension FirefoxHomeViewController {
     private func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let pocketCell = cell as? FxHomePocketCollectionCell else { return UICollectionViewCell() }
         pocketCell.viewModel = pocketViewModel
-        pocketCell.viewModel?.section = indexPath.section
+        pocketCell.viewModel?.pocketShownInSection = indexPath.section
         pocketCell.reloadLayout()
         pocketCell.setNeedsLayout()
 
