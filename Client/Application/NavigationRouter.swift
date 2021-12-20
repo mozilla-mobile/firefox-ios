@@ -128,6 +128,7 @@ enum NavigationPath {
             }
         } else if ["http", "https"].contains(scheme) {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
+            RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)

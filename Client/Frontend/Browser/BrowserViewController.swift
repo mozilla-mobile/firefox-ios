@@ -74,6 +74,7 @@ class BrowserViewController: UIViewController {
     var currentMiddleButtonState: MiddleButtonState?
     fileprivate var customSearchBarButton: UIBarButtonItem?
     var updateState: TabUpdateState = .coldStart
+    var openedUrlFromExternalSource = false
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -89,6 +90,7 @@ class BrowserViewController: UIViewController {
     var tabTrayViewController: TabTrayViewController?
     let profile: Profile
     let tabManager: TabManager
+    let ratingPromptManager: RatingPromptManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     var header: UIView!
@@ -139,6 +141,11 @@ class BrowserViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
+
+        let daysOfUseCounter = CumulativeDaysOfUseCounter()
+        daysOfUseCounter.updateCounter()
+        self.ratingPromptManager = RatingPromptManager(profile: profile, daysOfUseCounter: daysOfUseCounter)
+
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -583,7 +590,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return Sentry.crashedLastLaunch
+        return Sentry.shared.crashedLastLaunch
     }
 
     fileprivate func cleanlyBackgrounded() -> Bool {
@@ -1135,6 +1142,7 @@ class BrowserViewController: UIViewController {
             return
         }
         popToBVC()
+        openedUrlFromExternalSource = true
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
