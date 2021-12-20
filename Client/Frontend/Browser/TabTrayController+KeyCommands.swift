@@ -50,7 +50,7 @@ extension GridTabViewController {
 
     @objc func didEnterTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "enter-tab"])
-        _ = self.navigationController?.popViewController(animated: true)
+        dismissVC()
     }
 
     @objc func didOpenNewTabKeyCommand() {
