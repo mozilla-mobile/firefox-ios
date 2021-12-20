@@ -38,15 +38,19 @@ class FxHomePocketViewModel {
     static var widthDimension: NSCollectionLayoutDimension {
         if deviceIsiPad {
             return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
-        } else if deviceIsInLandscapeMode {
-            return .fractionalWidth(7/15) // iPhone in landscape
+        } else if UIWindow.isLandscape {
+            return .fractionalWidth(FxHomePocketCollectionCellUX.fractionalWidthiPhoneLanscape)
         } else {
-            return .fractionalWidth(29/30) // iPhone in portrait
+            return .fractionalWidth(FxHomePocketCollectionCellUX.fractionalWidthiPhonePortrait)
         }
     }
 
     var numberOfCells: Int {
         return pocketStories.count != 0 ? pocketStories.count + 1 : 0
+    }
+
+    static var numberOfItemsInColumn: CGFloat {
+        return 3
     }
 
     func isStoryCell(index: Int) -> Bool {
@@ -103,9 +107,5 @@ class FxHomePocketViewModel {
 
     private static var deviceIsiPad: Bool {
         UIDevice.current.userInterfaceIdiom == .pad
-    }
-
-    private static var deviceIsInLandscapeMode: Bool {
-        UIWindow.isLandscape
     }
 }

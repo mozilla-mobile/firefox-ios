@@ -9,6 +9,8 @@ struct FxHomePocketCollectionCellUX {
     static let numberOfItemsInColumn = 3
     static let discoverMoreMaxFontSize: CGFloat = 26 // Title 3 xxxLarge
     static let numberOfItemsInSection = 11
+    static let fractionalWidthiPhonePortrait: CGFloat = 29/30
+    static let fractionalWidthiPhoneLanscape: CGFloat = 7/15
 }
 
 class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {

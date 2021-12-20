@@ -548,7 +548,7 @@ extension FirefoxHomeViewController {
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .pocket: return FirefoxHomeUX.homeHorizontalCellHeight * 3
+            case .pocket: return FirefoxHomeUX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
             case .jumpBackIn: return FirefoxHomeUX.homeHorizontalCellHeight
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .historyHighlights: return FirefoxHomeUX.historyHighlightsCellHeight
