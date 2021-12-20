@@ -102,7 +102,7 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
               let viewModel = viewModel, let onLongPressTileAction = viewModel.onLongPressTileAction
         else { return }
 
-        let parentIndexPath = IndexPath(row: indexPath.row, section: viewModel.section)
+        let parentIndexPath = IndexPath(row: indexPath.row, section: viewModel.pocketShownInSection)
         onLongPressTileAction(parentIndexPath)
     }
 }

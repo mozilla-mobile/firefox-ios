@@ -57,15 +57,15 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // The maximum number of items to display in the whole section
     static var maxItemsToDisplay: Int {
-        return deviceIsiPad ? 3 : deviceIsInLandscapeMode ? 4 : 2
+        return UIDevice.current.userInterfaceIdiom == .pad ? 3 : UIWindow.isLandscape ? 4 : 2
     }
 
     static var maxNumberOfItemsInColumn: Int {
-        return deviceIsiPad ? 1 : 2
+        return UIDevice.current.userInterfaceIdiom == .pad ? 1 : 2
     }
 
     var numberOfItemsInColumn: Int {
-        if FirefoxHomeJumpBackInViewModel.deviceIsiPad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             return 1
         } else {
             return jumpBackInList.itemsToDisplay > 1 ? 2 : 1
