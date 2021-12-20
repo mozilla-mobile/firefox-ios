@@ -49,6 +49,10 @@ class FxHomePocketViewModel {
         return pocketStories.count != 0 ? pocketStories.count + 1 : 0
     }
 
+    func isStoryCell(index: Int) -> Bool {
+        return index < pocketStories.count
+    }
+
     func updateData(completion: @escaping () -> Void) {
         getPocketSites().uponQueue(.main) { _ in
             completion()
@@ -56,7 +60,11 @@ class FxHomePocketViewModel {
     }
 
     func getSitesDetail(for index: Int) -> Site {
-        return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+        if isStoryCell(index: index) {
+            return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+        } else {
+            return Site(url: Pocket.MoreStoriesURL.absoluteString, title: .PocketMoreStoriesText)
+        }
     }
 
     // MARK: - Telemetry

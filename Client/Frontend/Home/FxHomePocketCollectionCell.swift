@@ -116,8 +116,7 @@ extension FxHomePocketCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let viewModel = viewModel else { return UICollectionViewCell() }
 
-        // TODO: Section needs to be considered ??
-        if indexPath.row < viewModel.pocketStories.count {
+        if viewModel.isStoryCell(index: indexPath.row) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxHomeHorizontalCell
             let pocketStory = viewModel.pocketStories[indexPath.row]
             let cellViewModel = FxHomeHorizontalCellViewModel(titleText: pocketStory.title, descriptionText: pocketStory.domain, tag: indexPath.item, hasFavicon: false)
@@ -138,7 +137,7 @@ extension FxHomePocketCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let viewModel = viewModel, let showSiteWithURLHandler = viewModel.onTapTileAction else { return }
 
-        if indexPath.row < viewModel.pocketStories.count {
+        if viewModel.isStoryCell(index: indexPath.row) {
             viewModel.recordTapOnStory(index: indexPath.row)
 
             let siteUrl = viewModel.pocketStories[indexPath.row].url
