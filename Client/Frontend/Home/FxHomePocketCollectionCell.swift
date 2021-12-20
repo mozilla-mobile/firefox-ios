@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Storage
 
 struct FxHomePocketCollectionCellUX {
     static let numberOfItemsInColumn = 3
@@ -34,7 +35,9 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         setupLayout()
+        collectionView.addGestureRecognizer(longPressRecognizer)
     }
 
     required init?(coder: NSCoder) {
@@ -85,6 +88,22 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
         section.orthogonalScrollingBehavior = .continuous
         return section
     }
+
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+    }()
+
+    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+
+        let point = longPressGestureRecognizer.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: point),
+              let viewModel = viewModel, let onLongPressTileAction = viewModel.onLongPressTileAction
+        else { return }
+
+        let parentIndexPath = IndexPath(row: indexPath.row, section: viewModel.section)
+        onLongPressTileAction(parentIndexPath)
+    }
 }
 
 
@@ -117,43 +136,17 @@ extension FxHomePocketCollectionCell: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension FxHomePocketCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let viewModel = viewModel else { return }
-        // TODO: Laurie - Click action
-        // TODO: Laurie - Long press
+        guard let viewModel = viewModel, let showSiteWithURLHandler = viewModel.onTapTileAction else { return }
 
-//        if indexPath.row == viewModel.jumpBackInList.itemsToDisplay - 1,
-//           let group = viewModel.jumpBackInList.group {
-//            viewModel.switchTo(group: group)
-//
-//        } else {
-//            let tab = viewModel.jumpBackInList.tabs[indexPath.row]
-//            viewModel.switchTo(tab: tab)
-//        }
+        if indexPath.row < viewModel.pocketStories.count {
+            viewModel.recordTapOnStory(index: indexPath.row)
 
-//        var site: Site? = nil
-//        switch section {
-//        case .pocket:
-//            // Pocket site extra
-//            site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
-//            let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
-//            let siteExtra = [key : "\(index)"]
-//
-//            // Origin extra
-//            let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-//            let extras = originExtra.merge(with: siteExtra)
-//
-//            TelemetryWrapper.recordEvent(category: .action,
-//                                         method: .tap,
-//                                         object: .pocketStory,
-//                                         value: nil,
-//                                         extras: extras)
-//        case .topSites, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
-//            return
-//        }
-//
-//        if let site = site {
-//            showSiteWithURLHandler(URL(string: site.url)!)
-//        }
+            let siteUrl = viewModel.pocketStories[indexPath.row].url
+            showSiteWithURLHandler(siteUrl)
+
+        } else {
+            showSiteWithURLHandler(Pocket.MoreStoriesURL)
+        }
     }
 }
 

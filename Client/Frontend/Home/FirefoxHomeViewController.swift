@@ -279,12 +279,16 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM()
-        self.pocketViewModel = FxHomePocketViewModel(profile: profile)
+        self.pocketViewModel = FxHomePocketViewModel(profile: profile, isZeroSearch: isZeroSearch)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
 
-        pocketViewModel.showMorePocketAction = { [weak self] in
-            self?.showMorePocketStories()
+        pocketViewModel.onTapTileAction = { [weak self] url in
+            self?.showSiteWithURLHandler(url)
+        }
+
+        pocketViewModel.onLongPressTileAction = { [weak self] indexPath in
+            self?.presentContextMenu(for: indexPath)
         }
 
         collectionView?.delegate = self
@@ -852,6 +856,7 @@ extension FirefoxHomeViewController {
     private func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let pocketCell = cell as! FxHomePocketCollectionCell
         pocketCell.viewModel = pocketViewModel
+        pocketCell.viewModel?.section = indexPath.section
         pocketCell.reloadLayout()
         pocketCell.setNeedsLayout()
 
@@ -1021,10 +1026,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                                      extras: extras)
     }
 
-    @objc func showMorePocketStories() {
-        showSiteWithURLHandler(Pocket.MoreStoriesURL)
-    }
-
     // Invoked by the ActivityStreamDataObserver when highlights/top sites invalidation is complete.
     func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {
         // Do not reload panel unless we're currently showing the highlight intro or if we
@@ -1088,14 +1089,12 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         guard let indexPath = self.collectionView?.indexPathForItem(at: point) else { return }
 
         switch Section(indexPath.section) {
-        case .pocket:
-            presentContextMenu(for: indexPath)
         case .topSites:
             let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
             presentContextMenu(for: topSiteIndexPath)
-        case .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
+        case .pocket, .libraryShortcuts, .jumpBackIn, .recentlySaved, .historyHighlights, .customizeHome:
             return
         }
     }

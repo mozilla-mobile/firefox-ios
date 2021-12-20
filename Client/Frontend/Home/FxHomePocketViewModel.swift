@@ -12,13 +12,20 @@ class FxHomePocketViewModel {
 
     private let profile: Profile
     private let pocketAPI = Pocket()
+
+    private let isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
 
-    var onTapPocketTileAction: ((PocketStory) -> Void)? = nil
-    var showMorePocketAction: (() -> Void)? = nil
+    var onTapTileAction: ((URL) -> Void)? = nil
+    var onLongPressTileAction: ((IndexPath) -> Void)? = nil
+    // Need to save the parent's section for the long press action
+    // since it's currently handled in FirefoxHomeViewController
+    // TODO: Each section should handle the long press details - not the parent
+    var section: Int = 0
 
-    init(profile: Profile) {
+    init(profile: Profile, isZeroSearch: Bool) {
         self.profile = profile
+        self.isZeroSearch = isZeroSearch
     }
 
     var pocketStories: [PocketStory] = []
@@ -48,6 +55,12 @@ class FxHomePocketViewModel {
         }
     }
 
+    func getSitesDetail(for index: Int) -> Site {
+        return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+    }
+
+    // MARK: - Telemetry
+
     // TODO: Laurie - Call this when section is shown
     func recordSectionHasShown() {
         if !hasSentPocketSectionEvent {
@@ -56,8 +69,20 @@ class FxHomePocketViewModel {
         }
     }
 
-    func getSitesDetail(for index: Int) -> Site {
-        return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+    func recordTapOnStory(index: Int) {
+        // Pocket site extra
+        let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
+        let siteExtra = [key : "\(index)"]
+
+        // Origin extra
+        let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        let extras = originExtra.merge(with: siteExtra)
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .pocketStory,
+                                     value: nil,
+                                     extras: extras)
     }
 
     // MARK: - Private
