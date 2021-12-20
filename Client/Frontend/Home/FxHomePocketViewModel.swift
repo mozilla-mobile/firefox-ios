@@ -36,7 +36,7 @@ class FxHomePocketViewModel {
     // The dimension of a cell
     // Fractions for iPhone to only show a slight portion of the next column
     static var widthDimension: NSCollectionLayoutDimension {
-        if deviceIsiPad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
         } else if UIWindow.isLandscape {
             return .fractionalWidth(FxHomePocketCollectionCellUX.fractionalWidthiPhoneLanscape)
@@ -89,11 +89,7 @@ class FxHomePocketViewModel {
         let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
         let extras = originExtra.merge(with: siteExtra)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .pocketStory,
-                                     value: nil,
-                                     extras: extras)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: extras)
     }
 
     // MARK: - Private
@@ -103,9 +99,5 @@ class FxHomePocketViewModel {
             self.pocketStories = pocketStory
             return succeed()
         }
-    }
-
-    private static var deviceIsiPad: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad
     }
 }

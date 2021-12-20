@@ -46,9 +46,9 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // The dimension of a cell
     static var widthDimension: NSCollectionLayoutDimension {
-        if deviceIsiPad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
-        } else if deviceIsInLandscapeMode {
+        } else if UIWindow.isLandscape {
             return .fractionalWidth(1/2) // iPhone in landscape
         } else {
             return .fractionalWidth(1) // iPhone in portrait
@@ -161,13 +161,5 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
 
         return recentTabs
-    }
-
-    private static var deviceIsiPad: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad
-    }
-
-    private static var deviceIsInLandscapeMode: Bool {
-        UIWindow.isLandscape
     }
 }
