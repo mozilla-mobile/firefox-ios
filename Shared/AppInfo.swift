@@ -78,11 +78,13 @@ open class AppInfo {
 
     // Return the MozWhatsNewTopic key from the Info.plist
     public static var whatsNewTopic: String? {
+        // By default we don't want to add dot version to what's new section. Set this to true if you'd like to add dot version for whats new article.
+        let shouldAddDotVersion = false
         let appVersionSplit = AppInfo.appVersion.components(separatedBy: ".")
         let majorAppVersion = appVersionSplit[0]
         var dotVersion = ""
         if appVersionSplit.count > 1, appVersionSplit[0] != "0" { dotVersion = appVersionSplit[1] }
-        let topic = "whats-new-ios-\(majorAppVersion)\(dotVersion)"
+        let topic = "whats-new-ios-\(majorAppVersion)\(shouldAddDotVersion ? dotVersion : "")"
         return topic
     }
 
