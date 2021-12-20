@@ -158,6 +158,7 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
                                                                        maxSize: FxHomePocketCollectionCellUX.discoverMoreMaxFontSize)
         label.numberOfLines = 0
+        label.textAlignment = .center
     }
 
     // MARK: - Init
