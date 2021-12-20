@@ -851,7 +851,7 @@ extension FirefoxHomeViewController {
     }
 
     func configureLibraryShortcutsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let libraryCell = cell as! ASLibraryCell
+        guard let libraryCell = cell as? ASLibraryCell else { return UICollectionViewCell() }
         let targets = [#selector(openBookmarks), #selector(openHistory), #selector(openDownloads), #selector(openReadingList)]
         libraryCell.libraryButtons.map({ $0.button }).zip(targets).forEach { (button, selector) in
             button.removeTarget(nil, action: nil, for: .allEvents)
@@ -863,8 +863,7 @@ extension FirefoxHomeViewController {
     }
 
     func configureLogoHeaderCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let logoHeaderCell = cell as! FxHomeLogoHeaderCell
-
+        guard let logoHeaderCell = cell as? FxHomeLogoHeaderCell else { return UICollectionViewCell() }
         let tap = UITapGestureRecognizer(target: self, action: #selector(changeHomepageWallpaper))
         tap.numberOfTapsRequired = 2
         logoHeaderCell.logoButton.addGestureRecognizer(tap)
@@ -873,7 +872,7 @@ extension FirefoxHomeViewController {
     }
 
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let topSiteCell = cell as! ASHorizontalScrollCell
+        guard let topSiteCell = cell as? ASHorizontalScrollCell else { return UICollectionViewCell() }
         topSiteCell.delegate = self.topSitesManager
         topSiteCell.setNeedsLayout()
         topSiteCell.collectionView.reloadData()
@@ -881,19 +880,19 @@ extension FirefoxHomeViewController {
     }
 
     private func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        pocketViewModel.recordSectionHasShown()
-
-        let pocketCell = cell as! FxHomePocketCollectionCell
+        guard let pocketCell = cell as? FxHomePocketCollectionCell else { return UICollectionViewCell() }
         pocketCell.viewModel = pocketViewModel
         pocketCell.viewModel?.section = indexPath.section
         pocketCell.reloadLayout()
         pocketCell.setNeedsLayout()
 
+        pocketViewModel.recordSectionHasShown()
+
         return pocketCell
     }
 
     private func configureRecentlySavedCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let recentlySavedCell = cell as! FxHomeRecentlySavedCollectionCell
+        guard let recentlySavedCell = cell as? FxHomeRecentlySavedCollectionCell else { return UICollectionViewCell() }
         recentlySavedCell.viewModel = recentlySavedViewModel
         recentlySavedCell.homePanelDelegate = homePanelDelegate
         recentlySavedCell.libraryPanelDelegate = libraryPanelDelegate
@@ -904,7 +903,7 @@ extension FirefoxHomeViewController {
     }
 
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let jumpBackInCell = cell as! FxHomeJumpBackInCollectionCell
+        guard let jumpBackInCell = cell as? FxHomeJumpBackInCollectionCell else { return UICollectionViewCell() }
         jumpBackInCell.viewModel = jumpBackInViewModel
 
         jumpBackInViewModel.onTapGroup = { [weak self] tab in
@@ -917,8 +916,7 @@ extension FirefoxHomeViewController {
     }
 
     private func configureHistoryHighlightsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let historyCell = cell as! FxHomeHistoryHighlightsCollectionCell
-
+        guard let historyCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
         historyHighlightsViewModel.onTapItem = { [weak self] in
             // TODO: When the data is hooked up, this will actually send a user to
             // the correct place in history
@@ -934,6 +932,7 @@ extension FirefoxHomeViewController {
     }
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        guard let customizeHomeCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
         let customizeHomeCell = cell as! FxHomeCustomizeHomeView
         customizeHomeCell.goToSettingsButton.addTarget(self, action: #selector(openCustomizeHomeSettings), for: .touchUpInside)
         customizeHomeCell.setNeedsLayout()
