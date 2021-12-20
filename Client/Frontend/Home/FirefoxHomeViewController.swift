@@ -18,7 +18,6 @@ struct FirefoxHomeUX {
     static let recentlySavedCellHeight: CGFloat = 136
     static let historyHighlightsCellHeight: CGFloat = 70
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
-    static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let spacingBetweenSections: CGFloat = 24
     static let sectionInsetsForIpad: CGFloat = 101
     static let minimumInsets: CGFloat = 15
@@ -806,14 +805,6 @@ extension FirefoxHomeViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var numItems: CGFloat = FirefoxHomeUX.numberOfItemsPerRowForSizeClassIpad[self.traitCollection.horizontalSizeClass]
-        if UIWindow.isPortrait {
-            numItems = numItems - 1
-        }
-        if self.traitCollection.horizontalSizeClass == .compact && UIWindow.isLandscape {
-            numItems = numItems - 1
-        }
-
         switch Section(section) {
         case .logoHeader:
             return shouldShowFxLogoHeader ? 1 : 0
