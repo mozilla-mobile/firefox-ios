@@ -7,8 +7,7 @@ import Storage
 
 struct FxHomePocketCollectionCellUX {
     static let numberOfItemsInColumn = 3
-    // TODO: Laurie - Test for A11y dynamic font
-    static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 AX5
+    static let discoverMoreMaxFontSize: CGFloat = 26 // Title 3 xxxLarge
     static let numberOfItemsInSection = 11
 }
 

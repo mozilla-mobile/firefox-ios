@@ -69,7 +69,6 @@ class FxHomePocketViewModel {
 
     // MARK: - Telemetry
 
-    // TODO: Laurie - Call this when section is shown
     func recordSectionHasShown() {
         if !hasSentPocketSectionEvent {
             TelemetryWrapper.recordEvent(category: .action, method: .view, object: .pocketSectionImpression, value: nil, extras: nil)
