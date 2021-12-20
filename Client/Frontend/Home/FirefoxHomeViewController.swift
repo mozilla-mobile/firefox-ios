@@ -18,6 +18,7 @@ struct FirefoxHomeUX {
     static let recentlySavedCellHeight: CGFloat = 136
     static let historyHighlightsCellHeight: CGFloat = 70
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
+    static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let spacingBetweenSections: CGFloat = 24
     static let sectionInsetsForIpad: CGFloat = 101
     static let minimumInsets: CGFloat = 15
