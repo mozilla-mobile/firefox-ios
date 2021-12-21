@@ -116,6 +116,15 @@ extension BrowserViewController {
         tabManager.removeTab(currentTab)
     }
 
+    @objc private func undoLastTabClosedKeyCommand() {
+        guard let lastClosedURL = profile.recentlyClosedTabs.popFirstTab()?.url,
+            let selectedTab = tabManager.selectedTab else { return }
+
+        let request = URLRequest(url: lastClosedURL)
+        let closedTab = tabManager.addTab(request, afterTab: selectedTab, isPrivate: false)
+        tabManager.selectTab(closedTab)
+    }
+
     @objc private func nextTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "next-tab"])
         guard let currentTab = tabManager.selectedTab else {
@@ -201,6 +210,7 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(newPrivateTabKeyCommand), input: "p", modifierFlags: [.command, .shift], discoverabilityTitle: shortcuts.NewPrivateTab),
             UIKeyCommand(action: #selector(newPrivateTabKeyCommand), input: "n", modifierFlags: [.command, .shift]),
             UIKeyCommand(action: #selector(closeTabKeyCommand), input: "w", modifierFlags: .command, discoverabilityTitle: shortcuts.CloseCurrentTab),
+            UIKeyCommand(action: #selector(undoLastTabClosedKeyCommand), input: "t", modifierFlags: [.command, .shift]),
 
             // Edit
             UIKeyCommand(action: #selector(findInPageKeyCommand), input: "f", modifierFlags: .command, discoverabilityTitle: shortcuts.Find),
