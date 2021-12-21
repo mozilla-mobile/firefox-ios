@@ -199,6 +199,7 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(newTabKeyCommand), input: "t", modifierFlags: .command, discoverabilityTitle: shortcuts.NewTab),
             UIKeyCommand(action: #selector(selectLocationBarKeyCommand), input: "l", modifierFlags: .command, discoverabilityTitle: shortcuts.SelectLocationBar),
             UIKeyCommand(action: #selector(newPrivateTabKeyCommand), input: "p", modifierFlags: [.command, .shift], discoverabilityTitle: shortcuts.NewPrivateTab),
+            UIKeyCommand(action: #selector(newPrivateTabKeyCommand), input: "n", modifierFlags: [.command, .shift]),
             UIKeyCommand(action: #selector(closeTabKeyCommand), input: "w", modifierFlags: .command, discoverabilityTitle: shortcuts.CloseCurrentTab),
 
             // Edit
