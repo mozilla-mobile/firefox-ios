@@ -672,6 +672,10 @@ class Tab: NSObject {
         }
     }
 
+    func resetZoom() {
+        pageZoom = 1.0
+    }
+
     func addContentScript(_ helper: TabContentScript, name: String) {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }

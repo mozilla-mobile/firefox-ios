@@ -207,15 +207,27 @@ extension BrowserViewController {
     // MARK: Zoom
 
     @objc private func zoomIn() {
+        guard let currentTab = tabManager.selectedTab else {
+            return
+        }
 
+        currentTab.zoomIn()
     }
 
     @objc private func zoomOut() {
+        guard let currentTab = tabManager.selectedTab else {
+            return
+        }
 
+        currentTab.zoomOut()
     }
 
     @objc private func resetZoom() {
+        guard let currentTab = tabManager.selectedTab else {
+            return
+        }
 
+        currentTab.resetZoom()
     }
 
     /// Select a certain tab number - If number is greater than the present number of tabs, select the last tab
