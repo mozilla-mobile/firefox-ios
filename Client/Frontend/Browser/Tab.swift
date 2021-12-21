@@ -638,34 +638,36 @@ class Tab: NSObject {
     }
     
 
-    func zoomIn() {
-        if pageZoom == 0.75 {
+    @objc func zoomIn() {
+        switch pageZoom {
+        case 0.75:
             pageZoom = 0.85
-        } else if pageZoom == 0.85 {
+        case 0.85:
             pageZoom = 1.0
-        } else if pageZoom == 1.0 {
+        case 1.0:
             pageZoom = 1.15
-        } else if pageZoom == 1.15 {
+        case 1.15:
             pageZoom = 1.25
-        } else if pageZoom == 3.0 {
+        case 3.0:
             return
-        } else {
+        default:
             pageZoom += 0.25
         }
     }
 
-    func zoomOut() {
-        if pageZoom == 0.5 {
+    @objc func zoomOut() {
+        switch pageZoom {
+        case 0.5:
             return
-        } else if pageZoom == 0.85 {
+        case 0.85:
             pageZoom = 0.75
-        } else if pageZoom == 1.0 {
+        case 1.0:
             pageZoom = 0.85
-        } else if pageZoom == 1.15 {
+        case 1.15:
             pageZoom = 1.0
-        } else if pageZoom == 1.25 {
+        case 1.25:
             pageZoom = 1.15
-        } else {
+        default:
             pageZoom -= 0.25
         }
     }
