@@ -122,9 +122,7 @@ extension BrowserViewController {
     }
 
     @objc private func moveURLCompletionKeyCommand(sender: UIKeyCommand) {
-        guard let searchController = self.searchController else {
-            return
-        }
+        guard let searchController = self.searchController else { return }
 
         searchController.handleKeyCommands(sender: sender)
     }
@@ -229,25 +227,19 @@ extension BrowserViewController {
     // MARK: Zoom
 
     @objc private func zoomIn() {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         currentTab.zoomIn()
     }
 
     @objc private func zoomOut() {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         currentTab.zoomOut()
     }
 
     @objc private func resetZoom() {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
+        guard let currentTab = tabManager.selectedTab else { return }
 
         currentTab.resetZoom()
     }
