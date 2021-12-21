@@ -161,6 +161,69 @@ extension BrowserViewController {
         searchController.handleKeyCommands(sender: sender)
     }
 
+    @objc private func selectFirstTab() {
+        selectTab(number: 0)
+    }
+
+    @objc private func selectTabTwo() {
+        selectTab(number: 1)
+    }
+
+    @objc private func selectTabThree() {
+        selectTab(number: 2)
+    }
+
+    @objc private func selectTabFour() {
+        selectTab(number: 3)
+    }
+
+    @objc private func selectTabFive() {
+        selectTab(number: 4)
+    }
+
+    @objc private func selectTabSix() {
+        selectTab(number: 5)
+    }
+
+    @objc private func selectTabSeven() {
+        selectTab(number: 6)
+    }
+
+    @objc private func selectTabEight() {
+        selectTab(number: 7)
+    }
+
+    @objc private func selectLastTab() {
+        guard let currentTab = tabManager.selectedTab else {
+            return
+        }
+
+        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        selectTab(number: tabs.count - 1)
+    }
+
+    /// Select a certain tab number - If number is greater than the present number of tabs, select the last tab
+    /// - Parameter number: The 0 indexed tab number to select
+    private func selectTab(number: Int) {
+        guard let currentTab = tabManager.selectedTab else {
+            return
+        }
+
+        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        // Do not continue if the index of the new tab to select is the current one
+        guard let currentTabIndex = tabs.firstIndex(of: currentTab), currentTabIndex != number else {
+            return
+        }
+
+        if tabs.count > number {
+            tabManager.selectTab(tabs[number])
+            keyboardPressesHandler.reset()
+        } else if let lastTab = tabs.last {
+            tabManager.selectTab(lastTab)
+            keyboardPressesHandler.reset()
+        }
+    }
+
     override var keyCommands: [UIKeyCommand]? {
         let searchLocationCommands = [
             // Navigate the suggestions
@@ -224,8 +287,16 @@ extension BrowserViewController {
 
             // Tools
             UIKeyCommand(action: #selector(showDownloadsKeyCommand), input: "j", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowDownloads),
+            UIKeyCommand(action: #selector(selectFirstTab), input: "1", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowFirstTab),
+            UIKeyCommand(action: #selector(selectTabTwo), input: "2", modifierFlags: .command),
+            UIKeyCommand(action: #selector(selectTabThree), input: "3", modifierFlags: .command),
+            UIKeyCommand(action: #selector(selectTabFour), input: "4", modifierFlags: .command),
+            UIKeyCommand(action: #selector(selectTabFive), input: "5", modifierFlags: .command),
+            UIKeyCommand(action: #selector(selectTabSix), input: "6", modifierFlags: .command),
+            UIKeyCommand(action: #selector(selectTabSeven), input: "7", modifierFlags: .command),
+            UIKeyCommand(action: #selector(selectTabEight), input: "8", modifierFlags: .command),
+            UIKeyCommand(action: #selector(selectLastTab), input: "9", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowLastTab),
 
-            // TODO: Show tab # 1-9 - Command + 1-9
         ] + windowShortcuts
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
