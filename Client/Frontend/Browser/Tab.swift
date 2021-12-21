@@ -121,7 +121,13 @@ class Tab: NSObject {
         }
     }
     
-    var adsTelemetryUrlList: [String] = [String]()
+    var adsTelemetryUrlList: [String] = [String]() {
+        didSet {
+            startingSearchUrlWithAds = url
+        }
+    }
+    var adsTelemetryRedirectUrlList: [URL] = [URL]()
+    var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
     var hasHomeScreenshot: Bool = false
 
@@ -525,9 +531,9 @@ class Tab: NSObject {
     var displayTitle: String {
         if let title = webView?.title, !title.isEmpty {
             let key = tabGroupData.tabHistoryMetadatakey()
-            if  lastObservation.keyUrl == key.url &&
-                    lastObservation.referrerUrl == key.referrerUrl &&
-                    lastObservation.searchTerm == key.searchTerm {
+            if lastObservation.keyUrl == key.url &&
+                lastObservation.referrerUrl == key.referrerUrl &&
+                lastObservation.searchTerm == key.searchTerm {
                 return title
             } else if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
