@@ -204,6 +204,28 @@ extension BrowserViewController {
         selectTab(number: tabs.count - 1)
     }
 
+    /// Select a certain tab number - If number is greater than the present number of tabs, select the last tab
+    /// - Parameter number: The 0 indexed tab number to select
+    private func selectTab(number: Int) {
+        guard let currentTab = tabManager.selectedTab else {
+            return
+        }
+
+        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        // Do not continue if the index of the new tab to select is the current one
+        guard let currentTabIndex = tabs.firstIndex(of: currentTab), currentTabIndex != number else {
+            return
+        }
+
+        if tabs.count > number {
+            tabManager.selectTab(tabs[number])
+            keyboardPressesHandler.reset()
+        } else if let lastTab = tabs.last {
+            tabManager.selectTab(lastTab)
+            keyboardPressesHandler.reset()
+        }
+    }
+
     // MARK: Zoom
 
     @objc private func zoomIn() {
@@ -230,27 +252,7 @@ extension BrowserViewController {
         currentTab.resetZoom()
     }
 
-    /// Select a certain tab number - If number is greater than the present number of tabs, select the last tab
-    /// - Parameter number: The 0 indexed tab number to select
-    private func selectTab(number: Int) {
-        guard let currentTab = tabManager.selectedTab else {
-            return
-        }
-
-        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        // Do not continue if the index of the new tab to select is the current one
-        guard let currentTabIndex = tabs.firstIndex(of: currentTab), currentTabIndex != number else {
-            return
-        }
-
-        if tabs.count > number {
-            tabManager.selectTab(tabs[number])
-            keyboardPressesHandler.reset()
-        } else if let lastTab = tabs.last {
-            tabManager.selectTab(lastTab)
-            keyboardPressesHandler.reset()
-        }
-    }
+    // MARK: - KeyCommands
 
     override var keyCommands: [UIKeyCommand]? {
         let searchLocationCommands = [
