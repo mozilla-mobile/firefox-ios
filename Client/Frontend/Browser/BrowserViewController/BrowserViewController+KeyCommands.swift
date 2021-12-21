@@ -116,6 +116,21 @@ extension BrowserViewController {
         tabManager.removeTab(currentTab)
     }
 
+    @objc private func showTabTrayKeyCommand() {
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "show-tab-tray"])
+        showTabTray()
+    }
+
+    @objc private func moveURLCompletionKeyCommand(sender: UIKeyCommand) {
+        guard let searchController = self.searchController else {
+            return
+        }
+
+        searchController.handleKeyCommands(sender: sender)
+    }
+
+    // MARK: - Tab selection
+
     @objc private func nextTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "next-tab"])
         guard let currentTab = tabManager.selectedTab else {
@@ -146,19 +161,6 @@ extension BrowserViewController {
         }
 
         keyboardPressesHandler.reset()
-    }
-
-    @objc private func showTabTrayKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "show-tab-tray"])
-        showTabTray()
-    }
-
-    @objc private func moveURLCompletionKeyCommand(sender: UIKeyCommand) {
-        guard let searchController = self.searchController else {
-            return
-        }
-
-        searchController.handleKeyCommands(sender: sender)
     }
 
     @objc private func selectFirstTab() {
@@ -200,6 +202,20 @@ extension BrowserViewController {
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         selectTab(number: tabs.count - 1)
+    }
+
+    // MARK: Zoom
+
+    @objc private func zoomIn() {
+
+    }
+
+    @objc private func zoomOut() {
+
+    }
+
+    @objc private func resetZoom() {
+
     }
 
     /// Select a certain tab number - If number is greater than the present number of tabs, select the last tab
@@ -270,9 +286,9 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(findInPageAgainKeyCommand), input: "g", modifierFlags: .command, discoverabilityTitle: shortcuts.FindAgain),
 
             // View
-            // TODO: Zoom in - Command + +
-            // TODO: Zoom out - Command + -
-            // TODO: Actual size - Command + 0
+            UIKeyCommand(action: #selector(zoomIn), input: "+", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomIn),
+            UIKeyCommand(action: #selector(zoomOut), input: "-", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomOut),
+            UIKeyCommand(action: #selector(resetZoom), input: "0", modifierFlags: .command, discoverabilityTitle: shortcuts.ActualSize),
             UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: shortcuts.ReloadPage),
             
             // History
