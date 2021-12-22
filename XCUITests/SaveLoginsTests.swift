@@ -23,7 +23,8 @@ class SaveLoginTest: BaseTestCase {
 
     private func saveLogin(givenUrl: String) {
         if iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.goto(SettingsScreen)
+            navigator.goto(NewTabScreen)
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(givenUrl)
