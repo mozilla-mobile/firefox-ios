@@ -266,7 +266,7 @@
 "photosPermission.openSettings" = "Nastajenja wočinić";
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
-"photosPermission.title" = "„%@“ prosy wo přistup na waše fota";
+"photosPermission.title" = "„%@“ prosy wo přistup k wašim fotam";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "Zwisk wěsty njeje";
