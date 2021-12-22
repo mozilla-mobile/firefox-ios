@@ -7,7 +7,10 @@ import WebKit
 import Shared
 import MozillaAppServices
 
-class SavedTab: NSObject, NSCoding {
+class SavedTab: NSObject, NSCoding, NSSecureCoding {
+
+    static var supportsSecureCoding: Bool = true
+
     var isSelected: Bool
     var title: String?
     var url: URL?
