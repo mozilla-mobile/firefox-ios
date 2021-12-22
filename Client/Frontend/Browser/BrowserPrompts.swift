@@ -25,8 +25,8 @@ class JSPromptAlertController: UIAlertController {
     }
     
     deinit {
-        if let alertInfo = alertInfo, !alertInfo.didComplete {
-            // Something tore us down without calling the JS completion handler, so ensure it happens now.
+        if let alertInfo = alertInfo, !alertInfo.completionHandlerAlreadyCalled {
+            // Something tore the view down without calling the JS completion handler, so ensure it happens now.
             alertInfo.cancel()
         }
     }
@@ -43,7 +43,7 @@ protocol JSAlertInfo {
     func alertController() -> JSPromptAlertController
     func cancel()
     /// Informs JSPromptAlertController that the completion handler has already been called.
-    var didComplete: Bool { get }
+    var completionHandlerAlreadyCalled: Bool { get }
 }
 
 class MessageAlert: JSAlertInfo {
@@ -58,8 +58,8 @@ class MessageAlert: JSAlertInfo {
         self._completionHandler = completionHandler
     }
     
-    var didComplete: Bool {
-        _completionHandler == nil
+    var completionHandlerAlreadyCalled: Bool {
+        return _completionHandler == nil
     }
 
     /// Calls the completion handler if it hasn't already been called.
@@ -111,8 +111,8 @@ class ConfirmPanelAlert: JSAlertInfo {
         return alertController
     }
 
-    var didComplete: Bool {
-        _completionHandler == nil
+    var completionHandlerAlreadyCalled: Bool {
+        return _completionHandler == nil
     }
 
     /// Calls the completion handler if it hasn't already been called.
@@ -160,8 +160,8 @@ class TextInputAlert: JSAlertInfo {
         return alertController
     }
 
-    var didComplete: Bool {
-        _completionHandler == nil
+    var completionHandlerAlreadyCalled: Bool {
+        return _completionHandler == nil
     }
 
     /// Calls the completion handler if it hasn't already been called.
