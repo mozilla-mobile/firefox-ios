@@ -8,13 +8,15 @@ import Shared
 open class ClosedTabsStore {
 
     private let prefs: Prefs
+    private let maxNumberOfStoredClosedTabs = 10
     enum KeyedArchiverKeys: String {
         case recentlyClosedTabs
     }
 
     lazy open var tabs: [ClosedTab] = {
         guard let tabsArray: Data = self.prefs.objectForKey(KeyedArchiverKeys.recentlyClosedTabs.rawValue) as Any? as? Data,
-              let unarchivedArray = NSKeyedUnarchiver.unarchiveObject(with: tabsArray) as? [ClosedTab] else {
+              let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: tabsArray),
+              let unarchivedArray = unarchiver.decodeObject(of: [NSArray.self, ClosedTab.self], forKey: KeyedArchiverKeys.recentlyClosedTabs.rawValue) as? [ClosedTab] else {
             return []
         }
         return unarchivedArray
@@ -27,10 +29,10 @@ open class ClosedTabsStore {
     open func addTab(_ url: URL, title: String?, faviconURL: String?) {
         let recentlyClosedTab = ClosedTab(url: url, title: title ?? "", faviconURL: faviconURL ?? "")
         tabs.insert(recentlyClosedTab, at: 0)
-        if tabs.count > 10 {
+        if tabs.count > maxNumberOfStoredClosedTabs {
             tabs.removeLast()
         }
-        let archivedTabsArray = NSKeyedArchiver.archivedData(withRootObject: tabs)
+        let archivedTabsArray = try? NSKeyedArchiver.archivedData(withRootObject: tabs, requiringSecureCoding: true)
         prefs.setObject(archivedTabsArray, forKey: KeyedArchiverKeys.recentlyClosedTabs.rawValue)
     }
 
