@@ -51,7 +51,12 @@ class TabManagerStoreTests: XCTestCase {
         waitForStoreChanged(tabCountOnDisk: 2)
     }
 
-    func testAddedTabsAreStored() {
+    func testNormalTabsAreArchived() {
+        addTabsWithSessionData(numberOfTabs: 2)
+        waitForStoreChanged(tabCountOnDisk: 2)
+    }
+
+    func testAddingMultipleTabsInARow() {
         // Add 2 tabs
         addTabsWithSessionData(numberOfTabs: 2)
         waitForStoreChanged(tabCountOnDisk: 2)
@@ -59,10 +64,26 @@ class TabManagerStoreTests: XCTestCase {
         // Add 2 more tabs
         addTabsWithSessionData(numberOfTabs: 2)
         waitForStoreChanged(tabCountOnDisk: 4)
+    }
+
+    func testRemoveTabs() {
+        // Add 3 tabs
+        addTabsWithSessionData(numberOfTabs: 3)
+        waitForStoreChanged(tabCountOnDisk: 3)
 
         // Remove all tabs
         manager.removeAll()
-        waitForStoreChanged(tabCountOnDisk: 0)
+        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
+    }
+
+    func testAddTabsRemoveAndAddAgain() {
+        // Add 2 tabs
+        addTabsWithSessionData(numberOfTabs: 2)
+        waitForStoreChanged(tabCountOnDisk: 2)
+
+        // Remove all tabs
+        manager.removeAll()
+        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
 
         // Add just 1 tab
         addTabsWithSessionData(numberOfTabs: 1)
@@ -85,13 +106,14 @@ extension TabManagerStoreTests {
 
     func waitForStoreChanged(tabCountOnDisk: Int, file: StaticString = #file, line: UInt = #line) {
         let expectation = expectation(description: "savedTabs")
-        manager.storeChanges().uponQueue(.main) {_ in
-            XCTAssertEqual(self.manager.testTabCountOnDisk(), tabCountOnDisk, file: file, line: line)
+        manager.storeChanges {
+            let message = "There should be \(tabCountOnDisk) tabs on disk but there is \(self.manager.testTabCountOnDisk())"
+            XCTAssertEqual(self.manager.testTabCountOnDisk(), tabCountOnDisk, message, file: file, line: line)
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 5) { error in
-            if let error = error { XCTFail("waitForExpectations failed with \(error): \(error.localizedDescription)", file: file, line: line) }
+            if let error = error { XCTFail("WaitForExpectations failed with: \(error.localizedDescription)", file: file, line: line) }
         }
     }
 }
