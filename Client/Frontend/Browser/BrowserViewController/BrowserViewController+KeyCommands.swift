@@ -227,19 +227,22 @@ extension BrowserViewController {
     // MARK: Zoom
 
     @objc private func zoomIn() {
-        guard let currentTab = tabManager.selectedTab else { return }
+        guard let currentTab = tabManager.selectedTab,
+              firefoxHomeViewController == nil else { return }
 
         currentTab.zoomIn()
     }
 
     @objc private func zoomOut() {
-        guard let currentTab = tabManager.selectedTab else { return }
+        guard let currentTab = tabManager.selectedTab,
+              firefoxHomeViewController == nil else { return }
 
         currentTab.zoomOut()
     }
 
     @objc private func resetZoom() {
-        guard let currentTab = tabManager.selectedTab else { return }
+        guard let currentTab = tabManager.selectedTab,
+              firefoxHomeViewController == nil else { return }
 
         currentTab.resetZoom()
     }
