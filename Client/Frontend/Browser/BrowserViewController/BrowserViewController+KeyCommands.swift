@@ -154,7 +154,8 @@ extension BrowserViewController {
 
     @objc private func undoLastTabClosedKeyCommand() {
         guard let lastClosedURL = profile.recentlyClosedTabs.popFirstTab()?.url,
-            let selectedTab = tabManager.selectedTab else { return }
+                   let selectedTab = tabManager.selectedTab
+        else { return }
 
         let request = URLRequest(url: lastClosedURL)
         let closedTab = tabManager.addTab(request, afterTab: selectedTab, isPrivate: false)

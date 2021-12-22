@@ -16,9 +16,8 @@ open class ClosedTabsStore {
     lazy open var tabs: [ClosedTab] = {
         guard let tabsArray: Data = self.prefs.objectForKey(KeyedArchiverKeys.recentlyClosedTabs.rawValue) as Any? as? Data,
               let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: tabsArray),
-              let unarchivedArray = unarchiver.decodeObject(of: [NSArray.self, ClosedTab.self], forKey: KeyedArchiverKeys.recentlyClosedTabs.rawValue) as? [ClosedTab] else {
-            return []
-        }
+              let unarchivedArray = unarchiver.decodeObject(of: [NSArray.self, ClosedTab.self], forKey: KeyedArchiverKeys.recentlyClosedTabs.rawValue) as? [ClosedTab]
+        else { return [] }
         return unarchivedArray
     }()
 
@@ -77,7 +76,8 @@ open class ClosedTab: NSObject, NSCoding {
     required convenience public init?(coder: NSCoder) {
         guard let url = coder.decodeObject(forKey: CodingKeys.url.rawValue) as? URL,
               let faviconURL = coder.decodeObject(forKey: CodingKeys.faviconURL.rawValue) as? String,
-              let title = coder.decodeObject(forKey: CodingKeys.title.rawValue) as? String else { return nil }
+              let title = coder.decodeObject(forKey: CodingKeys.title.rawValue) as? String
+        else { return nil }
 
         self.init(
             url: url,
