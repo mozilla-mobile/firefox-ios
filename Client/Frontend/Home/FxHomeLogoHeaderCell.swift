@@ -14,11 +14,6 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     let logoButton: UIButton = .build { button in
-        let resourceName = "fxHomeHeaderLogo"
-        let imageString = LegacyThemeManager.instance.currentName == .dark ? resourceName + "_dark" : resourceName
-        button.setImage(
-            UIImage(imageLiteralResourceName: imageString),
-            for: .normal)
         button.setTitle("", for: .normal)
         button.backgroundColor = .clear
         button.accessibilityIdentifier = a11y.logoButton
@@ -28,10 +23,16 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        applyTheme()
+        setupObservers()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - UI Setup
@@ -45,5 +46,29 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
             logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             logoButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
+    }
+
+    // MARK: - Observers & Notifications
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotifications),
+                                               name: .DisplayThemeChanged,
+                                               object: nil)
+    }
+    
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+}
+
+extension FxHomeLogoHeaderCell: NotificationThemeable {
+    func applyTheme() {
+        let resourceName = "fxHomeHeaderLogo"
+        let imageString = LegacyThemeManager.instance.currentName == .dark ? resourceName + "_dark" : resourceName
+        logoButton.setImage( UIImage(imageLiteralResourceName: imageString), for: .normal)
     }
 }

@@ -150,7 +150,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     // MARK: - UI Elements
     lazy var imageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(imageLiteralResourceName: "wallpaper1")
+        imageView.image = nil
         imageView.contentMode = .scaleAspectFill
     }
 
@@ -161,6 +161,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var didRotate = false
     fileprivate let profile: Profile
     fileprivate let flowLayout = UICollectionViewFlowLayout()
+    fileprivate let wallpaperManager = WallpaperManager()
     fileprivate let experiments: NimbusApi
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
@@ -450,8 +451,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     func applyTheme() {
         defaultBrowserCard.applyTheme()
-        // ROUX
-        view.backgroundColor = .clear //UIColor.theme.homePanel.topSitesBackground
+        view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        imageView.image = wallpaperManager.currentWallpaper.image
     }
 
     func scrollToTop(animated: Bool = false) {
@@ -1234,10 +1235,8 @@ extension FirefoxHomeViewController {
     }
 
     @objc func changeHomepageWallpaper() {
-        // TODO: Roux - This function will be implemented with the action when wallpaper feature is
-        // added in the next ticket.
-
-        // Telemetry is commented out until button action is activated.
+        wallpaperManager.cycleWallpaper()
+        applyTheme()
 //        TelemetryWrapper.recordEvent(category: .action,
 //                                     method: .tap,
 //                                     object: .firefoxHomepage,
