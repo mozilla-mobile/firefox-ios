@@ -91,7 +91,7 @@ extension TabManagerStoreTests {
         }
 
         waitForExpectations(timeout: 5) { error in
-            if let error = error { XCTFail("\(error)", file: file, line: line) }
+            if let error = error { XCTFail("waitForExpectations failed with \(error): \(error.localizedDescription)", file: file, line: line) }
         }
     }
 }
