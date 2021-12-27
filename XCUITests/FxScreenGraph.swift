@@ -28,8 +28,6 @@ let FxAccountManagementPage = "FxAccountManagementPage"
 let Intro_FxASigninEmail = "Intro_FxASigninEmail"
 let HomeSettings = "HomeSettings"
 let SiriSettings = "SiriSettings"
-let PasscodeSettings = "PasscodeSettings"
-let PasscodeIntervalSettings = "PasscodeIntervalSettings"
 let SearchSettings = "SearchSettings"
 let NewTabSettings = "NewTabSettings"
 let ClearPrivateDataSettings = "ClearPrivateDataSettings"
@@ -44,9 +42,6 @@ let WebImageContextMenu = "WebImageContextMenu"
 let WebLinkContextMenu = "WebLinkContextMenu"
 let CloseTabMenu = "CloseTabMenu"
 let AddCustomSearchSettings = "AddCustomSearchSettings"
-let DisablePasscodeSettings = "DisablePasscodeSettings"
-let ChangePasscodeSettings = "ChangePasscodeSettings"
-let LockedLoginsSettings = "LockedLoginsSettings"
 let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
@@ -78,7 +73,6 @@ let TopSitesPanelContextMenu = "TopSitesPanelContextMenu"
 
 let BasicAuthDialog = "BasicAuthDialog"
 let BookmarksPanelContextMenu = "BookmarksPanelContextMenu"
-let SetPasscodeScreen = "SetPasscodeScreen"
 
 let Intro_Welcome = "Intro.Welcome"
 let Intro_Sync = "Intro.Sync"
@@ -140,16 +134,6 @@ class Action {
 
     static let OpenPrivateTabLongPressTabsButton = "OpenPrivateTabLongPressTabsButton"
     static let OpenNewTabLongPressTabsButton = "OpenNewTabLongPressTabsButton"
-
-    static let SetPasscode = "SetPasscode"
-    static let SetPasscodeTypeOnce = "SetPasscodeTypeOnce"
-    static let DisablePasscode = "DisablePasscode"
-    static let LoginPasscodeTypeIncorrectOne = "LoginPasscodeTypeIncorrectOne"
-    static let ChangePasscode = "ChangePasscode"
-    static let ChangePasscodeTypeOnce = "ChangePasscodeTypeOnce"
-    static let ConfirmPasscodeToChangePasscode = "ConfirmPasscodeToChangePasscode"
-    static let UnlockLoginsSettings = "UnlockLoginsSettings"
-    static let DisablePasscodeTypeIncorrectPasscode = "DisablePasscodeTypeIncorrectPasscode"
 
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
@@ -238,10 +222,6 @@ class FxUserState: MMUserState {
     var url: String? = nil
     var requestDesktopSite = false
 
-    var passcode: String? = nil
-    var newPasscode: String = "111111"
-    var wrongPasscode: String = "111112"
-
     var noImageMode = false
     var nightMode = false
 
@@ -274,18 +254,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     let cancelBackAction = {
         app.otherElements["PopoverDismissRegion"].tap()
-    }
-
-    let cancelTypePasscode = {
-        if isTablet {
-            if (app.buttons["Cancel"].exists){
-                app.buttons["Cancel"].tap()
-            } else {
-                app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
-            }
-        } else {
-            app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
-        }
     }
 
     let dismissContextMenuAction = {
@@ -589,7 +557,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings)
-        screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
         screenState.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
         screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
         screenState.tap(table.cells["ShowTour"], to: ShowTourInSettings)
@@ -739,94 +706,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         app.staticTexts[String(rows)].firstMatch.tap()
     }
 
-    map.addScreenState(PasscodeSettings) { screenState in
-        screenState.backAction = navigationControllerBackAction
-        let table = app.tables.element(boundBy: 0)
-        screenState.tap(table.cells["TurnOnPasscode"], to: SetPasscodeScreen, if: "passcode == nil")
-        screenState.tap(table.cells["TurnOffPasscode"], to: DisablePasscodeSettings, if: "passcode != nil")
-        screenState.tap(table.cells["PasscodeInterval"], to: PasscodeIntervalSettings, if: "passcode != nil")
-        screenState.tap(table.cells["ChangePasscode"], to: ChangePasscodeSettings, if: "passcode != nil")
-    }
-
     func type(text: String) {
         text.forEach { char in
             app.keys[String(char)].tap()
-        }
-    }
-
-    map.addScreenState(SetPasscodeScreen) { screenState in
-        screenState.gesture(forAction: Action.SetPasscode, transitionTo: PasscodeSettings) { userState in
-            type(text: userState.newPasscode)
-            type(text: userState.newPasscode)
-            userState.passcode = userState.newPasscode
-        }
-
-        screenState.gesture(forAction: Action.SetPasscodeTypeOnce) { userState in
-            type(text: userState.newPasscode)
-        }
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(DisablePasscodeSettings) { screenState in
-        screenState.gesture(forAction: Action.DisablePasscode, transitionTo: PasscodeSettings) { userState in
-            if let passcode = userState.passcode {
-                type(text: passcode)
-            }
-        }
-
-        screenState.gesture(forAction: Action.DisablePasscodeTypeIncorrectPasscode) { userState in
-            type(text: userState.wrongPasscode)
-        }
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(PasscodeIntervalSettings) { screenState in
-        screenState.onEnter { userState in
-            if let passcode = userState.passcode {
-                type(text: passcode)
-            }
-        }
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(ChangePasscodeSettings) { screenState in
-        screenState.gesture(forAction: Action.ChangePasscode, transitionTo: PasscodeSettings) { userState in
-            if let passcode = userState.passcode {
-                type(text: passcode)
-                type(text: userState.newPasscode)
-                type(text: userState.newPasscode)
-                userState.passcode = userState.newPasscode
-            }
-        }
-
-        screenState.gesture(forAction: Action.ConfirmPasscodeToChangePasscode) { userState in
-            if let passcode = userState.passcode {
-                type(text: passcode)
-            }
-        }
-        screenState.gesture(forAction: Action.ChangePasscodeTypeOnce) { userState in
-            type(text: userState.newPasscode)
-        }
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(LoginsSettings) { screenState in
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(LockedLoginsSettings) { screenState in
-        screenState.backAction = cancelTypePasscode
-        screenState.dismissOnUse = true
-
-        screenState.gesture(forAction: Action.LoginPasscodeTypeIncorrectOne) { userState in
-            type(text: userState.wrongPasscode)
-        }
-
-        // Gesture to get to the protected screen.
-        screenState.gesture(forAction: Action.UnlockLoginsSettings, transitionTo: LoginsSettings) { userState in
-            if let passcode = userState.passcode {
-                type(text: passcode)
-            }
         }
     }
 
@@ -1059,6 +941,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 1), to: LibraryPanel_History)
         screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 2), to: LibraryPanel_Downloads)
         screenState.tap(app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3), to: LibraryPanel_ReadingList)
+    }
+
+    map.addScreenState(LoginsSettings) { screenState in
+        screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
