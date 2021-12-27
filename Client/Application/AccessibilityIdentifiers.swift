@@ -28,6 +28,7 @@ public struct AccessibilityIdentifiers {
             static let recentlySaved = "recentlySavedSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let historyHighlights = "historyHighlightsSectionMoreButton"
+            static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
         }
 
         struct SectionTitles {
@@ -54,10 +55,18 @@ public struct AccessibilityIdentifiers {
         static let tableViewController = "AppSettingsTableViewController.tableView"
         struct Homepage {
             static let homeSettings = "Home"
+            static let homePageNavigationBar = "Homepage"
             struct StartAtHome {
                 static let afterFourHours = "StartAtHomeAfterFourHours"
                 static let always = "StartAtHomeAlways"
                 static let disabled = "StartAtHomeDisabled"
+            }
+            struct CustomizeFirefox {
+                static let shortcuts = ""
+                static let jumpBackIn = "Jump Back In"
+                static let recentlySaved = "Recently Saved"
+                static let recentSearches = "Recent Searches"
+                static let recommendedByPocket = "Recommended by Pocket"
             }
         }
         struct Search {
