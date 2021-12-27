@@ -122,7 +122,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             } else {
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = .SettingsAddCustomEngineTitle
-                cell.accessibilityIdentifier = "customEngineViewButton"
+                cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
                 cell.textLabel?.text = .SettingsAddCustomEngine
             }
         }

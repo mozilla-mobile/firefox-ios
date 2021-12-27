@@ -51,12 +51,26 @@ public struct AccessibilityIdentifiers {
     }
 
     struct Settings {
+        static let tableViewController = "AppSettingsTableViewController.tableView"
         struct Homepage {
+            static let homeSettings = "Home"
             struct StartAtHome {
                 static let afterFourHours = "StartAtHomeAfterFourHours"
                 static let always = "StartAtHomeAlways"
                 static let disabled = "StartAtHomeDisabled"
             }
+        }
+        struct Search {
+            static let customEngineViewButton = "customEngineViewButton"
+            static let searchNavigationBar = "Search"
+            static let deleteMozillaEngine = "Delete Mozilla Engine"
+            static let deleteButton = "Delete"
+        }
+        struct Logins {
+            static let loginsSettings = "Logins"
+        }
+        struct ClearData {
+            static let clearPrivatedata = "ClearPrivateData"
         }
     }
 }

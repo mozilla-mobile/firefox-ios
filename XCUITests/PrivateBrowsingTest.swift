@@ -83,7 +83,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
+        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
         while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
             settingsTableView.swipeUp()
