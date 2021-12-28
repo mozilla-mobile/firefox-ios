@@ -148,10 +148,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     // MARK: - Typealiases
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
-    // MARK: - UI Elements
-    lazy var imageView: UIImageView = .build { imageView in
-        imageView.image = nil
-        imageView.contentMode = .scaleAspectFill
+    lazy var wallpaperView: WallpaperBackgroundView = .build { view in
+
     }
 
     // MARK: - Operational Variables
@@ -161,7 +159,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var didRotate = false
     fileprivate let profile: Profile
     fileprivate let flowLayout = UICollectionViewFlowLayout()
-    fileprivate let wallpaperManager = WallpaperManager()
     fileprivate let experiments: NimbusApi
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
@@ -338,7 +335,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                                  withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
-        view.addSubview(imageView)
+        view.addSubview(wallpaperView)
         view.addSubviews(overlayView)
         view.addSubview(contextualSourceView)
         contextualSourceView.backgroundColor = .clear
@@ -368,13 +365,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            imageView.topAnchor.constraint(equalTo: view.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
+            wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        view.sendSubviewToBack(imageView)
+        view.sendSubviewToBack(wallpaperView)
 
         profile.panelDataObservers.activityStream.delegate = self
 
@@ -452,7 +449,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     func applyTheme() {
         defaultBrowserCard.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        imageView.image = wallpaperManager.currentWallpaper.image
     }
 
     func scrollToTop(animated: Bool = false) {
@@ -1235,7 +1231,7 @@ extension FirefoxHomeViewController {
     }
 
     @objc func changeHomepageWallpaper() {
-        wallpaperManager.cycleWallpaper()
+        wallpaperView.cycleWallpaper()
         applyTheme()
 //        TelemetryWrapper.recordEvent(category: .action,
 //                                     method: .tap,

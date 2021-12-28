@@ -9,12 +9,10 @@ import Shared
 struct Wallpaper {
     private let name: String
     let image: UIImage?
-    let contrastStyle: UIUserInterfaceStyle
 
-    init(named name: String, withContrast contrastStyle: UIUserInterfaceStyle = .unspecified) {
+    init(named name: String) {
         self.name = name
         self.image = UIImage(named: name)
-        self.contrastStyle = contrastStyle
     }
 }
 

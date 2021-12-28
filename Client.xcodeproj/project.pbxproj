@@ -790,8 +790,10 @@
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
-		DF984600276B99660071CCAE /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9845FF276B99660071CCAE /* WallpaperManager.swift */; };
 		DF9845FE276A5E3A0071CCAE /* FxHomeLogoHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9845FD276A5E3A0071CCAE /* FxHomeLogoHeaderCell.swift */; };
+		DF984600276B99660071CCAE /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9845FF276B99660071CCAE /* WallpaperManager.swift */; };
+		DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF7E277B5F7B003D5F41 /* WallpaperBackgroundView.swift */; };
+		DFACBF81277B916B003D5F41 /* ConfigurableGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF80277B916B003D5F41 /* ConfigurableGradientView.swift */; };
 		DFACDFAA274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */; };
 		DFACDFAC274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift */; };
 		DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
@@ -3931,6 +3933,8 @@
 		DF4B4523B01B0EDC485E3BCB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		DF9845FD276A5E3A0071CCAE /* FxHomeLogoHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeLogoHeaderCell.swift; sourceTree = "<group>"; };
 		DF9845FF276B99660071CCAE /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
+		DFACBF7E277B5F7B003D5F41 /* WallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBackgroundView.swift; sourceTree = "<group>"; };
+		DFACBF80277B916B003D5F41 /* ConfigurableGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableGradientView.swift; sourceTree = "<group>"; };
 		DFACDFA9274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeHistoryHighlightsVM.swift; sourceTree = "<group>"; };
 		DFACDFAB274D48A500A94EEC /* FxHomeHistoryHighlightsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeHistoryHighlightsCollectionCell.swift; sourceTree = "<group>"; };
 		DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
@@ -5968,6 +5972,15 @@
 			path = HistoryHighlights;
 			sourceTree = "<group>";
 		};
+		DFACBF82277B9278003D5F41 /* Wallpapers */ = {
+			isa = PBXGroup;
+			children = (
+				DFACBF7E277B5F7B003D5F41 /* WallpaperBackgroundView.swift */,
+				DF9845FF276B99660071CCAE /* WallpaperManager.swift */,
+			);
+			path = Wallpapers;
+			sourceTree = "<group>";
+		};
 		DFACDFAD274D4D4B00A94EEC /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -6116,6 +6129,7 @@
 				D5D052EE2645ACBF00759F85 /* View.swift */,
 				F85C7F112721048E004BDBA4 /* Layout.swift */,
 				96D95015270238500079D39D /* Throttler.swift */,
+				DFACBF80277B916B003D5F41 /* ConfigurableGradientView.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -6672,7 +6686,7 @@
 				43AB6F9C25DC53D20016B015 /* GoogleTopSiteHelper.swift */,
 				43AB6FA025DC53D30016B015 /* LibraryShortcutView.swift */,
 				43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */,
-				DF9845FF276B99660071CCAE /* WallpaperManager.swift */,
+				DFACBF82277B9278003D5F41 /* Wallpapers */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -8675,6 +8689,7 @@
 				1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */,
+				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				D5D052EF2645ACBF00759F85 /* View.swift in Sources */,
 				C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */,
@@ -8700,6 +8715,7 @@
 				43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
 				431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */,
+				DFACBF81277B916B003D5F41 /* ConfigurableGradientView.swift in Sources */,
 				7482205C1DBAB56300EEEA72 /* MailProviders.swift in Sources */,
 				C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */,
 				DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */,
