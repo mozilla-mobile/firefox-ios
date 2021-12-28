@@ -186,7 +186,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         super.viewDidLoad()
         self.tableView.keyboardDismissMode = .onDrag
     }
+}
 
+extension HomePageSettingViewController {
     class TopSitesSettings: Setting {
         let profile: Profile
 
@@ -213,34 +215,30 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 }
 
-class TopSitesRowCountSettingsController: SettingsTableViewController {
-    let prefs: Prefs
-    var numberOfRows: Int32
-    static let defaultNumberOfRows: Int32 = 2
+extension HomePageSettingViewController {
 
-    init(prefs: Prefs) {
-        self.prefs = prefs
-        numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
-        super.init(style: .grouped)
-        self.title = .AppMenuTopSitesTitleString
-    }
+    class WallpaperSettings: Setting {
+        let profile: Profile
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func generateSettings() -> [SettingSection] {
-
-        let createSetting: (Int32) -> CheckmarkSetting = { num in
-            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"), subtitle: nil, isChecked: { return num == self.numberOfRows }, onChecked: {
-                self.numberOfRows = num
-                self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
-                self.tableView.reloadData()
-            })
+        override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+        override var status: NSAttributedString {
+            let num = self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
+            return NSAttributedString(string: String(format: .TopSitesRowCount, num))
         }
 
-        let rows = [1, 2, 3, 4].map(createSetting)
-        let section = SettingSection(title: NSAttributedString(string: .TopSitesRowSettingFooter), footerTitle: nil, children: rows)
-        return [section]
+        override var accessibilityIdentifier: String? { return "TopSitesRows" }
+        override var style: UITableViewCell.CellStyle { return .value1 }
+
+        init(settings: SettingsTableViewController) {
+            self.profile = settings.profile
+            super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Shortcuts,
+                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        }
+
+        override func onClick(_ navigationController: UINavigationController?) {
+            let viewController = TopSitesRowCountSettingsController(prefs: profile.prefs)
+            viewController.profile = profile
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
 }
