@@ -199,7 +199,7 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
     }
 
     map.addScreenState(SettingsScreen) { screenState in
-        let table = app.tables["AppSettingsTableViewController.tableView"]
+        let table = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
         screenState.onEnterWaitFor(element: table)
 
         screenState.backAction = navigationControllerBackAction
