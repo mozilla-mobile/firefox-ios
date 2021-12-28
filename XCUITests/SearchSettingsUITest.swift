@@ -41,8 +41,8 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     private func addCustomSearchEngine() {
-        waitForExistence(app.tables.cells["customEngineViewButton"])
-        app.tables.cells["customEngineViewButton"].tap()
+        waitForExistence(app.tables.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton])
+        app.tables.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton].tap()
         waitForExistence(app.tables.cells.staticTexts["Search Engine"])
         app.tables.cells.textViews["customEngineTitle"].tap()
         app.tables.cells.textViews["customEngineTitle"].typeText(customSearchEngine["name"]!)
@@ -116,7 +116,7 @@ class SearchSettingsUITests: BaseTestCase {
         // Remove the custom search engine and check that edit is disabled
         let tablesQuery = app.tables
         tablesQuery.buttons["Delete \(customSearchEngine["name"]!)"].tap()
-        tablesQuery.buttons["Delete"].tap()
+        tablesQuery.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
 
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
     }

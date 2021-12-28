@@ -550,14 +550,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(table.cells["Sync"], to: SyncSettings, if: "fxaUsername != nil")
         screenState.tap(table.cells["SignInToSync"], to: Intro_FxASignin, if: "fxaUsername == nil")
-        screenState.tap(table.cells["Search"], to: SearchSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Search.searchNavigationBar], to: SearchSettings)
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
-        screenState.tap(table.cells["Home"], to: HomeSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Homepage.homeSettings], to: HomeSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells["Logins"], to: LoginsSettings)
-        screenState.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.loginsSettings], to: LoginsSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.clearPrivatedata], to: ClearPrivateDataSettings)
         screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
         screenState.tap(table.cells["ShowTour"], to: ShowTourInSettings)
 
@@ -579,14 +579,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(SearchSettings) { screenState in
         let table = app.tables.element(boundBy: 0)
-        screenState.tap(table.cells["customEngineViewButton"], to: AddCustomSearchSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton], to: AddCustomSearchSettings)
         screenState.backAction = navigationControllerBackAction
         screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
             // Screengraph will go back to main Settings screen. Manually tap on settings
-            app.tables["AppSettingsTableViewController.tableView"].staticTexts["Google"].tap()
-            app.navigationBars["Search"].buttons["Edit"].tap()
-            app.tables.buttons["Delete Mozilla Engine"].tap()
-            app.tables.buttons["Delete"].tap()
+            app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
+            app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
+            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         }
     }
 
@@ -713,7 +713,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(ClearPrivateDataSettings) { screenState in
-        let table = app.tables.element(boundBy: 0)
         screenState.tap(app.cells["WebsiteData"], to: WebsiteDataSettings)
         screenState.gesture(forAction: Action.AcceptClearPrivateData) { userState in
             app.tables.cells["ClearPrivateData"].tap()

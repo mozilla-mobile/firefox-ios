@@ -9,7 +9,7 @@ class SettingsTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
+        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
         while settingsTableView.staticTexts["Help"].exists == false {
             settingsTableView.swipeUp()
