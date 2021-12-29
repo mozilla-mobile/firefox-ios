@@ -16,6 +16,10 @@ public struct AccessibilityIdentifiers {
     struct BottomToolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
     }
+    
+    struct TabToolbar {
+        static let homeButton = "TabToolbar.homeButton"
+    }
 
     struct FirefoxHomepage {
 
