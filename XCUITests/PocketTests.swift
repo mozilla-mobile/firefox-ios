@@ -35,13 +35,4 @@ class PocketTest: BaseTestCase {
         // The url textField is not empty
         XCTAssertNotEqual(app.textFields["url"].value as! String, "", "The url textField is empty")
     }
-
-    func testTapOnMore() {
-        waitForExistence(app.buttons["More"], timeout: 5)
-        app.buttons["More"].tap()
-        waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        waitForExistence(app.textFields["url"], timeout: 15)
-        waitForValueContains(app.textFields["url"], value: "getpocket.com/explore")
-    }
 }
