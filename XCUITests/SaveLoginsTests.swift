@@ -52,7 +52,6 @@ class SaveLoginTest: BaseTestCase {
 
     private func unlockLoginsView() {
         let passcodeInput = springboard.secureTextFields.firstMatch
-        print(springboard.debugDescription)
         waitForExistence(passcodeInput, timeout: 20)
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
