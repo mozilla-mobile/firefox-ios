@@ -35,13 +35,9 @@ struct WallpaperManager {
     }
 
     // MARK: - Initializer
-    init(with userDefaults: UserDefaults = UserDefaults.standard, and customWallpapers: [Wallpaper]? = nil) {
-        if let customWallpapers = customWallpapers {
-            self.wallpaperArray = customWallpapers
-        } else {
-            self.wallpaperArray = [defaultWallpaper, wallpaper01, wallpaper02]
-        }
+    init(with userDefaults: UserDefaults = UserDefaults.standard) {
         self.userDefaults = userDefaults
+        self.wallpaperArray = [defaultWallpaper, wallpaper01, wallpaper02]
     }
 
     // MARK: - Public methods
