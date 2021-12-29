@@ -8,6 +8,7 @@ class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .gray
+        contentView.layoutMargins = UIEdgeInsets(top: 0, left: UIConstants.layout.settingsCellLeftInset, bottom: 0, right: 0)        
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -138,6 +138,7 @@ struct UIConstants {
         static let actionSheetTablePadding: CGFloat = 6
         static let actionSheetTitleHeaderHeight: CGFloat = 36
         static let actionSheetSeparatorHeaderHeight: CGFloat = 12
+        static let settingsCellLeftInset: CGFloat = 20
      
     }
 
