@@ -212,7 +212,7 @@
 "ExternalLink.openAppStoreButton" = "Abrir App Store";
 
 /* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ deseja abrir a App Store.";
+"ExternalLink.openAppStoreTitle" = "%@ quer abrir a App Store.";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Abrir Maps";
