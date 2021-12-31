@@ -31,6 +31,7 @@ class WallpaperBackgroundView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        setupNotifications()
     }
 
     @available(*, unavailable)
@@ -56,16 +57,38 @@ class WallpaperBackgroundView: UIView {
         ])
     }
 
+    // MARK: - Notifications
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotifications),
+                                               name: .HomePanelPrefsChanged,
+                                               object: nil)
+    }
+
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .HomePanelPrefsChanged:
+            updateImageTo(wallpaperManager.currentWallpaper.image)
+        default:
+            break
+        }
+    }
+
     // MARK: - Methods
     public func cycleWallpaper() {
+        guard wallpaperManager.switchWallpaperFromLogoEnabled else { return }
         wallpaperManager.cycleWallpaper()
+        updateImageTo(wallpaperManager.currentWallpaper.image)
+    }
 
-        if let image = wallpaperManager.currentWallpaper.image {
-            pictureView.image = image
-            gradientView.alpha = 1.0
-        } else {
+    private func updateImageTo(_ image: UIImage?) {
+        guard let image = image else {
             pictureView.image = nil
             gradientView.alpha = 0.0
+            return
         }
+
+        pictureView.image = image
+        gradientView.alpha = 1.0
     }
 }

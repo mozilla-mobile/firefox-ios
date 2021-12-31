@@ -22,12 +22,29 @@ struct WallpaperManager {
     private let defaultWallpaper = Wallpaper(named: "defaultWallpaper")
     private let wallpaper01 = Wallpaper(named: "wallpaper1")
     private let wallpaper02 = Wallpaper(named: "wallpaper2")
-    private var wallpaperArray: [Wallpaper]
+    private let wallpaper03 = Wallpaper(named: "wallpaper3")
+    private let wallpaper04 = Wallpaper(named: "wallpaper4")
+    private let wallpaper05 = Wallpaper(named: "wallpaper5")
+    var wallpaperArray: [Wallpaper]
+
     private let userDefaults: UserDefaults
 
-    private var currentIndex: Int {
-        let index = userDefaults.integer(forKey: PrefsKeys.WallpaperManagerCustomizationKey)
+    // Computed properties
+    var currentIndex: Int {
+        let index = userDefaults.integer(forKey: PrefsKeys.WallpaperManagerCustomizationKeyIndex)
         return index
+    }
+
+    /// Returns the user's preference for whether or not to be able to change wallpapers
+    /// by tapping on the logo on the homepage.
+    ///
+    /// Because the default value of this feature is actually `true`, we have to invert
+    /// the actual value. Therefore, if the setting is `false`, we treat the setting as
+    /// being turned on, as `false` is what UserDefaults returns when a bool does not
+    /// exist for a key.
+    var switchWallpaperFromLogoEnabled: Bool {
+        get { return !userDefaults.bool(forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
+        set { userDefaults.set(!newValue, forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
     }
 
     var currentWallpaper: Wallpaper {
@@ -37,12 +54,12 @@ struct WallpaperManager {
     // MARK: - Initializer
     init(with userDefaults: UserDefaults = UserDefaults.standard) {
         self.userDefaults = userDefaults
-        self.wallpaperArray = [defaultWallpaper, wallpaper01, wallpaper02]
+        self.wallpaperArray = [defaultWallpaper, wallpaper01, wallpaper02, wallpaper03, wallpaper04, wallpaper05]
     }
 
     // MARK: - Public methods
     public func updateTo(index: Int) {
-        userDefaults.set(index, forKey: PrefsKeys.WallpaperManagerCustomizationKey)
+        userDefaults.set(index, forKey: PrefsKeys.WallpaperManagerCustomizationKeyIndex)
     }
 
     public func cycleWallpaper() {

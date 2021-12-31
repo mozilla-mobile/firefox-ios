@@ -13,7 +13,7 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     // MARK: - UI Elements
-    let logoButton: UIButton = .build { button in
+    lazy var logoButton: UIButton = .build { button in
         button.setTitle("", for: .normal)
         button.backgroundColor = .clear
         button.accessibilityIdentifier = a11y.logoButton
