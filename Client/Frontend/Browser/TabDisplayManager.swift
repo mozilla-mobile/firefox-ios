@@ -694,6 +694,13 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
             return
         }
 
+        // This enforces that filtered tabs, and tabs manager are in sync
+        if tab.isPrivate {
+            filteredTabs = tabManager.privateTabs.filter { filteredTabs.contains($0) }
+        } else {
+            filteredTabs = tabManager.normalTabs.filter { filteredTabs.contains($0) }
+        }
+        
         recordEventAndBreadcrumb(object: .tab, method: .drop)
 
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
