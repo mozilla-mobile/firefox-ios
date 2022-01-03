@@ -371,7 +371,7 @@ class URLBar: UIView {
         }
 
         truncatedUrlText.snp.makeConstraints { make in
-            make.centerY.equalTo(self).offset(4)
+            make.centerY.equalTo(self).offset(8)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().offset(UIConstants.layout.truncatedUrlTextOffset)
         }
