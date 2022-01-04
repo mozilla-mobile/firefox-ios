@@ -1167,7 +1167,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "To wam zmóžnja, wobraz do Camera Roll składować.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox by rady přistup na waše fota měł";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox by rady přistup k wašim fotam měł";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Začinić";
@@ -1251,7 +1251,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Daty su njepłaćiwe";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Prošu dowolće Firefox přistup na kameru swojeho grata w 'Nastajenja' -> 'Priwatnosć' -> 'Kamera'.";
+"ScanQRCode.PermissionError.Message" = "Prošu dowolće Firefox přistup ke kamerje swojeho grata w 'Nastajenja' -> 'Priwatnosć' -> 'Kamera'.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR-kod skenować";

@@ -1094,7 +1094,7 @@
 "No" = "Жоқ";
 
 /* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
-"No tabs" = "Беттер жоқ.";
+"No tabs" = "Беттер жоқ";
 
 /* OK button */
 "OK" = "ОК";
