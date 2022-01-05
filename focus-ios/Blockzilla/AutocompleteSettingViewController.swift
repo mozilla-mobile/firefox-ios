@@ -52,7 +52,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         if indexPath.section == 0 {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "enableCell")
             cell.textLabel?.text = UIConstants.strings.autocompleteTopSites
-
+            cell.contentView.layoutMargins = UIEdgeInsets(top: 0, left: UIConstants.layout.settingsCellLeftInset, bottom: 0, right: 0)
             let toggle = UISwitch()
             toggle.addTarget(self, action: #selector(defaultToggleSwitched(_:)), for: .valueChanged)
             toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
@@ -64,7 +64,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             if indexPath.row == 0 {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "enableCell")
                 cell.textLabel?.text = UIConstants.strings.autocompleteMySites
-
+                cell.contentView.layoutMargins = UIEdgeInsets(top: 0, left: UIConstants.layout.settingsCellLeftInset, bottom: 0, right: 0)
                 let toggle = UISwitch()
                 toggle.addTarget(self, action: #selector(customToggleSwitched(_:)), for: .valueChanged)
                 toggle.accessibilityIdentifier = "toggleCustomAutocompleteSwitch"
