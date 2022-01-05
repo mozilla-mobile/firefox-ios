@@ -353,7 +353,7 @@
 "Downloads.CancelDialog.Cancel" = "Cancelar";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "Tem certeza de que deseja cancelar este download?";
+"Downloads.CancelDialog.Message" = "Tem certeza que quer cancelar este download?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Continuar";
