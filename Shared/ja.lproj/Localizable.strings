@@ -306,7 +306,7 @@
 "Could not load page." = "ページを読み込めませんでした。";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "iOS 13 ユーザーは、端末がダークモードに設定されている場合、Firefox も自動的にダークテーマに切り替わります。この動作を変更するには、「設定」 > 「テーマ」の順に開いてください。";
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 ユーザーは、端末がダークモードに設定されている場合、Firefox も自動的にダークテーマに切り替わります。この動作を変更するには、「環境設定」 > 「テーマ」の順に開いてください。";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ダークテーマは、ダークキーボードとダークスプラッシュ画面を含みます。";
@@ -500,7 +500,7 @@
 "FxA.SignIntoSync" = "Sync にログイン";
 
 /* Label explaining what sync does */
-"FxA.SyncExplain" = "他の端末で開いたタブや、ブックマーク、パスワードを読み込めます。";
+"FxA.SyncExplain" = "他の端末で開いているタブや、ブックマーク、パスワードを読み込めます。";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "今すぐ同期";
@@ -530,13 +530,13 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "端末のひとつが Firefox Sync から切断されました";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "他の端末で開いたタブや、ブックマーク、パスワードを読み込めます。";
+"Get your open tabs, bookmarks, and passwords from your other devices." = "他の端末で開いているタブや、ブックマーク、パスワードを読み込めます。";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ヘルプ";
 
 /* Toggle history syncing setting */
-"History" = "履歴";
+"History" = "表示履歴";
 
 /* Title for button in the history panel to clear recent history */
 "HistoryPanel.ClearHistoryButtonTitle" = "最近の履歴を消去...";
@@ -1109,7 +1109,7 @@
 "Onboarding.WhatsNew.Description" = "前回のページから再開するのが簡単になりました。";
 
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
-"Onboarding.WhatsNew.PersonalizedHome.Description" = "開いているタブ、ブックマーク、ブラウジング履歴にジャンプします。";
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "開いているタブ、ブックマーク、閲覧履歴にジャンプします。";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
 "Onboarding.WhatsNew.RecentSearches.Description" = "ホームページから最近の検索を確認できます。";
@@ -1922,7 +1922,7 @@
 "SyncState.Failed.Title" = "同期に失敗しました";
 
 /* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "履歴";
+"SyncState.History.Title" = "表示履歴";
 
 /* The Logins sync component, used in SyncState.Partial.Title */
 "SyncState.Logins.Title" = "ログイン情報";

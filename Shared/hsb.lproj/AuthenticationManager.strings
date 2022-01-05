@@ -71,7 +71,7 @@
 "touchid.disable.reason.label" = "Wužiwajće swój porstowy wotćišć, zo by Touch ID znjemóžnił.";
 
 /* Touch ID prompt subtitle when accessing the require passcode setting */
-"touchid.require.passcode.reason.label" = "Wužiwajće swój porstowy wotćišć, zo byšće přistup na konfiguraciju swojeho interwala hesłoweho koda měł.";
+"touchid.require.passcode.reason.label" = "Wužiwajće swój porstowy wotćišć, zo byšće přistup ke konfiguraciji swojeho interwala hesłoweho koda měł.";
 
 /* Label used as a setting item to turn off passcode */
 "Turn Passcode Off" = "Hesłowy kod znjemóžnić";

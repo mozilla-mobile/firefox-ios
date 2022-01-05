@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "این اجازه را به شما می‌دهد تا تصاویر خود را ثبت و بارگذاری کنید.";
+"NSCameraUsageDescription" = "فایرفاکس از دوربین شما برای پردازش کد QR یا گرفتن عکس یا ویدیو شما استفاده می‌کند.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox برای دسترسی به ورودهای ذخیره شده شما نیاز به Face ID دارد.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "وب سایت‌هایی که شما بازدید میکنید ممکن است مکان شما را درخواست کنند.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "این به شما اجازهٔ گرفتن و بارگذاری عکس‌ها را می‌دهد.";
+"NSMicrophoneUsageDescription" = "فایرفاکس از میکروفن شما برای ضبط و ارسال صدا استفاده می‌کند.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "با این می‌توانید تصاویر را ذخیره کنید.";

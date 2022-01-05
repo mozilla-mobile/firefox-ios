@@ -89,16 +89,16 @@
 "TodayWidget.QuickActionsSubLabel" = "Firefox - クイックアクション";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescription" = "ホーム画面から開いたタブに直接アクセスできます。";
+"TodayWidget.QuickViewGalleryDescription" = "開いているタブにホーム画面から直接アクセスできます。";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescriptionV2" = "開いたタブへのショートカットを追加します。";
+"TodayWidget.QuickViewGalleryDescriptionV2" = "開いているタブへのショートカットを追加します。";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "クイックビュー";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "開いたタブへのショートカットを追加します。";
+"TodayWidget.QuickViewLargeGalleryDescription" = "開いているタブへのショートカットを追加します。";
 
 /* Sub label for Top Sites widget */
 "TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - 開いたタブ";

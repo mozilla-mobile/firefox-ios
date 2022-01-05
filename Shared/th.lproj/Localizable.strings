@@ -658,6 +658,9 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "เมื่อกี้นี้";
 
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "แสดงการดาวน์โหลด";
+
 /* History tableview section header */
 "Last month" = "เดือนที่แล้ว";
 
@@ -814,7 +817,7 @@
 "Menu.CopyURL.Confirm" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
-"Menu.Downloads.Label" = "ดาวน์โหลด";
+"Menu.Downloads.Label" = "การดาวน์โหลด";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "การป้องกันการติดตามที่มากขึ้นถูก ปิด สำหรับไซต์นี้";
