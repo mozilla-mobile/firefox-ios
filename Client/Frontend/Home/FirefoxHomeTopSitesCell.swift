@@ -91,6 +91,7 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(titleWrapper)
             make.leading.trailing.equalTo(titleWrapper)
+            make.width.equalTo(TopSiteCellUX.backgroundSize.width + 4)
         }
 
         imageView.snp.makeConstraints { make in
