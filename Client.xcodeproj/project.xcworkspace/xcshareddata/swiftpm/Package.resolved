@@ -2,12 +2,21 @@
   "object": {
     "pins": [
       {
+        "package": "GCDWebServer",
+        "repositoryURL": "https://github.com/nbhasin2/GCDWebServer.git",
+        "state": {
+          "branch": "master",
+          "revision": "14f9eedb296c5b71fec971d8256ef3bfc20a2245",
+          "version": null
+        }
+      },
+      {
         "package": "Glean",
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "7e5f0ea2cc7de9b3df2a1e2ee980cd56536ffb43",
-          "version": "42.1.0"
+          "revision": "20d49a6ea49a57df646f9ae0004f42f7fc318d16",
+          "version": "42.3.2"
         }
       },
       {
@@ -15,8 +24,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "e8d9b4373ced4b943df140ef6054e95ba9860195",
-          "version": "0.0.8"
+          "revision": "f7401cb55128c4239db92f8ffecea317eecc3ffe",
+          "version": "87.2.0"
         }
       },
       {
