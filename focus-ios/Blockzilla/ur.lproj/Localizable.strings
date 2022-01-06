@@ -532,6 +532,9 @@
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "مٹائيں";
 
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "براؤزنگ کی سابقات صاف ہو گئی۔";
+
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "صفحہ میں ڈھونڈیں: %@";
 
