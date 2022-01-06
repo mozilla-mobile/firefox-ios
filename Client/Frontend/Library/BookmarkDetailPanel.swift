@@ -39,7 +39,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     let bookmarkNodeType: BookmarkNodeType
 
     // Editable field(s) that all BookmarkNodes have.
-    var parentBookmarkFolder: BookmarkFolder
+    var parentBookmarkFolder: BookmarkFolderData
 
     // Sort position for the BookmarkItem. If editing, this
     // value remains the same as it was prior to the edit
@@ -64,7 +64,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
     // Array of tuples containing all of the BookmarkFolders
     // along with their indentation depth.
-    var bookmarkFolders: [(folder: BookmarkFolder, indent: Int)] = []
+    var bookmarkFolders: [(folder: BookmarkFolderData, indent: Int)] = []
 
     private var maxIndentationLevel: Int {
         return Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
@@ -84,25 +84,25 @@ class BookmarkDetailPanel: SiteTableViewController {
     }()
 
     // MARK: - Initializers
-    convenience init(profile: Profile, bookmarkNode: BookmarkNode, parentBookmarkFolder: BookmarkFolder, presentedFromToast fromToast: Bool = false) {
+    convenience init(profile: Profile, bookmarkNode: BookmarkNodeData, parentBookmarkFolder: BookmarkFolderData, presentedFromToast fromToast: Bool = false) {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
 
         self.isPresentedFromToast = fromToast
         self.bookmarkItemPosition = bookmarkNode.position
 
-        if let bookmarkItem = bookmarkNode as? BookmarkItem {
+        if let bookmarkItem = bookmarkNode as? BookmarkItemData {
             self.bookmarkItemOrFolderTitle = bookmarkItem.title
             self.bookmarkItemURL = bookmarkItem.url
 
             self.title = .BookmarksEditBookmark
-        } else if let bookmarkFolder = bookmarkNode as? BookmarkFolder {
+        } else if let bookmarkFolder = bookmarkNode as? BookmarkFolderData {
             self.bookmarkItemOrFolderTitle = bookmarkFolder.title
 
             self.title = .BookmarksEditFolder
         }
     }
 
-    convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolder) {
+    convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolderData) {
         self.init(profile: profile, bookmarkNodeGUID: nil, bookmarkNodeType: bookmarkNodeType, parentBookmarkFolder: parentBookmarkFolder)
 
         if bookmarkNodeType == .bookmark {
@@ -117,7 +117,7 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
-    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolder) {
+    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolderData) {
         self.bookmarkNodeGUID = bookmarkNodeGUID
         self.bookmarkNodeType = bookmarkNodeType
         self.parentBookmarkFolder = parentBookmarkFolder
@@ -181,29 +181,29 @@ class BookmarkDetailPanel: SiteTableViewController {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.RootGUID, recursive: true).uponQueue(.main) { result in
-            guard let rootFolder = result.successValue as? BookmarkFolder else {
+            guard let rootFolder = result.successValue as? BookmarkFolderData else {
                 // TODO: Handle error case?
                 self.bookmarkFolders = []
                 self.tableView.reloadData()
                 return
             }
 
-            var bookmarkFolders: [(folder: BookmarkFolder, indent: Int)] = []
+            var bookmarkFolders: [(folder: BookmarkFolderData, indent: Int)] = []
 
-            func addFolder(_ folder: BookmarkFolder, indent: Int = 0) {
+            func addFolder(_ folder: BookmarkFolderData, indent: Int = 0) {
                 // Do not append itself and the top "root" folder to this list as
                 // bookmarks cannot be stored directly within it.
                 if folder.guid != BookmarkRoots.RootGUID && folder.guid != self.bookmarkNodeGUID {
                     bookmarkFolders.append((folder, indent))
                 }
 
-                var folderChildren: [BookmarkNode]? = nil
+                var folderChildren: [BookmarkNodeData]? = nil
                 // Suitable to be appended
                 if folder.guid != self.bookmarkNodeGUID {
                     folderChildren = folder.children
                 }
 
-                for case let childFolder as BookmarkFolder in folderChildren ?? [] {
+                for case let childFolder as BookmarkFolderData in folderChildren ?? [] {
                     // Any "root" folders (i.e. "Mobile Bookmarks") should
                     // have an indentation of 0.
                     if childFolder.isRoot {
