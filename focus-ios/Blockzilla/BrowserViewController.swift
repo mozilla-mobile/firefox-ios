@@ -994,6 +994,16 @@ extension BrowserViewController: FindInPageBarDelegate {
         let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
         webViewController.evaluate("__firefox__.\(function)(\"\(escaped)\")", completion: nil)
     }
+    
+    private func shortcutContextMenuIsOpenOnIpad() -> Bool {
+        var shortcutContextMenuIsDisplayed: Bool =  false
+        for element in shortcutsContainer.subviews {
+            if let shortcut = element as? ShortcutView, shortcut.contextMenuIsDisplayed {
+                shortcutContextMenuIsDisplayed = true
+            }
+        }
+        return isIPadRegularDimensions && shortcutContextMenuIsDisplayed
+    }
 }
 
 extension BrowserViewController: URLBarDelegate {
@@ -1101,6 +1111,8 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
+       
+        guard !shortcutContextMenuIsOpenOnIpad() else { return }
         overlayView.dismiss()
         toggleURLBarBackground(isBright: !webViewController.isLoading)
         shortcutsContainer.isHidden = urlBar.inBrowsingMode
@@ -1225,6 +1237,12 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController: ShortcutViewDelegate {
+    
+    func dismissShortcut() {
+        guard isIPadRegularDimensions else { return }
+        urlBarDidDismiss(urlBar)
+    }
+    
     func shortcutTapped(shortcut: Shortcut) {
         ensureBrowsingMode()
         urlBar.url = shortcut.url

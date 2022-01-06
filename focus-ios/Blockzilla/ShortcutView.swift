@@ -10,9 +10,11 @@ import CoreHaptics
 protocol ShortcutViewDelegate: AnyObject {
     func shortcutTapped(shortcut: Shortcut)
     func removeFromShortcutsAction(shortcut: Shortcut)
+    func dismissShortcut()
 }
 
 class ShortcutView: UIView {
+    var contextMenuIsDisplayed = false
     private var shortcut: Shortcut
     weak var delegate: ShortcutViewDelegate?
     
@@ -115,5 +117,14 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
             }
             return UIMenu(children: [removeFromShortcutsAction])
         })
+    }
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willDisplayMenuFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+        contextMenuIsDisplayed =  true
+    }
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willEndFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+        contextMenuIsDisplayed = false
+        self.delegate?.dismissShortcut()
     }
 }
