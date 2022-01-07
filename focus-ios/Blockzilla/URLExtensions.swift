@@ -195,14 +195,14 @@ extension URL {
      :returns: The base domain string for the given host name.
      */
     public var baseDomain: String? {
-        guard !isIPv6, let host = host else { return nil }
+        guard !isIPv4 && !isIPv6, let host = host else { return host }
 
         // If this is just a hostname and not a FQDN, use the entire hostname.
         if !host.contains(".") {
             return host
         }
 
-        return publicSuffixFromHost(host, withAdditionalParts: 1)
+        return publicSuffixFromHost(host, withAdditionalParts: 1) ?? host
     }
 
     /**
@@ -283,6 +283,12 @@ extension URL {
         }
 
         return host.lowercased() == "localhost" || host == "127.0.0.1"
+    }
+
+    public var isIPv4: Bool {
+        let ipv4Pattern = #"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"#
+        
+        return host?.range(of: ipv4Pattern, options: .regularExpression) != nil
     }
 
     public var isIPv6: Bool {
