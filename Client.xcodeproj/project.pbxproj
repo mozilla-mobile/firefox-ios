@@ -299,6 +299,7 @@
 		4336FAD2264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 4336FAD1264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js */; };
 		433F87CE2788EAB600693368 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87CD2788EAB600693368 /* GCDWebServers */; };
 		433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87CF2788ECDD00693368 /* GCDWebServers */; };
+		433F87D52788F01500693368 /* KIF in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87D42788F01500693368 /* KIF */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
 		43446CEA2412066500F5C643 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CE92412066500F5C643 /* UIViewControllerExtension.swift */; };
 		43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */; };
@@ -394,7 +395,6 @@
 		7B3D9E651E4CBFDB007A50DA /* NSCoderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D9E641E4CBFDB007A50DA /* NSCoderExtensions.swift */; };
 		7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B42406D1CA04CAC009B5C28 /* Menu.xcassets */; };
 		7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B4980A71CE363ED0017547C /* Settings.xcassets */; };
-		7B604F991C494F74006EEEC3 /* KIF.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F981C494F74006EEEC3 /* KIF.framework */; };
 		7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* SDWebImage.framework */; };
 		7B604F9D1C495143006EEEC3 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* SDWebImage.framework */; };
 		7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FA11C495268006EEEC3 /* SnapKit.framework */; };
@@ -558,7 +558,6 @@
 		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */; };
-		D006F2E32283307B0004D3AB /* KIF.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7B604F981C494F74006EEEC3 /* KIF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */; };
 		D0131B4D1F3CF7D8000CDE86 /* SQLiteFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0131B4C1F3CF7D8000CDE86 /* SQLiteFavicons.swift */; };
 		D0148A02220C8C93008A6EEF /* RustLoginsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0148A01220C8C93008A6EEF /* RustLoginsTests.swift */; };
@@ -1305,7 +1304,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D006F2E32283307B0004D3AB /* KIF.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2494,7 +2492,6 @@
 		7B3D9E641E4CBFDB007A50DA /* NSCoderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCoderExtensions.swift; sourceTree = "<group>"; };
 		7B42406D1CA04CAC009B5C28 /* Menu.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Menu.xcassets; sourceTree = "<group>"; };
 		7B4980A71CE363ED0017547C /* Settings.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Settings.xcassets; sourceTree = "<group>"; };
-		7B604F981C494F74006EEEC3 /* KIF.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KIF.framework; path = Carthage/Build/iOS/KIF.framework; sourceTree = "<group>"; };
 		7B604F9A1C4950F2006EEEC3 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
 		7B604FA11C495268006EEEC3 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
@@ -4430,7 +4427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6231C071B90A712005ABB0D /* libz.tbd in Frameworks */,
-				7B604F991C494F74006EEEC3 /* KIF.framework in Frameworks */,
+				433F87D52788F01500693368 /* KIF in Frameworks */,
 				D36998891AD70A0A00650C6C /* IOKit.framework in Frameworks */,
 				D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */,
 			);
@@ -5197,7 +5194,6 @@
 				DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */,
 				7B604FA11C495268006EEEC3 /* SnapKit.framework */,
 				7B604F9A1C4950F2006EEEC3 /* SDWebImage.framework */,
-				7B604F981C494F74006EEEC3 /* KIF.framework */,
 				E4B334891BBF23F9004E2BFF /* AdSupport.framework */,
 				E4B334871BBF23F3004E2BFF /* iAd.framework */,
 				3905274B1C874D35007E0BB7 /* NotificationCenter.framework */,
@@ -6851,6 +6847,9 @@
 				D39FA1661A83E0EC00EE869C /* PBXTargetDependency */,
 			);
 			name = UITests;
+			packageProductDependencies = (
+				433F87D42788F01500693368 /* KIF */,
+			);
 			productName = UITests;
 			productReference = D39FA15F1A83E0EC00EE869C /* UITests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -7293,6 +7292,7 @@
 				1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 				1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */,
 				433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */,
+				433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -12739,6 +12739,14 @@
 				kind = branch;
 			};
 		};
+		433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kif-framework/KIF.git";
+			requirement = {
+				kind = exactVersion;
+				version = 3.8.6;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -12841,6 +12849,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
 			productName = GCDWebServers;
+		};
+		433F87D42788F01500693368 /* KIF */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF" */;
+			productName = KIF;
 		};
 		43EFA63D2786562600400DF0 /* Places */ = {
 			isa = XCSwiftPackageProductDependency;
