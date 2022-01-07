@@ -422,7 +422,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         // On iPad
         // The number of items in a row is equal to the number of highlights in a row * 2
         var numItems = Int(FirefoxHomeUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass])
-        if UIWindow.isLandscape || (traits.horizontalSizeClass == .compact && isLandscape) {
+        if UIWindow.isPortrait || (traits.horizontalSizeClass == .compact && isLandscape) {
             numItems = numItems - 1
         }
         return numItems * 2
