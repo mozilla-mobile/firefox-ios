@@ -30,20 +30,11 @@
       },
       {
         "package": "MozillaRustComponentsSwift",
-        "repositoryURL": "https://github.com/mozilla/rust-components-swift",
+        "repositoryURL": "https://github.com/skhamis/rust-components-swift",
         "state": {
-          "branch": null,
-          "revision": "f7401cb55128c4239db92f8ffecea317eecc3ffe",
-          "version": "87.2.0"
-        }
-      },
-      {
-        "package": "SwiftProtobuf",
-        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
-        "state": {
-          "branch": null,
-          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
-          "version": "1.18.0"
+          "branch": "no-glean-test",
+          "revision": "1e89ad557060cb68a46eba2b26d553db3ab3dee7",
+          "version": null
         }
       },
       {
