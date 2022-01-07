@@ -1,7 +1,6 @@
 github "getsentry/sentry-cocoa"             ~> 4.2
 github "SnapKit/SnapKit"                    ~> 5.0
 github "SDWebImage/SDWebImage"              ~> 5.0
-github "swisspol/GCDWebServer"              ~> 3.3
 github "kif-framework/KIF"                  "v3.7.11"
 github "mozilla-mobile/onepassword-app-extension"    "add-framework-support"
 github "DaveWoodCom/XCGLogger"              ~> 7.0
