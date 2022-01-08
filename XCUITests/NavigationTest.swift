@@ -15,7 +15,9 @@ let requestDesktopSiteLabel = "Request Desktop Site"
 
 class NavigationTest: BaseTestCase {
     func testNavigation() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         let urlPlaceholder = "Search or enter address"
         XCTAssert(app.textFields["url"].exists)
@@ -24,7 +26,6 @@ class NavigationTest: BaseTestCase {
         // Check the url placeholder text and that the back and forward buttons are disabled
         XCTAssert(urlPlaceholder == defaultValuePlaceholder)
         if iPad() {
-            app.buttons["urlBar-cancel"].tap()
             XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["Forward"].isEnabled)
             app.textFields["url"].tap()
@@ -34,6 +35,10 @@ class NavigationTest: BaseTestCase {
         }
 
         // Once an url has been open, the back button is enabled but not the forward button
+        if iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-example.html")
@@ -89,7 +94,7 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
-        let signInToFirefoxStaticText = app.tables["AppSettingsTableViewController.tableView"].staticTexts["Sign in to Sync"]
+        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Sign in to Sync"]
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
@@ -233,22 +238,24 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
             XCTAssertTrue(app.menuItems["Share…"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
         } else {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
         }
         
         app.textFields["address"].typeText("\n")
         waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+
         app.textFields["url"].press(forDuration:3)
         app.tables.cells["menu-Copy-Link"].tap()
+        
+        sleep(2)
         app.textFields["url"].tap()
         // Since the textField value appears all selected first time is clicked
         // this workaround is necessary
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         app.textFields["address"].tap()
         waitForExistence(app.menuItems["Copy"])
         if iPad() {

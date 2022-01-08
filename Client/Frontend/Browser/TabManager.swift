@@ -37,14 +37,27 @@ extension TabManager: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         store.preserveTabs(tabs, selectedTab: selectedTab)
     }
+    
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+        guard tab.screenshot != nil else {
+            // Remove screenshot from image store so we can use favicon
+            // when a screenshot isn't available for the associated tab url
+            removeScreenshot(tab: tab)
+            return
+        }
+        storeScreenshot(tab: tab)
+    }
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject, FeatureFlagsProtocol {
+
+    // MARK: - Variables
     fileprivate var delegates = [WeakTabManagerDelegate]()
     fileprivate let tabEventHandlers: [TabEventHandler]
     fileprivate let store: TabManagerStore
     fileprivate let profile: Profile
+    fileprivate var isRestoringTabs = false
 
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -143,6 +156,13 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return eligibleTabs
     }
 
+
+    var lastSessionWasPrivate: Bool {
+        return UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+    }
+    
+
+    // MARK: - Initializer
     init(profile: Profile, imageStore: DiskImageStore?) {
         assert(Thread.isMainThread)
 
@@ -153,7 +173,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         self.store = TabManagerStore(imageStore: imageStore, prefs: profile.prefs)
         super.init()
 
-        register(self, forTabEvents: .didLoadFavicon)
+        register(self, forTabEvents: .didLoadFavicon, .didSetScreenshot)
 
         addNavigationDelegate(self)
 
@@ -222,6 +242,12 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func storeScreenshot(tab: Tab) {
         store.preserveScreenshot(forTab: tab)
+        storeChanges()
+    }
+    
+    func removeScreenshot(tab: Tab) {
+        store.removeScreenshot(forTab: tab)
+        storeChanges()
     }
 
     // This function updates the _selectedIndex.
@@ -269,9 +295,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
     }
 
-    //Called by other classes to signal that they are entering/exiting private mode
-    //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    //we only want to remove all private tabs when leaving PBM and not when entering.
+    // Called by other classes to signal that they are entering/exiting private mode
+    // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
+    // we only want to remove all private tabs when leaving PBM and not when entering.
     func willSwitchTabMode(leavingPBM: Bool) {
         recentlyClosedForUndo.removeAll()
 
@@ -448,9 +474,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return result
     }
 
-    func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
+    func removeTab(_ tab: Tab) {
         guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
-        removeTab(tab, flushToDisk: true, notify: true)
+        removeTab(tab, flushToDisk: true)
         updateIndexAfterRemovalOf(tab, deletedIndex: index)
         hideNetworkActivitySpinner()
 
@@ -486,9 +512,11 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
-    /// - Parameter notify: if set to true, will call the delegate after the tab
-    ///   is removed.
-    fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool, notify: Bool) {
+    /// Remove a tab, will notify delegate of the tab removal
+    /// - Parameters:
+    ///   - tab: the tab to remove
+    ///   - flushToDisk: Will store changes if true, and update selected index
+    fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
         assert(Thread.isMainThread)
 
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
@@ -506,10 +534,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         tab.close()
 
-        if notify {
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
-            TabEvent.post(.didClose, for: tab)
-        }
+        // Notify of tab removal
+        delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
+        TabEvent.post(.didClose, for: tab)
 
         if flushToDisk {
             storeChanges()
@@ -543,7 +570,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func removeTabsAndAddNormalTab(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false)
         }
         if normalTabs.isEmpty {
             selectTab(addTab())
@@ -553,7 +580,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func removeTabsWithoutToast(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false)
         }
     }
 
@@ -602,7 +629,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         // In non-private mode, delete all tabs will automatically create a tab
         if let tab = tabs.first, !tab.isPrivate {
-            removeTabAndUpdateSelectedIndex(tab)
+            removeTab(tab)
         }
 
         selectTab(selectedTab)
@@ -613,9 +640,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         recentlyClosedForUndo.removeAll()
     }
 
-    func removeTabs(_ tabs: [Tab], shouldNotify: Bool = true) {
+    func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: shouldNotify)
+            self.removeTab(tab, flushToDisk: false)
         }
         storeChanges()
     }
@@ -678,23 +705,18 @@ extension TabManager {
     }
 
     func restoreTabs(_ forced: Bool = false) {
-        defer {
-            // Always make sure there is a single normal tab.
-            if normalTabs.isEmpty {
-                let tab = addTab()
-                if selectedTab == nil {
-                    selectTab(tab)
-                }
-            }
-        }
+        defer { checkForSingleTab() }
+        guard forced || count == 0,
+              !AppConstants.IsRunningTest,
+              !DebugSettingsBundleOptions.skipSessionRestore,
+              store.hasTabsToRestoreAtStartup
+        else { return }
 
-        guard forced || count == 0, !AppConstants.IsRunningTest, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
-            return
-        }
+        isRestoringTabs = true
 
-        var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(), tabManager: self)
-        let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
-        if wasLastSessionPrivate, !(tabToSelect?.isPrivate ?? false) {
+        var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(),
+                                                   tabManager: self)
+        if lastSessionWasPrivate, !(tabToSelect?.isPrivate ?? false) {
             tabToSelect = addTab(isPrivate: true)
         }
 
@@ -703,6 +725,129 @@ extension TabManager {
         for delegate in self.delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
+
+        isRestoringTabs = false
+    }
+
+    private func checkForSingleTab() {
+        // Always make sure there is a single normal tab.
+        if normalTabs.isEmpty {
+            let tab = addTab()
+            if selectedTab == nil { selectTab(tab) }
+        }
+    }
+
+    // MARK: - Start at Home
+
+    /// Public interface for checking whether the StartAtHome Feature should run.
+    public func startAtHomeCheck() {
+        // Do not open a new home page if we come from an external url source
+        guard !BrowserViewController.foregroundBVC().openedUrlFromExternalSource else {
+            // Reset the value for external url source so that
+            // after inactivity we can start at home again
+            BrowserViewController.foregroundBVC().openedUrlFromExternalSource = false
+            return
+        }
+        guard !AppConstants.IsRunningTest,
+              !DebugSettingsBundleOptions.skipSessionRestore,
+              !isRestoringTabs
+        else { return }
+
+        if shouldStartAtHome() {
+            let scannableTabs = lastSessionWasPrivate ? privateTabs : normalTabs
+            let existingHomeTab = scanForExistingHomeTab(in: scannableTabs,
+                                                         with: profile.prefs)
+            let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
+                                                   inPrivateMode: lastSessionWasPrivate,
+                                                   and: profile.prefs)
+
+            selectTab(tabToSelect)
+        }
+    }
+
+    /// Determines whether the Start at Home feature is enabled, how long it has been since
+    /// the user's last activity and whether, based on their settings, Start at Home feature
+    /// should perform its function.
+    private func shouldStartAtHome() -> Bool {
+        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
+              let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
+              setting != .disabled
+        else { return false }
+
+        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
+        let dateComponents = Calendar.current.dateComponents([.hour, .second],
+                                                             from: lastActiveTimestamp,
+                                                             to: Date())
+        var timeSinceLastActivity = 0
+        var timeToOpenNewHome = 0
+
+        if setting == .afterFourHours {
+            timeSinceLastActivity = dateComponents.hour ?? 0
+            timeToOpenNewHome = 4
+
+        } else if setting == .always {
+            timeSinceLastActivity = dateComponents.second ?? 0
+            timeToOpenNewHome = 5
+        }
+
+        return timeSinceLastActivity >= timeToOpenNewHome
+    }
+
+    /// Looks to see if the user already has a homepage tab open (as per their preferences)
+    /// and, if they do, returns that tab, in order to avoid opening multiple duplicate
+    /// homepage tabs.
+    ///
+    /// - Parameters:
+    ///   - tabs: The tabs to be scanned, either private, or normal, based on the last session
+    ///   - profilePreferences: Preferences stored in the user's `Profile`
+    /// - Returns: An optional tab, that matches the user's new tab preferences.
+    private func scanForExistingHomeTab(in tabs: [Tab],
+                                        with profilePreferences: Prefs) -> Tab? {
+
+        let page = NewTabAccessors.getHomePage(profilePreferences)
+        var existingHomeTab: Tab? = nil
+
+        for tab in tabs {
+            if page == .homePage {
+                existingHomeTab = tab.isCustomHomeTab ? tab : nil
+            } else if page == .topSites {
+                existingHomeTab = tab.isFxHomeTab ? tab : nil
+            }
+
+            if existingHomeTab != nil { return existingHomeTab }
+        }
+
+        return nil
+    }
+
+    /// Provides a tab on which to open if the start at home feature is enabled. This tab
+    /// can be an existing one, or, if no suitable candidate exists, a new one.
+    ///
+    /// - Parameters:
+    ///   - existingTab: A `Tab` that is the user's homepage, that is already open
+    ///   - privateMode: Whether the last session was private or not, so that, if there's
+    ///   no homepage open, we open a new tab in the correct state.
+    ///   - profilePreferences: Preferences, stored in the user's `Profile`
+    /// - Returns: A selectable tab
+    private func createStartAtHomeTab(withExistingTab existingTab: Tab?,
+                                      inPrivateMode privateMode: Bool,
+                                      and profilePreferences: Prefs) -> Tab? {
+
+        let page = NewTabAccessors.getHomePage(profilePreferences)
+        let customUrl = HomeButtonHomePageAccessors.getHomePage(profilePreferences)
+        let homeUrl = URL(string: "internal://local/about/home")
+
+        if page == .homePage, let customUrl = customUrl {
+            return existingTab ?? addTab(URLRequest(url: customUrl), isPrivate: privateMode)
+
+        } else if page == .topSites, let homeUrl = homeUrl {
+            let home = existingTab ?? addTab(isPrivate: privateMode)
+            home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
+            home.url = homeUrl
+            return home
+        }
+
+        return selectedTab ?? addTab()
     }
 }
 

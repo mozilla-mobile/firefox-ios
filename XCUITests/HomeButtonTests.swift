@@ -12,18 +12,30 @@ class HomeButtonTests: BaseTestCase {
     }
 
     func testGoHome() throws {
+        if iPad() {
+            waitForTabsButton()
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        waitForExistence(app.buttons["TabToolbar.homeButton"], timeout: 5)
-        XCTAssertTrue(app.buttons["TabToolbar.homeButton"].exists)
-        app.buttons["TabToolbar.homeButton"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton], timeout: 5)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].exists)
+        app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].tap()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
-        XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+        if iPad() {
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].label, "Menu")
+        } else {
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].label, "Search")
+        }
+        if iPad() {
+            navigator.nowAt(NewTabScreen)
+        }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
-        waitForExistence(app.buttons["TabToolbar.homeButton"], timeout: 5)
-        XCTAssertTrue(app.buttons["TabToolbar.homeButton"].exists)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton], timeout: 5)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].exists)
 
         XCUIDevice.shared.orientation = .landscapeRight
         // TabToolbar.homeButton is 'masked' as 'Reload' for some reason
@@ -31,6 +43,5 @@ class HomeButtonTests: BaseTestCase {
         XCTAssertTrue(app.buttons["Reload"].exists)
         app.buttons["Reload"].tap()
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
     }
 }

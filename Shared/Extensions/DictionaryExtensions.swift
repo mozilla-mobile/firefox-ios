@@ -4,8 +4,8 @@
 
 extension Dictionary {
 
-    public mutating func merge(with dictionary: Dictionary) {
-        dictionary.forEach { updateValue($1, forKey: $0) }
+    public func merge(with dictionary: Dictionary) -> Dictionary {
+        return self.merging(dictionary) { (_, new) in new }
     }
 
     public var asString: String? {

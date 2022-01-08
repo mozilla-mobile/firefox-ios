@@ -60,6 +60,7 @@ protocol TabEventHandler: AnyObject {
     func tabDidClose(_ tab: Tab)
     func tabDidToggleDesktopMode(_ tab: Tab)
     func tabDidChangeContentBlocking(_ tab: Tab)
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool)
 }
 
 // Provide default implmentations, because we don't want to litter the code with
@@ -75,6 +76,7 @@ extension TabEventHandler {
     func tabDidClose(_ tab: Tab) {}
     func tabDidToggleDesktopMode(_ tab: Tab) {}
     func tabDidChangeContentBlocking(_ tab: Tab) {}
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}
 }
 
 enum TabEventLabel: String {
@@ -88,6 +90,7 @@ enum TabEventLabel: String {
     case didClose
     case didToggleDesktopMode
     case didChangeContentBlocking
+    case didSetScreenshot
 }
 
 // Names of events must be unique!
@@ -102,6 +105,7 @@ enum TabEvent {
     case didClose
     case didToggleDesktopMode
     case didChangeContentBlocking
+    case didSetScreenshot(isHome: Bool)
 
     var label: TabEventLabel {
         let str = "\(self)".components(separatedBy: "(")[0] // Will grab just the name from 'didChangeURL(...)'
@@ -133,6 +137,8 @@ enum TabEvent {
             handler.tabDidToggleDesktopMode(tab)
         case .didChangeContentBlocking:
             handler.tabDidChangeContentBlocking(tab)
+        case .didSetScreenshot(let hasHomeScreenshot):
+            handler.tabDidSetScreenshot(tab, hasHomeScreenshot: hasHomeScreenshot)
         }
     }
 }

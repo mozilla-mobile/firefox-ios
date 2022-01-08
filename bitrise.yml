@@ -287,7 +287,7 @@ workflows:
     - 5_deploy_and_slack
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
   RunSmokeXCUITestsiPad:
     steps:
@@ -304,7 +304,7 @@ workflows:
     description: This Workflow is to run SmokeTest on iPad simulator device
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -327,7 +327,7 @@ workflows:
         is_always_run: true
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -455,7 +455,7 @@ workflows:
       This Workflow is to run L10n tests in one locale and then share the bundle with the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
 
   L10nScreenshotsTests:
@@ -534,7 +534,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
 
   RunUnitTests:
@@ -550,7 +550,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -560,7 +560,6 @@ workflows:
     - 5_deploy_and_slack
     after_run:
     - RunSmokeXCUITests
-
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
@@ -576,105 +575,8 @@ workflows:
     description: This Workflow is to run tests UI TESTS
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
-  RunAllXCUITests:
-    after_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    - 4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests
-    - 5_deploy_and_slack
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-  RunSmokeXCUITests:
-    steps:
-    - cache-pull@2.1:
-        is_always_run: true
-    - xcode-test@2:
-        inputs:
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
-        - simulator_device: iPhone 11
-        is_always_run: true
-    - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.2: {}
-    description: This Workflow is to run tests UI TESTS
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-  RunSmokeXCUITestsiPad:
-    steps:
-    - xcode-build-for-simulator@0.11:
-        inputs:
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec_Enterprise_XCUITests
-    - xcode-test@2.4:
-        inputs:
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
-        - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (4th generation)
-    description: This Workflow is to run SmokeTest on iPad simulator device
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    after_run:
-    - 5_deploy_and_slack
-  RunUITests:
-    steps:
-    - xcode-build-for-simulator@0.11:
-        inputs:
-        - configuration: Release
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-            -testPlan SmokeXCUITests
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
-    - xcode-test@2:
-        inputs:
-        - scheme: Fennec_Enterprise_UITests
-        - simulator_device: iPhone 8
-        is_always_run: true
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    after_run:
-    - 5_deploy_and_slack
-  RunUnitTests:
-    steps:
-    - slack@3.1:
-        run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
-        inputs:
-        - channel: "#firefox-ios"
-        - text: Build status using latest A-S
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN_2"
-    description: This Workflow is to run tests (currently SmokeTest) when there is
-      a merge in master
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    - 4_A_xcode_build_and_test_Fennec
-    - 5_deploy_and_slack
-    after_run:
-    - RunSmokeXCUITests
   Deploy_Beta:
     steps:
     - activate-ssh-key@4.1:
@@ -798,7 +700,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   Deploy_Nightly:
     steps:
@@ -925,7 +827,7 @@ workflows:
       basis
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   Deploy_Prod_Beta:
     steps:
@@ -1079,7 +981,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
 app:
   envs:
@@ -1094,14 +996,14 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '95'
+    BITRISE_RELEASE_VERSION: '96.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '95'
+    BITRISE_BETA_VERSION: '96.0'
 trigger_map:
 - push_branch: main
   workflow: RunUnitTests
-- push_branch: v39.0
+- push_branch: v96.0
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
   workflow: RunUnitTests

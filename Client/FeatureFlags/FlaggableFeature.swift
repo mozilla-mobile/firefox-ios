@@ -17,10 +17,14 @@ struct FlaggableFeature {
         switch featureID {
         case .chronologicalTabs:
             return PrefsKeys.ChronTabsPrefKey
+        case .customWallpaper:
+            return PrefsKeys.CustomWallpaperPrefKey
         case .inactiveTabs:
             return PrefsKeys.KeyEnableInactiveTabs
         case .groupedTabs:
             return PrefsKeys.KeyEnableGroupedTabs
+        case .historyHighlights:
+            return PrefsKeys.HistoryHighlightsSectionEnabled
         case .jumpBackIn:
             return PrefsKeys.JumpBackInSectionEnabled
         case .pocket:
@@ -91,6 +95,10 @@ struct FlaggableFeature {
         switch featureID {
         case .startAtHome:
             return StartAtHomeSetting.afterFourHours.rawValue
+        case .customWallpaper:
+            // In this case, we want to enable the tap banner to cycle through
+            // wallpapers behaviour by default.
+            return UserFeaturePreference.enabled.rawValue
 
         // Nimbus default options
         case .jumpBackIn, .pocket, .recentlySaved:

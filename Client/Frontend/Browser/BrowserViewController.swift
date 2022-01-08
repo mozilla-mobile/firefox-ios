@@ -73,6 +73,7 @@ class BrowserViewController: UIViewController {
     var currentMiddleButtonState: MiddleButtonState?
     fileprivate var customSearchBarButton: UIBarButtonItem?
     var updateState: TabUpdateState = .coldStart
+    var openedUrlFromExternalSource = false
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -88,6 +89,7 @@ class BrowserViewController: UIViewController {
     var tabTrayViewController: TabTrayViewController?
     let profile: Profile
     let tabManager: TabManager
+    let ratingPromptManager: RatingPromptManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     var header: UIView!
@@ -130,7 +132,7 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
-    var isOnlyCmdPressed = false
+    var keyboardPressesHandler = KeyboardPressesHandler()
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
@@ -138,6 +140,11 @@ class BrowserViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
+
+        let daysOfUseCounter = CumulativeDaysOfUseCounter()
+        daysOfUseCounter.updateCounter()
+        self.ratingPromptManager = RatingPromptManager(profile: profile, daysOfUseCounter: daysOfUseCounter)
+
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -376,8 +383,7 @@ class BrowserViewController: UIViewController {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        // TODO: When implementing StartATHome, this might be a good place to call
-        // the feature when restoring not from a launch.
+        tabManager.startAtHomeCheck()
     }
 
     override func viewDidLoad() {
@@ -583,7 +589,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return Sentry.crashedLastLaunch
+        return Sentry.shared.crashedLastLaunch
     }
 
     fileprivate func cleanlyBackgrounded() -> Bool {
@@ -618,7 +624,6 @@ class BrowserViewController: UIViewController {
         presentDBOnboardingViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
-        screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
         super.viewDidAppear(animated)
 
@@ -854,9 +859,11 @@ class BrowserViewController: UIViewController {
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
         controller.onViewWillDisappear = {
             self.firefoxHomeViewController?.reloadAll()
+            self.libraryViewController = nil
         }
         controller.onViewDismissed = {
             self.firefoxHomeViewController?.reloadAll()
+            self.libraryViewController = nil
         }
         self.present(controller, animated: true, completion: nil)
     }
@@ -1134,6 +1141,7 @@ class BrowserViewController: UIViewController {
             return
         }
         popToBVC()
+        openedUrlFromExternalSource = true
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
@@ -1157,7 +1165,6 @@ class BrowserViewController: UIViewController {
     func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
-            tabManager.storeScreenshot(tab: selectedTab)
         }
         let request: URLRequest?
         if let url = url {
@@ -1244,8 +1251,12 @@ class BrowserViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    @objc fileprivate func openSettings() {
+    @objc func openSettings() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
+
+        if let presentedViewController = self.presentedViewController {
+            presentedViewController.dismiss(animated: true, completion: nil)
+        }
 
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = profile
@@ -1299,8 +1310,12 @@ class BrowserViewController: UIViewController {
         }
 
         // Represents WebView observation or delegate update that called this function
-        switch webViewStatus {
-        case .title, .url, .finishedNavigation:
+        
+        if webViewStatus == .finishedNavigation {
+            // A delay of 500 milliseconds is added when we take screenshot
+            // as we don't know exactly when wkwebview is rendered
+            let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
+
             if tab !== tabManager.selectedTab, let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
@@ -1313,12 +1328,15 @@ class BrowserViewController: UIViewController {
                 // There are cases in which the page will still show a loading animation or nothing when the screenshot is being taken,
                 // depending on internet connection
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
                     self.screenshotHelper.takeScreenshot(tab)
-                    self.tabManager.storeScreenshot(tab: tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
+                }
+            } else if tab.webView != nil {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
+                    self.screenshotHelper.takeScreenshot(tab)
                 }
             }
         }
@@ -1550,6 +1568,13 @@ extension BrowserViewController: LibraryPanelDelegate {
 
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
+
+        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            libraryDrawerViewController?.close()
+            return
+        }
+
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
         libraryDrawerViewController?.close()
     }
@@ -1602,23 +1627,36 @@ extension BrowserViewController: HomePanelDelegate {
             tab.urlType = .googleTopSite
             searchTelemetry?.shouldSetGoogleTopSiteSearch = true
         }
+
+        // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            return
+        }
+
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
-    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
-        // If we are showing toptabs a user can just use the top tab bar
-        // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard !topTabsVisible, !self.urlBar.inOverlayMode else {
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
+        let tab = tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
+        // Select new tab automatically if needed
+        guard !selectNewTab else {
+            tabManager.selectTab(tab)
             return
         }
+
+        // If we are showing toptabs a user can just use the top tab bar
+        // If in overlay mode switching doesnt correctly dismiss the homepanels
+        guard !topTabsVisible, !urlBar.inOverlayMode else {
+            return
+        }
+
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
             }
         })
-        self.show(toast: toast)
+        show(toast: toast)
     }
 
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil) {
@@ -2203,24 +2241,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        // Temporary solution to support CMD + Click to open an unselected new tab
-        if #available(iOS 13.4, *) {
-            if let event = event, event.allPresses.count > 1 {
-                isOnlyCmdPressed = false
-            } else if let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) { // GUI equates to CMD key on physical keyboard
-                isOnlyCmdPressed = true
-            }
-        }
-
         super.pressesBegan(presses, with: event)
+        keyboardPressesHandler.handlePressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         super.pressesEnded(presses, with: event)
-        if #available(iOS 13.4, *) {
-            guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return }
-            isOnlyCmdPressed = false
-        }
+        keyboardPressesHandler.handlePressesEnded(presses, with: event)
     }
 }
 
@@ -2384,13 +2411,13 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
     }
 }
 
-// MARK: - reopen last closed tab
+// MARK: - Reopen last closed tab
 
 extension BrowserViewController {
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if featureFlags.isFeatureActiveForBuild(.shakeToRestore) {
-                homePanelDidRequestToRestoreClosedTab(motion)
+            homePanelDidRequestToRestoreClosedTab(motion)
         }
     }
 

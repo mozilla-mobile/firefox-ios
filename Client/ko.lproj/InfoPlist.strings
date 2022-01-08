@@ -4,9 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox가 저장된 로그인에 접근하기 위해 Face ID가 필요합니다.";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "방문한 웹사이트에서 위치 정보를 요청할 수 있습니다.";
 
 /* Privacy - Microphone Usage Description */

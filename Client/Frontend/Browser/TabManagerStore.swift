@@ -31,36 +31,6 @@ class TabManagerStore: FeatureFlagsProtocol {
         return lockedForReading
     }
 
-    var shouldOpenHome: Bool {
-        let isColdLaunch = NSUserDefaultsPrefs(prefix: "profile").boolForKey("isColdLaunch")
-        guard let coldLaunch = isColdLaunch, featureFlags.isFeatureActiveForBuild(.startAtHome) else { return false }
-        // TODO: When fixing start at home, the below code is correct, but needs to be
-        // uncommented in order to get the feature working properly
-//        guard let setting: StartAtHomeSetting = featureFlags.featureOption(.startAtHome) else { return false }
-//
-//        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
-//        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: lastActiveTimestamp, to: Date())
-//
-//        var timeSinceLastActivity: Int
-//        var timeToOpenNewHome: Int
-//        switch setting {
-//        case .afterFourHours:
-//            timeSinceLastActivity = dateComponents.hour ?? 0
-//            timeToOpenNewHome = 4
-//
-//        case .always:
-//            // ROUX: this needs to be MINUTES. Currently seconds for testing
-//            timeSinceLastActivity = dateComponents.second ?? 0
-//            timeToOpenNewHome = 5
-//
-//        case .never: return false // should never get here, but the switch must be exhaustive
-//        }
-//
-//        return timeSinceLastActivity >= timeToOpenNewHome || coldLaunch
-
-        return false
-    }
-
     var hasTabsToRestoreAtStartup: Bool {
         return archivedStartupTabs.0.count > 0
     }
@@ -98,6 +68,12 @@ class TabManagerStore: FeatureFlagsProtocol {
     func preserveScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshot = tab.screenshot, let uuidString = tab.screenshotUUID?.uuidString {
             imageStore?.put(uuidString, image: screenshot)
+        }
+    }
+    
+    func removeScreenshot(forTab tab: Tab?) {
+        if let tab = tab, let screenshotUUID = tab.screenshotUUID {
+            imageStore?.removeImage(screenshotUUID.uuidString)
         }
     }
 
@@ -150,9 +126,8 @@ class TabManagerStore: FeatureFlagsProtocol {
         assertIsMainThread("Restoration is a main-only operation")
         guard !lockedForReading, savedTabs.count > 0 else { return nil }
         lockedForReading = true
-        defer {
-            lockedForReading = false
-        }
+        defer { lockedForReading = false }
+        
         var savedTabs = savedTabs
         // Make sure to wipe the private tabs if the user has the pref turned on
         if clearPrivateTabs {
@@ -161,10 +136,6 @@ class TabManagerStore: FeatureFlagsProtocol {
 
         var tabToSelect: Tab?
 
-        var fxHomeTab: Tab?
-        var customHomeTab: Tab?
-        let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
-
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             var tab = tabManager.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
@@ -172,13 +143,6 @@ class TabManagerStore: FeatureFlagsProtocol {
             if savedTab.isSelected {
                 tabToSelect = tab
             }
-
-            // select Home Tab for correct previous private / regular session
-            if tab.isPrivate == wasLastSessionPrivate {
-                fxHomeTab = tab.isFxHomeTab ? tab : nil
-            }
-
-            customHomeTab = tab.isCustomHomeTab ? tab : nil
         }
 
         if tabToSelect == nil {
@@ -186,28 +150,6 @@ class TabManagerStore: FeatureFlagsProtocol {
         }
 
         return tabToSelect
-    }
-
-    func shouldOpenHomeWith(tabManager: TabManager) -> Tab? {
-        var fxHomeTab: Tab?
-        var customHomeTab: Tab?
-
-        if shouldOpenHome {
-            let page = NewTabAccessors.getHomePage(prefs)
-            let customUrl = HomeButtonHomePageAccessors.getHomePage(prefs)
-            let homeUrl = URL(string: "internal://local/about/home")
-
-            if page == .homePage, let customUrl = customUrl {
-                return customHomeTab ?? tabManager.addTab(URLRequest(url: customUrl))
-            } else if page == .topSites, let homeUrl = homeUrl {
-                let home = fxHomeTab ?? tabManager.addTab()
-                home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
-                home.url = homeUrl
-                return home
-            }
-        }
-
-        return tabManager.selectedTab
     }
 
     func clearArchive() {

@@ -275,4 +275,32 @@ extension UIImage {
 
         return result
     }
+    
+    // Courtesy: https://www.hackingwithswift.com/example-code/media/how-to-read-the-average-color-of-a-uiimage-using-ciareaaverage
+    public func averageColor(completion: @escaping (UIColor?) -> Void) {
+        guard let inputImage = CIImage(image: self) else {
+            completion(nil)
+            return
+        }
+        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
+
+        // core image filter that resamples an image down to 1x1 pixels
+        // so you can read the most dominant color in an imagage
+        guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]), let outputImage = filter.outputImage else {
+            completion(nil)
+            return
+        }
+
+        // reads each of the color values into a UIColor, and sends it back
+        var bitmap = [UInt8](repeating: 0, count: 4)
+        guard let kCFNull = kCFNull else {
+            completion(nil)
+            return
+        }
+
+        let context = CIContext(options: [.workingColorSpace: kCFNull])
+        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
+
+        completion(UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255))
+    }
 }

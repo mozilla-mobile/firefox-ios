@@ -122,6 +122,7 @@ class AdsTelemetryHelper: TabContentScript {
             AdsTelemetryHelper.trackAdsFoundOnPage(providerName: provider.name)
             tab?.adsProviderName = provider.name
             tab?.adsTelemetryUrlList = adUrls
+            tab?.adsTelemetryRedirectUrlList.removeAll()
         }
     }
     

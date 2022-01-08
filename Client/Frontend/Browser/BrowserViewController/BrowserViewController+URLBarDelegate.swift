@@ -69,9 +69,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
-            tabManager.storeScreenshot(tab: tab)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
+
+        // App store review in-app prompt
+        ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     private func shouldShowChronTabs() -> Bool {

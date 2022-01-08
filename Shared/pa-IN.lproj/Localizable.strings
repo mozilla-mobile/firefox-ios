@@ -38,7 +38,7 @@
 "ActivityStream.Highlights.Bookmark" = "ਬੁੱਕਮਾਰਕ ਕੀਤਾ";
 
 /* The description of a highlight if it is a site the user has visited */
-"ActivityStream.Highlights.Visited" = "ਖੋਲ੍ਹਿਆ";
+"ActivityStream.Highlights.Visited" = "ਖੋਲ੍ਹੇ";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "ਵਾਪਸ ਜਾਓ";
@@ -53,13 +53,13 @@
 "ActivityStream.Library.Title" = "ਤਾਜ਼ਾ ਸੰਭਾਲੇ";
 
 /* Section title label for recently bookmarked websites */
-"ActivityStream.NewRecentBookmarks.Title" = "ਤਾਜ਼ਾ ਬੁੱਕਮਾਰਕ";
+"ActivityStream.NewRecentBookmarks.Title" = "ਹਾਲੀਆ ਬੁੱਕਮਾਰਕ";
 
 /* The link that shows more Pocket trending stories */
 "ActivityStream.Pocket.MoreLink" = "ਹੋਰ";
 
 /* Section title label for Recommended by Pocket section */
-"ActivityStream.Pocket.SectionTitle" = "ਪਾਕੇਟ ਉੱਤੇ ਰੁਝਾਨ";
+"ActivityStream.Pocket.SectionTitle" = "Pocket ਵਿੱਚ ਰੁਝਾਨ";
 
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle2" = "Pocket ਵਲੋਂ ਸਿਫਾਰਸ਼ੀ";
@@ -68,10 +68,10 @@
 "ActivityStream.Pocket.Trending" = "ਰੁਝਾਨ";
 
 /* Section title label for recently visited websites */
-"ActivityStream.RecentHistory.Title" = "ਹਾਲ ਦੇ ਖੋਲ੍ਹੇ ਗਏ";
+"ActivityStream.RecentHistory.Title" = "ਸੱਜਰੀਆਂ ਖੋਲ੍ਹੀਆਂ";
 
 /* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
-"ActivityStream.RecentlySaved.SectionTitle" = "ਤਾਜ਼ਾ ਸੰਭਾਲੇ";
+"ActivityStream.RecentlySaved.SectionTitle" = "ਸੱਜੀਆਂ ਸੰਭਾਲੀਆਂ";
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "ਸਭ ਵੇਖੋ";
@@ -123,7 +123,7 @@
 "Authentication required" = "ਪ੍ਰਮਾਣਿਕਤਾ ਲੋੜੀਂਦੀ ਹੈ";
 
 /* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "ਸਿਰਨਾਵਾਂ ਪੱਟੀ ਵਿੱਚੋਂ %@ ਸਿ਼ੱਧਾ ਖੋਜੋ";
+"Awesomebar.SearchWithEngine.Description" = "ਸਿਰਨਾਵਾਂ ਪੱਟੀ ਵਿੱਚੋਂ %@ ਸਿੱਧਾ ਖੋਜੋ";
 
 /* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
 "Awesomebar.SearchWithEngine.Title" = "%@ ਨਾਲ ਖੋਜੋ";
@@ -149,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "ਬੁੱਕਮਾਰਕ";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "ਜੋੜੋ";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "ਸਭ ਟੈਬਾਂ ਨੂੰ ਬੁੱਕਮਾਰਕ ਕਰੋ";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "ਮੌਜੂਦਾ ਟੈਬ ਨੂੰ ਬੁੱਕਮਾਰਕ ਕਰੋ";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "ਸੋਧੋ";
 
@@ -167,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "ਫ਼ੋਲਡਰ ਨਾਂ";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "ਡੈਸਕਟਾਪ ਬੁੱਕਮਾਰਕ";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "ਹਾਲੀਆ ਬੁੱਕਮਾਰਕ ਕੀਤੇ";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "ਨਵਾਂ ਬੁੱਕਮਾਰਕ";
 
@@ -175,6 +190,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "ਨਵਾਂ ਵੱਖਰੇਵਾਂ";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "ਬੁੱਕਮਾਰਕ ਖੋਜੋ";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "ਸਿਰਲੇਖ";
@@ -237,7 +255,7 @@
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ਬਦਲੋ";
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ਜਾਓ";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
@@ -258,10 +276,10 @@
 "ContextMenu.OpenInNewTabButtonTitle" = "ਨਵੇਂ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
 /* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "ਲਿੰਕ ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਤੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "ਲਿੰਕ ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
 /* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "ਨਵੀਂ ਟੈਬ ਵਿੱਚ ਲਿੰਕ ਖੋਲ੍ਹੋ";
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "ਲਿੰਕ ਨਵੀਂ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "ਚਿੱਤਰ ਸੰਭਾਲੋ";
@@ -272,9 +290,11 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "ਤੁਹਾਡੇ ਆਪਣੇ ਬਣਾਏ Firefox ਮੁੱਖ-ਸਫ਼ੇ ਨੇ ਹੁਣ ਜਿੱਥੇ ਤੁਸੀਂ ਛੱਡ ਕੇ ਗਏ ਸੀ, ਉਥੋਂ ਹੀ ਸ਼ੁਰੂ ਕਰਨਾ ਸੌਖਾ ਬਣਾ ਦਿੱਤਾ ਹੈ। ਆਪਣੀਆਂ ਸੱਜਰੀਆਂ ਟੈਬਾਂ, ਬੁੱਕਮਾਰਕ ਅਤੇ ਖੋਜ ਨਤੀਜੇ ਲੱਭੋ।";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "ਪਿਛਲੇ ਦੋ ਹਫ਼ਤਿਆਂ ਵਿੱਚ ਤੁਹਾਡੇ ਵਲੋਂ ਨਾ ਵੇਖੀਆਂ ਟੈਬਾਂ ਨੂੰ ਇੱਥੇ ਭੇਜਿਆ ਜਾਂਦਾ ਹੈ।";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਬੰਦ ਕਰੋ";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "ਸਫ਼ੇ ਨੂੰ ਪੜ੍ਹਨ ਸੂਚੀ ਵਿੱਚ ਨਹੀਂ ਜੋੜ ਸਕਿਆ";
@@ -286,7 +306,7 @@
 "Could not load page." = "ਸਫ਼ੇ ਨੂੰ ਲੋਡ ਨਹੀਂ ਕਰ ਸਕਿਆ।";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "ios 13 ਵਰਤੋਂਕਾਰਾਂ ਲਈ, ਹੁਣ ਜਦੋਂ ਤੁਹਾਡਾ ਫ਼ੋਨ ਡਾਰਕ ਮੋਡ 'ਤੇ ਸੈੱਟ ਕੀਤਾ ਤਾਂ ਫਾਇਰਫਾਕਸ ਆਪਣੇ-ਆਪ ਡਾਰਕ ਥੀਮ ਲਈ ਬਦਲ ਜਾਵੇਗਾ। ਇਹ ਰਵੱਈਆ ਬਦਲਣ ਲਈ, ਸੈਟਿੰਗਾ > ਥੀਮ ਉੱਤੇ ਜਾਓ।";
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 ਵਰਤੋਂਕਾਰਾਂ ਲਈ, ਹੁਣ ਜਦੋਂ ਤੁਹਾਡਾ ਫ਼ੋਨ ਡਾਰਕ ਮੋਡ 'ਤੇ ਸੈੱਟ ਕੀਤਾ ਤਾਂ ਫਾਇਰਫਾਕਸ ਆਪਣੇ-ਆਪ ਡਾਰਕ ਥੀਮ ਲਈ ਬਦਲ ਜਾਵੇਗਾ। ਇਹ ਰਵੱਈਆ ਬਦਲਣ ਲਈ, ਸੈਟਿੰਗਾਂ > ਥੀਮ ਉੱਤੇ ਜਾਓ।";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ਗੂੜ੍ਹਾ ਥੀਮ ਵਿੱਚ ਹੁਣ ਗੂੜ੍ਹਾ ਕੀਬੋਰਡ ਅਤੇ ਗੂੜ੍ਹੀ ਸਵਾਗਤੀ ਸਕਰੀਨ ਸ਼ਾਮਲ ਹੈ।";
@@ -298,7 +318,7 @@
 "CoverSheet.v24.ETP.Settings.Button" = "ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ";
 
 /* Title for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Title" = "ਇਸ਼ਤਿਹਾਰ ਟਰੈਕ ਕਰਨ ਪ੍ਰਤੀ ਸੁਰੱਖਿਆ";
+"CoverSheet.v24.ETP.Title" = "ਇਸ਼ਤਿਹਾਰ ਟਰੈਕ ਕਰਨ ਵਿਰੁੱਧ ਸੁਰੱਖਿਆ";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "ਖਾਤਾ ਬਣਾਓ";
@@ -375,7 +395,7 @@
 "DownloadsPanel.Share.Title" = "ਸਾਂਝਾ ਕਰੋ";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "ਕਨੈਕਟ ਕਰਨ ਲਈ ਆਪਣਾ ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ";
+"Enter your password to connect" = "ਕਨੈਕਟ ਕਰਨ ਲਈ ਆਪਣਾ ਪਾਸਵਰਡ ਦਿਓ";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "ਤਕਨੀਕੀ";
@@ -519,7 +539,7 @@
 "History" = "ਅਤੀਤ";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "…ਤਾਜ਼ਾ ਅਤੀਤ ਸਾਫ਼ ਕਰੋ";
+"HistoryPanel.ClearHistoryButtonTitle" = "…ਸੱਜਰਾ ਅਤੀਤ ਮਿਟਾਓ";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "ਹਰ ਚੀਜ਼";
@@ -561,7 +581,7 @@
 "HistoryPanel.HistoryBackButton.Title" = "ਅਤੀਤ";
 
 /* Title for the Recently Closed button in the History Panel */
-"HistoryPanel.RecentlyClosedTabsButton.Title" = "ਹਾਲ ਹੀ ਵਿੱਚ ਬੰਦ ਕੀਤੇ";
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "ਸੱਜਰੀਆਂ ਬੰਦ ਕੀਤੀਆਂ";
 
 /* Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Description.Pluralized" = "%d ਡਿਵਾਈਸ ਕਨੈਕਟ ਹਨ";
@@ -645,7 +665,7 @@
 "InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "ਆਪੇ ਬੰਦ ਕਰਨਾ ਚਾਲੂ ਕਰੋ";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
-"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ਉਹਨਾਂ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰ ਦੇਵੇਗਾ, ਜਿਨਾਂ ਨੂੰ ਤੁਸੀਂ ਪਿਛਲੇ ਮਹੀਨੇ ਭਰ ਤੋਂ ਨਹੀਂ ਵੇਖਿਆ ਹੈ।";
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ਪਿਛਲੇ ਮਹੀਨੇ ਭਰ ਤੋਂ ਵੱਧ ਸਮੇਂ ਤੋਂ ਨਾ ਵੇਖੀਆਂ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰ ਦੇਵੇਗਾ।";
 
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
 "InactiveTabs.TabTray.AutoClosePrompt.Title" = "ਇੱਕ ਮਹੀਨੇ ਬਾਅਦ ਆਪੇ ਬੰਦ ਕਰਨਾ ਹੈ?";
@@ -658,6 +678,78 @@
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "ਬੱਸ ਹੁਣੇ";
+
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "ਅਸਲ ਆਕਾਰ";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "ਬੁੱਕਮਾਰਕ ਜੋੜੋ";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "ਸੱਜਰੇ ਅਤੀਤ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "ਡਾਊਨਲੋਡ ਲਿੰਕ";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "ਮੁੜ ਖੋਜੋ";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "ਲਿੰਕ ਬੈਕਗਰਾਊਂਡ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "ਲਿੰਕ ਨਵੀਂ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "…ਸਫ਼ੇ ਨੂੰ ਇੰਝ ਸੰਭਾਲੋ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "ਬੁੱਕਮਾਰਕ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "ਸੋਧੋ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "ਫਾਈਲ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "ਅਤੀਤ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "ਟੂਲ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "ਵੇਖੋ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "ਵਿੰਡੋ";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "ਸੈਟਿੰਗਾਂ";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "ਬੁੱਕਮਾਰਕ ਵੇਖਾਓ";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "ਡਾਊਨਲੋਡ ਵੇਖਾਓ";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "ਪਹਿਲੀ ਟੈਬ ਨੂੰ ਵੇਖੋ";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "ਅਤੀਤ ਵੇਖੋ";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "ਪਿਛਲੀ ਟੈਬ ਵੇਖੋ";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "ਟੈਬ ਨੰਬਰ 1-9 ਵੇਖੋ";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "ਜ਼ੂਮ ਇਨ";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "ਜ਼ੂਮ ਆਉਟ";
 
 /* History tableview section header */
 "Last month" = "ਪਿਛਲਾ ਮਹੀਨਾ";
@@ -686,6 +778,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "ਲਾਗਇਨ";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "ਹੋਰ ਜਾਣੋ";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "ਲਾਗਇਨ ਤੇ ਪਾਸਵਰਡ ਸੰਭਾਲਣ ਤੇ ਆਪੇ-ਭਰਨ ਲਈ, Face ID, Touch ID ਜਾਂ ਡਿਵਾਈਸ ਪਾਸਕੋਡ ਸਮਰੱਥ ਕਰੋ।";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "ਜਾਰੀ ਰੱਖੋ";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "ਹੋਰ ਜਾਣੋ";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "ਤੁਹਾਡੇ ਲਾਗਇਨ ਤੇ ਪਾਸਵਰਡ ਹੁਣ Face ID, Touch ID ਜਾਂ ਡਿਵਾਈਸ ਪਾਸਕੋਡ ਨਾਲ ਸੁਰੱਖਿਅਤ ਹਨ।";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Firefox ਲਈ ਆਪੇ-ਭਰਨ ਨੂੰ ਵਰਤਣ ਲਈ ਤੁਹਾਨੂੰ ਡਿਵਾਈਸ ਪਾਸਕੋਡ ਸਮਰੱਥ ਕਰਨਾ ਪਵੇਗਾ।";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "ਆਪਣੇ ਪਾਸਵਰਡ ਹਰ ਥਾਂ ਆਪਣੇ ਨਾਲ ਰੱਖੋ";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Firefox ਪਾਸਵਰਡ ਆਪੇ-ਭਰੋ";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "ਆਪੇ-ਭਰੋ ਨੂੰ ਚਾਲੂ ਕਰੋ";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "ਸੋਧੇ ਗਏ";
 
@@ -705,10 +824,10 @@
 "LoginsHelper.PromptSavePassword.Title" = "ਕੀ %@ ਲਈ ਪਾਸਵਰਡ ਨੂੰ ਸੰਭਾਲਣਾ ਹੈ?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ ਲਈ ਲੌਗਇਨ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ ਲਈ ਲਾਗਇਨ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ ਲਈ %1$@ ਲੌਗਇਨ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ ਲਈ %1$@ ਲਾਗਇਨ ਨੂੰ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "ਲਾਗਇਨ ਨੂੰ ਸੰਭਾਲੋ";
@@ -757,11 +876,11 @@
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
-"Mark as Read" = "ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਗਾਓ";
+"Mark as Read" = "ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਾਓ";
 
 /* Name for Mark as unread button in reader mode
    Title for the button that marks a reading list item as unread */
-"Mark as Unread" = "ਨਾ-ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਗਾਓ";
+"Mark as Unread" = "ਨਾ-ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਾਓ";
 
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "ਬੁੱਕਮਾਰਕ ਜੋੜਿਆ";
@@ -975,7 +1094,7 @@
 "No" = "ਨਹੀਂ";
 
 /* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
-"No tabs" = "ਕੋਈ ਟੈਬ ਨਹੀਂ ਹਨ";
+"No tabs" = "ਟੈਬਾਂ ਨਹੀਂ ਹਨ";
 
 /* OK button */
 "OK" = "ਠੀਕ ਹੈ";
@@ -1021,7 +1140,7 @@
 "Open Tabs" = "ਟੈਬਾਂ ਖੋਲ੍ਹੋ";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "ਫਾਇਰਫਾਕਸ ਸਫ਼ੇ ਨੂੰ ਖੋਲ੍ਹ ਨਹੀਂ ਸਕਦਾ, ਕਿਉਂਕਿ ਇਹ ਗ਼ਲਤ ਐਡਰੈਸ ਹੈ।";
+"OpenURL.Error.Message" = "ਫਾਇਰਫਾਕਸ ਗਲਤ ਸਿਰਨਾਵਾਂ ਹੋਣ ਕਰਕੇ ਸਫ਼ੇ ਨੂੰ ਖੋਲ੍ਹ ਨਹੀਂ ਸਕਦਾ ਹੈ।";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "ਸਫ਼ੇ ਨੂੰ ਖੋਲ੍ਹਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ";
@@ -1057,7 +1176,7 @@
 "Privacy" = "ਪਰਦੇਦਾਰੀ";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "ਪਰਦੇਦਾਰੀ ਦੀ ਨੀਤੀ";
+"Privacy Policy" = "ਪਰਦੇਦਾਰੀ ਨੀਤੀ";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "ਕਨੈਕਸ਼ਨ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਹੈ";
@@ -1067,6 +1186,9 @@
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "ਤੁਰੰਤ-ਖੋਜ ਇੰਜਣ";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "ਐਪ ਸਟੋਰ ਉੱਤੇ ਰੇਟ ਕਰੋ";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "ਪੜ੍ਹੇ";
@@ -1081,7 +1203,7 @@
 "Reading list" = "ਪੜ੍ਹਨ ਸੂਚੀ";
 
 /* Title for the Recently Closed Tabs Panel */
-"RecentlyClosedTabsPanel.Title" = "ਤਾਜ਼ਾ ਬੰਦ ਕੀਤੇ";
+"RecentlyClosedTabsPanel.Title" = "ਸੱਜਰੀਆਂ ਬੰਦ ਕੀਤੀਆਂ";
 
 /* More button text for Recently Saved items at the home page. */
 "RecentlySaved.Actions.More" = "ਸਭ ਵੇਖੋ";
@@ -1288,13 +1410,13 @@
 "Settings.ClearAllWebsiteData.Clear.Button" = "ਸਾਰੇ ਵੈੱਬਸਾਈਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
 
 /* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
+"Settings.ClearPrivateData.Clear.Button" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.ClearPrivateData.SectionName" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
+"Settings.ClearPrivateData.SectionName" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
 
 /* Title displayed in header of the setting panel. */
-"Settings.ClearPrivateData.Title" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
+"Settings.ClearPrivateData.Title" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "ਚੀਜ਼ਾਂ ਮਿਟਾਓ: %1$@";
@@ -1547,7 +1669,7 @@
 "Settings.SendUsage.Link" = "ਹੋਰ ਜਾਣੋ।";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "ਮੌਜ਼ੀਲਾ ਸਿਰਫ਼ ਉਹੀ ਇਕੱਤਰ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹੈ, ਜੋ ਕਿ ਸਾਨੂੰ ਹਰ ਕਿਸੇ ਲਈ ਫਾਇਰਫਾਕਸ ਪਹੁੰਚਣ ਅਤੇ ਸੁਧਾਰਨ ਲਈ ਚਾਹੀਦਾ ਹੈ।";
+"Settings.SendUsage.Message" = "Mozilla ਸਿਰਫ਼ ਉਹੀ ਇਕੱਤਰ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹੈ, ਜੋ ਕਿ ਸਾਨੂੰ ਹਰ ਕਿਸੇ ਲਈ ਫਾਇਰਫਾਕਸ ਪਹੁੰਚਣ ਅਤੇ ਸੁਧਾਰਨ ਲਈ ਚਾਹੀਦਾ ਹੈ।";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ਵਰਤੋ ਡਾਟੇ ਨੂੰ ਭੇਜੋ";
@@ -1556,7 +1678,7 @@
 "Settings.ShowLinkPreviews.Status" = "ਲਿੰਕਾਂ ਨੂੰ ਦੇਰ ਤੱਕ ਦਬਾਉਣ ਵੇਲੇ";
 
 /* Title of setting to enable link previews when long-pressing links. */
-"Settings.ShowLinkPreviews.Title" = "ਲਿੰਕ ਪੂਰਵਦਰਸ਼ਨ ਦਿਖਾਓ";
+"Settings.ShowLinkPreviews.Title" = "ਲਿੰਕ ਝਲਕਾਂ ਨੂੰ ਵੇਖੋ";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "ਐਪਲੀਕੇਸ਼ਨ ਮੇਨੂ ਵਿੱਚ ਵੇਖੋ";
@@ -1589,7 +1711,7 @@
 "Settings.Studies.Toggle.Link" = "ਹੋਰ ਜਾਣੋ।";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = " Firefox ਸਮੇਂ ਸਮੇਂ ਉੱਤੇ ਅਧਿਐਨ ਇੰਸਟਾਲ ਅਤੇ ਚਲਾ ਸਕਦਾ ਹੈ।";
+"Settings.Studies.Toggle.Message" = "Firefox ਸਮੇਂ ਸਮੇਂ ਉੱਤੇ ਅਧਿਐਨ ਇੰਸਟਾਲ ਅਤੇ ਚਲਾ ਸਕਦਾ ਹੈ।";
 
 /* Toggled OFF to opt-out of studies */
 "Settings.Studies.Toggle.Off" = "ਬੰਦ";
@@ -1640,7 +1762,7 @@
 "Settings.TrackingProtection.MoreInfo" = "…ਹੋਰ ਜਾਣਕਾਰੀ";
 
 /* Additional information about your Enhanced Tracking Protection */
-"Settings.TrackingProtection.ProtectionCellFooter" = "ਲਕਸ਼ਿਤ ਇਸ਼ਤਿਹਾਰਾਂ ਨੂੰ ਘਟਾਉਂਦੀ ਹੈ ਅਤੇ ਇਸ਼ਤਿਹਾਰਦਾਤਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਿੰਗ ਨੂੰ ਟਰੈਕ ਕਰਨ ਤੋਂ ਰੋਕਣ ਵਿੱਚ ਮਦਦ ਕਰਦੀ ਹੈ।";
+"Settings.TrackingProtection.ProtectionCellFooter" = "ਟੀਚਾ ਬਣਾਏ ਇਸ਼ਤਿਹਾਰਾਂ ਨੂੰ ਘਟਾਉਂਦੀ ਹੈ ਅਤੇ ਇਸ਼ਤਿਹਾਰਦਾਤਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਿੰਗ ਨੂੰ ਟਰੈਕ ਕਰਨ ਤੋਂ ਰੋਕਣ ਵਿੱਚ ਮਦਦ ਕਰਦੀ ਹੈ।";
 
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer" = "ਜੇ ਕੋਈ ਸਾਈਟ ਉਮੀਦ ਮੁਤਾਬਕ ਕੰਮ ਨਹੀਂ ਕਰਦੀ, ਤਾਂ ਐਡਰੈੱਸ ਬਾਰ ਵਿੱਚ ਸ਼ੀਲਡ 'ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ ਉਸ ਪੰਨੇ ਲਈ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਬੰਦ ਕਰੋ।";
@@ -1649,7 +1771,7 @@
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ਕੁਝ ਇਸ਼ਤਿਹਾਰ ਟਰੈਕ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿੰਦੀ ਹੈ, ਤਾਂ ਜੋ ਵੈੱਬਸਾਈਟਾਂ ਠੀਕ ਢੰਗ ਨਾਲ ਕੰਮ ਕਰ ਸਕਣ।";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "ਜ਼ਿਆਦਾ ਟਰੈਕਰਾਂ, ਇਸ਼ਤਿਹਾਰਾਂ ਅਤੇ ਪੌਪ-ਅੱਪ ਨੂੰ ਬਲੌਕ ਕਰਦੀ ਹੈ। ਪੰਨੇ ਵਧੇਰੇ ਤੇਜ਼ੀ ਨਾਲ ਲੋਡ ਹੁੰਦੇ ਹਨ, ਪਰ ਕੁਝ ਚੀਜ਼ਾਂ ਸ਼ਾਇਦ ਕੰਮ ਨਾ ਕਰਨ।";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "ਜ਼ਿਆਦਾ ਟਰੈਕਰਾਂ, ਇਸ਼ਤਿਹਾਰਾਂ ਅਤੇ ਪੌਪ-ਅੱਪ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦੀ ਹੈ। ਸਫ਼ੇ ਵਧੇਰੇ ਤੇਜ਼ੀ ਨਾਲ ਲੋਡ ਹੁੰਦੇ ਹਨ, ਪਰ ਕੁਝ ਚੀਜ਼ਾਂ ਸ਼ਾਇਦ ਕੰਮ ਨਾ ਕਰਨ।";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "ਸੁਰੱਖਿਆ ਪੱਧਰ";
@@ -1739,7 +1861,7 @@
 "ShareExtension.OpenInFirefoxAction.Title" = "ਫਾਇਰਫਾਕਸ 'ਚ ਖੋਲ੍ਹੋ";
 
 /* Action label on share extension to immediately open page in Firefox in private mode. */
-"ShareExtension.OpenInPrivateModeAction.Title" = "ਨਿੱਜੀ ਢੰਗ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+"ShareExtension.OpenInPrivateModeAction.Title" = "ਪ੍ਰਾਈਵੇਟ ਢੰਗ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "ਫਾਇਰਫਾਕਸ ਵਿੱਚ ਖੋਜੋ";
@@ -1850,6 +1972,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "ਇਸ ਵੇਲੇ ਚੁਣੀ ਟੈਬ ਹੈ।";
 
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "ਹੋਰ";
+
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "ਨਾ-ਸਰਗਰਮ ਟੈਬਾਂ";
 
@@ -1941,7 +2066,7 @@
 "TopSites.EmptyState.Title" = "ਸਿਖਰਲੀਆਂ ਸਾਈਟਾਂ ਲਈ ਜੀ ਆਇਆਂ ਨੂੰ";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
-"TopSites.RemovePage.Button" = "ਸਫ਼ੇ ਨੂੰ ਹਟਾਓ - %@";
+"TopSites.RemovePage.Button" = "ਸਫ਼ੇ ਨੂੰ ਹਟਾਓ — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "ਨਹੀਂ";

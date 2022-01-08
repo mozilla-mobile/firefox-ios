@@ -1,9 +1,7 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Bu sizə şəkil çəkmə və yükləmə imkanı verir.";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Daxil olduğunuz saytlar sizin yerinizi soruşa bilərlər.";
 
 /* Privacy - Microphone Usage Description */

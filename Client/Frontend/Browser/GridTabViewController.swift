@@ -37,7 +37,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     let profile: Profile
     weak var delegate: TabTrayDelegate?
     var tabDisplayManager: TabDisplayManager!
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.reuseIdentifier
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.cellIdentifier
     static let independentTabsHeaderIdentifier = "IndependentTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
@@ -73,11 +73,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         self.tabToFocus = tabToFocus
         super.init(nibName: nil, bundle: nil)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.reuseIdentifier)
+        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.cellIdentifier)
         collectionView.register(GroupedTabCell.self, forCellWithReuseIdentifier: GroupedTabCell.Identifier)
         collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
         collectionView.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier)
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.reuseIdentifier, tabDisplayType: .TabGrid, profile: profile)
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.cellIdentifier, tabDisplayType: .TabGrid, profile: profile)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 
@@ -766,232 +766,6 @@ extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPop
 
 protocol TabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: TabCell)
-}
-
-protocol TabTrayCell where Self: UICollectionViewCell {
-
-    /// True when the tab is the selected tab in the tray
-    var isSelectedTab: Bool { get }
-
-    /// Configure a tab cell using a Tab object, setting it's selected state at the same time
-    func configureWith(tab: Tab, isSelected selected: Bool)
-}
-
-extension TabTrayCell {
-
-    /// Use the display title unless it's an empty string, then use the base domain from the url
-    func getTabTrayTitle(tab: Tab) -> String? {
-        let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
-        let urlLabel = baseDomain != nil ? baseDomain!.contains("local") ? "" : baseDomain : ""
-        return tab.displayTitle.isEmpty ? urlLabel : tab.displayTitle
-    }
-
-    func getA11yTitleLabel(tab: Tab) -> String? {
-        var aboutComponent = ""
-        if let url = tab.url, let about = InternalURL(url)?.aboutComponent { aboutComponent = about }
-        let baseName = tab.displayTitle.isEmpty ? aboutComponent.isEmpty ? getTabTrayTitle(tab: tab) : aboutComponent : tab.displayTitle
-
-        if isSelectedTab, let baseName = baseName, !baseName.isEmpty {
-            return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
-        } else if isSelectedTab {
-            return String.TabTrayCurrentlySelectedTabAccessibilityLabel
-        } else {
-            return baseName
-        }
-    }
-}
-
-class TabCell: UICollectionViewCell, TabTrayCell {
-
-    enum Style {
-        case light
-        case dark
-    }
-
-    static let reuseIdentifier = "TabCellIdentifier"
-    static let borderWidth: CGFloat = 3
-
-    lazy var backgroundHolder: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = GridTabTrayControllerUX.CornerRadius
-        view.clipsToBounds = true
-        view.backgroundColor = UIColor.theme.tabTray.cellBackground
-        return view
-    }()
-
-    lazy var screenshotView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        view.isUserInteractionEnabled = false
-        view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
-        return view
-    }()
-
-    let titleText: UILabel = {
-        let label = UILabel()
-        label.isUserInteractionEnabled = false
-        label.numberOfLines = 1
-        label.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
-        label.textColor = UIColor.theme.tabTray.tabTitleText
-        return label
-    }()
-
-    let favicon: UIImageView = {
-        let favicon = UIImageView()
-        favicon.backgroundColor = UIColor.clear
-        favicon.layer.cornerRadius = 2.0
-        favicon.layer.masksToBounds = true
-        return favicon
-    }()
-
-    let closeButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
-        button.imageView?.contentMode = .scaleAspectFit
-        button.contentMode = .center
-        button.tintColor = UIColor.theme.tabTray.cellCloseButton
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: GridTabTrayControllerUX.CloseButtonEdgeInset)
-        return button
-    }()
-
-    var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
-    var animator: SwipeAnimator?
-    var isSelectedTab = false
-
-    weak var delegate: TabCellDelegate?
-
-    // Changes depending on whether we're full-screen or not.
-    var margin = CGFloat(0)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        self.animator = SwipeAnimator(animatingView: self)
-        self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
-
-        contentView.addSubview(backgroundHolder)
-
-        backgroundHolder.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
-        }
-
-        backgroundHolder.addSubview(self.screenshotView)
-
-        self.accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction, target: self.animator, selector: #selector(SwipeAnimator.closeWithoutGesture))
-        ]
-
-        backgroundHolder.addSubview(title)
-        title.contentView.addSubview(self.closeButton)
-        title.contentView.addSubview(self.titleText)
-        title.contentView.addSubview(self.favicon)
-
-        title.snp.makeConstraints { (make) in
-            make.top.left.right.equalTo(backgroundHolder)
-            make.height.equalTo(GridTabTrayControllerUX.TextBoxHeight)
-        }
-
-        favicon.snp.makeConstraints { make in
-            make.leading.equalTo(title.contentView).offset(6)
-            make.top.equalTo((GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2)
-            make.size.equalTo(GridTabTrayControllerUX.FaviconSize)
-        }
-
-        titleText.snp.makeConstraints { (make) in
-            make.leading.equalTo(favicon.snp.trailing).offset(6)
-            make.trailing.equalTo(closeButton.snp.leading).offset(-6)
-            make.centerY.equalTo(title.contentView)
-        }
-
-        closeButton.snp.makeConstraints { make in
-            make.size.equalTo(GridTabTrayControllerUX.CloseButtonSize)
-            make.centerY.trailing.equalTo(title.contentView)
-        }
-
-        screenshotView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.right.equalTo(backgroundHolder)
-            make.bottom.equalTo(backgroundHolder.snp.bottom)
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
-    }
-
-    func configureWith(tab: Tab, isSelected selected: Bool) {
-        isSelectedTab = selected
-
-        titleText.text = getTabTrayTitle(tab: tab)
-        accessibilityLabel = getA11yTitleLabel(tab: tab)
-        isAccessibilityElement = true
-        accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
-
-        if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
-            favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
-        } else {
-            favicon.image = UIImage(named: "defaultFavicon")
-            favicon.tintColor = UIColor.theme.tabTray.faviconTint
-        }
-
-        if selected {
-            setTabSelected(tab.isPrivate)
-        } else {
-            layer.shadowOffset = .zero
-            layer.shadowPath = nil
-            layer.shadowOpacity = 0
-        }
-        screenshotView.image = tab.screenshot
-    }
-
-    override func prepareForReuse() {
-        // Reset any close animations.
-        super.prepareForReuse()
-        backgroundHolder.transform = .identity
-        backgroundHolder.alpha = 1
-        self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
-        layer.shadowOffset = .zero
-        layer.shadowPath = nil
-        layer.shadowOpacity = 0
-        isHidden = false
-    }
-
-    override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-        var right: Bool
-        switch direction {
-        case .left:
-            right = false
-        case .right:
-            right = true
-        default:
-            return false
-        }
-        animator?.close(right: right)
-        return true
-    }
-
-    @objc func close() {
-        delegate?.tabCellDidClose(self)
-    }
-
-    private func setTabSelected(_ isPrivate: Bool) {
-        // This creates a border around a tabcell. Using the shadow creates a border _outside_ of the tab frame.
-        layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
-        layer.masksToBounds = false
-        // create a frame that is "BorderWidth" size bigger than the cell
-        layer.shadowOffset = CGSize(width: -TabCell.borderWidth, height: -TabCell.borderWidth)
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
-    }
 }
 
 extension GridTabViewController: NotificationThemeable {

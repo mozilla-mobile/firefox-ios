@@ -135,15 +135,16 @@ class HomePageSettingsUITests: BaseTestCase {
         //Run test for both iPhone and iPad devices as behavior differs between the two
         if iPad() {
             // On iPad, 6 top sites per row are displayed
-            topSitesPerRow = 6
+            topSitesPerRow = 8
             //Test each of the custom row options from 1-4
             for n in 1...4 {
                 userState.numTopSitesRows = n
                 navigator.goto(HomeSettings)
-                app.tables.cells.element(boundBy: 0).tap()
+                app.tables.cells.element(boundBy: 3).tap()
                 app.tables.cells.element(boundBy: n-1).tap()
+                navigator.goto(SettingsScreen)
+                app.buttons["Settings"].tap()
                 navigator.goto(NewTabScreen)
-                app.buttons["Done"].tap()
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
         } else {
@@ -183,7 +184,7 @@ class HomePageSettingsUITests: BaseTestCase {
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         waitForExistence(app.cells["TopSitesCell"])
         XCTAssertTrue(app.cells["TopSitesCell"].exists)
-        let numberOfTopSites = app.collectionViews.cells["TopSitesCell"].cells.matching(identifier: "TopSite").count
+        let numberOfTopSites = app.cells["TopSitesCell"].collectionViews.cells.count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
@@ -196,15 +197,34 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons["jumpBackInSectionMoreButton"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
         // Swipe up needed to see the content below the Jump Back In section
-        app.buttons["jumpBackInSectionMoreButton"].swipeUp()
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].swipeUp()
         XCTAssertTrue(app.cells.collectionViews.staticTexts["Example Domain"].exists)
         // Swipe down to be able to click on Show all option
         app.buttons["More"].swipeDown()
-        waitForExistence(app.buttons["jumpBackInSectionMoreButton"], timeout: 5)
-        app.buttons["jumpBackInSectionMoreButton"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
         // Tab tray is open with recently open tab
         waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
+    }
+
+    func testCustomizeHomepage() {
+        if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+            app.cells.otherElements["Bookmarks"].swipeUp()
+            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage])
+        }
+        app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
+        // Verify default settings
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: 3)
+        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists)
+        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists)
+        XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists)
+        // Commented due to experimental features
+        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String, "1")
+        // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String, "1")
+        XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentSearches].value as! String, "0")
+        XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recommendedByPocket].value as! String, "1")
     }
 }

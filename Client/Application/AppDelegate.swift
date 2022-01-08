@@ -104,7 +104,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
-        NSUserDefaultsPrefs(prefix: "profile").setBool(true, forKey: "isColdLaunch")
         FeatureFlagsManager.shared.initializeFeatures(with: profile)
         ThemeManager.shared.updateProfile(with: profile)
 
@@ -385,13 +384,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             self.profile?.cleanupHistoryIfNeeded()
+            self.browserViewController.ratingPromptManager.updateData()
         }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
         updateTopSitesWidget()
         UserDefaults.standard.setValue(Date(), forKey: "LastActiveTimestamp")
-        NSUserDefaultsPrefs(prefix: "profile").setBool(false, forKey: "isColdLaunch")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {

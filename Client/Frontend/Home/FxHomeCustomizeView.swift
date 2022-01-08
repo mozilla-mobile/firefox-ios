@@ -9,14 +9,15 @@ fileprivate struct HomeViewUX {
     static let settingsButtonTopAnchorSpace: CGFloat = 28
 }
 
-class FxHomeCustomizeHomeView: UICollectionViewCell {
+class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
+    typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     // MARK: - UI Elements
     let goToSettingsButton: UIButton = .build { button in
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
         button.layer.cornerRadius = 5
-        button.accessibilityIdentifier = "FxHomeCustomizeHomeSettingButton"
+        button.accessibilityIdentifier = a11y.customizeHome
     }
 
     // MARK: - Initializers

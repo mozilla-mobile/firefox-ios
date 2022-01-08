@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "ᱦᱮᱡ ᱨᱩᱟᱹᱲᱚᱜ ᱢᱮ";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "ᱴᱮᱵᱽ ᱠᱚ:%d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "\"%@\" ᱞᱟᱹᱜᱤᱜ ᱟᱢᱟᱜ ᱥᱮᱸᱫᱽᱨᱟ";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "ᱦᱟᱞᱮᱜᱮ ᱨᱩᱠᱷᱭᱟᱹ ᱟᱠᱟᱱᱟ";
 
@@ -69,6 +75,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "ᱡᱚᱛᱚ ᱧᱮᱞ ᱢᱟ";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "ᱚᱪᱚᱜᱽ ᱢᱮ";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ";
@@ -394,6 +403,9 @@
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefox ᱚᱲᱟᱜ ᱥᱟᱦᱟᱴᱟ";
 
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱠᱩᱥᱤᱛᱮ ᱫᱚᱦᱚᱭ ᱢᱮ";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ᱢᱟᱲᱟᱝ";
 
@@ -654,6 +666,18 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "ᱵᱚᱞᱚ ᱠᱚ";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "ᱞᱟᱦᱟᱜ ᱢᱮ";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "AutoFill ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "ᱵᱚᱫᱚᱞᱟᱠ";
@@ -951,6 +975,9 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "ᱴᱷᱤᱠ ᱜᱮ";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "ᱯᱟᱱᱛᱮᱭᱟᱜ ᱮᱦᱚᱵ ᱢᱮ";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "ᱚᱦᱟᱭ! Firefox ᱨᱚᱯᱩᱫᱮᱱᱟ";
@@ -1505,6 +1532,9 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "ᱯᱟᱲᱦᱟᱣ ᱠᱚ";
 
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "ᱴᱮᱵᱽ ᱠᱚ";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ᱴᱷᱤᱠ, ᱭᱟᱢᱮᱱᱟ";
 
@@ -1743,6 +1773,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "ᱱᱤᱛᱚᱜ ᱵᱟᱪᱷᱟᱣ ᱟᱠᱟᱱ ᱴᱮᱵᱽ ᱾";
 
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "ᱮᱴᱟᱜᱽ-ᱟᱜ";
+
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "ᱵᱟᱝ ᱩᱥᱨᱟᱹᱣ ᱴᱮᱵᱽᱥ";
 
@@ -1760,6 +1793,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "ᱵᱟᱪᱷᱟᱣᱟᱠ ᱴᱮᱵ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "ᱵᱷᱮᱜᱟᱨ ᱴᱮᱵᱽ ᱠᱚ";
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "ᱯᱨᱟᱭᱣᱮᱴ ᱴᱮᱵᱽ ᱠᱚ";

@@ -1,16 +1,14 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ligeann seo duit pictiúir a thógáil agus a uaslódáil.";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "D'fhéadfadh suíomhanna a dtugann tú cuairt orthu do láthair a iarraidh.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Ligeann seo duit físeáin a thógáil agus a uaslódáil.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
+"NSPhotoLibraryAddUsageDescription" = "Thug seo cumas duit pictiúir a shábháil.";
 
 /* (No Comment) */
 "ShortcutItemTitleNewPrivateTab" = "Cluaisín Nua Príobháideach";
@@ -19,5 +17,5 @@
 "ShortcutItemTitleNewTab" = "Cluaisín Nua";
 
 /* (No Comment) */
-"ShortcutItemTitleQRCode" = "Scan QR Code";
+"ShortcutItemTitleQRCode" = "Scan an cód QR";
 

@@ -40,6 +40,18 @@
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "បានទស្សនា";
 
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "រំលង​ត្រឡប់វិញ";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "ផ្ទាំង៖ %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "ការស្វែងរក​របស់អ្នក​សម្រាប់ \"%@\"";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "បានរក្សាទុក​ថ្មីៗ";
+
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "ចំណាំ​ថ្មីៗ";
 
@@ -57,6 +69,15 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "បាន​ចូលមើល​ថ្មីៗ";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "បានរក្សាទុក​ថ្មីៗ";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "បង្ហាញ​ទាំងអស់";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "ដកចេញ";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "ផ្លូវកាត់";
@@ -248,6 +269,12 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ចែករំលែក​តំណ";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "ឥឡូវនេះ គេហទំព័រ Firefox ដែលស្របតាមបុគ្គល​របស់អ្នក​ ងាយស្រួល​ជាងមុន​ក្នុងការជ្រើសរើស​កន្លែង​ដែលអ្នកបានចាកចេញ។ រក​ផ្ទាំង​ ចំណាំ និង​លទ្ធផល​ស្វែងរក​ថ្មីៗ​របស់អ្នក។";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "ផ្ទាំង​ដែល​អ្នក​មិន​បាន​មើល​រយៈពេល​ពីរសប្ដាហ៍​បានផ្លាស់ទី​នៅទីនេះ។";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "មិន​អាច​បន្ថែម​ទំព័រ​ទៅ​បញ្ជី​អាន​បាន​ទេ";
 
@@ -262,6 +289,9 @@
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ឥឡូវនេះ រចនាប័ទ្ម​ងងឹតរួម​បញ្ចូល​ទាំង​ក្តារ​ចុច​ងងឹត ​និង​អេក្រង់​ស្វាគមន៍​ងងឹត។";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "ការការពារ​ការតាមដាន​កែលម្អ​ដែលបានបង្កើត​​ជួយ​បញ្ឈប់​ការផ្សាយពាណិជ្ជកម្ម​ពី​ការតាមដាន​ជុំវិញ​អ្នក។ បើក​ការរឹតបន្តឹង​ដើម្បីទប់ស្កាត់​ទោះបីជា​មាន​កម្មវិធី​តាមដាន ការផ្សាយពាណិជ្ជកម្ម និង​ព័ត៌មាន​លេចឡើង​កាន់តែច្រើន​ក៏ដោយ។";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "ចូល​ទៅ​កាន់​ការ​កំណត់";
@@ -378,6 +408,9 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "ទំព័រដើម Firefox";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "កែ​គេហទំព័រ​តាមបំណង";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "បញ្ជូន​បន្ត";
@@ -511,6 +544,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "ឧបករណ៍​ដែល​បាន​ធ្វើ​សមកាលកម្ម";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "ទំព័រ​ដើម";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "បោះបង់​";
 
@@ -580,6 +616,18 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "បង្ហាញ​ផ្ទាំង​មុន​";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "បើក​ការបិទ​ស្វ័យប្រវត្តិ";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox នឹង​បិទ​ផ្ទាំង​ដែល​អ្នក​មិន​បាន​មើល​ជាងមួយ​ខែ​មុន។";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "បិទ​ស្វ័យប្រវត្តិ​បន្ទាប់​ពី​មួយខែ​ឬ?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "បិទ​ផ្ទាំងអសកម្ម​ទាំងអស់​";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "បង្កើន​ទំហំ​អត្ថបទ";
 
@@ -612,6 +660,21 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "ចូល";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "ស្វែងយល់​បន្ថែម";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "ដើម្បីរក្សាទុក និង​បំពេញ​ការចូល និង​ពាក្យសម្ងាត់​ស្វ័យប្រវត្តិ​ សូមបើក​ដំណើរការ​ការសម្គាល់​មុខ សម្គាល់​ការបេះ ឬ​លេខ​កូដ​ចូលឧបករណ៍។";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "បន្ត";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "ស្វែងយល់បន្ថែម";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "ឥឡូវនេះ ការចូល និង​ពាក្យសម្ងាត់​របស់អ្នក​ត្រូវបាន​ការពារ​ដោយ​ការសម្គាល់​មុខ ការសម្គាល់​ការប៉ះ ឬ​លេខកូដ​ចូលឧបករណ៍។";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "បាន​កែប្រែ";

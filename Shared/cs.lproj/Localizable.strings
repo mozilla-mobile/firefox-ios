@@ -263,8 +263,7 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Na své osobní domovské stránce Firefoxu vždy najdete, co jste dělali naposledy, ať už nedávno otevřené panely, záložky nebo výsledky vyhledávání.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Sem se přesunou panely, které jste déle než dva týdny nepoužili.";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
@@ -677,6 +676,33 @@
 /* Toggle logins syncing setting */
 "Logins" = "Přihlašovací údaje";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Zjistit více";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Pro ukládání a automatické vyplňování přihlašovacích údajů si na svém zařízení nastavte Face ID, Touch ID nebo kód zámku.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Pokračovat";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Zjistit více";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Vaše přihlašovací údaje jsou chráněné pomocí Face ID, Touch ID nebo kódu zámku.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Pro používání funkce automatického vyplňování si na svém zařízení nastavte kód zámku.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Vezměte si svá hesla všude s sebou";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Automatické vyplňování hesel z Firefoxu";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Zapnout automatické vyplňování";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Upraveno";
 
@@ -821,7 +847,7 @@
 "Menu.PageActions.Title" = "Akce stránky";
 
 /* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
-"Menu.Passwords.Label" = "Hesla";
+"Menu.Passwords.Label" = "Přihlašovací údaje";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Vložit";

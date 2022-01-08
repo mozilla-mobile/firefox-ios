@@ -13,14 +13,23 @@
 # Use the --importLocales option to fetch and update locales only
 #
 
-getLocale()
-{
+getLocale() {
   echo "Getting locale..."
   git clone https://github.com/boek/ios-l10n-scripts.git -b new_tool || exit 1
 
   echo "Creating firefoxios-l10n Git repo"
   rm -rf firefoxios-l10n
   git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
+}
+
+# Useful to check if previous command was successful - quit if it wasn't
+# Pass the error message as a parameter of the function with 'verifyExitCode "message"'
+verifyExitCode() {
+  EXIT_CODE=$?
+  if [ $EXIT_CODE == 0 ]; then
+    echo "$1"
+    exit 0
+  fi
 }
 
 if [ "$1" == "--force" ]; then
@@ -45,6 +54,7 @@ fi
 
 # Run carthage
 ./carthage_command.sh
+verifyExitCode "Exit due to carthage_command.sh"
 
 # Install Node.js dependencies and build user scripts
 npm install

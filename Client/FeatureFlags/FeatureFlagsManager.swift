@@ -18,8 +18,10 @@ extension FeatureFlagsProtocol {
 /// Please add new features alphabetically.
 enum FeatureFlagName: String, CaseIterable {
     case chronologicalTabs
+    case customWallpaper
     case inactiveTabs
     case groupedTabs
+    case historyHighlights
     case jumpBackIn
     case nimbus
     case pocket
@@ -115,8 +117,13 @@ class FeatureFlagsManager {
 
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
                                          and: profile,
-                                         enabledFor: [.developer])
+                                         enabledFor: [])
         features[.chronologicalTabs] = chronTabs
+
+        let customWallpaper = FlaggableFeature(withID: .customWallpaper,
+                                               and: profile,
+                                               enabledFor: [.developer])
+        features[.customWallpaper] = customWallpaper
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
                                             and: profile,
@@ -125,12 +132,12 @@ class FeatureFlagsManager {
 
         let groupedTabs = FlaggableFeature(withID: .groupedTabs,
                                            and: profile,
-                                           enabledFor: [.beta, .developer])
+                                           enabledFor: [.developer])
         features[.groupedTabs] = groupedTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
                                           and: profile,
-                                          enabledFor: [.beta, .developer])
+                                          enabledFor: [.release, .beta, .developer])
         features[.jumpBackIn] = jumpBackIn
 
         /// Use the Nimbus experimentation platform. If this is `true` then
@@ -153,8 +160,13 @@ class FeatureFlagsManager {
 
         let recentlySaved = FlaggableFeature(withID: .recentlySaved,
                                              and: profile,
-                                             enabledFor: [.beta, .developer])
+                                             enabledFor: [.release, .beta, .developer])
         features[.recentlySaved] = recentlySaved
+
+        let historyHighlights = FlaggableFeature(withID: .historyHighlights,
+                                                 and: profile,
+                                                 enabledFor: [.developer])
+        features[.historyHighlights] = historyHighlights
 
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
                                               and: profile,
@@ -163,7 +175,7 @@ class FeatureFlagsManager {
 
         let startAtHome = FlaggableFeature(withID: .startAtHome,
                                            and: profile,
-                                           enabledFor: [])
+                                           enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
         
         let reportSiteIssue = FlaggableFeature(withID: .reportSiteIssue,

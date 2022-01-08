@@ -89,6 +89,13 @@ class Tab: NSObject {
     // Tab Groups
     var tabGroupData: TabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
     
+    struct TabGroupLastUpdatedObservation {
+        var keyUrl: String?
+        var referrerUrl: String?
+        var searchTerm: String?
+    }
+    
+    var lastObservation: TabGroupLastUpdatedObservation = TabGroupLastUpdatedObservation()
     var tabGroupsTimerHelper = StopWatchTimer()
     var shouldResetTabGroupData: Bool = false
     
@@ -114,9 +121,16 @@ class Tab: NSObject {
         }
     }
     
-    var adsTelemetryUrlList: [String] = [String]()
+    var adsTelemetryUrlList: [String] = [String]() {
+        didSet {
+            startingSearchUrlWithAds = url
+        }
+    }
+    var adsTelemetryRedirectUrlList: [URL] = [URL]()
+    var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
-    
+    var hasHomeScreenshot: Bool = false
+
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
         guard url != nil else { return true }
@@ -145,7 +159,6 @@ class Tab: NSObject {
     }
 
     var userActivity: NSUserActivity?
-
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
@@ -176,29 +189,19 @@ class Tab: NSObject {
         }
         return self.url
     }
-    
+
     var isFxHomeTab: Bool {
-        if let numberOfUrls = self.sessionData?.urls.count,
-           let offset = self.sessionData?.currentPage,
-           let url = self.sessionData?.urls[numberOfUrls - 1 + offset],
-           url.absoluteString.hasPrefix("internal://") {
-            return true
-        }
+        if let url = url, url.absoluteString.hasPrefix("internal://") { return true }
         return false
     }
     
     var isCustomHomeTab: Bool {
         guard let profile = self.browserViewController?.profile else { return false }
         
-        // Note: sessionData holds your navigation history on that tab, & sessionData.currentPage
-        //  is where you are currently. With numberOfUrls - 1 + offset, we're grabbing the url
-        //  for the last known position of navigation for that tab.
         if let customHomeUrl = HomeButtonHomePageAccessors.getHomePage(profile.prefs),
-           let numberOfUrls = self.sessionData?.urls.count,
-           let offset = self.sessionData?.currentPage,
-           let url = self.sessionData?.urls[numberOfUrls - 1 + offset],
-           let baseDomain = url.baseDomain,
            let customHomeBaseDomain = customHomeUrl.baseDomain,
+           let url = url,
+           let baseDomain = url.baseDomain,
            baseDomain.hasPrefix(customHomeBaseDomain) {
             return true
         }
@@ -270,6 +273,12 @@ class Tab: NSObject {
         return false
     }
 
+    fileprivate(set) var pageZoom: CGFloat = 1.0 {
+        didSet {
+            webView?.setValue(pageZoom, forKey: "viewScale")
+        }
+    }
+
     fileprivate(set) var screenshot: UIImage?
 
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
@@ -322,7 +331,8 @@ class Tab: NSObject {
                 // reset tab group
                 tabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
                 shouldResetTabGroupData = true
-            } else if tabGroupData.tabAssociatedNextUrl.isEmpty {
+            // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
+            } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
                 let key = tabGroupData.tabHistoryMetadatakey()
                 if key.referrerUrl != nextUrl {
                     let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
@@ -527,15 +537,22 @@ class Tab: NSObject {
     var displayTitle: String {
         if let title = webView?.title, !title.isEmpty {
             let key = tabGroupData.tabHistoryMetadatakey()
-            if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
+            if lastObservation.keyUrl == key.url &&
+                lastObservation.referrerUrl == key.referrerUrl &&
+                lastObservation.searchTerm == key.searchTerm {
+                return title
+            } else if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
                 let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
-                updateObservationForKey(key: key, observation: observation)
+                    updateObservationForKey(key: key, observation: observation)
+                lastObservation.keyUrl = key.url
+                lastObservation.referrerUrl = key.referrerUrl
+                lastObservation.searchTerm = key.searchTerm
             }
             return title
         }
-
+        
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !restoring {
@@ -626,6 +643,45 @@ class Tab: NSObject {
         self.webView?.scrollView.refreshControl?.endRefreshing()
     }
     
+
+    @objc func zoomIn() {
+        switch pageZoom {
+        case 0.75:
+            pageZoom = 0.85
+        case 0.85:
+            pageZoom = 1.0
+        case 1.0:
+            pageZoom = 1.15
+        case 1.15:
+            pageZoom = 1.25
+        case 3.0:
+            return
+        default:
+            pageZoom += 0.25
+        }
+    }
+
+    @objc func zoomOut() {
+        switch pageZoom {
+        case 0.5:
+            return
+        case 0.85:
+            pageZoom = 0.75
+        case 1.0:
+            pageZoom = 0.85
+        case 1.15:
+            pageZoom = 1.0
+        case 1.25:
+            pageZoom = 1.15
+        default:
+            pageZoom -= 0.25
+        }
+    }
+
+    func resetZoom() {
+        pageZoom = 1.0
+    }
+
     func addContentScript(_ helper: TabContentScript, name: String) {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }
@@ -686,7 +742,7 @@ class Tab: NSObject {
     func setScreenshot(_ screenshot: UIImage?) {
         self.screenshot = screenshot
     }
-
+    
     func toggleChangeUserAgent() {
         changedUserAgent = !changedUserAgent
 

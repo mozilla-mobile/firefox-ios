@@ -41,7 +41,7 @@ class TelemetryWrapper {
     }
 
     init(profile: Profile) {
-        crashedLastLaunch = Sentry.crashedLastLaunch
+        crashedLastLaunch = Sentry.shared.crashedLastLaunch
 
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
@@ -389,6 +389,7 @@ extension TelemetryWrapper {
         case removePinnedSite = "remove-pinned-site"
         case firefoxHomepage = "firefox-homepage"
         case jumpBackInImpressions = "jump-back-in-impressions"
+        case historyImpressions = "history-highlights-impressions"
         case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
         case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
         case inactiveTabTray = "inactiveTabTray"
@@ -434,7 +435,10 @@ extension TelemetryWrapper {
         case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
         case recentlySavedReadingListView = "recently-saved-reading-list-view"
         case recentlySavedReadingListAction = "recently-saved-reading-list-action"
+        case historyHighlightsShowAll = "history-highlights-show-all"
+        case historyHighlightsItemOpened = "history-highlights-item-opened"
         case customizeHomepageButton = "customize-homepage-button"
+        case cycleWallpaperButton = "cycle-wallpaper-button"
         case fxHomepageOrigin = "firefox-homepage-origin"
         case fxHomepageOriginZeroSearch = "zero-search"
         case fxHomepageOriginOther = "origin-other"
@@ -749,6 +753,16 @@ extension TelemetryWrapper {
             }
 
         case (.action, .tap, .firefoxHomepage, EventValue.customizeHomepageButton.rawValue, _):
+            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+
+        case (.action, .tap, .firefoxHomepage, EventValue.cycleWallpaperButton.rawValue, _):
+            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+
+        case (.action, .tap, .firefoxHomepage, EventValue.historyHighlightsShowAll.rawValue, _):
+            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+        case (.action, .tap, .firefoxHomepage, EventValue.historyHighlightsItemOpened.rawValue, _):
+            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+        case (.action, .view, .historyImpressions, _, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
 
         default:

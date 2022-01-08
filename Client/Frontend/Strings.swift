@@ -13,9 +13,12 @@ public struct Strings {
 
 // MARK: - String last updated app version
 
-// Used as a helper enum to keep track of what app version strings were last updated in.
+// Used as a helper enum to keep track of what app version strings were last updated in. Updates
+// are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
     case v39
+    case v96
+    case v97
 
     // Used for all cases before version 39.
     case unknown
@@ -48,6 +51,28 @@ extension String {
     }
 }
 
+// MARK: - Bookmarks Menu
+extension String {
+    public struct Bookmarks {
+        
+        public struct Actions {
+            public static let Add = MZLocalizedString("Bookmarks.Actions.Add", value: "Add", comment: "A label indicating the action of adding a web page as a bookmark.", lastUpdated: .v96)
+            public static let BookmarkAllTabs = MZLocalizedString("Bookmarks.Actions.BookmarkAllTabs", value: "Bookmark All Tabs", comment: "A label indicating the action of bookmarking all currently open non private tabs.", lastUpdated: .v96)
+            public static let BookmarkCurrentTab = MZLocalizedString("Bookmarks.Actions.BookmarkCurrentTab", value: "Bookmark Current Tab", comment: "A label indicating the action of bookmarking the current tab.", lastUpdated: .v96)
+        }
+        
+        public struct Menu {
+            public static let DesktopBookmarks = MZLocalizedString("Bookmarks.Menu.DesktopBookmarks", value: "Desktop Bookmarks", comment: "A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'.", lastUpdated: .v96)
+            public static let RecentlyBookmarked = MZLocalizedString("Bookmarks.Menu.RecentlyBookmarked", value: "Recently Bookmarked", comment: "A label indicating all bookmarks that were recently added.", lastUpdated: .v96)
+        }
+        
+        public struct Search {
+            public static let SearchBookmarks = MZLocalizedString("Bookmarks.Search.SearchBookmarks", value: "Search Bookmarks", comment: "A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks.", lastUpdated: .v96)
+        }
+        
+    }
+}
+
 // MARK: - Browser View Controller
 extension String {
     public struct BVC {
@@ -76,7 +101,7 @@ extension String {
     public struct ContextualHints {
         public static let PersonalizedHome = MZLocalizedString("ContextualHints.Homepage.PersonalizedHome", value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.", lastUpdated: .v39)
         public static let InactiveTabsBody = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.", lastUpdated: .v39)
-        public static let InactiveTabsAction = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.", lastUpdated: .v39)
+        public static let InactiveTabsAction = MZLocalizedString("ContextualHints.TabTray.InactiveTabs.CallToAction", value: "Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.", lastUpdated: .v39)
     }
 }
 
@@ -108,7 +133,8 @@ extension String {
 
         }
 
-        public struct RecentlyVisited {
+        public struct HistoryHighlights {
+            public static let Title = MZLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites", lastUpdated: .v96)
 
         }
 
@@ -122,9 +148,69 @@ extension String {
     }
 }
 
+// MARK: - Keyboard shortcuts/"hotkeys"
+extension String {
+    public struct KeyboardShortcuts {
+        public static let ActualSize = MZLocalizedString("Keyboard.Shortcuts.ActualSize", value: "Actual Size", comment: "A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let AddBookmark = MZLocalizedString("Keyboard.Shortcuts.AddBookmark", value: "Add Bookmark", comment: "A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let Back = MZLocalizedString("Hotkeys.Back.DiscoveryTitle", value: "Back", comment: "A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ClearRecentHistory = MZLocalizedString("Keyboard.Shortcuts.ClearRecentHistory", value: "Clear Recent History", comment: "A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let CloseAllTabsInTabTray = MZLocalizedString("TabTray.CloseAllTabs.KeyCodeTitle", value: "Close All Tabs", comment: "A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let CloseSelectedTabInTabTray = MZLocalizedString("TabTray.CloseTab.KeyCodeTitle", value: "Close Selected Tab", comment: "A label indicating the keyboard shortcut of closing the currently selected tab from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let CloseCurrentTab = MZLocalizedString("Hotkeys.CloseTab.DiscoveryTitle", value: "Close Tab", comment: "A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let DownloadLink = MZLocalizedString("Keyboard.Shortcuts.DownloadLink", value: "Download Link", comment: "A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let Find = MZLocalizedString("Hotkeys.Find.DiscoveryTitle", value: "Find", comment: "A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let FindAgain = MZLocalizedString("Keyboard.Shortcuts.FindAgain", value: "Find Again", comment: "A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let Forward = MZLocalizedString("Hotkeys.Forward.DiscoveryTitle", value: "Forward", comment: "A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let NewNormalTab = MZLocalizedString("Keyboard.Shortcuts.NewNormalTab", value: "New Normal Tab", comment: "A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v97)
+        public static let NewPrivateTab = MZLocalizedString("Hotkeys.NewPrivateTab.DiscoveryTitle", value: "New Private Tab", comment: "A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let NewTab = MZLocalizedString("Hotkeys.NewTab.DiscoveryTitle", value: "New Tab", comment: "A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let NormalBrowsingMode = MZLocalizedString("Hotkeys.NormalMode.DiscoveryTitle", value: "Normal Browsing Mode", comment: "A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let OpenLinkInBackground = MZLocalizedString("Keyboard.Shortcuts.OpenLinkInBackground", value: "Open Link in Background", comment: "A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let OpenLinkInNewTab = MZLocalizedString("Keyboard.Shortcuts.OpenLinkInNewTab", value: "Open Link in New Tab", comment: "A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let OpenNewTabInTabTray = MZLocalizedString("TabTray.OpenNewTab.KeyCodeTitle", value: "Open New Tab", comment: "A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let PrivateBrowsingMode = MZLocalizedString("Hotkeys.PrivateMode.DiscoveryTitle", value: "Private Browsing Mode", comment: "A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ReloadPage = MZLocalizedString("Hotkeys.Reload.DiscoveryTitle", value: "Reload Page", comment: "A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let SavePageAs = MZLocalizedString("Keyboard.Shortcuts.SavePageAs", value: "Save Page As…", comment: "A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let SelectLocationBar = MZLocalizedString("Hotkeys.SelectLocationBar.DiscoveryTitle", value: "Select Location Bar", comment: "A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let Settings = MZLocalizedString("Keyboard.Shortcuts.Settings", value: "Settings", comment: "A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowBookmarks = MZLocalizedString("Keyboard.Shortcuts.ShowBookmarks", value: "Show Bookmarks", comment: "A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowDownloads = MZLocalizedString("Keyboard.Shortcuts.ShowDownloads", value: "Show Downloads", comment: "A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowFirstTab = MZLocalizedString("Keyboard.Shortcuts.ShowFirstTab", value: "Show First Tab", comment: "A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowHistory = MZLocalizedString("Keyboard.Shortcuts.ShowHistory", value: "Show History", comment: "A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowLastTab = MZLocalizedString("Keyboard.Shortcuts.ShowLastTab", value: "Show Last Tab", comment: "A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowNextTab = MZLocalizedString("Hotkeys.ShowNextTab.DiscoveryTitle", value: "Show Next Tab", comment: "A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowPreviousTab = MZLocalizedString("Hotkeys.ShowPreviousTab.DiscoveryTitle", value: "Show Previous Tab", comment: "A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowTabNumber = MZLocalizedString("Keyboard.Shortcuts.ShowTabNumber", value: "Show Tab Number 1-9", comment: "A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ShowTabTray = MZLocalizedString("Tab.ShowTabTray.KeyCodeTitle", value: "Show All Tabs", comment: "A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let UndoCloseTab = MZLocalizedString("Keyboard.Shortcuts.UndoCloseTab", value: "Undo Close Tab", comment: "A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v97)
+        public static let ZoomIn = MZLocalizedString("Keyboard.Shortcuts.ZoomIn", value: "Zoom In", comment: "A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        public static let ZoomOut = MZLocalizedString("Keyboard.Shortcuts.ZoomOut", value: "Zoom Out", comment: "A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        
+        public struct Sections {
+            public static let Bookmarks = MZLocalizedString("Keyboard.Shortcuts.Section.Bookmark", value: "Bookmarks", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+            public static let Edit = MZLocalizedString("Keyboard.Shortcuts.Section.Edit", value: "Edit", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+            public static let File = MZLocalizedString("Keyboard.Shortcuts.Section.File", value: "File", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+            public static let History = MZLocalizedString("Keyboard.Shortcuts.Section.History", value: "History", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+            public static let Tools = MZLocalizedString("Keyboard.Shortcuts.Section.Tools", value: "Tools", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+            public static let View = MZLocalizedString("Keyboard.Shortcuts.Section.View", value: "View", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+            public static let Window = MZLocalizedString("Keyboard.Shortcuts.Section.Window", value: "Window", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
+        }
+        
+    }
+}
+
 // MARK: - Library Panel
 extension String {
     public struct LibraryPanel {
+        
+        public struct Sections {
+            public static let Today = MZLocalizedString("Today", value: "Today", comment: "This label is meant to signify the section containing a group of items from the current day.", lastUpdated: .unknown)
+            public static let Yesterday = MZLocalizedString("Yesterday", value: "Yesterday", comment: "This label is meant to signify the section containing a group of items from the past 24 hours.", lastUpdated: .unknown)
+            public static let LastWeek = MZLocalizedString("Last week", value: "Last week", comment: "This label is meant to signify the section containing a group of items from the past seven days.", lastUpdated: .unknown)
+            public static let LastMonth = MZLocalizedString("Last month", value: "Last month", comment: "This label is meant to signify the section containing a group of items from the past thirty days.", lastUpdated: .unknown)
+            public static let Older = MZLocalizedString("LibraryPanel.Section.Older", value: "Older", comment: "This label is meant to signify the section containing a group of items that are older than thirty days.", lastUpdated: .v96)
+        }
 
         public struct Bookmarks {
 
@@ -158,6 +244,17 @@ extension String {
     }
 }
 
+// MARK: - Ratings Prompt
+extension String {
+    public struct RatingsPrompt {
+        
+        public struct Settings {
+            public static let RateOnAppStore = MZLocalizedString("Ratings.Settings.RateOnAppStore", value: "Rate on App Store", comment: "A label indicating the action that a user can rate the Firefox app in the App store.", lastUpdated: .v96)
+        }
+    
+    }
+}
+
 // MARK: - Settings screen
 extension String {
     public struct Settings {
@@ -178,7 +275,7 @@ extension String {
                 public static let Description = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v39)
             }
 
-            struct StartAtHome {
+            public struct StartAtHome {
                 public static let SectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Opening screen", comment: "Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage.", lastUpdated: .v39)
                 public static let SectionDescription = MZLocalizedString("Settings.Home.Option.StartAtHome.Description", value: "Choose what you see when you return to Firefox.", comment: "In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do.", lastUpdated: .v39)
                 public static let AfterFourHours = MZLocalizedString("Settings.Home.Option.StartAtHome.AfterFourHours", value: "Homepage after four hours of inactivity", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity.", lastUpdated: .v39)
@@ -272,14 +369,6 @@ extension String {
     public static let OpenSettingsString = MZLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7", lastUpdated: .unknown)
 }
 
-// MARK: - Table date section titles
-extension String {
-    public static let TableDateSectionTitleToday = MZLocalizedString("Today", comment: "History tableview section header", lastUpdated: .unknown)
-    public static let TableDateSectionTitleYesterday = MZLocalizedString("Yesterday", comment: "History tableview section header", lastUpdated: .unknown)
-    public static let TableDateSectionTitleLastWeek = MZLocalizedString("Last week", comment: "History tableview section header", lastUpdated: .unknown)
-    public static let TableDateSectionTitleLastMonth = MZLocalizedString("Last month", comment: "History tableview section header", lastUpdated: .unknown)
-}
-
 // MARK: - Top Sites
 extension String {
     public static let TopSitesEmptyStateDescription = MZLocalizedString("TopSites.EmptyState.Description", value: "Your most visited sites will show up here.", comment: "Description label for the empty Top Sites state.", lastUpdated: .unknown)
@@ -300,7 +389,6 @@ extension String {
     public static let TopSitesRowSettingFooter = MZLocalizedString("ActivityStream.TopSites.RowSettingFooter", value: "Set Rows", comment: "The title for the setting page which lets you select the number of top site rows", lastUpdated: .unknown)
     public static let TopSitesRowCount = MZLocalizedString("ActivityStream.TopSites.RowCount", value: "Rows: %d", comment: "label showing how many rows of topsites are shown. %d represents a number", lastUpdated: .unknown)
     public static let RecentlyBookmarkedTitle = MZLocalizedString("ActivityStream.NewRecentBookmarks.Title", value: "Recent Bookmarks", comment: "Section title label for recently bookmarked websites", lastUpdated: .unknown)
-    public static let RecentlyVisitedTitle = MZLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites", lastUpdated: .unknown)
     public static let RecentlySavedSectionTitle = MZLocalizedString("ActivityStream.Library.Title", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.", lastUpdated: .unknown)
     public static let RecentlySavedShowAllText = MZLocalizedString("RecentlySaved.Actions.More", value: "Show All", comment: "More button text for Recently Saved items at the home page.", lastUpdated: .unknown)
 }
@@ -533,23 +621,6 @@ extension String {
     public static let FxAAccountVerifyEmail = MZLocalizedString("Verify your email address", comment: "Text message in the settings table view", lastUpdated: .unknown)
     public static let FxAAccountVerifyPassword = MZLocalizedString("Enter your password to connect", comment: "Text message in the settings table view", lastUpdated: .unknown)
     public static let FxAAccountUpgradeFirefox = MZLocalizedString("Upgrade Firefox to connect", comment: "Text message in the settings table view", lastUpdated: .unknown)
-}
-
-// MARK: - Hotkey Titles
-extension String {
-    public static let ReloadPageTitle = MZLocalizedString("Hotkeys.Reload.DiscoveryTitle", value: "Reload Page", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-    public static let BackTitle = MZLocalizedString("Hotkeys.Back.DiscoveryTitle", value: "Back", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-    public static let ForwardTitle = MZLocalizedString("Hotkeys.Forward.DiscoveryTitle", value: "Forward", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-
-    public static let FindTitle = MZLocalizedString("Hotkeys.Find.DiscoveryTitle", value: "Find", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-    public static let SelectLocationBarTitle = MZLocalizedString("Hotkeys.SelectLocationBar.DiscoveryTitle", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-    public static let privateBrowsingModeTitle = MZLocalizedString("Hotkeys.PrivateMode.DiscoveryTitle", value: "Private Browsing Mode", comment: "Label to switch to private browsing mode", lastUpdated: .unknown)
-    public static let normalBrowsingModeTitle = MZLocalizedString("Hotkeys.NormalMode.DiscoveryTitle", value: "Normal Browsing Mode", comment: "Label to switch to normal browsing mode", lastUpdated: .unknown)
-    public static let NewTabTitle = MZLocalizedString("Hotkeys.NewTab.DiscoveryTitle", value: "New Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-    public static let NewPrivateTabTitle = MZLocalizedString("Hotkeys.NewPrivateTab.DiscoveryTitle", value: "New Private Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-    public static let CloseTabTitle = MZLocalizedString("Hotkeys.CloseTab.DiscoveryTitle", value: "Close Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-    public static let ShowNextTabTitle = MZLocalizedString("Hotkeys.ShowNextTab.DiscoveryTitle", value: "Show Next Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
-    public static let ShowPreviousTabTitle = MZLocalizedString("Hotkeys.ShowPreviousTab.DiscoveryTitle", value: "Show Previous Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts", lastUpdated: .unknown)
 }
 
 // MARK: - New tab choice settings
@@ -1024,18 +1095,6 @@ extension String {
     public static let IntroNextButtonTitle = MZLocalizedString("Intro.Slides.Button.Next", tableName: "Intro", value: "Next", comment: "Next button on the first intro screen.", lastUpdated: .unknown)
     public static let IntroSignInButtonTitle = MZLocalizedString("Intro.Slides.Button.SignIn", tableName: "Intro", value: "Sign In", comment: "Sign in to Firefox account button on second intro screen.", lastUpdated: .unknown)
     public static let IntroSignUpButtonTitle = MZLocalizedString("Intro.Slides.Button.SignUp", tableName: "Intro", value: "Sign Up", comment: "Sign up to Firefox account button on second intro screen.", lastUpdated: .unknown)
-}
-
-// MARK: - Keyboard short cuts
-extension String {
-    public static let ShowTabTrayFromTabKeyCodeTitle = MZLocalizedString("Tab.ShowTabTray.KeyCodeTitle", value: "Show All Tabs", comment: "Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down.", lastUpdated: .unknown)
-    public static let CloseTabFromTabTrayKeyCodeTitle = MZLocalizedString("TabTray.CloseTab.KeyCodeTitle", value: "Close Selected Tab", comment: "Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down.", lastUpdated: .unknown)
-    public static let CloseAllTabsFromTabTrayKeyCodeTitle = MZLocalizedString("TabTray.CloseAllTabs.KeyCodeTitle", value: "Close All Tabs", comment: "Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down.", lastUpdated: .unknown)
-    public static let OpenSelectedTabFromTabTrayKeyCodeTitle = MZLocalizedString("TabTray.OpenSelectedTab.KeyCodeTitle", value: "Open Selected Tab", comment: "Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down.", lastUpdated: .unknown)
-    public static let OpenNewTabFromTabTrayKeyCodeTitle = MZLocalizedString("TabTray.OpenNewTab.KeyCodeTitle", value: "Open New Tab", comment: "Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down.", lastUpdated: .unknown)
-    public static let ReopenClosedTabKeyCodeTitle = MZLocalizedString("ReopenClosedTab.KeyCodeTitle", value: "Reopen Closed Tab", comment: "Hardware shortcut to reopen the last closed tab, from the tab or the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down.", lastUpdated: .unknown)
-    public static let SwitchToPBMKeyCodeTitle = MZLocalizedString("SwitchToPBM.KeyCodeTitle", value: "Private Browsing Mode", comment: "Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down.", lastUpdated: .unknown)
-    public static let SwitchToNonPBMKeyCodeTitle = MZLocalizedString("SwitchToNonPBM.KeyCodeTitle", value: "Normal Browsing Mode", comment: "Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down.", lastUpdated: .unknown)
 }
 
 // MARK: - Share extension
