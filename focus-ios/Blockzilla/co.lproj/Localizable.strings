@@ -302,7 +302,7 @@
 "SearchSuggestions.promptEnable" = "Iè";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Per ottene sugestioni di ricerca, %@ hà bisognu di mandà à u mutore di ricerca ciò chì vo scrivite in a barra d’indirizzu.";
+"SearchSuggestions.promptMessage" = "Per ottene sugestioni di ricerca, %@ hà bisognu di mandà à u mutore di ricerca ciò chì vo stampittate in a barra d’indirizzu.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Affissà e sugestioni di ricerca ?";
@@ -323,7 +323,7 @@
 "Settings.darkTheme" = "Scuru";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "%@ manderà à u vostru mutore di ricerca ciò chì vo scrivite in a barra d’indirizzu.";
+"Settings.detailTextSearchSuggestion" = "%@ manderà à u vostru mutore di ricerca ciò chì vo stampittate in a barra d’indirizzu.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla face casu di cullettà solu i dati chì sò ghjuvevule per rigalà è amendà %@ per tutti.";
@@ -380,7 +380,7 @@
 "Settings.Search.SearchTemplate" = "Catena di ricerca à impiegà";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Incullate o scrivite una catena di ricerca. S’ellu hè bisognu, rimpiazzate u termine di ricerca da : %s.";
+"Settings.Search.SearchTemplatePlaceholder" = "Incullate o stampittate una catena di ricerca. S’ellu hè bisognu, rimpiazzate u termine di ricerca da : %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Mutore di ricerca";
