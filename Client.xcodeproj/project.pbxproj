@@ -50,18 +50,13 @@
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		1B0DFD25274856D60008EB0A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD24274856D60008EB0A /* SwiftyJSON */; };
-		1B0DFD28274857340008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
-		1B0DFD29274857350008EB0A /* AppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1B0DFD32274858B10008EB0A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD31274858B10008EB0A /* SwiftyJSON */; };
-		1B0DFD34274858E70008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
 		1B0DFD3827485A780008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3727485A780008EB0A /* SwiftKeychainWrapper */; };
 		1B0DFD3A27485AC10008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3927485AC10008EB0A /* SwiftKeychainWrapper */; };
 		1B0DFD3C27485B050008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3B27485B050008EB0A /* SwiftKeychainWrapper */; };
 		1B0DFD3E27485B240008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3D27485B240008EB0A /* SwiftKeychainWrapper */; };
 		1B0DFD4027485B560008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3F27485B560008EB0A /* SwiftKeychainWrapper */; };
 		1B0DFD4227485C3E0008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD4127485C3E0008EB0A /* SwiftKeychainWrapper */; };
-		1B0DFD452748611C0008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
-		1B0DFD46274861490008EB0A /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
 		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
 		1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCB2717704300D729BB /* SwiftyJSON */; };
@@ -295,12 +290,6 @@
 		433F87CE2788EAB600693368 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87CD2788EAB600693368 /* GCDWebServers */; };
 		433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87CF2788ECDD00693368 /* GCDWebServers */; };
 		433F87D52788F01500693368 /* KIF in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87D42788F01500693368 /* KIF */; };
-		433F87E42788F35F00693368 /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87E32788F35F00693368 /* FxAClient */; };
-		433F87E62788F37900693368 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87E52788F37900693368 /* Logins */; };
-		433F87E82788F37900693368 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87E72788F37900693368 /* Nimbus */; };
-		433F87EA2788F37900693368 /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87E92788F37900693368 /* Places */; };
-		433F87EC2788F37900693368 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87EB2788F37900693368 /* RustLog */; };
-		433F87EE2788F37900693368 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87ED2788F37900693368 /* Viaduct */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
 		43446CEA2412066500F5C643 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CE92412066500F5C643 /* UIViewControllerExtension.swift */; };
 		43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */; };
@@ -316,8 +305,6 @@
 		435D7CC32461EFDD0043ACB9 /* IntroScreenSyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC22461EFDD0043ACB9 /* IntroScreenSyncView.swift */; };
 		435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC4246209AA0043ACB9 /* IntroViewController.swift */; };
 		435E34B3254A6A6000406D92 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650758F1E37F7AB006961AC /* TimeConstants.swift */; };
-		4363AD282786501F00E361B3 /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
-		4363AD292786501F00E361B3 /* AppServices.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		436715892488216A006D1D4E /* TabTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436715882488216A006D1D4E /* TabTableViewCell.swift */; };
 		437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B672681256800FB41C1 /* InactiveTabCell.swift */; };
 		437A9B6A2681257F00FB41C1 /* InactiveTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */; };
@@ -336,6 +323,45 @@
 		43AB6FA725DC53D30016B015 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
+		43BE577E278BA4D900491291 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5777278BA4D900491291 /* Logins */; };
+		43BE57B0278BA4EB00491291 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57A8278BA4EB00491291 /* Nimbus */; };
+		43BE57C9278BA4EC00491291 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57C3278BA4EC00491291 /* Viaduct */; };
+		43BE57E2278BA4ED00491291 /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57D9278BA4ED00491291 /* Places */; };
+		43BE57FB278BA50600491291 /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57ED278BA50600491291 /* FxAClient */; };
+		43BE5805278BA52C00491291 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5804278BA52C00491291 /* RustLog */; };
+		43BE5806278BA7DA00491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
+		43BE5807278BA7EA00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
+		43BE5808278BA80D00491291 /* Viaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* Viaduct.framework */; };
+		43BE5809278BA9D700491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
+		43BE580A278BA9FD00491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
+		43BE580B278BAA0700491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
+		43BE580C278BAA1700491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
+		43BE580D278BABCF00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
+		43BE580E278BABCF00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
+		43BE580F278BABD000491291 /* Nimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* Nimbus.framework */; };
+		43BE5810278BABD000491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
+		43BE5811278BABD000491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
+		43BE5812278BABD000491291 /* Viaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* Viaduct.framework */; };
+		43BE5815278BB02000491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
+		43BE5816278BE53E00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
+		43BE5817278BE58B00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
+		43BE5818278BE58B00491291 /* Nimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* Nimbus.framework */; };
+		43BE5819278BE58B00491291 /* Viaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* Viaduct.framework */; };
+		43BE581A278BE5AE00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
+		43BE581B278BE5AE00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
+		43BE581C278BE5AE00491291 /* Nimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* Nimbus.framework */; };
+		43BE581D278BE5AE00491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
+		43BE581E278BE5AE00491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
+		43BE581F278BE5AE00491291 /* Viaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* Viaduct.framework */; };
+		43BE5820278BE68100491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
+		43BE5821278BE68100491291 /* Nimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* Nimbus.framework */; };
+		43BE5822278BE68100491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
+		43BE5823278BE68100491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
+		43BE5824278BE7D400491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
+		43BE5825278BE7EF00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
+		43BE5826278BE80A00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
+		43BE5827278BE81500491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
+		43BE5828278BE82B00491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
 		43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */; };
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
@@ -343,12 +369,6 @@
 		43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43E9BDFB255E0904005BCB91 /* TabMoreMenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E9BDFA255E0904005BCB91 /* TabMoreMenuHeader.swift */; };
-		43EFA63F27865E1C00400DF0 /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
-		43EFA64027865E1C00400DF0 /* AppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43EFA64227865E2200400DF0 /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
-		43EFA64327865E2200400DF0 /* AppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43EFA64527865E5800400DF0 /* AppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; };
-		43EFA64627865E5800400DF0 /* AppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0DFD20274855C00008EB0A /* AppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F7952425795F69005AEE40 /* SearchTelemetry.swift */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		4F2A06BE26F8E46E0017DA05 /* TabCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A06BD26F8E46E0017DA05 /* TabCounterTests.swift */; };
@@ -1081,6 +1101,13 @@
 			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
 			remoteInfo = Shared;
 		};
+		43BE5813278BAF9A00491291 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43BE57D4278BA4ED00491291;
+			remoteInfo = Places;
+		};
 		7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1246,7 +1273,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1B0DFD29274857350008EB0A /* AppServices.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1267,7 +1293,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				43EFA64027865E1C00400DF0 /* AppServices.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1278,7 +1303,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				43EFA64327865E2200400DF0 /* AppServices.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1289,7 +1313,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				43EFA64627865E5800400DF0 /* AppServices.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1302,7 +1325,6 @@
 			files = (
 				C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */,
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
-				4363AD292786501F00E361B3 /* AppServices.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1553,7 +1575,6 @@
 		1AC74B5BBF452B60564AA754 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		1AFE49DBBA4B3693F364688F /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Storage.strings; sourceTree = "<group>"; };
 		1AFF4A3789E3E6F506BA879A /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1B0DFD20274855C00008EB0A /* AppServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B0DFD21274855C10008EB0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/skhamis/moz/firefox-ios/Info.plist"; sourceTree = "<absolute>"; };
 		1B5945BE90BF6470FA3D4257 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Search.strings; sourceTree = "<group>"; };
 		1B8B4FF5B5B7E07A7E61B89C /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
@@ -2078,6 +2099,18 @@
 		43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelDataObservers.swift; sourceTree = "<group>"; };
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		43BDBBFD2752FA8600254DE4 /* TabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCell.swift; sourceTree = "<group>"; };
+		43BE578A278BA4D900491291 /* Logins.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Logins.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE578B278BA4D900491291 /* AppServices copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AppServices copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/AppServices copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE57A2278BA4EA00491291 /* RustLog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RustLog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE57A3278BA4EA00491291 /* Logins copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE57BA278BA4EB00491291 /* Nimbus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nimbus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE57BB278BA4EB00491291 /* Logins copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE57D2278BA4EC00491291 /* Viaduct.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Viaduct.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE57D3278BA4EC00491291 /* Logins copy copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE57EA278BA4ED00491291 /* Places.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Places.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE57EB278BA4ED00491291 /* Logins copy copy copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy copy copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE5802278BA50600491291 /* FxAClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FxAClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE5803278BA50700491291 /* Places copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Places copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Places copy-Info.plist"; sourceTree = "<absolute>"; };
 		43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		43CA482EA439A9C486CCA01D /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Shared.strings; sourceTree = "<group>"; };
 		43D72DB226FCE3550069BDE9 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = "mr.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -4287,24 +4320,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BE5806278BA7DA00491291 /* Places.framework in Frameworks */,
 				433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */,
 				C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */,
 				43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */,
-				1B0DFD28274857340008EB0A /* AppServices.framework in Frameworks */,
 				047F9B2924E1FE1C00CD7DF7 /* SwiftUI.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1B0DFCFC274855C00008EB0A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				433F87E62788F37900693368 /* Logins in Frameworks */,
-				433F87EC2788F37900693368 /* RustLog in Frameworks */,
-				433F87E82788F37900693368 /* Nimbus in Frameworks */,
-				433F87EE2788F37900693368 /* Viaduct in Frameworks */,
-				433F87EA2788F37900693368 /* Places in Frameworks */,
-				433F87E42788F35F00693368 /* FxAClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4312,11 +4332,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BE581A278BE5AE00491291 /* FxAClient.framework in Frameworks */,
+				43BE581B278BE5AE00491291 /* Logins.framework in Frameworks */,
+				43BE581C278BE5AE00491291 /* Nimbus.framework in Frameworks */,
+				43BE581D278BE5AE00491291 /* Places.framework in Frameworks */,
+				43BE581E278BE5AE00491291 /* RustLog.framework in Frameworks */,
+				43BE581F278BE5AE00491291 /* Viaduct.framework in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				1B0DFD3A27485AC10008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				1B0DFD32274858B10008EB0A /* SwiftyJSON in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
-				43EFA64527865E5800400DF0 /* AppServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4343,6 +4368,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BE580D278BABCF00491291 /* FxAClient.framework in Frameworks */,
+				43BE580E278BABCF00491291 /* Logins.framework in Frameworks */,
+				43BE580F278BABD000491291 /* Nimbus.framework in Frameworks */,
+				43BE5810278BABD000491291 /* Places.framework in Frameworks */,
+				43BE5811278BABD000491291 /* RustLog.framework in Frameworks */,
+				43BE5812278BABD000491291 /* Viaduct.framework in Frameworks */,
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
 				1B0DFD4227485C3E0008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
@@ -4356,7 +4387,6 @@
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
-				4363AD282786501F00E361B3 /* AppServices.framework in Frameworks */,
 				DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */,
 				435C85F02788F4D00072B526 /* Glean in Frameworks */,
 				433F87CE2788EAB600693368 /* GCDWebServers in Frameworks */,
@@ -4371,6 +4401,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BE5820278BE68100491291 /* Logins.framework in Frameworks */,
+				43BE5821278BE68100491291 /* Nimbus.framework in Frameworks */,
+				43BE5822278BE68100491291 /* Places.framework in Frameworks */,
+				43BE5823278BE68100491291 /* RustLog.framework in Frameworks */,
+				43BE5808278BA80D00491291 /* Viaduct.framework in Frameworks */,
+				43BE5807278BA7EA00491291 /* FxAClient.framework in Frameworks */,
 				C820443825241D3100740B71 /* libSyncTelemetry.a in Frameworks */,
 				C8340C4F24EC69EE00FE91A6 /* libcrypto.a in Frameworks */,
 				C8340C5024EC69EE00FE91A6 /* libssl.a in Frameworks */,
@@ -4389,6 +4425,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BE5809278BA9D700491291 /* Logins.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4396,7 +4433,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B0DFD452748611C0008EB0A /* AppServices.framework in Frameworks */,
 				1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4415,9 +4451,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BE5825278BE7EF00491291 /* Logins.framework in Frameworks */,
+				43BE5824278BE7D400491291 /* FxAClient.framework in Frameworks */,
+				43BE580A278BA9FD00491291 /* RustLog.framework in Frameworks */,
 				C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */,
 				1B0DFD3C27485B050008EB0A /* SwiftKeychainWrapper in Frameworks */,
-				43EFA64227865E2200400DF0 /* AppServices.framework in Frameworks */,
 				C877039725222FE6006E38EB /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4434,6 +4472,54 @@
 			buildActionMask = 2147483647;
 			files = (
 				392E18031FEC4D7B00EBA79C /* MappaMundi.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE577D278BA4D900491291 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43BE577E278BA4D900491291 /* Logins in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE5795278BA4EA00491291 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43BE5805278BA52C00491291 /* RustLog in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57AD278BA4EB00491291 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43BE57B0278BA4EB00491291 /* Nimbus in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57C5278BA4EC00491291 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43BE57C9278BA4EC00491291 /* Viaduct in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57DD278BA4ED00491291 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43BE57E2278BA4ED00491291 /* Places in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57F5278BA50600491291 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43BE57FB278BA50600491291 /* FxAClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4488,7 +4574,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B0DFD34274858E70008EB0A /* AppServices.framework in Frameworks */,
+				43BE5817278BE58B00491291 /* FxAClient.framework in Frameworks */,
+				43BE5818278BE58B00491291 /* Nimbus.framework in Frameworks */,
+				43BE5819278BE58B00491291 /* Viaduct.framework in Frameworks */,
+				43BE5816278BE53E00491291 /* Logins.framework in Frameworks */,
+				43BE5815278BB02000491291 /* Places.framework in Frameworks */,
+				43BE580C278BAA1700491291 /* RustLog.framework in Frameworks */,
 				F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				1B0DFD4027485B560008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				F8324AF62649B540007E4BFA /* Shared.framework in Frameworks */,
@@ -4500,7 +4591,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B0DFD46274861490008EB0A /* AppServices.framework in Frameworks */,
 				1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 				1BE9ECD0271770AB00D729BB /* SwiftKeychainWrapper in Frameworks */,
@@ -4511,13 +4601,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BE5828278BE82B00491291 /* Places.framework in Frameworks */,
+				43BE5827278BE81500491291 /* Logins.framework in Frameworks */,
+				43BE5826278BE80A00491291 /* FxAClient.framework in Frameworks */,
+				43BE580B278BAA0700491291 /* RustLog.framework in Frameworks */,
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
 				C877039625222FDC006E38EB /* Shared.framework in Frameworks */,
 				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
 				7B604F9D1C495143006EEEC3 /* SDWebImage.framework in Frameworks */,
 				1B0DFD3E27485B240008EB0A /* SwiftKeychainWrapper in Frameworks */,
-				43EFA63F27865E1C00400DF0 /* AppServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6258,6 +6351,12 @@
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
 				DA9FD87B24E212F500168D1E /* Recovered References */,
 				1B0DFD4327485CAF0008EB0A /* AppServices */,
+				43BE578B278BA4D900491291 /* AppServices copy-Info.plist */,
+				43BE57A3278BA4EA00491291 /* Logins copy-Info.plist */,
+				43BE57BB278BA4EB00491291 /* Logins copy copy-Info.plist */,
+				43BE57D3278BA4EC00491291 /* Logins copy copy copy-Info.plist */,
+				43BE57EB278BA4ED00491291 /* Logins copy copy copy copy-Info.plist */,
+				43BE5803278BA50700491291 /* Places copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -6286,7 +6385,12 @@
 				397848DB1ED86605004C0C0B /* NotificationService.appex */,
 				047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */,
 				F8324A052649A188007E4BFA /* CredentialProvider.appex */,
-				1B0DFD20274855C00008EB0A /* AppServices.framework */,
+				43BE578A278BA4D900491291 /* Logins.framework */,
+				43BE57A2278BA4EA00491291 /* RustLog.framework */,
+				43BE57BA278BA4EB00491291 /* Nimbus.framework */,
+				43BE57D2278BA4EC00491291 /* Viaduct.framework */,
+				43BE57EA278BA4ED00491291 /* Places.framework */,
+				43BE5802278BA50600491291 /* FxAClient.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6570,6 +6674,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43BE5814278BAF9A00491291 /* PBXTargetDependency */,
 				43118CDF251A9CAD00F24376 /* PBXTargetDependency */,
 			);
 			name = WidgetKitExtension;
@@ -6579,31 +6684,6 @@
 			productName = WidgetKitExtension;
 			productReference = 047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
-		};
-		1B0DFCAC274855C00008EB0A /* AppServices */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1B0DFD1B274855C00008EB0A /* Build configuration list for PBXNativeTarget "AppServices" */;
-			buildPhases = (
-				1B0DFCBD274855C00008EB0A /* Sources */,
-				1B0DFCFC274855C00008EB0A /* Frameworks */,
-				1B0DFD06274855C00008EB0A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = AppServices;
-			packageProductDependencies = (
-				433F87E32788F35F00693368 /* FxAClient */,
-				433F87E52788F37900693368 /* Logins */,
-				433F87E72788F37900693368 /* Nimbus */,
-				433F87E92788F37900693368 /* Places */,
-				433F87EB2788F37900693368 /* RustLog */,
-				433F87ED2788F37900693368 /* Viaduct */,
-			);
-			productName = Shared;
-			productReference = 1B0DFD20274855C00008EB0A /* AppServices.framework */;
-			productType = "com.apple.product-type.framework";
 		};
 		2827315D1ABC9BE600AA1954 /* Sync */ = {
 			isa = PBXNativeTarget;
@@ -6830,6 +6910,126 @@
 			productName = XCUITests;
 			productReference = 3BFE4B071D342FB800DDF53F /* XCUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		43BE5774278BA4D900491291 /* Logins */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "Logins" */;
+			buildPhases = (
+				43BE577C278BA4D900491291 /* Sources */,
+				43BE577D278BA4D900491291 /* Frameworks */,
+				43BE5784278BA4D900491291 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Logins;
+			packageProductDependencies = (
+				43BE5777278BA4D900491291 /* Logins */,
+			);
+			productName = Shared;
+			productReference = 43BE578A278BA4D900491291 /* Logins.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43BE578C278BA4EA00491291 /* RustLog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43BE579D278BA4EA00491291 /* Build configuration list for PBXNativeTarget "RustLog" */;
+			buildPhases = (
+				43BE5794278BA4EA00491291 /* Sources */,
+				43BE5795278BA4EA00491291 /* Frameworks */,
+				43BE579C278BA4EA00491291 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RustLog;
+			packageProductDependencies = (
+				43BE5804278BA52C00491291 /* RustLog */,
+			);
+			productName = Shared;
+			productReference = 43BE57A2278BA4EA00491291 /* RustLog.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43BE57A4278BA4EB00491291 /* Nimbus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43BE57B5278BA4EB00491291 /* Build configuration list for PBXNativeTarget "Nimbus" */;
+			buildPhases = (
+				43BE57AC278BA4EB00491291 /* Sources */,
+				43BE57AD278BA4EB00491291 /* Frameworks */,
+				43BE57B4278BA4EB00491291 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Nimbus;
+			packageProductDependencies = (
+				43BE57A8278BA4EB00491291 /* Nimbus */,
+			);
+			productName = Shared;
+			productReference = 43BE57BA278BA4EB00491291 /* Nimbus.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43BE57BC278BA4EC00491291 /* Viaduct */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43BE57CD278BA4EC00491291 /* Build configuration list for PBXNativeTarget "Viaduct" */;
+			buildPhases = (
+				43BE57C4278BA4EC00491291 /* Sources */,
+				43BE57C5278BA4EC00491291 /* Frameworks */,
+				43BE57CC278BA4EC00491291 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Viaduct;
+			packageProductDependencies = (
+				43BE57C3278BA4EC00491291 /* Viaduct */,
+			);
+			productName = Shared;
+			productReference = 43BE57D2278BA4EC00491291 /* Viaduct.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43BE57D4278BA4ED00491291 /* Places */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43BE57E5278BA4ED00491291 /* Build configuration list for PBXNativeTarget "Places" */;
+			buildPhases = (
+				43BE57DC278BA4ED00491291 /* Sources */,
+				43BE57DD278BA4ED00491291 /* Frameworks */,
+				43BE57E4278BA4ED00491291 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Places;
+			packageProductDependencies = (
+				43BE57D9278BA4ED00491291 /* Places */,
+			);
+			productName = Shared;
+			productReference = 43BE57EA278BA4ED00491291 /* Places.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43BE57EC278BA50600491291 /* FxAClient */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43BE57FD278BA50600491291 /* Build configuration list for PBXNativeTarget "FxAClient" */;
+			buildPhases = (
+				43BE57F4278BA50600491291 /* Sources */,
+				43BE57F5278BA50600491291 /* Frameworks */,
+				43BE57FC278BA50600491291 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FxAClient;
+			packageProductDependencies = (
+				43BE57ED278BA50600491291 /* FxAClient */,
+			);
+			productName = Shared;
+			productReference = 43BE5802278BA50600491291 /* FxAClient.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		7BEB64401C7345600092C02E /* L10nSnapshotTests */ = {
 			isa = PBXNativeTarget;
@@ -7345,7 +7545,6 @@
 				390527491C874D35007E0BB7 /* Today */,
 				047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */,
 				F8324A042649A188007E4BFA /* CredentialProvider */,
-				1B0DFCAC274855C00008EB0A /* AppServices */,
 				288A2D851AB8B3260023ABC3 /* Shared */,
 				2827315D1ABC9BE600AA1954 /* Sync */,
 				2FCAE2191ABB51F800877008 /* Storage */,
@@ -7362,6 +7561,12 @@
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
 				3B43E3CF1D95C48D00BBA9DB /* StoragePerfTests */,
 				E69DB07C1E97DEA9008A67E6 /* SyncTelemetryTests */,
+				43BE5774278BA4D900491291 /* Logins */,
+				43BE578C278BA4EA00491291 /* RustLog */,
+				43BE57A4278BA4EB00491291 /* Nimbus */,
+				43BE57BC278BA4EC00491291 /* Viaduct */,
+				43BE57D4278BA4ED00491291 /* Places */,
+				43BE57EC278BA50600491291 /* FxAClient */,
 			);
 		};
 /* End PBXProject section */
@@ -7374,13 +7579,6 @@
 				047F9B2E24E1FE1F00CD7DF7 /* Assets.xcassets in Resources */,
 				D58A202C25C9D96400105D25 /* Localizable.strings in Resources */,
 				1D9E1FE524FEF56C006E561D /* TopSites in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1B0DFD06274855C00008EB0A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7482,6 +7680,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3BFE4B051D342FB800DDF53F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE5784278BA4D900491291 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE579C278BA4EA00491291 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57B4278BA4EB00491291 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57CC278BA4EC00491291 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57E4278BA4ED00491291 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57FC278BA50600491291 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -7766,13 +8006,6 @@
 				DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */,
 				DA9FD88324E213B500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1B0DFCBD274855C00008EB0A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8094,6 +8327,48 @@
 				2CB56E3F1E926BFB00AF7586 /* ToolbarTest.swift in Sources */,
 				2C3406C81E719F00000FD889 /* SettingsTest.swift in Sources */,
 				2CF21D0920A4A163000D08B7 /* PocketTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE577C278BA4D900491291 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE5794278BA4EA00491291 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57AC278BA4EB00491291 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57C4278BA4EC00491291 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57DC278BA4ED00491291 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43BE57F4278BA50600491291 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8733,6 +9008,11 @@
 			isa = PBXTargetDependency;
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
 			targetProxy = 43118CDE251A9CAD00F24376 /* PBXContainerItemProxy */;
+		};
+		43BE5814278BAF9A00491291 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43BE57D4278BA4ED00491291 /* Places */;
+			targetProxy = 43BE5813278BAF9A00491291 /* PBXContainerItemProxy */;
 		};
 		43EFA63E2786562600400DF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -10991,95 +11271,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		1B0DFD1C274855C00008EB0A /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		1B0DFD1D274855C00008EB0A /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		1B0DFD1E274855C00008EB0A /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		1B0DFD1F274855C00008EB0A /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
 		282731771ABC9BE800AA1954 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -11412,6 +11603,540 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.FirefoxBeta.WidgetKit 2021-08-12";
 				SKIP_INSTALL = NO;
+			};
+			name = FirefoxBeta;
+		};
+		43BE5786278BA4D900491291 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "AppServices copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		43BE5787278BA4D900491291 /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "AppServices copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		43BE5788278BA4D900491291 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "AppServices copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		43BE5789278BA4D900491291 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "AppServices copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = FirefoxBeta;
+		};
+		43BE579E278BA4EA00491291 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		43BE579F278BA4EA00491291 /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		43BE57A0278BA4EA00491291 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "Logins copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		43BE57A1278BA4EA00491291 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = FirefoxBeta;
+		};
+		43BE57B6278BA4EB00491291 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		43BE57B7278BA4EB00491291 /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		43BE57B8278BA4EB00491291 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "Logins copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		43BE57B9278BA4EB00491291 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = FirefoxBeta;
+		};
+		43BE57CE278BA4EC00491291 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		43BE57CF278BA4EC00491291 /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		43BE57D0278BA4EC00491291 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "Logins copy copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		43BE57D1278BA4EC00491291 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = FirefoxBeta;
+		};
+		43BE57E6278BA4ED00491291 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		43BE57E7278BA4ED00491291 /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		43BE57E8278BA4ED00491291 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "Logins copy copy copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		43BE57E9278BA4ED00491291 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Logins copy copy copy copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = FirefoxBeta;
+		};
+		43BE57FE278BA50600491291 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Places copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		43BE57FF278BA50600491291 /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Places copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		43BE5800278BA50600491291 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "Places copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		43BE5801278BA50600491291 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "Places copy-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = FirefoxBeta;
 		};
@@ -12504,17 +13229,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		1B0DFD1B274855C00008EB0A /* Build configuration list for PBXNativeTarget "AppServices" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1B0DFD1C274855C00008EB0A /* Fennec */,
-				1B0DFD1D274855C00008EB0A /* Fennec_Enterprise */,
-				1B0DFD1E274855C00008EB0A /* Firefox */,
-				1B0DFD1F274855C00008EB0A /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
 		282731971ABC9BE800AA1954 /* Build configuration list for PBXNativeTarget "Sync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -12632,6 +13346,72 @@
 				E6DCC21A1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				3BFE4B0F1D342FB900DDF53F /* Firefox */,
 				3BFE4B101D342FB900DDF53F /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "Logins" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43BE5786278BA4D900491291 /* Fennec */,
+				43BE5787278BA4D900491291 /* Fennec_Enterprise */,
+				43BE5788278BA4D900491291 /* Firefox */,
+				43BE5789278BA4D900491291 /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		43BE579D278BA4EA00491291 /* Build configuration list for PBXNativeTarget "RustLog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43BE579E278BA4EA00491291 /* Fennec */,
+				43BE579F278BA4EA00491291 /* Fennec_Enterprise */,
+				43BE57A0278BA4EA00491291 /* Firefox */,
+				43BE57A1278BA4EA00491291 /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		43BE57B5278BA4EB00491291 /* Build configuration list for PBXNativeTarget "Nimbus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43BE57B6278BA4EB00491291 /* Fennec */,
+				43BE57B7278BA4EB00491291 /* Fennec_Enterprise */,
+				43BE57B8278BA4EB00491291 /* Firefox */,
+				43BE57B9278BA4EB00491291 /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		43BE57CD278BA4EC00491291 /* Build configuration list for PBXNativeTarget "Viaduct" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43BE57CE278BA4EC00491291 /* Fennec */,
+				43BE57CF278BA4EC00491291 /* Fennec_Enterprise */,
+				43BE57D0278BA4EC00491291 /* Firefox */,
+				43BE57D1278BA4EC00491291 /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		43BE57E5278BA4ED00491291 /* Build configuration list for PBXNativeTarget "Places" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43BE57E6278BA4ED00491291 /* Fennec */,
+				43BE57E7278BA4ED00491291 /* Fennec_Enterprise */,
+				43BE57E8278BA4ED00491291 /* Firefox */,
+				43BE57E9278BA4ED00491291 /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		43BE57FD278BA50600491291 /* Build configuration list for PBXNativeTarget "FxAClient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43BE57FE278BA50600491291 /* Fennec */,
+				43BE57FF278BA50600491291 /* Fennec_Enterprise */,
+				43BE5800278BA50600491291 /* Firefox */,
+				43BE5801278BA50600491291 /* FirefoxBeta */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -12833,6 +13613,46 @@
 				version = 42.3.2;
 			};
 		};
+		43BE5776278BA4D900491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			requirement = {
+				branch = "no-glean-test";
+				kind = branch;
+			};
+		};
+		43BE57A6278BA4EB00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			requirement = {
+				branch = "no-glean-test";
+				kind = branch;
+			};
+		};
+		43BE57BE278BA4EC00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			requirement = {
+				branch = "no-glean-test";
+				kind = branch;
+			};
+		};
+		43BE57D6278BA4ED00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			requirement = {
+				branch = "no-glean-test";
+				kind = branch;
+			};
+		};
+		43BE57EE278BA50600491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			requirement = {
+				branch = "no-glean-test";
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -12916,40 +13736,40 @@
 			package = 433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF" */;
 			productName = KIF;
 		};
-		433F87E32788F35F00693368 /* FxAClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = FxAClient;
-		};
-		433F87E52788F37900693368 /* Logins */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Logins;
-		};
-		433F87E72788F37900693368 /* Nimbus */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Nimbus;
-		};
-		433F87E92788F37900693368 /* Places */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Places;
-		};
-		433F87EB2788F37900693368 /* RustLog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = RustLog;
-		};
-		433F87ED2788F37900693368 /* Viaduct */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Viaduct;
-		};
 		435C85EF2788F4D00072B526 /* Glean */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
+		};
+		43BE5777278BA4D900491291 /* Logins */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43BE5776278BA4D900491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Logins;
+		};
+		43BE57A8278BA4EB00491291 /* Nimbus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43BE57A6278BA4EB00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Nimbus;
+		};
+		43BE57C3278BA4EC00491291 /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43BE57BE278BA4EC00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
+		};
+		43BE57D9278BA4ED00491291 /* Places */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43BE57D6278BA4ED00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Places;
+		};
+		43BE57ED278BA50600491291 /* FxAClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43BE57EE278BA50600491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = FxAClient;
+		};
+		43BE5804278BA52C00491291 /* RustLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = RustLog;
 		};
 		43EFA63D2786562600400DF0 /* Places */ = {
 			isa = XCSwiftPackageProductDependency;
