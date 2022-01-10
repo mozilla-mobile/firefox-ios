@@ -85,13 +85,11 @@ class TabManagerStore: FeatureFlagsProtocol {
     ///   - tabs: The tabs to preserve
     ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
     ///   - writeCompletion: Used to know the write operation has completed - Used in unit tests
-    /// - Returns: <#description#>
+    /// - Returns: Success when the write operation is on the queue
     @discardableResult func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? = nil) -> Success {
         assert(Thread.isMainThread)
-        log.debug("preserve tabs!, existing tabs: \(tabs.count)")
-        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
-              let path = tabsStateArchivePath()
-        else {
+        log.debug("Preserving tabs with existing tabs count: \(tabs.count)")
+        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab), let path = tabsStateArchivePath() else {
             clearArchive()
             return succeed()
         }
