@@ -329,37 +329,37 @@
 		43BE57E2278BA4ED00491291 /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57D9278BA4ED00491291 /* Places */; };
 		43BE57FB278BA50600491291 /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57ED278BA50600491291 /* FxAClient */; };
 		43BE5805278BA52C00491291 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5804278BA52C00491291 /* RustLog */; };
-		43BE5806278BA7DA00491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
-		43BE5807278BA7EA00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
-		43BE5808278BA80D00491291 /* Viaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* Viaduct.framework */; };
-		43BE5809278BA9D700491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
-		43BE580A278BA9FD00491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
-		43BE580B278BAA0700491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
-		43BE580E278BABCF00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
-		43BE580F278BABD000491291 /* Nimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* Nimbus.framework */; };
-		43BE5810278BABD000491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
-		43BE5811278BABD000491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
-		43BE5812278BABD000491291 /* Viaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* Viaduct.framework */; };
-		43BE5815278BB02000491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
-		43BE5816278BE53E00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
-		43BE5817278BE58B00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
-		43BE581A278BE5AE00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
-		43BE581B278BE5AE00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
-		43BE581C278BE5AE00491291 /* Nimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* Nimbus.framework */; };
-		43BE581D278BE5AE00491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
-		43BE581E278BE5AE00491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
-		43BE581F278BE5AE00491291 /* Viaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* Viaduct.framework */; };
-		43BE5820278BE68100491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
-		43BE5821278BE68100491291 /* Nimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* Nimbus.framework */; };
-		43BE5822278BE68100491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
-		43BE5823278BE68100491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
-		43BE5824278BE7D400491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
-		43BE5825278BE7EF00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
-		43BE5826278BE80A00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
-		43BE5827278BE81500491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
-		43BE5828278BE82B00491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
-		43BE582D278CA94000491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
-		43BE582E278CC5A000491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
+		43BE5806278BA7DA00491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
+		43BE5807278BA7EA00491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
+		43BE5808278BA80D00491291 /* RUSTViaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */; };
+		43BE5809278BA9D700491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43BE580A278BA9FD00491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
+		43BE580B278BAA0700491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
+		43BE580E278BABCF00491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43BE580F278BABD000491291 /* RUSTNimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */; };
+		43BE5810278BABD000491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
+		43BE5811278BABD000491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
+		43BE5812278BABD000491291 /* RUSTViaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */; };
+		43BE5815278BB02000491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
+		43BE5816278BE53E00491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43BE5817278BE58B00491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
+		43BE581A278BE5AE00491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
+		43BE581B278BE5AE00491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43BE581C278BE5AE00491291 /* RUSTNimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */; };
+		43BE581D278BE5AE00491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
+		43BE581E278BE5AE00491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
+		43BE581F278BE5AE00491291 /* RUSTViaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */; };
+		43BE5820278BE68100491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43BE5821278BE68100491291 /* RUSTNimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */; };
+		43BE5822278BE68100491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
+		43BE5823278BE68100491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
+		43BE5824278BE7D400491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
+		43BE5825278BE7EF00491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43BE5826278BE80A00491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
+		43BE5827278BE81500491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43BE5828278BE82B00491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
+		43BE582D278CA94000491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
+		43BE582E278CC5A000491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
 		43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */; };
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
@@ -2097,17 +2097,17 @@
 		43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelDataObservers.swift; sourceTree = "<group>"; };
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		43BDBBFD2752FA8600254DE4 /* TabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCell.swift; sourceTree = "<group>"; };
-		43BE578A278BA4D900491291 /* Logins.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Logins.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE578A278BA4D900491291 /* RUSTLogins.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTLogins.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE578B278BA4D900491291 /* AppServices copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AppServices copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/AppServices copy-Info.plist"; sourceTree = "<absolute>"; };
-		43BE57A2278BA4EA00491291 /* RustLog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RustLog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTRustLog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE57A3278BA4EA00491291 /* Logins copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy-Info.plist"; sourceTree = "<absolute>"; };
-		43BE57BA278BA4EB00491291 /* Nimbus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nimbus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTNimbus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE57BB278BA4EB00491291 /* Logins copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy-Info.plist"; sourceTree = "<absolute>"; };
-		43BE57D2278BA4EC00491291 /* Viaduct.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Viaduct.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTViaduct.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE57D3278BA4EC00491291 /* Logins copy copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy copy-Info.plist"; sourceTree = "<absolute>"; };
-		43BE57EA278BA4ED00491291 /* Places.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Places.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTPlaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE57EB278BA4ED00491291 /* Logins copy copy copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy copy copy-Info.plist"; sourceTree = "<absolute>"; };
-		43BE5802278BA50600491291 /* FxAClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FxAClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE5802278BA50600491291 /* RUSTFxAClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTFxAClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE5803278BA50700491291 /* Places copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Places copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Places copy-Info.plist"; sourceTree = "<absolute>"; };
 		43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		43CA482EA439A9C486CCA01D /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -4318,7 +4318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE5806278BA7DA00491291 /* Places.framework in Frameworks */,
+				43BE5806278BA7DA00491291 /* RUSTPlaces.framework in Frameworks */,
 				433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */,
 				C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */,
 				43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */,
@@ -4330,12 +4330,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE581A278BE5AE00491291 /* FxAClient.framework in Frameworks */,
-				43BE581B278BE5AE00491291 /* Logins.framework in Frameworks */,
-				43BE581C278BE5AE00491291 /* Nimbus.framework in Frameworks */,
-				43BE581D278BE5AE00491291 /* Places.framework in Frameworks */,
-				43BE581E278BE5AE00491291 /* RustLog.framework in Frameworks */,
-				43BE581F278BE5AE00491291 /* Viaduct.framework in Frameworks */,
+				43BE581A278BE5AE00491291 /* RUSTFxAClient.framework in Frameworks */,
+				43BE581B278BE5AE00491291 /* RUSTLogins.framework in Frameworks */,
+				43BE581C278BE5AE00491291 /* RUSTNimbus.framework in Frameworks */,
+				43BE581D278BE5AE00491291 /* RUSTPlaces.framework in Frameworks */,
+				43BE581E278BE5AE00491291 /* RUSTRustLog.framework in Frameworks */,
+				43BE581F278BE5AE00491291 /* RUSTViaduct.framework in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				1B0DFD3A27485AC10008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				1B0DFD32274858B10008EB0A /* SwiftyJSON in Frameworks */,
@@ -4366,12 +4366,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE582E278CC5A000491291 /* FxAClient.framework in Frameworks */,
-				43BE580E278BABCF00491291 /* Logins.framework in Frameworks */,
-				43BE580F278BABD000491291 /* Nimbus.framework in Frameworks */,
-				43BE5810278BABD000491291 /* Places.framework in Frameworks */,
-				43BE5811278BABD000491291 /* RustLog.framework in Frameworks */,
-				43BE5812278BABD000491291 /* Viaduct.framework in Frameworks */,
+				43BE582E278CC5A000491291 /* RUSTFxAClient.framework in Frameworks */,
+				43BE580E278BABCF00491291 /* RUSTLogins.framework in Frameworks */,
+				43BE580F278BABD000491291 /* RUSTNimbus.framework in Frameworks */,
+				43BE5810278BABD000491291 /* RUSTPlaces.framework in Frameworks */,
+				43BE5811278BABD000491291 /* RUSTRustLog.framework in Frameworks */,
+				43BE5812278BABD000491291 /* RUSTViaduct.framework in Frameworks */,
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
 				1B0DFD4227485C3E0008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
@@ -4399,12 +4399,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE5820278BE68100491291 /* Logins.framework in Frameworks */,
-				43BE5821278BE68100491291 /* Nimbus.framework in Frameworks */,
-				43BE5822278BE68100491291 /* Places.framework in Frameworks */,
-				43BE5823278BE68100491291 /* RustLog.framework in Frameworks */,
-				43BE5808278BA80D00491291 /* Viaduct.framework in Frameworks */,
-				43BE5807278BA7EA00491291 /* FxAClient.framework in Frameworks */,
+				43BE5820278BE68100491291 /* RUSTLogins.framework in Frameworks */,
+				43BE5821278BE68100491291 /* RUSTNimbus.framework in Frameworks */,
+				43BE5822278BE68100491291 /* RUSTPlaces.framework in Frameworks */,
+				43BE5823278BE68100491291 /* RUSTRustLog.framework in Frameworks */,
+				43BE5808278BA80D00491291 /* RUSTViaduct.framework in Frameworks */,
+				43BE5807278BA7EA00491291 /* RUSTFxAClient.framework in Frameworks */,
 				C820443825241D3100740B71 /* libSyncTelemetry.a in Frameworks */,
 				C8340C4F24EC69EE00FE91A6 /* libcrypto.a in Frameworks */,
 				C8340C5024EC69EE00FE91A6 /* libssl.a in Frameworks */,
@@ -4423,7 +4423,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE5809278BA9D700491291 /* Logins.framework in Frameworks */,
+				43BE5809278BA9D700491291 /* RUSTLogins.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4449,9 +4449,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE5825278BE7EF00491291 /* Logins.framework in Frameworks */,
-				43BE5824278BE7D400491291 /* FxAClient.framework in Frameworks */,
-				43BE580A278BA9FD00491291 /* RustLog.framework in Frameworks */,
+				43BE5825278BE7EF00491291 /* RUSTLogins.framework in Frameworks */,
+				43BE5824278BE7D400491291 /* RUSTFxAClient.framework in Frameworks */,
+				43BE580A278BA9FD00491291 /* RUSTRustLog.framework in Frameworks */,
 				C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */,
 				1B0DFD3C27485B050008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				C877039725222FE6006E38EB /* Shared.framework in Frameworks */,
@@ -4572,10 +4572,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE582D278CA94000491291 /* RustLog.framework in Frameworks */,
-				43BE5817278BE58B00491291 /* FxAClient.framework in Frameworks */,
-				43BE5816278BE53E00491291 /* Logins.framework in Frameworks */,
-				43BE5815278BB02000491291 /* Places.framework in Frameworks */,
+				43BE582D278CA94000491291 /* RUSTRustLog.framework in Frameworks */,
+				43BE5817278BE58B00491291 /* RUSTFxAClient.framework in Frameworks */,
+				43BE5816278BE53E00491291 /* RUSTLogins.framework in Frameworks */,
+				43BE5815278BB02000491291 /* RUSTPlaces.framework in Frameworks */,
 				F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				1B0DFD4027485B560008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				F8324AF62649B540007E4BFA /* Shared.framework in Frameworks */,
@@ -4597,10 +4597,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE5828278BE82B00491291 /* Places.framework in Frameworks */,
-				43BE5827278BE81500491291 /* Logins.framework in Frameworks */,
-				43BE5826278BE80A00491291 /* FxAClient.framework in Frameworks */,
-				43BE580B278BAA0700491291 /* RustLog.framework in Frameworks */,
+				43BE5828278BE82B00491291 /* RUSTPlaces.framework in Frameworks */,
+				43BE5827278BE81500491291 /* RUSTLogins.framework in Frameworks */,
+				43BE5826278BE80A00491291 /* RUSTFxAClient.framework in Frameworks */,
+				43BE580B278BAA0700491291 /* RUSTRustLog.framework in Frameworks */,
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
 				C877039625222FDC006E38EB /* Shared.framework in Frameworks */,
 				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
@@ -6381,12 +6381,12 @@
 				397848DB1ED86605004C0C0B /* NotificationService.appex */,
 				047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */,
 				F8324A052649A188007E4BFA /* CredentialProvider.appex */,
-				43BE578A278BA4D900491291 /* Logins.framework */,
-				43BE57A2278BA4EA00491291 /* RustLog.framework */,
-				43BE57BA278BA4EB00491291 /* Nimbus.framework */,
-				43BE57D2278BA4EC00491291 /* Viaduct.framework */,
-				43BE57EA278BA4ED00491291 /* Places.framework */,
-				43BE5802278BA50600491291 /* FxAClient.framework */,
+				43BE578A278BA4D900491291 /* RUSTLogins.framework */,
+				43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */,
+				43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */,
+				43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */,
+				43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */,
+				43BE5802278BA50600491291 /* RUSTFxAClient.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6907,9 +6907,9 @@
 			productReference = 3BFE4B071D342FB800DDF53F /* XCUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		43BE5774278BA4D900491291 /* Logins */ = {
+		43BE5774278BA4D900491291 /* RUSTLogins */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "Logins" */;
+			buildConfigurationList = 43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RUSTLogins" */;
 			buildPhases = (
 				43BE577C278BA4D900491291 /* Sources */,
 				43BE577D278BA4D900491291 /* Frameworks */,
@@ -6919,17 +6919,17 @@
 			);
 			dependencies = (
 			);
-			name = Logins;
+			name = RUSTLogins;
 			packageProductDependencies = (
 				43BE5777278BA4D900491291 /* Logins */,
 			);
 			productName = Shared;
-			productReference = 43BE578A278BA4D900491291 /* Logins.framework */;
+			productReference = 43BE578A278BA4D900491291 /* RUSTLogins.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		43BE578C278BA4EA00491291 /* RustLog */ = {
+		43BE578C278BA4EA00491291 /* RUSTRustLog */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE579D278BA4EA00491291 /* Build configuration list for PBXNativeTarget "RustLog" */;
+			buildConfigurationList = 43BE579D278BA4EA00491291 /* Build configuration list for PBXNativeTarget "RUSTRustLog" */;
 			buildPhases = (
 				43BE5794278BA4EA00491291 /* Sources */,
 				43BE5795278BA4EA00491291 /* Frameworks */,
@@ -6939,17 +6939,17 @@
 			);
 			dependencies = (
 			);
-			name = RustLog;
+			name = RUSTRustLog;
 			packageProductDependencies = (
 				43BE5804278BA52C00491291 /* RustLog */,
 			);
 			productName = Shared;
-			productReference = 43BE57A2278BA4EA00491291 /* RustLog.framework */;
+			productReference = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		43BE57A4278BA4EB00491291 /* Nimbus */ = {
+		43BE57A4278BA4EB00491291 /* RUSTNimbus */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE57B5278BA4EB00491291 /* Build configuration list for PBXNativeTarget "Nimbus" */;
+			buildConfigurationList = 43BE57B5278BA4EB00491291 /* Build configuration list for PBXNativeTarget "RUSTNimbus" */;
 			buildPhases = (
 				43BE57AC278BA4EB00491291 /* Sources */,
 				43BE57AD278BA4EB00491291 /* Frameworks */,
@@ -6959,17 +6959,17 @@
 			);
 			dependencies = (
 			);
-			name = Nimbus;
+			name = RUSTNimbus;
 			packageProductDependencies = (
 				43BE57A8278BA4EB00491291 /* Nimbus */,
 			);
 			productName = Shared;
-			productReference = 43BE57BA278BA4EB00491291 /* Nimbus.framework */;
+			productReference = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		43BE57BC278BA4EC00491291 /* Viaduct */ = {
+		43BE57BC278BA4EC00491291 /* RUSTViaduct */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE57CD278BA4EC00491291 /* Build configuration list for PBXNativeTarget "Viaduct" */;
+			buildConfigurationList = 43BE57CD278BA4EC00491291 /* Build configuration list for PBXNativeTarget "RUSTViaduct" */;
 			buildPhases = (
 				43BE57C4278BA4EC00491291 /* Sources */,
 				43BE57C5278BA4EC00491291 /* Frameworks */,
@@ -6979,17 +6979,17 @@
 			);
 			dependencies = (
 			);
-			name = Viaduct;
+			name = RUSTViaduct;
 			packageProductDependencies = (
 				43BE57C3278BA4EC00491291 /* Viaduct */,
 			);
 			productName = Shared;
-			productReference = 43BE57D2278BA4EC00491291 /* Viaduct.framework */;
+			productReference = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		43BE57D4278BA4ED00491291 /* Places */ = {
+		43BE57D4278BA4ED00491291 /* RUSTPlaces */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE57E5278BA4ED00491291 /* Build configuration list for PBXNativeTarget "Places" */;
+			buildConfigurationList = 43BE57E5278BA4ED00491291 /* Build configuration list for PBXNativeTarget "RUSTPlaces" */;
 			buildPhases = (
 				43BE57DC278BA4ED00491291 /* Sources */,
 				43BE57DD278BA4ED00491291 /* Frameworks */,
@@ -6999,17 +6999,17 @@
 			);
 			dependencies = (
 			);
-			name = Places;
+			name = RUSTPlaces;
 			packageProductDependencies = (
 				43BE57D9278BA4ED00491291 /* Places */,
 			);
 			productName = Shared;
-			productReference = 43BE57EA278BA4ED00491291 /* Places.framework */;
+			productReference = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		43BE57EC278BA50600491291 /* FxAClient */ = {
+		43BE57EC278BA50600491291 /* RUSTFxAClient */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE57FD278BA50600491291 /* Build configuration list for PBXNativeTarget "FxAClient" */;
+			buildConfigurationList = 43BE57FD278BA50600491291 /* Build configuration list for PBXNativeTarget "RUSTFxAClient" */;
 			buildPhases = (
 				43BE57F4278BA50600491291 /* Sources */,
 				43BE57F5278BA50600491291 /* Frameworks */,
@@ -7019,12 +7019,12 @@
 			);
 			dependencies = (
 			);
-			name = FxAClient;
+			name = RUSTFxAClient;
 			packageProductDependencies = (
 				43BE57ED278BA50600491291 /* FxAClient */,
 			);
 			productName = Shared;
-			productReference = 43BE5802278BA50600491291 /* FxAClient.framework */;
+			productReference = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7BEB64401C7345600092C02E /* L10nSnapshotTests */ = {
@@ -7557,12 +7557,12 @@
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
 				3B43E3CF1D95C48D00BBA9DB /* StoragePerfTests */,
 				E69DB07C1E97DEA9008A67E6 /* SyncTelemetryTests */,
-				43BE5774278BA4D900491291 /* Logins */,
-				43BE578C278BA4EA00491291 /* RustLog */,
-				43BE57A4278BA4EB00491291 /* Nimbus */,
-				43BE57BC278BA4EC00491291 /* Viaduct */,
-				43BE57D4278BA4ED00491291 /* Places */,
-				43BE57EC278BA50600491291 /* FxAClient */,
+				43BE5774278BA4D900491291 /* RUSTLogins */,
+				43BE578C278BA4EA00491291 /* RUSTRustLog */,
+				43BE57A4278BA4EB00491291 /* RUSTNimbus */,
+				43BE57BC278BA4EC00491291 /* RUSTViaduct */,
+				43BE57D4278BA4ED00491291 /* RUSTPlaces */,
+				43BE57EC278BA50600491291 /* RUSTFxAClient */,
 			);
 		};
 /* End PBXProject section */
@@ -9007,7 +9007,7 @@
 		};
 		43BE5814278BAF9A00491291 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 43BE57D4278BA4ED00491291 /* Places */;
+			target = 43BE57D4278BA4ED00491291 /* RUSTPlaces */;
 			targetProxy = 43BE5813278BAF9A00491291 /* PBXContainerItemProxy */;
 		};
 		43BE582A278BF01100491291 /* PBXTargetDependency */ = {
@@ -13346,7 +13346,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "Logins" */ = {
+		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RUSTLogins" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				43BE5786278BA4D900491291 /* Fennec */,
@@ -13357,7 +13357,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		43BE579D278BA4EA00491291 /* Build configuration list for PBXNativeTarget "RustLog" */ = {
+		43BE579D278BA4EA00491291 /* Build configuration list for PBXNativeTarget "RUSTRustLog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				43BE579E278BA4EA00491291 /* Fennec */,
@@ -13368,7 +13368,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		43BE57B5278BA4EB00491291 /* Build configuration list for PBXNativeTarget "Nimbus" */ = {
+		43BE57B5278BA4EB00491291 /* Build configuration list for PBXNativeTarget "RUSTNimbus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				43BE57B6278BA4EB00491291 /* Fennec */,
@@ -13379,7 +13379,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		43BE57CD278BA4EC00491291 /* Build configuration list for PBXNativeTarget "Viaduct" */ = {
+		43BE57CD278BA4EC00491291 /* Build configuration list for PBXNativeTarget "RUSTViaduct" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				43BE57CE278BA4EC00491291 /* Fennec */,
@@ -13390,7 +13390,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		43BE57E5278BA4ED00491291 /* Build configuration list for PBXNativeTarget "Places" */ = {
+		43BE57E5278BA4ED00491291 /* Build configuration list for PBXNativeTarget "RUSTPlaces" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				43BE57E6278BA4ED00491291 /* Fennec */,
@@ -13401,7 +13401,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		43BE57FD278BA50600491291 /* Build configuration list for PBXNativeTarget "FxAClient" */ = {
+		43BE57FD278BA50600491291 /* Build configuration list for PBXNativeTarget "RUSTFxAClient" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				43BE57FE278BA50600491291 /* Fennec */,
