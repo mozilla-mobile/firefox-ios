@@ -336,7 +336,6 @@
 		43BE580A278BA9FD00491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
 		43BE580B278BAA0700491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
 		43BE580C278BAA1700491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
-		43BE580D278BABCF00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
 		43BE580E278BABCF00491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
 		43BE580F278BABD000491291 /* Nimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* Nimbus.framework */; };
 		43BE5810278BABD000491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
@@ -362,6 +361,8 @@
 		43BE5826278BE80A00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
 		43BE5827278BE81500491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
 		43BE5828278BE82B00491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
+		43BE582B278CA44C00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
+		43BE582C278CA47E00491291 /* FxAClient.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */; };
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
@@ -1108,6 +1109,13 @@
 			remoteGlobalIDString = 43BE57D4278BA4ED00491291;
 			remoteInfo = Places;
 		};
+		43BE5829278BF01100491291 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F8324A042649A188007E4BFA;
+			remoteInfo = CredentialProvider;
+		};
 		7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1220,13 +1228,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		F8324A102649A188007E4BFA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F8324A042649A188007E4BFA;
-			remoteInfo = CredentialProvider;
-		};
 		F8324AF82649B540007E4BFA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1323,6 +1324,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43BE582C278CA47E00491291 /* FxAClient.framework in Copy Frameworks */,
 				C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */,
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
 			);
@@ -4368,7 +4370,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE580D278BABCF00491291 /* FxAClient.framework in Frameworks */,
+				43BE582B278CA44C00491291 /* FxAClient.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* Logins.framework in Frameworks */,
 				43BE580F278BABD000491291 /* Nimbus.framework in Frameworks */,
 				43BE5810278BABD000491291 /* Places.framework in Frameworks */,
@@ -7193,7 +7195,7 @@
 				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
 				390527551C874D35007E0BB7 /* PBXTargetDependency */,
 				047F9B3124E1FE1F00CD7DF7 /* PBXTargetDependency */,
-				F8324A112649A188007E4BFA /* PBXTargetDependency */,
+				43BE582A278BF01100491291 /* PBXTargetDependency */,
 			);
 			name = Client;
 			packageProductDependencies = (
@@ -9014,6 +9016,11 @@
 			target = 43BE57D4278BA4ED00491291 /* Places */;
 			targetProxy = 43BE5813278BAF9A00491291 /* PBXContainerItemProxy */;
 		};
+		43BE582A278BF01100491291 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F8324A042649A188007E4BFA /* CredentialProvider */;
+			targetProxy = 43BE5829278BF01100491291 /* PBXContainerItemProxy */;
+		};
 		43EFA63E2786562600400DF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 43EFA63D2786562600400DF0 /* Places */;
@@ -9097,11 +9104,6 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = E63CD1B21B31B66400A63AFF /* PBXContainerItemProxy */;
-		};
-		F8324A112649A188007E4BFA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F8324A042649A188007E4BFA /* CredentialProvider */;
-			targetProxy = F8324A102649A188007E4BFA /* PBXContainerItemProxy */;
 		};
 		F8324AF92649B540007E4BFA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
