@@ -19,8 +19,7 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test02Settings() {
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        app.collectionViews.buttons.element(boundBy: 0).tap()
+        openSettings()
         snapshot("08Settings")
         app.swipeUp()
         snapshot("9Settings")
@@ -54,8 +53,7 @@ class SnapshotTests: BaseTestCaseL10n {
     
     func test03About() {
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        app.collectionViews.buttons.element(boundBy: 0).tap()
+        openSettings()
         waitForExistence(app.cells["settingsViewController.about"])
         app.cells["settingsViewController.about"].tap()
         snapshot("13About")
@@ -80,8 +78,7 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test05SafariIntegration() {
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        app.collectionViews.buttons.element(boundBy: 0).tap()
+        openSettings()
         waitForExistence(app.tables.switches["BlockerToggle.Safari"])
         app.tables.switches["BlockerToggle.Safari"].tap()
         snapshot("15SafariIntegrationInstructions")
@@ -89,8 +86,7 @@ class SnapshotTests: BaseTestCaseL10n {
 
     func test06Theme() {
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        app.collectionViews.buttons.element(boundBy: 0).tap()
+        openSettings()
         waitForExistence(app.cells["settingsViewController.themeCell"])
         app.cells["settingsViewController.themeCell"].tap()
         // Toggle the switch on-off to see the different menus
@@ -123,7 +119,7 @@ class SnapshotTests: BaseTestCaseL10n {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("20HomeViewSettings")
-        app.collectionViews.buttons.element(boundBy: 0).tap()
+        app.collectionViews.buttons.element(boundBy: 1).tap()
         waitForExistence(app.cells["SettingsViewController.searchCell"])
         app.cells["SettingsViewController.searchCell"].tap()
         snapshot("SettingsSearchEngine")
