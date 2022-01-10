@@ -16,6 +16,8 @@ class TabManagerStore: FeatureFlagsProtocol {
     fileprivate let serialQueue = DispatchQueue(label: "tab-manager-write-queue")
     fileprivate var writeOperation = DispatchWorkItem {}
 
+    private let profilePath: String?
+
     // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
     fileprivate lazy var archivedStartupTabs = {
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
@@ -25,6 +27,12 @@ class TabManagerStore: FeatureFlagsProtocol {
         self.fileManager = fileManager
         self.imageStore = imageStore
         self.prefs = prefs
+
+        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
+            profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+        } else {
+            profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
+        }
     }
 
     var isRestoringTabs: Bool {
@@ -36,12 +44,6 @@ class TabManagerStore: FeatureFlagsProtocol {
     }
 
     fileprivate func tabsStateArchivePath() -> String? {
-        let profilePath: String?
-        if  AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
-            profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
-        } else {
-            profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        }
         guard let path = profilePath else { return nil }
         return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
     }
