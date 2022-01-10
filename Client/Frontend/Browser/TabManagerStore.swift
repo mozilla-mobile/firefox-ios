@@ -90,7 +90,6 @@ class TabManagerStore: FeatureFlagsProtocol {
     /// - Returns: Success when the write operation is on the queue
     @discardableResult func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? = nil) -> Success {
         assert(Thread.isMainThread)
-        log.debug("Preserving tabs with existing tabs count: \(tabs.count)")
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab), let path = tabsStateArchivePath() else {
             clearArchive()
             return succeed()
