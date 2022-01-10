@@ -58,6 +58,9 @@
 /* Label for the button, displayed in the menu, used to show the html page source */
 "Menu.PageSourceAction.Title" = "পাতা সোর্স দেখাও";
 
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"Menu.RecentlySaved.Title" = "সম্প্রতি সংরক্ষিত";
+
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "বুকমার্ক সরান";
 
@@ -84,4 +87,7 @@
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "মোবাইল সাইটের জন্য অনুরোধ করুন";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "হোমপেজ";
 

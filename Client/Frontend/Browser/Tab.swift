@@ -273,6 +273,12 @@ class Tab: NSObject {
         return false
     }
 
+    fileprivate(set) var pageZoom: CGFloat = 1.0 {
+        didSet {
+            webView?.setValue(pageZoom, forKey: "viewScale")
+        }
+    }
+
     fileprivate(set) var screenshot: UIImage?
 
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
@@ -637,6 +643,45 @@ class Tab: NSObject {
         self.webView?.scrollView.refreshControl?.endRefreshing()
     }
     
+
+    @objc func zoomIn() {
+        switch pageZoom {
+        case 0.75:
+            pageZoom = 0.85
+        case 0.85:
+            pageZoom = 1.0
+        case 1.0:
+            pageZoom = 1.15
+        case 1.15:
+            pageZoom = 1.25
+        case 3.0:
+            return
+        default:
+            pageZoom += 0.25
+        }
+    }
+
+    @objc func zoomOut() {
+        switch pageZoom {
+        case 0.5:
+            return
+        case 0.85:
+            pageZoom = 0.75
+        case 1.0:
+            pageZoom = 0.85
+        case 1.15:
+            pageZoom = 1.0
+        case 1.25:
+            pageZoom = 1.15
+        default:
+            pageZoom -= 0.25
+        }
+    }
+
+    func resetZoom() {
+        pageZoom = 1.0
+    }
+
     func addContentScript(_ helper: TabContentScript, name: String) {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }
