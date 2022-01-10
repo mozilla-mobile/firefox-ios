@@ -67,7 +67,7 @@ class TabManagerStoreTests: XCTestCase {
         waitForStoreChanged(tabCountOnDisk: 2)
 
         // Add 2 more tabs
-        addTabsWithSessionData(numberOfTabs: 2)
+        addTabsWithSessionData(numberOfTabs: 2, expectedTabsNumber: 4)
         waitForStoreChanged(tabCountOnDisk: 4)
     }
 
@@ -99,8 +99,12 @@ class TabManagerStoreTests: XCTestCase {
 // Helper functions for TabManagerStoreTests
 extension TabManagerStoreTests {
 
-    // Without session data, a Tab can't become a SavedTab and get archived
     func addTabsWithSessionData(numberOfTabs: Int = 1, isPrivate: Bool = false, file: StaticString = #file, line: UInt = #line) {
+        addTabsWithSessionData(numberOfTabs: numberOfTabs, expectedTabsNumber: numberOfTabs, isPrivate: isPrivate, file: file, line: line)
+    }
+
+    // Without session data, a Tab can't become a SavedTab and get archived
+    func addTabsWithSessionData(numberOfTabs: Int = 1, expectedTabsNumber: Int, isPrivate: Bool = false, file: StaticString = #file, line: UInt = #line) {
         for _ in 0..<numberOfTabs {
             let tab = Tab(bvc: BrowserViewController.foregroundBVC(), configuration: configuration, isPrivate: isPrivate)
             tab.url = URL(string: "http://yahoo.com")!
@@ -108,7 +112,7 @@ extension TabManagerStoreTests {
             tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
         }
 
-        XCTAssertEqual(manager.tabs.count, numberOfTabs, "Expected \(numberOfTabs) tabs in manager", file: file, line: line)
+        XCTAssertEqual(manager.tabs.count, expectedTabsNumber, "Expected \(expectedTabsNumber) tabs in manager", file: file, line: line)
     }
 
     func waitForStoreChanged(tabCountOnDisk: Int, file: StaticString = #file, line: UInt = #line) {
