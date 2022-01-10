@@ -358,9 +358,8 @@
 		43BE5826278BE80A00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
 		43BE5827278BE81500491291 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* Logins.framework */; };
 		43BE5828278BE82B00491291 /* Places.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* Places.framework */; };
-		43BE582B278CA44C00491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
-		43BE582C278CA47E00491291 /* FxAClient.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43BE582D278CA94000491291 /* RustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RustLog.framework */; };
+		43BE582E278CC5A000491291 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* FxAClient.framework */; };
 		43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */; };
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
@@ -1322,7 +1321,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				43BE582C278CA47E00491291 /* FxAClient.framework in Copy Frameworks */,
 				C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */,
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
 			);
@@ -4368,7 +4366,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE582B278CA44C00491291 /* FxAClient.framework in Frameworks */,
+				43BE582E278CC5A000491291 /* FxAClient.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* Logins.framework in Frameworks */,
 				43BE580F278BABD000491291 /* Nimbus.framework in Frameworks */,
 				43BE5810278BABD000491291 /* Places.framework in Frameworks */,
