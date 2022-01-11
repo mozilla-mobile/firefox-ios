@@ -44,6 +44,7 @@ class SearchTests: XCTestCase {
         checkInvalidURL("创业咖啡. 中国")
         checkInvalidURL("about:")
         checkInvalidURL("javascript:")
+        checkInvalidURL("javascript:alert(%22hi%22)")
         checkInvalidURL("ftp:")
         
     }
