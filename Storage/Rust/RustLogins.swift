@@ -7,7 +7,8 @@ import Shared
 import SwiftKeychainWrapper
 
 @_exported import Logins
-@_exported import Sync15
+//@_exported import Places
+//@_exported import Sync15
 
 private let log = Logger.syncLogger
 
@@ -477,7 +478,7 @@ public class RustLogins {
         return error
     }
 
-    public func syncLogins(unlockInfo: SyncUnlockInfo) -> Success {
+    public func syncLogins(unlockInfo: SyncLoginsUnlockInfo) -> Success {
         let deferred = Success()
 
         queue.async {

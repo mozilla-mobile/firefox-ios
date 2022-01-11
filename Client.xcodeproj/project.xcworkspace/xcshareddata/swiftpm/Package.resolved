@@ -33,8 +33,17 @@
         "repositoryURL": "https://github.com/skhamis/rust-components-swift",
         "state": {
           "branch": "no-glean-test",
-          "revision": "080addcb14b378bd0316ed62ce522fdac7f049fd",
+          "revision": "fdcf9802bd7a7a53190e4cc55af035bfb89487ed",
           "version": null
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
+        "state": {
+          "branch": null,
+          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
+          "version": "1.18.0"
         }
       },
       {

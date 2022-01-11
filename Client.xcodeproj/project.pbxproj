@@ -277,6 +277,12 @@
 		3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */; };
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
 		3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */; };
+		43017ECA278E0BFC00CED011 /* RUSTFxAClient.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43017ECB278E0C6700CED011 /* RUSTLogins.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43017ECC278E0C6700CED011 /* RUSTRustLog.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43017ECD278E0C6700CED011 /* RUSTNimbus.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43017ECE278E0C6700CED011 /* RUSTViaduct.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43017ECF278E0C6700CED011 /* RUSTPlaces.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		43118CF3251A9CCA00F24376 /* SiteArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */; };
 		43118D07251A9CD100F24376 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
@@ -1322,6 +1328,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43017ECB278E0C6700CED011 /* RUSTLogins.framework in Copy Frameworks */,
+				43017ECC278E0C6700CED011 /* RUSTRustLog.framework in Copy Frameworks */,
+				43017ECD278E0C6700CED011 /* RUSTNimbus.framework in Copy Frameworks */,
+				43017ECE278E0C6700CED011 /* RUSTViaduct.framework in Copy Frameworks */,
+				43017ECF278E0C6700CED011 /* RUSTPlaces.framework in Copy Frameworks */,
+				43017ECA278E0BFC00CED011 /* RUSTFxAClient.framework in Copy Frameworks */,
 				C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */,
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
 			);
@@ -2057,6 +2069,7 @@
 		42824D3487F29EFDBEFA20AD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		42CC4F75B4E9E31A4754A9FE /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		42D84A3EBD583A4797682E74 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
+		43017EBD278E07A000CED011 /* RUSTSync15.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RUSTSync15.h; sourceTree = "<group>"; };
 		43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyPrivateTabsView.swift; sourceTree = "<group>"; };
 		43175DB526B8774D00C41C31 /* Ads.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Ads.js; sourceTree = "<group>"; };
 		43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsTelemetryHelper.swift; sourceTree = "<group>"; };
@@ -5182,6 +5195,14 @@
 			path = XCUITests;
 			sourceTree = "<group>";
 		};
+		43017EBC278E07A000CED011 /* RUSTSync15 */ = {
+			isa = PBXGroup;
+			children = (
+				43017EBD278E07A000CED011 /* RUSTSync15.h */,
+			);
+			path = RUSTSync15;
+			sourceTree = "<group>";
+		};
 		431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -6329,6 +6350,7 @@
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
 				F8324A082649A188007E4BFA /* CredentialProvider */,
+				43017EBC278E07A000CED011 /* RUSTSync15 */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,

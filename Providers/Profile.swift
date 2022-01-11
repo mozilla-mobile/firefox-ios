@@ -18,6 +18,7 @@ import AuthenticationServices
 import RustLog
 import FxAClient
 
+@_exported import Places
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT
     import SwiftyJSON
@@ -1018,8 +1019,8 @@ open class BrowserProfile: Profile {
             public var description = "Failed to get stored key."
         }
 
-        fileprivate func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
-            let d = Deferred<Maybe<SyncUnlockInfo>>()
+        fileprivate func syncUnlockInfo() -> Deferred<Maybe<SyncLoginsUnlockInfo>> {
+            let d = Deferred<Maybe<SyncLoginsUnlockInfo>>()
             profile.rustFxA.accountManager.uponQueue(.main) { accountManager in
                 accountManager.getAccessToken(scope: OAuthScope.oldSync) { result in
                     guard let accessTokenInfo = try? result.get(), let key = accessTokenInfo.key else {
@@ -1039,7 +1040,7 @@ open class BrowserProfile: Profile {
                             return
                         }
 
-                        d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString, loginEncryptionKey: encryptionKey)))
+                        d.fill(Maybe(success: SyncLoginsUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString, loginEncryptionKey: encryptionKey)))
                     }
                 }
             }
@@ -1067,21 +1068,23 @@ open class BrowserProfile: Profile {
             })
         }
 
+        //TODO: DO NOT MERGE THIS IN!!!!!!!
+        //WARNING!!!!!!!
         fileprivate func syncBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing bookmarks to storage.")
             return syncUnlockInfo().bind({ result in
-                guard let syncUnlockInfo = result.successValue else {
+//                guard let syncUnlockInfo = result.successValue else {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
-                }
+//                }
 
-                return self.profile.places.syncBookmarks(unlockInfo: syncUnlockInfo).bind({ result in
-                    guard result.isSuccess else {
-                        return deferMaybe(SyncStatus.notStarted(.unknown))
-                    }
-
-                    let syncEngineStatsSession = SyncEngineStatsSession(collection: "bookmarks")
-                    return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
-                })
+//                return self.profile.places.syncBookmarks(unlockInfo: SyncPlacesUnlockInfo).bind({ result in
+//                    guard result.isSuccess else {
+//                        return deferMaybe(SyncStatus.notStarted(.unknown))
+//                    }
+//
+//                    let syncEngineStatsSession = SyncEngineStatsSession(collection: "bookmarks")
+//                    return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
+//                })
             })
         }
 

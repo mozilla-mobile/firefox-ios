@@ -6,6 +6,7 @@ import Foundation
 import Shared
 
 @_exported import Places
+import Logins
 
 private let log = Logger.syncLogger
 
@@ -288,7 +289,7 @@ public class RustPlaces {
         return error
     }
 
-    public func syncBookmarks(unlockInfo: SyncUnlockInfo) -> Success {
+    public func syncBookmarks(unlockInfo: SyncPlacesUnlockInfo) -> Success {
         let deferred = Success()
 
         writerQueue.async {
