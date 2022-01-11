@@ -139,12 +139,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         tableView.setEditing(false, animated: false)
-        coordinator.animate(alongsideTransition: { context in
-            //The AS context menu does not behave correctly. Dismiss it when rotating.
-            if let _ = self.presentedViewController as? PhotonActionSheet {
-                self.presentedViewController?.dismiss(animated: true, completion: nil)
-            }
-        }, completion: nil)
+        // The AS context menu does not behave correctly. Dismiss it when rotating.
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }
     }
 
     func reloadData() {
