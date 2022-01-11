@@ -58,6 +58,8 @@
 		1B0DFD4027485B560008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD3F27485B560008EB0A /* SwiftKeychainWrapper */; };
 		1B0DFD4227485C3E0008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD4127485C3E0008EB0A /* SwiftKeychainWrapper */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
+		1BE8D1CE278D35E200213777 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE8D1CD278D35E200213777 /* Viaduct */; };
+		1BE8D1D6278D3D4900213777 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE8D1D5278D3D4900213777 /* SwiftKeychainWrapper */; };
 		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
 		1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCB2717704300D729BB /* SwiftyJSON */; };
 		1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCD271770A600D729BB /* SwiftyJSON */; };
@@ -325,7 +327,6 @@
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
 		43BE577E278BA4D900491291 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5777278BA4D900491291 /* Logins */; };
 		43BE57B0278BA4EB00491291 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57A8278BA4EB00491291 /* Nimbus */; };
-		43BE57C9278BA4EC00491291 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57C3278BA4EC00491291 /* Viaduct */; };
 		43BE57E2278BA4ED00491291 /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57D9278BA4ED00491291 /* Places */; };
 		43BE57FB278BA50600491291 /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57ED278BA50600491291 /* FxAClient */; };
 		43BE5805278BA52C00491291 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5804278BA52C00491291 /* RustLog */; };
@@ -4501,7 +4502,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE57C9278BA4EC00491291 /* Viaduct in Frameworks */,
+				1BE8D1CE278D35E200213777 /* Viaduct in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4517,6 +4518,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE8D1D6278D3D4900213777 /* SwiftKeychainWrapper in Frameworks */,
 				43BE57FB278BA50600491291 /* FxAClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6981,7 +6983,7 @@
 			);
 			name = RUSTViaduct;
 			packageProductDependencies = (
-				43BE57C3278BA4EC00491291 /* Viaduct */,
+				1BE8D1CD278D35E200213777 /* Viaduct */,
 			);
 			productName = Shared;
 			productReference = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */;
@@ -7018,10 +7020,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				1BE8D1D4278D3D3C00213777 /* PBXTargetDependency */,
 			);
 			name = RUSTFxAClient;
 			packageProductDependencies = (
 				43BE57ED278BA50600491291 /* FxAClient */,
+				1BE8D1D5278D3D4900213777 /* SwiftKeychainWrapper */,
 			);
 			productName = Shared;
 			productReference = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */;
@@ -8923,6 +8927,10 @@
 			isa = PBXTargetDependency;
 			target = 047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */;
 			targetProxy = 047F9B3024E1FE1F00CD7DF7 /* PBXContainerItemProxy */;
+		};
+		1BE8D1D4278D3D3C00213777 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1BE8D1D3278D3D3C00213777 /* SwiftKeychainWrapper */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -13625,14 +13633,6 @@
 				kind = branch;
 			};
 		};
-		43BE57BE278BA4EC00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/skhamis/rust-components-swift";
-			requirement = {
-				branch = "no-glean-test";
-				kind = branch;
-			};
-		};
 		43BE57D6278BA4ED00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skhamis/rust-components-swift";
@@ -13697,6 +13697,21 @@
 			package = 1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */;
 			productName = Telemetry;
 		};
+		1BE8D1CD278D35E200213777 /* Viaduct */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = Viaduct;
+		};
+		1BE8D1D3278D3D3C00213777 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		1BE8D1D5278D3D4900213777 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		1BE9ECC927176FEA00D729BB /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
@@ -13746,11 +13761,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 43BE57A6278BA4EB00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Nimbus;
-		};
-		43BE57C3278BA4EC00491291 /* Viaduct */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43BE57BE278BA4EC00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Viaduct;
 		};
 		43BE57D9278BA4ED00491291 /* Places */ = {
 			isa = XCSwiftPackageProductDependency;
