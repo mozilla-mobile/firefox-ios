@@ -54,7 +54,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController> {
 
     var query: String = "" {
         didSet {
-            guard let profile = self.profile as? BrowserProfile else {
+            guard self.profile is BrowserProfile else {
                 assertionFailure("nil profile")
                 return
             }

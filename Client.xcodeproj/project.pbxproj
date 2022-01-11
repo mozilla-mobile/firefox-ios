@@ -305,7 +305,6 @@
 		43AB6FA425DC53D30016B015 /* ASHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9E25DC53D20016B015 /* ASHeaderView.swift */; };
 		43AB6FA525DC53D30016B015 /* ASLibraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9F25DC53D30016B015 /* ASLibraryCell.swift */; };
 		43AB6FA625DC53D30016B015 /* LibraryShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA025DC53D30016B015 /* LibraryShortcutView.swift */; };
-		43AB6FA725DC53D30016B015 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
 		43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */; };
@@ -3671,7 +3670,6 @@
 		D697400187A0D99761754466 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Intro.strings; sourceTree = "<group>"; };
 		D69A452E9E1F4E01F1AE258B /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		D6A54DEA878BDF945AF2AF7E /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Menu.strings; sourceTree = "<group>"; };
-		D6CC457ABDA49EA7C1606245 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D70D49E5AF0B7105E447885B /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		D76D487D985DD7579B5F0861 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/Intro.strings; sourceTree = "<group>"; };
 		D7794F8C9ABD98859F3219D9 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = "su.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -9558,7 +9556,6 @@
 				2BAB4A40A318F5A577488909 /* mr */,
 				5F684EB59A149BD03A1E5247 /* sq */,
 				E24446F28B659E7C536D9286 /* eu */,
-				D6CC457ABDA49EA7C1606245 /* en */,
 				95A247C39DF0864A47E736D0 /* en-CA */,
 				93F246329F96429FDB2B5A76 /* co */,
 				8EBF42BE87F80F323CFFDB68 /* uk */,
