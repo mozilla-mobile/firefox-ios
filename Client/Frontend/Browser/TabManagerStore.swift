@@ -16,6 +16,8 @@ class TabManagerStore: FeatureFlagsProtocol {
     fileprivate let serialQueue = DispatchQueue(label: "tab-manager-write-queue")
     fileprivate var writeOperation = DispatchWorkItem {}
 
+    private let profilePath: String?
+
     // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
     fileprivate lazy var archivedStartupTabs = {
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
@@ -25,6 +27,12 @@ class TabManagerStore: FeatureFlagsProtocol {
         self.fileManager = fileManager
         self.imageStore = imageStore
         self.prefs = prefs
+
+        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
+            profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+        } else {
+            profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
+        }
     }
 
     var isRestoringTabs: Bool {
@@ -36,11 +44,6 @@ class TabManagerStore: FeatureFlagsProtocol {
     }
 
     fileprivate func tabsStateArchivePath() -> String? {
-        let profilePath: String?
-        if  AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {      profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
-        } else {
-            profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        }
         guard let path = profilePath else { return nil }
         return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
     }
@@ -73,32 +76,33 @@ class TabManagerStore: FeatureFlagsProtocol {
     
     func removeScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshotUUID = tab.screenshotUUID {
-            imageStore?.removeImage(screenshotUUID.uuidString)
+            _ = imageStore?.removeImage(screenshotUUID.uuidString)
         }
     }
 
-    // Async write of the tab state. In most cases, code doesn't care about performing an operation
-    // after this completes. Deferred completion is called always, regardless of Data.write return value.
-    // Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
-    @discardableResult func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) -> Success {
+    /// Async write of the tab state. In most cases, code doesn't care about performing an operation
+    /// after this completes. Deferred completion is called always, regardless of Data.write return value.
+    /// Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
+    /// - Parameters:
+    ///   - tabs: The tabs to preserve
+    ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
+    ///   - writeCompletion: Used to know the write operation has completed - Used in unit tests
+    /// - Returns: Success when the write operation is on the queue
+    @discardableResult func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? = nil) -> Success {
         assert(Thread.isMainThread)
-        print("preserve tabs!, existing tabs: \(tabs.count)")
-        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
-            let path = tabsStateArchivePath() else {
-                clearArchive()
-                return succeed()
+        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab), let path = tabsStateArchivePath() else {
+            clearArchive()
+            return succeed()
         }
 
         writeOperation.cancel()
 
         let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
-
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
 
         let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
-
 
         let result = Success()
         writeOperation = DispatchWorkItem {
@@ -108,6 +112,7 @@ class TabManagerStore: FeatureFlagsProtocol {
             // Ignore write failure (could be restoring).
             log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
             result.fill(Maybe(success: ()))
+            writeCompletion?()
         }
 
         // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
