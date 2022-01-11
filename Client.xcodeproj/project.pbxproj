@@ -1113,13 +1113,6 @@
 			remoteGlobalIDString = 43BE57D4278BA4ED00491291;
 			remoteInfo = Places;
 		};
-		43BE5829278BF01100491291 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F8324A042649A188007E4BFA;
-			remoteInfo = CredentialProvider;
-		};
 		7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -7215,7 +7208,6 @@
 				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
 				390527551C874D35007E0BB7 /* PBXTargetDependency */,
 				047F9B3124E1FE1F00CD7DF7 /* PBXTargetDependency */,
-				43BE582A278BF01100491291 /* PBXTargetDependency */,
 			);
 			name = Client;
 			packageProductDependencies = (
@@ -9039,11 +9031,6 @@
 			isa = PBXTargetDependency;
 			target = 43BE57D4278BA4ED00491291 /* RUSTPlaces */;
 			targetProxy = 43BE5813278BAF9A00491291 /* PBXContainerItemProxy */;
-		};
-		43BE582A278BF01100491291 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F8324A042649A188007E4BFA /* CredentialProvider */;
-			targetProxy = 43BE5829278BF01100491291 /* PBXContainerItemProxy */;
 		};
 		43EFA63E2786562600400DF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
