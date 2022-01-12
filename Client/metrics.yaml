@@ -1633,6 +1633,54 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
+  navigate_tab_history_back:
+    type: counter
+    description: |
+      This counts the number of times a user taps the back
+      button on a tab's toolbar.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9278
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9785
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-07-01"
+  navigate_tab_back_swipe:
+    type: counter
+    description: |
+      This counts the number of times a user navigates back in tab
+      history by swiping from the left edge of the device to the right.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9278
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9785
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-07-01"
+  navigate_tab_history_forward:
+    type: counter
+    description: |
+      This counts the number of times a user taps the forward
+      button on a tab's toolbar.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9278
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9785
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-07-01"
+  reload_from_url_bar:
+    type: counter
+    description: |
+      This counts the number of times a user taps the reload
+      button in the URL bar.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9278
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9785
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-07-01"
 
 # Theme metrics
 theme:
