@@ -8,7 +8,7 @@ import Shared
 
 private let log = Logger.browserLogger
 
-class AdjustHelper {
+final class AdjustHelper {
 
     private static let adjustAppTokenKey = "AdjustAppToken"
 
