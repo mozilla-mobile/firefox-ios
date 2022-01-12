@@ -7045,7 +7045,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				1BE8D1D4278D3D3C00213777 /* PBXTargetDependency */,
 			);
 			name = RUSTFxAClient;
 			packageProductDependencies = (
@@ -9039,10 +9038,6 @@
 			isa = PBXTargetDependency;
 			target = 047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */;
 			targetProxy = 047F9B3024E1FE1F00CD7DF7 /* PBXContainerItemProxy */;
-		};
-		1BE8D1D4278D3D3C00213777 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 1BE8D1D3278D3D3C00213777 /* SwiftKeychainWrapper */;
 		};
 		2827316B1ABC9BE700AA1954 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -13813,11 +13808,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Viaduct;
-		};
-		1BE8D1D3278D3D3C00213777 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
 		};
 		1BE8D1D5278D3D4900213777 /* SwiftKeychainWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
