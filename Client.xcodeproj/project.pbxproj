@@ -386,6 +386,7 @@
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */; };
 		8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07910E278F62F2005529CB /* AdjustHelper.swift */; };
+		8A079115278F8B1F005529CB /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A079114278F8B1F005529CB /* AdjustSdk.framework */; };
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
 		8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */; };
@@ -2552,6 +2553,9 @@
 		89AE47D2B80AF49BFB9763BA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistoryHelper.swift; sourceTree = "<group>"; };
 		8A07910E278F62F2005529CB /* AdjustHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustHelper.swift; sourceTree = "<group>"; };
+		8A079110278F8ABC005529CB /* AdjustSdk */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = AdjustSdk; path = Carthage/Build/iOS/AdjustSdk.framework/AdjustSdk; sourceTree = "<group>"; };
+		8A079113278F8B18005529CB /* AdjustSdk.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = AdjustSdk.framework.dSYM; path = Carthage/Build/iOS/AdjustSdk.framework.dSYM; sourceTree = "<group>"; };
+		8A079114278F8B1F005529CB /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
 		8A0F46E89E106C66C6C29F07 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultOnlyTestList.json; sourceTree = "<group>"; };
 		8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleTests.swift; sourceTree = "<group>"; };
@@ -4268,6 +4272,7 @@
 				7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
+				8A079115278F8B1F005529CB /* AdjustSdk.framework in Frameworks */,
 				DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
@@ -5102,6 +5107,9 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8A079114278F8B1F005529CB /* AdjustSdk.framework */,
+				8A079113278F8B18005529CB /* AdjustSdk.framework.dSYM */,
+				8A079110278F8ABC005529CB /* AdjustSdk */,
 				D05434BF2257DE9900FDE4EF /* Leanplum.framework */,
 				C8E18F1F222EDED000E30E52 /* SafariServices.framework */,
 				C8E18F1D222EDE4400E30E52 /* Accelerate.framework */,
@@ -11183,6 +11191,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/AdjustSdk.framework",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -11463,6 +11475,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/AdjustSdk.framework",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -11709,6 +11725,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/AdjustSdk.framework",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
@@ -12173,6 +12193,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/AdjustSdk.framework",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
