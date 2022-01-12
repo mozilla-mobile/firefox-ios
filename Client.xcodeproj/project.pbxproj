@@ -6690,6 +6690,7 @@
 				047F9B2424E1FE1C00CD7DF7 /* Frameworks */,
 				047F9B2524E1FE1C00CD7DF7 /* Resources */,
 				1B0DFD2C274857350008EB0A /* Embed Frameworks */,
+				43338D0A278F726D00A23914 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -6860,6 +6861,7 @@
 				390527461C874D35007E0BB7 /* Sources */,
 				390527471C874D35007E0BB7 /* Frameworks */,
 				390527481C874D35007E0BB7 /* Resources */,
+				43338D09278F726500A23914 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -6879,6 +6881,7 @@
 				397848D81ED86605004C0C0B /* Frameworks */,
 				397848D91ED86605004C0C0B /* Resources */,
 				43EFA64427865E2200400DF0 /* Embed Frameworks */,
+				43338D07278F722700A23914 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -7178,6 +7181,7 @@
 				F8324A012649A188007E4BFA /* Sources */,
 				F8324A022649A188007E4BFA /* Frameworks */,
 				F8324A032649A188007E4BFA /* Resources */,
+				43338D0B278F727600A23914 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -7260,6 +7264,7 @@
 				F84B22461A0920C600AAB793 /* Frameworks */,
 				F84B22471A0920C600AAB793 /* Resources */,
 				43EFA64127865E1C00400DF0 /* Embed Frameworks */,
+				43338D08278F725C00A23914 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -7910,6 +7915,91 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		43338D07278F722700A23914 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+		};
+		43338D08278F725C00A23914 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+		};
+		43338D09278F726500A23914 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+		};
+		43338D0A278F726D00A23914 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+		};
+		43338D0B278F727600A23914 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+		};
 		7B604F8F1C494AAA006EEEC3 /* Copy Carthage Dependencies */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
