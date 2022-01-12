@@ -13,7 +13,7 @@ final class AdjustHelper {
     private static let adjustAppTokenKey = "AdjustAppToken"
 
     static func setupAdjust() {
-        let bundle = AdjustHelper.getBundle()
+        let bundle = AppInfo.applicationBundle
         guard let appToken = bundle.object(forInfoDictionaryKey: AdjustHelper.adjustAppTokenKey) as? String, !appToken.isEmpty else {
             log.debug("Not enabling Adjust; Not configured in Info.plist")
             return
@@ -24,18 +24,5 @@ final class AdjustHelper {
         let adjustConfig = ADJConfig(appToken: appToken, environment: environment)
 
         Adjust.appDidLaunch(adjustConfig)
-    }
-
-    private static func getBundle() -> Bundle {
-        var bundle = Bundle.main
-        if bundle.bundleURL.pathExtension == "appex" {
-            // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
-            let url = bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent()
-            if let extensionBundle = Bundle(url: url) {
-                bundle = extensionBundle
-            }
-        }
-
-        return bundle
     }
 }
