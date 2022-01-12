@@ -695,9 +695,9 @@ extension TabManager {
         }
     }
 
-    @discardableResult func storeChanges(writeCompletion: (() -> Void)? = nil) -> Success {
+    @discardableResult func storeChanges() -> Success {
         saveTabs(toProfile: profile, normalTabs)
-        return store.preserveTabs(tabs, selectedTab: selectedTab, writeCompletion: writeCompletion)
+        return store.preserveTabs(tabs, selectedTab: selectedTab)
     }
 
     func hasTabsToRestoreAtStartup() -> Bool {
