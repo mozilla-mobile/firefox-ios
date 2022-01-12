@@ -8,8 +8,6 @@ import Shared
 
 // Struct that retrives saved tabs and simple tabs dictionary for WidgetKit
 struct SiteArchiver {
-    static let tabsKey = "tabs"
-
     static func tabsToRestore(tabsStateArchivePath: String?) -> ([SavedTab], [String: SimpleTab]) {
         // Get simple tabs for widgetkit
         let simpleTabsDict = SimpleTab.getSimpleTabs()
@@ -20,20 +18,16 @@ struct SiteArchiver {
             return ([SavedTab](), simpleTabsDict)
         }
 
-        guard let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: tabData) else {
-            SimpleTab.saveSimpleTab(tabs: nil)
-            return ([SavedTab](), simpleTabsDict)
-        }
-
+        let unarchiver = try NSKeyedUnarchiver(forReadingWith: tabData)
         unarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
         unarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
-        guard let tabs = unarchiver.decodeObject(of: [NSArray.self, SavedTab.self], forKey: SiteArchiver.tabsKey) as? [SavedTab] else {
-            Sentry.shared.send(message: "Failed to restore tabs", tag: .tabManager, severity: .error, description: "\(unarchiver.error ??? "nil")")
+        unarchiver.decodingFailurePolicy = .setErrorAndReturn
+        guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
+            Sentry.shared.send( message: "Failed to restore tabs", tag: .tabManager, severity: .error, description: "\(unarchiver.error ??? "nil")")
             SimpleTab.saveSimpleTab(tabs: nil)
             return ([SavedTab](), simpleTabsDict)
         }
-
-        unarchiver.finishDecoding()
+        
         return (tabs, simpleTabsDict)
     }
 }
