@@ -7489,6 +7489,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MozillaAppServices.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (

@@ -16,12 +16,13 @@ import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
+import AdjustSdk
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
 #endif
 
-private let log = Logger.browserLogger
+private let logger = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
@@ -78,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
-        log.info("startApplication begin")
+        logger.info("startApplication begin")
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
@@ -149,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
             print("RustFirefoxAccounts started")
         }
-        log.info("startApplication end")
+        logger.info("startApplication end")
         return true
     }
 
@@ -289,6 +290,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         updateSessionCount()
+        setupAdjust()
 
         return shouldPerformAdditionalDelegateHandling
     }
@@ -302,6 +304,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         // increase session count value
         profile?.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
+    }
+
+    func setupAdjust() {
+        let yourAppToken = ""
+        // TODO: ADJEnvironmentProduction
+        let environment = ADJEnvironmentSandbox
+        let adjustConfig = ADJConfig( appToken: yourAppToken, environment: environment)
+        adjustConfig?.logLevel = ADJLogLevelVerbose // TODO: remove this when confident it's ok
+
+        Adjust.appDidLaunch(adjustConfig)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
