@@ -106,10 +106,10 @@ workflows:
         inputs:
         - scheme: Fennec
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-    #- xcode-test@3.1:
-    #    inputs:
-    #    - scheme: Fennec
-    #    - simulator_device: iPhone 8
+    - xcode-test@3.1:
+        inputs:
+        - scheme: Fennec
+        - simulator_device: iPhone 8
   5_deploy_and_slack:
     steps:
     - deploy-to-bitrise-io@1.9: {}
@@ -159,6 +159,7 @@ workflows:
             set -x
 
             echo "$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH"
+            echo "$BITRISE_XCODE_RAW_RESULT_TEXT_PATH"
             echo "$BITRISE_XCODEBUILD_BUILD_LOG_PATH"
             ls /Users/vagrant/deploy
             find /Users/vagrant -name '*.log'
@@ -606,8 +607,8 @@ workflows:
     - Detect_warnings
     - 5_deploy_and_slack
     after_run:
-    - RunSmokeXCUITests
-    - Detect_warnings
+    #- RunSmokeXCUITests
+    #- Detect_warnings
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
