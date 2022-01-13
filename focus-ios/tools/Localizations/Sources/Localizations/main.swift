@@ -75,13 +75,60 @@ struct L10NTools: ParsableCommand {
         default: return true;
         }
     }
-    
+
+    private func getBlockzillaFolder() -> [String] {
+        guard let blockzillaFolder = FileManager.default.enumerator(atPath: URL(fileURLWithPath: projectPath).deletingLastPathComponent().appendingPathComponent("Blockzilla").path),
+              let filePaths = blockzillaFolder.allObjects as? [String] else {
+                return[]
+        }
+        return filePaths
+    }
+
+    private func getLocalesFromProjectFolder () -> [String] {
+        var localesList:[String] = []
+
+        let filePaths = getBlockzillaFolder()
+
+        filePaths.filter { $0.contains(".lproj") }.forEach { path in
+            if let index = path.firstIndex(of: ".") {
+                let firstPart = path.prefix(upTo: index)
+                localesList.append(String(firstPart))
+            }
+        }
+        // Removing duplicates locales as there are several folders/subfolders for same locale
+        var uniqueLocales = Array(Set(localesList))
+        // Removing Settings from the locales list as it a folder containing locales
+        let toRemove = "Settings"
+        uniqueLocales = uniqueLocales.filter { $0 != toRemove }
+
+        // Mapping locale's project name with Pontoon's name to prevent from having errors
+        for item in uniqueLocales {
+            for (key, _) in locale_mapping {
+                if item == key {
+                    let position = uniqueLocales.firstIndex(of: item)!
+                    uniqueLocales[position] = locale_mapping[key]!
+                }
+            }
+        }
+
+        // Alphabetically ordered array for simplicity
+        return uniqueLocales.sorted(by:<)
+    }
+
+    private let locale_mapping = [
+        "fil" : "tl",
+        "ga" : "ga-IE",
+        "nb" : "nb-NO",
+        "nn" : "nn-NO",
+        "sv" : "sv-SE",
+        "en" : "en-US"
+    ]
+
     mutating func run() throws {
         guard validateArguments() else { L10NTools.exit() }
-        
-        let shippingLocales = URL(fileURLWithPath: projectPath).deletingLastPathComponent().appendingPathComponent("shipping_locales.txt")
-        let locales = try! String(contentsOf: shippingLocales).components(separatedBy: .newlines).filter { !$0.isEmpty }
 
+        let locales = getLocalesFromProjectFolder()
+        print(locales)
 
         if runImportTask {
             ImportTask(xcodeProjPath: projectPath, l10nRepoPath: l10nProjectPath, locales: locales).run()

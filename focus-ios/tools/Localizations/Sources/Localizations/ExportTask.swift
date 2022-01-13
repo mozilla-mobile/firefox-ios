@@ -7,18 +7,11 @@
 
 import Foundation
 
+var LOCALES:[String] = []
+
 struct ExportTask {
     let xcodeProjPath: String
     let l10nRepoPath: String
-
-    // Locales that are in the Xcode project
-    let LOCALES: [String] = [
-        "af", "an", "ar", "ast", "az", "bg", "bn", "br", "bs", "ca", "co", "cs", "cy", "da", "de", "dsb",
-        "el", "en", "en-GB", "eo", "es-AR", "es-CL", "es-ES", "es-MX", "eu", "fa", "fi", "fil", "fr", "ga", "gd", "gu-IN",
-        "he", "hi-IN", "hsb", "hu", "hy-AM", "ia", "id", "is", "it", "ja", "ka", "kab", "kk", "kn", "ko",
-        "lo", "lt", "lv", "mr", "ms", "my", "nb", "ne-NP", "nl", "nn", "pl", "pt-BR", "pt-PT", "ro", "ru", "ses", "sk",
-        "sl", "sq", "sv", "ta", "te", "th", "tr", "tt", "uk", "ur", "uz", "vi", "zh-CN", "zh-TW",
-    ]
     
     private let EXCLUDED_FILES: Set<String> = [
     ]
@@ -58,6 +51,7 @@ struct ExportTask {
     
     // Ask xcodebuild to export all locales
     private func exportLocales() {
+        
         let command = "xcodebuild -exportLocalizations -project \(xcodeProjPath) -localizationPath \(EXPORT_BASE_PATH)"
         let command2 = LOCALES.map { "-exportLanguage \($0)" }.joined(separator: " ")
 
@@ -66,6 +60,37 @@ struct ExportTask {
         task.arguments = ["-c", command + " " + command2]
         try! task.run()
         task.waitUntilExit()
+    }
+
+    private func getBlockzillaFolder() -> [String] {
+        guard let blockzillaFolder = FileManager.default.enumerator(atPath: URL(fileURLWithPath: xcodeProjPath).deletingLastPathComponent().appendingPathComponent("Blockzilla").path),
+              let filePaths = blockzillaFolder.allObjects as? [String] else {
+                return[]
+        }
+        return filePaths
+    }
+    
+    // Get Locales that are in the Xcode project
+    private func getProjectLocales() -> [String] {
+    
+        var localesList:[String] = []
+
+        let filePaths = getBlockzillaFolder()
+
+        filePaths.filter { $0.contains(".lproj") }.forEach { path in
+            if let index = path.firstIndex(of: ".") {
+                let firstPart = path.prefix(upTo: index)
+                localesList.append(String(firstPart))
+            }
+        }
+        // Removing duplicates locales as there are several folders/subfolders for same locale
+        var uniqueLocales = Array(Set(localesList))
+        // Removing Settings from the locales list as it a folder containing locales
+        let toRemove = "Settings"
+        uniqueLocales = uniqueLocales.filter { $0 != toRemove }
+        
+        // Alphabetically ordered array for simplicity
+        return uniqueLocales.sorted(by:<)
     }
 
     /// Load all trans-units by id from the old (from checkout)
@@ -204,9 +229,8 @@ struct ExportTask {
         let _ = try! FileManager.default.replaceItemAt(destination, withItemAt: source)
     }
 
-
-    
     func run() {
+        LOCALES = getProjectLocales()
         print("[*] Exporting \(LOCALES) to \(EXPORT_BASE_PATH)")
         exportLocales()
 
