@@ -75,6 +75,7 @@ class PastenGoTest: BaseTestCase {
 
         clipboard = "1(*&)(*%@@$^%^12345)"
         UIPasteboard.general.string = clipboard
+        waitForExistence(searchOrEnterAddressTextField, timeout: 3)
         searchOrEnterAddressTextField.tap()
         waitForExistence(app.menuItems["Paste"], timeout: 5)
         app.menuItems["Paste"].tap()

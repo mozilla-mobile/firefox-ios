@@ -30,7 +30,7 @@ workflows:
         title: ContentBlockerGen
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
 
 
   set-project-version:
@@ -57,7 +57,7 @@ workflows:
         title: Set OpenInFocus version numbers
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
     before_run: []
 
 
@@ -74,7 +74,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :NimbusAppChannel string ${NIMBUS_APP_CHANNEL}" Blockzilla/Info.plist
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
     before_run: []
 
 
@@ -90,7 +90,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
     before_run: []
 
 
@@ -120,7 +120,7 @@ workflows:
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
     before_run:
       - clone-and-build-dependencies
@@ -150,7 +150,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
 
 
@@ -217,7 +217,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
 
   runKlar:
@@ -282,7 +282,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
   runFocus-iPad:
     steps:
@@ -325,7 +325,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
   L10nScreenshotsTests:
     steps:
@@ -390,7 +390,7 @@ workflows:
         - deploy_path: artifacts/
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
   L10nBuild:
     steps:
@@ -432,7 +432,7 @@ workflows:
         - is_compress: 'true'
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
 
 app:
