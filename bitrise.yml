@@ -605,9 +605,9 @@ workflows:
     - 4_A_xcode_build_and_test_Fennec
     - Detect_warnings
     - 5_deploy_and_slack
-    - Detect_warnings
     after_run:
-    #- RunSmokeXCUITests
+    - RunSmokeXCUITests
+    - Detect_warnings
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
