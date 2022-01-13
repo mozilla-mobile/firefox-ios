@@ -59,7 +59,6 @@
 		1B0DFD4227485C3E0008EB0A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD4127485C3E0008EB0A /* SwiftKeychainWrapper */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
 		1BE8D1CE278D35E200213777 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE8D1CD278D35E200213777 /* Viaduct */; };
-		1BE8D1D6278D3D4900213777 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE8D1D5278D3D4900213777 /* SwiftKeychainWrapper */; };
 		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
 		1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCB2717704300D729BB /* SwiftyJSON */; };
 		1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCD271770A600D729BB /* SwiftyJSON */; };
@@ -4527,7 +4526,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BE8D1D6278D3D4900213777 /* SwiftKeychainWrapper in Frameworks */,
 				43BE57FB278BA50600491291 /* FxAClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7029,11 +7027,11 @@
 			buildRules = (
 			);
 			dependencies = (
+				4399CDC72790DDE500CEE7AE /* PBXTargetDependency */,
 			);
 			name = RUSTFxAClient;
 			packageProductDependencies = (
 				43BE57ED278BA50600491291 /* FxAClient */,
-				1BE8D1D5278D3D4900213777 /* SwiftKeychainWrapper */,
 			);
 			productName = Shared;
 			productReference = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */;
@@ -9108,6 +9106,10 @@
 			isa = PBXTargetDependency;
 			target = F8324A042649A188007E4BFA /* CredentialProvider */;
 			targetProxy = 435A2FF6278F51CD00C94282 /* PBXContainerItemProxy */;
+		};
+		4399CDC72790DDE500CEE7AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 4399CDC62790DDE500CEE7AE /* SwiftKeychainWrapper */;
 		};
 		43BE5814278BAF9A00491291 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -11710,7 +11712,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustLogins-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11732,7 +11734,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustLogins-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11755,7 +11757,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "RustLogins-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11777,7 +11779,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustLogins-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11799,7 +11801,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustRustLog-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11821,7 +11823,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustRustLog-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11844,7 +11846,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "RustRustLog-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11866,7 +11868,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustRustLog-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11888,7 +11890,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustNimbus-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11910,7 +11912,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustNimbus-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11933,7 +11935,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "RustNimbus-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11955,7 +11957,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustNimbus-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11977,7 +11979,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustViaDuct-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11999,7 +12001,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustViaDuct-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12022,7 +12024,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "RustViaDuct-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12044,7 +12046,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustViaDuct-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12066,7 +12068,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustPlaces-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12088,7 +12090,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustPlaces-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12111,7 +12113,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "RustPlaces-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12133,7 +12135,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustPlaces-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12155,7 +12157,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12177,7 +12179,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12200,7 +12202,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12222,7 +12224,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "Shared/Supporting Files/RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -13793,11 +13795,6 @@
 			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Viaduct;
 		};
-		1BE8D1D5278D3D4900213777 /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
 		1BE9ECC927176FEA00D729BB /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
@@ -13837,6 +13834,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
+		};
+		4399CDC62790DDE500CEE7AE /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
 		};
 		43BE5777278BA4D900491291 /* Logins */ = {
 			isa = XCSwiftPackageProductDependency;
