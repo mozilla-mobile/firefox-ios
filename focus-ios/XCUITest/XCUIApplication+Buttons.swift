@@ -21,4 +21,12 @@ extension XCUIApplication {
             return self.tables.cells["Find in Page"]
         }
     }
+
+    var eraseButton: XCUIElement {
+        return self.buttons["URLBar.deleteButton"]
+    }
+
+    var urlTextField: XCUIElement {
+        return self.textFields["URLBar.urlText"]
+    }
 }

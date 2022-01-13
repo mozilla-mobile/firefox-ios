@@ -146,6 +146,38 @@ class SnapshotTests: BaseTestCaseL10n {
         snapshot("07YourBrowsingHistoryHasBeenErased")
     }
 
+    func test12RemoveShortcut() {
+        loadWebPage("mozilla.org")
+        waitForWebPageLoad()
+
+        // Tap on shortcuts settings menu option
+        app.buttons["HomeView.settingsButton"].tap()
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 6))
+        app.collectionViews.cells.buttons.element(boundBy: 6).tap()
+
+        // Tap on erase button to go to homepage and check the shortcut created
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+        // Verify the shortcut is created
+        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
+
+        // Open shortcut to check the tab menu label for shortcut option
+        app.otherElements.staticTexts["M"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
+        waitForExistence(app.collectionViews.cells.buttons.element(boundBy: 6), timeout: 5)
+        snapshot("1-RemoveShortcutTabMenu")
+
+        // Go back to homescreen
+        app.collectionViews.cells.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons["SettingsViewController.doneButton"].tap()
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+        waitForExistence(app.otherElements.staticTexts["M"], timeout: 5)
+
+        // Remove created shortcut
+        app.otherElements.staticTexts["M"].press(forDuration: 2)
+        waitForExistence(app.collectionViews.cells.buttons.firstMatch)
+        snapshot("2-RemoveShortcutLongPressOnIt")
+    }
+
 //    Run it only for EN locales for now
 //    func test13HomePageTipsCarrousel() {
 //        dismissURLBarFocused()

@@ -180,6 +180,7 @@
 		D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D3E54FD41DEFB25B003E1AFF /* SearchPlugins */; };
 		D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */; };
 		D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */; };
+		D440BC18276B3535003FD9B1 /* ShortcutsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D440BC17276B3535003FD9B1 /* ShortcutsTest.swift */; };
 		D47396DC270F634800A03A69 /* BaseTestCaseL10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47396DB270F634800A03A69 /* BaseTestCaseL10n.swift */; };
 		D47940DA2664E4F700C286BB /* PastenGoTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4868651F2250A3008C3C09 /* PastenGoTest.swift */; };
 		D50939A91FBF807A005D4316 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D50939A81FBF807A005D4316 /* Settings.bundle */; };
@@ -717,6 +718,7 @@
 		D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsViewController.swift; sourceTree = "<group>"; };
 		D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FullFunctionalTests.xctestplan; sourceTree = "<group>"; };
 		D43A61BD26B4627100814232 /* SmokeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmokeTest.xctestplan; sourceTree = "<group>"; };
+		D440BC17276B3535003FD9B1 /* ShortcutsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsTest.swift; sourceTree = "<group>"; };
 		D47396DB270F634800A03A69 /* BaseTestCaseL10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTestCaseL10n.swift; sourceTree = "<group>"; };
 		D50939A81FBF807A005D4316 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
@@ -1120,6 +1122,7 @@
 				166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */,
 				F74E8108218183F400D18535 /* SearchSuggestionsTest.swift */,
 				58408BA4265FC524003C4E4F /* BasicBrowsing.swift */,
+				D440BC17276B3535003FD9B1 /* ShortcutsTest.swift */,
 			);
 			path = XCUITest;
 			sourceTree = "<group>";
@@ -2048,6 +2051,7 @@
 			files = (
 				D47940DA2664E4F700C286BB /* PastenGoTest.swift in Sources */,
 				1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */,
+				D440BC18276B3535003FD9B1 /* ShortcutsTest.swift in Sources */,
 				0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */,
 				1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */,
 				0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */,
