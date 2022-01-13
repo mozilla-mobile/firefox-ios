@@ -158,12 +158,9 @@ workflows:
             # debug log
             set -x
             find /Users/vagrant -name '*.log'
-            echo "$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH"
-            echo "$BITRISE_XCODEBUILD_BUILD_LOG_PATH"
-            echo "$BITRISE_APP_DIR_PATH"
-            echo "$BITRISE_DEPLOY_DIR"
+            cat /Users/vagrant/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/xcpretty-0.3.0/features/fixtures/xcodebuild.log
 
-            ./test-fixtures/generate-metrics.sh "$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH" .
+            ./test-fixtures/generate-metrics.sh /Users/vagrant/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/xcpretty-0.3.0/features/fixtures/xcodebuild.log .
   NewXcodeVersions:
     steps:
     - script@1:
