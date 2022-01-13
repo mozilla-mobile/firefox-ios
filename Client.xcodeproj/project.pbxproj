@@ -11712,7 +11712,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustLogins-Info.plist";
+				INFOPLIST_FILE = "Client/RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11734,7 +11734,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustLogins-Info.plist";
+				INFOPLIST_FILE = "Client/RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11757,7 +11757,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustLogins-Info.plist";
+				INFOPLIST_FILE = "Client/RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11779,7 +11779,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustLogins-Info.plist";
+				INFOPLIST_FILE = "Client/RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11801,7 +11801,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustRustLog-Info.plist";
+				INFOPLIST_FILE = "Client/RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11823,7 +11823,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustRustLog-Info.plist";
+				INFOPLIST_FILE = "Client/RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11846,7 +11846,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustRustLog-Info.plist";
+				INFOPLIST_FILE = "Client/RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11868,7 +11868,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustRustLog-Info.plist";
+				INFOPLIST_FILE = "Client/RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11890,7 +11890,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustNimbus-Info.plist";
+				INFOPLIST_FILE = "Client/RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11912,7 +11912,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustNimbus-Info.plist";
+				INFOPLIST_FILE = "Client/RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11935,7 +11935,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustNimbus-Info.plist";
+				INFOPLIST_FILE = "Client/RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11957,7 +11957,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustNimbus-Info.plist";
+				INFOPLIST_FILE = "Client/RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11979,7 +11979,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustViaDuct-Info.plist";
+				INFOPLIST_FILE = "Client/RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12001,7 +12001,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustViaDuct-Info.plist";
+				INFOPLIST_FILE = "Client/RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12024,7 +12024,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustViaDuct-Info.plist";
+				INFOPLIST_FILE = "Client/RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12046,7 +12046,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustViaDuct-Info.plist";
+				INFOPLIST_FILE = "Client/RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12068,7 +12068,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustPlaces-Info.plist";
+				INFOPLIST_FILE = "Client/RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12090,7 +12090,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustPlaces-Info.plist";
+				INFOPLIST_FILE = "Client/RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12113,7 +12113,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustPlaces-Info.plist";
+				INFOPLIST_FILE = "Client/RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12135,7 +12135,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustPlaces-Info.plist";
+				INFOPLIST_FILE = "Client/RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12157,7 +12157,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "Client/RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12179,7 +12179,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "Client/RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12202,7 +12202,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "Client/RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12224,7 +12224,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Shared/Supporting Files/RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "Client/RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
