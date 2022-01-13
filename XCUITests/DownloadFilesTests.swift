@@ -1,8 +1,9 @@
 import XCTest
 
-let testFileName = "Small.zip"
+let testFileName = "Download smallZip.zip"
+let testFileNameDownloadPanel = "smallZip.zip"
 let testFileSize = "178 bytes"
-let testURL = "http://demo.borland.com/testsite/download_testpage.php"
+let testURL = "https://storage.googleapis.com/mobile_test_assets/test_app/downloads.html"
 let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-download-text-blob/"
 let testBLOBFileSize = "35 bytes"
 
@@ -44,12 +45,10 @@ class DownloadFilesTests: BaseTestCase {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         // Verify that the context menu prior to download a file is correct
-        app.webViews.staticTexts[testFileName].firstMatch.tap()
-        waitForExistence(app.webViews.buttons["Download"], timeout: 3)
-        app.webViews.buttons["Download"].tap()
+        app.webViews.links[testFileName].firstMatch.tap()
 
         waitForExistence(app.tables["Context Menu"], timeout: 5)
-        XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileName].exists)
+        XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileNameDownloadPanel].exists)
         XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
         app.buttons["Cancel"].tap()
         navigator.goto(BrowserTabMenu)
@@ -66,7 +65,7 @@ class DownloadFilesTests: BaseTestCase {
         waitForExistence(app.tables["DownloadsTable"], timeout: 5)
         // There should be one item downloaded. It's name and size should be shown
         checkTheNumberOfDownloadedItems(items: 1)
-        XCTAssertTrue(app.tables.cells.staticTexts[testFileName].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts[testFileNameDownloadPanel].exists)
         XCTAssertTrue(app.tables.cells.staticTexts[testFileSize].exists)
     }
 
@@ -89,8 +88,8 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
 
-        deleteItem(itemName: testFileName)
-        waitForNoExistence(app.tables.cells.staticTexts[testFileName])
+        deleteItem(itemName: testFileNameDownloadPanel)
+        waitForNoExistence(app.tables.cells.staticTexts[testFileNameDownloadPanel])
 
         // After removing the number of items should be 0
         checkTheNumberOfDownloadedItems(items: 0)
@@ -100,7 +99,7 @@ class DownloadFilesTests: BaseTestCase {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
-        app.tables.cells.staticTexts[testFileName].swipeLeft()
+        app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
 
         XCTAssertTrue(app.tables.cells.buttons["Share"].exists)
         XCTAssertTrue(app.tables.cells.buttons["Delete"].exists)
@@ -113,7 +112,7 @@ class DownloadFilesTests: BaseTestCase {
 
         waitForExistence(app.tables["DownloadsTable"])
         //Comenting out until share sheet can be managed with automated tests issue #5477
-        app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
+        app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
         waitForExistence(app.otherElements["ActivityListView"], timeout: 10)
         if !iPad() {
             app.buttons["Close"].tap()
@@ -124,11 +123,9 @@ class DownloadFilesTests: BaseTestCase {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         for _ in 0..<numberOfDownlowds {
-            waitForExistence(app.webViews.staticTexts[testFileName], timeout: 5)
-            app.webViews.staticTexts[testFileName].firstMatch.tap()
-            waitForExistence(app.webViews.buttons["Download"])
-            app.webViews.buttons["Download"].tap()
-            waitForExistence(app.tables["Context Menu"], timeout: 5)
+            waitForExistence(app.webViews.links[testFileName], timeout: 5)
+            app.webViews.links[testFileName].firstMatch.tap()
+            waitForExistence(app.tables["Context Menu"].cells["download"], timeout: 5)
             app.tables["Context Menu"].cells["download"].tap()
         }
     }
