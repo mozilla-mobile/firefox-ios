@@ -2112,17 +2112,17 @@
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		43BDBBFD2752FA8600254DE4 /* TabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCell.swift; sourceTree = "<group>"; };
 		43BE578A278BA4D900491291 /* RUSTLogins.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTLogins.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE578B278BA4D900491291 /* AppServices copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AppServices copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/AppServices copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE578B278BA4D900491291 /* RustLogins-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RustLogins-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/RustLogins-Info.plist"; sourceTree = "<absolute>"; };
 		43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTRustLog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE57A3278BA4EA00491291 /* Logins copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE57A3278BA4EA00491291 /* RustRustLog-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RustRustLog-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/RustRustLog-Info.plist"; sourceTree = "<absolute>"; };
 		43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTNimbus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE57BB278BA4EB00491291 /* Logins copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE57BB278BA4EB00491291 /* RustNimbus-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RustNimbus-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/RustNimbus-Info.plist"; sourceTree = "<absolute>"; };
 		43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTViaduct.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE57D3278BA4EC00491291 /* Logins copy copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE57D3278BA4EC00491291 /* RustViaDuct-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RustViaDuct-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/RustViaDuct-Info.plist"; sourceTree = "<absolute>"; };
 		43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTPlaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE57EB278BA4ED00491291 /* Logins copy copy copy copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Logins copy copy copy copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Logins copy copy copy copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE57EB278BA4ED00491291 /* RustPlaces-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RustPlaces-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/RustPlaces-Info.plist"; sourceTree = "<absolute>"; };
 		43BE5802278BA50600491291 /* RUSTFxAClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTFxAClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE5803278BA50700491291 /* Places copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Places copy-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/Places copy-Info.plist"; sourceTree = "<absolute>"; };
+		43BE5803278BA50700491291 /* RustFxAClient-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RustFxAClient-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/RustFxAClient-Info.plist"; sourceTree = "<absolute>"; };
 		43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		43CA482EA439A9C486CCA01D /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Shared.strings; sourceTree = "<group>"; };
 		43D72DB226FCE3550069BDE9 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = "mr.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -6371,12 +6371,12 @@
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
 				DA9FD87B24E212F500168D1E /* Recovered References */,
 				1B0DFD4327485CAF0008EB0A /* AppServices */,
-				43BE578B278BA4D900491291 /* AppServices copy-Info.plist */,
-				43BE57A3278BA4EA00491291 /* Logins copy-Info.plist */,
-				43BE57BB278BA4EB00491291 /* Logins copy copy-Info.plist */,
-				43BE57D3278BA4EC00491291 /* Logins copy copy copy-Info.plist */,
-				43BE57EB278BA4ED00491291 /* Logins copy copy copy copy-Info.plist */,
-				43BE5803278BA50700491291 /* Places copy-Info.plist */,
+				43BE578B278BA4D900491291 /* RustLogins-Info.plist */,
+				43BE57A3278BA4EA00491291 /* RustRustLog-Info.plist */,
+				43BE57BB278BA4EB00491291 /* RustNimbus-Info.plist */,
+				43BE57D3278BA4EC00491291 /* RustViaDuct-Info.plist */,
+				43BE57EB278BA4ED00491291 /* RustPlaces-Info.plist */,
+				43BE5803278BA50700491291 /* RustFxAClient-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -11726,7 +11726,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "AppServices copy-Info.plist";
+				INFOPLIST_FILE = "RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11748,7 +11748,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "AppServices copy-Info.plist";
+				INFOPLIST_FILE = "RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11771,7 +11771,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "AppServices copy-Info.plist";
+				INFOPLIST_FILE = "RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11793,7 +11793,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "AppServices copy-Info.plist";
+				INFOPLIST_FILE = "RustLogins-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11815,7 +11815,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy-Info.plist";
+				INFOPLIST_FILE = "RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11837,7 +11837,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy-Info.plist";
+				INFOPLIST_FILE = "RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11860,7 +11860,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Logins copy-Info.plist";
+				INFOPLIST_FILE = "RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11882,7 +11882,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy-Info.plist";
+				INFOPLIST_FILE = "RustRustLog-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11904,7 +11904,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy-Info.plist";
+				INFOPLIST_FILE = "RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11926,7 +11926,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy-Info.plist";
+				INFOPLIST_FILE = "RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11949,7 +11949,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Logins copy copy-Info.plist";
+				INFOPLIST_FILE = "RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11971,7 +11971,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy-Info.plist";
+				INFOPLIST_FILE = "RustNimbus-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -11993,7 +11993,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy copy-Info.plist";
+				INFOPLIST_FILE = "RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12015,7 +12015,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy copy-Info.plist";
+				INFOPLIST_FILE = "RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12038,7 +12038,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Logins copy copy copy-Info.plist";
+				INFOPLIST_FILE = "RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12060,7 +12060,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy copy-Info.plist";
+				INFOPLIST_FILE = "RustViaDuct-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12082,7 +12082,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy copy copy-Info.plist";
+				INFOPLIST_FILE = "RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12104,7 +12104,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy copy copy-Info.plist";
+				INFOPLIST_FILE = "RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12127,7 +12127,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Logins copy copy copy copy-Info.plist";
+				INFOPLIST_FILE = "RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12149,7 +12149,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Logins copy copy copy copy-Info.plist";
+				INFOPLIST_FILE = "RustPlaces-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12171,7 +12171,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Places copy-Info.plist";
+				INFOPLIST_FILE = "RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12193,7 +12193,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Places copy-Info.plist";
+				INFOPLIST_FILE = "RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12216,7 +12216,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "Places copy-Info.plist";
+				INFOPLIST_FILE = "RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12238,7 +12238,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "Places copy-Info.plist";
+				INFOPLIST_FILE = "RustFxAClient-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
