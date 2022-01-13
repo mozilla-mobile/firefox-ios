@@ -146,6 +146,18 @@ workflows:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
         - simulator_device: "$IOS_DEVICE"
+  Detect_warnings:
+    steps:
+    - script@1.1:
+        title: Detect number of warnings
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            ./test-fixtures/generate-metrics.sh $BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH .
   NewXcodeVersions:
     steps:
     - script@1:
@@ -585,9 +597,10 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
+    - Detect_warnings
     - 5_deploy_and_slack
     after_run:
-    - RunSmokeXCUITests
+    #- RunSmokeXCUITests
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
