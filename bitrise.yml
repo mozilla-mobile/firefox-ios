@@ -157,10 +157,11 @@ workflows:
             set -e
             # debug log
             set -x
-            ls /Users/vagrant/deploy
+            find /Users/vagrant -name '*.log'
             echo "$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH"
             echo "$BITRISE_XCODEBUILD_BUILD_LOG_PATH"
             echo "$BITRISE_APP_DIR_PATH"
+            echo "$BITRISE_DEPLOY_DIR"
 
             ./test-fixtures/generate-metrics.sh "$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH" .
   NewXcodeVersions:
