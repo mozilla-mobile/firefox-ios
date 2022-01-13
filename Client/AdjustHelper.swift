@@ -11,18 +11,43 @@ private let log = Logger.browserLogger
 final class AdjustHelper {
 
     private static let adjustAppTokenKey = "AdjustAppToken"
+    private let profile: Profile
 
-    static func setupAdjust() {
+    init(profile: Profile) {
+        self.profile = profile
+    }
+
+    func setupAdjust() {
+        guard let config = getConfig() else { return }
+
+        // Always initialize Adjust if we have a config - otherwise we cannot enable/disable it later. Their SDK must be
+        // initialized through appDidFinishLaunching otherwise it will be in a bad state.
+        Adjust.appDidLaunch(config)
+        AdjustHelper.setEnabled(shouldEnable())
+    }
+
+    /// This is called from the Settings screen. The settinSendAnonymousUsageDataSettinggs screen will remember the choice in the
+    /// profile and then use this method to disable or enable Adjust.
+    static func setEnabled(_ enabled: Bool) {
+        Adjust.setEnabled(enabled)
+    }
+
+    private func getConfig() -> ADJConfig? {
         let bundle = AppInfo.applicationBundle
         guard let appToken = bundle.object(forInfoDictionaryKey: AdjustHelper.adjustAppTokenKey) as? String, !appToken.isEmpty else {
-            log.debug("Not enabling Adjust; Not configured in Info.plist")
-            return
+            log.debug("Adjust - Not enabling Adjust; Not configured in Info.plist")
+            return nil
         }
 
         let isProd = FeatureFlagsManager.shared.isFeatureActiveForBuild(.adjustEnvironmentProd)
         let environment = isProd ? ADJEnvironmentProduction : ADJEnvironmentSandbox
-        let adjustConfig = ADJConfig(appToken: appToken, environment: environment)
+        let config = ADJConfig(appToken: appToken, environment: environment)
+        config?.logLevel = isProd ? ADJLogLevelSuppress : ADJLogLevelDebug
+        return config
+    }
 
-        Adjust.appDidLaunch(adjustConfig)
+    /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data then we immediately return false.
+    private func shouldEnable() -> Bool {
+        return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? false
     }
 }
