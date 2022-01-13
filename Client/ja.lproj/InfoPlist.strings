@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "写真を撮影してアップロードできます。";
+"NSCameraUsageDescription" = "Firefox が QR コードのスキャンや写真、動画を撮影するためにカメラを使用します。";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "保存されたログイン情報にアクセスするには Face ID が必要です。";
