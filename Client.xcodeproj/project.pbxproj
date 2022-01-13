@@ -374,6 +374,7 @@
 		43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43E9BDFB255E0904005BCB91 /* TabMoreMenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E9BDFA255E0904005BCB91 /* TabMoreMenuHeader.swift */; };
 		43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F7952425795F69005AEE40 /* SearchTelemetry.swift */; };
+		43FF90AD2790E8A400C7B614 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 43FF90AC2790E8A400C7B614 /* SwiftKeychainWrapper */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		4F2A06BE26F8E46E0017DA05 /* TabCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A06BD26F8E46E0017DA05 /* TabCounterTests.swift */; };
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
@@ -2066,7 +2067,6 @@
 		42824D3487F29EFDBEFA20AD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		42CC4F75B4E9E31A4754A9FE /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		42D84A3EBD583A4797682E74 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
-		43017EBD278E07A000CED011 /* RUSTSync15.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RUSTSync15.h; sourceTree = "<group>"; };
 		43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyPrivateTabsView.swift; sourceTree = "<group>"; };
 		43175DB526B8774D00C41C31 /* Ads.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Ads.js; sourceTree = "<group>"; };
 		43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsTelemetryHelper.swift; sourceTree = "<group>"; };
@@ -4526,6 +4526,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43FF90AD2790E8A400C7B614 /* SwiftKeychainWrapper in Frameworks */,
 				43BE57FB278BA50600491291 /* FxAClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5179,14 +5180,6 @@
 				D4F3D788232F960600FBB9AA /* WhatsNewTest.swift */,
 			);
 			path = XCUITests;
-			sourceTree = "<group>";
-		};
-		43017EBC278E07A000CED011 /* RUSTSync15 */ = {
-			isa = PBXGroup;
-			children = (
-				43017EBD278E07A000CED011 /* RUSTSync15.h */,
-			);
-			path = RUSTSync15;
 			sourceTree = "<group>";
 		};
 		431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */ = {
@@ -6333,7 +6326,6 @@
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
 				F8324A082649A188007E4BFA /* CredentialProvider */,
-				43017EBC278E07A000CED011 /* RUSTSync15 */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
@@ -7027,11 +7019,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				4399CDC72790DDE500CEE7AE /* PBXTargetDependency */,
 			);
 			name = RUSTFxAClient;
 			packageProductDependencies = (
 				43BE57ED278BA50600491291 /* FxAClient */,
+				43FF90AC2790E8A400C7B614 /* SwiftKeychainWrapper */,
 			);
 			productName = Shared;
 			productReference = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */;
@@ -9106,10 +9098,6 @@
 			isa = PBXTargetDependency;
 			target = F8324A042649A188007E4BFA /* CredentialProvider */;
 			targetProxy = 435A2FF6278F51CD00C94282 /* PBXContainerItemProxy */;
-		};
-		4399CDC72790DDE500CEE7AE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 4399CDC62790DDE500CEE7AE /* SwiftKeychainWrapper */;
 		};
 		43BE5814278BAF9A00491291 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -13835,11 +13823,6 @@
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
 		};
-		4399CDC62790DDE500CEE7AE /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
-		};
 		43BE5777278BA4D900491291 /* Logins */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 43BE5776278BA4D900491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
@@ -13869,6 +13852,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Places;
+		};
+		43FF90AC2790E8A400C7B614 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B3D99F2270E8AD9006E1264 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
