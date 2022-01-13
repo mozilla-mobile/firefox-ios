@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import AdjustSdk
+import Adjust
 import Shared
 
 private let log = Logger.browserLogger

@@ -386,12 +386,12 @@
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */; };
 		8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07910E278F62F2005529CB /* AdjustHelper.swift */; };
-		8A079115278F8B1F005529CB /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A079114278F8B1F005529CB /* AdjustSdk.framework */; };
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
 		8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */; };
 		8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */; };
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
+		8A62951B2790EB6C00688230 /* Adjust in Frameworks */ = {isa = PBXBuildFile; productRef = 8A62951A2790EB6C00688230 /* Adjust */; };
 		8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */; };
 		8A8A05E42746ACAC004267A0 /* TabDisplayManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8A05E32746ACAC004267A0 /* TabDisplayManagerTests.swift */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
@@ -4261,6 +4261,7 @@
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
+				8A62951B2790EB6C00688230 /* Adjust in Frameworks */,
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
 				F8324A7C2649A5A5007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
@@ -4272,7 +4273,6 @@
 				7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
-				8A079115278F8B1F005529CB /* AdjustSdk.framework in Frameworks */,
 				DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
@@ -6844,6 +6844,9 @@
 				F8324A112649A188007E4BFA /* PBXTargetDependency */,
 			);
 			name = Client;
+			packageProductDependencies = (
+				8A62951A2790EB6C00688230 /* Adjust */,
+			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
 			productType = "com.apple.product-type.application";
@@ -7159,6 +7162,9 @@
 				"en-US",
 			);
 			mainGroup = F84B21B51A090F8100AAB793;
+			packageReferences = (
+				8A6295192790EB6B00688230 /* XCRemoteSwiftPackageReference "ios_sdk" */,
+			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -7500,7 +7506,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MozillaAppServices.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
@@ -8176,7 +8181,6 @@
 				43AB6FA625DC53D30016B015 /* LibraryShortcutView.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
 				23F2C36A244E463C00FA4496 /* TabTrayV2ViewModel.swift in Sources */,
-				43AB6FA725DC53D30016B015 /* PanelDataObservers.swift in Sources */,
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
 				DA3A4FE9254A781A00C4A9C9 /* TabTableViewHeader.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
@@ -12492,6 +12496,25 @@
 			defaultConfigurationName = Fennec;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8A6295192790EB6B00688230 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adjust/ios_sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 4.29.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A62951A2790EB6C00688230 /* Adjust */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A6295192790EB6B00688230 /* XCRemoteSwiftPackageReference "ios_sdk" */;
+			productName = Adjust;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F84B21B61A090F8100AAB793 /* Project object */;
 }
