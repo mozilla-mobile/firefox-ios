@@ -7,6 +7,10 @@ import Storage
 import Shared
 import AuthenticationServices
 
+struct NewSearchInProgressError: MaybeErrorType {
+    public let description: String
+}
+
 // MARK: - Main View Model
 // Login List View Model
 final class LoginListViewModel {
@@ -42,7 +46,7 @@ final class LoginListViewModel {
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
         // Fill in an in-flight query and re-query
-        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+        activeLoginQuery?.fillIfUnfilled(Maybe(failure: NewSearchInProgressError(description: "Updated search string provided")))
         activeLoginQuery = queryLogins(query ?? "")
         activeLoginQuery! >>== self.setLogins
         // Loading breaches is a heavy operation hence loading it once per opening logins screen
