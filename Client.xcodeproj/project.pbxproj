@@ -1586,7 +1586,6 @@
 		1AC74B5BBF452B60564AA754 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		1AFE49DBBA4B3693F364688F /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Storage.strings; sourceTree = "<group>"; };
 		1AFF4A3789E3E6F506BA879A /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1B0DFD21274855C10008EB0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/skhamis/moz/firefox-ios/Info.plist"; sourceTree = "<absolute>"; };
 		1B5945BE90BF6470FA3D4257 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Search.strings; sourceTree = "<group>"; };
 		1B8B4FF5B5B7E07A7E61B89C /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		1BA54369A0F131F4D825ECC4 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Search.strings; sourceTree = "<group>"; };
@@ -4655,14 +4654,6 @@
 			path = SearchQuickLinksMedium;
 			sourceTree = "<group>";
 		};
-		1B0DFD4327485CAF0008EB0A /* AppServices */ = {
-			isa = PBXGroup;
-			children = (
-				1B0DFD21274855C10008EB0A /* Info.plist */,
-			);
-			path = AppServices;
-			sourceTree = "<group>";
-		};
 		1DA3CE5B24EEE71B00422BB2 /* OpenTabs */ = {
 			isa = PBXGroup;
 			children = (
@@ -6370,7 +6361,6 @@
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
 				DA9FD87B24E212F500168D1E /* Recovered References */,
-				1B0DFD4327485CAF0008EB0A /* AppServices */,
 				43BE578B278BA4D900491291 /* RustLogins-Info.plist */,
 				43BE57A3278BA4EA00491291 /* RustRustLog-Info.plist */,
 				43BE57BB278BA4EB00491291 /* RustNimbus-Info.plist */,
