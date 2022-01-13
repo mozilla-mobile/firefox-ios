@@ -157,7 +157,10 @@ workflows:
             set -e
             # debug log
             set -x
-            ./test-fixtures/generate-metrics.sh $BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH .
+            echo "$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH"
+            echo "$BITRISE_XCODEBUILD_BUILD_LOG_PATH"
+
+            ./test-fixtures/generate-metrics.sh "$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH" .
   NewXcodeVersions:
     steps:
     - script@1:
