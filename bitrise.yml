@@ -162,9 +162,8 @@ workflows:
             echo "$BITRISE_XCODE_RAW_RESULT_TEXT_PATH"
             echo "$BITRISE_XCODEBUILD_BUILD_LOG_PATH"
             ls /Users/vagrant/deploy
-            find /Users/vagrant -name '*.log'
 
-            ./test-fixtures/generate-metrics.sh /Users/vagrant/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/xcpretty-0.3.0/features/fixtures/xcodebuild.log .
+            ./test-fixtures/generate-metrics.sh /Users/vagrant/deploy/xcodebuild_test.log .
   NewXcodeVersions:
     steps:
     - script@1:
@@ -606,6 +605,7 @@ workflows:
     - 4_A_xcode_build_and_test_Fennec
     - Detect_warnings
     - 5_deploy_and_slack
+    - Detect_warnings
     after_run:
     #- RunSmokeXCUITests
     #- Detect_warnings
