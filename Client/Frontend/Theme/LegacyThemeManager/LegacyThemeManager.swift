@@ -33,6 +33,7 @@ class LegacyThemeManager {
     var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(forKey: LegacyThemeManagerPrefs.automaticSwitchIsOn.rawValue) {
         didSet {
             UserDefaults.standard.set(automaticBrightnessIsOn, forKey: LegacyThemeManagerPrefs.automaticSwitchIsOn.rawValue)
+            guard automaticBrightnessIsOn else { return }
             updateCurrentThemeBasedOnScreenBrightness()
         }
     }
