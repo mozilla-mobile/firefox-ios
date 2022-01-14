@@ -26,10 +26,14 @@ final class AdjustHelper {
         AdjustHelper.setEnabled(shouldEnable())
     }
 
-    /// This is called from the Settings screen. The settinSendAnonymousUsageDataSettinggs screen will remember the choice in the
+    /// This is called from the Settings screen. The setting SendAnonymousUsageData screen will remember the choice in the
     /// profile and then use this method to disable or enable Adjust.
     static func setEnabled(_ enabled: Bool) {
         Adjust.setEnabled(enabled)
+
+        if !enabled {
+            Adjust.gdprForgetMe()
+        }
     }
 
     private func getConfig() -> ADJConfig? {
