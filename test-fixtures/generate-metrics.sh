@@ -10,8 +10,12 @@ rm -rf "$METRICS_FILE"
 
 # Count warnings
 echo Counting warnings
-WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`
+WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|ld: warning:|<unknown>:0: warning:|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`
 echo "warnings" $WARNING_COUNT >> "$METRICS_FILE"
+
+if [ $WARNING_COUNT \> 850 ]; then
+	exit 1
+fi
 
 # Count errors
 echo Counting errors
