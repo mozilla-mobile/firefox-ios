@@ -159,7 +159,7 @@ workflows:
             set -x
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
-            ./test-fixtures/generate-metrics.sh TEST_LOG_PATH .
+            ./test-fixtures/generate-metrics.sh $TEST_LOG_PATH .
   NewXcodeVersions:
     steps:
     - script@1:
@@ -602,8 +602,8 @@ workflows:
     - Detect_warnings
     - 5_deploy_and_slack
     after_run:
-    #- RunSmokeXCUITests
-    #- Detect_warnings
+    - RunSmokeXCUITests
+    - Detect_warnings
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
