@@ -157,10 +157,16 @@ workflows:
             set -e
             # debug log
             set -x
+            TEST_LOG_PATH_1=$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH
+            TEST_LOG_PATH_2=$BITRISE_XCODE_RAW_RESULT_TEXT_PATH
+            TEST_LOG_PATH_3=$BITRISE_XCODEBUILD_BUILD_LOG_PATH
+            TEST_LOG_PATH_4=$BITRISE_XCODEBUILD_TEST_LOG_PATH
 
-            echo "$BITRISE_XCODE_BUILD_RAW_RESULT_TEXT_PATH"
-            echo "$BITRISE_XCODE_RAW_RESULT_TEXT_PATH"
-            echo "$BITRISE_XCODEBUILD_BUILD_LOG_PATH"
+            TEST_LOG_PATH_1
+            TEST_LOG_PATH_2
+            TEST_LOG_PATH_3
+            TEST_LOG_PATH_4
+
             ls /Users/vagrant/deploy
 
             ./test-fixtures/generate-metrics.sh /Users/vagrant/deploy/xcodebuild_test.log .
@@ -605,7 +611,6 @@ workflows:
     - 4_A_xcode_build_and_test_Fennec
     - Detect_warnings
     - 5_deploy_and_slack
-    - Detect_warnings
     after_run:
     #- RunSmokeXCUITests
     #- Detect_warnings
