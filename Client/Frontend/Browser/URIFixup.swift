@@ -26,10 +26,10 @@ class URIFixup {
         }
 
         // If there's no scheme, we're going to prepend "http://". First,
-        // make sure there's at least one ".", or ":" for IPv6, in the host. This means
+        // make sure there's at least one ".", or two ":"'s for IPv6, in the host. This means
         // we'll allow single-word searches (e.g., "foo") at the expense
         // of breaking single-word hosts without a scheme (e.g., "localhost").
-        if trimmed.range(of: ".") == nil && trimmed.filter({ $0 == ":" }).isEmpty {
+        if trimmed.range(of: ".") == nil && trimmed.filter({ $0 == ":" }).count < 2 {
             return nil
         }
 
