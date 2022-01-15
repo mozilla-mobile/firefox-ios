@@ -29,7 +29,7 @@ class URIFixup {
         // make sure there's at least one ".", or ":" for IPv6, in the host. This means
         // we'll allow single-word searches (e.g., "foo") at the expense
         // of breaking single-word hosts without a scheme (e.g., "localhost").
-        if trimmed.range(of: ".") == nil && trimmed.filter({ $0 == ":" }).count < 1 {
+        if trimmed.range(of: ".") == nil && trimmed.filter({ $0 == ":" }).isEmpty {
             return nil
         }
 
@@ -48,11 +48,11 @@ class URIFixup {
 
     static func punycodedURL(_ string: String) -> URL? {
         var string = string
-        if string.filter({ $0 == "#" }).count > 1 {
+        if !string.filter({ $0 == "#" }).isEmpty {
             string = replaceHashMarks(url: string)
         }
-        
-        if string.filter({ $0 == "[" || $0 == "]" }).count > 1 {
+
+        if !string.filter({ $0 == "[" || $0 == "]" }).isEmpty {
             string = replaceBrackets(url: string)
         }
 
