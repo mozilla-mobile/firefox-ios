@@ -160,15 +160,14 @@ workflows:
             # debug log
             set -x
 
-            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)
-
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)
             envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT"
 
             STR=$COUNT
             SUB='greater'
             if [[ "$STR" == *"$SUB"* ]]; then
-                echo "Failure due to number of warnings increased"
+                echo "Failure, the number of warnings increased"
                 exit 1
             fi
         is_always_run: true
@@ -603,15 +602,15 @@ workflows:
             # debug log
             set -x
 
-            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test)
-
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
+
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test)
             envman add --key SHOW_WARNING_COUNT --value "$COUNT"
 
             STR=$COUNT
             SUB='greater'
             if [[ "$STR" == *"$SUB"* ]]; then
-                echo "Failure due to number of warnings increased"
+                echo "Failure, the number of warnings increased"
                 exit 1
             fi
         is_always_run: true
@@ -633,9 +632,7 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
-    #- 5_deploy_and_slack
     after_run:
-    #- 5_deploy_and_slack
     - RunSmokeXCUITests
     - Detect_warnings
     - 5_deploy_and_slack
