@@ -132,6 +132,7 @@ workflows:
             Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
             Branch | ${BITRISE_GIT_BRANCH}
             Warnings-in-code | ${SHOW_WARNING_COUNT}
+            Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
         - buttons: |+
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
@@ -160,7 +161,7 @@ workflows:
             set -x
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
-            envman add --key SHOW_WARNING_COUNT --value "$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)"
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)"
   NewXcodeVersions:
     steps:
     - script@1:
@@ -612,10 +613,12 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
-    - 5_deploy_and_slack
+    #- 5_deploy_and_slack
     after_run:
+    #- 5_deploy_and_slack
     - RunSmokeXCUITests
     - Detect_warnings
+    - 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
