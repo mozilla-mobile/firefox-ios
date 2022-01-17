@@ -162,6 +162,7 @@ workflows:
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
             envman add --key SHOW_WARNING_COUNT_XCUI --value "$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)"
+        is_always_run: true
   NewXcodeVersions:
     steps:
     - script@1:
@@ -595,6 +596,7 @@ workflows:
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
             envman add --key SHOW_WARNING_COUNT --value "$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test)"
+        is_always_run: true
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
         inputs:
