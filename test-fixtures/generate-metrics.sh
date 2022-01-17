@@ -12,26 +12,23 @@ THREESHOLD_XCUITEST=850
 rm -rf "$METRICS_FILE"
 
 # Count warnings
-echo Counting warnings
+#echo Counting warnings
 WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|ld: warning:|<unknown>:0: warning:|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`
-echo "warnings" $WARNING_COUNT >> "$METRICS_FILE"
+#echo "warnings" $WARNING_COUNT >> "$METRICS_FILE"
 
 if  [ $3 == "unit-test" ]; then
-    if [ $WARNING_COUNT \> $THREESHOLD_UNIT_TEST ]; then
-    echo "Error due to the increase number of warnings in unit test build"
-    exit 1
+    if [ $WARNING_COUNT -ge $THREESHOLD_UNIT_TEST ]; then
+        echo "Number of warnings is $WARNING_COUNT. This is greater than $THREESHOLD_UNIT_TEST"
+        exit 1
+    else
+        echo "Number of warnings is $WARNING_COUNT. This is lower than $THREESHOLD_UNIT_TEST"
     fi
 else
     if [ $WARNING_COUNT \> $THREESHOLD_XCUITEST ]; then
-    echo "Error due to the increase number of warnings in build"
+        echo "Number of warnings is $WARNING_COUNT. This is greater than $THREESHOLD_XCUITEST"
+        exit 1
+    else
+        echo "Number of warnings is $WARNING_COUNT. This is lower than $THREESHOLD_XCUITEST"
     exit 1
     fi
 fi
-
-# Count errors
-echo Counting errors
-ERROR_COUNT=`egrep '^(/.+:[0-9+:[0-9]+:.(error):|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`
-echo "errors" $ERROR_COUNT >> "$METRICS_FILE"
-
-# Print results
-cat "$METRICS_FILE"

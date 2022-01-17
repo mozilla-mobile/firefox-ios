@@ -131,6 +131,7 @@ workflows:
             Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
             Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
             Branch | ${BITRISE_GIT_BRANCH}
+            Warnings-in-code | ${SHOW_WARNING_COUNT}
         - buttons: |+
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
@@ -159,7 +160,7 @@ workflows:
             set -x
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
-            ./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all
+            envman add --key SHOW_WARNING_COUNT --value "$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)"
   NewXcodeVersions:
     steps:
     - script@1:
@@ -592,7 +593,7 @@ workflows:
             set -x
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
-            ./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test
+            envman add --key SHOW_WARNING_COUNT --value "$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test)"
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
         inputs:
