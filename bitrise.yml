@@ -593,7 +593,6 @@ workflows:
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
             ./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test
-    steps:
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
         inputs:
