@@ -4,7 +4,7 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THREESHOLD_UNIT_TEST=110
+THREESHOLD_UNIT_TEST=310
 THREESHOLD_XCUITEST=850
 
 
@@ -12,15 +12,15 @@ WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|ld: warning:|<unknown>:0: w
 
 if  [ $2 == "unit-test" ]; then
     if [ $WARNING_COUNT -ge $THREESHOLD_UNIT_TEST ]; then
-        echo "Number of warnings is $WARNING_COUNT. This is greater than $THREESHOLD_UNIT_TEST"
+        echo "Number of warnings is: $WARNING_COUNT. This is greater than unit-test threshold: $THREESHOLD_UNIT_TEST"
     else
-        echo "Number of warnings is $WARNING_COUNT. This is lower than $THREESHOLD_UNIT_TEST"
+        echo "Number of warnings is: $WARNING_COUNT. This is lower than unit-test threshold: $THREESHOLD_UNIT_TEST"
     fi
 else
     if [ $WARNING_COUNT -ge $THREESHOLD_XCUITEST ]; then
-        echo "Number of warnings is $WARNING_COUNT. This is greater than $THREESHOLD_XCUITEST"
+        echo "Number of warnings is: $WARNING_COUNT. This is greater than build threshold: $THREESHOLD_XCUITEST"
     else
-        echo "Number of warnings is $WARNING_COUNT. This is lower than $THREESHOLD_XCUITEST"
+        echo "Number of warnings is: $WARNING_COUNT. This is lower than build threshold: $THREESHOLD_XCUITEST"
     exit 1
     fi
 fi
