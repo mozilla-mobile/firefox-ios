@@ -66,6 +66,14 @@ extension WKUserContentController {
             add(scriptMessageHandler, name: name)
         }
     }
+
+    public func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        if #available(iOS 14.3, *), USE_NEW_SANDBOX_APIS {
+            add(scriptMessageHandler, contentWorld: .page, name: name)
+        } else {
+            add(scriptMessageHandler, name: name)
+        }
+    }
 }
 
 extension WKUserScript {
