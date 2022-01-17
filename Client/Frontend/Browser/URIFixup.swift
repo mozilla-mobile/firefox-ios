@@ -33,6 +33,13 @@ class URIFixup {
             return nil
         }
 
+        // If there is more than one ":", make sure the host is properly wrapped in brackets.
+        if trimmed.filter({ $0 == ":" }).count > 1,
+           trimmed.first != "[",
+           trimmed.last != "]" {
+            return nil
+        }
+
         if trimmed.range(of: " ") != nil {
             return nil
         }

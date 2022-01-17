@@ -50,6 +50,9 @@ class SearchTests: XCTestCase {
         checkInvalidURL("javascript:alert(%22hi%22)")
         checkInvalidURL("ftp:")
         checkInvalidURL("123:7::")
+        checkInvalidURL("foo:5000")
+        checkInvalidURL("http://::192.9.5.5")
+        checkInvalidURL("http://::192.9.5.5:8080")
     }
 
     func testURIFixupPunyCode() {
