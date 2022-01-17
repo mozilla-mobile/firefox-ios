@@ -5,7 +5,7 @@ set -e
 BUILD_LOG_FILE="$1"
 METRICS_FILE="${2}/metrics.txt"
 TYPE_LOG_FILE="$3"
-THREESHOLD_UNIT_TEST=310
+THREESHOLD_UNIT_TEST=110
 THREESHOLD_XCUITEST=850
 
 # Remove if found
@@ -19,14 +19,12 @@ WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|ld: warning:|<unknown>:0: w
 if  [ $3 == "unit-test" ]; then
     if [ $WARNING_COUNT -ge $THREESHOLD_UNIT_TEST ]; then
         echo "Number of warnings is $WARNING_COUNT. This is greater than $THREESHOLD_UNIT_TEST"
-        exit 1
     else
         echo "Number of warnings is $WARNING_COUNT. This is lower than $THREESHOLD_UNIT_TEST"
     fi
 else
     if [ $WARNING_COUNT \> $THREESHOLD_XCUITEST ]; then
         echo "Number of warnings is $WARNING_COUNT. This is greater than $THREESHOLD_XCUITEST"
-        exit 1
     else
         echo "Number of warnings is $WARNING_COUNT. This is lower than $THREESHOLD_XCUITEST"
     exit 1

@@ -160,8 +160,17 @@ workflows:
             # debug log
             set -x
 
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)
+
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
-            envman add --key SHOW_WARNING_COUNT_XCUI --value "$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)"
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT"
+
+            STR=$COUNT
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure due to number of warnings increased"
+                exit 1
+            fi
         is_always_run: true
   NewXcodeVersions:
     steps:
@@ -594,8 +603,17 @@ workflows:
             # debug log
             set -x
 
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test)
+
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
-            envman add --key SHOW_WARNING_COUNT --value "$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test)"
+            envman add --key SHOW_WARNING_COUNT --value "$COUNT"
+
+            STR=$COUNT
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure due to number of warnings increased"
+                exit 1
+            fi
         is_always_run: true
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
