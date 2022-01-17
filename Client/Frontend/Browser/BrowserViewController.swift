@@ -1013,13 +1013,9 @@ class BrowserViewController: UIViewController {
         if isLoading {
             state = .stop
         } else {
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                state = .home
-
-            } else {
-                state = .reload
-            }
+            state = .home
         }
+
         navigationToolbar.updateMiddleButtonState(state)
         if toolbar != nil {
             urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
