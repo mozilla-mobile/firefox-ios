@@ -50,6 +50,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     // whereever we need to focus the user's attention.
     var tabToFocus: Tab? = nil
 
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
