@@ -1474,7 +1474,7 @@ extension BrowserViewController: TabDelegate {
         tab.addContentScript(downloadContentScript, name: DownloadContentScript.name())
 
         let printHelper = PrintHelper(tab: tab)
-        tab.addContentScript(printHelper, name: PrintHelper.name())
+        tab.addContentScriptToPage(printHelper, name: PrintHelper.name())
 
         let nightModeHelper = NightModeHelper(tab: tab)
         tab.addContentScript(nightModeHelper, name: NightModeHelper.name())

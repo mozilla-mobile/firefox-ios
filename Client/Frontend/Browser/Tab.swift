@@ -686,6 +686,10 @@ class Tab: NSObject {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }
 
+    func addContentScriptToPage(_ helper: TabContentScript, name: String) {
+        contentScriptManager.addContentScriptToPage(helper, name: name, forTab: self)
+    }
+
     func getContentScript(name: String) -> TabContentScript? {
         return contentScriptManager.getContentScript(name)
     }
@@ -888,6 +892,20 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         }
     }
 
+    func addContentScriptToPage(_ helper: TabContentScript, name: String, forTab tab: Tab) {
+        if let _ = helpers[name] {
+            assertionFailure("Duplicate helper added: \(name)")
+        }
+
+        helpers[name] = helper
+
+        // If this helper handles script messages, then get the handler name and register it. The Browser
+        // receives all messages and then dispatches them to the right TabHelper.
+        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+            tab.webView?.configuration.userContentController.addInPageContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
+        }
+    }
+
     func getContentScript(_ name: String) -> TabContentScript? {
         return helpers[name]
     }
@@ -930,7 +948,14 @@ class TabWebView: WKWebView, MenuHelperInterface {
 
     internal override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // The find-in-page selection menu only appears if the webview is the first responder.
-        becomeFirstResponder()
+        if #available(iOS 13.4, *) {
+            // Do not becomeFirstResponder on a mouse event.
+            if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {
+                becomeFirstResponder()
+            }
+        } else {
+            becomeFirstResponder()
+        }
 
         return super.hitTest(point, with: event)
     }
