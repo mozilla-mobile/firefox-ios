@@ -21,6 +21,5 @@ else
         echo "Number of warnings is: $WARNING_COUNT. This is greater than build threshold: $THREESHOLD_XCUITEST"
     else
         echo "Number of warnings is: $WARNING_COUNT. This is lower than build threshold: $THREESHOLD_XCUITEST"
-    exit 1
     fi
 fi
