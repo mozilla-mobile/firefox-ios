@@ -161,7 +161,7 @@ workflows:
             set -x
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
-            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . all)
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH all)
             envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT"
 
             STR=$COUNT
@@ -604,7 +604,7 @@ workflows:
 
             TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
 
-            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH . unit-test)
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH unit-test)
             envman add --key SHOW_WARNING_COUNT --value "$COUNT"
 
             STR=$COUNT

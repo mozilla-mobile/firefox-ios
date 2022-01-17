@@ -17,7 +17,7 @@ if  [ $2 == "unit-test" ]; then
         echo "Number of warnings is $WARNING_COUNT. This is lower than $THREESHOLD_UNIT_TEST"
     fi
 else
-    if [ $WARNING_COUNT \> $THREESHOLD_XCUITEST ]; then
+    if [ $WARNING_COUNT -ge $THREESHOLD_XCUITEST ]; then
         echo "Number of warnings is $WARNING_COUNT. This is greater than $THREESHOLD_XCUITEST"
     else
         echo "Number of warnings is $WARNING_COUNT. This is lower than $THREESHOLD_XCUITEST"
