@@ -950,7 +950,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
         // The find-in-page selection menu only appears if the webview is the first responder.
         if #available(iOS 13.4, *) {
             // Do not becomeFirstResponder on a mouse event.
-            if let event = event, event.allTouches?.contains(where: { $0.type == .indirectPointer }) ?? false {
+            if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {
                 becomeFirstResponder()
             }
         } else {
