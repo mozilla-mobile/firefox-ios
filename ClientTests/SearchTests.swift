@@ -32,6 +32,9 @@ class SearchTests: XCTestCase {
         checkValidURL("foo.bar", afterFixup: "http://foo.bar")
         checkValidURL(" foo.bar ", afterFixup: "http://foo.bar")
         checkValidURL("1.2.3", afterFixup: "http://1.2.3")
+        checkValidURL("[2001:4860:4860::8888]", afterFixup: "http://[2001:4860:4860::8888]")
+        checkValidURL("[2606:2800:220:1:248:1893:25c8:1946]", afterFixup: "http://[2606:2800:220:1:248:1893:25c8:1946]")
+        checkValidURL("[2620:fe::fe]", afterFixup: "http://[2620:fe::fe]")
 
         // Check invalid URLs. These are passed along to the default search engine.
         checkInvalidURL("foobar")
@@ -46,7 +49,7 @@ class SearchTests: XCTestCase {
         checkInvalidURL("javascript:")
         checkInvalidURL("javascript:alert(%22hi%22)")
         checkInvalidURL("ftp:")
-        
+        checkInvalidURL("123:7::")
     }
 
     func testURIFixupPunyCode() {
