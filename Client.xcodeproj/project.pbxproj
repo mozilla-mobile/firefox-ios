@@ -363,6 +363,15 @@
 		43AFC0F527967C320039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
 		43AFC0F627967C3E0039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
 		43AFC0F727967C8A0039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
+		43AFC108279694E00039DDF4 /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 43AFC107279694E00039DDF4 /* ObjcExceptionBridging */; };
+		43AFC109279695DC0039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
+		43AFC10A279695DC0039DDF4 /* ObjcExceptionBridging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43AFC10D279695F80039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
+		43AFC10E279695F80039DDF4 /* ObjcExceptionBridging.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43AFC1112796961D0039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
+		43AFC1122796961D0039DDF4 /* ObjcExceptionBridging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43AFC115279696B70039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
+		43AFC116279697170039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
 		43BE577E278BA4D900491291 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5777278BA4D900491291 /* Logins */; };
@@ -782,7 +791,6 @@
 		DA9FD88624E213CD00168D1E /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88524E213CC00168D1E /* Helpers.swift */; };
 		DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88724E213DC00168D1E /* QuickLink.swift */; };
 		DA9FD88924E213E500168D1E /* QuickLinkSelection.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88124E213B400168D1E /* QuickLinkSelection.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
-		DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
 		DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACDE995225E537900C8F37F /* VersionSettingTests.swift */; };
 		DADC62DA226E3297003AFF8B /* ReopenLastTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC62D9226E3297003AFF8B /* ReopenLastTabTests.swift */; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
@@ -1197,6 +1205,27 @@
 			remoteGlobalIDString = 4368F86F27966E810013419B;
 			remoteInfo = SDWebImage;
 		};
+		43AFC10B279695DC0039DDF4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43AFC0F9279694C70039DDF4;
+			remoteInfo = ObjcExceptionBridging;
+		};
+		43AFC10F279695F90039DDF4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43AFC0F9279694C70039DDF4;
+			remoteInfo = ObjcExceptionBridging;
+		};
+		43AFC1132796961E0039DDF4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43AFC0F9279694C70039DDF4;
+			remoteInfo = ObjcExceptionBridging;
+		};
 		43BE5813278BAF9A00491291 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1385,6 +1414,7 @@
 			files = (
 				4368F88427966F350013419B /* SDWebImage.framework in Embed Frameworks */,
 				4368F835279665DF0013419B /* Sentry.framework in Embed Frameworks */,
+				43AFC10A279695DC0039DDF4 /* ObjcExceptionBridging.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1438,6 +1468,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43AFC1122796961D0039DDF4 /* ObjcExceptionBridging.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1450,6 +1481,7 @@
 			files = (
 				4368F85D27966BC30013419B /* Snapkit.framework in Copy Frameworks */,
 				43017ECB278E0C6700CED011 /* RUSTLogins.framework in Copy Frameworks */,
+				43AFC10E279695F80039DDF4 /* ObjcExceptionBridging.framework in Copy Frameworks */,
 				43017ECC278E0C6700CED011 /* RUSTRustLog.framework in Copy Frameworks */,
 				43017ECD278E0C6700CED011 /* RUSTNimbus.framework in Copy Frameworks */,
 				43017ECE278E0C6700CED011 /* RUSTViaduct.framework in Copy Frameworks */,
@@ -2238,6 +2270,8 @@
 		43AFC0DA279678920039DDF4 /* XCGLogger-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "XCGLogger-Info.plist"; sourceTree = "<group>"; };
 		43AFC0EF27967C000039DDF4 /* Fuzi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fuzi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43AFC0F027967C000039DDF4 /* Fuzi-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Fuzi-Info.plist"; sourceTree = "<group>"; };
+		43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjcExceptionBridging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43AFC106279694C80039DDF4 /* ObjcExceptionBridging-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ObjcExceptionBridging-Info.plist"; sourceTree = "<group>"; };
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		43BDBBFD2752FA8600254DE4 /* TabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCell.swift; sourceTree = "<group>"; };
 		43BE578A278BA4D900491291 /* RUSTLogins.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTLogins.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3958,7 +3992,6 @@
 		DA9FD88724E213DC00168D1E /* QuickLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickLink.swift; sourceTree = "<group>"; };
 		DAA34D57A0B4D64E6BD517EF /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		DAAE4D2BB25BB3FB7F927CBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ErrorPages.strings; sourceTree = "<group>"; };
-		DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjcExceptionBridging.framework; path = Carthage/Build/iOS/ObjcExceptionBridging.framework; sourceTree = "<group>"; };
 		DAC044248882A2485365F9A2 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Menu.strings; sourceTree = "<group>"; };
 		DACDE995225E537900C8F37F /* VersionSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSettingTests.swift; sourceTree = "<group>"; };
 		DAD46F3324A1606C001B3967 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -4191,8 +4224,6 @@
 		E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = JSPrompt.html; sourceTree = "<group>"; };
 		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
 		E6BA20111E52165800697F9C /* SyncTelemetryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncTelemetryTests.swift; path = StorageTests/SyncTelemetryTests.swift; sourceTree = "<group>"; };
-		E6C191D41E38F7B7000A213B /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
-		E6C191D51E38F7B7000A213B /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
 		E6C64CCF918A53B1EB0FAF01 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		E6CA4229B067C32CA10E19A9 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/Search.strings; sourceTree = "<group>"; };
 		E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensitiveViewController.swift; sourceTree = "<group>"; };
@@ -4475,6 +4506,7 @@
 				43BE581A278BE5AE00491291 /* RUSTFxAClient.framework in Frameworks */,
 				43BE581B278BE5AE00491291 /* RUSTLogins.framework in Frameworks */,
 				43BE581C278BE5AE00491291 /* RUSTNimbus.framework in Frameworks */,
+				43AFC1112796961D0039DDF4 /* ObjcExceptionBridging.framework in Frameworks */,
 				43BE581D278BE5AE00491291 /* RUSTPlaces.framework in Frameworks */,
 				43BE581E278BE5AE00491291 /* RUSTRustLog.framework in Frameworks */,
 				43BE581F278BE5AE00491291 /* RUSTViaduct.framework in Frameworks */,
@@ -4500,6 +4532,7 @@
 			files = (
 				43AFC0DE279678F70039DDF4 /* XCGLogger.framework in Frameworks */,
 				4368F88327966F350013419B /* SDWebImage.framework in Frameworks */,
+				43AFC109279695DC0039DDF4 /* ObjcExceptionBridging.framework in Frameworks */,
 				1B0DFD3827485A780008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				4368F834279665DF0013419B /* Sentry.framework in Frameworks */,
 				1B0DFD25274856D60008EB0A /* SwiftyJSON in Frameworks */,
@@ -4527,13 +4560,13 @@
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
 				F8324A7C2649A5A5007E4BFA /* AuthenticationServices.framework in Frameworks */,
+				43AFC10D279695F80039DDF4 /* ObjcExceptionBridging.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */,
 				432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
-				DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */,
 				435C85F02788F4D00072B526 /* Glean in Frameworks */,
 				433F87CE2788EAB600693368 /* GCDWebServers in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
@@ -4567,6 +4600,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AFC116279697170039DDF4 /* ObjcExceptionBridging.framework in Frameworks */,
 				43AFC0F627967C3E0039DDF4 /* Fuzi.framework in Frameworks */,
 				4368F888279671710013419B /* SDWebImage.framework in Frameworks */,
 				4368F839279665EF0013419B /* Sentry.framework in Frameworks */,
@@ -4660,6 +4694,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43AFC0FD279694C70039DDF4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43AFC108279694E00039DDF4 /* ObjcExceptionBridging in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43BE577D278BA4D900491291 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -4739,6 +4781,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AFC115279696B70039DDF4 /* ObjcExceptionBridging.framework in Frameworks */,
 				4368F887279671320013419B /* SDWebImage.framework in Frameworks */,
 				4368F83A279666020013419B /* Sentry.framework in Frameworks */,
 			);
@@ -5489,7 +5532,6 @@
 				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
 				D36998881AD70A0A00650C6C /* IOKit.framework */,
 				7B8A47F51D01D3B400C07734 /* PassKit.framework */,
-				DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */,
 				E4B334891BBF23F9004E2BFF /* AdSupport.framework */,
 				E4B334871BBF23F3004E2BFF /* iAd.framework */,
 				3905274B1C874D35007E0BB7 /* NotificationCenter.framework */,
@@ -6491,8 +6533,6 @@
 				D4C792CA25651FC500FB7E86 /* PerformanceTestPlan.xctestplan */,
 				3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */,
 				C8E2E80623D20FB3005AACE6 /* RustFxA */,
-				E6C191D41E38F7B7000A213B /* Cartfile */,
-				E6C191D51E38F7B7000A213B /* Cartfile.resolved */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -6531,6 +6571,7 @@
 				4368F87C27966E810013419B /* SDWebImage-Info.plist */,
 				43AFC0DA279678920039DDF4 /* XCGLogger-Info.plist */,
 				43AFC0F027967C000039DDF4 /* Fuzi-Info.plist */,
+				43AFC106279694C80039DDF4 /* ObjcExceptionBridging-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -6570,6 +6611,7 @@
 				4368F87B27966E810013419B /* SDWebImage.framework */,
 				43AFC0D9279678920039DDF4 /* XCGLogger.framework */,
 				43AFC0EF27967C000039DDF4 /* Fuzi.framework */,
+				43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6880,6 +6922,7 @@
 			dependencies = (
 				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
 				2F11EE501ABCAE910083902D /* PBXTargetDependency */,
+				43AFC1142796961E0039DDF4 /* PBXTargetDependency */,
 			);
 			name = Sync;
 			packageProductDependencies = (
@@ -6927,6 +6970,7 @@
 			dependencies = (
 				4368F837279665DF0013419B /* PBXTargetDependency */,
 				4368F88627966F350013419B /* PBXTargetDependency */,
+				43AFC10C279695DC0039DDF4 /* PBXTargetDependency */,
 			);
 			name = Shared;
 			packageProductDependencies = (
@@ -7197,6 +7241,26 @@
 			);
 			productName = Shared;
 			productReference = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43AFC0F9279694C70039DDF4 /* ObjcExceptionBridging */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43AFC100279694C70039DDF4 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging" */;
+			buildPhases = (
+				43AFC0FC279694C70039DDF4 /* Sources */,
+				43AFC0FD279694C70039DDF4 /* Frameworks */,
+				43AFC0FF279694C70039DDF4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ObjcExceptionBridging;
+			packageProductDependencies = (
+				43AFC107279694E00039DDF4 /* ObjcExceptionBridging */,
+			);
+			productName = Shared;
+			productReference = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		43BE5774278BA4D900491291 /* RUSTLogins */ = {
@@ -7490,6 +7554,7 @@
 				047F9B3124E1FE1F00CD7DF7 /* PBXTargetDependency */,
 				4368F82F279665C20013419B /* PBXTargetDependency */,
 				4368F88227966EA50013419B /* PBXTargetDependency */,
+				43AFC110279695F90039DDF4 /* PBXTargetDependency */,
 			);
 			name = Client;
 			packageProductDependencies = (
@@ -7877,6 +7942,7 @@
 				4368F86F27966E810013419B /* SDWebImage */,
 				43AFC0CD279678920039DDF4 /* XCGLogger */,
 				43AFC0E327967C000039DDF4 /* Fuzi */,
+				43AFC0F9279694C70039DDF4 /* ObjcExceptionBridging */,
 			);
 		};
 /* End PBXProject section */
@@ -8025,6 +8091,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		43AFC0E927967C000039DDF4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43AFC0FF279694C70039DDF4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -8792,6 +8865,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43AFC0FC279694C70039DDF4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43BE577C278BA4D900491291 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -9515,6 +9595,21 @@
 			isa = PBXTargetDependency;
 			target = 4368F86F27966E810013419B /* SDWebImage */;
 			targetProxy = 4368F88527966F350013419B /* PBXContainerItemProxy */;
+		};
+		43AFC10C279695DC0039DDF4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43AFC0F9279694C70039DDF4 /* ObjcExceptionBridging */;
+			targetProxy = 43AFC10B279695DC0039DDF4 /* PBXContainerItemProxy */;
+		};
+		43AFC110279695F90039DDF4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43AFC0F9279694C70039DDF4 /* ObjcExceptionBridging */;
+			targetProxy = 43AFC10F279695F90039DDF4 /* PBXContainerItemProxy */;
+		};
+		43AFC1142796961E0039DDF4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43AFC0F9279694C70039DDF4 /* ObjcExceptionBridging */;
+			targetProxy = 43AFC1132796961E0039DDF4 /* PBXContainerItemProxy */;
 		};
 		43BE5814278BAF9A00491291 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -12553,6 +12648,95 @@
 			};
 			name = FirefoxBeta;
 		};
+		43AFC101279694C70039DDF4 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "ObjcExceptionBridging-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		43AFC102279694C70039DDF4 /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "ObjcExceptionBridging-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		43AFC103279694C70039DDF4 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "ObjcExceptionBridging-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		43AFC104279694C70039DDF4 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "ObjcExceptionBridging-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = FirefoxBeta;
+		};
 		43BE5786278BA4D900491291 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -14352,6 +14536,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
+		43AFC100279694C70039DDF4 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43AFC101279694C70039DDF4 /* Fennec */,
+				43AFC102279694C70039DDF4 /* Fennec_Enterprise */,
+				43AFC103279694C70039DDF4 /* Firefox */,
+				43AFC104279694C70039DDF4 /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
 		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RUSTLogins" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -14817,6 +15012,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
+		};
+		43AFC107279694E00039DDF4 /* ObjcExceptionBridging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = ObjcExceptionBridging;
 		};
 		43BE5777278BA4D900491291 /* Logins */ = {
 			isa = XCSwiftPackageProductDependency;
