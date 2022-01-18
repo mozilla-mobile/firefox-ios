@@ -42,17 +42,17 @@
         "repositoryURL": "https://github.com/skhamis/rust-components-swift",
         "state": {
           "branch": "no-glean-test",
-          "revision": "bb29a53bb2668a22db21ff9fdbaaa5eab241973e",
+          "revision": "da99bcf3771f92b83c772ba590511515f927d820",
           "version": null
         }
       },
       {
-        "package": "SwiftProtobuf",
-        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
+        "package": "Sentry",
+        "repositoryURL": "https://github.com/getsentry/sentry-cocoa.git",
         "state": {
           "branch": null,
-          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
-          "version": "1.18.0"
+          "revision": "bb3c1d852980432907cd314e4fa984fc9a78c9f3",
+          "version": "4.4.3"
         }
       },
       {

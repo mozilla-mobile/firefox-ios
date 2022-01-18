@@ -1,4 +1,3 @@
-github "getsentry/sentry-cocoa"             ~> 4.2
 github "SnapKit/SnapKit"                    ~> 5.0
 github "SDWebImage/SDWebImage"              ~> 5.0
 github "mozilla-mobile/onepassword-app-extension"    "add-framework-support"
