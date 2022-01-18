@@ -60,4 +60,7 @@ verifyExitCode "Exit due to carthage_command.sh"
 npm install
 npm run build
 
+# Clone shavar prod list
+rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout 3910527004252af3aa9dd701566a2cb3b78e5c3a
+
 (cd content-blocker-lib-ios/ContentBlockerGen && swift run)
