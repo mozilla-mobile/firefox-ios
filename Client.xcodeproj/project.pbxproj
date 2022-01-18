@@ -355,6 +355,10 @@
 		43AB6FA525DC53D30016B015 /* ASLibraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9F25DC53D30016B015 /* ASLibraryCell.swift */; };
 		43AB6FA625DC53D30016B015 /* LibraryShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA025DC53D30016B015 /* LibraryShortcutView.swift */; };
 		43AB6FA725DC53D30016B015 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */; };
+		43AFC0DC279678A80039DDF4 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 43AFC0DB279678A80039DDF4 /* XCGLogger */; };
+		43AFC0DD279678EE0039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
+		43AFC0DE279678F70039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
+		43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
 		43BE577E278BA4D900491291 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5777278BA4D900491291 /* Logins */; };
@@ -448,9 +452,6 @@
 		7B3D9E651E4CBFDB007A50DA /* NSCoderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D9E641E4CBFDB007A50DA /* NSCoderExtensions.swift */; };
 		7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B42406D1CA04CAC009B5C28 /* Menu.xcassets */; };
 		7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B4980A71CE363ED0017547C /* Settings.xcassets */; };
-		7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
-		7B604FBF1C495E60006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
-		7B604FC01C495FD1006EEEC3 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */; };
 		7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */; };
 		7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8A47F51D01D3B400C07734 /* PassKit.framework */; };
 		7B9BF91C1E43472E00CB24F4 /* JSONExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BF91B1E43472E00CB24F4 /* JSONExtensions.swift */; };
@@ -2231,6 +2232,8 @@
 		43AB6F9F25DC53D30016B015 /* ASLibraryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASLibraryCell.swift; sourceTree = "<group>"; };
 		43AB6FA025DC53D30016B015 /* LibraryShortcutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryShortcutView.swift; sourceTree = "<group>"; };
 		43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelDataObservers.swift; sourceTree = "<group>"; };
+		43AFC0D9279678920039DDF4 /* XCGLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XCGLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43AFC0DA279678920039DDF4 /* XCGLogger-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "XCGLogger-Info.plist"; path = "/Users/nbhasin/Documents/Repos/FF-Related/SPM_FX/firefox-ios/XCGLogger-Info.plist"; sourceTree = "<absolute>"; };
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		43BDBBFD2752FA8600254DE4 /* TabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCell.swift; sourceTree = "<group>"; };
 		43BE578A278BA4D900491291 /* RUSTLogins.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTLogins.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2668,7 +2671,6 @@
 		7B3D9E641E4CBFDB007A50DA /* NSCoderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCoderExtensions.swift; sourceTree = "<group>"; };
 		7B42406D1CA04CAC009B5C28 /* Menu.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Menu.xcassets; sourceTree = "<group>"; };
 		7B4980A71CE363ED0017547C /* Settings.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Settings.xcassets; sourceTree = "<group>"; };
-		7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronView.swift; sourceTree = "<group>"; };
 		7B864D89B9D9C309484081D1 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -4463,6 +4465,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */,
 				4368F889279671B10013419B /* SDWebImage.framework in Frameworks */,
 				43BE581A278BE5AE00491291 /* RUSTFxAClient.framework in Frameworks */,
 				43BE581B278BE5AE00491291 /* RUSTLogins.framework in Frameworks */,
@@ -4482,7 +4485,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */,
-				7B604FC01C495FD1006EEEC3 /* XCGLogger.framework in Frameworks */,
 				28ECD9BF1BA1F19900D829DA /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4491,6 +4493,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AFC0DE279678F70039DDF4 /* XCGLogger.framework in Frameworks */,
 				4368F88327966F350013419B /* SDWebImage.framework in Frameworks */,
 				1B0DFD3827485A780008EB0A /* SwiftKeychainWrapper in Frameworks */,
 				4368F834279665DF0013419B /* Sentry.framework in Frameworks */,
@@ -4502,6 +4505,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AFC0DD279678EE0039DDF4 /* XCGLogger.framework in Frameworks */,
 				4368F84E279669A60013419B /* Snapkit.framework in Frameworks */,
 				43BE582E278CC5A000491291 /* RUSTFxAClient.framework in Frameworks */,
 				4368F82C279665C20013419B /* Sentry.framework in Frameworks */,
@@ -4529,7 +4533,6 @@
 				435C85F02788F4D00072B526 /* Glean in Frameworks */,
 				433F87CE2788EAB600693368 /* GCDWebServers in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
-				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4553,7 +4556,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B604FBF1C495E60006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4634,6 +4636,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4368F87E27966E960013419B /* SDWebImage in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43AFC0D1279678920039DDF4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43AFC0DC279678A80039DDF4 /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5468,7 +5478,6 @@
 				3BA9A0221D2C208C00BD418C /* Fuzi.framework */,
 				7B8A47F51D01D3B400C07734 /* PassKit.framework */,
 				7BA4A9491C4CEFC70091D032 /* OnePasswordExtension.framework */,
-				7B604FBA1C495D8A006EEEC3 /* XCGLogger.framework */,
 				DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */,
 				E4B334891BBF23F9004E2BFF /* AdSupport.framework */,
 				E4B334871BBF23F3004E2BFF /* iAd.framework */,
@@ -6509,6 +6518,7 @@
 				4368F829279665220013419B /* Sentry-Info.plist */,
 				4368F84B279669740013419B /* Snapkit-Info.plist */,
 				4368F87C27966E810013419B /* SDWebImage-Info.plist */,
+				43AFC0DA279678920039DDF4 /* XCGLogger-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -6546,6 +6556,7 @@
 				4368F828279665220013419B /* Sentry.framework */,
 				4368F84A279669740013419B /* Snapkit.framework */,
 				4368F87B27966E810013419B /* SDWebImage.framework */,
+				43AFC0D9279678920039DDF4 /* XCGLogger.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7133,6 +7144,26 @@
 			);
 			productName = Shared;
 			productReference = 4368F87B27966E810013419B /* SDWebImage.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43AFC0CD279678920039DDF4 /* XCGLogger */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43AFC0D4279678920039DDF4 /* Build configuration list for PBXNativeTarget "XCGLogger" */;
+			buildPhases = (
+				43AFC0D0279678920039DDF4 /* Sources */,
+				43AFC0D1279678920039DDF4 /* Frameworks */,
+				43AFC0D3279678920039DDF4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XCGLogger;
+			packageProductDependencies = (
+				43AFC0DB279678A80039DDF4 /* XCGLogger */,
+			);
+			productName = Shared;
+			productReference = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		43BE5774278BA4D900491291 /* RUSTLogins */ = {
@@ -7774,6 +7805,7 @@
 				4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */,
 				4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -7810,6 +7842,7 @@
 				4368F81C279665220013419B /* Sentry */,
 				4368F83E279669740013419B /* Snapkit */,
 				4368F86F27966E810013419B /* SDWebImage */,
+				43AFC0CD279678920039DDF4 /* XCGLogger */,
 			);
 		};
 /* End PBXProject section */
@@ -7944,6 +7977,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		4368F87527966E810013419B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43AFC0D3279678920039DDF4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -8261,8 +8301,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/ObjcExceptionBridging.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Fuzi.framework",
 			);
@@ -8709,6 +8747,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		4368F87227966E810013419B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43AFC0D0279678920039DDF4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -12298,6 +12343,95 @@
 			};
 			name = FirefoxBeta;
 		};
+		43AFC0D5279678920039DDF4 /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "XCGLogger-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec;
+		};
+		43AFC0D6279678920039DDF4 /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "XCGLogger-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Fennec_Enterprise;
+		};
+		43AFC0D7279678920039DDF4 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "XCGLogger-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = Firefox;
+		};
+		43AFC0D8279678920039DDF4 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				INFOPLIST_FILE = "XCGLogger-Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
+			};
+			name = FirefoxBeta;
+		};
 		43BE5786278BA4D900491291 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -14075,6 +14209,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
+		43AFC0D4279678920039DDF4 /* Build configuration list for PBXNativeTarget "XCGLogger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43AFC0D5279678920039DDF4 /* Fennec */,
+				43AFC0D6279678920039DDF4 /* Fennec_Enterprise */,
+				43AFC0D7279678920039DDF4 /* Firefox */,
+				43AFC0D8279678920039DDF4 /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
 		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RUSTLogins" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -14370,6 +14515,14 @@
 				version = 5.4.0;
 			};
 		};
+		43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DaveWoodCom/XCGLogger.git";
+			requirement = {
+				kind = exactVersion;
+				version = 7.0.0;
+			};
+		};
 		43BE5776278BA4D900491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skhamis/rust-components-swift";
@@ -14514,6 +14667,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		43AFC0DB279678A80039DDF4 /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
 		};
 		43BE5777278BA4D900491291 /* Logins */ = {
 			isa = XCSwiftPackageProductDependency;
