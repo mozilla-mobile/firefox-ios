@@ -536,8 +536,7 @@ class BrowserViewController: UIViewController {
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
         }
 
-        setupMiddleButtonStatus(isLoading: false) // TODO: Does that work on iphone? if not add check for ipad
-        print("Laurie Hello \(UIApplication.shared.isSplitOrSlideOver)")
+        setupMiddleButtonStatus(isLoading: false)
     }
 
     fileprivate func setupConstraints() {
