@@ -131,6 +131,8 @@ workflows:
             Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
             Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
             Branch | ${BITRISE_GIT_BRANCH}
+            Warnings-in-code | ${SHOW_WARNING_COUNT}
+            Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
         - buttons: |+
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
@@ -146,6 +148,30 @@ workflows:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
         - simulator_device: "$IOS_DEVICE"
+  Detect_warnings:
+    steps:
+    - script@1.1:
+        title: Detect number of warnings
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
+
+            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH all)
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
+
+            STR=$COUNT_XCUI
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+        is_always_run: true
   NewXcodeVersions:
     steps:
     - script@1:
@@ -567,6 +593,28 @@ workflows:
 
   RunUnitTests:
     steps:
+    - script@1.1:
+        title: Detect number of warnings
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
+
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH unit-test)
+            envman add --key SHOW_WARNING_COUNT --value "$COUNT"
+
+            STR=$COUNT
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+        is_always_run: true
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
         inputs:
@@ -585,9 +633,10 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
-    - 5_deploy_and_slack
     after_run:
     - RunSmokeXCUITests
+    - Detect_warnings
+    - 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:

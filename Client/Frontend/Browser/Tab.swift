@@ -9,6 +9,7 @@ import Shared
 import XCGLogger
 
 fileprivate var debugTabCount = 0
+fileprivate let log = Logger.browserLogger
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
@@ -429,6 +430,7 @@ class Tab: NSObject {
             restore(webView)
 
             self.webView = webView
+            configureEdgeSwipeGestureRecognizers()
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
             UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
             tabDelegate?.tab?(self, didCreateWebView: webView)
@@ -832,6 +834,34 @@ class Tab: NSObject {
         
         FaviconFetcher.downloadFaviconAndCache(imageURL: currentFaviconUrl, imageKey: baseDomain)
     }
+}
+
+extension Tab: UIGestureRecognizerDelegate {
+    // This prevents the recognition of one gesture recognizer from blocking another
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func configureEdgeSwipeGestureRecognizers() {
+        guard let webView = webView else {
+            log.info("Tab's edge swipe gesture recognizer was never added. This will affect Tab navigation telemetry!")
+            return
+        }
+        
+        let edgeSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgeSwipeTabNavigation(_:)))
+        edgeSwipeGesture.edges = .left
+        edgeSwipeGesture.delegate = self
+        webView.addGestureRecognizer(edgeSwipeGesture)
+    }
+    
+    @objc func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
+        guard let webView = webView else { return }
+        
+        if sender.state == .ended, (sender.velocity(in: webView).x > 150) {
+            TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
+        }
+    }
+    
 }
 
 extension Tab: TabWebViewDelegate {
