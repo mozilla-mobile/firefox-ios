@@ -294,7 +294,7 @@ class ShareViewController: UIViewController {
     private func setupNavBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
-        appearance.backgroundColor = Theme.defaultBackground.color
+        appearance.backgroundColor = ShareTheme.defaultBackground.color
         appearance.shadowColor = .clear
         appearance.shadowImage = UIImage()
 
