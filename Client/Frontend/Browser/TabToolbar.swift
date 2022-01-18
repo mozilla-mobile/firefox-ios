@@ -215,6 +215,8 @@ open class TabToolbarHelper: NSObject {
         switch middleButtonState {
         case .search:
             return
+        case .home:
+            return
         default:
             if recognizer.state == .began {
                 toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.multiStateButton)
