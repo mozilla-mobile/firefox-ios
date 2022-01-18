@@ -280,6 +280,7 @@ extension TelemetryWrapper {
         case drag = "drag"
         case drop = "drop"
         case foreground = "foreground"
+        case swipe = "swipe"
         case navigate = "navigate"
         case open = "open"
         case press = "press"
@@ -370,6 +371,9 @@ extension TelemetryWrapper {
         case home = "home-page"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
+        case navigateTabHistoryBack = "navigate-tab-history-back"
+        case navigateTabHistoryBackSwipe = "navigate-tab-history-back-swipe"
+        case navigateTabHistoryForward = "navigate-tab-history-forward"
         case nightModeEnabled = "night-mode-enabled"
         case nightModeDisabled = "night-mode-disabled"
         case logins = "logins-and-passwords"
@@ -394,6 +398,7 @@ extension TelemetryWrapper {
         case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
         case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
+        case reloadFromUrlBar = "reload-from-url-bar"
     }
 
     public enum EventValue: String {
@@ -549,6 +554,14 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.pullToRefresh.add()
         case(.action, .navigate, .tab, _, _):
             GleanMetrics.Tabs.normalAndPrivateUriCount.add()
+        case(.action, .tap, .navigateTabHistoryBack, _, _), (.action, .press, .navigateTabHistoryBack, _, _):
+            GleanMetrics.Tabs.navigateTabHistoryBack.add()
+        case(.action, .tap, .navigateTabHistoryForward, _, _), (.action, .press, .navigateTabHistoryForward, _, _):
+            GleanMetrics.Tabs.navigateTabHistoryForward.add()
+        case(.action, .swipe, .navigateTabHistoryBackSwipe, _, _):
+            GleanMetrics.Tabs.navigateTabBackSwipe.add()
+        case(.action, .tap, .reloadFromUrlBar, _, _):
+            GleanMetrics.Tabs.reloadFromUrlBar.add()
         // Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
