@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import OnePasswordExtension
 
 private let log = Logger.browserLogger
 
@@ -104,11 +103,14 @@ extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
         if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
-        } else if isOpenByCopy(activityType: activityType) {
-            return isFile(url: url) ? kUTTypeFileURL as String : kUTTypeURL as String
         }
-
-        return activityType == nil ? browserFillIdentifier : kUTTypeURL as String
+//TODO: UPDATE BEFORE MERGING
+//        else if isOpenByCopy(activityType: activityType) {
+//            return isFile(url: url) ? kUTTypeFileURL as String : kUTTypeURL as String
+//        }
+//
+//        return activityType == nil ? browserFillIdentifier : kUTTypeURL as String
+        return browserFillIdentifier
     }
 
     private func isPasswordManager(activityType: UIActivity.ActivityType?) -> Bool {
@@ -135,28 +137,29 @@ private extension ShareExtensionHelper {
         guard let selectedWebView = selectedTab?.webView else {
             return
         }
-
+        
+//TODO: UPDATE BEFORE MERGING
         // Add 1Password to share sheet
-        OnePasswordExtension.shared().createExtensionItem(forWebView: selectedWebView, completion: {(extensionItem, error) -> Void in
-            if extensionItem == nil {
-                log.error("Failed to create the password manager extension item: \(error.debugDescription).")
-                return
-            }
-
-            // Set the 1Password extension item property
-            self.onePasswordExtensionItem = extensionItem
-        })
+//        OnePasswordExtension.shared().createExtensionItem(forWebView: selectedWebView, completion: {(extensionItem, error) -> Void in
+//            if extensionItem == nil {
+//                log.error("Failed to create the password manager extension item: \(error.debugDescription).")
+//                return
+//            }
+//
+//            // Set the 1Password extension item property
+//            self.onePasswordExtensionItem = extensionItem
+//        })
     }
 
     func fillPasswords(_ returnedItems: [AnyObject]) {
         guard let selectedWebView = selectedTab?.webView else {
             return
         }
-
-        OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: selectedWebView, completion: { (success, returnedItemsError) -> Void in
-            if !success {
-                log.error("Failed to fill item into webview: \(returnedItemsError ??? "nil").")
-            }
-        })
+//TODO: UPDATE BEFORE MERGING
+//        OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: selectedWebView, completion: { (success, returnedItemsError) -> Void in
+//            if !success {
+//                log.error("Failed to fill item into webview: \(returnedItemsError ??? "nil").")
+//            }
+//        })
     }
 }

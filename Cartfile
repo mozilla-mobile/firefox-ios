@@ -1,4 +1,2 @@
-github "mozilla-mobile/onepassword-app-extension"    "add-framework-support"
-github "cezheng/Fuzi"                       ~> 3.0
 github "mozilla-mobile/MappaMundi"          "master"
 github "mozilla-services/shavar-prod-lists" "89.0"
