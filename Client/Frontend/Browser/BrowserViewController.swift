@@ -1015,14 +1015,10 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if UIDevice.current.userInterfaceIdiom == .phone {
+        if traitCollection.horizontalSizeClass == .compact {
             state = .home
         } else {
-            if UIApplication.shared.isSplitOrSlideOver {
-                state = .home
-            } else {
-                state = isLoading ? .stop : .reload
-            }
+            state = isLoading ? .stop : .reload
         }
 
         navigationToolbar.updateMiddleButtonState(state)
