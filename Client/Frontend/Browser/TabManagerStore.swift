@@ -73,7 +73,7 @@ class TabManagerStore: FeatureFlagsProtocol {
     
     func removeScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshotUUID = tab.screenshotUUID {
-            imageStore?.removeImage(screenshotUUID.uuidString)
+            _ = imageStore?.removeImage(screenshotUUID.uuidString)
         }
     }
 
