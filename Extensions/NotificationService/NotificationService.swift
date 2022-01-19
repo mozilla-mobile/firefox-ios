@@ -143,8 +143,9 @@ extension SyncDataDisplay {
         #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
             return
-        #endif
+        #else
         presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
+        #endif
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
@@ -152,9 +153,9 @@ extension SyncDataDisplay {
         #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
             return
-        #endif
-
+        #else
         presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: .SentTab_NoTabArrivingNotification_body)
+        #endif
     }
 }
 
