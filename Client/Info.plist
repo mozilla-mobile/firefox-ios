@@ -97,6 +97,7 @@
 		<string>QuickActionIntent</string>
 		<string>QuickLinkSelectionIntent</string>
 		<string>org.mozilla.ios.firefox.browsing</string>
+		<string>NSUserActivityTypeBrowsingWeb</string>
 	</array>
 	<key>PocketEnvironmentAPIKey</key>
 	<string>$(POCKET_API_KEY)</string>
