@@ -76,31 +76,6 @@ extension ScreenGraphTest {
         XCTAssertFalse(navigator.userState.nightMode)
         XCTAssertEqual(navigator.screenState, BrowserTabMenu)
     }
-
-    func testChainedActionPerf1() throws {
-        throw XCTSkip("Skipping this test due intermittent failures")
-        let navigator = self.navigator!
-        measure {
-            navigator.userState.url = defaultURL
-            wait(forElement: app.textFields.firstMatch, timeout: 3)
-            navigator.performAction(TestActions.LoadURLByPasting)
-            XCTAssertEqual(navigator.screenState, WebPageLoading)
-        }
-    }
-
-    func testChainedActionPerf2() throws {
-        throw XCTSkip("Skipping this test due intermittent failures")
-        let navigator = self.navigator!
-        measure {
-            navigator.userState.url = defaultURL
-            navigator.performAction(TestActions.LoadURLByPasting)
-            XCTAssertEqual(navigator.screenState, WebPageLoading)
-        }
-
-        navigator.userState.url = defaultURL
-        navigator.performAction(TestActions.LoadURL)
-        XCTAssertEqual(navigator.screenState, WebPageLoading)
-    }
 }
 
 

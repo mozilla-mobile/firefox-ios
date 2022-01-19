@@ -4,8 +4,8 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THREESHOLD_UNIT_TEST=310
-THREESHOLD_XCUITEST=850
+THREESHOLD_UNIT_TEST=150
+THREESHOLD_XCUITEST=700
 
 
 WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|ld: warning:|<unknown>:0: warning:|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`

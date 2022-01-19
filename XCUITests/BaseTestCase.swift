@@ -87,12 +87,16 @@ class BaseTestCase: XCTestCase {
     }
 
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+
         let predicate = NSPredicate(format: predicateString)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
         if result != .completed {
             let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
-            self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
+            var issue = XCTIssue(type: .assertionFailure, compactDescription: message)
+            let location = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
+            issue.sourceCodeContext = XCTSourceCodeContext(location: location)
+            self.record(issue)
         }
     }
 
