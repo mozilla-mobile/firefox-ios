@@ -292,12 +292,18 @@ class ShareViewController: UIViewController {
     }
 
     private func setupNavBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.backgroundColor = ShareTheme.defaultBackground.color
+        appearance.shadowColor = .clear
+        appearance.shadowImage = UIImage()
+
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.setValue(true, forKey: "hidesShadow") // hide separator line
         navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
         navigationItem.titleView?.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SendToCancelButton, style: .plain, target: self, action: #selector(finish))
-        navigationController?.navigationBar.barTintColor = ShareTheme.defaultBackground.color
     }
 
     private func setupStackView() {
