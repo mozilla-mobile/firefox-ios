@@ -709,7 +709,7 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
-        let state = locationView.reloadButton.isHidden ? locationView.reloadButton.reloadButtonState : .reload
+        let state = locationView.reloadButton.isHidden ? .reload : locationView.reloadButton.reloadButtonState
         
         switch state {
         case .reload:
