@@ -18,8 +18,11 @@ private let customSearchEnginesFileName = "customEngines.plist"
 /**
  * Manage a set of Open Search engines.
  *
- * The search engines are ordered.  Individual search engines can be enabled and disabled.  The
- * first search engine is distinguished and labeled the "default" search engine; it can never be
+ * The search engines are ordered.
+ *
+ * Individual search engines can be enabled and disabled.
+ *
+ * The first search engine is distinguished and labeled the "default" search engine; it can never be
  * disabled.  Search suggestions should always be sourced from the default search engine.
  *
  * Two additional bits of information are maintained: whether the user should be shown "opt-in to
