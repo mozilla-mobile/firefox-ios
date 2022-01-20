@@ -75,13 +75,13 @@ class DomainAutocompleteTest: BaseTestCase {
     // Ensure that the scheme is included in the autocompletion.
     func test4EnsureSchemeIncludedAutocompletion() throws {
         throw XCTSkip("Skipping this test due intermittent failures")
-        navigator.openURL(websiteExample["url"]!)
-        waitUntilPageLoad()
-        navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("http")
-        waitForValueContains(app.textFields["address"], value: "example")
-        let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "http://www.example.com", "Wrong autocompletion")
+//        navigator.openURL(websiteExample["url"]!)
+//        waitUntilPageLoad()
+//        navigator.goto(URLBarOpen)
+//        app.textFields["address"].typeText("http")
+//        waitForValueContains(app.textFields["address"], value: "example")
+//        let value = app.textFields["address"].value
+//        XCTAssertEqual(value as? String, "http://www.example.com", "Wrong autocompletion")
     }
     // Non-matches.
     func test5NoMatches() {
