@@ -1259,7 +1259,9 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 sourceView = topSiteCell.collectionView.cellForItem(at: IndexPath(row: indexPath.row, section: 0))
             }
         case .pocket:
-            sourceView = self.collectionView?.cellForItem(at: indexPath)
+            if let pocketCell = collectionView?.cellForItem(at: IndexPath(row: 0, section: indexPath.section)) as? FxHomePocketCollectionCell {
+                sourceView = pocketCell.collectionView.cellForItem(at: IndexPath(row: indexPath.row, section: 0))
+            }
         default:
             return nil
         }
