@@ -1255,11 +1255,13 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
 
         switch Section(indexPath.section) {
         case .topSites:
-            if let topSiteCell = self.collectionView?.cellForItem(at: IndexPath(row: 0, section: 0)) as? ASHorizontalScrollCell {
-                sourceView = topSiteCell.collectionView.cellForItem(at: indexPath)
+            if let topSiteCell = collectionView?.cellForItem(at: IndexPath(row: 0, section: indexPath.section)) as? ASHorizontalScrollCell {
+                sourceView = topSiteCell.collectionView.cellForItem(at: IndexPath(row: indexPath.row, section: 0))
             }
         case .pocket:
-            sourceView = self.collectionView?.cellForItem(at: indexPath)
+            if let pocketCell = collectionView?.cellForItem(at: IndexPath(row: 0, section: indexPath.section)) as? FxHomePocketCollectionCell {
+                sourceView = pocketCell.collectionView.cellForItem(at: IndexPath(row: indexPath.row, section: 0))
+            }
         default:
             return nil
         }
