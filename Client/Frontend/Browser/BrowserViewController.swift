@@ -166,27 +166,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-
-        dismissVisibleMenus()
-
-        coordinator.animate(alongsideTransition: { context in
-            self.scrollController.updateMinimumZoom()
-            self.topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
-            if let popover = self.displayedPopoverController {
-                self.updateDisplayedPopoverProperties?()
-                self.present(popover, animated: true, completion: nil)
-            }
-        }, completion: { _ in
-            self.scrollController.setMinimumZoom()
-        })
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     fileprivate func didInit() {
         screenshotHelper = ScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
@@ -194,7 +173,7 @@ class BrowserViewController: UIViewController {
         downloadQueue.delegate = self
 
         NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged), name: .DisplayThemeChanged, object: nil)
-  }
+    }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         LegacyThemeManager.instance.statusBarStyle
@@ -239,7 +218,7 @@ class BrowserViewController: UIViewController {
         toolbar?.warningMenuBadge(setVisible: showWarningBadge)
     }
 
-    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
+    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
@@ -302,21 +281,6 @@ class BrowserViewController: UIViewController {
         libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
     }
 
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransition(to: newCollection, with: coordinator)
-
-        // During split screen launching on iPad, this callback gets fired before viewDidLoad gets a chance to
-        // set things up. Make sure to only update the toolbar state if the view is ready for it.
-        if isViewLoaded {
-            updateToolbarStateForTraitCollection(newCollection, withTransitionCoordinator: coordinator)
-        }
-
-        displayedPopoverController?.dismiss(animated: true, completion: nil)
-        coordinator.animate(alongsideTransition: { context in
-            self.scrollController.showToolbars(animated: false)
-        }, completion: nil)
-    }
-
     func dismissVisibleMenus() {
         displayedPopoverController?.dismiss(animated: true)
         if let _ = self.presentedViewController as? PhotonActionSheet {
@@ -338,7 +302,7 @@ class BrowserViewController: UIViewController {
         scrollController.showToolbars(animated: true)
     }
 
-   @objc  func appWillResignActiveNotification() {
+    @objc func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
@@ -386,6 +350,8 @@ class BrowserViewController: UIViewController {
 
         tabManager.startAtHomeCheck()
     }
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -481,6 +447,98 @@ class BrowserViewController: UIViewController {
         searchTelemetry = SearchTelemetry()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
+        // not flash before we present. This change of alpha also participates in the animation when
+        // the intro view is dismissed.
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
+        }
+
+        if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
+            displayedRestoreTabsAlert = true
+            showRestoreTabsAlert()
+        } else {
+            tabManager.restoreTabs()
+        }
+
+        updateTabCountUsingTabManager(tabManager, animated: false)
+        clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        presentIntroViewController()
+        presentDBOnboardingViewController()
+        presentUpdateViewController()
+        screenshotHelper.viewIsVisible = true
+
+        super.viewDidAppear(animated)
+
+        if let toast = self.pendingToast {
+            self.pendingToast = nil
+            show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
+        }
+        showQueuedAlertIfAvailable()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        screenshotHelper.viewIsVisible = false
+        super.viewWillDisappear(animated)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        statusBarOverlay.snp.remakeConstraints { make in
+            make.top.left.right.equalTo(self.view)
+            make.height.equalTo(self.view.safeAreaInsets.top)
+        }
+        adjustURLBarHeightBasedOnLocationViewHeight()
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+
+        // During split screen launching on iPad, this callback gets fired before viewDidLoad gets a chance to
+        // set things up. Make sure to only update the toolbar state if the view is ready for it.
+        if isViewLoaded {
+            updateToolbarStateForTraitCollection(newCollection)
+        }
+
+        displayedPopoverController?.dismiss(animated: true, completion: nil)
+        coordinator.animate(alongsideTransition: { context in
+            self.scrollController.showToolbars(animated: false)
+        }, completion: nil)
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        dismissVisibleMenus()
+
+        coordinator.animate(alongsideTransition: { context in
+            self.scrollController.updateMinimumZoom()
+            self.topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
+            if let popover = self.displayedPopoverController {
+                self.updateDisplayedPopoverProperties?()
+                self.present(popover, animated: true, completion: nil)
+            }
+        }, completion: { _ in
+            self.scrollController.setMinimumZoom()
+        })
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), LegacyThemeManager.instance.systemThemeIsOn {
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+        }
+
+        setupMiddleButtonStatus(isLoading: false)
+    }
+
     fileprivate func setupConstraints() {
         topTabsContainer.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.header)
@@ -501,15 +559,6 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        statusBarOverlay.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(self.view.safeAreaInsets.top)
-        }
-        adjustURLBarHeightBasedOnLocationViewHeight()
     }
 
     fileprivate func adjustURLBarHeightBasedOnLocationViewHeight() {
@@ -569,26 +618,6 @@ class BrowserViewController: UIViewController {
     // value so that we do not keep asking the user to restore their tabs.
     var displayedRestoreTabsAlert = false
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
-        // not flash before we present. This change of alpha also participates in the animation when
-        // the intro view is dismissed.
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
-        }
-
-        if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
-            displayedRestoreTabsAlert = true
-            showRestoreTabsAlert()
-        } else {
-            tabManager.restoreTabs()
-        }
-
-        updateTabCountUsingTabManager(tabManager, animated: false)
-        clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
-    }
-
     fileprivate func crashedLastLaunch() -> Bool {
         return Sentry.shared.crashedLastLaunch
     }
@@ -620,21 +649,6 @@ class BrowserViewController: UIViewController {
         isCrashAlertShowing = true
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        presentIntroViewController()
-        presentDBOnboardingViewController()
-        presentUpdateViewController()
-        screenshotHelper.viewIsVisible = true
-
-        super.viewDidAppear(animated)
-
-        if let toast = self.pendingToast {
-            self.pendingToast = nil
-            show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
-        }
-        showQueuedAlertIfAvailable()
-    }
-
     // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in
     // the profile, that means that this is a fresh install and we do not show the What's New. If we do have
     // that value, we compare it to the major version of the running app. If it is different then this is an
@@ -654,15 +668,6 @@ class BrowserViewController: UIViewController {
             alertController.delegate = self
             present(alertController, animated: true, completion: nil)
         }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        screenshotHelper.viewIsVisible = false
-        super.viewWillDisappear(animated)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
     }
 
     func resetBrowserChrome() {
@@ -1010,10 +1015,10 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if isLoading {
-            state = .stop
-        } else {
+        if traitCollection.horizontalSizeClass == .compact {
             state = .home
+        } else {
+            state = isLoading ? .stop : .reload
         }
 
         navigationToolbar.updateMiddleButtonState(state)
@@ -1336,15 +1341,6 @@ class BrowserViewController: UIViewController {
                     self.screenshotHelper.takeScreenshot(tab)
                 }
             }
-        }
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), LegacyThemeManager.instance.systemThemeIsOn {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
         }
     }
 }
