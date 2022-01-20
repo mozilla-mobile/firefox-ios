@@ -110,7 +110,7 @@
     "ca": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "twitter", "wikipedia-ca", "diec2"
+          "google-b-m", "twitter", "wikipedia-ca"
         ]
       }
     },
@@ -124,7 +124,7 @@
     "cs": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "ddg", "heureka-cz", "mapy-cz", "seznam-cz", "wikipedia-cz"
+          "google-b-m", "bing", "ddg", "mapy-cz", "seznam-cz", "wikipedia-cz"
         ]
       }
     },
@@ -206,7 +206,7 @@
     "es-CL": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "drae", "mercadolibre-cl", "twitter", "wikipedia-es"
+          "google-b-m", "bing", "mercadolibre-cl", "twitter", "wikipedia-es"
         ]
       }
     },
@@ -286,7 +286,7 @@
     "ga-IE": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "amazon-co-uk", "tearma", "twitter", "wikipedia-ga-IE"
+          "google-b-m", "amazon-co-uk", "twitter", "wikipedia-ga-IE"
         ]
       }
     },
@@ -356,7 +356,7 @@
     "hy-AM": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "amazondotcom", "list-am", "wikipedia-hy-AM"
+          "google-b-m", "bing", "amazondotcom", "wikipedia-hy-AM"
         ]
       }
     },
@@ -445,7 +445,7 @@
     "ko": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "danawa-kr", "twitter", "daum-kr", "naver-kr"
+          "google-b-m", "danawa-kr", "twitter", "daum-kr"
         ]
       }
     },
@@ -480,7 +480,7 @@
     "lv": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "salidzinilv", "sslv", "twitter", "wikipedia-lv"
+          "google-b-m", "salidzinilv", "twitter", "wikipedia-lv"
         ]
       }
     },
@@ -536,7 +536,7 @@
     "nl": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "bing", "bolcom-nl", "ddg", "twitter", "wikipedia-nl"
+          "google-b-m", "bing", "ddg", "twitter", "wikipedia-nl"
         ]
       },
       "experimental-hidden": {
@@ -635,7 +635,7 @@
     "sk": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "azet-sk", "slovnik-sk", "twitter", "wikipedia-sk"
+          "google-b-m", "slovnik-sk", "twitter", "wikipedia-sk"
         ]
       }
     },
@@ -725,7 +725,7 @@
     "uk": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "twitter", "wikipedia-uk", "hotline"
+          "google-b-m", "twitter", "wikipedia-uk"
         ]
       }
     },

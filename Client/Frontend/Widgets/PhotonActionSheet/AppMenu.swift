@@ -101,7 +101,7 @@ extension PhotonActionSheetProtocol {
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
 
             if nightModeEnabled {
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeEnabled)
             } else {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
             }
