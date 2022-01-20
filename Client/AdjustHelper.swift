@@ -29,6 +29,7 @@ final class AdjustHelper {
     /// This is called from the Settings screen. The setting SendAnonymousUsageData screen will remember the choice in the
     /// profile and then use this method to disable or enable Adjust.
     static func setEnabled(_ enabled: Bool) {
+        Adjust.disableThirdPartySharing()
         Adjust.setEnabled(enabled)
 
         if !enabled {
