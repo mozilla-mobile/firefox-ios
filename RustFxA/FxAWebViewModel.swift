@@ -7,7 +7,6 @@ import Foundation
 import Account
 import FxAClient
 import Shared
-import SwiftKeychainWrapper
 
 enum FxAPageType {
     case emailLoginFlow
@@ -234,7 +233,7 @@ extension FxAWebViewModel {
             self.profile.syncManager.onAddedAccount()
             
             // ask for push notification
-            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+            MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             let center = UNUserNotificationCenter.current()
             center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 guard error == nil else {

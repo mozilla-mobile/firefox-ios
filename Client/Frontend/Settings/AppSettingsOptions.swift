@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Account
-import SwiftKeychainWrapper
 import LocalAuthentication
 import Glean
 
