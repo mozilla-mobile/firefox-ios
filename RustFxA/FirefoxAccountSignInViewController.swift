@@ -68,7 +68,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .highlighted)
         let imageWidth = button.imageView?.frame.width ?? 0.0
         button.setTitle(.FxASignin_QRScanSignin, for: .normal)
-        button.accessibilityIdentifier = "QRCodeSignIn.button"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
