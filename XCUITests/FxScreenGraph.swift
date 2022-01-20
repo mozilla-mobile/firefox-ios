@@ -743,7 +743,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(Intro_FxASignin) { screenState in
         screenState.tap(app.buttons["EmailSignIn.button"], forAction: Action.OpenEmailToSignIn, transitionTo: FxASigninScreen)
-        screenState.tap(app.buttons["QRCodeSignIn.button"], forAction: Action.OpenEmailToQR, transitionTo: Intro_FxASignin)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton], forAction: Action.OpenEmailToQR, transitionTo: Intro_FxASignin)
 
         screenState.tap(app.navigationBars.buttons.element(boundBy: 0), to: SettingsScreen)
         screenState.backAction = navigationControllerBackAction

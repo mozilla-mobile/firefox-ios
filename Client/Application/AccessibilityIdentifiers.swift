@@ -57,14 +57,17 @@ public struct AccessibilityIdentifiers {
 
     struct Settings {
         static let tableViewController = "AppSettingsTableViewController.tableView"
+
         struct Homepage {
             static let homeSettings = "Home"
             static let homePageNavigationBar = "Homepage"
+
             struct StartAtHome {
                 static let afterFourHours = "StartAtHomeAfterFourHours"
                 static let always = "StartAtHomeAlways"
                 static let disabled = "StartAtHomeDisabled"
             }
+
             struct CustomizeFirefox {
                 static let shortcuts = ""
                 static let jumpBackIn = "Jump Back In"
@@ -73,15 +76,22 @@ public struct AccessibilityIdentifiers {
                 static let recommendedByPocket = "Recommended by Pocket"
             }
         }
+
+        struct FirefoxAccount {
+            static let qrButton = "QRCodeSignIn.button"
+        }
+
         struct Search {
             static let customEngineViewButton = "customEngineViewButton"
             static let searchNavigationBar = "Search"
             static let deleteMozillaEngine = "Delete Mozilla Engine"
             static let deleteButton = "Delete"
         }
+
         struct Logins {
             static let loginsSettings = "Logins"
         }
+
         struct ClearData {
             static let clearPrivatedata = "ClearPrivateData"
         }
