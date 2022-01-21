@@ -7,7 +7,8 @@ import Foundation
 enum WallpaperType {
     case defaultBackground
     case firefox
-    case promotional
+    case themed
+    case seasonal
 }
 
 struct Wallpaper {
@@ -54,17 +55,17 @@ class WallpaperDataManager {
         let promotionalLocale = ["en_US", "en_CA"]
 
         let promotionalWallpaper1 = Wallpaper(named: "promotionalWallpaper1",
-                                              ofType: .promotional,
+                                              ofType: .themed,
                                               expiringOn: promotionalExpiryDate,
                                               limitedToLocale: promotionalLocale)
 
         let promotionalWallpaper2 = Wallpaper(named: "promotionalWallpaper2",
-                                              ofType: .promotional,
+                                              ofType: .themed,
                                               expiringOn: promotionalExpiryDate,
                                               limitedToLocale: promotionalLocale)
 
         let promotionalWallpaper3 = Wallpaper(named: "promotionalWallpaper3",
-                                              ofType: .promotional,
+                                              ofType: .themed,
                                               expiringOn: promotionalExpiryDate,
                                               limitedToLocale: promotionalLocale)
 
