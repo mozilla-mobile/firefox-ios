@@ -63,6 +63,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     fileprivate lazy var tabLayoutDelegate: TabLayoutDelegate = {
         let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager, traitCollection: self.traitCollection, scrollView: self.collectionView)
         delegate.tabSelectionDelegate = self
+        delegate.tabPeekDelegate = self
         return delegate
     }()
 
@@ -194,10 +195,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
-        }
-
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: view)
         }
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
@@ -516,36 +513,6 @@ extension GridTabViewController: TabPeekDelegate {
     }
 }
 
-extension GridTabViewController: UIViewControllerPreviewingDelegate {
-
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-
-        guard let collectionView = collectionView else { return nil }
-        let convertedLocation = self.view.convert(location, to: collectionView)
-
-        guard let indexPath = collectionView.indexPathForItem(at: convertedLocation),
-            let cell = collectionView.cellForItem(at: indexPath) else { return nil }
-
-        guard let tab = tabDisplayManager.dataStore.at(indexPath.row) else {
-            return nil
-        }
-        let tabVC = TabPeekViewController(tab: tab, delegate: self)
-        if let browserProfile = profile as? BrowserProfile {
-            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
-        }
-        previewingContext.sourceRect = self.view.convert(cell.frame, from: collectionView)
-
-        return tabVC
-    }
-
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
-        tabManager.selectTab(tpvc.tab)
-        navigationController?.popViewController(animated: true)
-        delegate?.tabTrayDidDismiss(self)
-    }
-}
-
 extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPanelDelegate {
     // RecentlyClosedPanelDelegate
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
@@ -632,6 +599,7 @@ extension GridTabViewController {
 
 fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
+    weak var tabPeekDelegate: TabPeekDelegate?
     var searchHeightConstraint: Constraint?
     let scrollView: UIScrollView
     var lastYOffset: CGFloat = 0
@@ -744,6 +712,20 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard TabDisplaySection(rawValue: indexPath.section) == .regularTabs,
+              let tab = tabDisplayManager.dataStore.at(indexPath.row)
+        else { return nil }
+
+        let tabVC = TabPeekViewController(tab: tab, delegate: tabPeekDelegate)
+        if let browserProfile = tabDisplayManager.profile as? BrowserProfile,
+           let pickerDelegate = tabPeekDelegate as? DevicePickerViewControllerDelegate {
+            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)
+        }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: { return tabVC }, actionProvider: tabVC.contextActions(defaultActions:))
     }
 }
 
