@@ -358,11 +358,9 @@
 		43AFC0F727967C8A0039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
 		43AFC108279694E00039DDF4 /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 43AFC107279694E00039DDF4 /* ObjcExceptionBridging */; };
 		43AFC109279695DC0039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
-		43AFC10A279695DC0039DDF4 /* ObjcExceptionBridging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43AFC10D279695F80039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
 		43AFC10E279695F80039DDF4 /* ObjcExceptionBridging.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43AFC1112796961D0039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
-		43AFC1122796961D0039DDF4 /* ObjcExceptionBridging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43AFC115279696B70039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
 		43AFC116279697170039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
 		43AFC117279699530039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
@@ -1409,7 +1407,6 @@
 			files = (
 				4368F88427966F350013419B /* SDWebImage.framework in Embed Frameworks */,
 				4368F835279665DF0013419B /* Sentry.framework in Embed Frameworks */,
-				43AFC10A279695DC0039DDF4 /* ObjcExceptionBridging.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1463,7 +1460,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				43AFC1122796961D0039DDF4 /* ObjcExceptionBridging.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
