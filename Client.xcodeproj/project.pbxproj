@@ -359,7 +359,6 @@
 		43AFC108279694E00039DDF4 /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 43AFC107279694E00039DDF4 /* ObjcExceptionBridging */; };
 		43AFC109279695DC0039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
 		43AFC10D279695F80039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
-		43AFC10E279695F80039DDF4 /* ObjcExceptionBridging.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43AFC1112796961D0039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
 		43AFC115279696B70039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
 		43AFC116279697170039DDF4 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; };
@@ -405,6 +404,7 @@
 		43BE582D278CA94000491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
 		43BE582E278CC5A000491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
 		43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */; };
+		43C6A46A279B71C600C79856 /* ObjcExceptionBridging.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC105279694C70039DDF4 /* ObjcExceptionBridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
 		43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB97524099F200058A068 /* ETPViewModel.swift */; };
@@ -1205,13 +1205,6 @@
 			remoteGlobalIDString = 43AFC0F9279694C70039DDF4;
 			remoteInfo = ObjcExceptionBridging;
 		};
-		43AFC10F279695F90039DDF4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43AFC0F9279694C70039DDF4;
-			remoteInfo = ObjcExceptionBridging;
-		};
 		43AFC1132796961E0039DDF4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1470,11 +1463,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43C6A46A279B71C600C79856 /* ObjcExceptionBridging.framework in Copy Frameworks */,
 				43AFC11927969A820039DDF4 /* Fuzi.framework in Copy Frameworks */,
 				4368F85D27966BC30013419B /* Snapkit.framework in Copy Frameworks */,
 				43017ECB278E0C6700CED011 /* RUSTLogins.framework in Copy Frameworks */,
 				43AFC118279699530039DDF4 /* XCGLogger.framework in Copy Frameworks */,
-				43AFC10E279695F80039DDF4 /* ObjcExceptionBridging.framework in Copy Frameworks */,
 				43017ECC278E0C6700CED011 /* RUSTRustLog.framework in Copy Frameworks */,
 				43017ECD278E0C6700CED011 /* RUSTNimbus.framework in Copy Frameworks */,
 				43017ECE278E0C6700CED011 /* RUSTViaduct.framework in Copy Frameworks */,
@@ -7527,7 +7520,6 @@
 				047F9B3124E1FE1F00CD7DF7 /* PBXTargetDependency */,
 				4368F82F279665C20013419B /* PBXTargetDependency */,
 				4368F88227966EA50013419B /* PBXTargetDependency */,
-				43AFC110279695F90039DDF4 /* PBXTargetDependency */,
 			);
 			name = Client;
 			packageProductDependencies = (
@@ -9569,11 +9561,6 @@
 			isa = PBXTargetDependency;
 			target = 43AFC0F9279694C70039DDF4 /* ObjcExceptionBridging */;
 			targetProxy = 43AFC10B279695DC0039DDF4 /* PBXContainerItemProxy */;
-		};
-		43AFC110279695F90039DDF4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43AFC0F9279694C70039DDF4 /* ObjcExceptionBridging */;
-			targetProxy = 43AFC10F279695F90039DDF4 /* PBXContainerItemProxy */;
 		};
 		43AFC1142796961E0039DDF4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
