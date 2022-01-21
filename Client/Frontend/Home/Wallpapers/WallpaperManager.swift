@@ -6,28 +6,11 @@ import Foundation
 import UIKit
 import Shared
 
-struct Wallpaper {
-    private let name: String
-    let image: UIImage?
-
-    init(named name: String) {
-        self.name = name
-        self.image = UIImage(named: name)
-    }
-}
-
 struct WallpaperManager {
 
     // MARK: - Variables
-    private let defaultWallpaper = Wallpaper(named: "defaultWallpaper")
-    private let wallpaper01 = Wallpaper(named: "wallpaper1")
-    private let wallpaper02 = Wallpaper(named: "wallpaper2")
-    private let wallpaper03 = Wallpaper(named: "wallpaper3")
-    private let wallpaper04 = Wallpaper(named: "wallpaper4")
-    private let wallpaper05 = Wallpaper(named: "wallpaper5")
-    var wallpaperArray: [Wallpaper]
-
     private let userDefaults: UserDefaults
+    private let wallpaperData: WallpaperDataManager
 
     // Computed properties
     var currentIndex: Int {
@@ -48,13 +31,13 @@ struct WallpaperManager {
     }
 
     var currentWallpaper: Wallpaper {
-        return wallpaperArray[currentIndex]
+        return wallpaperData.availableWallpapers[0]
     }
 
     // MARK: - Initializer
     init(with userDefaults: UserDefaults = UserDefaults.standard) {
         self.userDefaults = userDefaults
-        self.wallpaperArray = [defaultWallpaper, wallpaper01, wallpaper02, wallpaper03, wallpaper04, wallpaper05]
+        self.wallpaperData = WallpaperDataManager()
     }
 
     // MARK: - Public methods
@@ -63,7 +46,7 @@ struct WallpaperManager {
     }
 
     public func cycleWallpaper() {
-        let newIndex = calculateIndex(using: currentIndex, and: wallpaperArray)
+        let newIndex = calculateIndex(using: currentIndex, and: wallpaperData.availableWallpapers)
         updateTo(index: newIndex)
     }
 
