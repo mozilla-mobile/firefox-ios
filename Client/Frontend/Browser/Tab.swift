@@ -9,6 +9,7 @@ import Shared
 import XCGLogger
 
 fileprivate var debugTabCount = 0
+fileprivate let log = Logger.browserLogger
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
@@ -429,6 +430,7 @@ class Tab: NSObject {
             restore(webView)
 
             self.webView = webView
+            configureEdgeSwipeGestureRecognizers()
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
             UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
             tabDelegate?.tab?(self, didCreateWebView: webView)
@@ -686,6 +688,10 @@ class Tab: NSObject {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }
 
+    func addContentScriptToPage(_ helper: TabContentScript, name: String) {
+        contentScriptManager.addContentScriptToPage(helper, name: name, forTab: self)
+    }
+
     func getContentScript(name: String) -> TabContentScript? {
         return contentScriptManager.getContentScript(name)
     }
@@ -830,6 +836,34 @@ class Tab: NSObject {
     }
 }
 
+extension Tab: UIGestureRecognizerDelegate {
+    // This prevents the recognition of one gesture recognizer from blocking another
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func configureEdgeSwipeGestureRecognizers() {
+        guard let webView = webView else {
+            log.info("Tab's edge swipe gesture recognizer was never added. This will affect Tab navigation telemetry!")
+            return
+        }
+        
+        let edgeSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgeSwipeTabNavigation(_:)))
+        edgeSwipeGesture.edges = .left
+        edgeSwipeGesture.delegate = self
+        webView.addGestureRecognizer(edgeSwipeGesture)
+    }
+    
+    @objc func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
+        guard let webView = webView else { return }
+        
+        if sender.state == .ended, (sender.velocity(in: webView).x > 150) {
+            TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
+        }
+    }
+    
+}
+
 extension Tab: TabWebViewDelegate {
     fileprivate func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
@@ -888,6 +922,20 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         }
     }
 
+    func addContentScriptToPage(_ helper: TabContentScript, name: String, forTab tab: Tab) {
+        if let _ = helpers[name] {
+            assertionFailure("Duplicate helper added: \(name)")
+        }
+
+        helpers[name] = helper
+
+        // If this helper handles script messages, then get the handler name and register it. The Browser
+        // receives all messages and then dispatches them to the right TabHelper.
+        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+            tab.webView?.configuration.userContentController.addInPageContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
+        }
+    }
+
     func getContentScript(_ name: String) -> TabContentScript? {
         return helpers[name]
     }
@@ -930,7 +978,14 @@ class TabWebView: WKWebView, MenuHelperInterface {
 
     internal override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // The find-in-page selection menu only appears if the webview is the first responder.
-        becomeFirstResponder()
+        if #available(iOS 13.4, *) {
+            // Do not becomeFirstResponder on a mouse event.
+            if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {
+                becomeFirstResponder()
+            }
+        } else {
+            becomeFirstResponder()
+        }
 
         return super.hitTest(point, with: event)
     }

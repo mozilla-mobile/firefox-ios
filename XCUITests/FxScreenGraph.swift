@@ -270,7 +270,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     var i = 0
     let introLast = allIntroPages.count - 1
     for intro in allIntroPages {
-        let prev = i == 0 ? nil : allIntroPages[i - 1]
+        _ = i == 0 ? nil : allIntroPages[i - 1]
         let next = i == introLast ? nil : allIntroPages[i + 1]
 
         map.addScreenState(intro) { screenState in
@@ -284,8 +284,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         i += 1
     }
-
-    let noopAction = {}
 
     // Some internally useful screen states.
     let WebPageLoading = "WebPageLoading"
@@ -449,7 +447,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
-        let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
 
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
@@ -746,7 +743,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(Intro_FxASignin) { screenState in
         screenState.tap(app.buttons["EmailSignIn.button"], forAction: Action.OpenEmailToSignIn, transitionTo: FxASigninScreen)
-        screenState.tap(app.buttons["QRCodeSignIn.button"], forAction: Action.OpenEmailToQR, transitionTo: Intro_FxASignin)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton], forAction: Action.OpenEmailToQR, transitionTo: Intro_FxASignin)
 
         screenState.tap(app.navigationBars.buttons.element(boundBy: 0), to: SettingsScreen)
         screenState.backAction = navigationControllerBackAction

@@ -50,7 +50,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             if hideSettings {
                 cell.isHidden = true
             } else if viewModel.isDuringSearchControllerDismiss {
-            // Fade in the cell while dismissing the search or the cell showing suddenly looks janky
+                // Fade in the cell while dismissing the search or the cell showing suddenly looks janky
                 cell.isHidden = false
                 cell.contentView.alpha = 0
                 cell.accessoryView?.alpha = 0
