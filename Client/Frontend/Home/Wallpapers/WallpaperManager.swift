@@ -12,6 +12,14 @@ struct WallpaperManager {
     private let userDefaults: UserDefaults
     private let wallpaperData: WallpaperDataManager
 
+    var wallpapers: [Wallpaper] {
+        return wallpaperData.availableWallpapers
+    }
+
+    var currentWallpaper: Wallpaper {
+        return wallpapers[currentIndex]
+    }
+
     // Computed properties
     var currentIndex: Int {
         let index = userDefaults.integer(forKey: PrefsKeys.WallpaperManagerCustomizationKeyIndex)
@@ -28,10 +36,6 @@ struct WallpaperManager {
     var switchWallpaperFromLogoEnabled: Bool {
         get { return !userDefaults.bool(forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
         set { userDefaults.set(!newValue, forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
-    }
-
-    var currentWallpaper: Wallpaper {
-        return wallpaperData.availableWallpapers[0]
     }
 
     // MARK: - Initializer

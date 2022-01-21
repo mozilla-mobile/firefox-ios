@@ -87,7 +87,7 @@ class WallpaperDataManager {
             if wallpaper.locales.contains(Locale.current.identifier),
                let wallpaperDate = wallpaper.expiryDate,
                let expiryDate = formatter.date(from: wallpaperDate),
-               currentDate > expiryDate {
+               currentDate < expiryDate {
 
                 eligibleWallpapers.append(wallpaper)
             }

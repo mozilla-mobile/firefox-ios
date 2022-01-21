@@ -217,13 +217,13 @@ extension WallpaperSettingsViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - Collection View Data Source
 extension WallpaperSettingsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return wallpaperManager.wallpaperArray.count
+        return wallpaperManager.wallpapers.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier, for: indexPath) as! WallpaperSettingCollectionCell
 
-        cell.updateImage(to: wallpaperManager.wallpaperArray[indexPath.row].image)
+        cell.updateImage(to: wallpaperManager.wallpapers[indexPath.row].image)
 
         return cell
     }
