@@ -502,9 +502,12 @@ extension GridTabViewController: TabPeekDelegate {
     }
 
     func tabPeekDidCloseTab(_ tab: Tab) {
+        // Tab peek is only available on regular tabs
         if let index = tabDisplayManager.dataStore.index(of: tab),
-            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: 0)) as? TabCell {
+            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
+
             cell.close()
+            NotificationCenter.default.post(name: .TabClosed, object: nil)
         }
     }
 
