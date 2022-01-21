@@ -17,6 +17,18 @@ enum OneLineTableViewCustomization {
 
 class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
+    
+    override var indentationLevel: Int {
+        didSet {
+            containerView.snp.remakeConstraints { make in
+                make.height.equalTo(44)
+                make.top.bottom.equalToSuperview()
+                make.leading.equalToSuperview().offset(indentationLevel * Int(indentationWidth))
+                make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
+            }
+        }
+    }
+    
     var selectedView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.theme.tableView.selectedBackground

@@ -358,6 +358,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                 }
 
                 cell.indentationLevel = min(item.indent, maxIndentationLevel)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: CGFloat(cell.indentationLevel) * cell.indentationWidth + 61, bottom: 0, right: 0)
                 if item.folder.guid == parentBookmarkFolder.guid {
                     cell.accessoryType = .checkmark
                 } else {
