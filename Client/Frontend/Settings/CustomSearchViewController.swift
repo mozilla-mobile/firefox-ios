@@ -167,6 +167,8 @@ class CustomSearchViewController: SettingsTableViewController {
         navigationItem.rightBarButtonItem?.isEnabled = false
         if let url = self.urlString {
             self.addSearchEngine(url, title: self.engineTitle)
+        } else {
+            navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
 }
