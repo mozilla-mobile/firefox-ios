@@ -315,11 +315,8 @@
 		4368F84D2796698A0013419B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4368F84C2796698A0013419B /* SnapKit */; };
 		4368F84E279669A60013419B /* Snapkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; };
 		4368F84F279669C90013419B /* Snapkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; };
-		4368F850279669C90013419B /* Snapkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4368F85427966A4F0013419B /* Snapkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; };
-		4368F85527966A4F0013419B /* Snapkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4368F85927966A860013419B /* Snapkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; };
-		4368F85A27966A860013419B /* Snapkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4368F85D27966BC30013419B /* Snapkit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4368F87E27966E960013419B /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 4368F87D27966E960013419B /* SDWebImage */; };
 		4368F87F27966EA50013419B /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F87B27966E810013419B /* SDWebImage.framework */; };
@@ -1391,7 +1388,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4368F850279669C90013419B /* Snapkit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1402,7 +1398,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4368F85527966A4F0013419B /* Snapkit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1413,7 +1408,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4368F85A27966A860013419B /* Snapkit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
