@@ -40,8 +40,8 @@ private func migrate(urls: [URL]) -> [URL] {
 
 class SessionData: NSObject, NSCoding {
     let currentPage: Int
-    let urls: [URL]
     let lastUsedTime: Timestamp
+    let urls: [URL]
 
     var jsonDictionary: [String: Any] {
         return [
