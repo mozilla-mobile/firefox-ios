@@ -62,13 +62,13 @@ class WallpaperBackgroundView: UIView {
     private func setupNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(handleNotifications),
-                                               name: .HomePanelPrefsChanged,
+                                               name: .WallpaperDidChange,
                                                object: nil)
     }
 
     @objc private func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .HomePanelPrefsChanged:
+        case .WallpaperDidChange:
             updateImageTo(wallpaperManager.currentWallpaper)
         default:
             break
@@ -79,7 +79,6 @@ class WallpaperBackgroundView: UIView {
     public func cycleWallpaper() {
         guard wallpaperManager.switchWallpaperFromLogoEnabled else { return }
         wallpaperManager.cycleWallpaper()
-        updateImageTo(wallpaperManager.currentWallpaper)
     }
 
     private func updateImageTo(_ image: UIImage?) {

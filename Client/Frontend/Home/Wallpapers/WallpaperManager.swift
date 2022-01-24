@@ -20,8 +20,15 @@ struct WallpaperManager {
         return retrieveCurrentWallpaperImage()
     }
 
-    // Computed properties
+    var isUsingCustomWallpaper: Bool {
+        // If no wallpaper was ever set, then we must be using the default wallpaper
+        guard let currentWallpaper = retrieveCurrentWallpaperObject() else { return false }
+        if currentWallpaper.type == .defaultBackground { return false }
+        return true
+    }
+
     var currentIndex: Int? {
+        // If no wallpaper was ever set, then we must be at index 0
         guard let currentWallpaper = retrieveCurrentWallpaperObject() else { return 0 }
 
         for (index, wallpaper) in wallpaperData.availableWallpapers.enumerated() {
@@ -74,15 +81,22 @@ struct WallpaperManager {
 
         if newIndex > maxIndex {
             return 0
-        } else {
-            return newIndex
         }
+        
+        return newIndex
     }
 
     // MARK: - Wallpaper storage
     private func updateSelectedWallpaper(to wallpaper: Wallpaper) {
         store(wallpaper: wallpaper)
-        store(image: wallpaper.image)
+        store(image: wallpaper.image) { result in
+            switch result {
+            case .success(()):
+                NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
+            case .failure(let error):
+                print("There was an error storing the wallpaper: ", error.localizedDescription)
+            }
+        }
     }
 
     private func store(wallpaper: Wallpaper) {
@@ -92,25 +106,24 @@ struct WallpaperManager {
         }
     }
 
-    private func store(image: UIImage?) {
+    private func store(image: UIImage?, completionHandler: @escaping (Result<Void, Error>) -> Void) {
         guard let filePath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage) else { return }
 
         if let image = image,
            let pngRepresentation = image.pngData() {
             do {
                 try pngRepresentation.write(to: filePath, options: .atomic)
-                NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+                completionHandler(.success(()))
             } catch let error {
-                print("Saving file resulted in error: ", error)
+                completionHandler(.failure(error))
             }
 
         } else {
             do {
                 try FileManager.default.removeItem(at: filePath)
-                NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+                completionHandler(.success(()))
             } catch {
-                print("Removing file resulted in error: ", error)
-
+                completionHandler(.failure(error))
             }
         }
     }

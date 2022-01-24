@@ -215,12 +215,18 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     }
     
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+        let refreshEvents: [Notification.Name] = [.DisplayThemeChanged, .WallpaperDidChange]
+        refreshEvents.forEach {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(handleNotifications),
+                                                   name: $0,
+                                                   object: nil)
+        }
     }
     
     @objc private func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DisplayThemeChanged:
+        case .DisplayThemeChanged, .WallpaperDidChange:
             applyTheme()
         default:
             break
@@ -228,10 +234,16 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     }
     
     func applyTheme() {
-        if LegacyThemeManager.instance.currentName == .dark {
+        let wallpaperManager = WallpaperManager()
+        if wallpaperManager.isUsingCustomWallpaper {
             itemTitle.textColor = UIColor.Photon.LightGrey10
+
         } else {
-            itemTitle.textColor = UIColor.Photon.DarkGrey90
+            if LegacyThemeManager.instance.currentName == .dark {
+                itemTitle.textColor = UIColor.Photon.LightGrey10
+            } else {
+                itemTitle.textColor = UIColor.Photon.DarkGrey90
+            }
         }
     }
     
