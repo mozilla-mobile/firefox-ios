@@ -32,6 +32,7 @@ class WallpaperBackgroundView: UIView {
         super.init(frame: frame)
         setupView()
         setupNotifications()
+        updateImageTo(wallpaperManager.currentWallpaper)
     }
 
     @available(*, unavailable)
@@ -68,7 +69,7 @@ class WallpaperBackgroundView: UIView {
     @objc private func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .HomePanelPrefsChanged:
-            updateImageTo(wallpaperManager.currentWallpaper.image)
+            updateImageTo(wallpaperManager.currentWallpaper)
         default:
             break
         }
@@ -78,7 +79,7 @@ class WallpaperBackgroundView: UIView {
     public func cycleWallpaper() {
         guard wallpaperManager.switchWallpaperFromLogoEnabled else { return }
         wallpaperManager.cycleWallpaper()
-        updateImageTo(wallpaperManager.currentWallpaper.image)
+        updateImageTo(wallpaperManager.currentWallpaper)
     }
 
     private func updateImageTo(_ image: UIImage?) {

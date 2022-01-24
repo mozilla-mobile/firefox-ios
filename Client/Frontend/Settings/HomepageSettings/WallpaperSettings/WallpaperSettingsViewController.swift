@@ -113,9 +113,10 @@ class WallpaperSettingsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let currentIndex = IndexPath(row: wallpaperManager.currentIndex, section: 0)
+        guard let rowIndex = wallpaperManager.currentIndex else { return }
+        let currentIndex = IndexPath(row: rowIndex, section: 0)
         collectionView.selectItem(at: currentIndex,
-                                  animated: true,
+                                  animated: false,
                                   scrollPosition: [])
     }
 
@@ -222,7 +223,7 @@ extension WallpaperSettingsViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier, for: indexPath) as! WallpaperSettingCollectionCell
-
+        
         cell.updateImage(to: wallpaperManager.wallpapers[indexPath.row].image)
 
         return cell
@@ -234,7 +235,6 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
         wallpaperManager.updateTo(index: indexPath.row)
-        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

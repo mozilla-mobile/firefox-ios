@@ -16,14 +16,21 @@ struct WallpaperManager {
         return wallpaperData.availableWallpapers
     }
 
-    var currentWallpaper: Wallpaper {
-        return wallpapers[currentIndex]
+    var currentWallpaper: UIImage? {
+        return retrieveCurrentWallpaperImage()
     }
 
     // Computed properties
-    var currentIndex: Int {
-        let index = userDefaults.integer(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject)
-        return index
+    var currentIndex: Int? {
+        guard let currentWallpaper = retrieveCurrentWallpaperObject() else { return 0 }
+
+        for (index, wallpaper) in wallpaperData.availableWallpapers.enumerated() {
+            if wallpaper == currentWallpaper {
+                return index
+            }
+        }
+
+        return nil
     }
 
     /// Returns the user's preference for whether or not to be able to change wallpapers
@@ -39,23 +46,28 @@ struct WallpaperManager {
     }
 
     // MARK: - Initializer
-    init(with userDefaults: UserDefaults = UserDefaults.standard) {
+    init(with userDefaults: UserDefaults = UserDefaults.standard,
+         wallpaperData: WallpaperDataManager = WallpaperDataManager()) {
         self.userDefaults = userDefaults
-        self.wallpaperData = WallpaperDataManager()
+        self.wallpaperData = wallpaperData
     }
 
     // MARK: - Public methods
     public func updateTo(index: Int) {
-        userDefaults.set(index, forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject)
+        let wallpapers = wallpaperData.availableWallpapers
+        guard index <= (wallpapers.count - 1) else { return }
+        updateSelectedWallpaper(to: wallpapers[index])
     }
 
     public func cycleWallpaper() {
-        let newIndex = calculateIndex(using: currentIndex, and: wallpaperData.availableWallpapers)
+        let newIndex = calculateIndex(using: currentIndex,
+                                      and: wallpaperData.availableWallpapers)
         updateTo(index: newIndex)
     }
 
     // MARK: - Private functions
-    private func calculateIndex(using currentIndex: Int, and wallpaperArray: [Wallpaper]) -> Int {
+    private func calculateIndex(using currentIndex: Int?, and wallpaperArray: [Wallpaper]) -> Int {
+        guard let currentIndex = currentIndex else { return 0 }
 
         let newIndex = currentIndex + 1
         let maxIndex = wallpaperArray.count - 1
@@ -67,4 +79,70 @@ struct WallpaperManager {
         }
     }
 
+    // MARK: - Wallpaper storage
+    private func updateSelectedWallpaper(to wallpaper: Wallpaper) {
+        store(wallpaper: wallpaper)
+        store(image: wallpaper.image)
+    }
+
+    private func store(wallpaper: Wallpaper) {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(wallpaper) {
+            userDefaults.set(encoded, forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject)
+        }
+    }
+
+    private func store(image: UIImage?) {
+        guard let filePath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage) else { return }
+
+        if let image = image,
+           let pngRepresentation = image.pngData() {
+            do {
+                try pngRepresentation.write(to: filePath, options: .atomic)
+                NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+            } catch let error {
+                print("Saving file resulted in error: ", error)
+            }
+
+        } else {
+            do {
+                try FileManager.default.removeItem(at: filePath)
+                NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+            } catch {
+                print("Removing file resulted in error: ", error)
+
+            }
+        }
+    }
+
+    private func filePath(forKey key: String) -> URL? {
+        let fileManager = FileManager.default
+        guard let documentURL = fileManager.urls(
+            for: .documentDirectory,
+               in: FileManager.SearchPathDomainMask.userDomainMask).first
+        else { return nil }
+
+        return documentURL.appendingPathComponent(key)
+    }
+
+    private func retrieveCurrentWallpaperObject() -> Wallpaper? {
+        if let savedWallpaper = userDefaults.object(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject) as? Data {
+            let decoder = JSONDecoder()
+            if let wallpaper = try? decoder.decode(Wallpaper.self, from: savedWallpaper) {
+                return wallpaper
+            }
+        }
+
+        return nil
+    }
+
+    private func retrieveCurrentWallpaperImage() -> UIImage? {
+        if let filePath = self.filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage),
+           let fileData = FileManager.default.contents(atPath: filePath.path),
+           let image = UIImage(data: fileData) {
+            return image
+        }
+
+        return nil
+    }
 }

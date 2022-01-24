@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit
 
 enum WallpaperType: String, Codable {
     case defaultBackground
@@ -12,24 +13,23 @@ enum WallpaperType: String, Codable {
     case seasonal
 }
 
-struct Wallpaper: Codable {
-    private let name: String
+struct Wallpaper: Codable, Equatable {
+    let name: String
     let type: WallpaperType
-    let expiryDate: String?
-    let locales: [String]
+    fileprivate let expiryDate: String?
+    fileprivate let locales: [String]?
 
     var image: UIImage? {
-        return UIImage(named: name)
-    }
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let fileName = isiPad ? name + "_iPad" : name
 
-    var imageiPad: UIImage? {
-        return UIImage(named: name + "iPad")
+        return UIImage(named: fileName)
     }
 
     init(named name: String,
          ofType type: WallpaperType,
          expiringOn date: String? = nil,
-         limitedToLocale locale: [String] = [])
+         limitedToLocale locale: [String]? = nil)
     {
         self.name = name
         self.expiryDate = date
@@ -38,31 +38,32 @@ struct Wallpaper: Codable {
     }
 }
 
-class WallpaperDataManager {
+fileprivate struct TimedProjects {
+    struct TimedProject {
+        let expiryDate: String
+        let projectLocales: [String]
+    }
+
+    static let projectHouse = TimedProject(expiryDate: "20220430",
+                                           projectLocales: ["en_US", "es_US"])
+}
+
+struct WallpaperDataManager {
+    
     var availableWallpapers: [Wallpaper] {
         return buildWallpapers()
-    }
-
-    var currentlySelectedWallpaper: Wallpaper? {
-        return retrieveCurrentWallpaper()
-    }
-
-    var currentWallpaperImage: UIImage? {
-        return nil
     }
 
     // MARK: - Wallpaper data
     private func buildWallpapers() -> [Wallpaper] {
         var wallpapers: [Wallpaper] = []
-        wallpapers.append(contentsOf: buildDefaultWallpapers())
-
-        let promotionalWallpapers = buildPromotionalWallpapers()
-        wallpapers.append(contentsOf: checkPromotionalWallpapersForEligibility(promotionalWallpapers))
+        wallpapers.append(contentsOf: defaultWallpapers())
+        wallpapers.append(contentsOf: themedWallpapers())
 
         return wallpapers
     }
 
-    private func buildDefaultWallpapers() -> [Wallpaper] {
+    private func defaultWallpapers() -> [Wallpaper] {
         let defaultWallpaper = Wallpaper(named: "defaultBackground", ofType: .defaultBackground)
         let fxWallpaper1 = Wallpaper(named: "fxWallpaper1", ofType: .firefox)
         let fxWallpaper2 = Wallpaper(named: "fxWallpaper2", ofType: .firefox)
@@ -70,33 +71,36 @@ class WallpaperDataManager {
         return [defaultWallpaper, fxWallpaper1, fxWallpaper2]
     }
 
-    private func buildPromotionalWallpapers() -> [Wallpaper] {
-        let promotionalExpiryDate = "20220430"
-        let promotionalLocale = ["en_US", "en_CA"]
+    private func themedWallpapers() -> [Wallpaper] {
+        let themedWallpapers = buildThemedWallpapers()
+        return checkSpecialWallpapersForEligibility(themedWallpapers)
+    }
 
-        let promotionalWallpaper1 = Wallpaper(named: "promotionalWallpaper1",
-                                              ofType: .themed,
-                                              expiringOn: promotionalExpiryDate,
-                                              limitedToLocale: promotionalLocale)
+    private func buildThemedWallpapers() -> [Wallpaper] {
 
-        let promotionalWallpaper2 = Wallpaper(named: "promotionalWallpaper2",
-                                              ofType: .themed,
-                                              expiringOn: promotionalExpiryDate,
-                                              limitedToLocale: promotionalLocale)
+        let themedWallpaper1 = Wallpaper(named: "themedWallpaper1",
+                                         ofType: .themed,
+                                         expiringOn: TimedProjects.projectHouse.expiryDate,
+                                         limitedToLocale: TimedProjects.projectHouse.projectLocales)
 
-        let promotionalWallpaper3 = Wallpaper(named: "promotionalWallpaper3",
-                                              ofType: .themed,
-                                              expiringOn: promotionalExpiryDate,
-                                              limitedToLocale: promotionalLocale)
+        let themedWallpaper2 = Wallpaper(named: "themedWallpaper2",
+                                         ofType: .themed,
+                                         expiringOn: TimedProjects.projectHouse.expiryDate,
+                                         limitedToLocale: TimedProjects.projectHouse.projectLocales)
 
-        return [promotionalWallpaper1, promotionalWallpaper2, promotionalWallpaper3]
+        let themedWallpaper3 = Wallpaper(named: "themedWallpaper3",
+                                         ofType: .themed,
+                                         expiringOn: TimedProjects.projectHouse.expiryDate,
+                                         limitedToLocale: TimedProjects.projectHouse.projectLocales)
+
+        return [themedWallpaper1, themedWallpaper2, themedWallpaper3]
     }
 
     /// Checks an array of `Wallpaper` to see what eligible wallpaper can be shown.
     ///
     /// - Parameter wallpapers: An array of `Wallpaper` that will have expiry
-    /// - Returns: A array of promotional wallpapers that can be shown to the user
-    private func checkPromotionalWallpapersForEligibility(_ wallpapers: [Wallpaper]) -> [Wallpaper] {
+    /// - Returns: A array of wallpapers that can be shown to the user
+    private func checkSpecialWallpapersForEligibility(_ wallpapers: [Wallpaper]) -> [Wallpaper] {
 
         var eligibleWallpapers = [Wallpaper]()
 
@@ -105,7 +109,8 @@ class WallpaperDataManager {
         let currentDate = Date()
 
         for wallpaper in wallpapers {
-            if wallpaper.locales.contains(Locale.current.identifier),
+            if let locales = wallpaper.locales,
+               locales.contains(Locale.current.identifier),
                let wallpaperDate = wallpaper.expiryDate,
                let expiryDate = formatter.date(from: wallpaperDate),
                currentDate < expiryDate {
@@ -115,36 +120,5 @@ class WallpaperDataManager {
         }
 
         return eligibleWallpapers
-    }
-
-    // MARK: - Wallpaper storage
-    func store(wallpaper: Wallpaper) {
-
-    }
-
-    func store(image: UIImage) {
-        if let pngRepresentation = image.pngData(),
-           let filePath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage) {
-            do  {
-                try pngRepresentation.write(to: filePath, options: .atomic)
-            } catch let error {
-                print("Saving file resulted in error: ", error)
-            }
-        }
-    }
-
-    private func filePath(forKey key: String) -> URL? {
-        let fileManager = FileManager.default
-        guard let documentURL = fileManager.urls(
-            for: .documentDirectory,
-               in: FileManager.SearchPathDomainMask.userDomainMask).first
-        else { return nil }
-
-        return documentURL.appendingPathComponent(key + ".png")
-    }
-
-    private func retrieveCurrentWallpaper() -> Wallpaper? {
-
-        return nil
     }
 }
