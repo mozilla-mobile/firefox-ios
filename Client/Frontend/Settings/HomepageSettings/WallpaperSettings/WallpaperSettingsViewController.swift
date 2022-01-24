@@ -26,8 +26,8 @@ class WallpaperSettingsViewController: UIViewController {
 
     lazy var collectionContainer: UIView = .build { _ in }
 
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(
+    lazy var collectionView: DynamicHeightCollectionView = {
+        let collectionView = DynamicHeightCollectionView(
             frame: .zero,
             collectionViewLayout: UICollectionViewFlowLayout())
 
@@ -124,8 +124,9 @@ class WallpaperSettingsViewController: UIViewController {
         collectionView.reloadData()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.layoutIfNeeded()
         guard let rowIndex = wallpaperManager.currentIndex else { return }
         let currentIndex = IndexPath(row: rowIndex, section: 0)
         collectionView.selectItem(at: currentIndex,
@@ -157,7 +158,7 @@ class WallpaperSettingsViewController: UIViewController {
             collectionContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionContainer.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 9),
             collectionContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionContainer.heightAnchor.constraint(equalToConstant: 285),
+//            collectionContainer.heightAnchor.constraint(equalToConstant: 285),
 
             collectionView.leadingAnchor.constraint(equalTo: collectionContainer.leadingAnchor, constant: 28),
             collectionView.topAnchor.constraint(equalTo: collectionContainer.topAnchor, constant: 32),
