@@ -79,7 +79,8 @@ public struct PrefsKeys {
     public static let ThemeManagerCustomizationKey = "ThemeManagerCustomizationKey"
 
     // WallpaperManager Key
-    public static let WallpaperManagerCustomizationKeyIndex = "WallpaperManagerCustomizationKeyIndex"
+    public static let WallpaperManagerCurrentWallpaperObject = "WallpaperManagerCurrentWallpaperObject"
+    public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
     public static let WallpaperManagerLogoSwitchPreference = "WallpaperManagerLogoSwitchPreference"
 }
 

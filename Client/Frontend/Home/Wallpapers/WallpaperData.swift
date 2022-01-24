@@ -3,24 +3,35 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
-enum WallpaperType {
+enum WallpaperType: String, Codable {
     case defaultBackground
     case firefox
     case themed
     case seasonal
 }
 
-struct Wallpaper {
+struct Wallpaper: Codable {
     private let name: String
-    let image: UIImage?
-    let expiryDate: String?
     let type: WallpaperType
+    let expiryDate: String?
     let locales: [String]
 
-    init(named name: String, ofType type: WallpaperType, expiringOn date: String? = nil, limitedToLocale locale: [String] = []) {
+    var image: UIImage? {
+        return UIImage(named: name)
+    }
+
+    var imageiPad: UIImage? {
+        return UIImage(named: name + "iPad")
+    }
+
+    init(named name: String,
+         ofType type: WallpaperType,
+         expiringOn date: String? = nil,
+         limitedToLocale locale: [String] = [])
+    {
         self.name = name
-        self.image = UIImage(named: name)
         self.expiryDate = date
         self.type = type
         self.locales = locale
@@ -32,6 +43,15 @@ class WallpaperDataManager {
         return buildWallpapers()
     }
 
+    var currentlySelectedWallpaper: Wallpaper? {
+        return retrieveCurrentWallpaper()
+    }
+
+    var currentWallpaperImage: UIImage? {
+        return nil
+    }
+
+    // MARK: - Wallpaper data
     private func buildWallpapers() -> [Wallpaper] {
         var wallpapers: [Wallpaper] = []
         wallpapers.append(contentsOf: buildDefaultWallpapers())
@@ -95,5 +115,36 @@ class WallpaperDataManager {
         }
 
         return eligibleWallpapers
+    }
+
+    // MARK: - Wallpaper storage
+    func store(wallpaper: Wallpaper) {
+
+    }
+
+    func store(image: UIImage) {
+        if let pngRepresentation = image.pngData(),
+           let filePath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage) {
+            do  {
+                try pngRepresentation.write(to: filePath, options: .atomic)
+            } catch let error {
+                print("Saving file resulted in error: ", error)
+            }
+        }
+    }
+
+    private func filePath(forKey key: String) -> URL? {
+        let fileManager = FileManager.default
+        guard let documentURL = fileManager.urls(
+            for: .documentDirectory,
+               in: FileManager.SearchPathDomainMask.userDomainMask).first
+        else { return nil }
+
+        return documentURL.appendingPathComponent(key + ".png")
+    }
+
+    private func retrieveCurrentWallpaper() -> Wallpaper? {
+
+        return nil
     }
 }

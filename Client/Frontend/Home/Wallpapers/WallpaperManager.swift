@@ -22,7 +22,7 @@ struct WallpaperManager {
 
     // Computed properties
     var currentIndex: Int {
-        let index = userDefaults.integer(forKey: PrefsKeys.WallpaperManagerCustomizationKeyIndex)
+        let index = userDefaults.integer(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject)
         return index
     }
 
@@ -46,7 +46,7 @@ struct WallpaperManager {
 
     // MARK: - Public methods
     public func updateTo(index: Int) {
-        userDefaults.set(index, forKey: PrefsKeys.WallpaperManagerCustomizationKeyIndex)
+        userDefaults.set(index, forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject)
     }
 
     public func cycleWallpaper() {
@@ -66,4 +66,5 @@ struct WallpaperManager {
             return newIndex
         }
     }
+
 }
