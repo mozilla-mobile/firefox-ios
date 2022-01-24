@@ -9,6 +9,7 @@ import UIKit
 fileprivate struct WallpaperSettingsUX {
     static let collectionTitleFontMaxSize = 40.0
     static let switchTitleFontMaxSize = 46.0
+    static let switchDescriptionFontMaxSize = 34.0
 }
 
 class WallpaperSettingsViewController: UIViewController {
@@ -75,6 +76,7 @@ class WallpaperSettingsViewController: UIViewController {
             withTextStyle: .body,
             maxSize: WallpaperSettingsUX.switchTitleFontMaxSize)
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         label.text = .Settings.Homepage.Wallpaper.SwitchTitle
     }
 
@@ -86,13 +88,23 @@ class WallpaperSettingsViewController: UIViewController {
 
     lazy var switchLine: UIView = .build { _ in }
 
+    lazy var switchDescription: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(
+            withTextStyle: .caption1,
+            maxSize: WallpaperSettingsUX.switchTitleFontMaxSize)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        label.text = .Settings.Homepage.Wallpaper.SwitchDescription
+    }
+
     // MARK: - Variables
     var profile: Profile
-    var wallpaperManager = WallpaperManager()
+    var wallpaperManager: WallpaperManager
 
     // MARK: - Initializers
-    init(with profile: Profile) {
+    init(with profile: Profile, and wallpaperManager: WallpaperManager = WallpaperManager()) {
         self.profile = profile
+        self.wallpaperManager = wallpaperManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -109,6 +121,7 @@ class WallpaperSettingsViewController: UIViewController {
         setupCurrentState()
         applyTheme()
         setupNotifications()
+        collectionView.reloadData()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -132,6 +145,7 @@ class WallpaperSettingsViewController: UIViewController {
         switchContainer.addSubview(switchTitle)
         switchContainer.addSubview(logoSwitch)
         switchContainer.addSubview(switchLine)
+        switchContainer.addSubview(switchDescription)
         view.addSubview(switchContainer)
 
         NSLayoutConstraint.activate([
@@ -143,7 +157,7 @@ class WallpaperSettingsViewController: UIViewController {
             collectionContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionContainer.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 9),
             collectionContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionContainer.heightAnchor.constraint(equalToConstant: 259),
+            collectionContainer.heightAnchor.constraint(equalToConstant: 285),
 
             collectionView.leadingAnchor.constraint(equalTo: collectionContainer.leadingAnchor, constant: 28),
             collectionView.topAnchor.constraint(equalTo: collectionContainer.topAnchor, constant: 32),
@@ -156,7 +170,7 @@ class WallpaperSettingsViewController: UIViewController {
 
             switchTitle.leadingAnchor.constraint(equalTo: switchContainer.leadingAnchor, constant: 16),
             switchTitle.topAnchor.constraint(equalTo: switchContainer.topAnchor, constant: 11),
-            switchTitle.trailingAnchor.constraint(equalTo: logoSwitch.leadingAnchor, constant: 16),
+            switchTitle.trailingAnchor.constraint(equalTo: logoSwitch.leadingAnchor, constant: -8),
             switchTitle.bottomAnchor.constraint(equalTo: switchContainer.bottomAnchor, constant: -11),
 
             switchLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -167,7 +181,11 @@ class WallpaperSettingsViewController: UIViewController {
             switchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             switchContainer.topAnchor.constraint(equalTo: collectionContainer.bottomAnchor, constant: 8),
             switchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            switchContainer.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8)
+
+            switchDescription.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17),
+            switchDescription.topAnchor.constraint(equalTo: switchLine.bottomAnchor, constant: 8),
+            switchDescription.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -17),
+            switchDescription.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
     }
 
@@ -255,5 +273,6 @@ extension WallpaperSettingsViewController: NotificationThemeable {
         logoSwitch.tintColor = UIColor.theme.etpMenu.switchAndButtonTint
         logoSwitch.onTintColor = UIColor.theme.etpMenu.switchAndButtonTint
         switchLine.backgroundColor = UIColor.theme.etpMenu.horizontalLine
+        switchDescription.textColor = UIColor.theme.tableView.headerTextLight
     }
 }
