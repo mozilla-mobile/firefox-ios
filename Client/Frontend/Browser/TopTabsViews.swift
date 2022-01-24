@@ -156,9 +156,14 @@ class TopTabFader: UIView {
 
     init() {
         super.init(frame: .zero)
-        layer.mask = hMaskLayer
+        isFaderActive(true)
     }
 
+    func isFaderActive(_ isActive: Bool) {
+        layer.mask = isActive ? hMaskLayer : nil
+        layoutIfNeeded()
+    }
+    
     internal override func layoutSubviews() {
         super.layoutSubviews()
 
