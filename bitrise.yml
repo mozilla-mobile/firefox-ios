@@ -1140,7 +1140,7 @@ app:
     BITRISE_BETA_VERSION: '96.0'
 trigger_map:
 - push_branch: main
-  workflow: RunUnitTests
+  workflow: RunSmokeXCUITestsiPad
 - push_branch: v96.0
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
