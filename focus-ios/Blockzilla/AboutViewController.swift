@@ -230,6 +230,7 @@ private class AboutHeaderView: UIView {
         self.init(frame: CGRect.zero)
         addSubviews()
         configureConstraints()
+        setupSecretMenuActivation()
     }
 
     @objc private func didPressLearnMore() {
@@ -271,5 +272,20 @@ private class AboutHeaderView: UIView {
             make.bottom.equalTo(self).inset(50).priority(.low)
         }
     }
+    
+    private func setupSecretMenuActivation() {
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleSecretMenuActivation(sender:)))
+        gestureRecognizer.numberOfTapsRequired = 5
+        logo.isUserInteractionEnabled = true
+        logo.addGestureRecognizer(gestureRecognizer)
+    }
 
+    @objc private func handleSecretMenuActivation(sender: UITapGestureRecognizer) {
+        Settings.set(true, forToggle: .displaySecretMenu)
+        // Give the logo a little shake as a confirmation
+        logo.transform = CGAffineTransform(translationX: 20, y: 0)
+        UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.logo.transform = CGAffineTransform.identity
+        }, completion: nil)
+    }
 }

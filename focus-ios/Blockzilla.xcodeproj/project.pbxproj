@@ -222,6 +222,10 @@
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
+		F861799B2795D95E00CFD324 /* InternalExperimentsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */; };
+		F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */; };
+		F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799E27961F4200CFD324 /* InternalSettings.swift */; };
+		F86D00612790978700E83177 /* InternalSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86D00602790978700E83177 /* InternalSettingsView.swift */; };
 		F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */; };
 		F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */; };
 		F8DE0EC826CC887800A31419 /* SupportUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EC726CC887800A31419 /* SupportUtilsTest.swift */; };
@@ -1000,6 +1004,10 @@
 		F8324CDF264EA223007E4BFA /* gpl.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = gpl.html; sourceTree = "<group>"; };
 		F8324CE0264EA223007E4BFA /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		F8324CE1264EA223007E4BFA /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+		F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalExperimentsSettingsView.swift; sourceTree = "<group>"; };
+		F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalExperimentDetailView.swift; sourceTree = "<group>"; };
+		F861799E27961F4200CFD324 /* InternalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSettings.swift; sourceTree = "<group>"; };
+		F86D00602790978700E83177 /* InternalSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSettingsView.swift; sourceTree = "<group>"; };
 		F8820C7126E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Intro.strings"; sourceTree = "<group>"; };
 		F8820C7226E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Intents.strings"; sourceTree = "<group>"; };
 		F8820C7326E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1579,6 +1587,10 @@
 				24433100219DA46F00778D02 /* Debouncer.swift */,
 				F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */,
 				F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */,
+				F861799E27961F4200CFD324 /* InternalSettings.swift */,
+				F86D00602790978700E83177 /* InternalSettingsView.swift */,
+				F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */,
+				F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
 			);
 			path = Blockzilla;
@@ -2150,6 +2162,7 @@
 				C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */,
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
 				C8337DFA2710898800093D42 /* SubtitleCell.swift in Sources */,
+				F86D00612790978700E83177 /* InternalSettingsView.swift in Sources */,
 				C8CE05052743F9EA002057C6 /* PhotonActionSheetItem+MenuAction.swift in Sources */,
 				C8C74BF4271D5D310009CE5A /* ActionFooterView.swift in Sources */,
 				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
@@ -2175,6 +2188,7 @@
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
 				C8337E06271089C200093D42 /* Section.swift in Sources */,
+				F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */,
 				840057582735309500E48144 /* SettingsTableViewToggleCell.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
 				C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */,
@@ -2192,6 +2206,7 @@
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
 				B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */,
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
+				F861799B2795D95E00CFD324 /* InternalExperimentsSettingsView.swift in Sources */,
 				C8CE050E2743FEC5002057C6 /* MenuAction.swift in Sources */,
 				B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */,
 				C8337DFB2710898800093D42 /* TrackingHeaderView.swift in Sources */,
@@ -2209,6 +2224,7 @@
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
 				84EF9F97269489980000E361 /* TipsPageControl.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
+				F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */,
 				D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */,

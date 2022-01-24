@@ -19,6 +19,7 @@ enum SettingsToggle: String, Equatable {
     case enableDomainAutocomplete = "enableDomainAutocomplete"
     case enableCustomDomainAutocomplete = "enableCustomDomainAutocomplete"
     case enableSearchSuggestions = "enableSearchSuggestions"
+    case displaySecretMenu = "displaySecretMenu"
 }
 
 extension SettingsToggle {
@@ -62,6 +63,7 @@ struct Settings {
         case .enableDomainAutocomplete: return true
         case .enableCustomDomainAutocomplete: return true
         case .enableSearchSuggestions: return false
+        case .displaySecretMenu: return false
         }
     }
 

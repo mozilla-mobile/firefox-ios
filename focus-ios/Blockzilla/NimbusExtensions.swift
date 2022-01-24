@@ -5,6 +5,7 @@
 import Nimbus
 
 private let NimbusServerURLKey = "NimbusServerURL"
+private let NimbusStagingServerURLKey = "NimbusStagingServerURL"
 private let NimbusAppNameKey = "NimbusAppName"
 private let NimbusAppChannelKey = "NimbusAppChannel"
 
@@ -14,11 +15,12 @@ extension NimbusServerSettings {
     /// Create a `NimbusServerSettings` struct by looking up the server URL in the `Info.plist`. If the value is missing
     /// from the `Info.plist`, or if it failes to parse as a valid URL, then `nil` is returned.
     /// - Returns: NimbusServerSettings
-    static func createFromInfoDictionary() -> NimbusServerSettings? {
-        guard let serverURLString = Bundle.main.object(forInfoDictionaryKey: NimbusServerURLKey) as? String, let serverURL = URL(string: serverURLString) else {
+    static func createFromInfoDictionary(useStagingServer: Bool, usePreviewCollection: Bool) -> NimbusServerSettings? {
+        let key = useStagingServer ? NimbusStagingServerURLKey : NimbusServerURLKey
+        guard let serverURLString = Bundle.main.object(forInfoDictionaryKey: key) as? String, let serverURL = URL(string: serverURLString) else {
             return nil
         }
-        return NimbusServerSettings(url: serverURL)
+        return NimbusServerSettings(url: serverURL, collection: usePreviewCollection ? "nimbus-preview" : remoteSettingsCollection)
     }
 }
 

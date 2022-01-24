@@ -8,6 +8,11 @@ import RustLog
 import Viaduct
 import Nimbus
 
+
+let NimbusUseStagingServerDefault = "NimbusUseStagingServer"
+let NimbusUsePreviewCollectionDefault = "NimbusUsePreviewCollection"
+
+
 /// An application specific enum of app features that we are configuring with experiments.
 /// This is expected to grow and shrink across releases of the app.
 enum FeatureId: String {
@@ -46,7 +51,11 @@ class NimbusWrapper {
 
         Viaduct.shared.useReqwestBackend()
 
-        guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(), let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
+        let useStagingServer = UserDefaults.standard.bool(forKey: NimbusUseStagingServerDefault)
+        let usePreviewCollection = UserDefaults.standard.bool(forKey: NimbusUsePreviewCollectionDefault)
+        
+        guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(useStagingServer: useStagingServer, usePreviewCollection: usePreviewCollection),
+              let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
             throw "Failed to load Nimbus settings from Info.plist"
         }
 
@@ -59,6 +68,30 @@ class NimbusWrapper {
         self.nimbus?.applyPendingExperiments()
         self.nimbus?.fetchExperiments()
     }
+}
+
+// Helper functions for the internal settings
+
+extension NimbusWrapper {
+    func getAvailableExperiments() -> [AvailableExperiment] {
+        return self.nimbus?.getAvailableExperiments() ?? []
+    }
     
+    func getEnrolledBranchSlug(forExperiment experiment: AvailableExperiment) -> String? {
+        return self.nimbus?.getExperimentBranch(experimentId: experiment.slug)
+    }
+
+    func optIn(toExperiment experiment: AvailableExperiment, withBranch branch: ExperimentBranch) {
+        self.nimbus?.optIn(experiment.slug, branch: branch.slug)
+    }
+    
+    func optOut(ofExperiment experiment: AvailableExperiment) {
+        self.nimbus?.optOut(experiment.slug)
+    }
+}
+
+// Experiment specific shortcuts to check enrollment
+
+extension NimbusWrapper {
     var shouldHaveBoldTitle: Bool { nimbus?.getVariables(featureId: .nimbusValidation).getBool("bold-tip-title") == true }
 }

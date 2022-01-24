@@ -70,6 +70,7 @@ workflows:
             #!/usr/bin/env bash
             set -x
             /usr/libexec/PlistBuddy -c "Add :NimbusServerURL string ${NIMBUS_SERVER_URL}" Blockzilla/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :NimbusStagingServerURL string ${NIMBUS_STAGING_SERVER_URL}" Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Add :NimbusAppName string ${NIMBUS_APP_NAME}" Blockzilla/Info.plist
             /usr/libexec/PlistBuddy -c "Add :NimbusAppChannel string ${NIMBUS_APP_CHANNEL}" Blockzilla/Info.plist
     meta:

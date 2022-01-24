@@ -109,6 +109,11 @@ while (( "$#" )); do
     esac
 done
 
+if [ "$ACTION" = "indexbuild" ]; then
+  echo "Skipping code generation in 'indexbuild' build. See https://bugzilla.mozilla.org/show_bug.cgi?id=1744504 for more info."
+  exit 0
+fi
+
 if [ "${#PARAMS[@]}" -gt 0 ]; then
     YAML_FILES=("${PARAMS[@]}")
 else
