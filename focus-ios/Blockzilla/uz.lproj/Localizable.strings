@@ -52,6 +52,12 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "To‘xtatish";
 
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Rasmdan nusxa olish";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Havoladan nusxa olish";
+
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Yana urinib ko‘rish";
 
