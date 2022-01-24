@@ -104,6 +104,8 @@
 	<string>$(SENTRY_DSN)</string>
 	<key>SentryNightlyDSN</key>
 	<string>$(SENTRY_NIGHTLY_DSN)</string>
+	<key>AdjustAppToken</key>
+	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>NimbusURL</key>
 	<string>$(NIMBUS_URL)</string>
 	<key>UIAppFonts</key>
