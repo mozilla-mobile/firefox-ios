@@ -31,6 +31,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
+        
+        backgroundView = UIView()
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
@@ -52,7 +54,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }
 
