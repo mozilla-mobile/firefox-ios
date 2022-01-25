@@ -116,6 +116,7 @@ workflows:
     - cache-push@2.2:
         is_always_run: true
     - slack@3.1:
+        run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | eq "Show_Warnings" }}'
         inputs:
         - title: ''
         - author_name: ''
@@ -133,6 +134,27 @@ workflows:
             Branch | ${BITRISE_GIT_BRANCH}
             Warnings-in-code | ${SHOW_WARNING_COUNT}
             Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
+        - buttons: |+
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    - slack@3.1:
+        run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | ne "Show_Warnings" }}'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
+            Branch | ${BITRISE_GIT_BRANCH}
         - buttons: |+
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
@@ -164,6 +186,8 @@ workflows:
 
             COUNT_XCUI=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH all)
             envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
+
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
 
             STR=$COUNT_XCUI
             SUB='greater'
@@ -607,6 +631,7 @@ workflows:
 
             COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH unit-test)
             envman add --key SHOW_WARNING_COUNT --value "$COUNT"
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
 
             STR=$COUNT
             SUB='greater'
