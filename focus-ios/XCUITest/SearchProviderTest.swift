@@ -26,6 +26,7 @@ class SearchProviderTest: BaseTestCase {
         doSearch(searchWord: "mozilla", provider: provider)
         waitForWebPageLoad()
 
+        waitForExistence(app.buttons["URLBar.deleteButton"], timeout: 5)
         app.buttons["URLBar.deleteButton"].tap()
         if !iPad() {
             waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 5)

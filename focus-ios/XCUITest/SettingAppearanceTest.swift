@@ -43,6 +43,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         //Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
+        waitForExistence(app.tables.switches["Safari"], timeout: 5)
 
         XCTAssertEqual(safariSwitch.value as! String, "0")
         safariSwitch.tap()
