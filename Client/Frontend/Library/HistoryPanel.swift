@@ -167,13 +167,16 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         if profile.isShutdown { return }
         guard !isFetchInProgress else { return }
         groupedSites = DateGroupedTableData<Site>()
+        let allGroupedSites = groupedSites.allSites()
 
         currentFetchOffset = 0
         fetchData().uponQueue(.main) { result in
             if let sites = result.successValue {
                 for site in sites {
                     if let site = site, let latestVisit = site.latestVisit {
-                        self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                        if !allGroupedSites.contains(site) {
+                            self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                        }
                     }
                 }
 

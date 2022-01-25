@@ -91,4 +91,12 @@ public struct DateGroupedTableData<T: Equatable> {
             return older.map({ $0.0 })
         }
     }
+    
+    /// This will give you all currently fetched (and grouped) Sites.
+    public func allSites() -> [T] {
+        let allHistory = today + yesterday + lastWeek + lastMonth + older
+        let allSites = allHistory.map { $0.0 }
+        
+        return allSites
+    }
 }
