@@ -130,8 +130,8 @@ class LibraryViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            navigationToolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            navigationToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             librarySegmentControl.widthAnchor.constraint(equalToConstant: 343),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: CGFloat(ChronologicalTabsControllerUX.navigationMenuHeight)),
@@ -273,9 +273,9 @@ class LibraryViewController: UIViewController {
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             libraryPanel.view.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
-            libraryPanel.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            libraryPanel.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            libraryPanel.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            libraryPanel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            libraryPanel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            libraryPanel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         libraryPanel.didMove(toParent: self)
         updateTitle()
