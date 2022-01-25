@@ -395,6 +395,7 @@
 		43C6A46E279B8A0800C79856 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
 		43C6A46F279B8A3300C79856 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
 		43C6A470279B8AAF00C79856 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
+		43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */ = {isa = PBXBuildFile; productRef = 43C6A47E27A0679300C79856 /* MappaMundi */; };
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
 		43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB97524099F200058A068 /* ETPViewModel.swift */; };
@@ -4514,6 +4515,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6941,6 +6943,9 @@
 				3BFE4B0D1D342FB900DDF53F /* PBXTargetDependency */,
 			);
 			name = XCUITests;
+			packageProductDependencies = (
+				43C6A47E27A0679300C79856 /* MappaMundi */,
+			);
 			productName = XCUITests;
 			productReference = 3BFE4B071D342FB800DDF53F /* XCUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -7654,6 +7659,7 @@
 				4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */,
 				43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */,
+				43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -14348,6 +14354,14 @@
 				kind = branch;
 			};
 		};
+		43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nbhasin2/MappaMundi.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -14460,6 +14474,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = RustLog;
+		};
+		43C6A47E27A0679300C79856 /* MappaMundi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */;
+			productName = MappaMundi;
 		};
 		43EFA63D2786562600400DF0 /* Places */ = {
 			isa = XCSwiftPackageProductDependency;
