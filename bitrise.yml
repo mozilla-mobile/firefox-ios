@@ -1134,14 +1134,14 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '96.0'
+    BITRISE_RELEASE_VERSION: '97.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '96.0'
+    BITRISE_BETA_VERSION: '97.0'
 trigger_map:
 - push_branch: main
   workflow: RunUnitTests
-- push_branch: v96.0
+- push_branch: v97.0
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
   workflow: RunUnitTests
