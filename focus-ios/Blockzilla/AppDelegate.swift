@@ -5,6 +5,7 @@
 import UIKit
 import Telemetry
 import Glean
+import Sentry
 
 protocol AppSplashController {
     var splashView: SplashView { get }
@@ -49,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
 
+        setupCrashReporting()
         setupTelemetry()
         setupExperimentation()
         
@@ -350,6 +352,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             make.edges.equalTo(window!)
         }
         splashView.animateHidden(false, duration: 0.25)
+    }
+}
+
+
+// MARK: - Crash Reporting
+
+private let SentryDSNKey = "SentryDSN"
+
+extension AppDelegate {
+    func setupCrashReporting() {
+        // Do not enable crash reporting if collection of anonymous usage data is disabled.
+        if !Settings.getToggle(.sendAnonymousUsageData) {
+            return
+        }
+        
+        if let sentryDSN = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String {
+            SentrySDK.start { options in
+                options.dsn = sentryDSN
+            }
+        }
     }
 }
 

@@ -222,6 +222,7 @@
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
+		F8B92FBE279EC73700183998 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8B92FBD279EC73700183998 /* Sentry */; };
 		F861799B2795D95E00CFD324 /* InternalExperimentsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */; };
 		F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */; };
 		F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799E27961F4200CFD324 /* InternalSettings.swift */; };
@@ -1090,6 +1091,7 @@
 				1B56C58727221B1C00BB1152 /* RustLog in Frameworks */,
 				1B56C58927221B1C00BB1152 /* Viaduct in Frameworks */,
 				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
+				F8B92FBE279EC73700183998 /* Sentry in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1734,6 +1736,7 @@
 				1B56C58427221B1C00BB1152 /* Nimbus */,
 				1B56C58627221B1C00BB1152 /* RustLog */,
 				1B56C58827221B1C00BB1152 /* Viaduct */,
+				F8B92FBD279EC73700183998 /* Sentry */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -1912,6 +1915,7 @@
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
 				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
 				1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
+				F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
 			projectDirPath = "";
@@ -5494,6 +5498,14 @@
 				kind = branch;
 			};
 		};
+		F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = exactVersion;
+				version = 7.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -5526,6 +5538,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */;
 			productName = Telemetry;
+		};
+		F8B92FBD279EC73700183998 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
