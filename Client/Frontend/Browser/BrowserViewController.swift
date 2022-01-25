@@ -309,7 +309,7 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
-        // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
+        // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else {
             return
@@ -1194,6 +1194,7 @@ class BrowserViewController: UIViewController {
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         popToBVC()
+        openedUrlFromExternalSource = true
         openURLInNewTab(nil, isPrivate: isPrivate)
         let freshTab = tabManager.selectedTab
         freshTab?.updateTimerAndObserving(state: .newTab)
