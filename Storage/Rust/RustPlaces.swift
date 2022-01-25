@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-
+import Sync15
 @_exported import Places
 import Logins
 
@@ -289,7 +289,7 @@ public class RustPlaces {
         return error
     }
 
-    public func syncBookmarks(unlockInfo: SyncPlacesUnlockInfo) -> Success {
+    public func syncBookmarks(unlockInfo: SyncUnlockInfo) -> Success {
         let deferred = Success()
 
         writerQueue.async {

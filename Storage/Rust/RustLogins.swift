@@ -5,10 +5,8 @@
 import Foundation
 import Shared
 import FxAClient
-
+import Sync15
 @_exported import Logins
-//@_exported import Places
-//@_exported import Sync15
 
 private let log = Logger.syncLogger
 
@@ -478,7 +476,7 @@ public class RustLogins {
         return error
     }
 
-    public func syncLogins(unlockInfo: SyncLoginsUnlockInfo) -> Success {
+    public func syncLogins(unlockInfo: SyncUnlockInfo) -> Success {
         let deferred = Success()
 
         queue.async {
