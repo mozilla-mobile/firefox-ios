@@ -38,18 +38,20 @@ struct Wallpaper: Codable, Equatable {
     }
 }
 
-fileprivate struct TimedProjects {
-    struct TimedProject {
+struct WallpaperDataManager {
+
+    /// A model for projects with wallpapers that are timed.
+    private struct TimedProject {
+        /// The names of the wallpaper assets to be included in the project.
+        let names: [String]
+        /// The date beyond which the project's assets should not show up.
         let expiryDate: String
+        /// The locales that the wallpapers will show up in.
         let projectLocales: [String]
     }
 
-    static let projectHouse = TimedProject(expiryDate: "20220430",
-                                           projectLocales: ["en_US", "es_US"])
-}
-
-struct WallpaperDataManager {
-    
+    /// Returns an array of wallpapers available to the user given their region,
+    /// and various seasonal or expiration date requirements.
     var availableWallpapers: [Wallpaper] {
         return buildWallpapers()
     }
@@ -76,24 +78,27 @@ struct WallpaperDataManager {
         return checkSpecialWallpapersForEligibility(themedWallpapers)
     }
 
+    /// Builds an array of all available themed wallpapers.
+    ///
+    /// In the future, this function will need to be updated to accomodate
+    /// different for adding all sorts of different projects
     private func buildThemedWallpapers() -> [Wallpaper] {
+        var wallpapers = [Wallpaper]()
 
-        let themedWallpaper1 = Wallpaper(named: "themedWallpaper1",
-                                         ofType: .themed,
-                                         expiringOn: TimedProjects.projectHouse.expiryDate,
-                                         limitedToLocale: TimedProjects.projectHouse.projectLocales)
+        let projectHouse = TimedProject(names: ["themedWallpaper1",
+                                               "themedWallpaper2",
+                                               "themedWallpaper3"],
+                                        expiryDate: "20220430",
+                                        projectLocales: ["en_US", "es_US"])
 
-        let themedWallpaper2 = Wallpaper(named: "themedWallpaper2",
-                                         ofType: .themed,
-                                         expiringOn: TimedProjects.projectHouse.expiryDate,
-                                         limitedToLocale: TimedProjects.projectHouse.projectLocales)
+        wallpapers.append(contentsOf: projectHouse.names.map { wallpaperName in
+            return Wallpaper(named: wallpaperName,
+                             ofType: .themed,
+                             expiringOn: projectHouse.expiryDate,
+                             limitedToLocale: projectHouse.projectLocales)
+        })
 
-        let themedWallpaper3 = Wallpaper(named: "themedWallpaper3",
-                                         ofType: .themed,
-                                         expiringOn: TimedProjects.projectHouse.expiryDate,
-                                         limitedToLocale: TimedProjects.projectHouse.projectLocales)
-
-        return [themedWallpaper1, themedWallpaper2, themedWallpaper3]
+        return wallpapers
     }
 
     /// Checks an array of `Wallpaper` to see what eligible wallpaper can be shown.
@@ -102,23 +107,19 @@ struct WallpaperDataManager {
     /// - Returns: A array of wallpapers that can be shown to the user
     private func checkSpecialWallpapersForEligibility(_ wallpapers: [Wallpaper]) -> [Wallpaper] {
 
-        var eligibleWallpapers = [Wallpaper]()
-
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let currentDate = Date()
 
-        for wallpaper in wallpapers {
+        return wallpapers.filter { wallpaper in
             if let locales = wallpaper.locales,
                locales.contains(Locale.current.identifier),
                let wallpaperDate = wallpaper.expiryDate,
                let expiryDate = formatter.date(from: wallpaperDate),
                currentDate < expiryDate {
-
-                eligibleWallpapers.append(wallpaper)
+                return true
             }
+            return false
         }
-
-        return eligibleWallpapers
     }
 }
