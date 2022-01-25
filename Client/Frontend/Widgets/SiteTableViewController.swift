@@ -92,6 +92,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         table.cellLayoutMarginsFollowReadableWidth = false
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
+        table.separatorInsetReference = .fromAutomaticInsets
         
         if let _ = self as? HomePanelContextMenu {
             table.dragDelegate = self
