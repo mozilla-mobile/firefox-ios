@@ -201,8 +201,6 @@
 		39098DC41CAD5ACB00AE87F3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 391AEFD11C8F11ED00691F84 /* Images.xcassets */; };
 		391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */; };
-		392E18031FEC4D7B00EBA79C /* MappaMundi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 392E18021FEC4D7B00EBA79C /* MappaMundi.framework */; };
-		392E18041FEC4D9E00EBA79C /* MappaMundi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 392E18021FEC4D7B00EBA79C /* MappaMundi.framework */; };
 		392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */; };
 		392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */; };
 		39409A3F1C90E68300DAE683 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
@@ -1340,15 +1338,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		0B21E8011E26C5D3000C8779 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(TEST_HOST)/..";
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1B0DFD2C274857350008EB0A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1360,16 +1349,6 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2F3444EC1AB2378200FD9731 /* Copy Files */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-			);
-			name = "Copy Files";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4368F838279665E00013419B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1378,56 +1357,6 @@
 			files = (
 				4368F88427966F350013419B /* SDWebImage.framework in Embed Frameworks */,
 				4368F835279665DF0013419B /* Sentry.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F853279669CA0013419B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F85827966A500013419B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43EFA64127865E1C00400DF0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43EFA64427865E2200400DF0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43EFA64727865E5800400DF0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1453,15 +1382,6 @@
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E6ECF2371C974E0600B0DC93 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F84B22531A0920C600AAB793 /* Embed App Extensions */ = {
@@ -2048,7 +1968,6 @@
 		39104C4F9A5CFDE66911D82B /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/Search.strings"; sourceTree = "<group>"; };
 		391AEFD11C8F11ED00691F84 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabEventHandlerTests.swift; sourceTree = "<group>"; };
-		392E18021FEC4D7B00EBA79C /* MappaMundi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MappaMundi.framework; path = Carthage/Build/iOS/MappaMundi.framework; sourceTree = "<group>"; };
 		392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTabAccessors.swift; path = Accessors/NewTabAccessors.swift; sourceTree = "<group>"; };
 		392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomePageAccessors.swift; path = Accessors/HomePageAccessors.swift; sourceTree = "<group>"; };
 		394344CA90682A8640FDE3DF /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -4591,18 +4510,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3B43E3CD1D95C48D00BBA9DB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3BFE4B041D342FB800DDF53F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				392E18031FEC4D7B00EBA79C /* MappaMundi.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4698,14 +4609,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				392E18041FEC4D9E00EBA79C /* MappaMundi.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BEB64531C7345990092C02E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4727,20 +4630,6 @@
 				43C6A46F279B8A3300C79856 /* XCGLogger.framework in Frameworks */,
 				43C6A46E279B8A0800C79856 /* Sentry.framework in Frameworks */,
 				4368F887279671320013419B /* SDWebImage.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E69DB07A1E97DEA9008A67E6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E6F965091B2F1CF20034B023 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5465,7 +5354,6 @@
 			children = (
 				C8E18F1F222EDED000E30E52 /* SafariServices.framework */,
 				C8E18F1D222EDE4400E30E52 /* Accelerate.framework */,
-				392E18021FEC4D7B00EBA79C /* MappaMundi.framework */,
 				E6231C041B90A472005ABB0D /* libxml2.2.tbd */,
 				E6231C001B90A44F005ABB0D /* libz.tbd */,
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
@@ -6845,7 +6733,6 @@
 				282731591ABC9BE600AA1954 /* Sources */,
 				2827315A1ABC9BE600AA1954 /* Frameworks */,
 				2827315C1ABC9BE600AA1954 /* Resources */,
-				43EFA64727865E5800400DF0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -6867,7 +6754,6 @@
 			buildPhases = (
 				282731641ABC9BE700AA1954 /* Sources */,
 				282731651ABC9BE700AA1954 /* Frameworks */,
-				282731661ABC9BE700AA1954 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -6913,7 +6799,6 @@
 			buildPhases = (
 				2FA435F61ABB83B4008031D1 /* Sources */,
 				2FA435F71ABB83B4008031D1 /* Frameworks */,
-				2FA435F91ABB83B4008031D1 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -6931,7 +6816,6 @@
 			buildPhases = (
 				2FA436011ABB83B4008031D1 /* Sources */,
 				2FA436021ABB83B4008031D1 /* Frameworks */,
-				2FA436031ABB83B4008031D1 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -6950,7 +6834,6 @@
 			buildPhases = (
 				2FCAE2151ABB51F800877008 /* Sources */,
 				2FCAE2161ABB51F800877008 /* Frameworks */,
-				2FCAE2181ABB51F800877008 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -6995,7 +6878,6 @@
 				390527471C874D35007E0BB7 /* Frameworks */,
 				390527481C874D35007E0BB7 /* Resources */,
 				43338D09278F726500A23914 /* ShellScript */,
-				4368F853279669CA0013419B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -7015,7 +6897,6 @@
 				397848D71ED86605004C0C0B /* Sources */,
 				397848D81ED86605004C0C0B /* Frameworks */,
 				397848D91ED86605004C0C0B /* Resources */,
-				43EFA64427865E2200400DF0 /* Embed Frameworks */,
 				43338D07278F722700A23914 /* ShellScript */,
 			);
 			buildRules = (
@@ -7036,8 +6917,6 @@
 			buildConfigurationList = 3B43E3E91D95C48E00BBA9DB /* Build configuration list for PBXNativeTarget "StoragePerfTests" */;
 			buildPhases = (
 				3B43E3CC1D95C48D00BBA9DB /* Sources */,
-				3B43E3CD1D95C48D00BBA9DB /* Frameworks */,
-				3B43E3CE1D95C48D00BBA9DB /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7053,10 +6932,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3BFE4B201D342FB900DDF53F /* Build configuration list for PBXNativeTarget "XCUITests" */;
 			buildPhases = (
-				E6EC6EFC1E5354E20067985D /* Copy Carthage Frameworks */,
 				3BFE4B031D342FB800DDF53F /* Sources */,
 				3BFE4B041D342FB800DDF53F /* Frameworks */,
-				3BFE4B051D342FB800DDF53F /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7074,7 +6951,6 @@
 			buildPhases = (
 				4368F81F279665220013419B /* Sources */,
 				4368F820279665220013419B /* Frameworks */,
-				4368F822279665220013419B /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7094,7 +6970,6 @@
 			buildPhases = (
 				4368F841279669740013419B /* Sources */,
 				4368F842279669740013419B /* Frameworks */,
-				4368F844279669740013419B /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7114,7 +6989,6 @@
 			buildPhases = (
 				4368F87227966E810013419B /* Sources */,
 				4368F87327966E810013419B /* Frameworks */,
-				4368F87527966E810013419B /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7134,7 +7008,6 @@
 			buildPhases = (
 				43AFC0D0279678920039DDF4 /* Sources */,
 				43AFC0D1279678920039DDF4 /* Frameworks */,
-				43AFC0D3279678920039DDF4 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7154,7 +7027,6 @@
 			buildPhases = (
 				43AFC0E627967C000039DDF4 /* Sources */,
 				43AFC0E727967C000039DDF4 /* Frameworks */,
-				43AFC0E927967C000039DDF4 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7174,7 +7046,6 @@
 			buildPhases = (
 				43BE577C278BA4D900491291 /* Sources */,
 				43BE577D278BA4D900491291 /* Frameworks */,
-				43BE5784278BA4D900491291 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7194,7 +7065,6 @@
 			buildPhases = (
 				43BE5794278BA4EA00491291 /* Sources */,
 				43BE5795278BA4EA00491291 /* Frameworks */,
-				43BE579C278BA4EA00491291 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7214,7 +7084,6 @@
 			buildPhases = (
 				43BE57AC278BA4EB00491291 /* Sources */,
 				43BE57AD278BA4EB00491291 /* Frameworks */,
-				43BE57B4278BA4EB00491291 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7234,7 +7103,6 @@
 			buildPhases = (
 				43BE57C4278BA4EC00491291 /* Sources */,
 				43BE57C5278BA4EC00491291 /* Frameworks */,
-				43BE57CC278BA4EC00491291 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7254,7 +7122,6 @@
 			buildPhases = (
 				43BE57DC278BA4ED00491291 /* Sources */,
 				43BE57DD278BA4ED00491291 /* Frameworks */,
-				43BE57E4278BA4ED00491291 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7274,7 +7141,6 @@
 			buildPhases = (
 				43BE57F4278BA50600491291 /* Sources */,
 				43BE57F5278BA50600491291 /* Frameworks */,
-				43BE57FC278BA50600491291 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7294,8 +7160,6 @@
 			buildPhases = (
 				7BEB64431C7345600092C02E /* Sources */,
 				7BEB64461C7345600092C02E /* Frameworks */,
-				7BEB64471C7345600092C02E /* Resources */,
-				E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -7312,8 +7176,6 @@
 			buildConfigurationList = E60138641C89EAE700DF9756 /* Build configuration list for PBXNativeTarget "MarketingUITests" */;
 			buildPhases = (
 				7BEB64501C7345990092C02E /* Sources */,
-				7BEB64531C7345990092C02E /* Frameworks */,
-				7BEB64541C7345990092C02E /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7332,8 +7194,6 @@
 				D39FA15B1A83E0EC00EE869C /* Sources */,
 				D39FA15C1A83E0EC00EE869C /* Frameworks */,
 				D39FA15D1A83E0EC00EE869C /* Resources */,
-				E6ECF2371C974E0600B0DC93 /* CopyFiles */,
-				0B21E8011E26C5D3000C8779 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -7354,7 +7214,6 @@
 			buildPhases = (
 				E69DB0701E97DEA9008A67E6 /* Sources */,
 				E69DB0711E97DEA9008A67E6 /* Frameworks */,
-				E69DB0731E97DEA9008A67E6 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7373,8 +7232,6 @@
 			buildConfigurationList = E69DB0921E97DEAA008A67E6 /* Build configuration list for PBXNativeTarget "SyncTelemetryTests" */;
 			buildPhases = (
 				E69DB0791E97DEA9008A67E6 /* Sources */,
-				E69DB07A1E97DEA9008A67E6 /* Frameworks */,
-				E69DB07B1E97DEA9008A67E6 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7392,8 +7249,6 @@
 			buildConfigurationList = E6F965381B2F1CF20034B023 /* Build configuration list for PBXNativeTarget "SharedTests" */;
 			buildPhases = (
 				E6F965081B2F1CF20034B023 /* Sources */,
-				E6F965091B2F1CF20034B023 /* Frameworks */,
-				E6F9650A1B2F1CF20034B023 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -7416,7 +7271,6 @@
 				F8324A022649A188007E4BFA /* Frameworks */,
 				F8324A032649A188007E4BFA /* Resources */,
 				43338D0B278F727600A23914 /* ShellScript */,
-				4368F85827966A500013419B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -7476,7 +7330,6 @@
 				F84B21CF1A090F8100AAB793 /* Sources */,
 				F84B21D01A090F8100AAB793 /* Frameworks */,
 				F84B21D11A090F8100AAB793 /* Resources */,
-				2F3444EC1AB2378200FD9731 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -7499,7 +7352,6 @@
 				F84B22451A0920C600AAB793 /* Sources */,
 				F84B22461A0920C600AAB793 /* Frameworks */,
 				F84B22471A0920C600AAB793 /* Resources */,
-				43EFA64127865E1C00400DF0 /* Embed Frameworks */,
 				43338D08278F725C00A23914 /* ShellScript */,
 			);
 			buildRules = (
@@ -7864,13 +7716,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		282731661ABC9BE700AA1954 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		288A2D841AB8B3260023ABC3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -7895,27 +7740,6 @@
 				D58A202F25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings in Resources */,
 				D59643EA25C9B8E000EAB8B9 /* HistoryPanel.strings in Resources */,
 				D59643E425C9B8E000EAB8B9 /* 3DTouchActions.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2FA435F91ABB83B4008031D1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2FA436031ABB83B4008031D1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2FCAE2181ABB51F800877008 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7945,111 +7769,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3B43E3CE1D95C48D00BBA9DB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3BFE4B051D342FB800DDF53F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F822279665220013419B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F844279669740013419B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F87527966E810013419B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43AFC0D3279678920039DDF4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43AFC0E927967C000039DDF4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE5784278BA4D900491291 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE579C278BA4EA00491291 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57B4278BA4EB00491291 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57CC278BA4EC00491291 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57E4278BA4ED00491291 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57FC278BA50600491291 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BEB64471C7345600092C02E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7BEB64541C7345990092C02E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D39FA15D1A83E0EC00EE869C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -8068,27 +7787,6 @@
 				EBB6CAA1214197DB00077CFA /* blobURL.html in Resources */,
 				D31EC05F1CC57ED80096F4AB /* localhostLoad.html in Resources */,
 				4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E69DB0731E97DEA9008A67E6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E69DB07B1E97DEA9008A67E6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E6F9650A1B2F1CF20034B023 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8319,22 +8017,6 @@
 			shellPath = /bin/sh;
 			shellScript = "rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean\n";
 		};
-		E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/MappaMundi.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/AStar.framework",
-			);
-			name = "Copy Carthage Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
 		E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -8348,22 +8030,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${INCLUDE_SETTINGS_BUNDLE}\" = \"YES\" ]\nthen\n    cp -r \"${PROJECT_DIR}/${TARGET_NAME}/Application/Settings.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\"\nfi\n";
-		};
-		E6EC6EFC1E5354E20067985D /* Copy Carthage Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/MappaMundi.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/AStar.framework",
-			);
-			name = "Copy Carthage Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
