@@ -100,5 +100,3 @@ Client/Assets/*.js.LICENSE.txt
 
 # Glean 
 sdk_generator.sh
-
-Client.xcodeproj/project.xcworkspace/contents.xcworkspacedata
