@@ -61,10 +61,11 @@ extension WallpaperType: Codable {
 }
 
 // MARK: - Collection types
+/// This enum will outline all types of different wallpaper collections we currently
+/// and may offer in the future. As such, there may be items here that are outdated.
 enum WallpaperCollectionType: String, Codable {
-    case firefoxDefault
+    case firefox
     case projectHouse
-    case seasonal
 }
 
 // MARK: - Wallpaper
@@ -90,7 +91,7 @@ struct Wallpaper: Codable, Equatable {
     }
 
     var isEligibleForDisplay: Bool {
-        if type == .defaultBackground || type == .themed(type: .firefoxDefault) { return true }
+        if type == .defaultBackground || type == .themed(type: .firefox) { return true }
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"

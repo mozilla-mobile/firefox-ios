@@ -7,18 +7,28 @@ import Foundation
 /// A internal model for projects with wallpapers that are timed.
 fileprivate struct WallpaperCollection {
     /// The names of the wallpaper assets to be included in the collection.
-    let names: [String]
+    let wallpaperFileNames: [String]
     let type: WallpaperType
     let expiryDate: String?
     /// The locales that the wallpapers will show up in. If empty,
     /// they will not show up anywhere.
     let locales: [String]?
 
-    init(names: [String],
+    /// Created a collection of wallpapers offered, with the option for it to be
+    /// region or time limited.
+    ///
+    /// - Parameters:
+    ///   - names: An array of the names of the wallpapers included in the collection.
+    ///   - type: The collection type.
+    ///   - expiryDate: An optional expiry date, as a string in format `yyyyMMdd`, after
+    ///         which the wallpapers in the array are no longer shown.
+    ///   - locales: An optional set of locales used to limit the regions to which
+    ///         wallpapers in the collection are shown.
+    init(wallpaperFileNames: [String],
          type: WallpaperType,
          expiryDate: String? = nil,
          locales: [String]? = nil) {
-        self.names = names
+        self.wallpaperFileNames = wallpaperFileNames
         self.type = type
         self.expiryDate = expiryDate
         self.locales = locales
@@ -41,13 +51,13 @@ struct WallpaperDataManager {
     private func themedWallpapers() -> [Wallpaper] {
         var wallpapers = [Wallpaper]()
 
-        buildAllWallpaperCollections().forEach { project in
-            wallpapers.append(contentsOf: project.names.compactMap { wallpaperName in
+        buildAllWallpaperCollections().forEach { collection in
+            wallpapers.append(contentsOf: collection.wallpaperFileNames.compactMap { wallpaperName in
 
                 let wallpaper = Wallpaper(named: wallpaperName,
-                                          ofType: project.type,
-                                          expiringOn: project.expiryDate,
-                                          limitedToLocale: project.locales)
+                                          ofType: collection.type,
+                                          expiringOn: collection.expiryDate,
+                                          limitedToLocale: collection.locales)
 
                 return wallpaper.isEligibleForDisplay ? wallpaper : nil
             })
@@ -57,12 +67,12 @@ struct WallpaperDataManager {
     }
 
     private func buildAllWallpaperCollections() -> [WallpaperCollection] {
-        return [WallpaperCollection(names: ["fxWallpaper1",
-                                            "fxWallpaper2"],
-                                    type: .themed(type: .firefoxDefault)),
-                WallpaperCollection(names: ["projectHouse1",
-                                            "projectHouse2",
-                                            "projectHouse3"],
+        return [WallpaperCollection(wallpaperFileNames: ["fxWallpaper1",
+                                                         "fxWallpaper2"],
+                                    type: .themed(type: .firefox)),
+                WallpaperCollection(wallpaperFileNames: ["projectHouse1",
+                                                         "projectHouse2",
+                                                         "projectHouse3"],
                                     type: .themed(type: .projectHouse),
                                     expiryDate: "20220430",
                                     locales: ["en_US", "es_US"]),

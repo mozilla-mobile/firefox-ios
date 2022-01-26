@@ -20,6 +20,21 @@ struct WallpaperManager {
         return retrieveCurrentWallpaperImage()
     }
 
+    var telemetryMetadata: [String: String] {
+        guard let wallpaper = retrieveCurrentWallpaperObject() else { return [:] }
+        var metadata = [String: String]()
+
+        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = wallpaper.name
+
+        if wallpaper.type == .defaultBackground {
+            metadata[TelemetryWrapper.EventExtraKey.wallpaperType.rawValue] = "default"
+        } else if case .themed(let type) = wallpaper.type {
+            metadata[TelemetryWrapper.EventExtraKey.wallpaperType.rawValue] = type.rawValue
+        }
+
+        return metadata
+    }
+
     var isUsingCustomWallpaper: Bool {
         // If no wallpaper was ever set, then we must be using the default wallpaper
         guard let currentWallpaper = retrieveCurrentWallpaperObject() else { return false }
@@ -153,7 +168,7 @@ struct WallpaperManager {
 
     private func retrieveCurrentWallpaperImage() -> UIImage? {
         let key = UIDevice.current.orientation.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
-        
+
         if let filePath = self.filePath(forKey: key),
            let fileData = FileManager.default.contents(atPath: filePath.path),
            let image = UIImage(data: fileData) {

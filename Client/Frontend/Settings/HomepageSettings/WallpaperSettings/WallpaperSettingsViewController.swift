@@ -214,6 +214,12 @@ class WallpaperSettingsViewController: UIViewController {
     // MARK: - Actions
     @objc func didChangeSwitchState(_ sender: UISwitch!) {
         wallpaperManager.switchWallpaperFromLogoEnabled = sender.isOn
+        let extras = [TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: sender.isOn ? "on" : "off"]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .change,
+                                     object: .wallpaperSettings,
+                                     value: .toggleLogoWallpaperButton,
+                                     extras: extras)
     }
 
 }
@@ -254,6 +260,12 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
         wallpaperManager.updateTo(index: indexPath.row)
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .wallpaperSettings,
+                                     value: .wallpaperSelected,
+                                     extras: wallpaperManager.telemetryMetadata)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

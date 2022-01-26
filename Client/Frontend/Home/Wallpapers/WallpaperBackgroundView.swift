@@ -79,6 +79,12 @@ class WallpaperBackgroundView: UIView {
     public func cycleWallpaper() {
         guard wallpaperManager.switchWallpaperFromLogoEnabled else { return }
         wallpaperManager.cycleWallpaper()
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .cycleWallpaperButton,
+                                     extras: wallpaperManager.telemetryMetadata)
     }
 
     public func updateImageForOrientationChange() {
