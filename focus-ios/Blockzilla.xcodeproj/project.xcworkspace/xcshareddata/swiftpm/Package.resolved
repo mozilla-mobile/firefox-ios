@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "54e6ef54b4e908d8eb2951fe9226c5f8392678c2",
-          "version": "42.2.0"
+          "revision": "e8fef341610de380b55cd5a057f9a3adf7cebb44",
+          "version": "43.0.2"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "f7401cb55128c4239db92f8ffecea317eecc3ffe",
-          "version": "87.2.0"
+          "revision": "4ca440b59654116dd4506f165d7876e9442f5b29",
+          "version": "90.0.0"
         }
       },
       {
@@ -44,15 +44,6 @@
           "branch": null,
           "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
           "version": "5.0.1"
-        }
-      },
-      {
-        "package": "SwiftProtobuf",
-        "repositoryURL": "https://github.com/apple/swift-protobuf",
-        "state": {
-          "branch": null,
-          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
-          "version": "1.18.0"
         }
       },
       {

@@ -222,11 +222,11 @@
 		F85F7A292655AD5800395515 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A282655AD5800395515 /* SnapKit */; };
 		F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2A2655AD5800395515 /* Fuzi */; };
 		F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = F85F7A2E2655AD5800395515 /* Telemetry */; };
-		F8B92FBE279EC73700183998 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8B92FBD279EC73700183998 /* Sentry */; };
 		F861799B2795D95E00CFD324 /* InternalExperimentsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */; };
 		F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */; };
 		F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799E27961F4200CFD324 /* InternalSettings.swift */; };
 		F86D00612790978700E83177 /* InternalSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86D00602790978700E83177 /* InternalSettingsView.swift */; };
+		F8B92FBE279EC73700183998 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8B92FBD279EC73700183998 /* Sentry */; };
 		F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */; };
 		F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */; };
 		F8DE0EC826CC887800A31419 /* SupportUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EC726CC887800A31419 /* SupportUtilsTest.swift */; };
@@ -5471,7 +5471,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 87.2.0;
+				minimumVersion = 90.0.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
