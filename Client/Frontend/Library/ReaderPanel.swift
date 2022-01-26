@@ -9,6 +9,21 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
+extension UITableView {
+    // setting tableHeaderView
+    func setAndLayoutTableHeaderView(header: UIView) {
+        tableHeaderView = header
+        header.setNeedsLayout()
+        header.layoutIfNeeded()
+        header.frame.size = header.systemLayoutSizeFitting(UIView.layoutFittingExpandedSize)
+        tableHeaderView = header
+        
+        DispatchQueue.main.async {
+            self.tableHeaderView?.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        }
+    }
+}
+
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
@@ -33,15 +48,12 @@ private struct ReadingListTableViewCellUX {
 
 private struct ReadingListPanelUX {
     // Welcome Screen
-    static let WelcomeScreenTopPadding: CGFloat = 16
+    static let WelcomeScreenTopPadding: CGFloat = 50
     static let WelcomeScreenPadding: CGFloat = 15
-
-    static let WelcomeScreenItemWidth = 220
-    static let WelcomeScreenItemOffset = -20
-
-    static let WelcomeScreenCircleWidth = 40
-    static let WelcomeScreenCircleOffset = 20
-    static let WelcomeScreenCircleSpacer = 10
+    static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
+    
+    static let WelcomeScreenMaxWidth: CGFloat = 400
+    static let WelcomeScreenItemImageWidth: CGFloat = 20
 }
 
 class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
@@ -71,7 +83,7 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
     let readStatusImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
     }
-    let titleLabel: UILabel = .build { label in 
+    let titleLabel: UILabel = .build { label in
         label.numberOfLines = 2
         label.font = DynamicFontHelper.defaultHelper.DeviceFont
     }
@@ -232,7 +244,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
-                tableView.tableHeaderView = emptyStateView
+                tableView.setAndLayoutTableHeaderView(header: emptyStateView)
             } else {
                 if prevNumberOfRecords == 0 {
                     tableView.isScrollEnabled = true
@@ -257,6 +269,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             label.textColor = .label
         }
         let readerModeImageView: UIImageView = .build { imageView in
+            imageView.contentMode = .scaleAspectFit
             imageView.image = UIImage(named: "ReaderModeCircle")
         }
         let readingListLabel: UILabel = .build { label in
@@ -266,29 +279,47 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             label.textColor = .label
         }
         let readingListImageView: UIImageView = .build { imageView in
+            imageView.contentMode = .scaleAspectFit
             imageView.image = UIImage(named: "AddToReadingListCircle")
         }
-        
-        view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
+        let emptyStateViewWrapper: UIView = .build { view in
+            view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
+        }
+        view.addSubviews(emptyStateViewWrapper)
         
         NSLayoutConstraint.activate([
-            welcomeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(UIDevice.current.userInterfaceIdiom == .pad ? 212 : 48)),
-            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: CGFloat(UIDevice.current.orientation.isLandscape ? 16 : 150)),
-            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)),
+            // title
+            welcomeLabel.topAnchor.constraint(equalTo: emptyStateViewWrapper.topAnchor),
+            welcomeLabel.leadingAnchor.constraint(equalTo: emptyStateViewWrapper.leadingAnchor),
+            welcomeLabel.trailingAnchor.constraint(equalTo: emptyStateViewWrapper.trailingAnchor),
             
-            readerModeLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: CGFloat(ReadingListPanelUX.WelcomeScreenPadding)),
+            // first row
+            readerModeLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: ReadingListPanelUX.WelcomeScreenPadding),
             readerModeLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            readerModeLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth)),
+            readerModeLabel.trailingAnchor.constraint(equalTo: readerModeImageView.leadingAnchor, constant: -ReadingListPanelUX.WelcomeScreenPadding),
             
             readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
             readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+            readerModeImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
             
-            readingListLabel.topAnchor.constraint(equalTo: readerModeLabel.bottomAnchor, constant: CGFloat(ReadingListPanelUX.WelcomeScreenPadding)),
+            // second row
+            readingListLabel.topAnchor.constraint(equalTo: readerModeLabel.bottomAnchor, constant: ReadingListPanelUX.WelcomeScreenPadding),
             readingListLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            readingListLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth)),
+            readingListLabel.trailingAnchor.constraint(equalTo: readingListImageView.leadingAnchor, constant: -ReadingListPanelUX.WelcomeScreenPadding),
             
             readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
-            readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
+            readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+            readingListImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
+            
+            // position wrapper
+            emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding),
+            emptyStateViewWrapper.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
+            emptyStateViewWrapper.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
+            
+            // overall positioning of emptyStateViewWrapper
+            emptyStateViewWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth),
+            emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyStateViewWrapper.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 
