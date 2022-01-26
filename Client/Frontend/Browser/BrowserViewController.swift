@@ -355,11 +355,74 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification),
+                                               name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification),
+                                               name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification),
+                                               name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMenuBadgeUpdate),
+                                               name: .FirefoxAccountStateChange, object: nil)
+
         KeyboardHelper.defaultHelper.addDelegate(self)
 
+        addSubviews()
+
+        // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work,
+        // thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need
+        // to make them "persistent" e.g. by being stored in BVC
+        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { () -> Bool in
+            if let pasteboardContents = UIPasteboard.general.string {
+                self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
+                return true
+            }
+            return false
+        })
+        pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
+            if let pasteboardContents = UIPasteboard.general.string {
+                // Enter overlay mode and make the search controller appear.
+                self.urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+
+                return true
+            }
+            return false
+        })
+        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { () -> Bool in
+            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
+                UIPasteboard.general.url = url
+            }
+            return true
+        })
+
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
+        clipboardBarDisplayHandler?.delegate = self
+
+        scrollController.urlBar = urlBar
+        scrollController.readerModeBar = readerModeBar
+        scrollController.header = header
+        scrollController.footer = footer
+        scrollController.snackBars = alertStackView
+
+        updateToolbarStateForTraitCollection(traitCollection)
+
+        setupConstraints()
+
+        // Setup UIDropInteraction to handle dragging and dropping
+        // links into the view from other apps.
+        let dropInteraction = UIDropInteraction(delegate: self)
+        view.addInteraction(dropInteraction)
+
+        if !NightModeHelper.isActivated(profile.prefs) && LegacyThemeManager.instance.systemThemeIsOn {
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+        }
+
+        // Setup chron tabs A/B test
+        chronTabsUserResearch = ChronTabsUserResearch()
+        searchTelemetry = SearchTelemetry()
+    }
+
+    func addSubviews() {
         webViewContainerBackdrop = UIView()
         webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         webViewContainerBackdrop.alpha = 0
@@ -387,64 +450,11 @@ class BrowserViewController: UIViewController {
         urlBarTopTabsContainer.addSubview(topTabsContainer)
         view.addSubview(header)
 
-        // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
-        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { () -> Bool in
-            if let pasteboardContents = UIPasteboard.general.string {
-                self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
-                return true
-            }
-            return false
-        })
-        pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
-            if let pasteboardContents = UIPasteboard.general.string {
-                // Enter overlay mode and make the search controller appear.
-                self.urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
-
-                return true
-            }
-            return false
-        })
-        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { () -> Bool in
-            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
-                UIPasteboard.general.url = url
-            }
-            return true
-        })
-
         view.addSubview(alertStackView)
         footer = UIView()
         view.addSubview(footer)
         alertStackView.axis = .vertical
         alertStackView.alignment = .center
-
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
-        clipboardBarDisplayHandler?.delegate = self
-
-        scrollController.urlBar = urlBar
-        scrollController.readerModeBar = readerModeBar
-        scrollController.header = header
-        scrollController.footer = footer
-        scrollController.snackBars = alertStackView
-
-        self.updateToolbarStateForTraitCollection(self.traitCollection)
-
-        setupConstraints()
-
-        // Setup UIDropInteraction to handle dragging and dropping
-        // links into the view from other apps.
-        let dropInteraction = UIDropInteraction(delegate: self)
-        view.addInteraction(dropInteraction)
-
-        if !NightModeHelper.isActivated(profile.prefs) && LegacyThemeManager.instance.systemThemeIsOn {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-        }
-
-        NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
-
-        // Setup chron tabs A/B test
-        chronTabsUserResearch = ChronTabsUserResearch()
-        searchTelemetry = SearchTelemetry()
     }
 
     override func viewWillAppear(_ animated: Bool) {
