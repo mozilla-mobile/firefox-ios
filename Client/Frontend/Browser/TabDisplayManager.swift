@@ -733,6 +733,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+
         let forbiddenOperation = UICollectionViewDropProposal(operation: .forbidden)
         guard let indexPath = destinationIndexPath else {
             return forbiddenOperation
@@ -740,19 +741,15 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 
         let section = TabDisplaySection(rawValue: indexPath.section)
         guard tabDisplayType == .TopTabTray || section == .regularTabs else {
-            print("Laurie - FORBIDDEN TYPE")
-            return forbiddenOperation
-        }
-
-        guard let localDragSession = session.localDragSession,
-              let item = localDragSession.items.first,
-              let localObject = item.localObject as? Tab
-        else {
             return forbiddenOperation
         }
 
         // Forbidden if collection view isn't in the same mode as drop session
-        guard localObject.isPrivate == self.isPrivate else {
+        guard let localDragSession = session.localDragSession,
+              let item = localDragSession.items.first,
+              let localObject = item.localObject as? Tab,
+              localObject.isPrivate == self.isPrivate
+        else {
             return forbiddenOperation
         }
 
