@@ -512,7 +512,7 @@ extension GridTabViewController: TabPeekDelegate {
     }
 
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {
-        delegate?.tabTrayRequestsPresentationOf(viewController)
+        present(viewController, animated: true, completion: nil)
     }
 }
 
