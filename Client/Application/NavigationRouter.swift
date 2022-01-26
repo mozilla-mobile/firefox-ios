@@ -344,6 +344,8 @@ func == (lhs: NavigationPath, rhs: NavigationPath) -> Bool {
         return lhs.query == rhs.query
     case let (.deepLink(lhs), .deepLink(rhs)):
         return lhs == rhs
+    case (.closePrivateTabs, .closePrivateTabs):
+        return true
     default:
         return false
     }
