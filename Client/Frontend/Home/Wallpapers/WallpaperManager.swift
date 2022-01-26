@@ -89,7 +89,7 @@ struct WallpaperManager {
     // MARK: - Wallpaper storage
     private func updateSelectedWallpaper(to wallpaper: Wallpaper) {
         store(wallpaper: wallpaper)
-        store(image: wallpaper.image) { result in
+        store(image: wallpaper.image, landscapeImage: wallpaper.landscapeImage) { result in
             switch result {
             case .success(()):
                 NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
@@ -106,21 +106,32 @@ struct WallpaperManager {
         }
     }
 
-    private func store(image: UIImage?, completionHandler: @escaping (Result<Void, Error>) -> Void) {
-        guard let filePath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage) else { return }
+    private func store(image: UIImage?,
+                       landscapeImage: UIImage?,
+                       completionHandler: @escaping (Result<Void, Error>) -> Void
+    ) {
+        guard let filePathPortrait = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage),
+              let filePathLandscape = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape)
+        else { return }
 
         if let image = image,
-           let pngRepresentation = image.pngData() {
+           let landscapeImage = landscapeImage,
+           let portraitPngRepresentation = image.pngData(),
+           let landscapePngRepresentation = landscapeImage.pngData() {
             do {
-                try pngRepresentation.write(to: filePath, options: .atomic)
+                try portraitPngRepresentation.write(to: filePathPortrait, options: .atomic)
+                try landscapePngRepresentation.write(to: filePathLandscape, options: .atomic)
                 completionHandler(.success(()))
             } catch let error {
                 completionHandler(.failure(error))
             }
 
         } else {
+            // If we're passing in `nil` for the image, we need to remove the currently
+            // stored image so that it's not showing up.
             do {
-                try FileManager.default.removeItem(at: filePath)
+                try FileManager.default.removeItem(at: filePathPortrait)
+                try FileManager.default.removeItem(at: filePathLandscape)
                 completionHandler(.success(()))
             } catch {
                 completionHandler(.failure(error))
@@ -128,16 +139,7 @@ struct WallpaperManager {
         }
     }
 
-    private func filePath(forKey key: String) -> URL? {
-        let fileManager = FileManager.default
-        guard let documentURL = fileManager.urls(
-            for: .documentDirectory,
-               in: FileManager.SearchPathDomainMask.userDomainMask).first
-        else { return nil }
-
-        return documentURL.appendingPathComponent(key)
-    }
-
+    // MARK: - Wallpaper retrieval
     private func retrieveCurrentWallpaperObject() -> Wallpaper? {
         if let savedWallpaper = userDefaults.object(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject) as? Data {
             let decoder = JSONDecoder()
@@ -150,12 +152,24 @@ struct WallpaperManager {
     }
 
     private func retrieveCurrentWallpaperImage() -> UIImage? {
-        if let filePath = self.filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage),
+        let key = UIWindow.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
+        if let filePath = self.filePath(forKey: key),
            let fileData = FileManager.default.contents(atPath: filePath.path),
            let image = UIImage(data: fileData) {
             return image
         }
 
         return nil
+    }
+
+    // MARK: - Helper methods
+    private func filePath(forKey key: String) -> URL? {
+        let fileManager = FileManager.default
+        guard let documentURL = fileManager.urls(
+            for: .documentDirectory,
+               in: FileManager.SearchPathDomainMask.userDomainMask).first
+        else { return nil }
+
+        return documentURL.appendingPathComponent(key)
     }
 }

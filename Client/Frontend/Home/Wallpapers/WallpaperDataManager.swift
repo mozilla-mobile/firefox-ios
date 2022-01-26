@@ -49,7 +49,7 @@ struct WallpaperDataManager {
                                           expiringOn: project.expiryDate,
                                           limitedToLocale: project.locales)
 
-                return wallpaper.isElibibleForDisplay ? wallpaper : nil
+                return wallpaper.isEligibleForDisplay ? wallpaper : nil
             })
         }
 
@@ -60,9 +60,9 @@ struct WallpaperDataManager {
         return [WallpaperCollection(names: ["fxWallpaper1",
                                             "fxWallpaper2"],
                                     type: .themed(type: .firefoxDefault)),
-                WallpaperCollection(names: ["themedWallpaper1",
-                                            "themedWallpaper2",
-                                            "themedWallpaper3"],
+                WallpaperCollection(names: ["projectHouse1",
+                                            "projectHouse2",
+                                            "projectHouse3"],
                                     type: .themed(type: .projectHouse),
                                     expiryDate: "20220430",
                                     locales: ["en_US", "es_US"]),

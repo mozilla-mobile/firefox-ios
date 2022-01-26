@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 // MARK: - Wallpaper Type
 enum WallpaperType {
@@ -76,13 +77,19 @@ struct Wallpaper: Codable, Equatable {
 
     var image: UIImage? {
         var fileName = name
-        if UIWindow.isLandscape { fileName += "_ls" }
         if UIDevice.current.userInterfaceIdiom == .pad { fileName += "_pad" }
 
         return UIImage(named: fileName)
     }
 
-    var isElibibleForDisplay: Bool {
+    var landscapeImage: UIImage? {
+        var fileName = name + "_ls"
+        if UIDevice.current.userInterfaceIdiom == .pad { fileName += "_pad" }
+
+        return UIImage(named: fileName)
+    }
+
+    var isEligibleForDisplay: Bool {
         if type == .defaultBackground || type == .themed(type: .firefoxDefault) { return true }
 
         let formatter = DateFormatter()
