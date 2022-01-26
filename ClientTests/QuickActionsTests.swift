@@ -31,47 +31,36 @@ class QuickActionsTest: XCTestCase {
         quickActions = nil
     }
 
-    func testNewTabShortcut() {
-        let expectation = expectation(description: "New tab is opened")
-        browserViewController.handleOpenNewTab = {
-            XCTAssertTrue(self.browserViewController.openedUrlFromExternalSource,
-                          "openedUrlFromExternalSource needs to be true for start at home feature")
-            expectation.fulfill()
-        }
-
+    func testNewTabShortcut_externalSourceIsTrue() {
         let shortcutItem = UIApplicationShortcutItem(type: ShortcutType.newTab.rawValue, localizedTitle: "")
-        quickActions.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
-        waitForExpectations(timeout: 5, handler: nil)
+        handleShortcutAndWait(shortcutItem: shortcutItem)
     }
 
-    func testNewPrivateTabShortcut() {
-        let expectation = expectation(description: "New private tab is opened")
-        browserViewController.handleOpenNewTab = {
-            XCTAssertTrue(self.browserViewController.openedUrlFromExternalSource,
-                          "openedUrlFromExternalSource needs to be true for start at home feature")
-            expectation.fulfill()
-        }
-
+    func testNewPrivateTabShortcut_externalSourceIsTrue() {
         let shortcutItem = UIApplicationShortcutItem(type: ShortcutType.newPrivateTab.rawValue, localizedTitle: "")
-        quickActions.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
-        waitForExpectations(timeout: 5, handler: nil)
+        handleShortcutAndWait(shortcutItem: shortcutItem)
     }
 
-    func testOpenBookmark() {
-        let expectation = expectation(description: "Last bookmark is opened")
-        browserViewController.handleOpenURL = {
-            XCTAssertTrue(self.browserViewController.openedUrlFromExternalSource,
-                          "openedUrlFromExternalSource needs to be true for start at home feature")
-            expectation.fulfill()
-        }
-
+    func testOpenBookmarkShortcut_externalSourceIsTrue() {
         let shortcutItem = BookmarkShortcutItem()
-        quickActions.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
-        waitForExpectations(timeout: 5, handler: nil)
+        handleShortcutAndWait(shortcutItem: shortcutItem)
     }
 }
 
 // MARK: - Helper methods
+
+private extension QuickActionsTest {
+    func handleShortcutAndWait(shortcutItem: UIApplicationShortcutItem) {
+        let expectation = expectation(description: "Completion URL of SpyBrowserViewController should be called")
+        browserViewController.completionURL = {
+            XCTAssertTrue(self.browserViewController.openedUrlFromExternalSource, "openedUrlFromExternalSource needs to be true for start at home feature")
+            expectation.fulfill()
+        }
+
+        quickActions.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+}
 
 private class BookmarkShortcutItem: UIApplicationShortcutItem {
     convenience init() {
@@ -84,16 +73,15 @@ private class BookmarkShortcutItem: UIApplicationShortcutItem {
 }
 
 private class SpyBrowserViewController: BrowserViewController {
-    var handleOpenNewTab: (() -> Void)?
-    var handleOpenURL: (() -> Void)?
+    var completionURL: (() -> Void)?
 
     override func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         super.openBlankNewTab(focusLocationField: focusLocationField, isPrivate: isPrivate, searchFor: searchText)
-        handleOpenNewTab?()
+        completionURL?()
     }
 
     override func switchToTabForURLOrOpen(_ url: URL, isPrivate: Bool = false) {
         super.switchToTabForURLOrOpen(url, isPrivate: isPrivate)
-        handleOpenURL?()
+        completionURL?()
     }
 }
