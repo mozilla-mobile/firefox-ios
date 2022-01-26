@@ -5,11 +5,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 #
-# Bootstrap Carthage dependencies.
-#
-# Use the --force option to force a rebuild of the dependencies.
+# Use the --force option to force a re-build locales.
 # Use the --importLocales option to fetch and update locales only
-#
 
 getLocale() {
   echo "Getting locale..."
@@ -38,11 +35,5 @@ if [ "$1" == "--importLocales" ]; then
   exit 0
 fi
 
-# Install Node.js dependencies and build user scripts
-npm install
-npm run build
-
-# Clone shavar prod list
-rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout 3910527004252af3aa9dd701566a2cb3b78e5c3a
-
-(cd content-blocker-lib-ios/ContentBlockerGen && swift run)
+# Run and update content blocker
+./content_blocker_update.sh
