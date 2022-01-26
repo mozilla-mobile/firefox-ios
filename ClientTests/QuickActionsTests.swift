@@ -50,6 +50,7 @@ class QuickActionsTest: XCTestCase {
 // MARK: - Helper methods
 
 private extension QuickActionsTest {
+    /// Wait for openedUrlFromExternalSource to be set true, testing the start at home edge case
     func handleShortcutAndWait(shortcutItem: UIApplicationShortcutItem) {
         let expectation = expectation(description: "Completion URL of SpyBrowserViewController should be called")
         browserViewController.completionURL = {
