@@ -152,7 +152,8 @@ struct WallpaperManager {
     }
 
     private func retrieveCurrentWallpaperImage() -> UIImage? {
-        let key = UIWindow.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
+        let key = UIDevice.current.orientation.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
+        
         if let filePath = self.filePath(forKey: key),
            let fileData = FileManager.default.contents(atPath: filePath.path),
            let image = UIImage(data: fileData) {

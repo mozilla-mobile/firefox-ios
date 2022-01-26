@@ -428,6 +428,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
         })
+
+        wallpaperView.updateImageForOrientationChange()
     }
 
     // MARK: - Helpers

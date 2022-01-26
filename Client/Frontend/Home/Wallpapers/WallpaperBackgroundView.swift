@@ -81,6 +81,10 @@ class WallpaperBackgroundView: UIView {
         wallpaperManager.cycleWallpaper()
     }
 
+    public func updateImageForOrientationChange() {
+        updateImageTo(wallpaperManager.currentWallpaper)
+    }
+
     private func updateImageTo(_ image: UIImage?) {
         guard let image = image else {
             pictureView.image = nil
