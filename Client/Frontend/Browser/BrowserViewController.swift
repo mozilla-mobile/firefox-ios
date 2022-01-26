@@ -1147,27 +1147,17 @@ class BrowserViewController: UIViewController {
         topTabsViewController?.applyUIMode(isPrivate: isPrivate)
     }
 
-    func switchToTabForURLOrOpen(_ url: URL, isPrivate: Bool = false) {
+    func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
         guard !isCrashAlertShowing else {
             urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
             return
         }
         popToBVC()
         openedUrlFromExternalSource = true
-        if let tab = tabManager.getTabForURL(url) {
-            tabManager.selectTab(tab)
-        } else {
-            openURLInNewTab(url, isPrivate: isPrivate)
-        }
-    }
 
-    func switchToTabForURLOrOpen(_ url: URL, uuid: String,  isPrivate: Bool = false) {
-        guard !isCrashAlertShowing else {
-            urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
-            return
-        }
-        popToBVC()
-        if let tab = tabManager.getTabForUUID(uuid: uuid) {
+        if let uuid = uuid, let tab = tabManager.getTabForUUID(uuid: uuid) {
+            tabManager.selectTab(tab)
+        } else if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)

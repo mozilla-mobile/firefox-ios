@@ -80,8 +80,8 @@ private class SpyBrowserViewController: BrowserViewController {
         completionURL?()
     }
 
-    override func switchToTabForURLOrOpen(_ url: URL, isPrivate: Bool = false) {
-        super.switchToTabForURLOrOpen(url, isPrivate: isPrivate)
+    override func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
+        super.switchToTabForURLOrOpen(url, uuid: uuid, isPrivate: isPrivate)
         completionURL?()
     }
 }
