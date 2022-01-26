@@ -109,6 +109,30 @@ workflows:
     - cache-push@2.2:
         is_always_run: true
     - slack@3.1:
+        run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | eq "Show_Warnings" }}'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
+            Branch | ${BITRISE_GIT_BRANCH}
+            Warnings-in-code | ${SHOW_WARNING_COUNT}
+            Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
+        - buttons: |+
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    - slack@3.1:
+        run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | ne "Show_Warnings" }}'
         inputs:
         - title: ''
         - author_name: ''
@@ -139,6 +163,32 @@ workflows:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
         - simulator_device: "$IOS_DEVICE"
+  Detect_warnings:
+    steps:
+    - script@1.1:
+        title: Detect number of warnings
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
+
+            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH all)
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
+
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+
+            STR=$COUNT_XCUI
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+        is_always_run: true
   NewXcodeVersions:
     steps:
     - script@1:
@@ -539,6 +589,29 @@ workflows:
 
   RunUnitTests:
     steps:
+    - script@1.1:
+        title: Detect number of warnings
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
+
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH unit-test)
+            envman add --key SHOW_WARNING_COUNT --value "$COUNT"
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+
+            STR=$COUNT
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+        is_always_run: true
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
         inputs:
@@ -557,9 +630,10 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
-    - 5_deploy_and_slack
     after_run:
     - RunSmokeXCUITests
+    - Detect_warnings
+    - 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
@@ -996,14 +1070,14 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '96.0'
+    BITRISE_RELEASE_VERSION: '97.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '96.0'
+    BITRISE_BETA_VERSION: '97.0'
 trigger_map:
 - push_branch: main
   workflow: RunUnitTests
-- push_branch: v96.0
+- push_branch: v97.0
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
   workflow: RunUnitTests

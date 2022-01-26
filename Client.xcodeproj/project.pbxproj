@@ -352,7 +352,7 @@
 		43AFC0F727967C8A0039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
 		43AFC117279699530039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
 		43AFC118279699530039DDF4 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43AFC11927969A820039DDF4 /* Fuzi.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43AFC11927969A820039DDF4 /* Fuzi.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };	
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
 		43BE577E278BA4D900491291 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5777278BA4D900491291 /* Logins */; };
@@ -464,6 +464,7 @@
 		7BF5A1EE1B429B3100EA9DD8 /* SyncCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */; };
+		8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07910E278F62F2005529CB /* AdjustHelper.swift */; };
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
 		8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */; };
@@ -2703,6 +2704,7 @@
 		890045908C7B76449D0FEA78 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		89AE47D2B80AF49BFB9763BA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistoryHelper.swift; sourceTree = "<group>"; };
+		8A07910E278F62F2005529CB /* AdjustHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustHelper.swift; sourceTree = "<group>"; };
 		8A0F46E89E106C66C6C29F07 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultOnlyTestList.json; sourceTree = "<group>"; };
 		8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleTests.swift; sourceTree = "<group>"; };
@@ -3822,7 +3824,6 @@
 		D697400187A0D99761754466 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Intro.strings; sourceTree = "<group>"; };
 		D69A452E9E1F4E01F1AE258B /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		D6A54DEA878BDF945AF2AF7E /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Menu.strings; sourceTree = "<group>"; };
-		D6CC457ABDA49EA7C1606245 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D70D49E5AF0B7105E447885B /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		D76D487D985DD7579B5F0861 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/Intro.strings; sourceTree = "<group>"; };
 		D7794F8C9ABD98859F3219D9 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = "su.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -5118,6 +5119,7 @@
 		39A359BD1BFCCE7B006B9E87 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				8A07910E278F62F2005529CB /* AdjustHelper.swift */,
 				E65075531E37F6FC006961AC /* DynamicFontHelper.swift */,
 				E65075601E37F77D006961AC /* MenuHelper.swift */,
 				39455F761FC83F430088A22C /* TabEventHandler.swift */,
@@ -8671,6 +8673,7 @@
 				C82A94F2269F68ED00624AA7 /* FeatureFlagsManager.swift in Sources */,
 				3BB50E111D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift in Sources */,
 				048B4C8624A53F3E001B56E8 /* TodayUX.swift in Sources */,
+				8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */,
 				43AB6FA525DC53D30016B015 /* ASLibraryCell.swift in Sources */,
 				1DF4266E251BC46D0086386A /* FaviconFetcher+Non-Bundled.swift in Sources */,
 				43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */,
@@ -8714,7 +8717,6 @@
 				43AB6FA625DC53D30016B015 /* LibraryShortcutView.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
 				23F2C36A244E463C00FA4496 /* TabTrayV2ViewModel.swift in Sources */,
-				43AB6FA725DC53D30016B015 /* PanelDataObservers.swift in Sources */,
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
 				DA3A4FE9254A781A00C4A9C9 /* TabTableViewHeader.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
@@ -10156,7 +10158,6 @@
 				2BAB4A40A318F5A577488909 /* mr */,
 				5F684EB59A149BD03A1E5247 /* sq */,
 				E24446F28B659E7C536D9286 /* eu */,
-				D6CC457ABDA49EA7C1606245 /* en */,
 				95A247C39DF0864A47E736D0 /* en-CA */,
 				93F246329F96429FDB2B5A76 /* co */,
 				8EBF42BE87F80F323CFFDB68 /* uk */,
@@ -12786,6 +12787,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)"
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -13071,6 +13075,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)"
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -13319,6 +13326,9 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)"
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
@@ -13790,6 +13800,9 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)"
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;

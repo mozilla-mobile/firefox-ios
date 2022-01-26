@@ -39,18 +39,19 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         var actions = [UIPreviewActionItem]()
 
         let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
+        let isHomeTab = self.tab?.isFxHomeTab ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
-            if !self.isBookmarked {
+            if !self.isBookmarked && !isHomeTab {
                 actions.append(UIPreviewAction(title: .TabPeekAddToBookmarks, style: .default) { [weak self] previewAction, viewController in
                     guard let wself = self, let tab = wself.tab else { return }
                     wself.delegate?.tabPeekDidAddBookmark(tab)
-                    })
+                })
             }
             if self.hasRemoteClients {
                 actions.append(UIPreviewAction(title: .SendToDeviceTitle, style: .default) { [weak self] previewAction, viewController in
                     guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
-                    })
+                })
             }
             // only add the copy URL action if we don't already have 3 items in our list
             // as we are only allowed 4 in total and we always want to display close tab
@@ -65,7 +66,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         actions.append(UIPreviewAction(title: .TabPeekCloseTab, style: .destructive) { [weak self] previewAction, viewController in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)
-            })
+        })
 
         return actions
     }()
@@ -74,20 +75,21 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         var actions = [UIAction]()
 
         let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
+        let isHomeTab = self.tab?.isFxHomeTab ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
-            if !self.isBookmarked {
+            if !self.isBookmarked && !isHomeTab {
                 actions.append(UIAction(title: .TabPeekAddToBookmarks, image: UIImage.templateImageNamed("menu-Bookmark"), identifier: nil) { [weak self] _ in
                     guard let wself = self, let tab = wself.tab else { return }
                     wself.delegate?.tabPeekDidAddBookmark(tab)
-                    })
+                })
             }
             if self.hasRemoteClients {
                 actions.append(UIAction(title: .SendToDeviceTitle, image: UIImage.templateImageNamed("menu-Send"), identifier: nil) { [weak self] _ in
                     guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
-                    })
+                })
             }
-            actions.append(UIAction(title: .TabPeekCopyUrl, image: UIImage.templateImageNamed("menu-Copy-Link"), identifier: nil) {[weak self] _ in
+            actions.append(UIAction(title: .TabPeekCopyUrl, image: UIImage.templateImageNamed("menu-Copy-Link"), identifier: nil) { [weak self] _ in
                 guard let wself = self, let url = wself.tab?.canonicalURL else { return }
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
@@ -96,7 +98,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         actions.append(UIAction(title: .TabPeekCloseTab, image: UIImage.templateImageNamed("menu-CloseTabs"), identifier: nil) { [weak self] _ in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)
-            })
+        })
 
         return UIMenu(title: "", children: actions)
     }
@@ -124,9 +126,11 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         }
         // if there is no screenshot, load the URL in a web page
         // otherwise just show the screenshot
-        setupWebView(tab?.webView)
-        guard let screenshot = tab?.screenshot else { return }
-        setupWithScreenshot(screenshot)
+        if let screenshot = tab?.screenshot {
+            setupWithScreenshot(screenshot)
+        } else {
+            setupWebView(tab?.webView)
+        }
     }
 
     fileprivate func setupWithScreenshot(_ screenshot: UIImage) {

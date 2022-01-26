@@ -190,23 +190,23 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testJumpBackIn() throws {
         throw XCTSkip("Disabled failing in BR - investigating") 
-        navigator.openURL(path(forTestPage: exampleUrl))
-        waitUntilPageLoad()
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-        navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
-        // Swipe up needed to see the content below the Jump Back In section
-        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].swipeUp()
-        XCTAssertTrue(app.cells.collectionViews.staticTexts["Example Domain"].exists)
-        // Swipe down to be able to click on Show all option
-        app.buttons["More"].swipeDown()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
-        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
-        // Tab tray is open with recently open tab
-        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
+//        navigator.openURL(path(forTestPage: exampleUrl))
+//        waitUntilPageLoad()
+//        navigator.goto(TabTray)
+//        navigator.performAction(Action.OpenNewTabFromTabTray)
+//        navigator.nowAt(NewTabScreen)
+//        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+//        navigator.performAction(Action.CloseURLBarOpen)
+//        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+//        // Swipe up needed to see the content below the Jump Back In section
+//        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].swipeUp()
+//        XCTAssertTrue(app.cells.collectionViews.staticTexts["Example Domain"].exists)
+//        // Swipe down to be able to click on Show all option
+//        app.buttons["More"].swipeDown()
+//        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn], timeout: 5)
+//        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
+//        // Tab tray is open with recently open tab
+//        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
     }
 
     func testCustomizeHomepage() {

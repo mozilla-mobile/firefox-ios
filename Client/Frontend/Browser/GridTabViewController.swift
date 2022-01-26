@@ -50,6 +50,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     // whereever we need to focus the user's attention.
     var tabToFocus: Tab? = nil
 
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
@@ -59,6 +63,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     fileprivate lazy var tabLayoutDelegate: TabLayoutDelegate = {
         let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager, traitCollection: self.traitCollection, scrollView: self.collectionView)
         delegate.tabSelectionDelegate = self
+        delegate.tabPeekDelegate = self
         return delegate
     }()
 
@@ -190,10 +195,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
-        }
-
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: view)
         }
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
@@ -501,44 +502,17 @@ extension GridTabViewController: TabPeekDelegate {
     }
 
     func tabPeekDidCloseTab(_ tab: Tab) {
+        // Tab peek is only available on regular tabs
         if let index = tabDisplayManager.dataStore.index(of: tab),
-            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: 0)) as? TabCell {
+            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
+
             cell.close()
+            NotificationCenter.default.post(name: .TabClosed, object: nil)
         }
     }
 
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {
         delegate?.tabTrayRequestsPresentationOf(viewController)
-    }
-}
-
-extension GridTabViewController: UIViewControllerPreviewingDelegate {
-
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-
-        guard let collectionView = collectionView else { return nil }
-        let convertedLocation = self.view.convert(location, to: collectionView)
-
-        guard let indexPath = collectionView.indexPathForItem(at: convertedLocation),
-            let cell = collectionView.cellForItem(at: indexPath) else { return nil }
-
-        guard let tab = tabDisplayManager.dataStore.at(indexPath.row) else {
-            return nil
-        }
-        let tabVC = TabPeekViewController(tab: tab, delegate: self)
-        if let browserProfile = profile as? BrowserProfile {
-            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: self)
-        }
-        previewingContext.sourceRect = self.view.convert(cell.frame, from: collectionView)
-
-        return tabVC
-    }
-
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
-        tabManager.selectTab(tpvc.tab)
-        navigationController?.popViewController(animated: true)
-        delegate?.tabTrayDidDismiss(self)
     }
 }
 
@@ -628,6 +602,7 @@ extension GridTabViewController {
 
 fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
+    weak var tabPeekDelegate: TabPeekDelegate?
     var searchHeightConstraint: Constraint?
     let scrollView: UIScrollView
     var lastYOffset: CGFloat = 0
@@ -694,7 +669,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
+        let cellWidth = floor((collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .groupedTabs:
             let width = collectionView.frame.size.width
@@ -731,7 +706,12 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
+        switch TabDisplaySection(rawValue: section) {
+        case .regularTabs, .none:
+            return UIEdgeInsets(top: GridTabTrayControllerUX.Margin, left: GridTabTrayControllerUX.Margin + collectionView.safeAreaInsets.left, bottom: GridTabTrayControllerUX.Margin, right: GridTabTrayControllerUX.Margin + collectionView.safeAreaInsets.right)
+        default:
+            return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
+        }
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -740,6 +720,20 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard TabDisplaySection(rawValue: indexPath.section) == .regularTabs,
+              let tab = tabDisplayManager.dataStore.at(indexPath.row)
+        else { return nil }
+
+        let tabVC = TabPeekViewController(tab: tab, delegate: tabPeekDelegate)
+        if let browserProfile = tabDisplayManager.profile as? BrowserProfile,
+           let pickerDelegate = tabPeekDelegate as? DevicePickerViewControllerDelegate {
+            tabVC.setState(withProfile: browserProfile, clientPickerDelegate: pickerDelegate)
+        }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: { return tabVC }, actionProvider: tabVC.contextActions(defaultActions:))
     }
 }
 

@@ -31,6 +31,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
+        
+        backgroundView = UIView()
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
@@ -52,7 +54,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }
 
@@ -97,6 +99,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         // Set an empty footer to prevent empty cells from appearing in the list.
         table.tableFooterView = UIView()
+        
+        if #available(iOS 15.0, *) {
+            table.sectionHeaderTopPadding = 0
+        }
     }
 
     private override init(nibName: String?, bundle: Bundle?) {
@@ -139,12 +145,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         tableView.setEditing(false, animated: false)
-        coordinator.animate(alongsideTransition: { context in
-            //The AS context menu does not behave correctly. Dismiss it when rotating.
-            if let _ = self.presentedViewController as? PhotonActionSheet {
-                self.presentedViewController?.dismiss(animated: true, completion: nil)
-            }
-        }, completion: nil)
+        // The AS context menu does not behave correctly. Dismiss it when rotating.
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }
     }
 
     func reloadData() {

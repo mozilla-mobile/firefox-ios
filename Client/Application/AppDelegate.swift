@@ -42,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var receivedURLs = [URL]()
     var telemetry: TelemetryWrapper?
+    var adjustHelper: AdjustHelper?
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
@@ -143,6 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
+        adjustHelper = AdjustHelper(profile: profile)
         SystemUtils.onFirstRun()
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
@@ -288,6 +290,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         updateSessionCount()
+        adjustHelper?.setupAdjust()
 
         return shouldPerformAdditionalDelegateHandling
     }
