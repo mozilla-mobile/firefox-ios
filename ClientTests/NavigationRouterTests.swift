@@ -86,41 +86,41 @@ class NavigationRouterTests: XCTestCase {
 
     // MARK: - Widget
 
-    func testOpenURLWidget_normalTab() {
+    func testOpenURLWidget_normalTabPath() {
         let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=true")
         XCTAssertEqual(path, NavigationPath.url(webURL: nil, isPrivate: true))
     }
 
-    func testOpenURLWidget_privateTab() {
+    func testOpenURLWidget_privateTabPath() {
         let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=false")
         XCTAssertEqual(path, NavigationPath.url(webURL: nil, isPrivate: false))
     }
 
-    func testCloseTabsSmallWidget_privateTab() {
+    func testCloseTabsSmallWidget_privateTabPath() {
         let path = buildNavigationPath(url: "widget-small-quicklink-close-private-tabs")
         XCTAssertEqual(path, NavigationPath.closePrivateTabs)
     }
 
-    func testCloseTabsMediumWidget_privateTab() {
+    func testCloseTabsMediumWidget_privateTabPath() {
         let path = buildNavigationPath(url: "widget-medium-quicklink-close-private-tabs")
         XCTAssertEqual(path, NavigationPath.closePrivateTabs)
     }
 
-    func testNavigationPath_handleNormalTab() {
+    func testNavigationPath_handleNormalTab_isExternalSourceTrue() {
         let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=false")
         NavigationPath.handle(nav: path, with: browserViewController, tray: gridTab)
 
         XCTAssertTrue(browserViewController.openedUrlFromExternalSource, "openedUrlFromExternalSource needs to be true for start at home feature")
     }
 
-    func testNavigationPath_handlePrivateTab() {
+    func testNavigationPath_handlePrivateTab_isExternalSourceTrue() {
         let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=true")
         NavigationPath.handle(nav: path, with: browserViewController, tray: gridTab)
 
         XCTAssertTrue(browserViewController.openedUrlFromExternalSource, "openedUrlFromExternalSource needs to be true for start at home feature")
     }
 
-    func testNavigationPath_handleClosingPrivateTabs(){
+    func testNavigationPath_handleClosingPrivateTabs_tabsAreDeleted(){
         browserViewController.tabManager.addTab(isPrivate: true)
         XCTAssertEqual(browserViewController.tabManager.privateTabs.count, 1, "There should be one private tab")
 
