@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "20d49a6ea49a57df646f9ae0004f42f7fc318d16",
-          "version": "42.3.2"
+          "revision": "e8fef341610de380b55cd5a057f9a3adf7cebb44",
+          "version": "43.0.2"
         }
       },
       {
@@ -68,8 +68,8 @@
         "package": "MozillaRustComponentsSwift",
         "repositoryURL": "https://github.com/skhamis/rust-components-swift",
         "state": {
-          "branch": "no-glean-test",
-          "revision": "3a81d8b019ec50b71ae0359ef6a4c954aae4ac7e",
+          "branch": "update-for-fxios",
+          "revision": "686383d39bb507e9a86822a8638babf17f0ec625",
           "version": null
         }
       },
@@ -98,6 +98,15 @@
           "branch": null,
           "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
           "version": "5.0.1"
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
+        "state": {
+          "branch": null,
+          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
+          "version": "1.18.0"
         }
       },
       {
