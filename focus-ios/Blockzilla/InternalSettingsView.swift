@@ -13,6 +13,11 @@ struct InternalSettingsView: View {
                 }
             }
             SwiftUI.Section {
+                NavigationLink("Crash Reporting") {
+                    InternalCrashReportingSettingsView()
+                }
+            }
+            SwiftUI.Section {
                 Text("The settings in this section are used by Focus developers and testers.")
                     .font(.caption)
             }

@@ -226,6 +226,7 @@
 		F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */; };
 		F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799E27961F4200CFD324 /* InternalSettings.swift */; };
 		F86D00612790978700E83177 /* InternalSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86D00602790978700E83177 /* InternalSettingsView.swift */; };
+		F8714D2127A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8714D2027A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift */; };
 		F8B92FBE279EC73700183998 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8B92FBD279EC73700183998 /* Sentry */; };
 		F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */; };
 		F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */; };
@@ -1009,6 +1010,7 @@
 		F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalExperimentDetailView.swift; sourceTree = "<group>"; };
 		F861799E27961F4200CFD324 /* InternalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSettings.swift; sourceTree = "<group>"; };
 		F86D00602790978700E83177 /* InternalSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSettingsView.swift; sourceTree = "<group>"; };
+		F8714D2027A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalCrashReportingSettingsView.swift; sourceTree = "<group>"; };
 		F8820C7126E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Intro.strings"; sourceTree = "<group>"; };
 		F8820C7226E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Intents.strings"; sourceTree = "<group>"; };
 		F8820C7326E19B1E006AB3B8 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1592,6 +1594,7 @@
 				F861799E27961F4200CFD324 /* InternalSettings.swift */,
 				F86D00602790978700E83177 /* InternalSettingsView.swift */,
 				F861799A2795D95E00CFD324 /* InternalExperimentsSettingsView.swift */,
+				F8714D2027A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift */,
 				F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
 			);
@@ -2270,6 +2273,7 @@
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,
 				C8337DF42710898800093D42 /* ImageLoader.swift in Sources */,
+				F8714D2127A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift in Sources */,
 				F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */,
 				C8415DB326E9FA38008BAAA2 /* UIApplication+Orientation.swift in Sources */,
 				60D779C327469A2300DF8047 /* DesignSystem.swift in Sources */,
