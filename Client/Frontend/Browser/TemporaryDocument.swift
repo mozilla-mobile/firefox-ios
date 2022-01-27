@@ -50,18 +50,12 @@ class TemporaryDocument: NSObject {
         downloadTask = session?.downloadTask(with: request)
         downloadTask?.resume()
 
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-
         return result
     }
 }
 
 extension TemporaryDocument: URLSessionTaskDelegate, URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        ensureMainThread {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-        }
-
         // If we encounter an error downloading the temp file, just return with the
         // original remote URL so it can still be shared as a web URL.
         if error != nil, let remoteURL = request.url {
