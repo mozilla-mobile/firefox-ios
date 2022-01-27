@@ -970,7 +970,7 @@ class BrowserViewController: UIViewController {
         if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
-            guard let bookmarkFolder = result.successValue as? BookmarkFolder,
+            guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
                   let bookmarkNode = bookmarkFolder.children?.last else { return }
             let detailController = BookmarkDetailPanel(profile: self.profile,
                                                        bookmarkNode: bookmarkNode,
