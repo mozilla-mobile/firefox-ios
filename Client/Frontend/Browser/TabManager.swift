@@ -160,7 +160,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     var lastSessionWasPrivate: Bool {
         return UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
     }
-    
 
     // MARK: - Initializer
     init(profile: Profile, imageStore: DiskImageStore?) {
