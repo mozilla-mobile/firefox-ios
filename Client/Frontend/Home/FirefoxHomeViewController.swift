@@ -400,6 +400,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidAppear(_ animated: Bool) {
         experiments.recordExposureEvent(featureId: .homescreen)
+        animateLogo()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,
@@ -1246,10 +1247,13 @@ extension FirefoxHomeViewController {
 
     @objc func changeHomepageWallpaper() {
         wallpaperView.cycleWallpaper()
-//        TelemetryWrapper.recordEvent(category: .action,
-//                                     method: .tap,
-//                                     object: .firefoxHomepage,
-//                                     value: .cycleWallpaperButton)
+    }
+
+    func animateLogo() {
+        guard let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell else { return }
+        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
+            cell.animateLogo()
+        })
     }
 }
 

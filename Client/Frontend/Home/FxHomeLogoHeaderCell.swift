@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
+import UIKit
 
 fileprivate struct LogoViewUX {
     static let imageHeight: CGFloat = 40
@@ -19,7 +21,14 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         button.accessibilityIdentifier = a11y.logoButton
     }
 
+    private var userDefaults: UserDefaults?
+
     // MARK: - Initializers
+    convenience init(userDefaults: UserDefaults = UserDefaults.standard) {
+        self.init(frame: .zero)
+        self.userDefaults = userDefaults
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -64,6 +73,48 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         case .DisplayThemeChanged, .WallpaperDidChange:
             applyTheme()
         default: break
+        }
+    }
+
+    // MARK: - Animation
+    public func animateLogo() {
+//        guard !userDefaults?.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation) else { return }
+        let angle: CGFloat = .pi/32
+        let numberOfFrames: Double = 6
+        let frameDuration = Double(1/numberOfFrames)
+
+        UIView.animateKeyframes(withDuration: 1, delay: 0, options: []) {
+
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: frameDuration) {
+                self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: frameDuration,
+                               relativeDuration: frameDuration) {
+                self.logoButton.transform = CGAffineTransform(rotationAngle: +angle)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: frameDuration*2,
+                               relativeDuration: frameDuration) {
+                self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: frameDuration*3,
+                               relativeDuration: frameDuration) {
+                self.logoButton.transform = CGAffineTransform(rotationAngle: +angle)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: frameDuration*4,
+                               relativeDuration: frameDuration) {
+                self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: frameDuration*5,
+                               relativeDuration: frameDuration) {
+                self.logoButton.transform = CGAffineTransform.identity
+            }
+        } completion: { _ in
+//            userDefaults?.set(true, forKey: PrefsKeys.WallpaperLogoHasShownAnimation)
         }
     }
 }

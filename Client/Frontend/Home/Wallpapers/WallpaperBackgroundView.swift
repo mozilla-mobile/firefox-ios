@@ -10,6 +10,7 @@ class WallpaperBackgroundView: UIView {
     private lazy var pictureView: UIImageView = .build { imageView in
         imageView.image = nil
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
     }
 
     private lazy var gradientView: ConfigurableGradientView = .build { gradientView in
