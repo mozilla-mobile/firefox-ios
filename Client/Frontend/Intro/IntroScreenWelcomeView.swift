@@ -174,7 +174,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
         closeButton.addTarget(self, action: #selector(handleCloseButtonTapped), for: .touchUpInside)
         closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(buttonEdgeInset)
-            make.right.equalToSuperview().inset(buttonEdgeInset)
+            make.trailing.equalToSuperview().inset(buttonEdgeInset)
         }
 
         closeButton.tintColor = .secondaryLabel
