@@ -48,7 +48,7 @@ class TabEventHandlerTests: XCTestCase {
         BrowserViewController.foregroundBVC().profile.prefs.setBool(false, forKey: PrefsKeys.KeyBlockPopups)
         BrowserViewController.foregroundBVC().tabManager.addTab(URLRequest(url: URL(string: "\(webServerBase)/blankpopup")!))
 
-        let exists = NSPredicate() { obj,_ in
+        let exists = NSPredicate() { obj, _ in
             let tabManager = obj as! TabManager
             return tabManager.tabs.count > 2
         }
@@ -59,7 +59,7 @@ class TabEventHandlerTests: XCTestCase {
             return true
         }
 
-        waitForExpectations(timeout: 20, handler: nil)
+        waitForExpectations(timeout: 30, handler: nil)
     }
 }
 

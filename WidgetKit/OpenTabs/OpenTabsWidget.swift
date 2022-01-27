@@ -10,7 +10,7 @@ import Combine
 struct OpenTabsWidget: Widget {
     private let kind: String = "Quick View"
 
-     var body: some WidgetConfiguration {
+    var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TabProvider()) { entry in
             OpenTabsView(entry: entry)
         }
