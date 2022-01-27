@@ -91,21 +91,15 @@ struct Wallpaper: Codable, Equatable {
     }
 
     var isEligibleForDisplay: Bool {
-        if type == .defaultBackground || type == .themed(type: .firefox) { return true }
+        if type == .defaultBackground { return true }
 
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd"
-        let currentDate = Date()
-
-        if let locales = locales,
-           locales.contains(Locale.current.identifier),
-           let wallpaperDate = expiryDate,
-           let expiredDate = formatter.date(from: wallpaperDate),
-           currentDate <= expiredDate {
-            return true
+        switch (expiryDate, locales) {
+        case (nil, nil): return true
+        case (let date?, nil): return checkEligibilityFor(date: date)
+        case (nil, let locales?): return checkEligibilityFor(locales: locales)
+        case (let date?, let locales?):
+            return checkEligibilityFor(date: date) && checkEligibilityFor(locales: locales)
         }
-
-        return false
     }
 
     // MARK: - Initializer
@@ -117,6 +111,26 @@ struct Wallpaper: Codable, Equatable {
         self.expiryDate = date
         self.type = type
         self.locales = locale
+    }
+
+    // MARK: - Private helper methods
+    private func checkEligibilityFor(date: String) -> Bool {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let currentDate = Date()
+
+        if let expiredDate = formatter.date(from: date),
+           currentDate <= expiredDate {
+            return true
+        }
+
+        return false
+    }
+
+    private func checkEligibilityFor(locales: [String]) -> Bool {
+        if locales.contains(Locale.current.identifier) { return true }
+
+        return false
     }
 }
 
