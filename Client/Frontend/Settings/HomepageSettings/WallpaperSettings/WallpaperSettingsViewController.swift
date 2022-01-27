@@ -100,10 +100,12 @@ class WallpaperSettingsViewController: UIViewController {
     // MARK: - Variables
     var profile: Profile
     var wallpaperManager: WallpaperManager
+//    var tabManager: TabManager
 
     // MARK: - Initializers
     init(with profile: Profile, and wallpaperManager: WallpaperManager = WallpaperManager()) {
         self.profile = profile
+//        self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
         super.init(nibName: nil, bundle: nil)
     }
@@ -222,6 +224,27 @@ class WallpaperSettingsViewController: UIViewController {
                                      extras: extras)
     }
 
+    private func showToast() {
+        let toast = ButtonToast(
+            labelText: .Settings.Homepage.Wallpaper.WallpaperUpdatedToastLabel,
+            buttonText: .Settings.Homepage.Wallpaper.WallpaperUpdatedToastButton,
+            completion: { buttonPressed in
+            if buttonPressed {
+                guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
+                navigationController.done()
+            }
+        })
+
+        toast.showToast(viewController: self,
+                        delay: SimpleToastUX.ToastDelayBefore,
+                        duration: SimpleToastUX.ToastDismissAfter) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            ]
+        }
+    }
 }
 
 extension WallpaperSettingsViewController: UICollectionViewDelegateFlowLayout {
@@ -260,6 +283,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
         wallpaperManager.updateTo(index: indexPath.row)
+        showToast()
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,

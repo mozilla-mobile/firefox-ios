@@ -15,9 +15,9 @@ class WallpaperBackgroundView: UIView {
 
     private lazy var gradientView: ConfigurableGradientView = .build { gradientView in
         gradientView.configureGradient(
-            colors: [UIColor(white: 0.0, alpha: 0.6),
-                     UIColor(white: 0.0, alpha: 0.5),
-                     UIColor(white: 0.0, alpha: 0.4)],
+            colors: [UIColor(white: 0.0, alpha: 0.5),
+                     UIColor(white: 0.0, alpha: 0.41),
+                     UIColor(white: 0.0, alpha: 0.35)],
             positions: [0, 0.5, 0.8],
             startPoint: .zero,
             endPoint: CGPoint(x: 0, y: 1)
