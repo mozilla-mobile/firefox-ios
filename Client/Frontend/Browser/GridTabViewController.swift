@@ -28,7 +28,6 @@ protocol TabTrayDelegate: AnyObject {
     func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab)
     func tabTrayDidAddBookmark(_ tab: Tab)
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
-    func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
     func tabTrayOpenRecentlyClosedTab(_ url: URL)
 }
 
@@ -508,7 +507,7 @@ extension GridTabViewController: TabPeekDelegate {
     }
 
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {
-        delegate?.tabTrayRequestsPresentationOf(viewController)
+        present(viewController, animated: true, completion: nil)
     }
 }
 

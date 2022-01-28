@@ -1316,7 +1316,7 @@ class BrowserViewController: UIViewController {
         }
 
         // Represents WebView observation or delegate update that called this function
-        
+
         if webViewStatus == .finishedNavigation {
             // A delay of 500 milliseconds is added when we take screenshot
             // as we don't know exactly when wkwebview is rendered
@@ -1671,11 +1671,11 @@ extension BrowserViewController: HomePanelDelegate {
         controller.presentingModalViewControllerDelegate = self
         self.present(controller, animated: true, completion: nil)
     }
-    
+
     func homePanelDidPresentContextualHint(type: ContextualHintViewType) {
         self.urlBar.locationTextField?.resignFirstResponder()
     }
-    
+
     func homePanelDidDismissContextualHint(type: ContextualHintViewType) {
         self.urlBar.locationTextField?.becomeFirstResponder()
     }
@@ -2315,10 +2315,6 @@ extension BrowserViewController: TabTrayDelegate {
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return nil }
         return profile.readingList.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.current.name).value.successValue
-    }
-
-    func tabTrayRequestsPresentationOf(_ viewController: UIViewController) {
-        self.present(viewController, animated: false, completion: nil)
     }
 }
 
