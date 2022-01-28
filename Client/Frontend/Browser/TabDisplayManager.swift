@@ -159,7 +159,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
     private(set) var isPrivate = false
 
-    // Sigh. Dragging on the collection view is either an 'active drag' where the item is moved, or
+    // Dragging on the collection view is either an 'active drag' where the item is moved, or
     // that the item has been long pressed on (and not moved yet), and this gesture recognizer has been triggered
     var isDragging: Bool {
         return collectionView.hasActiveDrag || isLongPressGestureStarted
@@ -179,6 +179,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     fileprivate func cancelDragAndGestures() -> Bool {
         let isActive = collectionView.hasActiveDrag || isLongPressGestureStarted
         collectionView.cancelInteractiveMovement()
+        collectionView.endInteractiveMovement()
 
         // Long-pressing a cell to initiate dragging, but not actually moving the cell, will not trigger the collectionView's internal 'interactive movement' vars/funcs, and cancelInteractiveMovement() will not work. The gesture recognizer needs to be cancelled in this case.
         collectionView.gestureRecognizers?.forEach { $0.cancel() }
@@ -732,11 +733,23 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+
         let forbiddenOperation = UICollectionViewDropProposal(operation: .forbidden)
-        guard let indexPath = destinationIndexPath else { return forbiddenOperation }
+        guard let indexPath = destinationIndexPath else {
+            return forbiddenOperation
+        }
+
         let section = TabDisplaySection(rawValue: indexPath.section)
-        guard tabDisplayType == .TopTabTray || section == .regularTabs else { return forbiddenOperation }
-        guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab else {
+        guard tabDisplayType == .TopTabTray || section == .regularTabs else {
+            return forbiddenOperation
+        }
+
+        // Forbidden if collection view isn't in the same mode as drop session
+        guard let localDragSession = session.localDragSession,
+              let item = localDragSession.items.first,
+              let localObject = item.localObject as? Tab,
+              localObject.isPrivate == self.isPrivate
+        else {
             return forbiddenOperation
         }
 

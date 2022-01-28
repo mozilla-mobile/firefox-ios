@@ -227,10 +227,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
 
     @objc func didTogglePrivateMode() {
-        if tabDisplayManager.isDragging {
-            return
-        }
-
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
         let newOffset = CGPoint(x: 0.0, y: collectionView.contentOffset.y)
@@ -251,7 +247,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        self.tabDisplayManager.refreshStore()
+        tabDisplayManager.refreshStore()
 
         // If we are exiting private mode and we have the close private tabs option selected, make sure
         // we clear out all of the private tabs
