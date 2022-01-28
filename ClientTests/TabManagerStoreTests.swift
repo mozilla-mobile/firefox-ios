@@ -55,12 +55,12 @@ class TabManagerStoreTests: XCTestCase {
 
         let expectation = expectation(description: "Saved store changes")
         manager.storeChanges(writeCompletion: { [weak self] in
-            guard let self = self else {
+            guard let strongSelf = self else {
                 XCTFail("Should be strong reference")
                 return
             }
 
-            XCTAssertEqual(self.manager.testTabCountOnDisk(), 2)
+            XCTAssertEqual(strongSelf.manager.testTabCountOnDisk(), 2)
             expectation.fulfill()
         })
         waitForExpectations(timeout: 20, handler: nil)

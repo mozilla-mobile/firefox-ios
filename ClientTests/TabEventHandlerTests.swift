@@ -59,17 +59,12 @@ class TabEventHandlerTests: XCTestCase {
         }
 
         expectation(for: exists, evaluatedWith: manager) {
-            var urlIsAboutBlank = false
-            var urlsList = [String]()
-            for tab in manager.tabs {
-                guard let url = tab.url?.absoluteString else { continue }
-                urlsList.append(url)
-                if url == "about:blank" {
-                    urlIsAboutBlank = true
-                }
+            guard let lastTabUrl = manager.tabs.last?.url?.absoluteString else {
+                XCTFail("Should have the last tab url")
+                return true
             }
 
-            XCTAssertTrue(urlIsAboutBlank, "URLs should contain \"about:blank:\" - \(urlsList)")
+            XCTAssertEqual(lastTabUrl, "about:blank", "URLs should contain \"about:blank:\" \(lastTabUrl)")
             return true
         }
 
