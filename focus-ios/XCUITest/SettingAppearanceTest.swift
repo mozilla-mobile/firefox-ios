@@ -49,6 +49,7 @@ class SettingAppearanceTest: BaseTestCase {
         safariSwitch.tap()
 
         // Check the information page
+        waitForExistence(app.staticTexts["Open Settings App"], timeout: 5)
         XCTAssert(app.staticTexts["Open Settings App"].exists)
         XCTAssert(app.staticTexts["Tap Safari, then select Content Blockers"].exists)
         if app.label == "Firefox Focus" {
@@ -82,7 +83,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         otherContentSwitch.tap()
         let alertsQuery = app.alerts
-
+        waitForExistence(alertsQuery.buttons[UIConstants.strings.settingsBlockOtherYes])
         // Say yes this time, the switch should be enabled
         alertsQuery.buttons[UIConstants.strings.settingsBlockOtherYes].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "1")

@@ -30,9 +30,9 @@ class BasicBrowsing: BaseTestCase {
 
         // Launch external app
         let RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 0)
-        waitForExistence( RemindersApp)
+        waitForExistence(RemindersApp, timeout: 5)
         RemindersApp.tap()
-        waitForExistence(app.buttons["Add"], timeout: 5)
+        waitForExistence(app.buttons["Add"], timeout: 10)
         XCTAssertTrue(app.buttons["Add"].exists)
     }
     

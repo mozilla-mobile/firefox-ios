@@ -29,6 +29,6 @@ class TrackingProtectionMenu: BaseTestCase {
 
         // Wait for the sidebar to open
         let switchValue = app.switches["BlockerToggle.TrackingProtection"].value!
-        XCTAssertEqual(switchValue as! String, "0")
+        XCTAssertLessThan(switchValue as! String, "2")
     }
 }
