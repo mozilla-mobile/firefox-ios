@@ -134,6 +134,7 @@ class QuickActions: NSObject {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = vc
         let controller = UINavigationController(rootViewController: qrCodeViewController)
+        vc.presentedViewController?.dismiss(animated: true)
         vc.present(controller, animated: true, completion: nil)
     }
 }
