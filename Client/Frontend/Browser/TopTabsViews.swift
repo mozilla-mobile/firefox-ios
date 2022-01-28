@@ -150,13 +150,13 @@ class TopTabFader: UIView {
         case none
     }
     
-    private let innerColor: CGColor = UIColor.Photon.White100.cgColor
-    private let outerColor: CGColor = UIColor(white: 1, alpha: 0.0).cgColor
-    
     private var activeSide: ActiveSide = .both
     
     private lazy var hMaskLayer: CAGradientLayer = {
         let hMaskLayer = CAGradientLayer()
+        let innerColor = UIColor.Photon.White100.cgColor
+        let outerColor = UIColor(white: 1, alpha: 0.0).cgColor
+        
         hMaskLayer.anchorPoint = .zero
         hMaskLayer.startPoint = CGPoint(x: 0, y: 0.5)
         hMaskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
