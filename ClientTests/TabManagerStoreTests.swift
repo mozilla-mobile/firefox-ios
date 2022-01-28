@@ -58,7 +58,7 @@ class TabManagerStoreTests: XCTestCase {
             XCTAssertEqual(self.manager.testTabCountOnDisk(), 2)
             e.fulfill()
         }
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     // Test disabled due to Issue:https://github.com/mozilla-mobile/firefox-ios/issues/7867

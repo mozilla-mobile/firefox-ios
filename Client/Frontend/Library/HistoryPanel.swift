@@ -164,26 +164,28 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     override func reloadData() {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
-        if profile.isShutdown { return }
-        guard !isFetchInProgress else { return }
-        groupedSites = DateGroupedTableData<Site>()
-
-        currentFetchOffset = 0
+        guard !profile.isShutdown, !isFetchInProgress else { return }
+        
         fetchData().uponQueue(.main) { result in
             if let sites = result.successValue {
-                for site in sites {
-                    if let site = site, let latestVisit = site.latestVisit {
+                let fetchedSites = sites.asArray()
+                let allCurrentGroupedSites = self.groupedSites.allItems()
+                let allUniquedSitesToAdd = (allCurrentGroupedSites + fetchedSites).uniqued().filter {
+                    !allCurrentGroupedSites.contains($0)
+                }
+                
+                allUniquedSitesToAdd.forEach { site in
+                    if let latestVisit = site.latestVisit {
                         self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
                     }
                 }
-
+                
                 self.tableView.reloadData()
                 self.updateEmptyPanelState()
-
+                
                 if let cell = self.clearHistoryCell {
                     AdditionalHistoryActionRow.setStyle(enabled: !self.groupedSites.isEmpty, forCell: cell)
                 }
-
             }
         }
     }
@@ -562,24 +564,9 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
 extension HistoryPanel: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard !isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else {
-            return
-        }
+        guard !isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }
 
-        fetchData().uponQueue(.main) { result in
-            if let sites = result.successValue {
-                let indexPaths: [IndexPath] = sites.compactMap({ site in
-                    guard let site = site, let latestVisit = site.latestVisit else {
-                        return nil
-                    }
-
-                    let indexPath = self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
-                    return IndexPath(row: indexPath.row, section: indexPath.section + 1)
-                })
-
-                self.tableView.insertRows(at: indexPaths, with: .automatic)
-            }
-        }
+        reloadData()
     }
 
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {
