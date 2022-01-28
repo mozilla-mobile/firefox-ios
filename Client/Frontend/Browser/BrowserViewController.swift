@@ -1155,7 +1155,7 @@ class BrowserViewController: UIViewController {
             return
         }
         popToBVC()
-        guard isShowingJSAlert() else {
+        guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
             return
         }
@@ -1200,7 +1200,7 @@ class BrowserViewController: UIViewController {
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         popToBVC()
-        guard isShowingJSAlert() else {
+        guard !isShowingJSPromptAlert() else {
             tabManager.addTab(nil, isPrivate: isPrivate)
             return
         }
@@ -1234,7 +1234,7 @@ class BrowserViewController: UIViewController {
             return
         }
         // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
-        if isShowingJSAlert() {
+        if !isShowingJSPromptAlert() {
             currentViewController.dismiss(animated: true, completion: nil)
         }
 
@@ -1245,11 +1245,8 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func isShowingJSAlert() -> Bool {
-        guard let _ = navigationController?.topViewController?.presentedViewController as? JSPromptAlertController else {
-            return true
-        }
-        return false
+    private func isShowingJSPromptAlert() -> Bool {
+        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
     func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
