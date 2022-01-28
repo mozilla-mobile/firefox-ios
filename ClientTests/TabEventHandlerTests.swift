@@ -54,8 +54,12 @@ class TabEventHandlerTests: XCTestCase {
         }
 
         expectation(for: exists, evaluatedWith: BrowserViewController.foregroundBVC().tabManager) {
-            let url = BrowserViewController.foregroundBVC().tabManager.tabs[2].url
-            XCTAssertTrue(url?.absoluteString == "about:blank")
+            guard let url = BrowserViewController.foregroundBVC().tabManager.tabs[2].url else {
+                XCTFail("URL should not be nil")
+                return false
+            }
+
+            XCTAssertTrue(url.absoluteString == "about:blank", "URL should be \"about:blank:\" - \(url.absoluteString)")
             return true
         }
 
