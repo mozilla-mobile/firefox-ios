@@ -48,11 +48,16 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertEqual(manager.tabs.count, 2)
 
         let expectation = expectation(description: "Saved store changes")
-        manager.storeChanges(writeCompletion: {
+        manager.storeChanges(writeCompletion: { [weak self] in
+            guard let self = self else {
+                XCTFail("Should be strong reference")
+                return
+            }
+
             XCTAssertEqual(self.manager.testTabCountOnDisk(), 2)
             expectation.fulfill()
         })
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
     }
 
     // Test disabled due to Issue:https://github.com/mozilla-mobile/firefox-ios/issues/7867

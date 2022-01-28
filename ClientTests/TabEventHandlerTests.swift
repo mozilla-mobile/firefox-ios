@@ -26,9 +26,12 @@ class TabEventHandlerTests: XCTestCase {
 
 
     func testBlankPopupURL() {
+        let manager = BrowserViewController.foregroundBVC().tabManager
+        let prefs = BrowserViewController.foregroundBVC().profile.prefs
+
         // Hide intro so it is easier to see the test running and debug it
-        BrowserViewController.foregroundBVC().profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        BrowserViewController.foregroundBVC().profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+        prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+        prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
 
         let webServer = GCDWebServer()
         webServer.addHandler(forMethod: "GET", path: "/blankpopup", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
@@ -45,27 +48,31 @@ class TabEventHandlerTests: XCTestCase {
         }
         let webServerBase = "http://localhost:\(webServer.port)"
 
-        BrowserViewController.foregroundBVC().profile.prefs.setBool(false, forKey: PrefsKeys.KeyBlockPopups)
-        BrowserViewController.foregroundBVC().tabManager.addTab(URLRequest(url: URL(string: "\(webServerBase)/blankpopup")!))
+        prefs.setBool(false, forKey: PrefsKeys.KeyBlockPopups)
+        manager.addTab(URLRequest(url: URL(string: "\(webServerBase)/blankpopup")!))
 
+        XCTAssertEqual(manager.tabs.count, 2)
         let exists = NSPredicate() { obj, _ in
             let tabManager = obj as! TabManager
             return tabManager.tabs.count > 2
         }
 
-        expectation(for: exists, evaluatedWith: BrowserViewController.foregroundBVC().tabManager) {
-            XCTAssertEqual(BrowserViewController.foregroundBVC().tabManager.tabs.count, 3)
-            let thirdTab = BrowserViewController.foregroundBVC().tabManager.tabs[2]
-            guard let url = thirdTab.url else {
-                XCTFail("URL should not be nil for tab \(thirdTab.debugDescription)")
-                return false
+        expectation(for: exists, evaluatedWith: manager) {
+            var urlIsAboutBlank = false
+            var urlsList = [String]()
+            for tab in manager.tabs {
+                guard let url = tab.url?.absoluteString else { continue }
+                urlsList.append(url)
+                if url == "about:blank" {
+                    urlIsAboutBlank = true
+                }
             }
 
-            XCTAssertTrue(url.absoluteString == "about:blank", "URL should be \"about:blank:\" - \(url.absoluteString)")
+            XCTAssertTrue(urlIsAboutBlank, "URLs should contain \"about:blank:\" - \(urlsList)")
             return true
         }
 
-        waitForExpectations(timeout: 30, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
     }
 }
 
