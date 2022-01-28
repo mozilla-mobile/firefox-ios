@@ -260,15 +260,15 @@ class DevicePickerTableViewHeaderCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(nameLabel)
+        contentView.addSubview(nameLabel)
         nameLabel.font = DevicePickerViewControllerUX.TableHeaderTextFont
         nameLabel.text = .SendToDevicesListTitle
         nameLabel.textColor = DevicePickerViewControllerUX.TableHeaderTextColor
 
         nameLabel.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(DevicePickerViewControllerUX.TableHeaderTextPaddingLeft)
-            make.centerY.equalTo(self)
-            make.right.equalTo(self)
+            make.left.equalTo(contentView).offset(DevicePickerViewControllerUX.TableHeaderTextPaddingLeft)
+            make.centerY.equalTo(contentView)
+            make.right.equalTo(contentView)
         }
 
         preservesSuperviewLayoutMargins = false
