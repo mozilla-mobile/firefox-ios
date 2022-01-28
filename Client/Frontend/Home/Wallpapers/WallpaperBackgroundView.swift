@@ -14,16 +14,6 @@ class WallpaperBackgroundView: UIView {
     }
 
     private lazy var gradientView: ConfigurableGradientView = .build { gradientView in
-
-        let contrastColour = LegacyThemeManager.instance.currentName == .dark ? 1.0 : 0.0
-        gradientView.configureGradient(
-            colors: [UIColor(white: contrastColour, alpha: 0.5),
-                     UIColor(white: contrastColour, alpha: 0.41),
-                     UIColor(white: contrastColour , alpha: 0.35)],
-            positions: [0, 0.5, 0.8],
-            startPoint: .zero,
-            endPoint: CGPoint(x: 0, y: 1)
-        )
         gradientView.alpha = 0.0
     }
 
@@ -34,6 +24,7 @@ class WallpaperBackgroundView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        updateGradientColor()
         setupNotifications()
         updateImageTo(wallpaperManager.currentWallpaperImage)
     }
@@ -41,6 +32,10 @@ class WallpaperBackgroundView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     private func setupView() {
@@ -63,16 +58,23 @@ class WallpaperBackgroundView: UIView {
 
     // MARK: - Notifications
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications),
-                                               name: .WallpaperDidChange,
-                                               object: nil)
+        let refreshEvents: [Notification.Name] = [.DisplayThemeChanged,
+                                                  .WallpaperDidChange]
+        refreshEvents.forEach {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(handleNotifications),
+                                                   name: $0,
+                                                   object: nil)
+        }
     }
 
     @objc private func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .WallpaperDidChange:
             updateImageTo(wallpaperManager.currentWallpaperImage)
+            updateGradient()
+        case .DisplayThemeChanged:
+            updateGradient()
         default:
             break
         }
@@ -95,13 +97,36 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func updateImageTo(_ image: UIImage?) {
-        guard let image = image else {
-            pictureView.image = nil
-            gradientView.alpha = 0.0
-            return
+        UIView.animate(withDuration: 0.3) {
+            self.pictureView.image = image
+        }
+    }
+
+    private func updateGradient() {
+        updateGradientColor()
+        updateGradientVisibilityForSelectedWallpaper()
+    }
+
+    private func updateGradientColor() {
+        let contrastColour = LegacyThemeManager.instance.currentName == .dark ? 0.0 : 1.0
+        gradientView.configureGradient(
+            colors: [UIColor(white: contrastColour, alpha: 0.4),
+                     UIColor(white: contrastColour, alpha: 0.35),
+                     UIColor(white: contrastColour , alpha: 0.3)],
+            positions: [0, 0.5, 0.8],
+            startPoint: .zero,
+            endPoint: CGPoint(x: 0, y: 1)
+        )
+    }
+
+    private func updateGradientVisibilityForSelectedWallpaper() {
+
+        switch wallpaperManager.savedWallpaper.type {
+        // ROUX - remove this. It's just for testing!
+        case .themed(type: .projectHouse): gradientView.alpha = 1.0
+        // No gradient exists for default wallpaper OR firefox default wallpapers.
+        default: gradientView.alpha = 0.0
         }
 
-        pictureView.image = image
-        gradientView.alpha = 1.0
     }
 }

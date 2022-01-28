@@ -126,17 +126,9 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
 extension FxHomeLogoHeaderCell: NotificationThemeable {
     func applyTheme() {
-        let wallpaperManager = WallpaperManager()
         let resourceName = "fxHomeHeaderLogo"
         let resourceNameDark = "fxHomeHeaderLogo_dark"
-        var imageString = resourceName
-
-        if wallpaperManager.isUsingCustomWallpaper {
-            imageString = resourceNameDark
-        } else {
-            imageString = LegacyThemeManager.instance.currentName == .dark ? resourceNameDark : resourceName
-        }
-
-        logoButton.setImage( UIImage(imageLiteralResourceName: imageString), for: .normal)
+        let imageString = LegacyThemeManager.instance.currentName == .dark ? resourceNameDark : resourceName
+        logoButton.setImage(UIImage(imageLiteralResourceName: imageString), for: .normal)
     }
 }
