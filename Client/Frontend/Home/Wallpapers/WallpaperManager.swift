@@ -16,23 +16,18 @@ struct WallpaperManager {
         return wallpaperData.availableWallpapers
     }
 
-    var currentWallpaper: UIImage? {
+    var currentWallpaperImage: UIImage? {
         return retrieveCurrentWallpaperImage()
     }
 
-    var telemetryMetadata: [String: String] {
-        guard let wallpaper = retrieveCurrentWallpaperObject() else { return [:] }
-        var metadata = [String: String]()
-
-        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = wallpaper.name
-
-        if wallpaper.type == .defaultBackground {
-            metadata[TelemetryWrapper.EventExtraKey.wallpaperType.rawValue] = "default"
-        } else if case .themed(let type) = wallpaper.type {
-            metadata[TelemetryWrapper.EventExtraKey.wallpaperType.rawValue] = type.rawValue
+    var savedWallpaper: Wallpaper {
+        guard let currentWallpaper = retrieveCurrentWallpaperObject() else {
+            // Returning the default wallpaper if nothing else is currently set
+            // as default will always exist
+            return wallpapers[0]
         }
 
-        return metadata
+        return currentWallpaper
     }
 
     var isUsingCustomWallpaper: Bool {
@@ -47,9 +42,7 @@ struct WallpaperManager {
         guard let currentWallpaper = retrieveCurrentWallpaperObject() else { return 0 }
 
         for (index, wallpaper) in wallpaperData.availableWallpapers.enumerated() {
-            if wallpaper == currentWallpaper {
-                return index
-            }
+            if wallpaper == currentWallpaper { return index }
         }
 
         return nil
@@ -104,7 +97,8 @@ struct WallpaperManager {
     // MARK: - Wallpaper storage
     private func updateSelectedWallpaper(to wallpaper: Wallpaper) {
         store(wallpaper: wallpaper)
-        store(image: wallpaper.image, landscapeImage: wallpaper.landscapeImage) { result in
+        store(image: wallpaper.image.portrait,
+              landscapeImage: wallpaper.image.landscape) { result in
             switch result {
             case .success(()):
                 NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)

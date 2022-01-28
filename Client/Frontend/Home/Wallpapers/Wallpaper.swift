@@ -76,18 +76,25 @@ struct Wallpaper: Codable, Equatable {
     fileprivate let expiryDate: String?
     fileprivate let locales: [String]?
 
-    var image: UIImage? {
+    var image: (portrait: UIImage?, landscape: UIImage?) {
         var fileName = name
         if UIDevice.current.userInterfaceIdiom == .pad { fileName += "_pad" }
 
-        return UIImage(named: fileName)
+        return (UIImage(named: fileName), UIImage(named: fileName + "_ls"))
     }
 
-    var landscapeImage: UIImage? {
-        var fileName = name + "_ls"
-        if UIDevice.current.userInterfaceIdiom == .pad { fileName += "_pad" }
+    var telemetryMetadata: [String: String] {
+        var metadata = [String: String]()
 
-        return UIImage(named: fileName)
+        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = name
+
+        if type == .defaultBackground {
+            metadata[TelemetryWrapper.EventExtraKey.wallpaperType.rawValue] = "default"
+        } else if case .themed(let collection) = type {
+            metadata[TelemetryWrapper.EventExtraKey.wallpaperType.rawValue] = collection.rawValue
+        }
+
+        return metadata
     }
 
     var isEligibleForDisplay: Bool {
@@ -129,7 +136,6 @@ struct Wallpaper: Codable, Equatable {
 
     private func checkEligibilityFor(locales: [String]) -> Bool {
         if locales.contains(Locale.current.identifier) { return true }
-
         return false
     }
 }

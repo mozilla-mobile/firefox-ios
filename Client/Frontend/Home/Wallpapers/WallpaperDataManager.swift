@@ -41,6 +41,7 @@ struct WallpaperDataManager {
     /// and various seasonal or expiration date requirements.
     var availableWallpapers: [Wallpaper] {
         var wallpapers: [Wallpaper] = []
+        // Default wallpaper should always be first in the array.
         wallpapers.append(Wallpaper(named: "defaultBackground", ofType: .defaultBackground))
         wallpapers.append(contentsOf: themedWallpapers())
 
@@ -67,15 +68,9 @@ struct WallpaperDataManager {
     }
 
     private func buildAllWallpaperCollections() -> [WallpaperCollection] {
-        return [WallpaperCollection(wallpaperFileNames: ["fxWallpaper1",
-                                                         "fxWallpaper2"],
+        return [WallpaperCollection(wallpaperFileNames: ["fxCerulean",
+                                                         "fxAmethyst"],
                                     type: .themed(type: .firefox)),
-                WallpaperCollection(wallpaperFileNames: ["projectHouse1",
-                                                         "projectHouse2",
-                                                         "projectHouse3"],
-                                    type: .themed(type: .projectHouse),
-                                    expiryDate: "20220430",
-                                    locales: ["en_US", "es_US"]),
                 ]
     }
 }

@@ -271,8 +271,8 @@ extension WallpaperSettingsViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier, for: indexPath) as! WallpaperSettingCollectionCell
-        
-        cell.updateImage(to: wallpaperManager.wallpapers[indexPath.row].image)
+        let image = UIDevice.current.orientation.isLandscape ? wallpaperManager.wallpapers[indexPath.row].image.landscape : wallpaperManager.wallpapers[indexPath.row].image.portrait
+        cell.updateImage(to: image)
 
         return cell
     }
@@ -289,7 +289,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate {
                                      method: .tap,
                                      object: .wallpaperSettings,
                                      value: .wallpaperSelected,
-                                     extras: wallpaperManager.telemetryMetadata)
+                                     extras: wallpaperManager.savedWallpaper.telemetryMetadata)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

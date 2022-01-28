@@ -17,9 +17,9 @@ class WallpaperBackgroundView: UIView {
 
         let contrastColour = LegacyThemeManager.instance.currentName == .dark ? 1.0 : 0.0
         gradientView.configureGradient(
-            colors: [UIColor(white: 1.0, alpha: 0.5),
-                     UIColor(white: 1.0, alpha: 0.41),
-                     UIColor(white: 1.0, alpha: 0.35)],
+            colors: [UIColor(white: contrastColour, alpha: 0.5),
+                     UIColor(white: contrastColour, alpha: 0.41),
+                     UIColor(white: contrastColour , alpha: 0.35)],
             positions: [0, 0.5, 0.8],
             startPoint: .zero,
             endPoint: CGPoint(x: 0, y: 1)
@@ -35,7 +35,7 @@ class WallpaperBackgroundView: UIView {
         super.init(frame: frame)
         setupView()
         setupNotifications()
-        updateImageTo(wallpaperManager.currentWallpaper)
+        updateImageTo(wallpaperManager.currentWallpaperImage)
     }
 
     @available(*, unavailable)
@@ -72,7 +72,7 @@ class WallpaperBackgroundView: UIView {
     @objc private func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .WallpaperDidChange:
-            updateImageTo(wallpaperManager.currentWallpaper)
+            updateImageTo(wallpaperManager.currentWallpaperImage)
         default:
             break
         }
@@ -87,11 +87,11 @@ class WallpaperBackgroundView: UIView {
                                      method: .tap,
                                      object: .firefoxHomepage,
                                      value: .cycleWallpaperButton,
-                                     extras: wallpaperManager.telemetryMetadata)
+                                     extras: wallpaperManager.savedWallpaper.telemetryMetadata)
     }
 
     public func updateImageForOrientationChange() {
-        updateImageTo(wallpaperManager.currentWallpaper)
+        updateImageTo(wallpaperManager.currentWallpaperImage)
     }
 
     private func updateImageTo(_ image: UIImage?) {
