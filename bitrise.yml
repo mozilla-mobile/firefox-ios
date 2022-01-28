@@ -55,7 +55,10 @@ workflows:
     - script@1:
         inputs:
         - content: |-
-            ./bootstrap
+            ls
+            echo $BITRISE_PROJECT_PATH
+            project_dir=$BITRISE_PROJECT_PATH
+            ./project_dir/bootstrap.sh
         title: Run bootstrap
     - script@1:
         inputs:
@@ -590,8 +593,8 @@ workflows:
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
     after_run:
-    - RunSmokeXCUITests
-    - Detect_warnings
+    #- RunSmokeXCUITests
+    #- Detect_warnings
     - 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:
