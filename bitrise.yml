@@ -52,9 +52,11 @@ workflows:
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo
-    - carthage@3.2:
+    - script@1:
         inputs:
-        - carthage_options: "--platform ios"
+        - content: |-
+            ./bootstrap
+        title: Run bootstrap
     - script@1:
         inputs:
         - content: |-
