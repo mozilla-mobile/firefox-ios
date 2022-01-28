@@ -100,12 +100,15 @@ class WallpaperSettingsViewController: UIViewController {
     // MARK: - Variables
     var profile: Profile
     var wallpaperManager: WallpaperManager
-//    var tabManager: TabManager
+    var tabManager: TabManager
 
     // MARK: - Initializers
-    init(with profile: Profile, and wallpaperManager: WallpaperManager = WallpaperManager()) {
+    init(with profile: Profile,
+         tabManager: TabManager,
+         and wallpaperManager: WallpaperManager = WallpaperManager()
+    ) {
         self.profile = profile
-//        self.tabManager = tabManager
+        self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
         super.init(nibName: nil, bundle: nil)
     }
@@ -157,10 +160,9 @@ class WallpaperSettingsViewController: UIViewController {
             collectionTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 19),
             collectionTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 
-            collectionContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionContainer.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 9),
-            collectionContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            collectionContainer.heightAnchor.constraint(equalToConstant: 285),
+            collectionContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
             collectionView.leadingAnchor.constraint(equalTo: collectionContainer.leadingAnchor, constant: 28),
             collectionView.topAnchor.constraint(equalTo: collectionContainer.topAnchor, constant: 32),
@@ -229,10 +231,8 @@ class WallpaperSettingsViewController: UIViewController {
             labelText: .Settings.Homepage.Wallpaper.WallpaperUpdatedToastLabel,
             buttonText: .Settings.Homepage.Wallpaper.WallpaperUpdatedToastButton,
             completion: { buttonPressed in
-            if buttonPressed {
-                guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
-                navigationController.done()
-            }
+
+            if buttonPressed { self.dismissView() }
         })
 
         toast.showToast(viewController: self,
@@ -244,6 +244,16 @@ class WallpaperSettingsViewController: UIViewController {
                 toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ]
         }
+    }
+
+    private func dismissView() {
+        guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
+
+        if let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab, !isFxHomeTab {
+            tabManager.selectTab(tabManager.addTab())
+        }
+
+        navigationController.done()
     }
 }
 

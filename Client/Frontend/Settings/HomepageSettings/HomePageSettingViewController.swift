@@ -237,18 +237,23 @@ extension HomePageSettingViewController {
 extension HomePageSettingViewController {
     class WallpaperSettings: Setting {
 
-        let profile: Profile
+        var profile: Profile
+        var tabManager: TabManager
+
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var accessibilityIdentifier: String? { return "WallpaperSettings" }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
-        init(settings: SettingsTableViewController) {
+        init(settings: SettingsTableViewController,
+             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+        ) {
             self.profile = settings.profile
+            self.tabManager = tabManager
             super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            let wallpaperVC = WallpaperSettingsViewController(with: profile)
+            let wallpaperVC = WallpaperSettingsViewController(with: profile, tabManager: tabManager)
             navigationController?.pushViewController(wallpaperVC, animated: true)
         }
     }
