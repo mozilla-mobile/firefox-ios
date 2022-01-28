@@ -54,8 +54,10 @@ class TabEventHandlerTests: XCTestCase {
         }
 
         expectation(for: exists, evaluatedWith: BrowserViewController.foregroundBVC().tabManager) {
-            guard let url = BrowserViewController.foregroundBVC().tabManager.tabs[2].url else {
-                XCTFail("URL should not be nil")
+            XCTAssertEqual(BrowserViewController.foregroundBVC().tabManager.tabs.count, 3)
+            let thirdTab = BrowserViewController.foregroundBVC().tabManager.tabs[2]
+            guard let url = thirdTab.url else {
+                XCTFail("URL should not be nil for tab \(thirdTab.debugDescription)")
                 return false
             }
 
