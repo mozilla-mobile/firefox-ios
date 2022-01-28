@@ -9,21 +9,6 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-extension UITableView {
-    // setting tableHeaderView
-    func setAndLayoutTableHeaderView(header: UIView) {
-        tableHeaderView = header
-        header.setNeedsLayout()
-        header.layoutIfNeeded()
-        header.frame.size = header.systemLayoutSizeFitting(UIView.layoutFittingExpandedSize)
-        tableHeaderView = header
-        
-        DispatchQueue.main.async {
-            self.tableHeaderView?.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        }
-    }
-}
-
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
@@ -54,6 +39,8 @@ private struct ReadingListPanelUX {
     
     static let WelcomeScreenMaxWidth: CGFloat = 400
     static let WelcomeScreenItemImageWidth: CGFloat = 20
+    
+    static let WelcomeScreenVerticalOffset: CGFloat = -20
 }
 
 class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
@@ -244,7 +231,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
-                tableView.setAndLayoutTableHeaderView(header: emptyStateView)
+                DispatchQueue.main.async { self.tableView.backgroundView = self.emptyStateView }
             } else {
                 if prevNumberOfRecords == 0 {
                     tableView.isScrollEnabled = true
@@ -254,7 +241,9 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         }
     }
     
-    private lazy var emptyStateView: UIView = .build { view in
+    private lazy var emptyStateView: UIView = {
+        let view = UIView()
+        
         let welcomeLabel: UILabel = .build { label in
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
@@ -285,7 +274,8 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         let emptyStateViewWrapper: UIView = .build { view in
             view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
         }
-        view.addSubviews(emptyStateViewWrapper)
+        
+        view.addSubview(emptyStateViewWrapper)
         
         NSLayoutConstraint.activate([
             // title
@@ -311,17 +301,19 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
             readingListImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
             
-            // position wrapper
-            emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding),
-            emptyStateViewWrapper.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
-            emptyStateViewWrapper.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
+            readingListLabel.bottomAnchor.constraint(equalTo: emptyStateViewWrapper.bottomAnchor),
             
             // overall positioning of emptyStateViewWrapper
+            emptyStateViewWrapper.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
+            emptyStateViewWrapper.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
             emptyStateViewWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth),
+            
             emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyStateViewWrapper.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            emptyStateViewWrapper.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: ReadingListPanelUX.WelcomeScreenVerticalOffset)
         ])
-    }
+        
+        return view
+    }()
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
