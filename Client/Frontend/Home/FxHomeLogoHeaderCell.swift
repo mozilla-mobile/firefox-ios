@@ -114,7 +114,39 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
                 self.logoButton.transform = CGAffineTransform.identity
             }
         } completion: { _ in
+            UIView.animateKeyframes(withDuration: 1, delay: 0.5, options: []) {
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: frameDuration) {
+                    self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
+                }
+
+                UIView.addKeyframe(withRelativeStartTime: frameDuration,
+                                   relativeDuration: frameDuration) {
+                    self.logoButton.transform = CGAffineTransform(rotationAngle: +angle)
+                }
+
+                UIView.addKeyframe(withRelativeStartTime: frameDuration*2,
+                                   relativeDuration: frameDuration) {
+                    self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
+                }
+
+                UIView.addKeyframe(withRelativeStartTime: frameDuration*3,
+                                   relativeDuration: frameDuration) {
+                    self.logoButton.transform = CGAffineTransform(rotationAngle: +angle)
+                }
+
+                UIView.addKeyframe(withRelativeStartTime: frameDuration*4,
+                                   relativeDuration: frameDuration) {
+                    self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
+                }
+
+                UIView.addKeyframe(withRelativeStartTime: frameDuration*5,
+                                   relativeDuration: frameDuration) {
+                    self.logoButton.transform = CGAffineTransform.identity
+                }
+            } completion: { _ in
 //            userDefaults?.set(true, forKey: PrefsKeys.WallpaperLogoHasShownAnimation)
+            }
         }
     }
 }
