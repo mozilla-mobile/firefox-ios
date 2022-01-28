@@ -1252,7 +1252,7 @@ extension FirefoxHomeViewController {
     func animateLogo() {
         guard let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell else { return }
         _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
-            cell.animateLogo()
+            cell.runLogoAnimation()
         })
     }
 }

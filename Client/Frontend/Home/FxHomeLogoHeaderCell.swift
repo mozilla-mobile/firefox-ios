@@ -21,14 +21,9 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         button.accessibilityIdentifier = a11y.logoButton
     }
 
-    private var userDefaults: UserDefaults?
+    private var userDefaults: UserDefaults = UserDefaults.standard
 
     // MARK: - Initializers
-    convenience init(userDefaults: UserDefaults = UserDefaults.standard) {
-        self.init(frame: .zero)
-        self.userDefaults = userDefaults
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -77,76 +72,54 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Animation
-    public func animateLogo() {
-//        guard !userDefaults?.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation) else { return }
+    public func runLogoAnimation() {
+        let localesAnimationIsAvailableFor = ["en_US", "es_US"]
+        guard !userDefaults.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
+              localesAnimationIsAvailableFor.contains(Locale.current.identifier)
+        else { return }
+
+        animateLogo(withDelay: 0) {
+            self.animateLogo(withDelay: 0.5) {
+                self.userDefaults.set(true, forKey: PrefsKeys.WallpaperLogoHasShownAnimation)
+            }
+        }
+    }
+
+    private func animateLogo(withDelay delay: TimeInterval, completionHandler: @escaping () -> Void) {
         let angle: CGFloat = .pi/32
         let numberOfFrames: Double = 6
         let frameDuration = Double(1/numberOfFrames)
 
-        UIView.animateKeyframes(withDuration: 1, delay: 0, options: []) {
+        // The number of keyframes added in this keyframe block are equal to the
+        // `numberOfFrames`. But each keyframe needs to change angle for the
+        // respective animation to move through the keyframes. Instead of doing this
+        // manually, we can automate it given that we treat the `relativeStartTimeModifier`
+        // as an index (ie, starting at 0) and the `numberOfFrames` as a `.count`
+        // meaning that the correct index is found at `x - 1`.
+        UIView.animateKeyframes(withDuration: 1, delay: delay, options: []) {
 
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: frameDuration) {
-                self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
-            }
+            var relativeStartTimeModifier = 0.0
+            repeat {
 
-            UIView.addKeyframe(withRelativeStartTime: frameDuration,
-                               relativeDuration: frameDuration) {
-                self.logoButton.transform = CGAffineTransform(rotationAngle: +angle)
-            }
+                let adjustedAngle = (relativeStartTimeModifier.remainder(dividingBy: 2) == 0) ? +angle : -angle
+                let newStartTime = frameDuration*relativeStartTimeModifier
 
-            UIView.addKeyframe(withRelativeStartTime: frameDuration*2,
-                               relativeDuration: frameDuration) {
-                self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
-            }
+                UIView.addKeyframe(withRelativeStartTime: newStartTime,
+                                   relativeDuration: frameDuration) {
 
-            UIView.addKeyframe(withRelativeStartTime: frameDuration*3,
-                               relativeDuration: frameDuration) {
-                self.logoButton.transform = CGAffineTransform(rotationAngle: +angle)
-            }
+                    if relativeStartTimeModifier < numberOfFrames - 1 {
+                        self.logoButton.transform = CGAffineTransform(rotationAngle: adjustedAngle)
 
-            UIView.addKeyframe(withRelativeStartTime: frameDuration*4,
-                               relativeDuration: frameDuration) {
-                self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
-            }
+                    } else if relativeStartTimeModifier == numberOfFrames - 1 {
+                        self.logoButton.transform = CGAffineTransform.identity
+                    }
+                }
 
-            UIView.addKeyframe(withRelativeStartTime: frameDuration*5,
-                               relativeDuration: frameDuration) {
-                self.logoButton.transform = CGAffineTransform.identity
-            }
+                relativeStartTimeModifier += 1.0
+            } while relativeStartTimeModifier < numberOfFrames
+
         } completion: { _ in
-            UIView.animateKeyframes(withDuration: 1, delay: 0.5, options: []) {
-
-                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: frameDuration) {
-                    self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
-                }
-
-                UIView.addKeyframe(withRelativeStartTime: frameDuration,
-                                   relativeDuration: frameDuration) {
-                    self.logoButton.transform = CGAffineTransform(rotationAngle: +angle)
-                }
-
-                UIView.addKeyframe(withRelativeStartTime: frameDuration*2,
-                                   relativeDuration: frameDuration) {
-                    self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
-                }
-
-                UIView.addKeyframe(withRelativeStartTime: frameDuration*3,
-                                   relativeDuration: frameDuration) {
-                    self.logoButton.transform = CGAffineTransform(rotationAngle: +angle)
-                }
-
-                UIView.addKeyframe(withRelativeStartTime: frameDuration*4,
-                                   relativeDuration: frameDuration) {
-                    self.logoButton.transform = CGAffineTransform(rotationAngle: -angle)
-                }
-
-                UIView.addKeyframe(withRelativeStartTime: frameDuration*5,
-                                   relativeDuration: frameDuration) {
-                    self.logoButton.transform = CGAffineTransform.identity
-                }
-            } completion: { _ in
-//            userDefaults?.set(true, forKey: PrefsKeys.WallpaperLogoHasShownAnimation)
-            }
+            completionHandler()
         }
     }
 }
