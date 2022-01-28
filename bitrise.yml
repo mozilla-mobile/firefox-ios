@@ -56,9 +56,7 @@ workflows:
         inputs:
         - content: |-
             ls
-            echo $BITRISE_PROJECT_PATH
-            project_dir=$BITRISE_PROJECT_PATH
-            ./project_dir/bootstrap.sh
+            ./bootstrap.sh
         title: Run bootstrap
     - script@1:
         inputs:
