@@ -198,7 +198,7 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         midView.addSubview(descriptionLabel)
         let containerView = UIView()
         containerView.addSubview(midView)
-        addSubview(containerView)
+        contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints { make in
             make.height.equalTo(65)
