@@ -11,18 +11,21 @@ import WebKit
 import XCTest
 
 class TabManagerStoreTests: XCTestCase {
-    let profile = TabManagerMockProfile()
+    var profile: TabManagerMockProfile!
     var manager: TabManager!
     let configuration = WKWebViewConfiguration()
 
     override func setUp() {
         super.setUp()
 
+        profile = TabManagerMockProfile()
+        profile._reopen()
         manager = TabManager(profile: profile, imageStore: nil)
         configuration.processPool = WKProcessPool()
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            // BVC.viewWillAppear() calls restoreTabs() which interferes with these tests. (On iPhone, ClientTests never dismiss the intro screen, on iPad the intro is a popover on the BVC).
+            // BVC.viewWillAppear() calls restoreTabs() which interferes with these tests.
+            // (On iPhone, ClientTests never dismiss the intro screen, on iPad the intro is a popover on the BVC).
             // Wait for this to happen (UIView.window only gets assigned after viewWillAppear()), then begin testing.
             let bvc = (UIApplication.shared.delegate as! AppDelegate).browserViewController
             let predicate = XCTNSPredicateExpectation(predicate: NSPredicate(format: "view.window != nil"), object: bvc)
@@ -34,6 +37,9 @@ class TabManagerStoreTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        profile._shutdown()
+        profile = nil
+        manager = nil
     }
 
     func testNoData() {

@@ -51,10 +51,11 @@ class TabEventHandlerTests: XCTestCase {
         prefs.setBool(false, forKey: PrefsKeys.KeyBlockPopups)
         manager.addTab(URLRequest(url: URL(string: "\(webServerBase)/blankpopup")!))
 
-        XCTAssertEqual(manager.tabs.count, 2)
+        // Wait for tab count to increase by one with the popup open
+        let actualTabCount = manager.tabs.count
         let exists = NSPredicate() { obj, _ in
             let tabManager = obj as! TabManager
-            return tabManager.tabs.count > 2
+            return tabManager.tabs.count > actualTabCount
         }
 
         expectation(for: exists, evaluatedWith: manager) {
