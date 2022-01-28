@@ -37,7 +37,7 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     imageView.image = UIImage(named: "emptySync")
     view.addSubview(imageView)
     imageView.snp.makeConstraints { (make) -> Void in
-        make.top.equalTo(view).offset(InstructionsViewControllerUX.TopPadding)
+        make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(InstructionsViewControllerUX.TopPadding)
         make.centerX.equalTo(view)
     }
 
@@ -75,7 +75,6 @@ class InstructionsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        edgesForExtendedLayout = []
         view.backgroundColor = UIColor.Photon.White100
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SendToCloseButton, style: .done, target: self, action: #selector(close))
