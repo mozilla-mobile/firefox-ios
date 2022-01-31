@@ -39,7 +39,7 @@ class ETPCoverSheetTests: XCTestCase {
         var sessionValue:Int32 = 0
         var shouldShow = false
         var isCleanInstall = true // Only for the first time
-        for session in 0...2 {
+        for _ in 0...2 {
            shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: prefs, currentAppVersion: currentTestAppVersion, isCleanInstall: isCleanInstall, supportedAppVersions: supportedVersion)
             // False after the 1st run
             isCleanInstall = false
