@@ -18,62 +18,54 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertEqual(manager.testCountRestoredTabs(), 0)
     }
 
+    func testAddTabWithoutStoring_hasNoData() {
+        let manager = createManager()
+        let configuration = createConfiguration()
+        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2, isPrivate: true)
+        XCTAssertEqual(manager.tabs.count, 2)
+        XCTAssertEqual(manager.testTabCountOnDisk(), 0)
+        XCTAssertEqual(manager.testCountRestoredTabs(), 0)
+    }
+
     func testPrivateTabsAreArchived() {
         let manager = createManager()
         let configuration = createConfiguration()
-        for _ in 0..<2 {
-            addTabWithSessionData(manager: manager, configuration: configuration, isPrivate: true)
-        }
+        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2, isPrivate: true)
         XCTAssertEqual(manager.tabs.count, 2)
 
-        let expectation = expectation(description: "Saved store changes")
-        manager.storeChanges(writeCompletion: {
-            XCTAssertEqual(manager.testTabCountOnDisk(), 2)
-            expectation.fulfill()
-        })
-        waitForExpectations(timeout: 20, handler: nil)
+        waitStoreChanges(manager: manager, expectedTabCount: 2)
     }
 
-    // Test disabled due to Issue:https://github.com/mozilla-mobile/firefox-ios/issues/7867
-    /*
-    func testAddedTabsAreStored() {
-        // Add 2 tabs
-        for _ in 0..<2 {
-            addTabWithSessionData()
-        }
+    func testNormalTabsAreArchived_storeMultipleTimesProperly() {
+        let manager = createManager()
+        let configuration = createConfiguration()
+        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
+        XCTAssertEqual(manager.tabs.count, 2)
 
-        var e = expectation(description: "saved")
-        manager.storeChanges().uponQueue(.main) { _ in
-            XCTAssertEqual(self.manager.testTabCountOnDisk(), 2)
-            e.fulfill()
-        }
-        waitForExpectations(timeout: 2, handler: nil)
+        waitStoreChanges(manager: manager, expectedTabCount: 2)
 
-        // Add 2 more
-        for _ in 0..<2 {
-            addTabWithSessionData()
-        }
+        // Add 2 more tabs
+        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
+        XCTAssertEqual(manager.tabs.count, 4)
 
-        e = expectation(description: "saved")
-        manager.storeChanges().uponQueue(.main) { _ in
-            XCTAssertEqual(self.manager.testTabCountOnDisk(), 4)
-            e.fulfill()
-        }
-        waitForExpectations(timeout: 2, handler: nil)
+        waitStoreChanges(manager: manager, expectedTabCount: 4)
+    }
+
+    func testRemoveAndAddTab_doesntStoreRemovedTabs() {
+        let manager = createManager()
+        let configuration = createConfiguration()
+        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
+        XCTAssertEqual(manager.tabs.count, 2)
 
         // Remove all tabs, and add just 1 tab
         manager.removeAll()
-        addTabWithSessionData()
+        addTabWithSessionData(manager: manager, configuration: configuration)
 
-        e = expectation(description: "saved")
-        manager.storeChanges().uponQueue(.main) {_ in
-            XCTAssertEqual(self.manager.testTabCountOnDisk(), 1)
-            e.fulfill()
-        }
-        waitForExpectations(timeout: 2, handler: nil)
-    }*/
+        waitStoreChanges(manager: manager, expectedTabCount: 1)
+    }
 }
 
+// MARK: - Helper methods
 private extension TabManagerStoreTests {
 
     func createManager(file: StaticString = #file, line: UInt = #line) -> TabManager {
@@ -112,11 +104,27 @@ private extension TabManagerStoreTests {
         }
     }
 
+    func addNumberOfTabs(manager: TabManager, configuration: WKWebViewConfiguration, tabNumber: Int, isPrivate: Bool = false) {
+        for _ in 0..<tabNumber {
+            addTabWithSessionData(manager: manager, configuration: configuration, isPrivate: isPrivate)
+        }
+    }
+
     // Without session data, a Tab can't become a SavedTab and get archived
     func addTabWithSessionData(manager: TabManager, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         let tab = Tab(bvc: BrowserViewController.foregroundBVC(), configuration: configuration, isPrivate: isPrivate)
         tab.url = URL(string: "http://yahoo.com")!
         manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)
         tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
+    }
+
+    func waitStoreChanges(manager: TabManager, expectedTabCount: Int, file: StaticString = #file, line: UInt = #line) {
+        let expectation = expectation(description: "Saved store changes")
+        manager.storeChanges(writeCompletion: { [weak manager] in
+            guard let manager = manager else { XCTFail("Manager shouldn't be nil"); return }
+            XCTAssertEqual(manager.testTabCountOnDisk(), expectedTabCount, file: file, line: line)
+            expectation.fulfill()
+        })
+        waitForExpectations(timeout: 20, handler: nil)
     }
 }
