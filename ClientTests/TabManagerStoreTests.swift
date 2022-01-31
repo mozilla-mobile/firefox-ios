@@ -11,56 +11,23 @@ import WebKit
 import XCTest
 
 class TabManagerStoreTests: XCTestCase {
-    var profile: TabManagerMockProfile!
-    var manager: TabManager!
-    let configuration = WKWebViewConfiguration()
-
-    override func setUp() {
-        super.setUp()
-
-        profile = TabManagerMockProfile()
-        profile._reopen()
-        manager = TabManager(profile: profile, imageStore: nil)
-        configuration.processPool = WKProcessPool()
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            // BVC.viewWillAppear() calls restoreTabs() which interferes with these tests.
-            // (On iPhone, ClientTests never dismiss the intro screen, on iPad the intro is a popover on the BVC).
-            // Wait for this to happen (UIView.window only gets assigned after viewWillAppear()), then begin testing.
-            let bvc = (UIApplication.shared.delegate as! AppDelegate).browserViewController
-            let predicate = XCTNSPredicateExpectation(predicate: NSPredicate(format: "view.window != nil"), object: bvc)
-            wait(for: [predicate], timeout: 20)
-        }
-
-        manager.testClearArchive()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        profile._shutdown()
-        profile = nil
-        manager = nil
-    }
 
     func testNoData() {
+        let (manager, _) = createSUT()
         XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
         XCTAssertEqual(manager.testCountRestoredTabs(), 0)
     }
 
     func testPrivateTabsAreArchived() {
+        let (manager, configuration) = createSUT()
         for _ in 0..<2 {
-            addTabWithSessionData(isPrivate: true)
+            addTabWithSessionData(manager: manager, configuration: configuration, isPrivate: true)
         }
         XCTAssertEqual(manager.tabs.count, 2)
 
         let expectation = expectation(description: "Saved store changes")
-        manager.storeChanges(writeCompletion: { [weak self] in
-            guard let strongSelf = self else {
-                XCTFail("Should be strong reference")
-                return
-            }
-
-            XCTAssertEqual(strongSelf.manager.testTabCountOnDisk(), 2)
+        manager.storeChanges(writeCompletion: {
+            XCTAssertEqual(manager.testTabCountOnDisk(), 2)
             expectation.fulfill()
         })
         waitForExpectations(timeout: 20, handler: nil)
@@ -108,8 +75,41 @@ class TabManagerStoreTests: XCTestCase {
 
 private extension TabManagerStoreTests {
 
+    // SUT = system under test
+    func createSUT(file: StaticString = #file, line: UInt = #line) -> (TabManager, WKWebViewConfiguration) {
+        let profile = TabManagerMockProfile()
+        profile._reopen()
+        let configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
+        configureiPad()
+
+        let manager = TabManager(profile: profile, imageStore: nil)
+        manager.testClearArchive()
+
+        trackForMemoryLeaks(manager, file: file, line: line)
+        trackForMemoryLeaks(profile, file: file, line: line)
+        trackForMemoryLeaks(configuration, file: file, line: line)
+        return (manager, configuration)
+    }
+
+    func configureiPad() {
+        guard UIDevice.current.userInterfaceIdiom == .pad else { return }
+        // BVC.viewWillAppear() calls restoreTabs() which interferes with these tests.
+        // (On iPhone, ClientTests never dismiss the intro screen, on iPad the intro is a popover on the BVC).
+        // Wait for this to happen (UIView.window only gets assigned after viewWillAppear()), then begin testing.
+        let bvc = (UIApplication.shared.delegate as! AppDelegate).browserViewController
+        let predicate = XCTNSPredicateExpectation(predicate: NSPredicate(format: "view.window != nil"), object: bvc)
+        wait(for: [predicate], timeout: 20)
+    }
+
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated, potential memory leak.", file: file, line: line)
+        }
+    }
+
     // Without session data, a Tab can't become a SavedTab and get archived
-    func addTabWithSessionData(isPrivate: Bool = false) {
+    func addTabWithSessionData(manager: TabManager, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         let tab = Tab(bvc: BrowserViewController.foregroundBVC(), configuration: configuration, isPrivate: isPrivate)
         tab.url = URL(string: "http://yahoo.com")!
         manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)

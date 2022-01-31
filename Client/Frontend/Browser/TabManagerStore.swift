@@ -84,13 +84,12 @@ class TabManagerStore: FeatureFlagsProtocol {
     ///   - tabs: The tabs to preserve
     ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
     ///   - writeCompletion: Used to know the write operation has completed - Used in unit tests
-    /// - Returns: Success when the write operation is on the queue
-    @discardableResult func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? = nil) -> Success {
+    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, writeCompletion: (() -> Void)? = nil) {
         assert(Thread.isMainThread)
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
             let path = tabsStateArchivePath() else {
                 clearArchive()
-                return succeed()
+                return
         }
 
         writeOperation.cancel()
@@ -103,22 +102,19 @@ class TabManagerStore: FeatureFlagsProtocol {
 
         let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
 
-        let result = Success()
-        writeOperation = DispatchWorkItem {
+        writeOperation = DispatchWorkItem { [weak self] in
+            guard let _ = self else { return }
             let written = tabStateData.write(toFile: path, atomically: true)
 
             SimpleTab.saveSimpleTab(tabs: simpleTabs)
             // Ignore write failure (could be restoring).
             log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
-            result.fill(Maybe(success: ()))
             writeCompletion?()
         }
 
         // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
         // Notice above that a repeated 'preserveTabs' call will 'cancel()' a pending write operation.
         serialQueue.asyncAfter(deadline: .now() + 0.100, execute: writeOperation)
-
-        return result
     }
 
     func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
