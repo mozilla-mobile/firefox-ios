@@ -71,6 +71,7 @@ struct WallpaperDataManager {
         return [WallpaperCollection(wallpaperFileNames: ["fxCerulean"],
                                                          //"fxAmethyst"],
                                     type: .themed(type: .firefox)),
+                // ROUX - Remove this, it's just for testing!
                 WallpaperCollection(wallpaperFileNames: ["fxAmethyst"],
                                     type: .themed(type: .projectHouse)),
                 ]

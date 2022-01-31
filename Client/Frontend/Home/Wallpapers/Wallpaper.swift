@@ -127,6 +127,7 @@ struct Wallpaper: Codable, Equatable {
     }
 
     // MARK: - Private helper methods
+    /// Checking if a date of format `yyyyMMdd` is
     private func checkEligibilityFor(date: String) -> Bool {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
