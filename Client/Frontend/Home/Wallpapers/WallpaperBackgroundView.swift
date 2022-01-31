@@ -132,5 +132,6 @@ class WallpaperBackgroundView: UIView {
         // No gradient exists for default wallpaper OR firefox default wallpapers.
         default: gradientView.alpha = 0.0
         }
+
     }
 }

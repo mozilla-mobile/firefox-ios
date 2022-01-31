@@ -78,8 +78,8 @@ struct Wallpaper: Codable, Equatable {
     // MARK: - Variables
     let name: String
     let type: WallpaperType
-    fileprivate let expiryDate: String?
-    fileprivate let locales: [String]?
+    private let expiryDate: Date?
+    private let locales: [String]?
 
     var image: WallpaperImageSet {
         var fileName = name
@@ -118,7 +118,7 @@ struct Wallpaper: Codable, Equatable {
     // MARK: - Initializer
     init(named name: String,
          ofType type: WallpaperType,
-         expiringOn date: String? = nil,
+         expiringOn date: Date? = nil,
          limitedToLocale locale: [String]? = nil) {
         self.name = name
         self.expiryDate = date
@@ -128,16 +128,10 @@ struct Wallpaper: Codable, Equatable {
 
     // MARK: - Private helper methods
     /// Checking if a date of format `yyyyMMdd` is
-    private func checkEligibilityFor(date: String) -> Bool {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd"
+    private func checkEligibilityFor(date expiryDate: Date) -> Bool {
         let currentDate = Date()
 
-        if let expiredDate = formatter.date(from: date),
-           currentDate <= expiredDate {
-            return true
-        }
-
+        if currentDate <= expiryDate { return true }
         return false
     }
 

@@ -44,29 +44,29 @@ class WallpaperSettingsViewController: UIViewController {
         return collectionView
     }()
 
-    private var layoutSection: NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: FxHomePocketViewModel.widthDimension,
-            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
-        )
-
-        let subItems = Array(repeating: item, count: FxHomePocketCollectionCellUX.numberOfItemsInColumn)
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
-
-        let section = NSCollectionLayoutSection(group: group)
-
-        section.orthogonalScrollingBehavior = .continuous
-        return section
-    }
+//    private var layoutSection: NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1),
+//            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+//        )
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//
+//        let groupSize = NSCollectionLayoutSize(
+//            widthDimension: FxHomePocketViewModel.widthDimension,
+//            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+//        )
+//
+//        let subItems = Array(repeating: item, count: FxHomePocketCollectionCellUX.numberOfItemsInColumn)
+//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
+//        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
+//        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
+//                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
+//
+//        let section = NSCollectionLayoutSection(group: group)
+//
+//        section.orthogonalScrollingBehavior = .continuous
+//        return section
+//    }
 
     // Switch
     lazy var switchContainer: UIView = .build { _ in }
@@ -139,6 +139,10 @@ class WallpaperSettingsViewController: UIViewController {
                                   scrollPosition: [])
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        // reload layout
+    }
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -160,9 +164,9 @@ class WallpaperSettingsViewController: UIViewController {
             collectionTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 19),
             collectionTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 
-            collectionContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionContainer.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 9),
-            collectionContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             collectionView.leadingAnchor.constraint(equalTo: collectionContainer.leadingAnchor, constant: 28),
             collectionView.topAnchor.constraint(equalTo: collectionContainer.topAnchor, constant: 32),

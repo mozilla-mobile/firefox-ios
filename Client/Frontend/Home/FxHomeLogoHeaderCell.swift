@@ -75,7 +75,8 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     public func runLogoAnimation() {
         let localesAnimationIsAvailableFor = ["en_US", "es_US"]
         guard !userDefaults.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
-              localesAnimationIsAvailableFor.contains(Locale.current.identifier)
+              localesAnimationIsAvailableFor.contains(Locale.current.identifier),
+              UIAccessibility.isReduceMotionEnabled
         else { return }
 
         animateLogo(withDelay: 0) {

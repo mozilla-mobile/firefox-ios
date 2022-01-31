@@ -5,11 +5,11 @@
 import Foundation
 
 /// A internal model for projects with wallpapers that are timed.
-fileprivate struct WallpaperCollection {
+private struct WallpaperCollection {
     /// The names of the wallpaper assets to be included in the collection.
     let wallpaperFileNames: [String]
     let type: WallpaperType
-    let expiryDate: String?
+    let expiryDate: Date?
     /// The locales that the wallpapers will show up in. If empty,
     /// they will not show up anywhere.
     let locales: [String]?
@@ -26,7 +26,7 @@ fileprivate struct WallpaperCollection {
     ///         wallpapers in the collection are shown.
     init(wallpaperFileNames: [String],
          type: WallpaperType,
-         expiryDate: String? = nil,
+         expiryDate: Date? = nil,
          locales: [String]? = nil) {
         self.wallpaperFileNames = wallpaperFileNames
         self.type = type
@@ -68,6 +68,9 @@ struct WallpaperDataManager {
     }
 
     private func buildAllWallpaperCollections() -> [WallpaperCollection] {
+
+        // It's preferred to create dates for the collections using
+        // `Calendar.current.date(from: DateComponents(year: 2018, month: 1, day: 15))`
         return [WallpaperCollection(wallpaperFileNames: ["fxCerulean",
                                                          "fxAmethyst"],
                                     type: .themed(type: .firefox)),
