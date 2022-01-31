@@ -4,21 +4,21 @@
 
 import Foundation
 import XCGLogger
-import SwiftKeychainWrapper
+import FxAClient
 
 private let log = Logger.keychainLogger
 
-public extension KeychainWrapper {
-    static var sharedAppContainerKeychain: KeychainWrapper {
+public extension MZKeychainWrapper {
+    static var sharedClientAppContainerKeychain: MZKeychainWrapper {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
-        return KeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
+        return MZKeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
     }
 }
 
-public extension KeychainWrapper {
-    func ensureStringItemAccessibility(_ accessibility: SwiftKeychainWrapper.KeychainItemAccessibility, forKey key: String) {
+public extension MZKeychainWrapper {
+    func ensureClientStringItemAccessibility(_ accessibility: MZKeychainItemAccessibility, forKey key: String) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
                 log.debug("updating item \(key) with \(accessibility)")
@@ -39,7 +39,7 @@ public extension KeychainWrapper {
         }
     }
 
-    func ensureObjectItemAccessibility(_ accessibility: SwiftKeychainWrapper.KeychainItemAccessibility, forKey key: String) {
+    func ensureObjectItemAccessibility(_ accessibility: MZKeychainItemAccessibility, forKey key: String) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
                 log.debug("updating item \(key) with \(accessibility)")

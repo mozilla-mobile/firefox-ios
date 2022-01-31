@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import MozillaAppServices
+import Glean
 import Shared
 import Telemetry
 import Account
@@ -140,7 +140,7 @@ class TelemetryWrapper {
         }
 
         // Initialize Glean telemetry
-        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue))
+        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue), buildInfo: GleanMetrics.GleanBuild.info)
 
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile

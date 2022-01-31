@@ -79,13 +79,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-            # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
   3_provisioning_and_npm_installation:
     steps:
     - script@1.1:
@@ -280,14 +273,6 @@ workflows:
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
     - script@1:
-        title: Copy glean sdk_generator
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-            # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
@@ -478,19 +463,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lip
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1.1:
         title: NPM install and build
         inputs:
@@ -1112,6 +1084,302 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'FirefoxBeta: Deploy to iTunes Connect'
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.1.x
+        machine_type_id: g2.8core
+  SPM_Deploy_Prod_Beta:
+    steps:
+    - activate-ssh-key@4.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.1: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            ./content_blocker_update.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - distribution_method: app-store
+        - export_development_team: 43AQ936H96
+        - configuration: "$BITRISE_SCHEME"
+    - deploy-to-bitrise-io@2.0: {}
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            # sleep 9999
+        is_always_run: true
+        title: debug-sleep
+    - slack@3.2:
+        inputs:
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - export_development_team: 43AQ936H96
+        - distribution_method: app-store
+        - configuration: FirefoxBeta
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'FirefoxBeta: Deploy to iTunes Connect'
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.1.x
+        machine_type_id: g2.8core
+  SPM_Deploy_Beta_Only:
+    steps:
+    - activate-ssh-key@4.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.1: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            ./content_blocker_update.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - export_development_team: 43AQ936H96
+        - distribution_method: app-store
+        - configuration: FirefoxBeta
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.1.x
+        machine_type_id: g2.8core
+  SPM_Nightly_Beta_Only:
+    steps:
+    - activate-ssh-key@4.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.1: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            ./content_blocker_update.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - export_development_team: 43AQ936H96
+        - distribution_method: app-store
+        - configuration: FirefoxBeta
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'Nightly FirefoxBeta: Xcode Archive & Export for iOS'
     envs:
     - opts:
         is_expand: false
