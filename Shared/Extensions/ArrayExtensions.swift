@@ -58,6 +58,16 @@ public extension Array {
 
 }
 
+public extension Sequence where Iterator.Element: Hashable {
+    
+    /// Return a  de-duplicated sequence with the order preserved. `o(N)` complexity.
+    func uniqued() -> [Iterator.Element] {
+        var seen: Set<Iterator.Element> = []
+        return filter { seen.insert($0).inserted }
+    }
+    
+}
+
 public extension Sequence {
     func every(_ f: (Self.Iterator.Element) -> Bool) -> Bool {
         for x in self {

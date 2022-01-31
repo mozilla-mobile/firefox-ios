@@ -10,7 +10,25 @@ import XCTest
 
 class NavigationRouterTests: XCTestCase {
 
-    var appScheme: String {
+    private var profile: TabManagerMockProfile!
+    private var browserViewController: BrowserViewController!
+    private var gridTab: GridTabViewController!
+
+    override func setUp() {
+        super.setUp()
+        profile = TabManagerMockProfile()
+        browserViewController = BrowserViewController.foregroundBVC()
+        gridTab = GridTabViewController(tabManager: browserViewController.tabManager, profile: profile)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        profile = nil
+        browserViewController = nil
+        gridTab = nil
+    }
+
+    private var appScheme: String {
         return URL.mozInternalScheme
     }
 
@@ -64,5 +82,60 @@ class NavigationRouterTests: XCTestCase {
         // http[s] URLs stay as NavigationPath.url, even if their non-scheme components would match another type of NavigationPath
         XCTAssertEqual(NavigationPath(url: URL(string: "https://deep-link?url=/settings/newTab")!), NavigationPath.url(webURL: URL(string: "https://deep-link?url=/settings/newTab")!, isPrivate: false))
 
+    }
+
+    // MARK: - Widget
+
+    func testOpenURLWidget_normalTabPath() {
+        let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=true")
+        XCTAssertEqual(path, NavigationPath.url(webURL: nil, isPrivate: true))
+    }
+
+    func testOpenURLWidget_privateTabPath() {
+        let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=false")
+        XCTAssertEqual(path, NavigationPath.url(webURL: nil, isPrivate: false))
+    }
+
+    func testCloseTabsSmallWidget_privateTabPath() {
+        let path = buildNavigationPath(url: "widget-small-quicklink-close-private-tabs")
+        XCTAssertEqual(path, NavigationPath.closePrivateTabs)
+    }
+
+    func testCloseTabsMediumWidget_privateTabPath() {
+        let path = buildNavigationPath(url: "widget-medium-quicklink-close-private-tabs")
+        XCTAssertEqual(path, NavigationPath.closePrivateTabs)
+    }
+
+    func testNavigationPath_handleNormalTab_isExternalSourceTrue() {
+        let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=false")
+        NavigationPath.handle(nav: path, with: browserViewController, tray: gridTab)
+
+        XCTAssertTrue(browserViewController.openedUrlFromExternalSource, "openedUrlFromExternalSource needs to be true for start at home feature")
+    }
+
+    func testNavigationPath_handlePrivateTab_isExternalSourceTrue() {
+        let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=true")
+        NavigationPath.handle(nav: path, with: browserViewController, tray: gridTab)
+
+        XCTAssertTrue(browserViewController.openedUrlFromExternalSource, "openedUrlFromExternalSource needs to be true for start at home feature")
+    }
+
+    func testNavigationPath_handleClosingPrivateTabs_tabsAreDeleted(){
+        browserViewController.tabManager.addTab(isPrivate: true)
+        XCTAssertEqual(browserViewController.tabManager.privateTabs.count, 1, "There should be one private tab")
+
+        let path = buildNavigationPath(url: "widget-medium-quicklink-close-private-tabs")
+        NavigationPath.handle(nav: path, with: browserViewController, tray: gridTab)
+
+        XCTAssertEqual(browserViewController.tabManager.privateTabs.count, 0, "There should be no private tab anymore")
+    }
+}
+
+// MARK: - Helper methods
+private extension NavigationRouterTests {
+
+    func buildNavigationPath(url: String) -> NavigationPath {
+        let appURL = "\(appScheme)://\(url)"
+        return NavigationPath(url: URL(string: appURL)!)!
     }
 }
