@@ -119,6 +119,13 @@ class WallpaperBackgroundView: UIView {
         )
     }
 
+    /// By default, no wallpaper collection should show a gradient. If we wish
+    /// a particular wallpaper collection to have a gradient, it should be included
+    /// in the switch case as
+    ///
+    /// `case .themed(type: .collectionName): gradientView.alpha = 1.0`
+    ///
+    /// Both default and Firefox papers have no gradient.
     private func updateGradientVisibilityForSelectedWallpaper() {
 
         switch wallpaperManager.savedWallpaper.type {
