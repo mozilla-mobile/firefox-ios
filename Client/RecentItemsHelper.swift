@@ -19,7 +19,7 @@ class RecentItemsHelper {
         var cutoff = since
         let calendar = Calendar.current
         
-        if let bookmarkItem = recentItems as? [BookmarkItem] {
+        if let bookmarkItem = recentItems as? [BookmarkItemData] {
             return bookmarkItem.filter { item in
                 let dateAdded = Date.fromTimestamp(Timestamp(item.dateAdded))
                 return calendar.numberOfDaysBetween(dateAdded, and: cutoff) <= 10

@@ -6,7 +6,6 @@ import Foundation
 import GCDWebServers
 import Storage
 import WebKit
-import SwiftKeychainWrapper
 import Shared
 @testable import Client
 

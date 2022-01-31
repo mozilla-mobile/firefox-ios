@@ -5,6 +5,7 @@
 import Shared
 import Storage
 import Telemetry
+import Glean
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }

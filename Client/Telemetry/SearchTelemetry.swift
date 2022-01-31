@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import MozillaAppServices
 import WebKit
+import Glean
 
 // Search Partner Codes
 // https://docs.google.com/spreadsheets/d/1HMm9UXjfJv-uHhGU1pJlbP4ILkdpSD9w_Fd-3yOd8oY/

@@ -8,7 +8,7 @@ import Sync
 import XCGLogger
 import UserNotifications
 import Account
-import SwiftKeychainWrapper
+import FxAClient
 
 private let log = Logger.browserLogger
 
@@ -52,7 +52,7 @@ extension AppDelegate {
         NotificationCenter.default.addObserver(forName: .constellationStateUpdate, object: nil, queue: nil) { notification in
             if let newState = notification.userInfo?["newState"] as? ConstellationState {
                 if newState.localDevice?.pushEndpointExpired ?? false {
-                    KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+                    MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
             }
@@ -61,8 +61,8 @@ extension AppDelegate {
         // Use sync event as a periodic check for the apnsToken.
         // The notification service extension can clear this token if there is an error, and the main app can detect this and re-register.
         NotificationCenter.default.addObserver(forName: .ProfileDidStartSyncing, object: nil, queue: .main) { _ in
-            let kc = KeychainWrapper.sharedAppContainerKeychain
-            if kc.object(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) == nil {
+            let kc = MZKeychainWrapper.sharedClientAppContainerKeychain
+            if kc.object(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock) == nil {
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }
         }

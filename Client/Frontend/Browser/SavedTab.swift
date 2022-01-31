@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 import Shared
-import MozillaAppServices
+import Places
 
 class SavedTab: NSObject, NSCoding {
     var isSelected: Bool
@@ -102,10 +102,10 @@ public class TabGroupData: NSObject, NSCoding {
     func isEmpty() -> Bool {
         return tabAssociatedSearchTerm.isEmpty && tabAssociatedSearchUrl.isEmpty && tabAssociatedNextUrl.isEmpty
     }
-    
-    func tabHistoryMetadatakey() -> HistoryMetadataKey {
-        return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
-    }
+
+   func tabHistoryMetadatakey() -> HistoryMetadataKey {
+       return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
+   }
     
     var jsonDictionary: [String: Any] {
         return [

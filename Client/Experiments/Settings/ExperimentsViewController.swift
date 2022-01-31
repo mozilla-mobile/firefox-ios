@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import MozillaAppServices
+import Nimbus
 
 class ExperimentsViewController: UIViewController {
     private let experimentsView = ExperimentsTableView()

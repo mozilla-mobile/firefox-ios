@@ -4,7 +4,6 @@
 
 import UIKit
 import AuthenticationServices
-import SwiftKeychainWrapper
 
 let CredentialProviderAuthenticationDelay = 0.25
 

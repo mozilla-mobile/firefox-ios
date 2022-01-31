@@ -8,6 +8,7 @@ import Storage
 import SDWebImage
 import XCGLogger
 import SyncTelemetry
+import Nimbus
 
 private let log = Logger.browserLogger
 

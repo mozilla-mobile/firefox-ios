@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import WebKit
-import MozillaAppServices
+import Glean
 
 public enum BasicSearchProvider: String {
     case google

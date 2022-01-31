@@ -11,7 +11,7 @@ protocol RecentlySavedItem {
 }
 
 extension ReadingListItem: RecentlySavedItem { }
-extension BookmarkItem: RecentlySavedItem { }
+extension BookmarkItemData: RecentlySavedItem { }
 
 class FirefoxHomeRecentlySavedViewModel {
     
@@ -22,7 +22,7 @@ class FirefoxHomeRecentlySavedViewModel {
     private let profile: Profile
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var readingListItems = [ReadingListItem]()
-    private var recentBookmarks = [BookmarkItem]()
+    private var recentBookmarks = [BookmarkItemData]()
     private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
 
     init(isZeroSearch: Bool, profile: Profile) {
@@ -78,8 +78,8 @@ class FirefoxHomeRecentlySavedViewModel {
 
     // MARK: - Private
 
-    private func updateRecentBookmarks(bookmarks: [BookmarkItem]) {
-        recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()) as! [BookmarkItem]
+    private func updateRecentBookmarks(bookmarks: [BookmarkItemData]) {
+        recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()) as! [BookmarkItemData]
 
         // Send telemetry if bookmarks aren't empty
         if !recentBookmarks.isEmpty {
