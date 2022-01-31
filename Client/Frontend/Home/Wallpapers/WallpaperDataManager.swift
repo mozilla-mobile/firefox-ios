@@ -68,12 +68,9 @@ struct WallpaperDataManager {
     }
 
     private func buildAllWallpaperCollections() -> [WallpaperCollection] {
-        return [WallpaperCollection(wallpaperFileNames: ["fxCerulean"],
-                                                         //"fxAmethyst"],
+        return [WallpaperCollection(wallpaperFileNames: ["fxCerulean",
+                                                         "fxAmethyst"],
                                     type: .themed(type: .firefox)),
-                // ROUX - Remove this, it's just for testing!
-                WallpaperCollection(wallpaperFileNames: ["fxAmethyst"],
-                                    type: .themed(type: .projectHouse)),
                 ]
     }
 }

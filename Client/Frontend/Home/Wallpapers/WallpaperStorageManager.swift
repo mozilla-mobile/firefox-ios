@@ -17,10 +17,10 @@ class WallpaperStorageManager {
 
     // MARK: - Storage
     public func store(_ wallpaper: Wallpaper) {
-        store(wallpaperObject: wallpaper)
         store(imageSet: wallpaper.image) { result in
             switch result {
             case .success(()):
+                self.store(wallpaperObject: wallpaper)
                 NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
             case .failure(let error):
                 print("There was an error storing the wallpaper: ", error.localizedDescription)

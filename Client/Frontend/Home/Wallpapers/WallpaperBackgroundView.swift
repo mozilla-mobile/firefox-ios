@@ -129,11 +129,8 @@ class WallpaperBackgroundView: UIView {
     private func updateGradientVisibilityForSelectedWallpaper() {
 
         switch wallpaperManager.savedWallpaper.type {
-        // ROUX - remove this. It's just for testing!
-        case .themed(type: .projectHouse): gradientView.alpha = 1.0
         // No gradient exists for default wallpaper OR firefox default wallpapers.
         default: gradientView.alpha = 0.0
         }
-
     }
 }
