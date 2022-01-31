@@ -402,6 +402,12 @@
 		43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43E9BDFB255E0904005BCB91 /* TabMoreMenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E9BDFA255E0904005BCB91 /* TabMoreMenuHeader.swift */; };
 		43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F7952425795F69005AEE40 /* SearchTelemetry.swift */; };
+		43F93C2327A86818009833D9 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
+		43F93C2427A8681C009833D9 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43F93C2527A8682D009833D9 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
+		43F93C2627A86831009833D9 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F87B27966E810013419B /* SDWebImage.framework */; };
+		43F93C2727A86835009833D9 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
+		43F93C2827A8683E009833D9 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		4F2A06BE26F8E46E0017DA05 /* TabCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A06BD26F8E46E0017DA05 /* TabCounterTests.swift */; };
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
@@ -4485,6 +4491,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43F93C2427A8681C009833D9 /* RUSTLogins.framework in Frameworks */,
+				43F93C2327A86818009833D9 /* RUSTPlaces.framework in Frameworks */,
 				1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4654,6 +4662,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43F93C2827A8683E009833D9 /* RUSTLogins.framework in Frameworks */,
+				43F93C2727A86835009833D9 /* RUSTPlaces.framework in Frameworks */,
+				43F93C2627A86831009833D9 /* SDWebImage.framework in Frameworks */,
+				43F93C2527A8682D009833D9 /* Sentry.framework in Frameworks */,
 				1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 			);
