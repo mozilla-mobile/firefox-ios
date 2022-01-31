@@ -234,16 +234,10 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     }
     
     func applyTheme() {
-        let wallpaperManager = WallpaperManager()
-        if wallpaperManager.isUsingCustomWallpaper {
+        if LegacyThemeManager.instance.currentName == .dark {
             itemTitle.textColor = UIColor.Photon.LightGrey10
-
         } else {
-            if LegacyThemeManager.instance.currentName == .dark {
-                itemTitle.textColor = UIColor.Photon.LightGrey10
-            } else {
-                itemTitle.textColor = UIColor.Photon.DarkGrey90
-            }
+            itemTitle.textColor = UIColor.Photon.DarkGrey90
         }
     }
     

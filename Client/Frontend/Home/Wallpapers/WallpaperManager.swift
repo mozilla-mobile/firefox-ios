@@ -97,8 +97,7 @@ struct WallpaperManager {
     // MARK: - Wallpaper storage
     private func updateSelectedWallpaper(to wallpaper: Wallpaper) {
         store(wallpaper: wallpaper)
-        store(image: wallpaper.image.portrait,
-              landscapeImage: wallpaper.image.landscape) { result in
+        store(imageSet: wallpaper.image) { result in
             switch result {
             case .success(()):
                 NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
@@ -115,18 +114,17 @@ struct WallpaperManager {
         }
     }
 
-    private func store(image: UIImage?,
-                       landscapeImage: UIImage?,
+    private func store(imageSet: WallpaperImageSet,
                        completionHandler: @escaping (Result<Void, Error>) -> Void
     ) {
         guard let filePathPortrait = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage),
               let filePathLandscape = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape)
         else { return }
 
-        if let image = image,
-           let landscapeImage = landscapeImage,
-           let portraitPngRepresentation = image.pngData(),
-           let landscapePngRepresentation = landscapeImage.pngData() {
+        if let portrait = imageSet.portrait,
+           let landscape = imageSet.landscape,
+           let portraitPngRepresentation = portrait.pngData(),
+           let landscapePngRepresentation = landscape.pngData() {
             do {
                 try portraitPngRepresentation.write(to: filePathPortrait, options: .atomic)
                 try landscapePngRepresentation.write(to: filePathLandscape, options: .atomic)

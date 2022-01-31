@@ -162,17 +162,8 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
     }
 
     func applyTheme() {
-
-        let wallpaperManager = WallpaperManager()
-        if wallpaperManager.isUsingCustomWallpaper {
-            pinImageView.tintColor =  UIColor.Photon.LightGrey05
-            titleLabel.textColor =  UIColor.Photon.LightGrey05
-
-        } else {
-            pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
-            titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
-        }
-
+        pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
+        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
         faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
         faviconBG.layer.borderColor = TopSiteCellUX.borderColor.cgColor
         faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor

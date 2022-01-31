@@ -125,13 +125,7 @@ class ASHeaderView: UICollectionReusableView {
 
 extension ASHeaderView: NotificationThemeable {
     func applyTheme() {
-        let wallpaperManager = WallpaperManager()
-        if wallpaperManager.isUsingCustomWallpaper {
-            titleLabel.textColor = UIColor.Photon.LightGrey05
-            moreButton.setTitleColor(UIColor.Photon.Blue20, for: .normal)
-        } else {
-            titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-            moreButton.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
-        }
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        moreButton.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
     }
 }

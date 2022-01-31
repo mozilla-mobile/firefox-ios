@@ -60,6 +60,11 @@ extension WallpaperType: Codable {
     }
 }
 
+struct WallpaperImageSet {
+    let portrait: UIImage?
+    let landscape: UIImage?
+}
+
 // MARK: - Collection types
 /// This enum will outline all types of different wallpaper collections we currently
 /// and may offer in the future. As such, there may be items here that are outdated.
@@ -76,11 +81,12 @@ struct Wallpaper: Codable, Equatable {
     fileprivate let expiryDate: String?
     fileprivate let locales: [String]?
 
-    var image: (portrait: UIImage?, landscape: UIImage?) {
+    var image: WallpaperImageSet {
         var fileName = name
         if UIDevice.current.userInterfaceIdiom == .pad { fileName += "_pad" }
 
-        return (UIImage(named: fileName), UIImage(named: fileName + "_ls"))
+        return WallpaperImageSet(portrait: UIImage(named: fileName),
+                                 landscape: UIImage(named: fileName + "_ls"))
     }
 
     var telemetryMetadata: [String: String] {

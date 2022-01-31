@@ -59,15 +59,8 @@ class ASLibraryCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
     }
 
     func applyTheme() {
-        let wallpaperManager = WallpaperManager()
-
         libraryButtons.forEach { button in
-            if wallpaperManager.isUsingCustomWallpaper {
-                button.titleLabel.textColor = UIColor.Photon.LightGrey05
-            } else {
-                button.titleLabel.textColor = UIColor.theme.homePanel.activityStreamCellTitle
-            }
-
+            button.titleLabel.textColor = UIColor.theme.homePanel.activityStreamCellTitle
             button.button.backgroundColor = UIColor.theme.homePanel.shortcutBackground
             button.button.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
             button.button.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
