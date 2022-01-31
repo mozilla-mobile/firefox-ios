@@ -12,19 +12,34 @@ import XCTest
 
 class TabManagerStoreTests: XCTestCase {
 
+    private var profile: TabManagerMockProfile!
+
+    override func setUp() {
+        super.setUp()
+        profile = TabManagerMockProfile()
+        profile._reopen()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        profile._shutdown()
+        profile = nil
+    }
+
     func testNoData() {
         let manager = createManager()
         XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
         XCTAssertEqual(manager.testCountRestoredTabs(), 0)
+        XCTAssertEqual(profile.numberOfTabsStored, 0)
     }
 
     func testAddTabWithoutStoring_hasNoData() {
         let manager = createManager()
         let configuration = createConfiguration()
-        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2, isPrivate: true)
+        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
         XCTAssertEqual(manager.tabs.count, 2)
         XCTAssertEqual(manager.testTabCountOnDisk(), 0)
-        XCTAssertEqual(manager.testCountRestoredTabs(), 0)
+        XCTAssertEqual(profile.numberOfTabsStored, 0)
     }
 
     func testPrivateTabsAreArchived() {
@@ -33,7 +48,8 @@ class TabManagerStoreTests: XCTestCase {
         addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2, isPrivate: true)
         XCTAssertEqual(manager.tabs.count, 2)
 
-        waitStoreChanges(manager: manager, expectedTabCount: 2)
+        // Private tabs aren't stored in remote tabs
+        waitStoreChanges(manager: manager, managerTabCount: 2, profileTabCount: 0)
     }
 
     func testNormalTabsAreArchived_storeMultipleTimesProperly() {
@@ -42,13 +58,13 @@ class TabManagerStoreTests: XCTestCase {
         addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
         XCTAssertEqual(manager.tabs.count, 2)
 
-        waitStoreChanges(manager: manager, expectedTabCount: 2)
+        waitStoreChanges(manager: manager, managerTabCount: 2, profileTabCount: 2)
 
         // Add 2 more tabs
         addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
         XCTAssertEqual(manager.tabs.count, 4)
 
-        waitStoreChanges(manager: manager, expectedTabCount: 4)
+        waitStoreChanges(manager: manager, managerTabCount: 4, profileTabCount: 4)
     }
 
     func testRemoveAndAddTab_doesntStoreRemovedTabs() {
@@ -61,7 +77,7 @@ class TabManagerStoreTests: XCTestCase {
         manager.removeAll()
         addTabWithSessionData(manager: manager, configuration: configuration)
 
-        waitStoreChanges(manager: manager, expectedTabCount: 1)
+        waitStoreChanges(manager: manager, managerTabCount: 1, profileTabCount: 1)
     }
 }
 
@@ -69,13 +85,10 @@ class TabManagerStoreTests: XCTestCase {
 private extension TabManagerStoreTests {
 
     func createManager(file: StaticString = #file, line: UInt = #line) -> TabManager {
-        let profile = TabManagerMockProfile()
         let manager = TabManager(profile: profile, imageStore: nil)
         manager.testClearArchive()
 
         trackForMemoryLeaks(manager, file: file, line: line)
-        trackForMemoryLeaks(profile, file: file, line: line)
-
         return manager
     }
 
@@ -118,13 +131,21 @@ private extension TabManagerStoreTests {
         tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
     }
 
-    func waitStoreChanges(manager: TabManager, expectedTabCount: Int, file: StaticString = #file, line: UInt = #line) {
-        let expectation = expectation(description: "Saved store changes")
-        manager.storeChanges(writeCompletion: { [weak manager] in
-            guard let manager = manager else { XCTFail("Manager shouldn't be nil"); return }
-            XCTAssertEqual(manager.testTabCountOnDisk(), expectedTabCount, file: file, line: line)
+    func waitStoreChanges(manager: TabManager, managerTabCount: Int, profileTabCount: Int, file: StaticString = #file, line: UInt = #line) {
+        let expectation = expectation(description: "Manager stored changes")
+        manager.storeChanges(writeCompletion: { [weak self] in
+            guard let self = self else { XCTFail("self should be strong"); return }
+
+            let managerMessage = "TestTabCountOnDisk is \(manager.testTabCountOnDisk()) when it should be \(managerTabCount)"
+            XCTAssertEqual(manager.testTabCountOnDisk(), managerTabCount, managerMessage, file: file, line: line)
+
+            let profileMessage = "NumberOfTabsStored is \(self.profile.numberOfTabsStored) when it should be \(profileTabCount)"
+            XCTAssertEqual(self.profile.numberOfTabsStored, profileTabCount, profileMessage, file: file, line: line)
             expectation.fulfill()
         })
-        waitForExpectations(timeout: 20, handler: nil)
+
+        waitForExpectations(timeout: 20) { error in
+            if let error = error { XCTFail("WaitForExpectations failed with: \(error.localizedDescription)", file: file, line: line) }
+        }
     }
 }
