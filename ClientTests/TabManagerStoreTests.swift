@@ -13,13 +13,14 @@ import XCTest
 class TabManagerStoreTests: XCTestCase {
 
     func testNoData() {
-        let (manager, _) = createSUT()
+        let manager = createManager()
         XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
         XCTAssertEqual(manager.testCountRestoredTabs(), 0)
     }
 
     func testPrivateTabsAreArchived() {
-        let (manager, configuration) = createSUT()
+        let manager = createManager()
+        let configuration = createConfiguration()
         for _ in 0..<2 {
             addTabWithSessionData(manager: manager, configuration: configuration, isPrivate: true)
         }
@@ -75,21 +76,24 @@ class TabManagerStoreTests: XCTestCase {
 
 private extension TabManagerStoreTests {
 
-    // SUT = system under test
-    func createSUT(file: StaticString = #file, line: UInt = #line) -> (TabManager, WKWebViewConfiguration) {
+    func createManager(file: StaticString = #file, line: UInt = #line) -> TabManager {
         let profile = TabManagerMockProfile()
-        profile._reopen()
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-        configureiPad()
-
         let manager = TabManager(profile: profile, imageStore: nil)
         manager.testClearArchive()
 
         trackForMemoryLeaks(manager, file: file, line: line)
         trackForMemoryLeaks(profile, file: file, line: line)
+
+        return manager
+    }
+
+    func createConfiguration(file: StaticString = #file, line: UInt = #line) -> WKWebViewConfiguration {
+        let configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
+        configureiPad()
+
         trackForMemoryLeaks(configuration, file: file, line: line)
-        return (manager, configuration)
+        return configuration
     }
 
     func configureiPad() {
