@@ -237,7 +237,7 @@ extension Profile {
 
 open class BrowserProfile: Profile {
     fileprivate let name: String
-    fileprivate let keychain: MZKeychainWrapper
+    fileprivate let keychain: KeychainWrapper
     var isShutdown = false
 
     internal let files: FileAccessor
@@ -264,7 +264,7 @@ open class BrowserProfile: Profile {
         log.debug("Initing profile \(localName) on thread \(Thread.current).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+        self.keychain = KeychainWrapper.sharedClientAppContainerKeychain
         self.syncDelegate = syncDelegate
 
         if clear {
@@ -288,7 +288,7 @@ open class BrowserProfile: Profile {
 
         if isNewProfile {
             log.info("New profile. Removing old Keychain/Prefs data.")
-            MZKeychainWrapper.wipeKeychain()
+            KeychainWrapper.wipeKeychain()
             prefs.clearAll()
         }
 

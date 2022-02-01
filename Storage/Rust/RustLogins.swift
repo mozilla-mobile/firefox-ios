@@ -345,7 +345,7 @@ public class RustLoginEncryptionKeys {
     public let loginsPostMigrationSalt = "sqlcipher.key.logins.salt.post.migration"
     public let loginsPostMigrationKey = "sqlcipher.key.logins.db.post.migration"
     
-    let keychain: MZKeychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
+    let keychain: KeychainWrapper = KeychainWrapper.sharedClientAppContainerKeychain
     let canaryPhraseKey = "canaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
     
@@ -744,7 +744,7 @@ public class RustLogins {
     }
     
     private func migrateSQLCipherDBIfNeeded(key: String) {
-        let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+        let keychain = KeychainWrapper.sharedClientAppContainerKeychain
         let rustKeys: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
         let sqlCipherLoginsKey: String? = keychain.string(forKey: rustKeys.loginsUnlockKeychainKey)
         let sqlCipherLoginsSalt: String? = keychain.string(forKey: rustKeys.loginsSaltKeychainKey)

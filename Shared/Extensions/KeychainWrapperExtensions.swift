@@ -8,16 +8,16 @@ import FxAClient
 
 private let log = Logger.keychainLogger
 
-public extension MZKeychainWrapper {
-    static var sharedClientAppContainerKeychain: MZKeychainWrapper {
+public extension KeychainWrapper {
+    static var sharedClientAppContainerKeychain: KeychainWrapper {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
-        return MZKeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
+        return KeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
     }
 }
 
-public extension MZKeychainWrapper {
+public extension KeychainWrapper {
     func ensureClientStringItemAccessibility(_ accessibility: MZKeychainItemAccessibility, forKey key: String) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {

@@ -12,10 +12,10 @@ private let log = Logger.keychainLogger
 public class KeychainStore {
     public static let shared = KeychainStore()
 
-    private let keychainWrapper: MZKeychainWrapper
+    private let keychainWrapper: KeychainWrapper
 
     private init() {
-        self.keychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
+        self.keychainWrapper = KeychainWrapper.sharedClientAppContainerKeychain
     }
 
     public func setDictionary(_ value: [String: Any]?, forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) {

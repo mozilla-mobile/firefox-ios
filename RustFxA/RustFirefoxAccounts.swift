@@ -166,7 +166,7 @@ open class RustFirefoxAccounts {
         NotificationCenter.default.addObserver(forName: .accountAuthenticated, object: nil, queue: .main) { [weak self] notification in
             // Handle account migration completed successfully. Need to clear the old stored apnsToken and re-register push.
             if let type = notification.userInfo?["authType"] as? FxaAuthType, case .migrated = type {
-                MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+                KeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }
 
@@ -193,7 +193,7 @@ open class RustFirefoxAccounts {
         // Keychain forKey("profile.account"), return dictionary, from there
         // forKey("account.state.<guid>"), guid is dictionary["stateKeyLabel"]
         // that returns JSON string.
-        let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+        let keychain = KeychainWrapper.sharedClientAppContainerKeychain
         let key = "profile.account"
         keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
 
@@ -287,7 +287,7 @@ open class RustFirefoxAccounts {
         prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
         cachedUserProfile = nil
         pushNotifications.unregister()
-        MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+        KeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
     }
 
     public func hasAccount() -> Bool {

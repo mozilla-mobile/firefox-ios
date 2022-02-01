@@ -395,6 +395,16 @@
 		43C6A46F279B8A3300C79856 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
 		43C6A470279B8AAF00C79856 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
 		43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */ = {isa = PBXBuildFile; productRef = 43C6A47E27A0679300C79856 /* MappaMundi */; };
+		43CA0CFA27A8AE4B003DADCF /* PersistedFirefoxAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CEF27A8AE4B003DADCF /* PersistedFirefoxAccount.swift */; };
+		43CA0CFC27A8AE4B003DADCF /* FxAccountDeviceConstellation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF027A8AE4B003DADCF /* FxAccountDeviceConstellation.swift */; };
+		43CA0CFE27A8AE4B003DADCF /* KeychainWrapper+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF127A8AE4B003DADCF /* KeychainWrapper+.swift */; };
+		43CA0D0027A8AE4B003DADCF /* FxAccountOAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF227A8AE4B003DADCF /* FxAccountOAuth.swift */; };
+		43CA0D0227A8AE4B003DADCF /* FxAccountStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF327A8AE4B003DADCF /* FxAccountStorage.swift */; };
+		43CA0D0427A8AE4B003DADCF /* FxAccountState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF427A8AE4B003DADCF /* FxAccountState.swift */; };
+		43CA0D0627A8AE4B003DADCF /* FxAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF527A8AE4B003DADCF /* FxAccountManager.swift */; };
+		43CA0D0827A8AE4B003DADCF /* FxAccountLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF627A8AE4B003DADCF /* FxAccountLogging.swift */; };
+		43CA0D0A27A8AE4B003DADCF /* FxAccountConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF727A8AE4B003DADCF /* FxAccountConfig.swift */; };
+		43CA0D0C27A8AE4B003DADCF /* FxAccountMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA0CF827A8AE4B003DADCF /* FxAccountMigration.swift */; };
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
 		43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB97524099F200058A068 /* ETPViewModel.swift */; };
@@ -2174,6 +2184,16 @@
 		43BE5802278BA50600491291 /* RUSTFxAClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTFxAClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE5803278BA50700491291 /* RustFxAClient-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "RustFxAClient-Info.plist"; sourceTree = "<group>"; };
 		43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		43CA0CEF27A8AE4B003DADCF /* PersistedFirefoxAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedFirefoxAccount.swift; sourceTree = "<group>"; };
+		43CA0CF027A8AE4B003DADCF /* FxAccountDeviceConstellation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountDeviceConstellation.swift; sourceTree = "<group>"; };
+		43CA0CF127A8AE4B003DADCF /* KeychainWrapper+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift"; sourceTree = "<group>"; };
+		43CA0CF227A8AE4B003DADCF /* FxAccountOAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountOAuth.swift; sourceTree = "<group>"; };
+		43CA0CF327A8AE4B003DADCF /* FxAccountStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountStorage.swift; sourceTree = "<group>"; };
+		43CA0CF427A8AE4B003DADCF /* FxAccountState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountState.swift; sourceTree = "<group>"; };
+		43CA0CF527A8AE4B003DADCF /* FxAccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountManager.swift; sourceTree = "<group>"; };
+		43CA0CF627A8AE4B003DADCF /* FxAccountLogging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountLogging.swift; sourceTree = "<group>"; };
+		43CA0CF727A8AE4B003DADCF /* FxAccountConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountConfig.swift; sourceTree = "<group>"; };
+		43CA0CF827A8AE4B003DADCF /* FxAccountMigration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountMigration.swift; sourceTree = "<group>"; };
 		43CA482EA439A9C486CCA01D /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Shared.strings; sourceTree = "<group>"; };
 		43D72DB226FCE3550069BDE9 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = "mr.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPCoverSheetViewController.swift; sourceTree = "<group>"; };
@@ -5326,6 +5346,23 @@
 			path = Client/BottomSheet;
 			sourceTree = SOURCE_ROOT;
 		};
+		43CA0CEE27A8AE4B003DADCF /* FxAccount */ = {
+			isa = PBXGroup;
+			children = (
+				43CA0CEF27A8AE4B003DADCF /* PersistedFirefoxAccount.swift */,
+				43CA0CF027A8AE4B003DADCF /* FxAccountDeviceConstellation.swift */,
+				43CA0CF127A8AE4B003DADCF /* KeychainWrapper+.swift */,
+				43CA0CF227A8AE4B003DADCF /* FxAccountOAuth.swift */,
+				43CA0CF327A8AE4B003DADCF /* FxAccountStorage.swift */,
+				43CA0CF427A8AE4B003DADCF /* FxAccountState.swift */,
+				43CA0CF527A8AE4B003DADCF /* FxAccountManager.swift */,
+				43CA0CF627A8AE4B003DADCF /* FxAccountLogging.swift */,
+				43CA0CF727A8AE4B003DADCF /* FxAccountConfig.swift */,
+				43CA0CF827A8AE4B003DADCF /* FxAccountMigration.swift */,
+			);
+			path = FxAccount;
+			sourceTree = "<group>";
+		};
 		43DDB967240870AC0058A068 /* EnhancedTrackingProtection */ = {
 			isa = PBXGroup;
 			children = (
@@ -5604,6 +5641,7 @@
 		C8E2E80623D20FB3005AACE6 /* RustFxA */ = {
 			isa = PBXGroup;
 			children = (
+				43CA0CEE27A8AE4B003DADCF /* FxAccount */,
 				EB07F85E240D695F00924860 /* PushNotificationSetup.swift */,
 				C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */,
 				5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */,
@@ -8218,23 +8256,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				39F99FE41E3A6F1700F353B4 /* PushClient.swift in Sources */,
+				43CA0D0227A8AE4B003DADCF /* FxAccountStorage.swift in Sources */,
 				39F99FE51E3A6F1700F353B4 /* PushConfiguration.swift in Sources */,
 				EB07F860240D696000924860 /* PushNotificationSetup.swift in Sources */,
+				43CA0CFE27A8AE4B003DADCF /* KeychainWrapper+.swift in Sources */,
+				43CA0CFA27A8AE4B003DADCF /* PersistedFirefoxAccount.swift in Sources */,
 				D047C55620E1640B001A3C07 /* KeyBundle.swift in Sources */,
 				C8340C6024EC6A3500FE91A6 /* encrypt.c in Sources */,
 				39F99FE61E3A6F1700F353B4 /* PushRegistration.swift in Sources */,
 				3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */,
+				43CA0D0027A8AE4B003DADCF /* FxAccountOAuth.swift in Sources */,
 				C8340C5E24EC6A3500FE91A6 /* trailer.c in Sources */,
 				C8340C6224EC6A3500FE91A6 /* decrypt.c in Sources */,
 				C8340C6124EC6A3500FE91A6 /* keys.c in Sources */,
 				C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */,
 				C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */,
+				43CA0D0427A8AE4B003DADCF /* FxAccountState.swift in Sources */,
+				43CA0D0627A8AE4B003DADCF /* FxAccountManager.swift in Sources */,
 				2FDBCF611ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */,
 				C8340C4824EC69EE00FE91A6 /* NSData+Base16.m in Sources */,
 				39C22C291E89791C000C0E56 /* PushCrypto.swift in Sources */,
 				C8340C5F24EC6A3500FE91A6 /* base64url.c in Sources */,
 				2FA436351ABB8436008031D1 /* TokenServerClient.swift in Sources */,
+				43CA0CFC27A8AE4B003DADCF /* FxAccountDeviceConstellation.swift in Sources */,
 				2FA436331ABB8436008031D1 /* HawkHelper.swift in Sources */,
+				43CA0D0A27A8AE4B003DADCF /* FxAccountConfig.swift in Sources */,
+				43CA0D0827A8AE4B003DADCF /* FxAccountLogging.swift in Sources */,
+				43CA0D0C27A8AE4B003DADCF /* FxAccountMigration.swift in Sources */,
 				C8340C6324EC6A3500FE91A6 /* params.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
