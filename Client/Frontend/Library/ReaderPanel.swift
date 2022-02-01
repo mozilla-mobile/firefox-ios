@@ -33,14 +33,13 @@ private struct ReadingListTableViewCellUX {
 
 private struct ReadingListPanelUX {
     // Welcome Screen
-    static let WelcomeScreenTopPadding: CGFloat = 50
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
     
     static let WelcomeScreenMaxWidth: CGFloat = 400
     static let WelcomeScreenItemImageWidth: CGFloat = 20
     
-    static let WelcomeScreenVerticalOffset: CGFloat = -20
+    static let WelcomeScreenTopPadding: CGFloat = 120
 }
 
 class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
@@ -309,7 +308,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             emptyStateViewWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth),
             
             emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyStateViewWrapper.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: ReadingListPanelUX.WelcomeScreenVerticalOffset)
+            emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding)
         ])
         
         return view
