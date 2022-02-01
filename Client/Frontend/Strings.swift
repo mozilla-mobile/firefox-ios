@@ -19,6 +19,7 @@ fileprivate enum StringLastUpdatedAppVersion {
     case v39
     case v96
     case v97
+    case v98
 
     // Used for all cases before version 39.
     case unknown
@@ -273,6 +274,7 @@ extension String {
                 public static let Shortcuts = MZLocalizedString("Settings.Home.Option.Shortcuts", value: "Shortcuts", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Pocket = MZLocalizedString("Settings.Home.Option.Pocket", value: "Recommended by Pocket", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Description = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v39)
+                public static let Wallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper", value: "Wallpaper", comment: "In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application.", lastUpdated: .v98)
             }
 
             public struct StartAtHome {
@@ -281,6 +283,25 @@ extension String {
                 public static let AfterFourHours = MZLocalizedString("Settings.Home.Option.StartAtHome.AfterFourHours", value: "Homepage after four hours of inactivity", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity.", lastUpdated: .v39)
                 public static let Always = MZLocalizedString("Settings.Home.Option.StartAtHome.Always", value: "Homepage", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox", lastUpdated: .v39)
                 public static let Never = MZLocalizedString("Settings.Home.Option.StartAtHome.Never", value: "Last tab", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox", lastUpdated: .v39)
+            }
+
+            public struct Wallpaper {
+                public static let PageTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.Title", value: "Wallpaper", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application.", lastUpdated: .v98)
+                public static let CollectionTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.CollectionTitle", value: "OPENING SCREEN", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application.", lastUpdated: .v98)
+                public static let SwitchTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.SwitchTitle", value: "Tap logo to change wallpaper", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off.", lastUpdated: .v98)
+                public static let SwitchDescription = MZLocalizedString("Settings.Home.Option.Wallpaper.SwitchDescription", value: "Cycle through and update image without leaving the homepage.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the string describing the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off.", lastUpdated: .v98)
+                public static let WallpaperUpdatedToastLabel = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToast", value: "Wallpaper Updated!", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated.", lastUpdated: .v98)
+                public static let WallpaperUpdatedToastButton = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToastButton", value: "View", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page.", lastUpdated: .v98)
+                
+                // Accessibilitiy
+                struct AccessibilityLabels {
+                public static let FxHomepageWallpaperButton = MZLocalizedString("FxHomepage.Wallpaper.ButtonLabel", value: "Firefox logo, change the wallpaper, button", comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper", lastUpdated: .v98)
+                public static let ToggleButton = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.ToggleButton", value: "Homepage wallpaper cycle toggle", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.", lastUpdated: .v98)
+                public static let DefaultWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper", value: "Default clear wallpaper, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.", lastUpdated: .v98)
+                public static let FxAmethystWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper", value: "Firefox wallpaper, amethyst pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.", lastUpdated: .v98)
+                public static let FxSunriseWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper", value: "Firefox wallpaper, sunrise pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.", lastUpdated: .v98)
+                public static let FxCeruleanWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper", value: "Firefox wallpaper, cerulean pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.", lastUpdated: .v98)
+                }
             }
         }
 
