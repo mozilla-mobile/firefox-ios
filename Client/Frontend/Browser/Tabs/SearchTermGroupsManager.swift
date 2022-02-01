@@ -22,9 +22,9 @@ class SearchTermGroupsManager {
     // Yoana, SITE here needs to change to HistoryHighlight
     public static func getHighlightGroups(
         with profile: Profile,
-        from highlights: [MozillaAppServices.HistoryHighlight],
+        from highlights: [HistoryHighlight],
         using ordering: ComparisonResult,
-        completion: @escaping ([ASGroup<MozillaAppServices.HistoryHighlight>]?, _ filteredItems: [MozillaAppServices.HistoryHighlight]) -> Void
+        completion: @escaping ([ASGroup<HistoryHighlight>]?, _ filteredItems: [HistoryHighlight]) -> Void
     ) {
         getGroups(with: profile, from: highlights, using: ordering, completion: completion)
     }

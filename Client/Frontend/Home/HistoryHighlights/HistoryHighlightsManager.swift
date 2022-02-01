@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import Storage
-import MozillaAppServices
+import Places
 
 protocol HighlightItem {}
 
@@ -24,6 +24,7 @@ class HistoryHighlightsManager {
     // MARK: - Public interface
     
     // Get highlights
+    // Filter Tabs
     // Group highlights
     // Group Tabs
     // Remove top tab group from highlight groups if they are the same
@@ -44,7 +45,7 @@ class HistoryHighlightsManager {
     private static func fetchHighlights(
         with profile: Profile,
         andLimit limit: Int32 = 1000,
-        completion: @escaping ([MozillaAppServices.HistoryHighlight]?) -> Void
+        completion: @escaping ([HistoryHighlight]?) -> Void
     ) {
 
         profile.places.getHighlights(
@@ -100,7 +101,7 @@ class HistoryHighlightsManager {
         completion: @escaping ([ASGroup<Site>]?, [Site]) -> Void
     ) {
 
-        SearchTermGroupsManager.getURLGroups(
+        SearchTermGroupsManager.getSiteGroups(
             with: profile,
             from: sites,
             using: .orderedAscending
