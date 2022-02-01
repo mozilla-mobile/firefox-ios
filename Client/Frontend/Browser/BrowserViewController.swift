@@ -95,7 +95,6 @@ class BrowserViewController: UIViewController {
     var header: UIView!
     var footer: UIView!
     fileprivate var topTouchArea: UIButton!
-    let urlBarTopTabsContainer = UIView(frame: .zero)
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
@@ -447,9 +446,10 @@ class BrowserViewController: UIViewController {
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
-        header = urlBarTopTabsContainer
-        urlBarTopTabsContainer.addSubview(urlBar)
-        urlBarTopTabsContainer.addSubview(topTabsContainer)
+
+        header = UIView(frame: .zero)
+        header.addSubview(urlBar)
+        header.addSubview(topTabsContainer)
         view.addSubview(header)
 
         view.addSubview(alertStackView)
@@ -457,6 +457,12 @@ class BrowserViewController: UIViewController {
         view.addSubview(footer)
         alertStackView.axis = .vertical
         alertStackView.alignment = .center
+
+        // Laurie - Remove, used to debug
+        header.accessibilityLabel = "HEADER"
+        footer.accessibilityLabel = "FOOTER"
+        alertStackView.accessibilityLabel = "ALERT STACKVIEW"
+        topTabsContainer.accessibilityLabel = "TOPTABS CONTAINER"
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -554,11 +560,11 @@ class BrowserViewController: UIViewController {
     fileprivate func setupConstraints() {
         topTabsContainer.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.header)
-            make.top.equalTo(urlBarTopTabsContainer)
+            make.top.equalTo(header)
         }
 
         urlBar.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
+            make.leading.trailing.bottom.equalTo(header)
             self.urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
             make.top.equalTo(topTabsContainer.snp.bottom)
         }
@@ -688,7 +694,7 @@ class BrowserViewController: UIViewController {
         footer.alpha = 1
 
         [header, footer, readerModeBar].forEach { view in
-                view?.transform = .identity
+            view?.transform = .identity
         }
 
         statusBarOverlay.isHidden = false
@@ -741,7 +747,7 @@ class BrowserViewController: UIViewController {
         // Remake constraints even if we're already showing the home controller.
         // The home controller may change sizes if we tap the URL bar while on about:home.
         firefoxHomeViewController?.view.snp.remakeConstraints { make in
-            make.top.equalTo(self.urlBar.snp.bottom)
+            make.top.equalTo(self.header.snp.bottom)
             make.left.right.equalTo(self.view)
             if self.homePanelIsInline {
                 make.bottom.equalTo(self.toolbar?.snp.top ?? self.view.snp.bottom)
@@ -913,7 +919,7 @@ class BrowserViewController: UIViewController {
         addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.snp.makeConstraints { make in
-            make.top.equalTo(self.urlBar.snp.bottom)
+            make.top.equalTo(self.header.snp.bottom)
             make.left.right.bottom.equalTo(self.view)
         }
 
