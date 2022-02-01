@@ -91,10 +91,21 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // These views wrap the urlbar and toolbar to provide background effects on them
-    var header: UIView!
-    var footer: UIView!
-    fileprivate var topTouchArea: UIButton!
+    // Header and footer wrap the urlbar and toolbar to provide background effects on them
+    // URLbar can be in header or footer
+    var header: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+    }
+
+    var footer: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+    }
+
+    private var topTouchArea: UIButton!
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
@@ -389,7 +400,6 @@ class BrowserViewController: UIViewController {
         scrollController.readerModeBar = readerModeBar
         scrollController.header = header
         scrollController.footer = footer
-        scrollController.snackBars = alertStackView
 
         updateToolbarStateForTraitCollection(traitCollection)
 
@@ -447,13 +457,11 @@ class BrowserViewController: UIViewController {
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
 
-        header = UIView(frame: .zero)
-        header.addSubview(urlBar)
-        header.addSubview(topTabsContainer)
+        header.addArrangedSubview(topTabsContainer)
+        header.addArrangedSubview(urlBar)
         view.addSubview(header)
 
         view.addSubview(alertStackView)
-        footer = UIView()
         view.addSubview(footer)
         alertStackView.axis = .vertical
         alertStackView.alignment = .center
@@ -558,15 +566,8 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func setupConstraints() {
-        topTabsContainer.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self.header)
-            make.top.equalTo(header)
-        }
-
         urlBar.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(header)
-            self.urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
-            make.top.equalTo(topTabsContainer.snp.bottom)
+            urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
         }
 
         header.snp.makeConstraints { make in
@@ -589,8 +590,8 @@ class BrowserViewController: UIViewController {
         // or else funky conflicts happen
         urlBarHeightConstraint.deactivate()
         urlBar.snp.makeConstraints { make in
-            let height =  heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
-            self.urlBarHeightConstraint = make.height.equalTo(height).constraint
+            let height = heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
+            urlBarHeightConstraint = make.height.equalTo(height).constraint
         }
     }
 

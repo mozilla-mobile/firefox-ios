@@ -36,7 +36,6 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
     weak var footer: UIView?
     weak var urlBar: URLBarView?
     weak var readerModeBar: ReaderModeBarView?
-    weak var snackBars: UIView?
 
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
@@ -77,7 +76,6 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
         return headerHeight + readerModeHeight
     }
     fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }
-    fileprivate var snackBarsFrame: CGRect { return snackBars?.frame ?? .zero }
 
     fileprivate var lastContentOffset: CGFloat = 0
     fileprivate var scrollDirection: ScrollDirection = .down
