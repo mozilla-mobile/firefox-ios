@@ -409,9 +409,11 @@ workflows:
             # Import only the shipping locales (from shipping_locales.txt) onRelease
             git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
         title: Pull in L10n
-    - carthage@3.2:
+    - script@1:
         inputs:
-        - carthage_options: '--platform ios'
+        - content: |-
+            ./bootstrap.sh
+        title: Run bootstrap
     - script@1:
         inputs:
         - content: |-
