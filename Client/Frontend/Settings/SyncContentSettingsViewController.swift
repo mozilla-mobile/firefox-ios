@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import Sync
 import Account
-import MozillaAppServices
 
 class ManageFxAccountSetting: Setting {
     let profile: Profile

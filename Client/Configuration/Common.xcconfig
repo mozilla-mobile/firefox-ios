@@ -12,7 +12,6 @@ DEVELOPMENT_TEAM = 43AQ936H96
 ENABLE_BITCODE = NO
 ENABLE_TESTABILITY = YES;
 ENABLE_STRICT_OBJC_MSGSEND = YES;
-FRAMEWORK_SEARCH_PATHS = $(PROJECT_DIR)/Carthage/Build/iOS
 GCC_DYNAMIC_NO_PIC = NO;
 HEADER_SEARCH_PATHS = $(inherited) /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include $(SRCROOT) $(SDKROOT)/usr/include/libxml2
 INCLUDE_SETTINGS_BUNDLE = NO
