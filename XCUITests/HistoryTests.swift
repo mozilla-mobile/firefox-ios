@@ -281,6 +281,13 @@ class HistoryTests: BaseTestCase {
     private func navigateToGoogle(){
         navigator.openURL("example.com")
         waitUntilPageLoad()
+        // Workaround as the item does not appear if there is only that tab open
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts["Example Domain"].exists)

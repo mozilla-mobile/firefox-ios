@@ -409,9 +409,11 @@ workflows:
             # Import only the shipping locales (from shipping_locales.txt) onRelease
             git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
         title: Pull in L10n
-    - carthage@3.2:
+    - script@1:
         inputs:
-        - carthage_options: '--platform ios'
+        - content: |-
+            ./bootstrap.sh
+        title: Run bootstrap
     - script@1:
         inputs:
         - content: |-
@@ -592,8 +594,8 @@ workflows:
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
     after_run:
-    #- RunSmokeXCUITests
-    #- Detect_warnings
+    - RunSmokeXCUITests
+    - Detect_warnings
     - 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:

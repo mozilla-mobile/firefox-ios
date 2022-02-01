@@ -70,17 +70,18 @@ class TabManagerStoreTests: XCTestCase {
 //        waitStoreChanges(manager: manager, managerTabCount: 4, profileTabCount: 4)
     }
 
-    func testRemoveAndAddTab_doesntStoreRemovedTabs() {
-        let manager = createManager()
-        let configuration = createConfiguration()
-        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
-        XCTAssertEqual(manager.tabs.count, 2)
-
-        // Remove all tabs, and add just 1 tab
-        manager.removeAll()
-        addTabWithSessionData(manager: manager, configuration: configuration)
-
-        waitStoreChanges(manager: manager, managerTabCount: 1, profileTabCount: 1)
+    func testRemoveAndAddTab_doesntStoreRemovedTabs() throws {
+        throw XCTSkip("Test is failing intermittently on Bitrise")
+//        let manager = createManager()
+//        let configuration = createConfiguration()
+//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
+//        XCTAssertEqual(manager.tabs.count, 2)
+//
+//        // Remove all tabs, and add just 1 tab
+//        manager.removeAll()
+//        addTabWithSessionData(manager: manager, configuration: configuration)
+//
+//        waitStoreChanges(manager: manager, managerTabCount: 1, profileTabCount: 1)
     }
 }
 
