@@ -72,7 +72,8 @@ struct WallpaperDataManager {
         // It's preferred to create dates for the collections using
         // `Calendar.current.date(from: DateComponents(year: 2018, month: 1, day: 15))`
         return [WallpaperCollection(wallpaperFileNames: ["fxCerulean",
-                                                         "fxAmethyst"],
+                                                         "fxAmethyst",
+                                                         "fxSunrise"],
                                     type: .themed(type: .firefox)),
                 ]
     }
