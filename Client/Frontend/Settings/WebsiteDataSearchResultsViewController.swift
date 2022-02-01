@@ -51,6 +51,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
+        KeyboardHelper.defaultHelper.addDelegate(self)
     }
     
     func reloadData() {
@@ -170,5 +171,20 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 extension WebsiteDataSearchResultsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text!)
+    }
+}
+
+extension WebsiteDataSearchResultsViewController: KeyboardHelperDelegate {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        let coveredHeight = state.intersectionHeightForView(view)
+        tableView.contentInset.bottom = coveredHeight
+        tableView.verticalScrollIndicatorInsets.bottom = coveredHeight
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        tableView.contentInset.bottom = 0
     }
 }
