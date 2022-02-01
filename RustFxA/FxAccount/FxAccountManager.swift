@@ -31,7 +31,7 @@ open class FxAccountManager {
         }
     }
 
-    var state = AccountState.start
+    var state = AccountState2.start
     var profile: Profile?
     var constellation: DeviceConstellation?
     var latestOAuthStateParam: String?
@@ -329,9 +329,9 @@ open class FxAccountManager {
 
     let fxaFsmQueue = DispatchQueue(label: "com.mozilla.fxa-mgr-queue")
 
-    internal func processEvent(event: Event, completionHandler: @escaping () -> Void) {
+    internal func processEvent(event: Event2, completionHandler: @escaping () -> Void) {
         fxaFsmQueue.async {
-            var toProcess: Event? = event
+            var toProcess: Event2? = event
             while let evt = toProcess {
                 toProcess = nil // Avoid infinite loop if `toProcess` doesn't get replaced.
                 guard let nextState = FxAccountManager.nextState(state: self.state, event: evt) else {
@@ -352,7 +352,7 @@ open class FxAccountManager {
     }
 
     // swiftlint:disable function_body_length
-    internal func stateActions(forState: AccountState, via: Event) -> Event? {
+    internal func stateActions(forState: AccountState2, via: Event2) -> Event2? {
         switch forState {
         case .start: do {
                 switch via {
@@ -461,7 +461,7 @@ open class FxAccountManager {
 
                         postAuthenticated(authType: authData.authType)
 
-                        return Event.fetchProfile(ignoreCache: false)
+                        return Event2.fetchProfile(ignoreCache: false)
                     }
                 case .accountRestored: do {
                         FxALog.info("Registering persistence callback")
@@ -472,7 +472,7 @@ open class FxAccountManager {
 
                         postAuthenticated(authType: .existingAccount)
 
-                        return Event.fetchProfile(ignoreCache: false)
+                        return Event2.fetchProfile(ignoreCache: false)
                     }
                 case .authenticatedViaMigration: do {
                         // Note that we are not registering an account persistence callback here like
@@ -485,7 +485,7 @@ open class FxAccountManager {
 
                         postAuthenticated(authType: .migrated)
 
-                        return Event.fetchProfile(ignoreCache: false)
+                        return Event2.fetchProfile(ignoreCache: false)
                     }
                 case .recoveredFromAuthenticationProblem: do {
                         FxALog.info("Registering persistence callback")
@@ -500,7 +500,7 @@ open class FxAccountManager {
 
                         postAuthenticated(authType: .recovered)
 
-                        return Event.fetchProfile(ignoreCache: false)
+                        return Event2.fetchProfile(ignoreCache: false)
                     }
                 case let .changedPassword(newSessionToken): do {
                         do {
@@ -515,7 +515,7 @@ open class FxAccountManager {
 
                             postAuthenticated(authType: .existingAccount)
 
-                            return Event.fetchProfile(ignoreCache: false)
+                            return Event2.fetchProfile(ignoreCache: false)
                         } catch {
                             FxALog.error("Error handling the session token change: \(error)")
                         }
@@ -528,9 +528,9 @@ open class FxAccountManager {
                         do {
                             profile = try requireAccount().getProfile(ignoreCache: ignoreCache)
                         } catch {
-                            return Event.failedToFetchProfile
+                            return Event2.failedToFetchProfile
                         }
-                        return Event.fetchedProfile
+                        return Event2.fetchedProfile
                     }
                 default: break // Do nothing
                 }
@@ -551,9 +551,9 @@ open class FxAccountManager {
                         do {
                             profile = try requireAccount().getProfile(ignoreCache: refresh)
                         } catch {
-                            return Event.failedToFetchProfile
+                            return Event2.failedToFetchProfile
                         }
-                        return Event.fetchedProfile
+                        return Event2.fetchedProfile
                     }
                 default: break // Do nothing
                 }

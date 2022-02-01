@@ -3,10 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import SwiftyJSON
-import SyncTelemetry
 import Shared
-import FxAClient
+//import FxAClient
 import SwiftKeychainWrapper
+import SyncTelemetry
 
 open class FxATelemetry {
     /// Parses a JSON blob returned from `FxAccountManager#parseTelemetry()`

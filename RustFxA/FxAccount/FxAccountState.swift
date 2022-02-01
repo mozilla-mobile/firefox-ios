@@ -7,7 +7,7 @@ import Foundation
 /**
  * States of the [FxAccountManager].
  */
-public enum AccountState {
+public enum AccountState2 {
     case start
     case notAuthenticated
     case authenticationProblem
@@ -20,7 +20,7 @@ public enum AccountState {
  * Base class for [FxAccountManager] state machine events.
  * Events aren't a simple enum class because we might want to pass data along with some of the events.
  */
-public enum Event {
+public enum Event2 {
     case initialize
     case accountNotFound
     case accountRestored
@@ -47,7 +47,7 @@ public enum Event {
 extension FxAccountManager {
     // State transition matrix. Returns nil if there's no transition.
     // swiftlint:disable function_body_length
-    static func nextState(state: AccountState, event: Event) -> AccountState? {
+    static func nextState(state: AccountState2, event: Event2) -> AccountState2? {
         switch state {
         case .start:
             switch event {
