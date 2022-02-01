@@ -11,12 +11,26 @@ struct ASGroup<T> {
     var searchTerm: String
     var groupedItems: [T]
     var timestamp: Timestamp
+    // Yoana
+    // This will need average weight as optional from the `HistoryHighlight` weight
+    // alse make timestamp optional
+    // inside STGM, differentiate that
 }
 
 class SearchTermGroupsManager {
 
-    public static func getURLGroups(with profile: Profile, from urls: [Site], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void) {
-        getGroups(with: profile, from: urls, using: ordering, completion: completion)
+    // Yoana, SITE here needs to change to HistoryHighlight
+    public static func getHighlightGroups(
+        with profile: Profile,
+        from highlights: [MozillaAppServices.HistoryHighlight],
+        using ordering: ComparisonResult,
+        completion: @escaping ([ASGroup<MozillaAppServices.HistoryHighlight>]?, _ filteredItems: [MozillaAppServices.HistoryHighlight]) -> Void
+    ) {
+        getGroups(with: profile, from: highlights, using: ordering, completion: completion)
+    }
+    
+    public static func getSiteGroups(with profile: Profile, from sites: [Site], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void) {
+        getGroups(with: profile, from: sites, using: ordering, completion: completion)
     }
 
     public static func getTabGroups(with profile: Profile, from tabs: [Tab], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Tab>]?, _ filteredItems: [Tab]) -> Void) {
