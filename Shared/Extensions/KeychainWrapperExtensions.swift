@@ -10,7 +10,7 @@ import SwiftKeychainWrapper
 private let log = Logger.keychainLogger
 
 public extension KeychainWrapper {
-    public static var sharedAppContainerKeychain: KeychainWrapper {
+    static var sharedAppContainerKeychain: KeychainWrapper {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
@@ -19,7 +19,7 @@ public extension KeychainWrapper {
 }
 
 public extension KeychainWrapper {
-    public func ensureStringItemAccessibility(_ accessibility: KeychainItemAccessibility, forKey key: String) {
+    func ensureStringItemAccessibility(_ accessibility: KeychainItemAccessibility, forKey key: String) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
                 log.debug("updating item \(key) with \(accessibility)")

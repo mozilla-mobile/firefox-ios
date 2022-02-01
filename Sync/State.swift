@@ -8,6 +8,7 @@ import Shared
 import XCGLogger
 import FxAClient
 import SwiftyJSON
+import SwiftKeychainWrapper
 
 private let log = Logger.syncLogger
 
@@ -201,7 +202,7 @@ class PrefsBackoffStorage: BackoffStorage {
  * TODO: the Scratchpad needs to be loaded from persistent storage, and written
  * back at certain points in the state machine (after a replayable action is taken).
  */
-open class Scratchpad {
+public class Scratchpad {
     open class Builder {
         var syncKeyBundle: KeyBundle         // For the love of god, if you change this, invalidate keys, too!
         fileprivate var global: Fetched<MetaGlobal>?
@@ -439,7 +440,7 @@ open class Scratchpad {
                    .build()
     }
 
-    fileprivate class func unpickleV1FromPrefs(_ prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad {
+    class func unpickleV1FromPrefs(_ prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad {
         let b = Scratchpad(b: syncKeyBundle, persistingTo: prefs).evolve()
 
         if let mg = prefs.stringForKey(PrefGlobal) {
@@ -459,7 +460,7 @@ open class Scratchpad {
             b.keyLabel = keyLabel
             if let ckTS = prefs.unsignedLongForKey(PrefKeysTS) {
                 let key = "keys." + keyLabel
-                KeychainWrapper.sharedAppContainerKeychain.ensureClientStringItemAccessibility(.afterFirstUnlock, forKey: key)
+                KeychainWrapper.sharedAppContainerKeychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
                 if let keys = KeychainWrapper.sharedAppContainerKeychain.string(forKey: key) {
                     // We serialize as JSON.
                     let keys = Keys(payload: KeysPayload(keys))
@@ -527,7 +528,7 @@ open class Scratchpad {
     /**
      * Remove anything that might be left around after prefs is wiped.
      */
-    open class func clearFromPrefs(_ prefs: Prefs) {
+    public class func clearFromPrefs(_ prefs: Prefs) {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             log.debug("Removing saved key from keychain.")
             KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: keyLabel)
@@ -536,7 +537,7 @@ open class Scratchpad {
         }
     }
 
-    open class func restoreFromPrefs(_ prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad? {
+    public class func restoreFromPrefs(_ prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad? {
         if let ver = prefs.intForKey(PrefVersion) {
             switch ver {
             case 1:

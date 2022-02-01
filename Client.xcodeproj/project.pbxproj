@@ -285,6 +285,13 @@
 		432908BA27A8B90500C37CE0 /* MKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432908B027A8B6D700C37CE0 /* MKeychainWrapper.framework */; };
 		432908BD27A8B91700C37CE0 /* MKeychainWrapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 432908B027A8B6D700C37CE0 /* MKeychainWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		432908BE27A8C08E00C37CE0 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		432908BF27A8CB6D00C37CE0 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		432908C027A8CC3200C37CE0 /* MKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432908B027A8B6D700C37CE0 /* MKeychainWrapper.framework */; };
+		432908C127A8CC4200C37CE0 /* Shared.framework in Resources */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		432908C227A8CC4800C37CE0 /* MKeychainWrapper.framework in Resources */ = {isa = PBXBuildFile; fileRef = 432908B027A8B6D700C37CE0 /* MKeychainWrapper.framework */; };
+		432908C327A8CDB300C37CE0 /* MKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432908B027A8B6D700C37CE0 /* MKeychainWrapper.framework */; };
+		432908C427A8CDCD00C37CE0 /* MKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432908B027A8B6D700C37CE0 /* MKeychainWrapper.framework */; };
+		432908C527A8CEC400C37CE0 /* MKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 432908B027A8B6D700C37CE0 /* MKeychainWrapper.framework */; };
 		432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */ = {isa = PBXBuildFile; productRef = 432BD0232790EBD000A0F3C3 /* Adjust */; };
 		4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BA27193DEF005E8080 /* ContextualHintViewController.swift */; };
 		4331A9BD271D267E005E8080 /* ContextualHintViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BC271D267E005E8080 /* ContextualHintViewModel.swift */; };
@@ -4426,6 +4433,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				432908C027A8CC3200C37CE0 /* MKeychainWrapper.framework in Frameworks */,
+				432908BF27A8CB6D00C37CE0 /* Shared.framework in Frameworks */,
 				43AFC0F727967C8A0039DDF4 /* Fuzi.framework in Frameworks */,
 				43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */,
 				4368F889279671B10013419B /* SDWebImage.framework in Frameworks */,
@@ -4557,6 +4566,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				432908C327A8CDB300C37CE0 /* MKeychainWrapper.framework in Frameworks */,
 				43BE5825278BE7EF00491291 /* RUSTLogins.framework in Frameworks */,
 				43BE5824278BE7D400491291 /* RUSTFxAClient.framework in Frameworks */,
 				43BE580A278BA9FD00491291 /* RUSTRustLog.framework in Frameworks */,
@@ -4703,6 +4713,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				432908C527A8CEC400C37CE0 /* MKeychainWrapper.framework in Frameworks */,
 				43BE582D278CA94000491291 /* RUSTRustLog.framework in Frameworks */,
 				43BE5817278BE58B00491291 /* RUSTFxAClient.framework in Frameworks */,
 				4368F85427966A4F0013419B /* Snapkit.framework in Frameworks */,
@@ -4731,6 +4742,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				432908C427A8CDCD00C37CE0 /* MKeychainWrapper.framework in Frameworks */,
 				43AFC0F427967C2B0039DDF4 /* Fuzi.framework in Frameworks */,
 				43BE5828278BE82B00491291 /* RUSTPlaces.framework in Frameworks */,
 				4368F85927966A860013419B /* Snapkit.framework in Frameworks */,
@@ -7829,6 +7841,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				432908C227A8CC4800C37CE0 /* MKeychainWrapper.framework in Resources */,
+				432908C127A8CC4200C37CE0 /* Shared.framework in Resources */,
 				D37DE2CA1CA356F900A5EC69 /* testcert1.pem in Resources */,
 				D37DE2CB1CA356F900A5EC69 /* testcert2.pem in Resources */,
 			);

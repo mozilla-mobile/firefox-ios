@@ -2,28 +2,30 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
-import SwiftKeychainWrapper
 import Shared
 import FxAClient
+import SwiftKeychainWrapper
+
+//import FxAClient
 
 public class KeyChainAccountStorage {
-    internal var keychainWrapper: KeychainWrapper
-    internal static var keychainKey: String = "accountJSON"
-    internal static var accessibility: KeychainItemAccessibility = .afterFirstUnlock
+//    var keychainWrapper: KeychainWrapper
+    static var keychainKey: String = "accountJSON"
+    static var accessibility: KeychainItemAccessibility = .afterFirstUnlock
 
-    init(keychainAccessGroup: String?) {
-        keychainWrapper = KeychainWrapper.sharedAppContainerKeychain(keychainAccessGroup: keychainAccessGroup)
-    }
+//    init(keychainAccessGroup: String?) {
+//        KeychainWrapper.sharedAppContainerKeychain
+//        keychainWrapper = KeychainWrapper.sharedAppContainerKeychain(keychainAccessGroup: keychainAccessGroup)
+//    }
 
     func read() -> PersistedFirefoxAccount? {
         // Firefox iOS v25.0 shipped with the default accessibility, which breaks Send Tab when the screen is locked.
         // This method migrates the existing keychains to the correct accessibility.
-        keychainWrapper.ensureStringItemAccessibility(
+        KeychainWrapper.sharedAppContainerKeychain.ensureStringItemAccessibility(
             KeyChainAccountStorage.accessibility,
             forKey: KeyChainAccountStorage.keychainKey
         )
-        if let json = keychainWrapper.string(
+        if let json = KeychainWrapper.sharedAppContainerKeychain.string(
             forKey: KeyChainAccountStorage.keychainKey,
             withAccessibility: KeyChainAccountStorage.accessibility
         ) {
@@ -38,7 +40,7 @@ public class KeyChainAccountStorage {
     }
 
     func write(_ json: String) {
-        if !keychainWrapper.set(
+        if !KeychainWrapper.sharedAppContainerKeychain.set(
             json,
             forKey: KeyChainAccountStorage.keychainKey,
             withAccessibility: KeyChainAccountStorage.accessibility
@@ -48,7 +50,7 @@ public class KeyChainAccountStorage {
     }
 
     func clear() {
-        if !keychainWrapper.removeObject(
+        if !KeychainWrapper.sharedAppContainerKeychain.removeObject(
             forKey: KeyChainAccountStorage.keychainKey,
             withAccessibility: KeyChainAccountStorage.accessibility
         ) {

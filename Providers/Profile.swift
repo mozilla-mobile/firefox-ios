@@ -17,6 +17,7 @@ import AuthenticationServices
 import RustLog
 import FxAClient
 import Sync15
+import SwiftKeychainWrapper
 @_exported import Logins
 
 // Import these dependencies ONLY for the main `Client` application target.

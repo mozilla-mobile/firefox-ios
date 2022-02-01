@@ -8,6 +8,7 @@ import SyncTelemetry
 import Account
 import os.log
 import FxAClient
+import SwiftKeychainWrapper
 
 private let log = Logger.syncLogger
 

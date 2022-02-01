@@ -49,7 +49,7 @@ open class FxAccountManager {
         self.config = config
         self.deviceConfig = deviceConfig
         self.applicationScopes = applicationScopes
-        accountStorage = KeyChainAccountStorage(keychainAccessGroup: keychainAccessGroup)
+        accountStorage = KeyChainAccountStorage()
         setupInternalListeners()
     }
 
