@@ -350,8 +350,9 @@ extension GridTabViewController {
         let tabs = self.tabDisplayManager.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         let maxTabs = 100
         if self.tabDisplayManager.isPrivate {
+            let previous = self.tabManager.selectedTab
             self.tabManager.removeTabsWithoutToast(tabs)
-            self.tabManager.selectTab(mostRecentTab(inTabs: tabManager.normalTabs) ?? tabManager.normalTabs.last, previous: nil)
+            self.tabManager.selectTab(mostRecentTab(inTabs: tabManager.normalTabs) ?? tabManager.normalTabs.last, previous: previous)
         } else if tabs.count >= maxTabs {
             self.tabManager.removeTabsAndAddNormalTab(tabs)
         } else {
