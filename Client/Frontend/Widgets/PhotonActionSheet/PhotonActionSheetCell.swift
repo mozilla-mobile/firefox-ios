@@ -214,8 +214,8 @@ class PhotonActionSheetCell: UITableViewCell {
             case .URL:
                 let image = UIImage(named: iconName)?.createScaled(PhotonActionSheetUX.IconSize)
                 statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
-                statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: []) { (img, err, _, _) in
-                    if let img = img {
+                statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: [.avoidAutoSetImage]) { (img, err, _, _) in
+                    if let img = img, self.accessibilityLabel == action.title {
                         self.statusIcon.image = img.createScaled(PhotonActionSheetUX.IconSize)
                         self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                     }
