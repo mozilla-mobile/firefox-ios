@@ -592,8 +592,8 @@ workflows:
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
     after_run:
-    - RunSmokeXCUITests
-    - Detect_warnings
+    #- RunSmokeXCUITests
+    #- Detect_warnings
     - 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:
