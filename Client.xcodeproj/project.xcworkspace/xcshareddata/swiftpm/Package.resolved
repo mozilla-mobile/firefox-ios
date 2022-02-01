@@ -68,8 +68,8 @@
         "package": "MozillaRustComponentsSwift",
         "repositoryURL": "https://github.com/skhamis/rust-components-swift",
         "state": {
-          "branch": "update-for-fxios",
-          "revision": "1f1aba21157b0da730a5f3c7029bfca448cbec5e",
+          "branch": "remove-fxios-consumer",
+          "revision": "2752c0c99e37e7270d4e5bf1c22fc61c1e3bf87a",
           "version": null
         }
       },

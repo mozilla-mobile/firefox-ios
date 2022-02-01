@@ -14342,7 +14342,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skhamis/rust-components-swift";
 			requirement = {
-				branch = "update-for-fxios";
+				branch = "remove-fxios-consumer";
 				kind = branch;
 			};
 		};
@@ -14398,7 +14398,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skhamis/rust-components-swift";
 			requirement = {
-				branch = "update-for-fxios";
+				branch = "remove-fxios-consumer";
 				kind = branch;
 			};
 		};
@@ -14406,7 +14406,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skhamis/rust-components-swift";
 			requirement = {
-				branch = "update-for-fxios";
+				branch = "remove-fxios-consumer";
 				kind = branch;
 			};
 		};
@@ -14414,7 +14414,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skhamis/rust-components-swift";
 			requirement = {
-				branch = "update-for-fxios";
+				branch = "remove-fxios-consumer";
 				kind = branch;
 			};
 		};
@@ -14422,7 +14422,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skhamis/rust-components-swift";
 			requirement = {
-				branch = "update-for-fxios";
+				branch = "remove-fxios-consumer";
 				kind = branch;
 			};
 		};
