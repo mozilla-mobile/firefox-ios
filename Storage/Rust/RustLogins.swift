@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import FxAClient
 import Sync15
+import SwiftKeychainWrapper
 @_exported import Logins
 
 private let log = Logger.syncLogger

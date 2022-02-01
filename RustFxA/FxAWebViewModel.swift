@@ -7,6 +7,7 @@ import Foundation
 import Account
 import FxAClient
 import Shared
+import SwiftKeychainWrapper
 
 enum FxAPageType {
     case emailLoginFlow

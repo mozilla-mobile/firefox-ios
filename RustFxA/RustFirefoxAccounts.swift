@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import FxAClient
 import Viaduct
+import SwiftKeychainWrapper
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 

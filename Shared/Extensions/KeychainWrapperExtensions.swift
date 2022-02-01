@@ -5,12 +5,12 @@
 import Foundation
 import XCGLogger
 import FxAClient
-import MKeychainWrapper
+import SwiftKeychainWrapper
 
 private let log = Logger.keychainLogger
 
 public extension KeychainWrapper {
-    static var sharedAppContainerKeychain: KeychainWrapper {
+    public static var sharedAppContainerKeychain: KeychainWrapper {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
@@ -19,7 +19,7 @@ public extension KeychainWrapper {
 }
 
 public extension KeychainWrapper {
-    func ensureClientStringItemAccessibility(_ accessibility: KeychainItemAccessibility, forKey key: String) {
+    public func ensureStringItemAccessibility(_ accessibility: KeychainItemAccessibility, forKey key: String) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
                 log.debug("updating item \(key) with \(accessibility)")
@@ -40,7 +40,7 @@ public extension KeychainWrapper {
         }
     }
 
-    func ensureObjectItemAccessibility(_ accessibility: KeychainItemAccessibility, forKey key: String) {
+    public func ensureObjectItemAccessibility(_ accessibility: KeychainItemAccessibility, forKey key: String) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
                 log.debug("updating item \(key) with \(accessibility)")

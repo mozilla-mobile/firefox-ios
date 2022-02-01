@@ -4,6 +4,9 @@
 
 import SwiftyJSON
 import SyncTelemetry
+import Shared
+import FxAClient
+import SwiftKeychainWrapper
 
 open class FxATelemetry {
     /// Parses a JSON blob returned from `FxAccountManager#parseTelemetry()`

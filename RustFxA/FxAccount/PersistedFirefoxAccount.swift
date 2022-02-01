@@ -2,7 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import FxAClient
 import Foundation
+
 #if canImport(MozillaRustComponents)
     import MozillaRustComponents
 #endif
@@ -20,7 +22,7 @@ import Foundation
 /// It's not yet clear how we might integrate with observer notifications in
 /// a cross-platform way, though.
 ///
-class PersistedFirefoxAccount {
+public class PersistedFirefoxAccount {
     private var persistCallback: PersistCallback?
     private var inner: FirefoxAccount
 

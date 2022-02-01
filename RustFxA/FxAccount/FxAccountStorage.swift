@@ -3,9 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import MKeychainWrapper
+import SwiftKeychainWrapper
+import Shared
+import FxAClient
 
-class KeyChainAccountStorage {
+public class KeyChainAccountStorage {
     internal var keychainWrapper: KeychainWrapper
     internal static var keychainKey: String = "accountJSON"
     internal static var accessibility: KeychainItemAccessibility = .afterFirstUnlock
@@ -55,28 +57,28 @@ class KeyChainAccountStorage {
     }
 }
 
-public extension KeychainWrapper {
-    func ensureStringItemAccessibility(
-        _ accessibility: KeychainItemAccessibility,
-        forKey key: String
-    ) {
-        if hasValue(forKey: key) {
-            if accessibilityOfKey(key) != accessibility {
-                FxALog.info("ensureStringItemAccessibility: updating item \(key) with \(accessibility)")
-
-                guard let value = string(forKey: key) else {
-                    FxALog.error("ensureStringItemAccessibility: failed to get item \(key)")
-                    return
-                }
-
-                if !removeObject(forKey: key) {
-                    FxALog.error("ensureStringItemAccessibility: failed to remove item \(key)")
-                }
-
-                if !set(value, forKey: key, withAccessibility: accessibility) {
-                    FxALog.error("ensureStringItemAccessibility: failed to update item \(key)")
-                }
-            }
-        }
-    }
-}
+//public extension KeychainWrapper {
+//    func ensureStringItemAccessibility(
+//        _ accessibility: KeychainItemAccessibility,
+//        forKey key: String
+//    ) {
+//        if hasValue(forKey: key) {
+//            if accessibilityOfKey(key) != accessibility {
+//                FxALog.info("ensureStringItemAccessibility: updating item \(key) with \(accessibility)")
+//
+//                guard let value = string(forKey: key) else {
+//                    FxALog.error("ensureStringItemAccessibility: failed to get item \(key)")
+//                    return
+//                }
+//
+//                if !removeObject(forKey: key) {
+//                    FxALog.error("ensureStringItemAccessibility: failed to remove item \(key)")
+//                }
+//
+//                if !set(value, forKey: key, withAccessibility: accessibility) {
+//                    FxALog.error("ensureStringItemAccessibility: failed to update item \(key)")
+//                }
+//            }
+//        }
+//    }
+//}

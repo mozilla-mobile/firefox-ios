@@ -7,7 +7,7 @@ import Foundation
 /**
  * States of the [FxAccountManager].
  */
-internal enum AccountState {
+public enum AccountState {
     case start
     case notAuthenticated
     case authenticationProblem
@@ -20,7 +20,7 @@ internal enum AccountState {
  * Base class for [FxAccountManager] state machine events.
  * Events aren't a simple enum class because we might want to pass data along with some of the events.
  */
-internal enum Event {
+public enum Event {
     case initialize
     case accountNotFound
     case accountRestored
