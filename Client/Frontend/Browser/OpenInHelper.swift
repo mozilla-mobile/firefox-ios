@@ -140,7 +140,8 @@ class OpenPassBookHelper: NSObject {
 
     func open() {
         // add webview cookies to download session
-        self.cookieStore.getAllCookies { [self] cookies in
+        self.cookieStore.getAllCookies { [weak self] cookies in
+            guard let self = self else { return }
             for cookie in cookies {
                 self.session.configuration.httpCookieStorage?.setCookie(cookie)
             }
@@ -179,7 +180,7 @@ class OpenPassBookHelper: NSObject {
         let message = .UnableToAddPassErrorMessage + detail
         let alertController = UIAlertController(title: .UnableToAddPassErrorTitle, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss, style: .cancel) { (action) in
-                // Do nothing.
+            // Do nothing.
         })
         browserViewController.present(alertController, animated: true, completion: nil)
     }
