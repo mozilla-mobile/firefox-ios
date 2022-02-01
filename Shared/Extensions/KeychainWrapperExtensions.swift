@@ -9,7 +9,7 @@ import FxAClient
 private let log = Logger.keychainLogger
 
 public extension KeychainWrapper {
-    static var sharedClientAppContainerKeychain: KeychainWrapper {
+    static var sharedAppContainerKeychain: KeychainWrapper {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)

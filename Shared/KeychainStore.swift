@@ -15,7 +15,7 @@ public class KeychainStore {
     private let keychainWrapper: KeychainWrapper
 
     private init() {
-        self.keychainWrapper = KeychainWrapper.sharedClientAppContainerKeychain
+        self.keychainWrapper = KeychainWrapper.sharedAppContainerKeychain
     }
 
     public func setDictionary(_ value: [String: Any]?, forKey key: String, withAccessibility accessibility: KeychainItemAccessibility = .afterFirstUnlock) {

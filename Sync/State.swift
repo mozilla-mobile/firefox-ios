@@ -459,8 +459,8 @@ open class Scratchpad {
             b.keyLabel = keyLabel
             if let ckTS = prefs.unsignedLongForKey(PrefKeysTS) {
                 let key = "keys." + keyLabel
-                KeychainWrapper.sharedClientAppContainerKeychain.ensureClientStringItemAccessibility(.afterFirstUnlock, forKey: key)
-                if let keys = KeychainWrapper.sharedClientAppContainerKeychain.string(forKey: key) {
+                KeychainWrapper.sharedAppContainerKeychain.ensureClientStringItemAccessibility(.afterFirstUnlock, forKey: key)
+                if let keys = KeychainWrapper.sharedAppContainerKeychain.string(forKey: key) {
                     // We serialize as JSON.
                     let keys = Keys(payload: KeysPayload(keys))
                     if keys.valid {
@@ -530,7 +530,7 @@ open class Scratchpad {
     open class func clearFromPrefs(_ prefs: Prefs) {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             log.debug("Removing saved key from keychain.")
-            KeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: keyLabel)
+            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: keyLabel)
         } else {
             log.debug("No key label; nothing to remove from keychain.")
         }
@@ -578,10 +578,10 @@ open class Scratchpad {
             log.debug("Storing keys in Keychain with label \(label).")
             prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
             prefs.setLong(keys.timestamp, forKey: PrefKeysTS)
-            KeychainWrapper.sharedClientAppContainerKeychain.set(payload, forKey: label, withAccessibility: .afterFirstUnlock)
+            KeychainWrapper.sharedAppContainerKeychain.set(payload, forKey: label, withAccessibility: .afterFirstUnlock)
         } else {
             log.debug("Removing keys from Keychain.")
-            KeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: self.keyLabel)
+            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: self.keyLabel)
         }
 
         prefs.setString(clientName, forKey: PrefClientName)

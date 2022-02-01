@@ -233,7 +233,7 @@ extension FxAWebViewModel {
             self.profile.syncManager.onAddedAccount()
             
             // ask for push notification
-            KeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: KeychainItemAccessibility.afterFirstUnlock)
+            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: KeychainItemAccessibility.afterFirstUnlock)
             let center = UNUserNotificationCenter.current()
             center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 guard error == nil else {

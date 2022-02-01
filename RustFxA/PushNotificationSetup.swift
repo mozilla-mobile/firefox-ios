@@ -12,7 +12,7 @@ open class PushNotificationSetup {
     public func didRegister(withDeviceToken deviceToken: Data) {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
-        let keychain = KeychainWrapper.sharedClientAppContainerKeychain
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
         guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else {
             return
         }

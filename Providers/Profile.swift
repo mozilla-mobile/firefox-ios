@@ -264,7 +264,7 @@ open class BrowserProfile: Profile {
         log.debug("Initing profile \(localName) on thread \(Thread.current).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.keychain = KeychainWrapper.sharedClientAppContainerKeychain
+        self.keychain = KeychainWrapper.sharedAppContainerKeychain
         self.syncDelegate = syncDelegate
 
         if clear {
