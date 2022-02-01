@@ -119,8 +119,9 @@ class CustomSearchViewController: SettingsTableViewController {
         return nil
     }
     
-    func updateSaveButton(){
-        self.navigationItem.rightBarButtonItem?.isEnabled = !self.engineTitle.isEmptyOrWhitespace() && !(self.urlString?.isEmptyOrWhitespace() ?? true)
+    func updateSaveButton() {
+        let isEnabled = !self.engineTitle.isEmptyOrWhitespace() && !(self.urlString?.isEmptyOrWhitespace() ?? true)
+        self.navigationItem.rightBarButtonItem?.isEnabled = isEnabled
     }
 
     override func generateSettings() -> [SettingSection] {
