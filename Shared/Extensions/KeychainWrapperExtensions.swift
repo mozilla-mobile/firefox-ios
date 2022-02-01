@@ -5,6 +5,7 @@
 import Foundation
 import XCGLogger
 import FxAClient
+import MKeychainWrapper
 
 private let log = Logger.keychainLogger
 

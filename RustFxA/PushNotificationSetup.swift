@@ -4,6 +4,7 @@
 
 import Shared
 import FxAClient
+import MKeychainWrapper
 
 open class PushNotificationSetup {
     private var pushClient: PushClient?
