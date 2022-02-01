@@ -278,6 +278,7 @@
 		43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */; };
 		431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C0CA825C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift */; };
 		431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C0D1D25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift */; };
+		432908A427A8B5FF00C37CE0 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 432908A327A8B5FF00C37CE0 /* SwiftKeychainWrapper */; };
 		432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */ = {isa = PBXBuildFile; productRef = 432BD0232790EBD000A0F3C3 /* Adjust */; };
 		4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BA27193DEF005E8080 /* ContextualHintViewController.swift */; };
 		4331A9BD271D267E005E8080 /* ContextualHintViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BC271D267E005E8080 /* ContextualHintViewModel.swift */; };
@@ -4454,6 +4455,7 @@
 				4368F82C279665C20013419B /* Sentry.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* RUSTLogins.framework in Frameworks */,
 				4368F87F27966EA50013419B /* SDWebImage.framework in Frameworks */,
+				432908A427A8B5FF00C37CE0 /* SwiftKeychainWrapper in Frameworks */,
 				43BE580F278BABD000491291 /* RUSTNimbus.framework in Frameworks */,
 				43BE5810278BABD000491291 /* RUSTPlaces.framework in Frameworks */,
 				43BE5811278BABD000491291 /* RUSTRustLog.framework in Frameworks */,
@@ -7381,6 +7383,7 @@
 				433F87CD2788EAB600693368 /* GCDWebServers */,
 				435C85EF2788F4D00072B526 /* Glean */,
 				432BD0232790EBD000A0F3C3 /* Adjust */,
+				432908A327A8B5FF00C37CE0 /* SwiftKeychainWrapper */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -7718,6 +7721,7 @@
 				43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */,
 				43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */,
 				43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */,
+				432908A227A8B5FE00C37CE0 /* XCRemoteSwiftPackageReference "swiftkeychainwrapper" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -14314,6 +14318,14 @@
 				version = 87.2.0;
 			};
 		};
+		432908A227A8B5FE00C37CE0 /* XCRemoteSwiftPackageReference "swiftkeychainwrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/swiftkeychainwrapper";
+			requirement = {
+				kind = exactVersion;
+				version = 4.0.1;
+			};
+		};
 		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adjust/ios_sdk.git";
@@ -14471,6 +14483,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		432908A327A8B5FF00C37CE0 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 432908A227A8B5FE00C37CE0 /* XCRemoteSwiftPackageReference "swiftkeychainwrapper" */;
+			productName = SwiftKeychainWrapper;
 		};
 		432BD0232790EBD000A0F3C3 /* Adjust */ = {
 			isa = XCSwiftPackageProductDependency;

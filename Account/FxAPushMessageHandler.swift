@@ -57,7 +57,7 @@ extension FxAPushMessageHandler {
 
         guard let string = plaintext else {
             // The app will detect this missing, and re-register. see AppDelegate+PushNotifications.swift.
-            keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: KeychainItemAccessibility.afterFirstUnlock)
             return deferMaybe(PushMessageError.notDecrypted)
         }
 

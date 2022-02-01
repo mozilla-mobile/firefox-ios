@@ -18,7 +18,7 @@ public extension KeychainWrapper {
 }
 
 public extension KeychainWrapper {
-    func ensureClientStringItemAccessibility(_ accessibility: MZKeychainItemAccessibility, forKey key: String) {
+    func ensureClientStringItemAccessibility(_ accessibility: KeychainItemAccessibility, forKey key: String) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
                 log.debug("updating item \(key) with \(accessibility)")
@@ -39,7 +39,7 @@ public extension KeychainWrapper {
         }
     }
 
-    func ensureObjectItemAccessibility(_ accessibility: MZKeychainItemAccessibility, forKey key: String) {
+    func ensureObjectItemAccessibility(_ accessibility: KeychainItemAccessibility, forKey key: String) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
                 log.debug("updating item \(key) with \(accessibility)")

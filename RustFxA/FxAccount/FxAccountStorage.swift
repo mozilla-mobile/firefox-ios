@@ -7,7 +7,7 @@ import Foundation
 class KeyChainAccountStorage {
     internal var keychainWrapper: KeychainWrapper
     internal static var keychainKey: String = "accountJSON"
-    internal static var accessibility: MZKeychainItemAccessibility = .afterFirstUnlock
+    internal static var accessibility: KeychainItemAccessibility = .afterFirstUnlock
 
     init(keychainAccessGroup: String?) {
         keychainWrapper = KeychainWrapper.sharedAppContainerKeychain(keychainAccessGroup: keychainAccessGroup)
@@ -56,7 +56,7 @@ class KeyChainAccountStorage {
 
 public extension KeychainWrapper {
     func ensureStringItemAccessibility(
-        _ accessibility: MZKeychainItemAccessibility,
+        _ accessibility: KeychainItemAccessibility,
         forKey key: String
     ) {
         if hasValue(forKey: key) {

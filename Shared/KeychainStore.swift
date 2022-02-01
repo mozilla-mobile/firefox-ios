@@ -18,7 +18,7 @@ public class KeychainStore {
         self.keychainWrapper = KeychainWrapper.sharedClientAppContainerKeychain
     }
 
-    public func setDictionary(_ value: [String: Any]?, forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) {
+    public func setDictionary(_ value: [String: Any]?, forKey key: String, withAccessibility accessibility: KeychainItemAccessibility = .afterFirstUnlock) {
         guard let value = value else {
             setString(nil, forKey: key, withAccessibility: accessibility)
             return
@@ -29,7 +29,7 @@ public class KeychainStore {
         setString(stringValue, forKey: key, withAccessibility: accessibility)
     }
 
-    public func setString(_ value: String?, forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) {
+    public func setString(_ value: String?, forKey key: String, withAccessibility accessibility: KeychainItemAccessibility = .afterFirstUnlock) {
         guard let value = value else {
             keychainWrapper.removeObject(forKey: key, withAccessibility: accessibility)
             return
@@ -38,7 +38,7 @@ public class KeychainStore {
         keychainWrapper.set(value, forKey: key, withAccessibility: accessibility)
     }
 
-    public func dictionary(forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) -> [String: Any]? {
+    public func dictionary(forKey key: String, withAccessibility accessibility: KeychainItemAccessibility = .afterFirstUnlock) -> [String: Any]? {
         guard let stringValue = string(forKey: key, withAccessibility: accessibility) else {
             return nil
         }
@@ -49,7 +49,7 @@ public class KeychainStore {
         return dictionary
     }
 
-    public func string(forKey key: String, withAccessibility accessibility: MZKeychainItemAccessibility = .afterFirstUnlock) -> String? {
+    public func string(forKey key: String, withAccessibility accessibility: KeychainItemAccessibility = .afterFirstUnlock) -> String? {
         keychainWrapper.ensureStringItemAccessibility(accessibility, forKey: key)
 
         return keychainWrapper.string(forKey: key, withAccessibility: accessibility)

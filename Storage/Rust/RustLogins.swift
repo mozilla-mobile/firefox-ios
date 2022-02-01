@@ -356,8 +356,8 @@ public class RustLoginEncryptionKeys {
             let secret = try createKey()
             let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
             
-            keychain.set(secret, forKey: loginPerFieldKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            keychain.set(canary, forKey: canaryPhraseKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            keychain.set(secret, forKey: loginPerFieldKeychainKey, withAccessibility: KeychainItemAccessibility.afterFirstUnlock)
+            keychain.set(canary, forKey: canaryPhraseKey, withAccessibility: KeychainItemAccessibility.afterFirstUnlock)
             
             return secret
         } catch let err as NSError {

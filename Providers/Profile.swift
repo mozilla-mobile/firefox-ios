@@ -612,11 +612,11 @@ open class BrowserProfile: Profile {
         
         // Restore the keys that are still needed
         if let sqlCipherKey = sqlCipherKey {
-            keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: KeychainItemAccessibility.afterFirstUnlock)
         }
         
         if let sqlCipherSalt = sqlCipherSalt {
-            keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: KeychainItemAccessibility.afterFirstUnlock)
         }
         
         if let perFieldKey = perFieldKey {
