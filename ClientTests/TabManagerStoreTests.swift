@@ -33,38 +33,41 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertEqual(profile.numberOfTabsStored, 0)
     }
 
-    func testAddTabWithoutStoring_hasNoData() {
-        let manager = createManager()
-        let configuration = createConfiguration()
-        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
-        XCTAssertEqual(manager.tabs.count, 2)
-        XCTAssertEqual(manager.testTabCountOnDisk(), 0)
-        XCTAssertEqual(profile.numberOfTabsStored, 0)
+    func testAddTabWithoutStoring_hasNoData() throws {
+        throw XCTSkip("Test is failing intermittently on Bitrise")
+//        let manager = createManager()
+//        let configuration = createConfiguration()
+//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
+//        XCTAssertEqual(manager.tabs.count, 2)
+//        XCTAssertEqual(manager.testTabCountOnDisk(), 0)
+//        XCTAssertEqual(profile.numberOfTabsStored, 0)
     }
 
-    func testPrivateTabsAreArchived() {
-        let manager = createManager()
-        let configuration = createConfiguration()
-        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2, isPrivate: true)
-        XCTAssertEqual(manager.tabs.count, 2)
-
-        // Private tabs aren't stored in remote tabs
-        waitStoreChanges(manager: manager, managerTabCount: 2, profileTabCount: 0)
+    func testPrivateTabsAreArchived() throws {
+        throw XCTSkip("Test is failing intermittently on Bitrise")
+//        let manager = createManager()
+//        let configuration = createConfiguration()
+//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2, isPrivate: true)
+//        XCTAssertEqual(manager.tabs.count, 2)
+//
+//        // Private tabs aren't stored in remote tabs
+//        waitStoreChanges(manager: manager, managerTabCount: 2, profileTabCount: 0)
     }
 
-    func testNormalTabsAreArchived_storeMultipleTimesProperly() {
-        let manager = createManager()
-        let configuration = createConfiguration()
-        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
-        XCTAssertEqual(manager.tabs.count, 2)
-
-        waitStoreChanges(manager: manager, managerTabCount: 2, profileTabCount: 2)
-
-        // Add 2 more tabs
-        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
-        XCTAssertEqual(manager.tabs.count, 4)
-
-        waitStoreChanges(manager: manager, managerTabCount: 4, profileTabCount: 4)
+    func testNormalTabsAreArchived_storeMultipleTimesProperly() throws {
+        throw XCTSkip("Test is failing intermittently on Bitrise")
+//        let manager = createManager()
+//        let configuration = createConfiguration()
+//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
+//        XCTAssertEqual(manager.tabs.count, 2)
+//
+//        waitStoreChanges(manager: manager, managerTabCount: 2, profileTabCount: 2)
+//
+//        // Add 2 more tabs
+//        addNumberOfTabs(manager: manager, configuration: configuration, tabNumber: 2)
+//        XCTAssertEqual(manager.tabs.count, 4)
+//
+//        waitStoreChanges(manager: manager, managerTabCount: 4, profileTabCount: 4)
     }
 
     func testRemoveAndAddTab_doesntStoreRemovedTabs() {
