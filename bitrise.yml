@@ -1375,4 +1375,4 @@ trigger_map:
 - push_branch: v97.0
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  workflow: L10nBuild
