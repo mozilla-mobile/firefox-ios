@@ -5,6 +5,7 @@
 import Shared
 import Storage
 import Telemetry
+import Glean
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
@@ -262,7 +263,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     }
 
     func locationActionsForURLBar(_ urlBar: URLBarView) -> [AccessibleAction] {
-        if UIPasteboard.general.string != nil {
+        if UIPasteboard.general.hasStrings {
             return [pasteGoAction, pasteAction, copyAddressAction]
         } else {
             return [copyAddressAction]

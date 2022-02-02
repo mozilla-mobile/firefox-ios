@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import MozillaAppServices
+import Glean
 
 struct FxALaunchParams {
     var query: [String: String]

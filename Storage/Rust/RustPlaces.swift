@@ -4,8 +4,9 @@
 
 import Foundation
 import Shared
-
-@_exported import MozillaAppServices
+import Sync15
+@_exported import Places
+import Logins
 
 private let log = Logger.syncLogger
 
@@ -39,7 +40,7 @@ public class RustPlaces {
         } catch let err as NSError {
             if let placesError = err as? PlacesError {
                 switch placesError {
-                case .panic(let message):
+                case .InternalPanic(let message):
                     Sentry.shared.sendWithStacktrace(message: "Panicked when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: message)
                 default:
                     Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
@@ -65,7 +66,7 @@ public class RustPlaces {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -81,7 +82,7 @@ public class RustPlaces {
                     deferred.fill(Maybe(failure: error as MaybeErrorType))
                 }
             } else {
-                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
             }
         }
 
@@ -93,7 +94,7 @@ public class RustPlaces {
 
         readerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -113,7 +114,7 @@ public class RustPlaces {
                     deferred.fill(Maybe(failure: error as MaybeErrorType))
                 }
             } else {
-                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
             }
         }
 
@@ -149,19 +150,19 @@ public class RustPlaces {
         }
     }
 
-    public func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNode?>> {
+    public func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
         return withReader { connection in
             return try connection.getBookmarksTree(rootGUID: rootGUID, recursive: recursive)
         }
     }
 
-    public func getBookmark(guid: GUID) -> Deferred<Maybe<BookmarkNode?>> {
+    public func getBookmark(guid: GUID) -> Deferred<Maybe<BookmarkNodeData?>> {
         return withReader { connection in
             return try connection.getBookmark(guid: guid)
         }
     }
 
-    public func getRecentBookmarks(limit: UInt) -> Deferred<Maybe<[BookmarkItem]>> {
+    public func getRecentBookmarks(limit: UInt) -> Deferred<Maybe<[BookmarkItemData]>> {
         return withReader { connection in
             return try connection.getRecentBookmarks(limit: limit)
         }
@@ -173,7 +174,7 @@ public class RustPlaces {
         }
     }
 
-    public func getBookmarksWithURL(url: String) -> Deferred<Maybe<[BookmarkItem]>> {
+    public func getBookmarksWithURL(url: String) -> Deferred<Maybe<[BookmarkItemData]>> {
         return withReader { connection in
             return try connection.getBookmarksWithURL(url: url)
         }
@@ -189,7 +190,7 @@ public class RustPlaces {
         }
     }
 
-    public func searchBookmarks(query: String, limit: UInt) -> Deferred<Maybe<[BookmarkItem]>> {
+    public func searchBookmarks(query: String, limit: UInt) -> Deferred<Maybe<[BookmarkItemData]>> {
         return withReader { connection in
             return try connection.searchBookmarks(query: query, limit: limit)
         }
@@ -293,7 +294,7 @@ public class RustPlaces {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -303,7 +304,7 @@ public class RustPlaces {
             } catch let err as NSError {
                 if let placesError = err as? PlacesError {
                     switch placesError {
-                    case .panic(let message):
+                    case .InternalPanic(let message):
                         Sentry.shared.sendWithStacktrace(message: "Panicked when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: message)
                     default:
                         Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
@@ -322,7 +323,7 @@ public class RustPlaces {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 

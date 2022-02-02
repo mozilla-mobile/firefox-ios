@@ -20,13 +20,9 @@ enum ASHeaderViewType {
 
 // Activity Stream header view
 class ASHeaderView: UICollectionReusableView {
-    static let verticalInsets: CGFloat = 4
-    var sectionType: ASHeaderViewType = .normal
-    private var titleLeadingConstraint: NSLayoutConstraint?
-
+    // MARK: - UIElements
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
-        label.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
                                                                        maxSize: FirefoxHomeHeaderViewUX.maxTitleLabelTextSize)
         label.adjustsFontForContentSizeCategory = true
@@ -39,10 +35,10 @@ class ASHeaderView: UICollectionReusableView {
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                                 maxSize: FirefoxHomeHeaderViewUX.maxMoreButtonTextSize)
         button.contentHorizontalAlignment = .right
-        button.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
     }
 
+    // MARK: - Variables
     var title: String? {
         willSet(newTitle) {
             titleLabel.text = newTitle
@@ -55,17 +51,11 @@ class ASHeaderView: UICollectionReusableView {
         }
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        moreButton.isHidden = true
-        moreButton.setTitle(nil, for: .normal)
-        moreButton.accessibilityIdentifier = nil
-        titleLabel.text = nil
-        moreButton.removeTarget(nil, action: nil, for: .allEvents)
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        moreButton.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
-    }
+    static let verticalInsets: CGFloat = 4
+    var sectionType: ASHeaderViewType = .normal
+    private var titleLeadingConstraint: NSLayoutConstraint?
 
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
@@ -79,19 +69,60 @@ class ASHeaderView: UICollectionReusableView {
             titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.titleTopInset),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
+
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
 
         titleLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: titleInsets)
         titleLeadingConstraint?.isActive = true
+
+        applyTheme()
+        setupObservers()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // MARK: - Notifications
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotifications),
+                                               name: .DisplayThemeChanged,
+                                               object: nil)
+    }
+
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+
+    // MARK: - Helper functions
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        moreButton.isHidden = true
+        moreButton.setTitle(nil, for: .normal)
+        moreButton.accessibilityIdentifier = nil
+        titleLabel.text = nil
+        moreButton.removeTarget(nil, action: nil, for: .allEvents)
     }
 
     func remakeConstraint(type: ASHeaderViewType) {
         let inset = type == .otherGroupTabs ? 15 : titleInsets
         titleLeadingConstraint?.constant = inset
     }
+}
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+extension ASHeaderView: NotificationThemeable {
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        moreButton.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
     }
 }

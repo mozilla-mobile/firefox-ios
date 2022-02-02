@@ -122,7 +122,7 @@ class URLBarView: UIView {
 
     fileprivate lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
-        cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
+        cancelButton.setImage(UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
         cancelButton.accessibilityLabel = AccessibilityIdentifiers.GeneralizedIdentifiers.back
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
