@@ -76,31 +76,6 @@ extension ScreenGraphTest {
         XCTAssertFalse(navigator.userState.nightMode)
         XCTAssertEqual(navigator.screenState, BrowserTabMenu)
     }
-
-    func testChainedActionPerf1() throws {
-        throw XCTSkip("Skipping this test due intermittent failures")
-        let navigator = self.navigator!
-        measure {
-            navigator.userState.url = defaultURL
-            wait(forElement: app.textFields.firstMatch, timeout: 3)
-            navigator.performAction(TestActions.LoadURLByPasting)
-            XCTAssertEqual(navigator.screenState, WebPageLoading)
-        }
-    }
-
-    func testChainedActionPerf2() throws {
-        throw XCTSkip("Skipping this test due intermittent failures")
-        let navigator = self.navigator!
-        measure {
-            navigator.userState.url = defaultURL
-            navigator.performAction(TestActions.LoadURLByPasting)
-            XCTAssertEqual(navigator.screenState, WebPageLoading)
-        }
-
-        navigator.userState.url = defaultURL
-        navigator.performAction(TestActions.LoadURL)
-        XCTAssertEqual(navigator.screenState, WebPageLoading)
-    }
 }
 
 
@@ -119,8 +94,6 @@ class TestUserState: MMUserState {
     var newPasscode: String = "111111"
 }
 
-let PasscodeSettingsOn = "PasscodeSettingsOn"
-let PasscodeSettingsOff = "PasscodeSettingsOff"
 let WebPageLoading = "WebPageLoading"
 
 fileprivate class TestActions {
@@ -201,25 +174,9 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
     }
 
     map.addScreenState(SettingsScreen) { screenState in
-        let table = app.tables["AppSettingsTableViewController.tableView"]
+        let table = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
         screenState.onEnterWaitFor(element: table)
 
-        screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettingsOff, if: "passcode == nil")
-        screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettingsOn, if: "passcode != nil")
-
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(PasscodeSettingsOn) { screenState in
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(PasscodeSettingsOff) { screenState in
-        screenState.tap(app.staticTexts["Turn Passcode On"], to: SetPasscodeScreen)
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(SetPasscodeScreen) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 

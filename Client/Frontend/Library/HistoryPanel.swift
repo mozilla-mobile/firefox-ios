@@ -31,19 +31,22 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         case yesterday
         case lastWeek
         case lastMonth
+        case older
 
-        static let count = 5
+        static let count = 6
 
         var title: String? {
             switch self {
             case .today:
-                return .TableDateSectionTitleToday
+                return .LibraryPanel.Sections.Today
             case .yesterday:
-                return .TableDateSectionTitleYesterday
+                return .LibraryPanel.Sections.Yesterday
             case .lastWeek:
-                return .TableDateSectionTitleLastWeek
+                return .LibraryPanel.Sections.LastWeek
             case .lastMonth:
-                return .TableDateSectionTitleLastMonth
+                return .LibraryPanel.Sections.LastMonth
+            case .older:
+                return .LibraryPanel.Sections.Older
             default:
                 return nil
             }
@@ -83,6 +86,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     var isFetchInProgress = false
 
     var clearHistoryCell: OneLineTableViewCell?
+    private let clearHistoryHelper: ClearHistoryHelper
 
     var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
@@ -96,12 +100,14 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     // MARK: - Lifecycle
     override init(profile: Profile) {
+        self.clearHistoryHelper = ClearHistoryHelper(profile: profile)
         super.init(profile: profile)
 
         [ Notification.Name.FirefoxAccountChanged,
           Notification.Name.PrivateDataClearedHistory,
           Notification.Name.DynamicFontChanged,
-          Notification.Name.DatabaseWasReopened ].forEach {
+          Notification.Name.DatabaseWasReopened,
+          Notification.Name.OpenClearRecentHistory].forEach {
             NotificationCenter.default.addObserver(self, selector: #selector(onNotificationReceived), name: $0, object: nil)
         }
     }
@@ -158,26 +164,28 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     override func reloadData() {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
-        if profile.isShutdown { return }
-        guard !isFetchInProgress else { return }
-        groupedSites = DateGroupedTableData<Site>()
-
-        currentFetchOffset = 0
+        guard !profile.isShutdown, !isFetchInProgress else { return }
+        
         fetchData().uponQueue(.main) { result in
             if let sites = result.successValue {
-                for site in sites {
-                    if let site = site, let latestVisit = site.latestVisit {
+                let fetchedSites = sites.asArray()
+                let allCurrentGroupedSites = self.groupedSites.allItems()
+                let allUniquedSitesToAdd = (allCurrentGroupedSites + fetchedSites).uniqued().filter {
+                    !allCurrentGroupedSites.contains($0)
+                }
+                
+                allUniquedSitesToAdd.forEach { site in
+                    if let latestVisit = site.latestVisit {
                         self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
                     }
                 }
-
+                
                 self.tableView.reloadData()
                 self.updateEmptyPanelState()
-
+                
                 if let cell = self.clearHistoryCell {
                     AdditionalHistoryActionRow.setStyle(enabled: !self.groupedSites.isEmpty, forCell: cell)
                 }
-
             }
         }
     }
@@ -256,47 +264,10 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         navigationController?.pushViewController(nextController, animated: true)
     }
 
-    func showClearRecentHistory() {
-        func remove(hoursAgo: Int) {
-            if let date = Calendar.current.date(byAdding: .hour, value: -hoursAgo, to: Date()) {
-                let types = WKWebsiteDataStore.allWebsiteDataTypes()
-                WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date, completionHandler: {})
-
-                self.profile.history.removeHistoryFromDate(date).uponQueue(.main) { _ in
-                    self.reloadData()
-                }
-            }
-        }
-
-        let alert = UIAlertController(title: .ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
-
-        // This will run on the iPad-only, and sets the alert to be centered with no arrow.
-        if let popoverController = alert.popoverPresentationController {
-            popoverController.sourceView = view
-            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-            popoverController.permittedArrowDirections = []
-        }
-
-        [(String.ClearHistoryMenuOptionTheLastHour, 1),
-         (String.ClearHistoryMenuOptionToday, 24),
-         (String.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {
-            (name, time) in
-            let action = UIAlertAction(title: name, style: .destructive) { _ in
-                remove(hoursAgo: time)
-            }
-            alert.addAction(action)
-        }
-        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
-            let types = WKWebsiteDataStore.allWebsiteDataTypes()
-            WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
-            self.profile.history.clearHistory().uponQueue(.main) { _ in
-                self.reloadData()
-            }
-            self.profile.recentlyClosedTabs.clearTabs()
-        }))
-        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
-        alert.addAction(cancelAction)
-        present(alert, animated: true)
+    private func showClearRecentHistory() {
+        clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] in
+            self?.reloadData()
+        })
     }
 
     // MARK: - Cell configuration
@@ -381,6 +352,8 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             if let dbName = notification.object as? String, dbName == "browser.db" {
                 reloadData()
             }
+        case .OpenClearRecentHistory:
+            showClearRecentHistory()
         default:
             // no need to do anything at all
             print("Error: Received unexpected notification \(notification.name)")
@@ -464,7 +437,11 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         guard indexPath.section > Section.additionalHistoryActions.rawValue else {
             switch indexPath.row {
             case 0:
+                clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] in
+                    self?.reloadData()
+                })
                 showClearRecentHistory()
+
             default:
                 navigateToRecentlyClosed()
             }
@@ -515,20 +492,19 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         return super.tableView(tableView, heightForHeaderInSection: section)
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // Intentionally blank. Required to use UITableViewRowActions
-    }
-
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if indexPath.section == Section.additionalHistoryActions.rawValue {
-            return []
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard indexPath.section != Section.additionalHistoryActions.rawValue else {
+            return nil
         }
-        let title: String = .HistoryPanelDelete
 
-        let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
-            self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
-        })
-        return [delete]
+        let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
+            guard let strongSelf = self else { completion(false); return }
+
+            strongSelf.removeHistoryForURLAtIndexPath(indexPath: indexPath)
+            completion(true)
+        }
+
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 
     // MARK: - Empty State
@@ -588,24 +564,9 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
 extension HistoryPanel: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard !isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else {
-            return
-        }
+        guard !isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }
 
-        fetchData().uponQueue(.main) { result in
-            if let sites = result.successValue {
-                let indexPaths: [IndexPath] = sites.compactMap({ site in
-                    guard let site = site, let latestVisit = site.latestVisit else {
-                        return nil
-                    }
-
-                    let indexPath = self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
-                    return IndexPath(row: indexPath.row, section: indexPath.section + 1)
-                })
-
-                self.tableView.insertRows(at: indexPaths, with: .automatic)
-            }
-        }
+        reloadData()
     }
 
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {

@@ -9,6 +9,7 @@ import Shared
 import XCGLogger
 
 fileprivate var debugTabCount = 0
+fileprivate let log = Logger.browserLogger
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
@@ -89,6 +90,13 @@ class Tab: NSObject {
     // Tab Groups
     var tabGroupData: TabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
     
+    struct TabGroupLastUpdatedObservation {
+        var keyUrl: String?
+        var referrerUrl: String?
+        var searchTerm: String?
+    }
+    
+    var lastObservation: TabGroupLastUpdatedObservation = TabGroupLastUpdatedObservation()
     var tabGroupsTimerHelper = StopWatchTimer()
     var shouldResetTabGroupData: Bool = false
     
@@ -114,9 +122,16 @@ class Tab: NSObject {
         }
     }
     
-    var adsTelemetryUrlList: [String] = [String]()
+    var adsTelemetryUrlList: [String] = [String]() {
+        didSet {
+            startingSearchUrlWithAds = url
+        }
+    }
+    var adsTelemetryRedirectUrlList: [URL] = [URL]()
+    var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
-    
+    var hasHomeScreenshot: Bool = false
+
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
         guard url != nil else { return true }
@@ -145,7 +160,6 @@ class Tab: NSObject {
     }
 
     var userActivity: NSUserActivity?
-
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
@@ -176,29 +190,19 @@ class Tab: NSObject {
         }
         return self.url
     }
-    
+
     var isFxHomeTab: Bool {
-        if let numberOfUrls = self.sessionData?.urls.count,
-           let offset = self.sessionData?.currentPage,
-           let url = self.sessionData?.urls[numberOfUrls - 1 + offset],
-           url.absoluteString.hasPrefix("internal://") {
-            return true
-        }
+        if let url = url, url.absoluteString.hasPrefix("internal://") { return true }
         return false
     }
     
     var isCustomHomeTab: Bool {
         guard let profile = self.browserViewController?.profile else { return false }
         
-        // Note: sessionData holds your navigation history on that tab, & sessionData.currentPage
-        //  is where you are currently. With numberOfUrls - 1 + offset, we're grabbing the url
-        //  for the last known position of navigation for that tab.
         if let customHomeUrl = HomeButtonHomePageAccessors.getHomePage(profile.prefs),
-           let numberOfUrls = self.sessionData?.urls.count,
-           let offset = self.sessionData?.currentPage,
-           let url = self.sessionData?.urls[numberOfUrls - 1 + offset],
-           let baseDomain = url.baseDomain,
            let customHomeBaseDomain = customHomeUrl.baseDomain,
+           let url = url,
+           let baseDomain = url.baseDomain,
            baseDomain.hasPrefix(customHomeBaseDomain) {
             return true
         }
@@ -270,6 +274,12 @@ class Tab: NSObject {
         return false
     }
 
+    fileprivate(set) var pageZoom: CGFloat = 1.0 {
+        didSet {
+            webView?.setValue(pageZoom, forKey: "viewScale")
+        }
+    }
+
     fileprivate(set) var screenshot: UIImage?
 
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
@@ -322,7 +332,8 @@ class Tab: NSObject {
                 // reset tab group
                 tabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
                 shouldResetTabGroupData = true
-            } else if tabGroupData.tabAssociatedNextUrl.isEmpty {
+            // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
+            } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
                 let key = tabGroupData.tabHistoryMetadatakey()
                 if key.referrerUrl != nextUrl {
                     let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
@@ -419,6 +430,7 @@ class Tab: NSObject {
             restore(webView)
 
             self.webView = webView
+            configureEdgeSwipeGestureRecognizers()
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
             UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
             tabDelegate?.tab?(self, didCreateWebView: webView)
@@ -527,15 +539,22 @@ class Tab: NSObject {
     var displayTitle: String {
         if let title = webView?.title, !title.isEmpty {
             let key = tabGroupData.tabHistoryMetadatakey()
-            if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
+            if lastObservation.keyUrl == key.url &&
+                lastObservation.referrerUrl == key.referrerUrl &&
+                lastObservation.searchTerm == key.searchTerm {
+                return title
+            } else if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
                 tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
                 let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
-                updateObservationForKey(key: key, observation: observation)
+                    updateObservationForKey(key: key, observation: observation)
+                lastObservation.keyUrl = key.url
+                lastObservation.referrerUrl = key.referrerUrl
+                lastObservation.searchTerm = key.searchTerm
             }
             return title
         }
-
+        
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !restoring {
@@ -626,8 +645,51 @@ class Tab: NSObject {
         self.webView?.scrollView.refreshControl?.endRefreshing()
     }
     
+
+    @objc func zoomIn() {
+        switch pageZoom {
+        case 0.75:
+            pageZoom = 0.85
+        case 0.85:
+            pageZoom = 1.0
+        case 1.0:
+            pageZoom = 1.15
+        case 1.15:
+            pageZoom = 1.25
+        case 3.0:
+            return
+        default:
+            pageZoom += 0.25
+        }
+    }
+
+    @objc func zoomOut() {
+        switch pageZoom {
+        case 0.5:
+            return
+        case 0.85:
+            pageZoom = 0.75
+        case 1.0:
+            pageZoom = 0.85
+        case 1.15:
+            pageZoom = 1.0
+        case 1.25:
+            pageZoom = 1.15
+        default:
+            pageZoom -= 0.25
+        }
+    }
+
+    func resetZoom() {
+        pageZoom = 1.0
+    }
+
     func addContentScript(_ helper: TabContentScript, name: String) {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
+    }
+
+    func addContentScriptToPage(_ helper: TabContentScript, name: String) {
+        contentScriptManager.addContentScriptToPage(helper, name: name, forTab: self)
     }
 
     func getContentScript(name: String) -> TabContentScript? {
@@ -686,7 +748,7 @@ class Tab: NSObject {
     func setScreenshot(_ screenshot: UIImage?) {
         self.screenshot = screenshot
     }
-
+    
     func toggleChangeUserAgent() {
         changedUserAgent = !changedUserAgent
 
@@ -774,6 +836,34 @@ class Tab: NSObject {
     }
 }
 
+extension Tab: UIGestureRecognizerDelegate {
+    // This prevents the recognition of one gesture recognizer from blocking another
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func configureEdgeSwipeGestureRecognizers() {
+        guard let webView = webView else {
+            log.info("Tab's edge swipe gesture recognizer was never added. This will affect Tab navigation telemetry!")
+            return
+        }
+        
+        let edgeSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgeSwipeTabNavigation(_:)))
+        edgeSwipeGesture.edges = .left
+        edgeSwipeGesture.delegate = self
+        webView.addGestureRecognizer(edgeSwipeGesture)
+    }
+    
+    @objc func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
+        guard let webView = webView else { return }
+        
+        if sender.state == .ended, (sender.velocity(in: webView).x > 150) {
+            TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
+        }
+    }
+    
+}
+
 extension Tab: TabWebViewDelegate {
     fileprivate func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
@@ -832,6 +922,20 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         }
     }
 
+    func addContentScriptToPage(_ helper: TabContentScript, name: String, forTab tab: Tab) {
+        if let _ = helpers[name] {
+            assertionFailure("Duplicate helper added: \(name)")
+        }
+
+        helpers[name] = helper
+
+        // If this helper handles script messages, then get the handler name and register it. The Browser
+        // receives all messages and then dispatches them to the right TabHelper.
+        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+            tab.webView?.configuration.userContentController.addInPageContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
+        }
+    }
+
     func getContentScript(_ name: String) -> TabContentScript? {
         return helpers[name]
     }
@@ -874,7 +978,14 @@ class TabWebView: WKWebView, MenuHelperInterface {
 
     internal override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // The find-in-page selection menu only appears if the webview is the first responder.
-        becomeFirstResponder()
+        if #available(iOS 13.4, *) {
+            // Do not becomeFirstResponder on a mouse event.
+            if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {
+                becomeFirstResponder()
+            }
+        } else {
+            becomeFirstResponder()
+        }
 
         return super.hitTest(point, with: event)
     }

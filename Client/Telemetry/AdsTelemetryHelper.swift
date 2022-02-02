@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import WebKit
-import MozillaAppServices
+import Glean
 
 public enum BasicSearchProvider: String {
     case google
@@ -122,6 +122,7 @@ class AdsTelemetryHelper: TabContentScript {
             AdsTelemetryHelper.trackAdsFoundOnPage(providerName: provider.name)
             tab?.adsProviderName = provider.name
             tab?.adsTelemetryUrlList = adUrls
+            tab?.adsTelemetryRedirectUrlList.removeAll()
         }
     }
     

@@ -1,4 +1,4 @@
-Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=57bf25c0f096bc01001e21e0&branch=main&build=latest)](https://dashboard.buddybuild.com/apps/57bf25c0f096bc01001e21e0/build/latest) [![codecov](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main)
+Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![codecov](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main)
 ===============
 
 Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
@@ -6,9 +6,9 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (main)
 -----------
 
-This branch works with [Xcode 13.0](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_13/Xcode_13.xip), Swift 5.5 and supports iOS 13 and above.
+This branch works only with [Xcode 13.2.1](https://developer.apple.com/download/all/?q=xcode), Swift 5.5.2 and supports iOS 13 and above.
 
-*Please note:* due to dependency issues, development of Firefox-iOS is currently only supported on Intel based Macs, and not Apple Silicon based Macs.
+*Please note:* Both Intel and M1 macs are supported 🎉 and we use swift package manager.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -23,10 +23,9 @@ Building the code
 -----------------
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install Carthage, Node, and a Python 3 virtualenv for localization scripts:
+1. Install, Node, and a Python 3 virtualenv for localization scripts:
     ```shell
     brew update
-    brew install carthage
     brew install node
     pip3 install virtualenv
     ```

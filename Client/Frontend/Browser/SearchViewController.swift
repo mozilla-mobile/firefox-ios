@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 import Storage
-import MozillaAppServices
+import Nimbus
 import Telemetry
 
 private enum SearchListSection: Int, CaseIterable {
@@ -324,8 +324,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
         layoutSearchEngineScrollView()
 
-        UIView.animate(withDuration: keyboardState.animationDuration, animations: {
-            UIView.setAnimationCurve(keyboardState.animationCurve)
+        UIView.animate(withDuration: keyboardState.animationDuration, delay: 0,
+                       options: [UIView.AnimationOptions(rawValue: UInt(keyboardState.animationCurve.rawValue << 16))], animations: {
             self.view.layoutIfNeeded()
         })
     }

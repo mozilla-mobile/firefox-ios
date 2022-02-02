@@ -122,9 +122,9 @@ class URLBarView: UIView {
 
     fileprivate lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
-        cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
+        cancelButton.setImage(UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
-        cancelButton.accessibilityLabel = .BackTitle
+        cancelButton.accessibilityLabel = AccessibilityIdentifiers.GeneralizedIdentifiers.back
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
@@ -575,6 +575,7 @@ class URLBarView: UIView {
         progressBar.isHidden = inOverlayMode
         addNewTabButton.isHidden = !toolbarIsShowing || topTabsIsShowing || inOverlayMode
         appMenuButton.isHidden = !toolbarIsShowing || inOverlayMode
+        homeButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         bookmarksButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
         backButton.isHidden = !toolbarIsShowing || inOverlayMode
@@ -709,11 +710,12 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
-        let state = locationView.reloadButton.isHidden ? locationView.reloadButton.reloadButtonState : .reload
+        let state = locationView.reloadButton.isHidden ? .reload : locationView.reloadButton.reloadButtonState
         
         switch state {
         case .reload:
             delegate?.urlBarDidPressReload(self)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
         case .stop:
             delegate?.urlBarDidPressStop(self)
         case .disabled:

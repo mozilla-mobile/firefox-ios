@@ -149,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "書籤";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "新增";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "將所有分頁加入書籤";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "將目前分頁加入書籤";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "編輯";
 
@@ -167,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "資料夾名稱";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "來自電腦的書籤";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "最近加入的書籤";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "新增書籤";
 
@@ -175,6 +190,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "新增分隔線";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "搜尋書籤";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "標題";
@@ -272,9 +290,11 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "現在起，有您的風格的 Firefox 首頁，可讓您更簡單就從上次結束瀏覽的地方繼續上網。快速找到您最近開啟的分頁、書籤、搜尋結果等分頁。";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "超過兩週沒有檢視過的分頁，將移動至此處。";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "到設定中關閉";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "無法新增頁面至閱讀清單";
@@ -659,6 +679,78 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "剛剛";
 
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "實際大小";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "新增書籤";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "清除最近的歷史記錄";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "下載鏈結";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "找下一個";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "在背景開啟鏈結";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "用新分頁開啟鏈結";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "另存新檔…";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "書籤";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "編輯";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "檔案";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "瀏覽紀錄";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "工具";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "檢視";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "視窗";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "設定";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "顯示書籤";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "顯示下載項目";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "顯示第一個分頁";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "顯示瀏覽紀錄";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "顯示最後一個分頁";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "顯示編號 1-9 的分頁";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "放大";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "縮小";
+
 /* History tableview section header */
 "Last month" = "上個月";
 
@@ -685,6 +777,33 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "登入資訊";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "了解更多";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "請先開啟 Face ID、Touch ID 或裝置解鎖碼任一種保護機制，才可以儲存或自動填寫網站登入資訊或密碼。";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "繼續";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "了解更多";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "您的網站登入資訊與密碼將受 Face ID、Touch ID 或裝置解鎖碼保護。";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "若要使用 Firefox 的「自動填寫」功能，必須先設定使用裝置解鎖碼。";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "密碼隨身帶著走";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "自動填寫 Firefox 密碼";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "開啟密碼「自動填寫」功能";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "修改於";
@@ -1067,6 +1186,9 @@
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "快速搜尋引擎";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "到 App Store 評分";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "已讀";
@@ -1849,6 +1971,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "目前選擇的分頁。";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "其他";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "閒置分頁";

@@ -149,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "बुकमार्क";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "जोड़ें";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "सभी टैब बुकमार्कित करें";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "मौजूदा टैब बुकमार्क करें";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "संपादित करें";
 
@@ -167,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "फोल्डर नाम";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "डेस्कटॉप बुकमार्क";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "हाल ही में बुकमार्क किया गया";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "नया बुकमार्क";
 
@@ -175,6 +190,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "नया विभाजक";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "बुकमार्क खोजें";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "शीर्षक";
@@ -262,6 +280,9 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "लिंक साझा करें";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "सेटिंग में बंद करें";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "पृष्ठ को पठन सूची मे नहीं जोड़ा जा सकता है";
@@ -646,6 +667,75 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "बस अभी";
 
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "वास्तविक आकार";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "बुकमार्क‌ जोड़ें‌";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "हालिया इतिहास मिटाएँ";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "डाउनलोड लिंक";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "फिर से खोजें";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "नए टैब में लिंक खोलें";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "इस रूप में पृष्ठ सहेजें…";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "बुकमार्क";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "संपादित करें";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "फ़ाइल";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "इतिहास";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "उपकरण";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "देखें";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "विंडो";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "सेटिंग";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "बुकमार्क दिखाएँ";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "डाउनलोड दिखाएँ";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "पहला टैब दिखाएँ";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "इतिहास दिखाएँ";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "अंतिम टैब दिखाएँ";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "टैब संख्या 1-9 दिखाएँ";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "बड़ा करें";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "छोटा करें";
+
 /* History tableview section header */
 "Last month" = "पिछला माह";
 
@@ -672,6 +762,24 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "लॉगिन";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "अधिक जानें";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "जारी रखें";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "अधिक जानें";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "हर जगह अपना पासवर्ड लेकर चलें";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "AutoFill Firefox पासवर्ड";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "AutoFill चालू करें";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "संशोधित";
@@ -720,6 +828,9 @@
 
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "आपकी खोज के अनुरूप कोई परिणाम नहीं मिला है।";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "कोई मिलान लॉगिन नहीं";
 
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "रद्द करें";
@@ -1028,6 +1139,9 @@
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "त्वरित-खोज इंजन";
 
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "ऐप स्टोर पर मूल्यांकन करें";
+
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "पढ़ें";
 
@@ -1256,6 +1370,9 @@
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "निजी डेटा मिटाएं";
 
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "चीजें साफ़ करें: %1$@";
+
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "क्लिपबोर्ड में कॉपी हो गया";
 
@@ -1349,6 +1466,9 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "वापस अंदर जायें";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Pocket द्वारा अनुशंसित";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
 "Settings.Home.Option.RecentlySaved" = "हाल ही में सहेजा गया";
@@ -1776,6 +1896,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "वर्तमान में चयनित टैब।";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "अन्य";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "निष्क्रिय टैब";

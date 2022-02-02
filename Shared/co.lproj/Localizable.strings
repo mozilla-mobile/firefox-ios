@@ -149,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Indette";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "Aghjunghje";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "Indettà tutte l’unghjette";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "Indettà l’unghjetta currente";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Mudificà";
 
@@ -167,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "Nome di u cartulare";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Indette di l’urdinatore";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "Indettati pocu fà";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Nova indetta";
 
@@ -175,6 +190,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Novu separadore";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Ricercà in l’indette";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Titulu";
@@ -272,9 +290,11 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "A vostra pagina d’accolta Firefox persunalizata vi permette avà di rivene d’una manera faciule induve vo avete lasciatu. Ci truverete l’unghjette, l’indette, è i risultati di ricerca recente.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "L’unghjette chì vo ùn avete micca viste dapoi duie settimane sò dispiazzate quì.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Disattivà in e preferenze";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Ùn si pò micca aghjunghje a pagina à a lista di lettura";
@@ -375,7 +395,7 @@
 "DownloadsPanel.Share.Title" = "Sparte";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Scrivite a vostra parolla d’intesa per cunnettesi";
+"Enter your password to connect" = "Stampittate a vostra parolla d’intesa per cunnettesi";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Espertu";
@@ -516,10 +536,10 @@
 "Help" = "Aiutu";
 
 /* Toggle history syncing setting */
-"History" = "Crunulogia";
+"History" = "Cronolugia";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "Squassà a crunulogia recente…";
+"HistoryPanel.ClearHistoryButtonTitle" = "Squassà a cronolugia recente…";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "Tuttu";
@@ -534,7 +554,7 @@
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Oghje è eri";
 
 /* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Squassà a crunulogia recente caccierà a crunulogia, i canistrelli è altri dati di u navigatore.";
+"HistoryPanel.ClearHistoryMenuTitle" = "Squassà a cronolugia recente caccierà a cronolugia, i canistrelli è altri dati di u navigatore.";
 
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "I siti visitati pocu fà seranu affissati quì.";
@@ -558,7 +578,7 @@
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
 
 /* Title for the Back to History button in the History Panel */
-"HistoryPanel.HistoryBackButton.Title" = "Crunulogia";
+"HistoryPanel.HistoryBackButton.Title" = "Cronolugia";
 
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Chjosi pocu fà";
@@ -588,7 +608,7 @@
 "HomePanel.ContextMenu.Bookmark" = "Indittà sta pagina";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.DeleteFromHistory" = "Squassà da a crunulogia";
+"HomePanel.ContextMenu.DeleteFromHistory" = "Squassà da a cronolugia";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "Apre in una nova unghjetta privata";
@@ -659,6 +679,78 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "una stonda fà";
 
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Dimensione attuale";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Aghjunghje un’indetta";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Squassà a cronolugia recente";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "Scaricà a destinazione di u liame";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Circà torna";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "Apre u liame in tacca di fondu";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "Apre u liame in una nova unghjetta";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "Arregistrà a pagina cù u nome…";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Indette";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "Mudificà";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "Schedariu";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Cronolugia";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Attrezzi";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "Affissà";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Finestra";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Preferenze";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Affissà l’indette";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Affissà i scaricamenti";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Affissà a prima unghjetta";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Affissà a cronolugia";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Affissà l’ultima unghjetta";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "Affissa l’unghjetta nᵘ 1-9";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Ingrandamentu";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Riduzzione";
+
 /* History tableview section header */
 "Last month" = "U mese scorsu";
 
@@ -685,6 +777,33 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Identificazioni di cunnessione";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Sapene di più";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Per arregistrà è riempie autumaticamente l’identificazioni di cunnessione è e parolle d’intesa, attivate Face ID, Touch ID o un codice d’accessu per l’apparechju.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Cuntinuà";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Sapene di più";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "E vostre identificazioni di cunnessione è parolle d’intesa sò prutette avà da Face ID, Touch ID o un codice d’accessu per l’apparechju.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Per impiegà a funzione di riempiimentu autumaticu di Firefox, ci vole à attivà un codice d’accessu per l’apparechju.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Purtatevi e vostre parolle d’intesa dapertuttu";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Riempiimentu autumaticu da Firefox di e parolle d’intesa";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Attivà u riempiimentu autumaticu";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Mudificatu";
@@ -887,10 +1006,10 @@
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Bluccà i perseguitatori in linea";
 
 /* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Canistrelli impiegati per u spiunagiu tra i siti";
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Canistrelli impiegati per u spiunagiu intersiti";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Perseguitatori d’un situ à l’altru";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Perseguitatori intersiti";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Minatori di crittomuneta";
@@ -929,7 +1048,7 @@
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Detettori d’impronta numerica";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
-"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Canistrelli di spiunagiu tra i siti bluccati";
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Canistrelli di spiunagiu intersiti bluccati";
 
 /* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
 "Menu.TrackingProtectionListTitle.Cryptominers" = "Minatori di crittomuneta bluccati";
@@ -1067,6 +1186,9 @@
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Mutori di ricerca rapidi";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Apprezzià nant’à l’App Store";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "Lettu";
@@ -1439,7 +1561,7 @@
 "Settings.HomePage.Title" = "Preferenze di a pagina d’accolta";
 
 /* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Scrive una pagina web";
+"Settings.HomePage.URL.Placeholder" = "Stampittà una pagina web";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Pagina d’accolta attuale";
@@ -1490,7 +1612,7 @@
 "Settings.NewTab.Option.HighlightsHistory" = "Visitatu";
 
 /* Option in settings to show history when you open a new tab */
-"Settings.NewTab.Option.History" = "A crunulogia";
+"Settings.NewTab.Option.History" = "A cronolugia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "A pagina d’accolta";
@@ -1800,7 +1922,7 @@
 "SyncState.Failed.Title" = "Fiascu di a sincrunisazione";
 
 /* The History sync component, used in SyncState.Partial.Title */
-"SyncState.History.Title" = "Crunulogia";
+"SyncState.History.Title" = "Cronolugia";
 
 /* The Logins sync component, used in SyncState.Partial.Title */
 "SyncState.Logins.Title" = "Identificazioni di cunnessione";
@@ -1849,6 +1971,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Unghjetta selezziunata attualmente.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Altri";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Unghjette inattive";

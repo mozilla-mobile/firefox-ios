@@ -43,6 +43,12 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Hopp inn igjen";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Faner: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Du søkte etter «%@»";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "Nyleg lagra";
 
@@ -69,6 +75,9 @@
 
 /* This button will open the library showing all the users bookmarks */
 "ActivityStream.RecentlySaved.ShowAll" = "Vis alle";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Fjern";
 
 /* Section title label for Shortcuts */
 "ActivityStream.Shortcuts.SectionTitle" = "Snarvegar";
@@ -140,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Bokmerke";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "Legg til";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "Bokmerk alle faner";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "Bokmerk gjeldande fane";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Rediger";
 
@@ -158,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "Mappenamn";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Bokmerke på PC-en";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "Nyleg bokmerkte";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Nytt bokmerke";
 
@@ -166,6 +190,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Ny skiljelinje";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Søk i bokmerka";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Tittel";
@@ -259,6 +286,15 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Del lenke";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Den personlege Firefox-startsida di gjer det no lettare å fortsetje der du slutta. Finn dei siste fanene, bokmerka og søkjeresultata.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Faner du ikkje har vist på to veker, vert flytta hit.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Slå av i innstillingar";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Klarte ikkje å leggje til sida i leselista";
@@ -393,6 +429,9 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefox startside";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Tilpass startsida";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Fram";
@@ -622,11 +661,95 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Vis førre fane";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Slå på auto-attlating";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox vil late att faner du ikkje har sett den siste månaden.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Late att automatisk etter ein månad?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Lat att alle inaktive faner";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Større tekst";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "nett no";
+
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Verkeleg storleik";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Legg til bokmerke";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Tøm nyleg historikk";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "Nedlastingslenke";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Søk igjen";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "Opne lenke i bakgrunnen";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "Opne lenke i ny fane";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "Lagre sida som…";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Bokmerke";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "Rediger";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "Fil";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Historikk";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Verktøy";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "Vis";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Vindauge";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Innstillingar";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Vis bokmerke";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Vis nedlastingar";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Vis første fane";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Vis historikk";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Vis siste fane";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "Vis fanenummer 1-9";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Zoom inn";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Zoom ut";
 
 /* History tableview section header */
 "Last month" = "Sist månad";
@@ -654,6 +777,33 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Innloggingar";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Les meir";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "For å lagre og autofylle innloggingar og passord, aktiver Face ID, Touch ID eller ein tryggingskode for eininga.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Fortset";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Les meir";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Innloggingane og passorda dine er no beskytta av Face ID, Touch ID eller ein tryggingskode på eininga di.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "For å bruke autofyll-funksjonen for Firefox, må du ha ein tryggingskode for eininga påslått.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Ta med deg passorda dine overalt";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Autofyll Firefox-passord";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Slå på autofyll";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Endra";
@@ -952,6 +1102,31 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "OK";
 
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Byrj surfinga";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "Det er no enklare å fortsetje der du slutta.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "Gå til dei opne fanene, bokmerka og nettlesarhistorikken.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "Gå tilbake til dei siste søka dine frå startsida.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "Nylege søk";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "Sider frå same søk vert grupperte saman.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "Ryddigare fanegrupper";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "Kva er nytt i Firefox";
+
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Ops! Firefox krasja";
 
@@ -1011,6 +1186,9 @@
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Hurtigsøkjemotorar";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Skriv ei vurdering App Store";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "lesen";
@@ -1334,6 +1512,45 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Generelt";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description" = "Vel innhaldet du ser på Firefox-startsida.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Gå tilbake til";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Tilrådd av Pocket";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Nyleg lagra";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Nyleg besøkte";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentSearches" = "Nylege søk";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Snarvegar";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Startside etter fire timar inaktivitet";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Startside";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Vel kva som skal visast når du går tilbake til Firefox.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Siste fane";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Opningsskjerm";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "Firefox startside";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Tøm";
 
@@ -1504,6 +1721,18 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Undersøkingar";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Uverksam fane";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Fanegrupper";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Tilpass fanerad";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Faner";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, eg forstår";
@@ -1743,6 +1972,9 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Gjeldande vald fane.";
 
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Andre";
+
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Uverksam fane";
 
@@ -1760,6 +1992,9 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Opne vald fane";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "Andre faner";
 
 /* The title for the tab tray in private mode */
 "TabTray.PrivateTitle" = "Private faner";

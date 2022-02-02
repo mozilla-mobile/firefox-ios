@@ -74,7 +74,7 @@ class SyncCommandsTests: XCTestCase {
 
         let j = JSON(parseJSON: syncCommand.value)
 
-        XCTAssertEqual(j.dictionary!["command"]?.stringValue, jsonObj["command"] as! String)
+        XCTAssertEqual(j.dictionary!["command"]?.stringValue, jsonObj["command"] as? String)
         XCTAssert(j.dictionary!["args"]!.arrayObject as! [String] == jsonObj["args"] as! [String])
         XCTAssertEqual(j.dictionary!.keys.count, jsonObj.keys.count)
     }

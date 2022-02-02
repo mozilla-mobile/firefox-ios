@@ -113,7 +113,7 @@
 "TodayWidget.SearchInPrivateTabLabelV2" = "Buscar en pestaña privada";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "Agrega accesos directos a los sitios visitados con frecuencia y recientemente.";
+"TodayWidget.TopSitesGalleryDescription" = "Agrega atajos de los sitios visitados recientemente y con frecuencia.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Sitios frecuentes";

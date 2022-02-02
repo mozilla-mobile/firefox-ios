@@ -146,7 +146,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
     override func layoutSubviews() {
         super.layoutSubviews()
         containerView.snp.remakeConstraints { make in
-            make.height.equalTo(55)
+            make.height.equalTo(58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
@@ -198,7 +198,7 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         midView.addSubview(descriptionLabel)
         let containerView = UIView()
         containerView.addSubview(midView)
-        addSubview(containerView)
+        contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints { make in
             make.height.equalTo(65)

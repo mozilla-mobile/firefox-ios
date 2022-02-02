@@ -4,17 +4,18 @@
 
 import Foundation
 import Shared
-import MozillaAppServices
+import Storage
+import Places
 
 struct ASGroup<T> {
-    let searchTerm: String
-    let groupedItems: [T]
-    let timestamp: Timestamp
+    var searchTerm: String
+    var groupedItems: [T]
+    var timestamp: Timestamp
 }
 
 class SearchTermGroupsManager {
 
-    public static func getURLGroups(with profile: Profile, from urls: [URL], using ordering: ComparisonResult, completion: @escaping ([ASGroup<URL>]?, _ filteredItems: [URL]) -> Void) {
+    public static func getURLGroups(with profile: Profile, from urls: [Site], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void) {
         getGroups(with: profile, from: urls, using: ordering, completion: completion)
     }
 
@@ -39,9 +40,7 @@ class SearchTermGroupsManager {
     ///   filteredItems list, `[T]`, which is comprised of items from the original input
     ///   that are not part of a group.
     private static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
-//        ROUX TODO: when URL support is added, fix check
-//        guard (items is [Tab] || items is [URL]) else { return completion(nil, [T]()) }
-        guard (items is [Tab]) else { return completion(nil, [T]()) }
+        guard (items is [Tab] || items is [Site]) else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
@@ -105,15 +104,14 @@ class SearchTermGroupsManager {
             innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata {
                 if historyMetaList.contains(where: { metadata in
                     var stringURL: String = ""
-                    if let item = item as? URL {
-                        stringURL = item.absoluteString
 
+                    if let item = item as? Site {
+                        stringURL = item.url
                     } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
                         stringURL = url
                     }
 
                     return metadata.url == stringURL || metadata.referrerUrl == stringURL
-
                 }) {
                     itemsInGroups.append(item)
                     if itemGroupData[searchTerm] == nil {
@@ -125,7 +123,6 @@ class SearchTermGroupsManager {
                 }
             }
         }
-
         return (itemGroupData, itemsInGroups)
     }
 
@@ -186,14 +183,17 @@ class SearchTermGroupsManager {
 
     /// Takes a dictionary and creates ASGroups from it.
     ///
+    /// If dictionary contains `Tab`s, then the group will be assigned a timestap based
+    /// on the `firstCreatedTime` of the first item in the group.
+    ///
     /// - Parameter groupDictionary: Dictionary that is to be processed
     /// - Returns: An array of `ASGroup<T>`
     private static func createGroups<T: Equatable>(from groupDictionary: [String: [T]]) -> [ASGroup<T>] {
         return groupDictionary.map() {
                 let orderedItems = orderItemsIn(group: $0.value)
                 var timestamp: Timestamp = 0
-                if let lastItem = orderedItems.last, let tab = lastItem as? Tab {
-                    timestamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+                if let firstItem = orderedItems.first, let tab = firstItem as? Tab {
+                    timestamp = tab.firstCreatedTime ?? 0
                 }
 
                 return ASGroup<T>(searchTerm: $0.key.capitalized, groupedItems: orderedItems, timestamp: timestamp)
@@ -207,9 +207,15 @@ class SearchTermGroupsManager {
     private static func orderItemsIn<T: Equatable>(group: [T]) -> [T] {
         return group.sorted {
             if let firstTab = $0 as? Tab, let secondTab = $1 as? Tab {
-                let firstTabTimestamp = firstTab.lastExecutedTime ?? firstTab.sessionData?.lastUsedTime ?? firstTab.firstCreatedTime ?? 0
-                let secondTabTimestamp = secondTab.lastExecutedTime ?? secondTab.sessionData?.lastUsedTime ?? secondTab.firstCreatedTime ?? 0
+                let firstTabTimestamp = firstTab.firstCreatedTime ?? 0
+                let secondTabTimestamp = secondTab.firstCreatedTime ?? 0
                 return firstTabTimestamp < secondTabTimestamp
+
+            } else if let firstSite = $0 as? Site, let secondSite = $1 as? Site {
+                let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
+                let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
+                return firstSiteATimestamp < secondSiteTimestamp
+
             } else {
                 fatalError("Error: We should never pass a type \(T.self) to this function.")
             }

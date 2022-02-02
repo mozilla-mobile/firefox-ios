@@ -21,7 +21,7 @@ enum SiteImageType: Int {
 /// A helper that'll fetch an image, and fallback to other image options if specified.
 class SiteImageHelper {
     
-    static let cache = NSCache<NSString, UIImage>()
+    private static let cache = NSCache<NSString, UIImage>()
     private let throttler = Throttler(seconds: 0.5, on: .main)
     private let profile: Profile
     
@@ -60,48 +60,64 @@ class SiteImageHelper {
         }
         
         throttler.throttle { [weak self] in
-            if !didCompleteFetch && imageType.peek() != nil {
-                if let updatedImageType = imageType.next() {
-                    self?.fetchImageFor(site: site, imageType: updatedImageType, shouldFallback: shouldFallback, completion: completion)
-                } else { return }
-            }
+            if !didCompleteFetch && imageType.peek() != nil,
+               let updatedImageType = imageType.next(), shouldFallback {
+                self?.fetchImageFor(site: site, imageType: updatedImageType, shouldFallback: shouldFallback, completion: completion)
+            } else { return }
         }
-        
     }
+
+    // MARK: - Private
     
     private func fetchHeroImage(for site: Site, completion: @escaping (UIImage?, Bool?) -> ()) {
+        let heroImageCacheKey = NSString(string: "\(site.url)\(SiteImageType.heroImage.rawValue)")
+
+        // Fetch from cache, if not then fetch with LPMetadataProvider
+        if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
+            completion(cachedImage, true)
+
+        } else {
+            guard let url = URL(string: site.url) else {
+                completion(nil, false)
+                return
+            }
+
+            fetchFromMetaDataProvider(heroImageCacheKey: heroImageCacheKey, url: url, completion: completion)
+        }
+    }
+
+    private func fetchFromMetaDataProvider(heroImageCacheKey: NSString, url: URL, completion: @escaping (UIImage?, Bool?) -> ()) {
         let linkPresentationProvider = LPMetadataProvider()
-        guard let url = URL(string: site.url) else { return }
-        
-        let heroImageCacheKey = NSString(string: site.url)
-        
         linkPresentationProvider.startFetchingMetadata(for: url) { metadata, error in
             guard let metadata = metadata, let imageProvider = metadata.imageProvider, error == nil else {
                 completion(nil, false)
                 return
             }
-            
+
             imageProvider.loadObject(ofClass: UIImage.self) { image, error in
                 guard error == nil, let image = image as? UIImage else {
                     completion(nil, false)
                     return
                 }
+
                 SiteImageHelper.cache.setObject(image, forKey: heroImageCacheKey)
                 completion(image, true)
-                return
             }
         }
-        
     }
     
     private func fetchFavicon(for site: Site, completion: @escaping (UIImage?, Bool?) -> ()) {
-        let faviconCacheKey = NSString(string: site.url)
-        
-        profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
-            guard let image = result.successValue else { return }
-            SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
-            completion(image, true)
-        })
+        let faviconCacheKey = NSString(string: "\(site.url)\(SiteImageType.favicon.rawValue)")
+
+        // Fetch from cache, if not then fetch from profile
+        if let cachedImage = SiteImageHelper.cache.object(forKey: faviconCacheKey) {
+            completion(cachedImage, true)
+        } else {
+            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
+                guard let image = result.successValue else { return }
+                SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
+                completion(image, true)
+            })
+        }
     }
-    
 }

@@ -4,9 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox को आपके सहेजे गए लॉगिन तक पहुंचने के लिए फेस आईडी की ज़रूरत है।";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "आपके द्वारा देखे गए वेबसाइट आपके स्थान का अनुरोध कर सकते हैं।";
 
 /* Privacy - Microphone Usage Description */

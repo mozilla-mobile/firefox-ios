@@ -4,9 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Goulennet eo ar FaceId evit ma c’hallfe Firefox haeziñ an titouroù kennaskañ enrollet.";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Lec’hiennoù web a weladennit a c’hall azgoulenn ho lec’hiadur.";
 
 /* Privacy - Microphone Usage Description */

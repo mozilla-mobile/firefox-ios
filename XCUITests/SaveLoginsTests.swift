@@ -22,6 +22,13 @@ let defaultNumRowsEmptyFilterList = 0
 class SaveLoginTest: BaseTestCase {
 
     private func saveLogin(givenUrl: String) {
+        if iPad() {
+            waitForTabsButton()
+            navigator.goto(TabTray)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
         waitForExistence(app.buttons["submit"], timeout: 3)
@@ -31,72 +38,73 @@ class SaveLoginTest: BaseTestCase {
 
     private func openLoginsSettings() {
         navigator.goto(SettingsScreen)
+        app.cells["SignInToSync"].swipeUp()
         navigator.goto(LoginsSettings)
+
+        // This only appears the first time
+        if app.otherElements.buttons["Continue"].exists {
+            app.otherElements.buttons["Continue"].tap()
+        }
+
+        unlockLoginsView()
         waitForExistence(app.tables["Login List"])
     }
-    
+
+    private func unlockLoginsView() {
+        let passcodeInput = springboard.secureTextFields.firstMatch
+        waitForExistence(passcodeInput, timeout: 20)
+        passcodeInput.tap()
+        passcodeInput.typeText("foo\n")
+
+    }
+
     func testLoginsListFromBrowserTabMenu() {
         closeURLBar()
         //Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
+        unlockLoginsView()
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.searchFields["Filter"].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         saveLogin(givenUrl: testLoginPage)
         //Make sure you can access populated Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
+        unlockLoginsView()
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.searchFields["Filter"].exists)
         XCTAssertTrue(app.staticTexts[domain].exists)
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
-    
-    func testPasscodeLoginsListFromBrowserTabMenu() {
+
+    // Smoketest
+    func testSaveLogin() {
         closeURLBar()
-        navigator.performAction(Action.SetPasscode)
-        navigator.nowAt(PasscodeSettings)
-        navigator.goto(SettingsScreen)
-
-        //Make sure you can access empty Login List from Browser Tab Menu
-        navigator.goto(LockedLoginsSettings)
-        navigator.performAction(Action.UnlockLoginsSettings)
-        waitForExistence(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields["Filter"].exists)
+        // Initially the login list should be empty
+        openLoginsSettings()
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        // Save a login and check that it appears on the list
         saveLogin(givenUrl: testLoginPage)
-        //Make sure you can access populated Login List from Browser Tab Menu
-        navigator.goto(LockedLoginsSettings)
-        navigator.performAction(Action.UnlockLoginsSettings)
+        openLoginsSettings()
         waitForExistence(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields["Filter"].exists)
         XCTAssertTrue(app.staticTexts[domain].exists)
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+        //Check to see how it works with multiple entries in the list- in this case, two for now
+        saveLogin(givenUrl: testSecondLoginPage)
+        openLoginsSettings()
+        waitForExistence(app.tables["Login List"])
+        XCTAssertTrue(app.staticTexts[domain].exists)
+        XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
+        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
     }
-
-//    func testSaveLogin() {
-//        closeURLBar()
-//        // Initially the login list should be empty
-//        openLoginsSettings()
-//        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
-//        // Save a login and check that it appears on the list
-//        saveLogin(givenUrl: testLoginPage)
-//        openLoginsSettings()
-//        waitForExistence(app.tables["Login List"])
-//        XCTAssertTrue(app.staticTexts[domain].exists)
-//        XCTAssertTrue(app.staticTexts[domainLogin].exists)
-//        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
-//        //Check to see how it works with multiple entries in the list- in this case, two for now
-//        saveLogin(givenUrl: testSecondLoginPage)
-//        openLoginsSettings()
-//        waitForExistence(app.tables["Login List"])
-//        XCTAssertTrue(app.staticTexts[domain].exists)
-//        XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-//        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
-//    }
 
     func testDoNotSaveLogin() {
+        if iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.buttons["submit"].tap()
@@ -175,6 +183,10 @@ class SaveLoginTest: BaseTestCase {
 
     // Smoketest
     func testSavedLoginAutofilled() {
+        if iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         // Provided text fields are completely empty
@@ -198,6 +210,10 @@ class SaveLoginTest: BaseTestCase {
         
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)
@@ -211,6 +227,11 @@ class SaveLoginTest: BaseTestCase {
     func testCreateLoginManually() {
         closeURLBar()
         navigator.goto(LoginsSettings)
+        // This only appears the first time
+        if app.otherElements.buttons["Continue"].exists {
+            app.otherElements.buttons["Continue"].tap()
+        }
+        unlockLoginsView()
         waitForExistence(app.tables["Login List"])
         app.buttons["Add"].tap()
         waitForExistence(app.tables["Add Credential"], timeout: 3)

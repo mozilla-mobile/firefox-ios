@@ -272,8 +272,7 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "ขณะนี้หน้าแรกของ Firefox ที่ปรับแต่งแบบคุณได้รับการปรับปรุงให้คุณสามารถกลับมาดูหน้าเว็บที่คุณดูค้างไว้ได้ง่ายขึ้นแล้ว ค้นหาแท็บ ที่คั่นหน้า และผลการค้นหาล่าสุดของคุณ";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "แท็บที่คุณไม่ได้ดูเป็นเวลา 2 สัปดาห์จะถูกย้ายมาที่นี่";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
@@ -659,6 +658,9 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "เมื่อกี้นี้";
 
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "แสดงการดาวน์โหลด";
+
 /* History tableview section header */
 "Last month" = "เดือนที่แล้ว";
 
@@ -685,6 +687,33 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "การเข้าสู่ระบบ";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "เรียนรู้เพิ่มเติม";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "หากต้องการบันทึกและป้อนการเข้าสู่ระบบและรหัสผ่านอัตโนมัติ ให้เปิดใช้งาน Face ID, Touch ID หรือรหัสผ่านของอุปกรณ์";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "ดำเนินการต่อ";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "เรียนรู้เพิ่มเติม";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "การเข้าสู่ระบบและรหัสผ่านของคุณได้รับการปกป้องโดย Face ID, Touch ID หรือรหัสผ่านของอุปกรณ์";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "ในการใช้คุณสมบัติป้อนอัตโนมัติสำหรับ Firefox คุณต้องเปิดใช้งานรหัสผ่านของอุปกรณ์";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "นำรหัสผ่านของคุณไปทุกที่";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "ป้อนรหัสผ่าน Firefox อัตโนมัติ";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "เปิดการป้อนอัตโนมัติ";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "เปลี่ยนแปลงเมื่อ";
@@ -788,7 +817,7 @@
 "Menu.CopyURL.Confirm" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
-"Menu.Downloads.Label" = "ดาวน์โหลด";
+"Menu.Downloads.Label" = "การดาวน์โหลด";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "การป้องกันการติดตามที่มากขึ้นถูก ปิด สำหรับไซต์นี้";
@@ -1849,6 +1878,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "แท็บที่เลือกในปัจจุบัน";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "อื่น ๆ";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "แท็บที่ไม่ได้ใช้งาน";

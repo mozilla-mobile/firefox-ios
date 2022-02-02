@@ -87,7 +87,6 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         if dismissType == .dismiss {
             super.dismiss(animated: animated, completion: completion)
         } else if dismissType == .popToTabTray {
-            print("SOMETHING")
             shouldDismissFxASignInViewController?()
         } else {
             navigationController?.popToRootViewController(animated: true)
@@ -136,7 +135,7 @@ extension FxAWebViewController: WKUIDelegate {
         helpBrowser = wv
         helpBrowser?.navigationDelegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: AccessibilityIdentifiers.GeneralizedIdentifiers.back, style: .plain, target: self, action: #selector(closeHelpBrowser)) 
 
         return helpBrowser
     }

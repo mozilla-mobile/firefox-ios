@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import MozillaAppServices
+import Glean
 
 struct FxALaunchParams {
     var query: [String: String]
@@ -128,6 +128,7 @@ enum NavigationPath {
             }
         } else if ["http", "https"].contains(scheme) {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
+            RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
@@ -239,11 +240,11 @@ enum NavigationPath {
 
     private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: GridTabViewController) {
         bvc.tabManager.removeTabs(bvc.tabManager.privateTabs)
-         guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
-             bvc.tabManager.selectTab(bvc.tabManager.addTab())
-             return
-         }
-         bvc.tabManager.selectTab(tab)
+        guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
+            bvc.tabManager.selectTab(bvc.tabManager.addTab())
+            return
+        }
+        bvc.tabManager.selectTab(tab)
     }
 
     private static func handleGlean(url: URL) {
@@ -343,6 +344,8 @@ func == (lhs: NavigationPath, rhs: NavigationPath) -> Bool {
         return lhs.query == rhs.query
     case let (.deepLink(lhs), .deepLink(rhs)):
         return lhs == rhs
+    case (.closePrivateTabs, .closePrivateTabs):
+        return true
     default:
         return false
     }

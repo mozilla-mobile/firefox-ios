@@ -272,8 +272,7 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Suasmenintame „Firefox“ pradžios tinklalapyje dabar lengviau tęsti nuo ten, kur baigėte. Raskite paskiausias korteles, adresyno įrašus, ir paieškos rezultatus.";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.
-   Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Čia perkeliamos paskutines dvi savaites nenaudotos kortelės.";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
@@ -685,6 +684,33 @@
 
 /* Toggle logins syncing setting */
 "Logins" = "Prisijungimai";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Sužinoti daugiau";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Norėdami įrašyti ir automatiškai užpildyti prisijungimus ir slaptažodžius, įjunkite „Face ID“, „Touch ID“ arba įrenginio apsaugos kodą.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Tęsti";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Sužinoti daugiau";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Dabar jūsų prisijungimai ir slaptažodžiai yra apsaugoti su „Face ID“, „Touch ID“ arba įrenginio apsaugos kodu.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Norėdami naudoti automatinio užpildymo funkciją su „Firefox“, turite įjungti įrenginio apsaugos kodą.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Turėkite savo slaptažodžius visur";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Automatiškai užpildykite „Firefox“ slaptažodžius";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Įjungti automatinį užpildymą";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Atnaujinta";
@@ -1849,6 +1875,9 @@
 
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Dabar pažymėta kortelė.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Kitos";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Neaktyvios kortelės";

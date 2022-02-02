@@ -8,7 +8,7 @@ extension UIConstants {
     static var BottomToolbarHeight: CGFloat {
         get {
             var bottomInset: CGFloat = 0.0
-            if let window = UIWindow.keyWindow {
+            if let window = UIWindow.attachedKeyWindow {
                 bottomInset = window.safeAreaInsets.bottom
             }
             return ToolbarHeight + bottomInset

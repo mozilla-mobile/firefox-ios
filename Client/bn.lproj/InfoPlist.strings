@@ -1,12 +1,10 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "এটা আপনাকে ছবি তুলতে এবং আপলোড করার সুযোগ দেবে।";
+"NSCameraUsageDescription" = "Firefox আপনার ক্যামেরা ব্যবহার করবে QR কোড স্ক্যান করার জন্য এবং ছবি তোলা এবং ভিডিও করার জন্য।";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "আপনার সংরক্ষিত লগইনগুলি অ্যাক্সেস করতে Firefox এর ফেস আইডির প্রয়োজন।";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "যে ওয়েবসাইট আপনি ব্রাউজ করছেন, তা আপনার অবস্থান জানতে চাইতে পারে।";
 
 /* Privacy - Microphone Usage Description */

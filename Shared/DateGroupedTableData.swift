@@ -15,14 +15,16 @@ public struct DateGroupedTableData<T: Equatable> {
     let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
     let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
     let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
+    let lastMonthTimestamp = getDate(dayOffset: -30).timeIntervalSince1970
 
-    var today: [(T, TimeInterval)] = []
-    var yesterday: [(T, TimeInterval)] = []
-    var lastWeek: [(T, TimeInterval)] = []
-    var older: [(T, TimeInterval)] = []
+    var today: [(item: T, timing: TimeInterval)] = []
+    var yesterday: [(item: T, timing: TimeInterval)] = []
+    var lastWeek: [(item: T, timing: TimeInterval)] = []
+    var lastMonth: [(item: T, timing: TimeInterval)] = []
+    var older: [(item: T, timing: TimeInterval)] = []
 
     public var isEmpty: Bool {
-        return today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && older.isEmpty
+        return today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && lastMonth.isEmpty && older.isEmpty
     }
 
     public init() {}
@@ -37,20 +39,25 @@ public struct DateGroupedTableData<T: Equatable> {
         } else if timestamp > lastWeekTimestamp {
             lastWeek.append((item, timestamp))
             return IndexPath(row: lastWeek.count - 1, section: 2)
+        } else if timestamp > lastMonthTimestamp {
+            lastMonth.append((item, timestamp))
+            return IndexPath(row: lastMonth.count - 1, section: 3)
         } else {
             older.append((item, timestamp))
-            return IndexPath(row: older.count - 1, section: 3)
+            return IndexPath(row: older.count - 1, section: 4)
         }
     }
 
     mutating public func remove(_ item: T) {
-        if let index = today.firstIndex(where: { item == $0.0 }) {
+        if let index = today.firstIndex(where: { item == $0.item }) {
             today.remove(at: index)
-        } else if let index = yesterday.firstIndex(where: { item == $0.0 }) {
+        } else if let index = yesterday.firstIndex(where: { item == $0.item }) {
             yesterday.remove(at: index)
-        } else if let index = lastWeek.firstIndex(where: { item == $0.0 }) {
+        } else if let index = lastWeek.firstIndex(where: { item == $0.item }) {
             lastWeek.remove(at: index)
-        } else if let index = older.firstIndex(where: { item == $0.0 }) {
+        } else if let index = lastMonth.firstIndex(where: { item == $0.item }) {
+            lastMonth.remove(at: index)
+        } else if let index = older.firstIndex(where: { item == $0.item }) {
             older.remove(at: index)
         }
     }
@@ -63,6 +70,8 @@ public struct DateGroupedTableData<T: Equatable> {
             return yesterday.count
         case 2:
             return lastWeek.count
+        case 3:
+            return lastMonth.count
         default:
             return older.count
         }
@@ -71,13 +80,23 @@ public struct DateGroupedTableData<T: Equatable> {
     public func itemsForSection(_ section: Int) -> [T] {
         switch section {
         case 0:
-            return today.map({ $0.0 })
+            return today.map({ $0.item })
         case 1:
-            return yesterday.map({ $0.0 })
+            return yesterday.map({ $0.item })
         case 2:
-            return lastWeek.map({ $0.0 })
+            return lastWeek.map({ $0.item })
+        case 3:
+            return lastMonth.map({ $0.item })
         default:
-            return older.map({ $0.0 })
+            return older.map({ $0.item })
         }
+    }
+    
+    /// Returns all currently fetched (and grouped) items: `[T.item]`.
+    public func allItems() -> [T] {
+        let allItems = (today + yesterday + lastWeek + lastMonth + older)
+            .map { $0.item }
+        
+        return allItems
     }
 }

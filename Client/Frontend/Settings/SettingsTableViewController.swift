@@ -276,8 +276,8 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     func writeBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
             let controlState = control.isOn ? UserFeaturePreference.enabled : UserFeaturePreference.disabled
-            featureFlags.setUserPreferenceFor(featureFlagName,
-                                              to: controlState)
+            featureFlags.setUserPreferenceFor(featureFlagName, to: controlState)
+
         } else {
             guard let key = prefKey else {
                 return
@@ -492,8 +492,14 @@ class CheckmarkSetting: Setting {
             cell.tintColor = UIColor.theme.tableView.rowActionAccessory // Sets accessory color only
 
             let checkColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
-            let check = UILabel(frame: CGRect(x: 20, y: 10, width: 24, height: 20))
+            let check = UILabel()
             cell.contentView.addSubview(check)
+            check.snp.makeConstraints { make in
+                make.height.equalTo(20)
+                make.width.equalTo(24)
+                make.top.equalToSuperview().offset(10)
+                make.leading.equalToSuperview().offset(20)
+            }
             check.text = "\u{2713}"
             check.font = UIFont.systemFont(ofSize: 20)
             check.textColor = checkColor

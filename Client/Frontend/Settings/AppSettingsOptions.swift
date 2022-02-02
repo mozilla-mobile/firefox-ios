@@ -5,9 +5,8 @@
 import Foundation
 import Shared
 import Account
-import SwiftKeychainWrapper
 import LocalAuthentication
-import MozillaAppServices
+import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -16,7 +15,7 @@ private var DebugSettingsClickCount: Int = 0
 
 private var disclosureIndicator: UIImageView {
     let disclosureIndicator = UIImageView()
-    disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate)
+    disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
     disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
     disclosureIndicator.sizeToFit()
     return disclosureIndicator
@@ -630,6 +629,20 @@ class ResetJumpBackInContextualHint: HiddenSetting {
     }
 }
 
+class OpenFiftyTabsDebugOption: HiddenSetting {
+
+    override var accessibilityIdentifier: String? { return "OpenFiftyTabsOption.Setting" }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "⚠️ Open 50 `mozilla.org` tabs ⚠️", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        guard let url = URL(string: "https://www.mozilla.org") else { return }
+        BrowserViewController.foregroundBVC().debugOpen(numberOfNewTabs: 50, at: url)
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
@@ -705,6 +718,18 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 }
 
+// Opens the App Store review page of this app
+class AppStoreReviewSetting: Setting {
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: .RatingsPrompt.Settings.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        RatingPromptManager.goToAppStoreReview()
+    }
+}
+
 // Opens about:rights page in the content view controller
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
@@ -765,6 +790,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
             attributedStatusText: statusText,
             settingDidChange: {
+                AdjustHelper.setEnabled($0)
                 Glean.shared.setUploadEnabled($0)
                 Experiments.shared.resetTelemetryIdentifiers()
             }
@@ -1067,7 +1093,7 @@ class NewTabPageSetting: Setting {
 
 fileprivate func getDisclosureIndicator() -> UIImageView {
     let disclosureIndicator = UIImageView()
-    disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate)
+    disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
     disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
     disclosureIndicator.sizeToFit()
     return disclosureIndicator
@@ -1236,5 +1262,23 @@ class ThemeSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.pushViewController(ThemeSettingsController(), animated: true)
+    }
+}
+
+extension BrowserViewController {
+    /// ⚠️ !! WARNING !! ⚠️
+    /// This function opens up x number of new tabs in the background.
+    /// This is meant to test memory overflows with tabs on a device.
+    /// DO NOT USE unless you're explicitly testing this feature.
+    /// It should only be used from the debug menu.
+    func debugOpen(numberOfNewTabs: Int?, at url: URL) {
+        guard let numberOfNewTabs = numberOfNewTabs,
+              numberOfNewTabs > 0
+        else { return }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+            self.tabManager.addTab(URLRequest(url: url))
+            self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
+        })
     }
 }

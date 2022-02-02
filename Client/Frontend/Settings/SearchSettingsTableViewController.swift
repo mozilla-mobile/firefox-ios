@@ -122,7 +122,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             } else {
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = .SettingsAddCustomEngineTitle
-                cell.accessibilityIdentifier = "customEngineViewButton"
+                cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
                 cell.textLabel?.text = .SettingsAddCustomEngine
             }
         }
@@ -339,7 +339,10 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             model.defaultEngine = engine
             updateSearchIcon?()
             self.tableView.reloadData()
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": "defaultSearchEngine", "to": engine.engineID ?? "custom"])
+
+            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "defaultSearchEngine",
+                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engine.engineID ?? "custom"]
+            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
         }
         _ = navigationController?.popViewController(animated: true)
     }

@@ -4,9 +4,7 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox តម្រូវឱ្យ​មាន​​លេខសម្គាល់​មុខ ដើម្បី​អាចចូលប្រើប្រាស់​​ព័ត៌មានការចូល​ដែល​បាន​រក្សាទុក​របស់​អ្នក។";
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "វិបសាយ​ដែល​អ្នក​ចូល​មើល​អាច​ស្នើ​សុំ​ទីតាំង​របស់​អ្នក។";
 
 /* Privacy - Microphone Usage Description */

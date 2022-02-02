@@ -21,20 +21,6 @@ workflows:
                 envman add --key NEW_AS_VERSION --value New_AS_Version
             fi
         title: Save Branch Name
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
     - script@1:
         title: Add default web browser entitlement for Fennec
         inputs:
@@ -66,9 +52,11 @@ workflows:
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo
-    - carthage@3.2:
+    - script@1:
         inputs:
-        - carthage_options: "--platform ios"
+        - content: |-
+            ./bootstrap.sh
+        title: Run bootstrap
     - script@1:
         inputs:
         - content: |-
@@ -79,13 +67,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-            # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
   3_provisioning_and_npm_installation:
     steps:
     - script@1.1:
@@ -116,6 +97,30 @@ workflows:
     - cache-push@2.2:
         is_always_run: true
     - slack@3.1:
+        run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | eq "Show_Warnings" }}'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
+            Branch | ${BITRISE_GIT_BRANCH}
+            Warnings-in-code | ${SHOW_WARNING_COUNT}
+            Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
+        - buttons: |+
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    - slack@3.1:
+        run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | ne "Show_Warnings" }}'
         inputs:
         - title: ''
         - author_name: ''
@@ -146,6 +151,32 @@ workflows:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
         - simulator_device: "$IOS_DEVICE"
+  Detect_warnings:
+    steps:
+    - script@1.1:
+        title: Detect number of warnings
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
+
+            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH all)
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
+
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+
+            STR=$COUNT_XCUI
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+        is_always_run: true
   NewXcodeVersions:
     steps:
     - script@1:
@@ -181,21 +212,6 @@ workflows:
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4.0: {}
-    - script@1.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
     - cache-pull@2.4: {}
     - certificate-and-profile-installer@1.10: {}
     - script@1:
@@ -214,10 +230,12 @@ workflows:
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
-    - carthage@3.2:
+    - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
-        - carthage_options: "--platform ios"
+        - content: |-
+            ./bootstrap.sh
+        title: Run bootstrap
     - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
@@ -229,14 +247,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
-    - script@1:
-        title: Copy glean sdk_generator
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-            # Copy Glean script to source folder from # MozillaAppServices.framework as we need # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
@@ -302,7 +312,7 @@ workflows:
     - 5_deploy_and_slack
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
   RunSmokeXCUITestsiPad:
     steps:
@@ -319,7 +329,7 @@ workflows:
     description: This Workflow is to run SmokeTest on iPad simulator device
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -342,7 +352,7 @@ workflows:
         is_always_run: true
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
@@ -355,20 +365,6 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4: {}
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
     - cache-pull@2.1: {}
     - certificate-and-profile-installer@1.10: {}
     - script@1:
@@ -413,9 +409,11 @@ workflows:
             # Import only the shipping locales (from shipping_locales.txt) onRelease
             git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
         title: Pull in L10n
-    - carthage@3.2:
+    - script@1:
         inputs:
-        - carthage_options: '--platform ios'
+        - content: |-
+            ./bootstrap.sh
+        title: Run bootstrap
     - script@1:
         inputs:
         - content: |-
@@ -428,19 +426,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lip
-    - script@1:
-        title: Copy glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-            # Copy Glean script to source folder from
-            # MozillaAppServices.framework as we need
-            # this script to build iOS App
-            cp Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1.1:
         title: NPM install and build
         inputs:
@@ -483,7 +468,7 @@ workflows:
       This Workflow is to run L10n tests in one locale and then share the bundle with the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
 
   L10nScreenshotsTests:
@@ -562,11 +547,34 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
 
   RunUnitTests:
     steps:
+    - script@1.1:
+        title: Detect number of warnings
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            TEST_LOG_PATH=$BITRISE_XCODEBUILD_TEST_LOG_PATH
+
+            COUNT=$(./test-fixtures/generate-metrics.sh $TEST_LOG_PATH unit-test)
+            envman add --key SHOW_WARNING_COUNT --value "$COUNT"
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+
+            STR=$COUNT
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+        is_always_run: true
     - slack@3.1:
         run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
         inputs:
@@ -578,17 +586,17 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     - 4_A_xcode_build_and_test_Fennec
-    - 5_deploy_and_slack
     after_run:
     - RunSmokeXCUITests
-
+    - Detect_warnings
+    - 5_deploy_and_slack
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
@@ -604,105 +612,8 @@ workflows:
     description: This Workflow is to run tests UI TESTS
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.4core
-  RunAllXCUITests:
-    after_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    - 4_B_xcode_build_and_test_Fennec_Enterprise_XCUITests
-    - 5_deploy_and_slack
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-  RunSmokeXCUITests:
-    steps:
-    - cache-pull@2.1:
-        is_always_run: true
-    - xcode-test@2:
-        inputs:
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
-        - simulator_device: iPhone 11
-        is_always_run: true
-    - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.2: {}
-    description: This Workflow is to run tests UI TESTS
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-  RunSmokeXCUITestsiPad:
-    steps:
-    - xcode-build-for-simulator@0.11:
-        inputs:
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec_Enterprise_XCUITests
-    - xcode-test@2.4:
-        inputs:
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
-        - simulator_os_version: latest
-        - simulator_device: iPad Pro (12.9-inch) (4th generation)
-    description: This Workflow is to run SmokeTest on iPad simulator device
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    after_run:
-    - 5_deploy_and_slack
-  RunUITests:
-    steps:
-    - xcode-build-for-simulator@0.11:
-        inputs:
-        - configuration: Release
-        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-            -testPlan SmokeXCUITests
-        - scheme: Fennec_Enterprise_XCUITests
-        - xcodebuild_test_options: "-testPlan SmokeXCUITests"
-    - xcode-test@2:
-        inputs:
-        - scheme: Fennec_Enterprise_UITests
-        - simulator_device: iPhone 8
-        is_always_run: true
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    after_run:
-    - 5_deploy_and_slack
-  RunUnitTests:
-    steps:
-    - slack@3.1:
-        run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
-        inputs:
-        - channel: "#firefox-ios"
-        - text: Build status using latest A-S
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN_2"
-    description: This Workflow is to run tests (currently SmokeTest) when there is
-      a merge in master
-    meta:
-      bitrise.io:
-        stack: osx-xcode-13.0.x
-        machine_type_id: g2.4core
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    - 4_A_xcode_build_and_test_Fennec
-    - 5_deploy_and_slack
-    after_run:
-    - RunSmokeXCUITests
   Deploy_Beta:
     steps:
     - activate-ssh-key@4.1:
@@ -838,7 +749,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   Deploy_Nightly:
     steps:
@@ -977,7 +888,7 @@ workflows:
       basis
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   Deploy_Prod_Beta:
     steps:
@@ -1143,7 +1054,303 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.0.x
+        stack: osx-xcode-13.1.x
+        machine_type_id: g2.8core
+  SPM_Deploy_Prod_Beta:
+    steps:
+    - activate-ssh-key@4.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.1: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            ./content_blocker_update.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - distribution_method: app-store
+        - export_development_team: 43AQ936H96
+        - configuration: "$BITRISE_SCHEME"
+    - deploy-to-bitrise-io@2.0: {}
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            # sleep 9999
+        is_always_run: true
+        title: debug-sleep
+    - slack@3.2:
+        inputs:
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - export_development_team: 43AQ936H96
+        - distribution_method: app-store
+        - configuration: FirefoxBeta
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'FirefoxBeta: Deploy to iTunes Connect'
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.1.x
+        machine_type_id: g2.8core
+  SPM_Deploy_Beta_Only:
+    steps:
+    - activate-ssh-key@4.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.1: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            ./content_blocker_update.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - export_development_team: 43AQ936H96
+        - distribution_method: app-store
+        - configuration: FirefoxBeta
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.1.x
+        machine_type_id: g2.8core
+  SPM_Nightly_Beta_Only:
+    steps:
+    - activate-ssh-key@4.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.1: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            ./content_blocker_update.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - export_development_team: 43AQ936H96
+        - distribution_method: app-store
+        - configuration: FirefoxBeta
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'Nightly FirefoxBeta: Xcode Archive & Export for iOS'
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
 app:
   envs:
@@ -1158,14 +1365,14 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '95'
+    BITRISE_RELEASE_VERSION: '97.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '95'
+    BITRISE_BETA_VERSION: '97.0'
 trigger_map:
 - push_branch: main
   workflow: RunUnitTests
-- push_branch: v39.0
+- push_branch: v97.0
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
   workflow: RunUnitTests

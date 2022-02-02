@@ -5,6 +5,7 @@
 import Shared
 import Storage
 import Telemetry
+import Glean
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
@@ -68,9 +69,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
-            tabManager.storeScreenshot(tab: tab)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
+
+        // App store review in-app prompt
+        ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     private func shouldShowChronTabs() -> Bool {
@@ -260,7 +263,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     }
 
     func locationActionsForURLBar(_ urlBar: URLBarView) -> [AccessibleAction] {
-        if UIPasteboard.general.string != nil {
+        if UIPasteboard.general.hasStrings {
             return [pasteGoAction, pasteAction, copyAddressAction]
         } else {
             return [copyAddressAction]

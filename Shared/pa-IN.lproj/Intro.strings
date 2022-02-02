@@ -2,7 +2,7 @@
 "Intro.Slides.Automatic.Privacy.Description" = "ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਖਤਰਨਾਕ ਚੀਜ਼ਾਂ ਨੂੰ ਬਲੌਕ ਕਰਦੀ ਹੈ ਅਤੇ ਟਰੈਕਰਾਂ ਨੂੰ ਰੋਕਦੀ ਹੈ।";
 
 /* Title for the first item in the table related to automatic privacy */
-"Intro.Slides.Automatic.Privacy.Title" = "ਸਵੈਚਲਿਤ ਪਰਦੇਦਾਰੀ";
+"Intro.Slides.Automatic.Privacy.Title" = "ਆਟੋਮੈਟਿਕ ਪਰਦੇਦਾਰੀ";
 
 /* Next button on the first intro screen. */
 "Intro.Slides.Button.Next" = "ਅੱਗੇ";
@@ -35,10 +35,10 @@
 "Intro.Slides.Private.Description" = "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ ਕਰਨ ਦੇ ਢੰਗ ਵਿੱਚ ਜਾਣ ਲਈ ਮਖੌਟਾ ਆਈਕਾਨ ਨੂੰ ਛੂਹੋ।";
 
 /* Title for the third panel 'Private Browsing' in the First Run tour. */
-"Intro.Slides.Private.Title" = "ਇੰਝ ਬਰਾਊਜ਼ ਕਰੋ ਕਿ ਕੋਈ ਨਾ ਵੇਂਹਦਾ ਹੋਵੇ";
+"Intro.Slides.Private.Title" = "ਇੰਝ ਬਰਾਊਜ਼ ਕਰੋ ਜਿਵੇਂ ਕੋਈ ਵੇਂਹਦਾ ਨਾ ਹੋਵੇ";
 
 /* Description for the third item in the table related to safe syncing with a firefox account */
-"Intro.Slides.Safe.Sync.Description" = "ਤੁਸੀਂ ਫਾਇਰਫਾਕਸ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ ਹਰ ਥਾਂ 'ਤੇ ਆਪਣੇ ਲੌਗਇਨ ਅਤੇ ਡੇਟਾ ਨੂੰ ਸੁਰੱਖਿਅਤ ਕਰੋ।";
+"Intro.Slides.Safe.Sync.Description" = "ਤੁਸੀਂ ਫਾਇਰਫਾਕਸ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ ਹਰ ਥਾਂ 'ਤੇ ਆਪਣੇ ਲਾਗਇਨ ਅਤੇ ਡਾਟੇ ਨੂੰ ਸੁਰੱਖਿਅਤ ਕਰੋ।";
 
 /* Title for the third item in the table related to safe syncing with a firefox account */
 "Intro.Slides.Safe.Sync.Title" = "ਸੁਰੱਖਿਅਤ ਸਿੰਕ";
