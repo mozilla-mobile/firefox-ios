@@ -5,7 +5,6 @@
 import Foundation
 import Storage
 import Shared
-import SwiftKeychainWrapper
 
 enum InfoItem: Int {
     case breachItem = 0

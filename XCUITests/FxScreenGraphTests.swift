@@ -14,6 +14,6 @@ class FxScreenGraphTests: XCTestCase {
         // dot is provided by graphviz.
         // To install:
         // % brew install graphviz
-        MMTestUtils.render(graph: createScreenGraph(for: self, with: XCUIApplication()))
+        // MMTestUtils.render(graph: createScreenGraph(for: self, with: XCUIApplication()))
     }
 }

@@ -109,7 +109,7 @@ extension FxHomeRecentlySavedCollectionCell: UICollectionViewDataSource {
 
 extension FxHomeRecentlySavedCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let item = viewModel.recentItems[safe: indexPath.row] as? BookmarkItem {
+        if let item = viewModel.recentItems[safe: indexPath.row] as? BookmarkItemData {
             guard let url = URIFixup.getURL(item.url) else { return }
             
             homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
@@ -214,8 +214,12 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         ])
     }
     
+    // MARK: - Notifications
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotifications),
+                                               name: .DisplayThemeChanged,
+                                               object: nil)
     }
     
     @objc private func handleNotifications(_ notification: Notification) {

@@ -43,7 +43,7 @@ class TopTabsViewController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
-        collectionView.clipsToBounds = false
+        collectionView.clipsToBounds = true
         collectionView.accessibilityIdentifier = "Top Tabs View"
         collectionView.semanticContentAttribute = .forceLeftToRight
         return collectionView
@@ -76,9 +76,18 @@ class TopTabsViewController: UIViewController {
 
     fileprivate lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
+        delegate.scrollViewDelegate = self
         delegate.tabSelectionDelegate = topTabDisplayManager
         return delegate
     }()
+    
+    private lazy var topTabFader: TopTabFader = {
+        let fader = TopTabFader()
+        fader.semanticContentAttribute = .forceLeftToRight
+        
+        return fader
+    }()
+    
 
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
@@ -115,10 +124,7 @@ class TopTabsViewController: UIViewController {
 
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
-
-        let topTabFader = TopTabFader()
-        topTabFader.semanticContentAttribute = .forceLeftToRight
-
+  
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
         view.addSubview(tabsButton)
@@ -153,7 +159,7 @@ class TopTabsViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(topTabFader)
         }
-
+        
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
@@ -217,13 +223,30 @@ class TopTabsViewController: UIViewController {
             }
         }
     }
-
+    
+    private func handleFadeOutAfterTabSelection() {
+        guard let currentTab = tabManager.selectedTab, let index = topTabDisplayManager.dataStore.index(of: currentTab), !collectionView.frame.isEmpty else {
+            return
+        }
+        
+        // Check wether first or last tab is being selected.
+        if index == 0 {
+            topTabFader.setFader(forSides: .right)
+            
+        } else if index == topTabDisplayManager.dataStore.count - 1 {
+            topTabFader.setFader(forSides: .left)
+            
+        } else if collectionView.contentSize.width <= collectionView.frame.size.width { // all tabs are visible
+            topTabFader.setFader(forSides: .none)
+        }
+    }
 }
 
 extension TopTabsViewController: TabDisplayer {
 
     func focusSelectedTab() {
         self.scrollToCurrentTab(true)
+        self.handleFadeOutAfterTabSelection()
     }
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
@@ -266,7 +289,30 @@ extension TopTabsViewController: NotificationThemeable, PrivateModeUI {
     }
 }
 
-// Functions for testing
+// MARK: TopTabsScrollDelegate
+extension TopTabsViewController: TopTabsScrollDelegate {
+    // disable / enable TopTabFader dynamically based on visible tabs
+    func collectionViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetX = scrollView.contentOffset.x
+        let scrollViewWidth = scrollView.frame.size.width
+        let scrollViewContentSize = scrollView.contentSize.width
+        
+        let reachedLeftEnd = offsetX == 0
+        let reachedRightEnd = (scrollViewContentSize - offsetX) == scrollViewWidth
+        
+        if reachedLeftEnd {
+            topTabFader.setFader(forSides: .right)
+            
+        } else if reachedRightEnd {
+            topTabFader.setFader(forSides: .left)
+            
+        } else {
+            topTabFader.setFader(forSides: .both)
+        }
+    }
+}
+
+// MARK: Functions for testing
 extension TopTabsViewController {
     func test_getDisplayManager() -> TabDisplayManager {
         assert(AppConstants.IsRunningTest)

@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import MozillaAppServices
+import Glean
 import Shared
 import Telemetry
 import Account
@@ -140,7 +140,7 @@ class TelemetryWrapper {
         }
 
         // Initialize Glean telemetry
-        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue))
+        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue), buildInfo: GleanMetrics.GleanBuild.info)
 
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
@@ -392,6 +392,7 @@ extension TelemetryWrapper {
         case pinToTopSites = "pin-to-top-sites"
         case removePinnedSite = "remove-pinned-site"
         case firefoxHomepage = "firefox-homepage"
+        case wallpaperSettings = "wallpaper-settings"
         case jumpBackInImpressions = "jump-back-in-impressions"
         case historyImpressions = "history-highlights-impressions"
         case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
@@ -444,6 +445,8 @@ extension TelemetryWrapper {
         case historyHighlightsItemOpened = "history-highlights-item-opened"
         case customizeHomepageButton = "customize-homepage-button"
         case cycleWallpaperButton = "cycle-wallpaper-button"
+        case toggleLogoWallpaperButton = "toggle-logo-wallpaper-button"
+        case wallpaperSelected = "wallpaper-selected"
         case fxHomepageOrigin = "firefox-homepage-origin"
         case fxHomepageOriginZeroSearch = "zero-search"
         case fxHomepageOriginOther = "origin-other"
@@ -467,6 +470,9 @@ extension TelemetryWrapper {
 
         case preference = "pref"
         case preferenceChanged = "to"
+
+        case wallpaperName = "wallpaperName"
+        case wallpaperType = "wallpaperType"
 
         // Grouped Tab
         case groupsWithTwoTabsOnly = "groupsWithTwoTabsOnly"
@@ -768,15 +774,53 @@ extension TelemetryWrapper {
         case (.action, .tap, .firefoxHomepage, EventValue.customizeHomepageButton.rawValue, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
 
-        case (.action, .tap, .firefoxHomepage, EventValue.cycleWallpaperButton.rawValue, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
-
+        // MARK: - History Highlights
         case (.action, .tap, .firefoxHomepage, EventValue.historyHighlightsShowAll.rawValue, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
         case (.action, .tap, .firefoxHomepage, EventValue.historyHighlightsItemOpened.rawValue, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
         case (.action, .view, .historyImpressions, _, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+
+        // MARK: - Wallpaper related
+        case (.action, .tap, .firefoxHomepage, EventValue.cycleWallpaperButton.rawValue, let extras):
+            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
+               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
+                GleanMetrics.WallpaperAnalytics.cycleWallpaperButton.record(
+                    GleanMetrics.WallpaperAnalytics.CycleWallpaperButtonExtra(
+                        wallpaperName: name,
+                        wallpaperType: type
+                    )
+                )
+
+            } else {
+                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
+
+        case (.action, .change, .wallpaperSettings, EventValue.toggleLogoWallpaperButton.rawValue, _):
+            if let state = extras?[EventExtraKey.preferenceChanged.rawValue] as? String {
+                GleanMetrics.WallpaperAnalytics.toggleLogoWallpaperButton.record(
+                    GleanMetrics.WallpaperAnalytics.ToggleLogoWallpaperButtonExtra(changedTo: state)
+                )
+            } else {
+                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
+        case (.action, .tap, .wallpaperSettings, EventValue.wallpaperSelected.rawValue, let extras):
+            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
+               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
+                GleanMetrics.WallpaperAnalytics.cycleWallpaperButton.record(
+                    GleanMetrics.WallpaperAnalytics.CycleWallpaperButtonExtra(
+                        wallpaperName: name,
+                        wallpaperType: type
+                    )
+                )
+
+            } else {
+                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
 
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"

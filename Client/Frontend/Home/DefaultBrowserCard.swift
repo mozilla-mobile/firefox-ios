@@ -46,7 +46,7 @@ class DefaultBrowserCard: UIView {
         button.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
     }
-    private lazy var background: UIView = .build { view in
+    private lazy var containerView: UIView = .build { view in
         view.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
         view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
@@ -56,7 +56,7 @@ class DefaultBrowserCard: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         setupLayout()
     }
     
@@ -65,36 +65,36 @@ class DefaultBrowserCard: UIView {
     }
     
     private func setupLayout() {
-        background.addSubviews(learnHowButton, image, title, descriptionText, closeButton)
-        addSubview(background)
+        containerView.addSubviews(learnHowButton, image, title, descriptionText, closeButton)
+        addSubview(containerView)
         
         NSLayoutConstraint.activate([
-            background.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            background.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            background.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-            background.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            background.heightAnchor.constraint(equalToConstant: 224),
+            containerView.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            containerView.heightAnchor.constraint(equalToConstant: 224),
             
-            image.topAnchor.constraint(equalTo: background.topAnchor, constant: 48),
-            image.leadingAnchor.constraint(equalTo: background.leadingAnchor, constant: 16),
+            image.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 48),
+            image.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             image.widthAnchor.constraint(equalToConstant: 64),
             image.heightAnchor.constraint(equalToConstant: 64),
             
             title.topAnchor.constraint(equalTo: image.topAnchor, constant: -16),
             title.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16),
-            title.trailingAnchor.constraint(equalTo: background.trailingAnchor),
+            title.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             
             descriptionText.topAnchor.constraint(equalTo: title.bottomAnchor),
             descriptionText.leadingAnchor.constraint(equalTo: title.leadingAnchor),
-            descriptionText.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -12),
+            descriptionText.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
             
-            closeButton.topAnchor.constraint(equalTo: background.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -16),
+            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             closeButton.heightAnchor.constraint(equalToConstant: 16),
             closeButton.widthAnchor.constraint(equalToConstant: 16),
             
             learnHowButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            learnHowButton.bottomAnchor.constraint(equalTo: background.bottomAnchor, constant: -16),
+            learnHowButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16),
             learnHowButton.widthAnchor.constraint(equalToConstant: 304),
             learnHowButton.heightAnchor.constraint(equalToConstant: 44)
         ])
@@ -116,10 +116,10 @@ class DefaultBrowserCard: UIView {
     }
     
     func applyTheme() {
-        background.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
+        containerView.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
         title.textColor = UIColor.theme.defaultBrowserCard.textColor
         descriptionText.textColor = UIColor.theme.defaultBrowserCard.textColor
         closeButton.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
-        backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        backgroundColor = .clear
     }
 }
