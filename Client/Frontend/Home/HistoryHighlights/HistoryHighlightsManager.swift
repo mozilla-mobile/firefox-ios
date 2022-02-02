@@ -9,8 +9,14 @@ import Places
 
 protocol HighlightItem {}
 
-extension Site: HighlightItem {}
 extension ASGroup: HighlightItem {}
+extension HistoryHighlight: HighlightItem {}
+
+extension HistoryHighlight {
+    var urlFromString: URL? {
+        return URL(string: url)
+    }
+}
 
 class HistoryHighlightsManager {
 
@@ -20,103 +26,91 @@ class HistoryHighlightsManager {
     // their requirements or input.
     private static let defaultViewTimeWeight = 10.0
     private static let defaultFrequencyWeight = 4.0
+    private static let defaultHighlightCount = 9
+    private static let shouldGroupHighlights = false
 
     // MARK: - Public interface
     
     // Get highlights
-    // Filter Tabs
+    // Filter from highlights
+    // Have a toggle to include groups
     // Group highlights
-    // Group Tabs
-    // Remove top tab group from highlight groups if they are the same
-    // filter out existing tabs from highlights???? ask daniela
-    // Collate highlights & highlights groups
-    // return that
+    // Collate single items & groups
+    // return top 9
 
-    public static func getHighlightsData(
-        with profile: Profile,
-        completion: @escaping ([HighlightItem]?) -> Void
-    ) {
+    public static func getHighlightsData(with profile: Profile,
+                                         and tabs: [Tab],
+                                         completion: @escaping ([HighlightItem]?) -> Void) {
+        // Get highlights
+        fetchHighlights(with: profile) { highlights in
+            guard let highlights = highlights, !highlights.isEmpty else {
+                completion(nil)
+                return
+            }
 
+            // Filter from highlights
+            let filterHighlights = highlights.filter { highlights in
+                tabs.contains { highlights.urlFromString != $0.url }
+            }
+
+            // Build groups
+            buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
+
+                let collatedHighlights = collateForRecentlySaved(from: groups, and: filterHighlights)
+                completion(Array(collatedHighlights[0...8]))
+            }
+        }
     }
 
 
     // MARK: - Data fetching functions
 
-    private static func fetchHighlights(
-        with profile: Profile,
-        andLimit limit: Int32 = 1000,
-        completion: @escaping ([HistoryHighlight]?) -> Void
-    ) {
+    private static func fetchHighlights(with profile: Profile,
+                                        andLimit limit: Int32 = 1000,
+                                        completion: @escaping ([HistoryHighlight]?) -> Void) {
 
-        profile.places.getHighlights(
-            weights: HistoryHighlightWeights(viewTime: self.defaultViewTimeWeight,
-                                             frequency: self.defaultFrequencyWeight),
-            limit: limit
-        ).uponQueue(.main) { result in
-            guard let ASHighlights = result.successValue,
-                  !ASHighlights.isEmpty
-            else { return completion(nil) }
+        profile.places.getHighlights(weights: HistoryHighlightWeights(viewTime: self.defaultViewTimeWeight,
+                                                                      frequency: self.defaultFrequencyWeight),
+                                     limit: limit).uponQueue(.main) { result in
+            guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
+
+            // filter tabs from highlights
 
             completion(ASHighlights)
         }
     }
 
-//    private static func commonFlow(
-//        using profile: Profile,
-//        completion: @escaping ([ASGroup<Site>]?, [Site]?) -> Void
-//    ) {
-//        fetchData(with: profile, andLimit: 1000) { (historyHighlights, historyData) in
-//            guard let highlights = historyHighlights,
-//                  !highlights.isEmpty,
-//                  let history = historyData,
-//                  !history.isEmpty
-//            else {
-//                completion(nil, nil)
-//                return
-//            }
-//
-//            buildSearchGroups(with: profile, and: highlightedSites) { groups, filteredSites in
-//                completion(groups, filteredSites)
-//            }
-//
-//            completion(nil, nil)
-//        }
-//
-//    }
-
-    private static func recentlyVisitedFlow(
-        with groups: [ASGroup<Site>]?,
-        and sites: [Site],
-        completion: @escaping ([HighlightItem]) -> Void
-    ) {
-
-    }
-
     // MARK: - Helper functions
 
 
-    private static func buildSearchGroups(
-        with profile: Profile,
-        and sites: [Site],
-        completion: @escaping ([ASGroup<Site>]?, [Site]) -> Void
-    ) {
+    private static func buildSearchGroups(with profile: Profile,
+                                          and highlights: [HistoryHighlight],
+                                          completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void) {
 
-        SearchTermGroupsManager.getSiteGroups(
-            with: profile,
-            from: sites,
-            using: .orderedAscending
-        ) { groups, filteredItems in
+        guard !shouldGroupHighlights else {
+            completion(nil, highlights)
+            return
+        }
+
+        SearchTermGroupsManager.getHighlightGroups(with: profile,
+                                                   from: highlights,
+                                                   using: .orderedAscending) { groups, filteredItems in
             completion(groups, filteredItems)
         }
     }
 
-    private static func collateForRecentlySaved(
-        from groups: [ASGroup<Site>]?,
-        and sites: [Site]
-    ) -> [HighlightItem] {
-
+    private static func collateForRecentlySaved(from groups: [ASGroup<HistoryHighlight>]?,
+                                                and sites: [HistoryHighlight]) -> [HighlightItem] {
         guard let groups = groups, !groups.isEmpty else { return sites }
 
-        return []
+        var highlightItems: [HighlightItem] = sites
+
+        for (index, group) in groups.enumerated() {
+            let insertIndex = (index * 2) + 1
+            highlightItems.insert(group, at: insertIndex)
+
+        }
+
+        return highlightItems
     }
 }

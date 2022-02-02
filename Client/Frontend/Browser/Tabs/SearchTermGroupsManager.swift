@@ -54,7 +54,7 @@ class SearchTermGroupsManager {
     ///   filteredItems list, `[T]`, which is comprised of items from the original input
     ///   that are not part of a group.
     private static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
-        guard (items is [Tab] || items is [Site]) else { return completion(nil, [T]()) }
+        guard (items is [Tab] || items is [Site] || items is [HistoryHighlight]) else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
