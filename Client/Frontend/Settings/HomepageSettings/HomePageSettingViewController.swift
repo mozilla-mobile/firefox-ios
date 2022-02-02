@@ -253,7 +253,9 @@ extension HomePageSettingViewController {
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            let wallpaperVC = WallpaperSettingsViewController(with: profile, tabManager: tabManager)
+            let viewModel = WallpaperSettingsViewModel(with: tabManager,
+                                                       and: WallpaperManager())
+            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
             navigationController?.pushViewController(wallpaperVC, animated: true)
         }
     }

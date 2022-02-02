@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import UIKit
 
-fileprivate struct WallpaperSettingsUX {
+private struct WallpaperSettingsUX {
     static let collectionTitleFontMaxSize = 40.0
     static let switchTitleFontMaxSize = 46.0
     static let switchDescriptionFontMaxSize = 34.0
@@ -27,9 +27,8 @@ class WallpaperSettingsViewController: UIViewController {
     lazy var collectionContainer: UIView = .build { _ in }
 
     lazy var collectionView: DynamicHeightCollectionView = {
-        let collectionView = DynamicHeightCollectionView(
-            frame: .zero,
-            collectionViewLayout: UICollectionViewFlowLayout())
+        let collectionView = DynamicHeightCollectionView(frame: .zero,
+                                                         collectionViewLayout: setupCompositionalLayout())
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -43,31 +42,7 @@ class WallpaperSettingsViewController: UIViewController {
 
         return collectionView
     }()
-
-//    private var layoutSection: NSCollectionLayoutSection {
-//        let itemSize = NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(1),
-//            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
-//        )
-//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//
-//        let groupSize = NSCollectionLayoutSize(
-//            widthDimension: FxHomePocketViewModel.widthDimension,
-//            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
-//        )
-//
-//        let subItems = Array(repeating: item, count: FxHomePocketCollectionCellUX.numberOfItemsInColumn)
-//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-//        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
-//        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-//                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
-//
-//        let section = NSCollectionLayoutSection(group: group)
-//
-//        section.orthogonalScrollingBehavior = .continuous
-//        return section
-//    }
-
+    
     // Switch
     lazy var switchContainer: UIView = .build { _ in }
 
@@ -98,20 +73,11 @@ class WallpaperSettingsViewController: UIViewController {
     }
 
     // MARK: - Variables
-    var profile: Profile
-    var wallpaperManager: WallpaperManager
-    var tabManager: TabManager
     var viewModel: WallpaperSettingsViewModel
 
     // MARK: - Initializers
-    init(with profile: Profile,
-         tabManager: TabManager,
-         and wallpaperManager: WallpaperManager = WallpaperManager()
-    ) {
-        self.profile = profile
-        self.tabManager = tabManager
-        self.wallpaperManager = wallpaperManager
-        self.viewModel = WallpaperSettingsViewModel()
+    init(with viewModel: WallpaperSettingsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -132,27 +98,22 @@ class WallpaperSettingsViewController: UIViewController {
         setupCurrentState()
         applyTheme()
         setupNotifications()
-        collectionView.reloadData()
+        reloadLayout()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         collectionView.layoutIfNeeded()
-        guard let rowIndex = wallpaperManager.currentIndex else { return }
-        let currentIndex = IndexPath(row: rowIndex, section: 0)
-        collectionView.selectItem(at: currentIndex,
-                                  animated: false,
-                                  scrollPosition: [])
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        // reload layout
+    override func viewWillTransition(
+        to size: CGSize,
+        with coordinator: UIViewControllerTransitionCoordinator
+    ) {
+        reloadLayout()
     }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
+    
+    // MARK: - View setup
     private func setupView() {
         view.addSubview(collectionTitle)
         collectionContainer.addSubview(collectionView)
@@ -166,9 +127,9 @@ class WallpaperSettingsViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             // Collection View
-            collectionTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             collectionTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 19),
-            collectionTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionTitle.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
 
             collectionContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionContainer.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 9),
@@ -178,6 +139,7 @@ class WallpaperSettingsViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: collectionContainer.topAnchor, constant: 32),
             collectionView.trailingAnchor.constraint(equalTo: collectionContainer.trailingAnchor, constant: -28),
             collectionView.bottomAnchor.constraint(equalTo: collectionContainer.bottomAnchor, constant: -32),
+            collectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
 
             // Switch View
             logoSwitch.trailingAnchor.constraint(equalTo: switchContainer.trailingAnchor, constant: -16),
@@ -205,8 +167,48 @@ class WallpaperSettingsViewController: UIViewController {
     }
 
     private func setupCurrentState() {
-        logoSwitch.isOn = wallpaperManager.switchWallpaperFromLogoEnabled
+        logoSwitch.isOn = viewModel.wallpaperManager.switchWallpaperFromLogoEnabled
     }
+    
+    private func highlightCurrentlySelectedCell() {
+        guard let rowIndex = viewModel.wallpaperManager.currentIndex else { return }
+        let currentIndex = IndexPath(row: rowIndex, section: 0)
+        collectionView.selectItem(at: currentIndex,
+                                  animated: false,
+                                  scrollPosition: [])
+    }
+    
+    private func reloadLayout() {
+        collectionView.collectionViewLayout = setupCompositionalLayout()
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.reloadData()
+        highlightCurrentlySelectedCell()
+    }
+    
+    private func setupCompositionalLayout() -> UICollectionViewCompositionalLayout {
+        let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? 1/6 : 1/3
+        let inset: CGFloat = 3.5
+        
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(fractionalWidth),
+            heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: inset,
+                                                     leading: inset,
+                                                     bottom: inset,
+                                                     trailing: inset)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalWidth(fractionalWidth))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        return UICollectionViewCompositionalLayout(section: section)
+    }
+
 
     // MARK: - Notifications
     private func setupNotifications() {
@@ -227,7 +229,7 @@ class WallpaperSettingsViewController: UIViewController {
 
     // MARK: - Actions
     @objc func didChangeSwitchState(_ sender: UISwitch!) {
-        wallpaperManager.switchWallpaperFromLogoEnabled = sender.isOn
+        viewModel.wallpaperManager.switchWallpaperFromLogoEnabled = sender.isOn
         let extras = [TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: sender.isOn ? "on" : "off"]
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .change,
@@ -238,8 +240,8 @@ class WallpaperSettingsViewController: UIViewController {
 
     private func showToast() {
         let toast = ButtonToast(
-            labelText: viewModel.toastStrings.label,
-            buttonText: viewModel.toastStrings.button,
+            labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
+            buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button,
             completion: { buttonPressed in
 
             if buttonPressed { self.dismissView() }
@@ -259,39 +261,23 @@ class WallpaperSettingsViewController: UIViewController {
     private func dismissView() {
         guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
 
-        if let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab, !isFxHomeTab {
-            tabManager.selectTab(tabManager.addTab())
+        if let isFxHomeTab = viewModel.tabManager.selectedTab?.isFxHomeTab, !isFxHomeTab {
+            viewModel.tabManager.selectTab(viewModel.tabManager.addTab())
         }
 
         navigationController.done()
     }
 }
 
-extension WallpaperSettingsViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width/3) - 6
-        return CGSize(width: width,
-                      height: (width/1.1) - 6)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
-    }
-}
-
 // MARK: - Collection View Data Source
 extension WallpaperSettingsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return wallpaperManager.wallpapers.count
+        return viewModel.wallpaperManager.wallpapers.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier, for: indexPath) as! WallpaperSettingCollectionCell
-        let image = UIDevice.current.orientation.isLandscape ? wallpaperManager.wallpapers[indexPath.row].image.landscape : wallpaperManager.wallpapers[indexPath.row].image.portrait
+        let image = UIDevice.current.orientation.isLandscape ? viewModel.wallpaperManager.wallpapers[indexPath.row].image.landscape : viewModel.wallpaperManager.wallpapers[indexPath.row].image.portrait
         cell.updateImage(to: image)
 
         return cell
@@ -302,14 +288,14 @@ extension WallpaperSettingsViewController: UICollectionViewDataSource {
 extension WallpaperSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
-        wallpaperManager.updateTo(index: indexPath.row)
+        viewModel.wallpaperManager.updateTo(index: indexPath.row)
         showToast()
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .wallpaperSettings,
                                      value: .wallpaperSelected,
-                                     extras: wallpaperManager.savedWallpaper.telemetryMetadata)
+                                     extras: viewModel.wallpaperManager.savedWallpaper.telemetryMetadata)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

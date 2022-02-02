@@ -4,12 +4,28 @@
 
 import Foundation
 
-struct WallpaperSettingsViewModel {
+// TODO: will move more things in there from the view during the next ticket.
+
+class WallpaperSettingsViewModel {
     
-    struct ToastStrings {
-        let label: String = .Settings.Homepage.Wallpaper.WallpaperUpdatedToastLabel
-        let button: String = .Settings.Homepage.Wallpaper.WallpaperUpdatedToastButton
+    // MARK: - Internal definitions
+    struct Constants {
+        struct Strings {
+            struct Toast {
+                static let label: String = .Settings.Homepage.Wallpaper.WallpaperUpdatedToastLabel
+                static let button: String = .Settings.Homepage.Wallpaper.WallpaperUpdatedToastButton
+            }
+        }
     }
     
-    let toastStrings = ToastStrings()
+    // MARK: - Variables
+    var tabManager: TabManager
+    var wallpaperManager: WallpaperManager
+    
+    init(with tabManager: TabManager,
+         and wallpaperManager: WallpaperManager
+    ) {
+        self.tabManager = tabManager
+        self.wallpaperManager = wallpaperManager
+    }
 }
