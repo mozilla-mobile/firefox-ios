@@ -6,12 +6,14 @@ import Foundation
 import Shared
 
 enum ContextualHintViewType {
+    typealias ContextualHints = String.ContextualHints.FirefoxHomepage
+    
     case jumpBackIn
     
     func descriptionForHint() -> String {
         switch self {
         case .jumpBackIn:
-            return String.ContextualHints.PersonalizedHome
+            return ContextualHints.JumpBackIn.PersonalizedHome
         }
     }
 }
