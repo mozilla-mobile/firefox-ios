@@ -8,21 +8,21 @@ import Sentry
 struct InternalCrashReportingSettingsView: View {
     var body: some View {
         Form {
-            SwiftUI.Section(header: Text("Crash Triggers")) {
-                Button("SentrySDK.crash()") {
-                    SentrySDK.crash()
+            SwiftUI.Section(header: Text(verbatim: "Crash Triggers")) {
+                Button(action: { SentrySDK.crash() }) {
+                    Text(verbatim: "SentrySDK.crash()")
                 }
-                Button("SentrySDK.capture(message:)") {
-                    SentrySDK.capture(message: "Test")
+                Button(action: { SentrySDK.capture(message: "Test") }) {
+                    Text(verbatim: "SentrySDK.capture(message:)")
                 }
-                Button("SentrySDK.capture(exception:)") {
-                    SentrySDK.capture(exception: NSException(name: .genericException, reason: "Test Exception", userInfo: ["UserInfo": "Something"]))
+                Button(action: { SentrySDK.capture(exception: NSException(name: .genericException, reason: "Test Exception", userInfo: ["UserInfo": "Something"])) }) {
+                    Text(verbatim: "SentrySDK.capture(exception:)")
                 }
-                Button("SentrySDK.capture(error:)") {
-                    SentrySDK.capture(error: NSError(domain: "TestDomain", code: 42, userInfo: ["UserInfo": "Something"]))
+                Button(action: { SentrySDK.capture(error: NSError(domain: "TestDomain", code: 42, userInfo: ["UserInfo": "Something"])) }) {
+                    Text(verbatim: "SentrySDK.capture(error:)")
                 }
             }
-        }.navigationBarTitle("Crash Reporting Settings")
+        }.navigationBarTitle(Text(verbatim: "Crash Reporting Settings"))
     }
 }
 

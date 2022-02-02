@@ -24,24 +24,24 @@ extension InternalExperimentDetailView: View {
     var body: some View {
         Form {
             SwiftUI.Section {
-                Text(experiment.userFacingDescription)
+                Text(verbatim: experiment.userFacingDescription)
             }
-            SwiftUI.Section(header: Text("Available Branches")) {
+            SwiftUI.Section(header: Text(verbatim: "Available Branches")) {
                 ForEach(experiment.branches, id: \.slug) { branch in
                     HStack {
-                        Text(branch.slug)
+                        Text(verbatim: branch.slug)
                         Spacer()
-                        Text("\(branch.ratio)")
+                        Text(verbatim: "\(branch.ratio)")
                     }
                 }
             }
             SwiftUI.Section {
-                Picker(selection: $selectedBranchSlug, label: Text("Active Branch")) {
+                Picker(selection: $selectedBranchSlug, label: Text(verbatim: "Active Branch")) {
                     ForEach(pickerBranches, id: \.self) { branch in
                         if branch == notEnrolledBranchSlug {
-                            Text("Not Enrolled")
+                            Text(verbatim: "Not Enrolled")
                         } else {
-                            Text(branch)
+                            Text(verbatim: branch)
                         }
                     }
                 }.onReceive(Just(selectedBranchSlug)) { newValue in
@@ -58,7 +58,7 @@ extension InternalExperimentDetailView: View {
                     }
                 }
             }
-        }.navigationBarTitle(experiment.userFacingName)
+        }.navigationBarTitle(Text(verbatim: experiment.userFacingName))
     }
 }
 
