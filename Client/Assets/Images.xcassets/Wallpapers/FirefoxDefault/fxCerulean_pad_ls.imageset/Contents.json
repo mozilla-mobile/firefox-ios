@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "fxCerulean_pad_ls.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

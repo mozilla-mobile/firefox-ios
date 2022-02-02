@@ -145,8 +145,12 @@ extension HomePanelContextMenu {
 // MARK: - HomeVC
 
 class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureFlagsProtocol {
+    // MARK: - Typealiases
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
+    lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+
+    // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate var hasPresentedContextualHint = false
@@ -159,6 +163,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var timer: Timer?
     fileprivate var contextualSourceView = UIView()
     fileprivate var isZeroSearch: Bool
+    fileprivate var wallpaperManager: WallpaperManager
     var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
     var historyHighlightsViewModel: FxHomeHistoryHightlightsVM
@@ -277,9 +282,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     // MARK: - Initializers
-    init(profile: Profile, isZeroSearch: Bool = false, experiments: NimbusApi = Experiments.shared) {
+    init(profile: Profile,
+         isZeroSearch: Bool = false,
+         experiments: NimbusApi = Experiments.shared,
+         wallpaperManager: WallpaperManager = WallpaperManager()
+    ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.wallpaperManager = wallpaperManager
 
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
@@ -304,7 +314,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? collectionView?.addGestureRecognizer(tapGestureRecognizer) : nil
 
         // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
-        let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged, .DisplayThemeChanged, .TabClosed]
+        let refreshEvents: [Notification.Name] = [.DynamicFontChanged,
+                                                  .HomePanelPrefsChanged,
+                                                  .DisplayThemeChanged,
+                                                  .TabClosed,
+                                                  .WallpaperDidChange]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
     }
 
@@ -329,6 +343,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                                  withReuseIdentifier: "Header")
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
+        view.addSubview(wallpaperView)
         view.addSubviews(overlayView)
         view.addSubview(contextualSourceView)
         contextualSourceView.backgroundColor = .clear
@@ -356,8 +371,15 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             overlayView.topAnchor.constraint(equalTo: view.topAnchor),
             overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
+            wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+
+        view.sendSubviewToBack(wallpaperView)
 
         profile.panelDataObservers.activityStream.delegate = self
 
@@ -376,6 +398,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidAppear(_ animated: Bool) {
         experiments.recordExposureEvent(featureId: .homescreen)
+        animateFirefoxLogo()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,
@@ -404,6 +427,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
         })
+
+        wallpaperView.updateImageForOrientationChange()
     }
 
     // MARK: - Helpers
@@ -425,7 +450,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     @objc func reload(notification: Notification) {
         switch notification.name {
-        case .DisplayThemeChanged, .DynamicFontChanged:
+        case .DisplayThemeChanged,
+                .DynamicFontChanged,
+                .WallpaperDidChange:
             reloadAll(shouldUpdateData: false)
         default:
             reloadAll()
@@ -866,7 +893,7 @@ extension FirefoxHomeViewController {
     func configureLogoHeaderCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let logoHeaderCell = cell as? FxHomeLogoHeaderCell else { return UICollectionViewCell() }
         let tap = UITapGestureRecognizer(target: self, action: #selector(changeHomepageWallpaper))
-        tap.numberOfTapsRequired = 2
+        tap.numberOfTapsRequired = 1
         logoHeaderCell.logoButton.addGestureRecognizer(tap)
         logoHeaderCell.setNeedsLayout()
         return logoHeaderCell
@@ -1217,14 +1244,28 @@ extension FirefoxHomeViewController {
     }
 
     @objc func changeHomepageWallpaper() {
-        // TODO: Roux - This function will be implemented with the action when wallpaper feature is
-        // added in the next ticket.
+        wallpaperView.cycleWallpaper()
+    }
 
-        // Telemetry is commented out until button action is activated.
-//        TelemetryWrapper.recordEvent(category: .action,
-//                                     method: .tap,
-//                                     object: .firefoxHomepage,
-//                                     value: .cycleWallpaperButton)
+    func animateFirefoxLogo() {
+        guard shouldRunLogoAnimation(),
+              let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell
+        else { return }
+        
+        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
+            cell.runLogoAnimation()
+        })
+    }
+    
+    private func shouldRunLogoAnimation() -> Bool {
+        let localesAnimationIsAvailableFor = ["en_US", "es_US"]
+        guard profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil,
+              !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
+              localesAnimationIsAvailableFor.contains(Locale.current.identifier),
+              UIAccessibility.isReduceMotionEnabled
+        else { return false }
+
+        return true
     }
 }
 

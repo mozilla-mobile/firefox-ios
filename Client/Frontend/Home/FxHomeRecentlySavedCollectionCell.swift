@@ -214,8 +214,12 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         ])
     }
     
+    // MARK: - Notifications
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotifications),
+                                               name: .DisplayThemeChanged,
+                                               object: nil)
     }
     
     @objc private func handleNotifications(_ notification: Notification) {

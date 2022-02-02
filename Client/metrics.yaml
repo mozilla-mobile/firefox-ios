@@ -785,20 +785,6 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
-  cycle_wallpaper_button:
-    type: counter
-    description: |
-      Counts the number of times a user changes the
-      wallpaper by double-tapping on the Firefox logo
-      on the Firefox Homepage
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3500
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9643
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
   firefox_homepage_view:
     type: counter
     description: |
@@ -1830,6 +1816,74 @@ widget:
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/7681
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-07-01"
+
+# Wallpaper metrics
+wallpaper_analytics:
+  toggle_logo_wallpaper_button:
+    type: event
+    description: |
+      Recorded when user toggles the button which enables
+      or disables the ability to toggle wallpapers on the
+      homepage from the logo.
+    extra_keys:
+      changed_to:
+        type: string
+        description: |
+          The value the switch was set to.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-07-01"
+  cycle_wallpaper_button:
+    type: event
+    description: |
+      Recorded when user taps the Fx logo on the homepage,
+      thus changing the wallpaper. Wallpaper information
+      is sent in the extra keys.
+    extra_keys:
+      wallpaper_name:
+        type: string
+        description: |
+          The name of the wallpaper set.
+      wallpaper_type:
+        type: string
+        description: |
+          The type of wallpaper set.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-07-01"
+  wallpaper_selected:
+    type: event
+    description: |
+      Recorded when the user selects a wallpaper from
+      the wallpaper settings screen. Wallpaper information
+      is sent in the extra keys.
+    extra_keys:
+      wallpaper_name:
+        type: string
+        description: |
+          The name of the wallpaper set.
+      wallpaper_type:
+        type: string
+        description: |
+          The type of wallpaper set.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
