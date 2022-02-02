@@ -82,6 +82,10 @@ class WallpaperStorageManager {
     func retrieveCurrentWallpaperImage() -> UIImage? {
         let key = UIDevice.current.orientation.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
 
+        return retrieveSavedImageWith(key: key)
+    }
+    
+    func retrieveSavedImageWith(key: String) -> UIImage? {
         if let filePath = filePath(forKey: key),
            let fileData = FileManager.default.contents(atPath: filePath.path),
            let image = UIImage(data: fileData) {

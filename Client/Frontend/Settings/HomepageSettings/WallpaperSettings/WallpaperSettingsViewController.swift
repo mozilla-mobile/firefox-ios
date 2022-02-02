@@ -101,6 +101,7 @@ class WallpaperSettingsViewController: UIViewController {
     var profile: Profile
     var wallpaperManager: WallpaperManager
     var tabManager: TabManager
+    var viewModel: WallpaperSettingsViewModel
 
     // MARK: - Initializers
     init(with profile: Profile,
@@ -110,12 +111,17 @@ class WallpaperSettingsViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
+        self.viewModel = WallpaperSettingsViewModel()
         super.init(nibName: nil, bundle: nil)
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - View Lifecycle
@@ -232,8 +238,8 @@ class WallpaperSettingsViewController: UIViewController {
 
     private func showToast() {
         let toast = ButtonToast(
-            labelText: .Settings.Homepage.Wallpaper.WallpaperUpdatedToastLabel,
-            buttonText: .Settings.Homepage.Wallpaper.WallpaperUpdatedToastButton,
+            labelText: viewModel.toastStrings.label,
+            buttonText: viewModel.toastStrings.button,
             completion: { buttonPressed in
 
             if buttonPressed { self.dismissView() }
