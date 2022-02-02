@@ -16,10 +16,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
-    case v39
-    case v96
-    case v97
-    case v98
+    case v39, v96, v97, v98
 
     // Used for all cases before version 39.
     case unknown
@@ -100,9 +97,26 @@ extension String {
 // MARK: - Contextual Hints
 extension String {
     public struct ContextualHints {
-        public static let PersonalizedHome = MZLocalizedString("ContextualHints.Homepage.PersonalizedHome", value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.", lastUpdated: .v39)
-        public static let InactiveTabsBody = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.", lastUpdated: .v39)
-        public static let InactiveTabsAction = MZLocalizedString("ContextualHints.TabTray.InactiveTabs.CallToAction", value: "Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.", lastUpdated: .v39)
+        
+        public struct FirefoxHomepage {
+            public struct JumpBackIn {
+                public static let PersonalizedHome = MZLocalizedString("ContextualHints.Homepage.PersonalizedHome", value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.", lastUpdated: .v39)
+            }
+        }
+        
+        public struct TabsTray {
+            public struct InactiveTabs {
+                public static let InactiveTabsAction = MZLocalizedString("ContextualHints.TabTray.InactiveTabs.CallToAction", value: "Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.", lastUpdated: .v39)
+                public static let InactiveTabsBody = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.", lastUpdated: .v39)
+            }
+        }
+        
+        public struct Toolbar {
+            public static let SearchBarPlacementForNewUsers = MZLocalizedString("ContextualHint.SearchBarPlacement.NewUsers", value: "To make entering info easier, the toolbar is now at the bottom by default.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device.", lastUpdated: .v98)
+            public static let SearchBarPlacementForExistingUsers = MZLocalizedString("ContextualHint.SearchBarPlacement.ExistingUsers", value: "Now you can move the toolbar to the bottom, so it's easier to enter info", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen.", lastUpdated: .v98)
+            public static let SearchBarPlacementButtonText = MZLocalizedString("ContextualHints.SearchBarPlacement.CallToAction", value: "Toolbar Settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar.", lastUpdated: .v98)
+        }
+        
     }
 }
 
@@ -115,6 +129,7 @@ extension String {
 
 // MARK: - Firefox Homepage
 extension String {
+    /// Identifiers of all new strings should begin with `FirefoxHome.`
     public struct FirefoxHomepage {
 
         public struct CustomizeHomepage {
@@ -127,7 +142,8 @@ extension String {
         }
 
         public struct Pocket {
-
+            public static let SectionTitle = MZLocalizedString("FirefoxHome.Pocket.SectionTitle", value: "Thought-Provoking Stories", comment: "This is the title of the Pocket section on Firefox Homepage.", lastUpdated: .v98)
+            public static let DiscoverMore = MZLocalizedString("FirefoxHome.Pocket.DiscoverMore", value: "Discover more", comment: "At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories.", lastUpdated: .v98)
         }
 
         public struct RecentlySaved {
@@ -136,7 +152,7 @@ extension String {
 
         public struct HistoryHighlights {
             public static let Title = MZLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites", lastUpdated: .v96)
-
+            public static let Remove = MZLocalizedString("FirefoxHome.RecentHistory.Remove", value: "Remove", comment: "When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item.", lastUpdated: .v98)
         }
 
         public struct Shortcuts {
@@ -151,6 +167,7 @@ extension String {
 
 // MARK: - Keyboard shortcuts/"hotkeys"
 extension String {
+    /// Identifiers of all new strings should begin with `Keyboard.Shortcuts.`
     public struct KeyboardShortcuts {
         public static let ActualSize = MZLocalizedString("Keyboard.Shortcuts.ActualSize", value: "Actual Size", comment: "A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
         public static let AddBookmark = MZLocalizedString("Keyboard.Shortcuts.AddBookmark", value: "Add Bookmark", comment: "A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
@@ -203,6 +220,7 @@ extension String {
 
 // MARK: - Library Panel
 extension String {
+    /// Identifiers of all new strings should begin with `LibraryPanel.{PanelName}.`
     public struct LibraryPanel {
         
         public struct Sections {
@@ -218,7 +236,8 @@ extension String {
         }
 
         public struct History {
-
+            public static let SearchHistory = MZLocalizedString("LibraryPanel.History.SearchHistoryPlaceholder", value: "Search History", comment: "In the history panel, this placeholder text inside the search component will indicate that a user can search through their browsing history.", lastUpdated: .v98)
+            public static let SyncedHistory = MZLocalizedString("LibraryPanel.History.SyncedHistory", value: "Synced History", comment: "In the history panel, this label indicates that tapping on this item will navigate the user to a screen showing only browser history from other devices that are synced with the user's Firefox account.", lastUpdated: .v98)
         }
 
         public struct ReadingList {
@@ -259,13 +278,13 @@ extension String {
 // MARK: - Settings screen
 extension String {
     public struct Settings {
-
+        
         public struct SectionTitles {
             public static let TabsTitle = MZLocalizedString("Settings.Tabs.Title", value: "Tabs", comment: "In the settings menu, this is the title for the Tabs customization section option", lastUpdated: .v39)
         }
-
+        
         public struct Homepage {
-
+            
             public struct CustomizeFirefoxHome {
                 public static let JumpBackIn = MZLocalizedString("Settings.Home.Option.JumpBackIn", value: "Jump Back In", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off", lastUpdated: .v39)
                 public static let RecentlyVisited = MZLocalizedString("Settings.Home.Option.RecentlyVisited", value: "Recently Visited", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off", lastUpdated: .v39)
@@ -276,7 +295,7 @@ extension String {
                 public static let Description = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v39)
                 public static let Wallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper", value: "Wallpaper", comment: "In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application.", lastUpdated: .v98)
             }
-
+            
             public struct StartAtHome {
                 public static let SectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Opening screen", comment: "Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage.", lastUpdated: .v39)
                 public static let SectionDescription = MZLocalizedString("Settings.Home.Option.StartAtHome.Description", value: "Choose what you see when you return to Firefox.", comment: "In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do.", lastUpdated: .v39)
@@ -284,7 +303,7 @@ extension String {
                 public static let Always = MZLocalizedString("Settings.Home.Option.StartAtHome.Always", value: "Homepage", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox", lastUpdated: .v39)
                 public static let Never = MZLocalizedString("Settings.Home.Option.StartAtHome.Never", value: "Last tab", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox", lastUpdated: .v39)
             }
-
+            
             public struct Wallpaper {
                 public static let PageTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.Title", value: "Wallpaper", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application.", lastUpdated: .v98)
                 public static let CollectionTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.CollectionTitle", value: "OPENING SCREEN", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application.", lastUpdated: .v98)
@@ -295,22 +314,29 @@ extension String {
                 
                 // Accessibilitiy
                 struct AccessibilityLabels {
-                public static let FxHomepageWallpaperButton = MZLocalizedString("FxHomepage.Wallpaper.ButtonLabel", value: "Firefox logo, change the wallpaper, button", comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper", lastUpdated: .v98)
-                public static let ToggleButton = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.ToggleButton", value: "Homepage wallpaper cycle toggle", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.", lastUpdated: .v98)
-                public static let DefaultWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper", value: "Default clear wallpaper, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.", lastUpdated: .v98)
-                public static let FxAmethystWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper", value: "Firefox wallpaper, amethyst pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.", lastUpdated: .v98)
-                public static let FxSunriseWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper", value: "Firefox wallpaper, sunrise pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.", lastUpdated: .v98)
-                public static let FxCeruleanWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper", value: "Firefox wallpaper, cerulean pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.", lastUpdated: .v98)
+                    public static let FxHomepageWallpaperButton = MZLocalizedString("FxHomepage.Wallpaper.ButtonLabel", value: "Firefox logo, change the wallpaper, button", comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper", lastUpdated: .v98)
+                    public static let ToggleButton = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.ToggleButton", value: "Homepage wallpaper cycle toggle", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.", lastUpdated: .v98)
+                    public static let DefaultWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper", value: "Default clear wallpaper, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.", lastUpdated: .v98)
+                    public static let FxAmethystWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper", value: "Firefox wallpaper, amethyst pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.", lastUpdated: .v98)
+                    public static let FxSunriseWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper", value: "Firefox wallpaper, sunrise pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.", lastUpdated: .v98)
+                    public static let FxCeruleanWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper", value: "Firefox wallpaper, cerulean pattern, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.", lastUpdated: .v98)
                 }
             }
         }
-
+        
         public struct Tabs {
             public static let TabsSectionTitle = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.Title", value: "Customize Tab Tray", comment: "In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage", lastUpdated: .v39)
             public static let InactiveTabs = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.InactiveTabs", value: "Inactive Tabs", comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off", lastUpdated: .v39)
             public static let TabGroups = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.TabGroups", value: "Tab Groups", comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off", lastUpdated: .v39)
         }
-
+        
+        public struct Toolbar {
+            public static let Toolbar = MZLocalizedString("Settings.Toolbar.SettingsTitle", value: "Toolbar", comment: "In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance.", lastUpdated: .v98)
+            public static let Top = MZLocalizedString("Settings.Toolbar.Top", value: "Top", comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen.", lastUpdated: .v98)
+            public static let Bottom = MZLocalizedString("Settings.Toolbar.Bottom", value: "Bottom", comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.", lastUpdated: .v98)
+        }
+        
+        
     }
 }
 
@@ -343,7 +369,6 @@ extension String {
         public static let OtherTabsLabelTitle = MZLocalizedString("TabTray.OtherTabs.Title", value: "Other tabs", comment: "In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs", lastUpdated: .v39)
 
         public struct InactiveTabs {
-
             public static let CloseAllInactiveTabsButton = MZLocalizedString("InactiveTabs.TabTray.CloseButtonTitle", value: "Close All Inactive Tabs", comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.", lastUpdated: .v39)
 
             public struct AutoClose {
@@ -399,6 +424,11 @@ extension String {
 
 // MARK: - Activity Stream
 extension String {
+    /** NOTE:
+     Strings with the following IDs may be removed after confirming with Product:
+     - ActivityStream.Pocket.SectionTitle       --> replaced by
+     - ActivityStream.Pocket.SectionTitle2     --> replaced by
+     */
     public static let ASPocketTitle = MZLocalizedString("ActivityStream.Pocket.SectionTitle", value: "Trending on Pocket", comment: "Section title label for Recommended by Pocket section", lastUpdated: .unknown)
     public static let ASPocketTitle2 = MZLocalizedString("ActivityStream.Pocket.SectionTitle2", value: "Recommended by Pocket", comment: "Section title label for Recommended by Pocket section", lastUpdated: .unknown)
     public static let ASTopSitesTitle =  MZLocalizedString("ActivityStream.TopSites.SectionTitle", value: "Top Sites", comment: "Section title label for Top Sites", lastUpdated: .unknown)
