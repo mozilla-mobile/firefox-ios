@@ -14360,10 +14360,10 @@
 		};
 		433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				branch = "update-for-fxios";
-				kind = branch;
+				kind = exactVersion;
+				version = 91.0.0;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -14416,34 +14416,34 @@
 		};
 		43BE5776278BA4D900491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				branch = "update-for-fxios";
-				kind = branch;
+				kind = exactVersion;
+				version = 91.0.0;
 			};
 		};
 		43BE57A6278BA4EB00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				branch = "update-for-fxios";
-				kind = branch;
+				kind = exactVersion;
+				version = 91.0.0;
 			};
 		};
 		43BE57D6278BA4ED00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				branch = "update-for-fxios";
-				kind = branch;
+				kind = exactVersion;
+				version = 91.0.0;
 			};
 		};
 		43BE57EE278BA50600491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/skhamis/rust-components-swift";
+			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				branch = "update-for-fxios";
-				kind = branch;
+				kind = exactVersion;
+				version = 91.0.0;
 			};
 		};
 		43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */ = {
