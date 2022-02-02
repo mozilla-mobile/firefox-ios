@@ -4,7 +4,7 @@
 
 @testable import Client
 
-import MozillaAppServices
+import Glean
 import XCTest
 
 class TelemetryWrapperTests: XCTestCase {

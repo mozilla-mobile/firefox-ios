@@ -12,9 +12,12 @@ import Shared
 import Storage
 import Sync
 import XCGLogger
-import SwiftKeychainWrapper
 import SyncTelemetry
 import AuthenticationServices
+import RustLog
+import FxAClient
+import Sync15
+@_exported import Logins
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT
@@ -234,7 +237,7 @@ extension Profile {
 
 open class BrowserProfile: Profile {
     fileprivate let name: String
-    fileprivate let keychain: KeychainWrapper
+    fileprivate let keychain: MZKeychainWrapper
     var isShutdown = false
 
     internal let files: FileAccessor
@@ -261,7 +264,7 @@ open class BrowserProfile: Profile {
         log.debug("Initing profile \(localName) on thread \(Thread.current).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.keychain = KeychainWrapper.sharedAppContainerKeychain
+        self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         self.syncDelegate = syncDelegate
 
         if clear {
@@ -285,7 +288,7 @@ open class BrowserProfile: Profile {
 
         if isNewProfile {
             log.info("New profile. Removing old Keychain/Prefs data.")
-            KeychainWrapper.wipeKeychain()
+            MZKeychainWrapper.wipeKeychain()
             prefs.clearAll()
         }
 
@@ -609,11 +612,11 @@ open class BrowserProfile: Profile {
         
         // Restore the keys that are still needed
         if let sqlCipherKey = sqlCipherKey {
-            keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
+            keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
         }
         
         if let sqlCipherSalt = sqlCipherSalt {
-            keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
+            keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
         }
         
         if let perFieldKey = perFieldKey {

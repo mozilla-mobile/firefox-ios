@@ -10,9 +10,9 @@ let fallbackPath: String = (#file as NSString).deletingLastPathComponent + "/../
 // We expect this command to be executed as 'cd <dir of swift package>; swift run', if not, use the fallback path generated from the path to main.swift. Running from an xcodeproj will use fallbackPath.
 let execIsFromCorrectDir = fm.fileExists(atPath: fm.currentDirectoryPath + "/Package.swift")
 let rootdir = execIsFromCorrectDir ? fm.currentDirectoryPath : fallbackPath
-let blocklist = "\(rootdir)/../../Carthage/Checkouts/shavar-prod-lists/disconnect-blacklist.json"
-let entityList = "\(rootdir)/../../Carthage/Checkouts/shavar-prod-lists/disconnect-entitylist.json"
-let fingerprintingList = "\(rootdir)/../../Carthage/Checkouts/shavar-prod-lists/normalized-lists/base-fingerprinting-track.json"
+let blocklist = "\(rootdir)/../../shavar-prod-lists/disconnect-blacklist.json"
+let entityList = "\(rootdir)/../../shavar-prod-lists/disconnect-entitylist.json"
+let fingerprintingList = "\(rootdir)/../../shavar-prod-lists/normalized-lists/base-fingerprinting-track.json"
 
 func jsonFrom(filename: String) -> [String: Any] {
     let file = URL(fileURLWithPath: filename)
