@@ -7,16 +7,20 @@ import Shared
 import UIKit
 
 private struct WallpaperSettingsUX {
-    static let collectionTitleFontMaxSize = 40.0
-    static let switchTitleFontMaxSize = 46.0
-    static let switchDescriptionFontMaxSize = 34.0
+    static let collectionTitleFontMaxSize = 43.0
+    static let switchTitleFontMaxSize = 53.0
+    static let switchDescriptionFontMaxSize = 43.0
+    
+    static let thirdFractionalWidth: CGFloat = 1/3
+    static let sixthFractionalWidth: CGFloat = 1/6
+    static let inset: CGFloat = 3.5
 }
 
 class WallpaperSettingsViewController: UIViewController {
 
     // MARK: - UIElements
     // Collection View
-    lazy var collectionTitle: UILabel = .build { label in
+    private lazy var collectionTitle: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .caption1,
             maxSize: WallpaperSettingsUX.collectionTitleFontMaxSize)
@@ -24,11 +28,11 @@ class WallpaperSettingsViewController: UIViewController {
         label.text = .Settings.Homepage.Wallpaper.CollectionTitle
     }
 
-    lazy var collectionContainer: UIView = .build { _ in }
+    private lazy var collectionContainer: UIView = .build { _ in }
 
-    lazy var collectionView: DynamicHeightCollectionView = {
+    private lazy var collectionView: DynamicHeightCollectionView = {
         let collectionView = DynamicHeightCollectionView(frame: .zero,
-                                                         collectionViewLayout: setupCompositionalLayout())
+                                                         collectionViewLayout: getCompositionalLayout())
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -44,9 +48,9 @@ class WallpaperSettingsViewController: UIViewController {
     }()
     
     // Switch
-    lazy var switchContainer: UIView = .build { _ in }
+    private lazy var switchContainer: UIView = .build { _ in }
 
-    lazy var switchTitle: UILabel = .build { label in
+    private lazy var switchTitle: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .body,
             maxSize: WallpaperSettingsUX.switchTitleFontMaxSize)
@@ -55,25 +59,25 @@ class WallpaperSettingsViewController: UIViewController {
         label.text = .Settings.Homepage.Wallpaper.SwitchTitle
     }
 
-    lazy var logoSwitch: UISwitch = .build { toggle in
+    private lazy var logoSwitch: UISwitch = .build { toggle in
         toggle.addTarget(self,
                          action: #selector(self.didChangeSwitchState(_:)),
                          for: .valueChanged)
     }
 
-    lazy var switchLine: UIView = .build { _ in }
+    private lazy var switchLine: UIView = .build { _ in }
 
-    lazy var switchDescription: UILabel = .build { label in
+    private lazy var switchDescription: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .caption1,
-            maxSize: WallpaperSettingsUX.switchTitleFontMaxSize)
+            maxSize: WallpaperSettingsUX.switchDescriptionFontMaxSize)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
         label.text = .Settings.Homepage.Wallpaper.SwitchDescription
     }
 
     // MARK: - Variables
-    var viewModel: WallpaperSettingsViewModel
+    private var viewModel: WallpaperSettingsViewModel
 
     // MARK: - Initializers
     init(with viewModel: WallpaperSettingsViewModel) {
@@ -179,24 +183,23 @@ class WallpaperSettingsViewController: UIViewController {
     }
     
     private func reloadLayout() {
-        collectionView.collectionViewLayout = setupCompositionalLayout()
+        collectionView.collectionViewLayout = getCompositionalLayout()
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
         highlightCurrentlySelectedCell()
     }
     
-    private func setupCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? 1/6 : 1/3
-        let inset: CGFloat = 3.5
+    private func getCompositionalLayout() -> UICollectionViewCompositionalLayout {
+        let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? WallpaperSettingsUX.sixthFractionalWidth : WallpaperSettingsUX.thirdFractionalWidth
         
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(fractionalWidth),
             heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: inset,
-                                                     leading: inset,
-                                                     bottom: inset,
-                                                     trailing: inset)
+        item.contentInsets = NSDirectionalEdgeInsets(top: WallpaperSettingsUX.inset,
+                                                     leading: WallpaperSettingsUX.inset,
+                                                     bottom: WallpaperSettingsUX.inset,
+                                                     trailing: WallpaperSettingsUX.inset)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -295,7 +298,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate {
                                      method: .tap,
                                      object: .wallpaperSettings,
                                      value: .wallpaperSelected,
-                                     extras: viewModel.wallpaperManager.savedWallpaper.telemetryMetadata)
+                                     extras: viewModel.wallpaperManager.currentWallpaper.telemetryMetadata)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

@@ -90,18 +90,15 @@ class ASHeaderView: UICollectionReusableView {
 
     // MARK: - Notifications
     private func setupObservers() {
-        let refreshEvents: [Notification.Name] = [.DisplayThemeChanged, .WallpaperDidChange]
-        refreshEvents.forEach {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(handleNotifications),
-                                                   name: $0,
-                                                   object: nil)
-        }
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotifications),
+                                               name: .DisplayThemeChanged,
+                                               object: nil)
     }
 
     @objc private func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DisplayThemeChanged, .WallpaperDidChange:
+        case .DisplayThemeChanged:
             applyTheme()
         default: break
         }

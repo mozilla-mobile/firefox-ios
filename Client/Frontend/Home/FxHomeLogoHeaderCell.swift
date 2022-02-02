@@ -54,18 +54,15 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Observers & Notifications
     private func setupObservers() {
-        let refreshEvents: [Notification.Name] = [.DisplayThemeChanged, .WallpaperDidChange]
-        refreshEvents.forEach {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(handleNotifications),
-                                                   name: $0,
-                                                   object: nil)
-        }
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleNotifications),
+                                               name: .DisplayThemeChanged,
+                                               object: nil)
     }
     
     @objc private func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DisplayThemeChanged, .WallpaperDidChange:
+        case .DisplayThemeChanged:
             applyTheme()
         default: break
         }
@@ -73,12 +70,6 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Animation
     public func runLogoAnimation() {
-        let localesAnimationIsAvailableFor = ["en_US", "es_US"]
-        guard !userDefaults.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
-              localesAnimationIsAvailableFor.contains(Locale.current.identifier),
-              UIAccessibility.isReduceMotionEnabled
-        else { return }
-
         animateLogo(withDelay: 0) {
             self.animateLogo(withDelay: 0.5) {
                 self.userDefaults.set(true, forKey: PrefsKeys.WallpaperLogoHasShownAnimation)

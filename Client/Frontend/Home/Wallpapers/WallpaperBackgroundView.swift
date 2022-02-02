@@ -89,7 +89,7 @@ class WallpaperBackgroundView: UIView {
                                      method: .tap,
                                      object: .firefoxHomepage,
                                      value: .cycleWallpaperButton,
-                                     extras: wallpaperManager.savedWallpaper.telemetryMetadata)
+                                     extras: wallpaperManager.currentWallpaper.telemetryMetadata)
     }
 
     public func updateImageForOrientationChange() {
@@ -128,7 +128,7 @@ class WallpaperBackgroundView: UIView {
     /// Both default and Firefox papers have no gradient.
     private func updateGradientVisibilityForSelectedWallpaper() {
 
-        switch wallpaperManager.savedWallpaper.type {
+        switch wallpaperManager.currentWallpaper.type {
         // No gradient exists for default wallpaper OR firefox default wallpapers.
         default: gradientView.alpha = 0.0
         }

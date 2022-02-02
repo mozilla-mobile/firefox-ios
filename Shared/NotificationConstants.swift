@@ -58,7 +58,7 @@ extension Notification.Name {
 
     public static let DisplayThemeChanged = Notification.Name("DisplayThemeChanged")
 
-    public static let WallpaperDidChange = Notification.Name("WallpaperDidChange ")
+    public static let WallpaperDidChange = Notification.Name("WallpaperDidChange")
 
     public static let TabClosed = Notification.Name("TabClosed")
 

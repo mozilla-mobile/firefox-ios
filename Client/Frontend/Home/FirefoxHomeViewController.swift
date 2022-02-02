@@ -148,9 +148,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     // MARK: - Typealiases
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
-    lazy var wallpaperView: WallpaperBackgroundView = .build { view in
-
-    }
+    lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
@@ -400,7 +398,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidAppear(_ animated: Bool) {
         experiments.recordExposureEvent(featureId: .homescreen)
-        animateLogo()
+        animateFirefoxLogo()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,
@@ -1249,14 +1247,25 @@ extension FirefoxHomeViewController {
         wallpaperView.cycleWallpaper()
     }
 
-    func animateLogo() {
-        guard profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil,
+    func animateFirefoxLogo() {
+        guard shouldRunLogoAnimation(),
               let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell
         else { return }
         
         _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
             cell.runLogoAnimation()
         })
+    }
+    
+    private func shouldRunLogoAnimation() -> Bool {
+        let localesAnimationIsAvailableFor = ["en_US", "es_US"]
+        guard profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil,
+              !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
+              localesAnimationIsAvailableFor.contains(Locale.current.identifier),
+              UIAccessibility.isReduceMotionEnabled
+        else { return false }
+
+        return true
     }
 }
 

@@ -18,10 +18,12 @@ struct WallpaperManager {
     }
 
     var currentWallpaperImage: UIImage? {
-        return storageManager.retrieveCurrentWallpaperImage()
+        let key = UIDevice.current.orientation.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
+
+        return storageManager.retrieveSavedImageWith(key: key)
     }
 
-    var savedWallpaper: Wallpaper {
+    var currentWallpaper: Wallpaper {
         guard let currentWallpaper = storageManager.retrieveCurrentWallpaperObject() else {
             // Returning the default wallpaper if nothing else is currently set
             // as default will always exist
@@ -50,6 +52,7 @@ struct WallpaperManager {
     /// being turned on, as `false` is what UserDefaults returns when a bool does not
     /// exist for a key.
     var switchWallpaperFromLogoEnabled: Bool {
+        // ROUX - update button behaviour based on this thing
         get { return !userDefaults.bool(forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
         set { userDefaults.set(!newValue, forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
     }

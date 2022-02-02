@@ -4,6 +4,9 @@
 
 import Foundation
 import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 class WallpaperStorageManager {
 
@@ -23,7 +26,7 @@ class WallpaperStorageManager {
                 self.store(wallpaperObject: wallpaper)
                 NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
             case .failure(let error):
-                print("There was an error storing the wallpaper: ", error.localizedDescription)
+                log.error("There was an error storing the wallpaper: \(error.localizedDescription)")
             }
         }
     }
@@ -79,12 +82,6 @@ class WallpaperStorageManager {
         return nil
     }
 
-    func retrieveCurrentWallpaperImage() -> UIImage? {
-        let key = UIDevice.current.orientation.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
-
-        return retrieveSavedImageWith(key: key)
-    }
-    
     func retrieveSavedImageWith(key: String) -> UIImage? {
         if let filePath = filePath(forKey: key),
            let fileData = FileManager.default.contents(atPath: filePath.path),
