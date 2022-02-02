@@ -306,6 +306,16 @@
                ReferencedContainer = "container:FxA/FxA.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "45D8908227AA61250054DAC1"
+               BuildableName = "MozillaAppServicesTests.xctest"
+               BlueprintName = "MozillaAppServicesTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

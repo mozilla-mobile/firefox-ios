@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Shared
 import UIKit
+import MozillaAppServices
 
 private let log = Logger.browserLogger
 

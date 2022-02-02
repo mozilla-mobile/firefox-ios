@@ -66,11 +66,11 @@
       },
       {
         "package": "MozillaRustComponentsSwift",
-        "repositoryURL": "https://github.com/skhamis/rust-components-swift",
+        "repositoryURL": "/Users/tarikeshaq/code/rust-components-swift",
         "state": {
-          "branch": "update-for-fxios",
-          "revision": "1f1aba21157b0da730a5f3c7029bfca448cbec5e",
-          "version": null
+          "branch": null,
+          "revision": "af6748ee6535d888aff6be71d00b2b88f70aeb64",
+          "version": "0.0.130"
         }
       },
       {

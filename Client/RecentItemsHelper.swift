@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import Shared
+import MozillaAppServices
 
 class RecentItemsHelper {
     

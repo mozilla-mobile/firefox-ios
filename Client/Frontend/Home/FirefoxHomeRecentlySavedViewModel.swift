@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import MozillaAppServices
 
 protocol RecentlySavedItem {
     var title: String { get }

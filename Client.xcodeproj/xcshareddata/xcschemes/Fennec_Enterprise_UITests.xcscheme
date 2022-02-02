@@ -201,8 +201,6 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
-      <EnvironmentVariables>
-      </EnvironmentVariables>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -254,6 +252,16 @@
                   Identifier = "ViewMemoryLeakTests">
                </Test>
             </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "45D8908227AA61250054DAC1"
+               BuildableName = "MozillaAppServicesTests.xctest"
+               BlueprintName = "MozillaAppServicesTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>

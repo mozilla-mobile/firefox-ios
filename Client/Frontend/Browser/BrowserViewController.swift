@@ -15,6 +15,7 @@ import MobileCoreServices
 import SDWebImage
 import Telemetry
 import Sentry
+import MozillaAppServices
 
 private let KVOs: [KVOConstants] = [
     .estimatedProgress,

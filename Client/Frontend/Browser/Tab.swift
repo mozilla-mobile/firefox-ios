@@ -7,6 +7,7 @@ import WebKit
 import Storage
 import Shared
 import XCGLogger
+import MozillaAppServices
 
 fileprivate var debugTabCount = 0
 fileprivate let log = Logger.browserLogger

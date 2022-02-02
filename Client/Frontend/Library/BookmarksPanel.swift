@@ -6,6 +6,7 @@ import UIKit
 import Storage
 import Shared
 import XCGLogger
+import MozillaAppServices
 
 private let log = Logger.browserLogger
 

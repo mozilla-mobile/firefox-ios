@@ -4,7 +4,7 @@
 
 import UIKit
 import Storage
-
+import MozillaAppServices
 struct RecentlySavedCollectionCellUX {
     static let bookmarkItemsLimit: UInt = 5
     static let readingListItemsLimit: Int = 5

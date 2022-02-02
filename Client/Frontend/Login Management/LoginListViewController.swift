@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import MozillaAppServices
 
 private extension UITableView {
     var allLoginIndexPaths: [IndexPath] {

@@ -4,9 +4,7 @@
 
 import Foundation
 import Shared
-import FxAClient
-import Sync15
-@_exported import Logins
+import MozillaAppServices
 
 private let log = Logger.syncLogger
 

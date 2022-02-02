@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import Storage
+import MozillaAppServices
 
 enum AddCredentialField: Int {
     case websiteItem

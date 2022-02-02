@@ -5,8 +5,8 @@
 import UIKit
 import Shared
 import Storage
-import Nimbus
 import Telemetry
+import MozillaAppServices
 
 private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions

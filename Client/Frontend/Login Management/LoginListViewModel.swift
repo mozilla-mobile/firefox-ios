@@ -6,6 +6,7 @@ import Foundation
 import Storage
 import Shared
 import AuthenticationServices
+import MozillaAppServices
 
 struct NewSearchInProgressError: MaybeErrorType {
     public let description: String

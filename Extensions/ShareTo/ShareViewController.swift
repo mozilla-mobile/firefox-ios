@@ -7,6 +7,7 @@ import SnapKit
 import Shared
 import Storage
 import Account
+import MozillaAppServices
 
 extension UIStackView {
     func addBackground(color: UIColor) {
