@@ -7,22 +7,13 @@ import Shared
 
 class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsProtocol {
 
+    // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
     var currentNewTabChoice: NewTabPage!
     var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
-    init(prefs: Prefs) {
-        self.prefs = prefs
-        super.init(style: .grouped)
 
-        self.title = .AppMenuOpenHomePageTitleString
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     lazy var homescreen = Experiments.shared.withVariables(featureId: .homescreen, sendExposureEvent: false) {
         Homescreen(variables: $0)
     }
@@ -41,11 +32,41 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         return true
     }
 
+    var isWallpaperSectionEnabled: Bool {
+        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.customWallpaper)
+        guard isFeatureEnabled else { return false }
+        return true
+    }
+
     var isHistoryHighlightsSectionEnabled: Bool {
         // TODO: If this feature is going behind a Nimbus flag, that should be added here
         return featureFlags.isFeatureActiveForBuild(.historyHighlights)
     }
 
+    // MARK: - Initializers
+    init(prefs: Prefs) {
+        self.prefs = prefs
+        super.init(style: .grouped)
+
+        self.title = .AppMenuOpenHomePageTitleString
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.tableView.keyboardDismissMode = .onDrag
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+    }
+
+    // MARK: - Methods
     override func generateSettings() -> [SettingSection] {
 
         let customizeFirefoxHomeSection = customizeFirefoxSettingSection()
@@ -102,6 +123,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         let historyHighlightsSetting = BoolSetting(with: .historyHighlights,
                                                    titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentSearches))
 
+        let wallpaperSetting = WallpaperSettings(settings: self)
+
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
@@ -118,6 +141,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         }
 
         sectionItems.append(pocketSetting)
+
+        if isWallpaperSectionEnabled {
+            sectionItems.append(wallpaperSetting)
+        }
 
         return SettingSection(title: NSAttributedString(string: .SettingsTopSitesCustomizeTitle),
                               footerTitle: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Description),
@@ -176,17 +203,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
 
         return section
     }
+}
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.tableView.keyboardDismissMode = .onDrag
-    }
-
+// MARK: - TopSitesSettings
+extension HomePageSettingViewController {
     class TopSitesSettings: Setting {
         let profile: Profile
 
@@ -213,34 +233,30 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 }
 
-class TopSitesRowCountSettingsController: SettingsTableViewController {
-    let prefs: Prefs
-    var numberOfRows: Int32
-    static let defaultNumberOfRows: Int32 = 2
+// MARK: - WallpaperSettings
+extension HomePageSettingViewController {
+    class WallpaperSettings: Setting {
 
-    init(prefs: Prefs) {
-        self.prefs = prefs
-        numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
-        super.init(style: .grouped)
-        self.title = .AppMenuTopSitesTitleString
-    }
+        var profile: Profile
+        var tabManager: TabManager
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+        override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+        override var accessibilityIdentifier: String? { return "WallpaperSettings" }
+        override var style: UITableViewCell.CellStyle { return .value1 }
 
-    override func generateSettings() -> [SettingSection] {
-
-        let createSetting: (Int32) -> CheckmarkSetting = { num in
-            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"), subtitle: nil, isChecked: { return num == self.numberOfRows }, onChecked: {
-                self.numberOfRows = num
-                self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
-                self.tableView.reloadData()
-            })
+        init(settings: SettingsTableViewController,
+             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+        ) {
+            self.profile = settings.profile
+            self.tabManager = tabManager
+            super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper))
         }
 
-        let rows = [1, 2, 3, 4].map(createSetting)
-        let section = SettingSection(title: NSAttributedString(string: .TopSitesRowSettingFooter), footerTitle: nil, children: rows)
-        return [section]
+        override func onClick(_ navigationController: UINavigationController?) {
+            let viewModel = WallpaperSettingsViewModel(with: tabManager,
+                                                       and: WallpaperManager())
+            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            navigationController?.pushViewController(wallpaperVC, animated: true)
+        }
     }
 }
