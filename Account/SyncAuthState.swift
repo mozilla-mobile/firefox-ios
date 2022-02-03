@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import SwiftyJSON
-import FxAClient
+import MozillaAppServices
 
 
 public let FxAClientErrorDomain = "org.mozilla.fxa.error"
