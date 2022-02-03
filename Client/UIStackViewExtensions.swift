@@ -17,8 +17,11 @@ extension UIStackView {
 
     func addAlertView(_ view: UIView, animated: Bool = true, completion: @escaping () -> Void) {
         view.layoutIfNeeded()
+
         UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
             self.addArrangedSubview(view)
+        }, completion: { _ in
+            completion()
         })
     }
 

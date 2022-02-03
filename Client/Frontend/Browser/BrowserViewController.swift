@@ -441,8 +441,6 @@ class BrowserViewController: UIViewController {
         header.addArrangedSubview(topTabsContainer)
         header.addArrangedSubview(urlBar)
         view.addSubview(header)
-
-        // Laurie - test find in page and snack bar
         view.addSubviews(bottomContentStackView)
 
         toolbar = TabToolbar()
@@ -569,25 +567,16 @@ class BrowserViewController: UIViewController {
         super.updateViewConstraints()
 
         topTouchArea.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
+            make.top.left.right.equalTo(view)
             make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
         }
 
         readerModeBar?.snp.remakeConstraints { make in
-            make.top.equalTo(self.header.snp.bottom)
             make.height.equalTo(UIConstants.ToolbarHeight)
-            make.leading.trailing.equalTo(self.view)
         }
 
         webViewContainer.snp.remakeConstraints { make in
-            make.left.right.equalTo(self.view)
-
-//            // Laurie readerModeBarBottom
-//            if let readerModeBarBottom = readerModeBar?.snp.bottom {
-//                make.top.equalTo(readerModeBarBottom)
-//            } else {
-//                make.top.equalTo(self.header.snp.bottom)
-//            }
+            make.left.right.equalTo(view)
             make.top.equalTo(header.snp.bottom)
             make.bottom.equalTo(footer.snp.top)
         }
@@ -600,8 +589,8 @@ class BrowserViewController: UIViewController {
         }
 
         footer.snp.remakeConstraints { make in
-            scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp.bottom).constraint
-            make.leading.trailing.equalTo(self.view)
+            scrollController.footerBottomConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            make.leading.trailing.equalTo(view)
         }
 
         urlBar.setNeedsUpdateConstraints()
@@ -611,11 +600,7 @@ class BrowserViewController: UIViewController {
         firefoxHomeViewController?.view.snp.remakeConstraints { make in
             make.top.equalTo(header.snp.bottom)
             make.left.right.equalTo(view)
-            if self.homePanelIsInline {
-                make.bottom.equalTo(self.toolbar.snp.top)
-            } else {
-                make.bottom.equalTo(self.view.snp.bottom)
-            }
+            make.bottom.equalTo(footer.snp.top)
         }
 
         bottomContentStackView.snp.remakeConstraints { make in
@@ -627,9 +612,9 @@ class BrowserViewController: UIViewController {
                 make.bottom.equalTo(view).offset(-keyboardHeight)
             } else if !toolbar.isHidden {
                 make.bottom.lessThanOrEqualTo(toolbar.snp.top)
-                make.bottom.lessThanOrEqualTo(self.view.safeArea.bottom)
+                make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
             } else {
-                make.bottom.equalTo(self.view.safeArea.bottom)
+                make.bottom.equalTo(view.safeArea.bottom)
             }
         }
     }
@@ -748,7 +733,7 @@ class BrowserViewController: UIViewController {
         urlBar.updateAlphaForSubviews(1)
         toolbar.isHidden = false
 
-        [header, footer, readerModeBar].forEach { view in
+        [header, footer].forEach { view in
             view?.transform = .identity
         }
 
