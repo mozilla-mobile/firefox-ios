@@ -5,6 +5,10 @@
 import Foundation
 import Combine
 
+let GleanEnableDebugView = "GleanEnableDebugView"
+let GleanDebugViewTag = "GleanDebugViewTag"
+let GleanLogPingsToConsole = "GleanLogPingsToConsole"
+
 final class InternalSettings: ObservableObject {
     let objectWillChange = PassthroughSubject<Void, Never>()
 
@@ -17,6 +21,27 @@ final class InternalSettings: ObservableObject {
 
     @UserDefault(key: NimbusUsePreviewCollectionDefault, defaultValue: false)
     var usePreviewCollection: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
+    @UserDefault(key: GleanEnableDebugView, defaultValue: false)
+    var gleanEnableDebugView: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
+    @UserDefault(key: GleanDebugViewTag, defaultValue: "")
+    var gleanDebugViewTag: String {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
+    @UserDefault(key: GleanLogPingsToConsole, defaultValue: false)
+    var gleanLogPingsToConsole: Bool {
         willSet {
             objectWillChange.send()
         }

@@ -423,10 +423,20 @@ extension AppDelegate {
             .flatMap(UUID.init(uuidString:)) {
             GleanMetrics.LegacyIds.clientId.set(clientId)
         }
+        
+        if UserDefaults.standard.bool(forKey: GleanLogPingsToConsole) {
+            Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=true")!)
+        }
+        
+        if UserDefaults.standard.bool(forKey: GleanEnableDebugView) {
+            if let tag = UserDefaults.standard.string(forKey: GleanDebugViewTag), !tag.isEmpty, let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
+                Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)")!)
+            }
+        }
 
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel), buildInfo: GleanMetrics.GleanBuild.info)
-        
+
         // Send "at startup" telemetry
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
         GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))

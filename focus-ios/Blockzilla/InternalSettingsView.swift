@@ -13,6 +13,11 @@ struct InternalSettingsView: View {
                 }
             }
             SwiftUI.Section {
+                NavigationLink(destination: InternalTelemetrySettingsView()) {
+                    Text(verbatim: "Telemetry")
+                }
+            }
+            SwiftUI.Section {
                 NavigationLink(destination: InternalCrashReportingSettingsView()) {
                     Text(verbatim: "Crash Reporting")
                 }
