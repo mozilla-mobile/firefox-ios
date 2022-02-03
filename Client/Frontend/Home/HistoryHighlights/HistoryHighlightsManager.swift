@@ -27,7 +27,7 @@ class HistoryHighlightsManager {
     private static let defaultViewTimeWeight = 10.0
     private static let defaultFrequencyWeight = 4.0
     private static let defaultHighlightCount = 9
-    private static let shouldGroupHighlights = false
+    private static var shouldGroupHighlights = false
 
     // MARK: - Public interface
     
@@ -40,8 +40,10 @@ class HistoryHighlightsManager {
 
     public static func getHighlightsData(with profile: Profile,
                                          and tabs: [Tab],
+                                         shouldGroupHighlights: Bool = false,
                                          completion: @escaping ([HighlightItem]?) -> Void) {
         // Get highlights
+        HistoryHighlightsManager.shouldGroupHighlights = shouldGroupHighlights
         fetchHighlights(with: profile) { highlights in
             guard let highlights = highlights, !highlights.isEmpty else {
                 completion(nil)
@@ -50,14 +52,18 @@ class HistoryHighlightsManager {
 
             // Filter from highlights
             let filterHighlights = highlights.filter { highlights in
-                tabs.contains { highlights.urlFromString != $0.url }
+                !tabs.contains { highlights.urlFromString?.host == $0.url?.host }
             }
 
             // Build groups
             buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
 
                 let collatedHighlights = collateForRecentlySaved(from: groups, and: filterHighlights)
-                completion(Array(collatedHighlights[0...8]))
+                if collatedHighlights.count > defaultHighlightCount {
+                    completion(Array(collatedHighlights[0...8]))
+                } else {
+                    completion(collatedHighlights)
+                }
             }
         }
     }
@@ -74,8 +80,6 @@ class HistoryHighlightsManager {
                                      limit: limit).uponQueue(.main) { result in
             guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
 
-            // filter tabs from highlights
-
             completion(ASHighlights)
         }
     }
@@ -87,7 +91,7 @@ class HistoryHighlightsManager {
                                           and highlights: [HistoryHighlight],
                                           completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void) {
 
-        guard !shouldGroupHighlights else {
+        guard shouldGroupHighlights else {
             completion(nil, highlights)
             return
         }
@@ -107,8 +111,8 @@ class HistoryHighlightsManager {
 
         for (index, group) in groups.enumerated() {
             let insertIndex = (index * 2) + 1
+//            if insertIndex < 
             highlightItems.insert(group, at: insertIndex)
-
         }
 
         return highlightItems

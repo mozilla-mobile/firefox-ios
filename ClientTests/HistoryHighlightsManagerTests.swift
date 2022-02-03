@@ -12,13 +12,16 @@ class HistoryHighlightsTests: XCTestCase {
     typealias manager = HistoryHighlightsManager
 
     var profile: MockProfile!
+    var tabManager: TabManager!
 
     override func setUp() {
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
+        tabManager = TabManager(profile: profile, imageStore: nil)
     }
 
     override func tearDown() {
         profile = nil
+        tabManager = nil
     }
 
     func testEmptyRead() {
@@ -48,8 +51,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         let expectation = expectation(description: "Highlights")
 
-        manager.getHighlightsDataForRecentlySaved(with: profile) { highlights in
-
+        manager.getHighlightsData(with: profile, and: [Tab]()) { highlights in
             XCTAssertNil(highlights, "Highlights should be nil if the DB is empty")
             expectation.fulfill()
         }
@@ -60,14 +62,81 @@ class HistoryHighlightsTests: XCTestCase {
     func testSingleHistoryHighlightExists() {
         emptyDB()
 
-        let site = createWebsiteEntry(named: "mozilla")
-        add(site: site)
-        setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
+        let testSites = ["mozilla", "wikipedia", "amazon"]
+
+        for siteText in testSites {
+            let site = createWebsiteEntry(named: siteText)
+            add(site: site)
+            setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
+        }
 
         let expectation = expectation(description: "Highlights")
-        let expectedCount = 1
+        let expectedCount = 3
 
-        manager.getHighlightsDataForRecentlySaved(with: profile) { highlights in
+        manager.getHighlightsData(with: profile, and: [Tab]()) { highlights in
+
+            guard let highlights = highlights else {
+                XCTFail("Highlights should not be nil.")
+                return
+            }
+
+            XCTAssertEqual(highlights.count, expectedCount, "There should be one history highlight")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func testSingleHistoryHighlightExists_RemovingExistingTab() {
+        emptyDB()
+
+        let testSites = ["mozilla", "wikipedia", "amazon"]
+
+        for siteText in testSites {
+            let site = createWebsiteEntry(named: siteText)
+            add(site: site)
+            setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
+        }
+
+        let tabs = createTabs(named: "mozilla")
+
+        let expectation = expectation(description: "Highlights")
+        let expectedCount = 2
+
+        manager.getHighlightsData(with: profile, and: [tabs]) { highlights in
+
+            guard let highlights = highlights else {
+                XCTFail("Highlights should not be nil.")
+                return
+            }
+
+            XCTAssertEqual(highlights.count, expectedCount, "There should be one history highlight")
+            XCTAssertEqual(highlights.count, expectedCount, "There should be one history highlight")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func testSingleHistoryHighlightExists_withGroupingEnabled() {
+        emptyDB()
+
+        let testSites = [("mozilla", ""),
+                         ("wikipedia", ""),
+                         ("amazon", ""),
+                         ("mozilla", "redirect"),
+                         ("amazon", "redirect")]
+
+        for (domain, suffix) in testSites {
+            let site = createWebsiteEntry(named: domain, with: suffix)
+            add(site: site)
+            setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
+        }
+
+        let expectation = expectation(description: "Highlights")
+        let expectedCount = 2
+
+        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
@@ -90,15 +159,24 @@ class HistoryHighlightsTests: XCTestCase {
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess)
     }
 
-    private func createWebsiteEntry(named name: String) -> Site {
-        let urlString = "https://www.\(name).com"
+    private func createWebsiteEntry(named name: String, with sufix: String = "") -> Site {
+        let urlString = "https://www.\(name).com\(sufix)"
         let urlTitle = "\(name) test"
 
         return Site(url: urlString, title: urlTitle)
     }
 
+    private func createTabs(named name: String) -> Tab {
+        guard let url = URL(string:"https://www.\(name).com") else {
+            return tabManager.addTab()
+        }
+
+        let urlRequest = URLRequest(url: url)
+        return tabManager.addTab(urlRequest)
+    }
+
     private func setupData(forTestURL siteURL: String, withTitle title: String, andViewTime viewTime: Int32) {
-        let metadataKey1 = HistoryMetadataKey(url: siteURL, searchTerm: nil, referrerUrl: nil)
+        let metadataKey1 = HistoryMetadataKey(url: siteURL, searchTerm: title, referrerUrl: nil)
 
         XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
             key: metadataKey1,

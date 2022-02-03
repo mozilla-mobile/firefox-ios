@@ -123,6 +123,8 @@ class SearchTermGroupsManager {
                         stringURL = item.url
                     } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
                         stringURL = url
+                    } else if let item = item as? HistoryHighlight {
+                        stringURL = item.url
                     }
 
                     return metadata.url == stringURL || metadata.referrerUrl == stringURL
@@ -229,6 +231,11 @@ class SearchTermGroupsManager {
                 let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
                 let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
                 return firstSiteATimestamp < secondSiteTimestamp
+
+            } else if let firstHighlight = $0 as? HistoryHighlight, let secondHighlight = $1 as? HistoryHighlight {
+//                let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
+//                let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
+                return firstHighlight.score < secondHighlight.score
 
             } else {
                 fatalError("Error: We should never pass a type \(T.self) to this function.")
