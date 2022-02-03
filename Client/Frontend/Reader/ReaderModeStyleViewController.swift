@@ -245,7 +245,6 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
         readerModeStyle.fontType = fontType
         for button in fontTypeButtons {
             button.isSelected = button.fontType.isSameFamily(fontType)
-            
         }
         for button in themeButtons {
             button.fontType = fontType
@@ -366,7 +365,6 @@ class FontSizeLabel: UILabel {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        // TODO
         fatalError("init(coder:) has not been implemented")
     }
 
