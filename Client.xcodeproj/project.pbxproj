@@ -13550,8 +13550,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
-				branch = "fix-dylib-issue";
-				kind = branch;
+				kind = exactVersion;
+				version = 91.0.1;
 			};
 		};
 		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
@@ -13582,8 +13582,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				branch = "fix-dylib-issue";
-				kind = branch;
+				kind = exactVersion;
+				version = 91.0.1;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

@@ -68,9 +68,9 @@
         "package": "MozillaRustComponentsSwift",
         "repositoryURL": "https://github.com/mozilla/rust-components-swift.git",
         "state": {
-          "branch": "fix-dylib-issue",
-          "revision": "ae24d4c8a15013debe6eb9d121dee457111b3814",
-          "version": null
+          "branch": null,
+          "revision": "001d704cd61ee0b88f078cc125caefecd8180467",
+          "version": "91.0.1"
         }
       },
       {
