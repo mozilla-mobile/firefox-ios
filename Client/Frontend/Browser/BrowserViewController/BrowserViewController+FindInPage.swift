@@ -22,7 +22,7 @@ extension BrowserViewController {
         self.findInPageBar = findInPageBar
         findInPageBar.delegate = self
 
-        bottomContentStackView.addAlertView(findInPageBar, completion: {
+        bottomContentStackView.addArrangedViewToBottom(findInPageBar, animated: false, completion: {
             self.view.layoutIfNeeded()
         })
 
@@ -45,7 +45,7 @@ extension BrowserViewController {
         let tab = tab ?? tabManager.selectedTab
         guard let webView = tab?.webView else { return }
         webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
-        bottomContentStackView.removeAlertView(findInPageBar)
+        bottomContentStackView.removeArrangedView(findInPageBar)
         self.findInPageBar = nil
         updateViewConstraints()
     }

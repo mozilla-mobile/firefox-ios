@@ -67,7 +67,7 @@ extension BrowserViewController {
         if self.readerModeBar == nil {
             let readerModeBar = ReaderModeBarView(frame: CGRect.zero)
             readerModeBar.delegate = self
-            header.addAlertView(readerModeBar, completion: {})
+            header.addArrangedViewToBottom(readerModeBar, completion: {})
             self.readerModeBar = readerModeBar
         }
 
@@ -78,7 +78,7 @@ extension BrowserViewController {
 
     func hideReaderModeBar(animated: Bool) {
         guard let readerModeBar = readerModeBar else { return }
-        header.removeAlertView(readerModeBar)
+        header.removeArrangedView(readerModeBar)
         self.readerModeBar = nil
         updateViewConstraints()
     }

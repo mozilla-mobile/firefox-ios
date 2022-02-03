@@ -15,7 +15,17 @@ extension UIStackView {
         UIView.animate(withDuration: 0.1, animations: { self.isHidden = false })
     }
 
-    func addAlertView(_ view: UIView, animated: Bool = true, completion: @escaping () -> Void) {
+    func addArrangedViewToTop(_ view: UIView, animated: Bool = true, completion: @escaping () -> Void) {
+        view.layoutIfNeeded()
+
+        UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
+            self.insertArrangedSubview(view, at: 0)
+        }, completion: { _ in
+            completion()
+        })
+    }
+
+    func addArrangedViewToBottom(_ view: UIView, animated: Bool = true, completion: @escaping () -> Void) {
         view.layoutIfNeeded()
 
         UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
@@ -25,14 +35,14 @@ extension UIStackView {
         })
     }
 
-    func removeAlertView(_ view: UIView, animated: Bool = true) {
+    func removeArrangedView(_ view: UIView, animated: Bool = true) {
         UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
             self.removeArrangedSubview(view)
             view.removeFromSuperview()
         })
     }
 
-    func removeAllAlertViews() {
+    func removeAllArrangedViews() {
         self.arrangedSubviews.forEach {
             self.removeArrangedSubview($0)
             $0.removeFromSuperview()
