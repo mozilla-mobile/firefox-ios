@@ -75,7 +75,8 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         super.viewDidLoad()
         view.addSubview(shadow)
         view.addSubview(tableView)
-        snappedToBottom = bvc?.toolbar != nil
+        snappedToBottom = bvc?.shouldShowToolbarForTraitCollection(traitCollection) ?? false
+
         tableView.snp.makeConstraints { make in
             make.height.equalTo(0)
             make.left.right.equalTo(self.view)
@@ -149,7 +150,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         guard let bvc = self.bvc else {
             return
         }
-        if bvc.shouldShowFooterForTraitCollection(newCollection) != snappedToBottom {
+        if bvc.shouldShowToolbarForTraitCollection(newCollection) != snappedToBottom {
             tableView.snp.updateConstraints { make in
                 if snappedToBottom {
                     make.bottom.equalTo(self.view).offset(0)
@@ -184,6 +185,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
         self.verticalConstraints = []
         tableView.snp.makeConstraints { make in
+            // Laurie - todo
             if snappedToBottom {
                 verticalConstraints += [make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height).constraint]
             } else {
