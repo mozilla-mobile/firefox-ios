@@ -14330,8 +14330,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
-				kind = exactVersion;
-				version = 87.2.0;
+				branch = fix-dylib-issue;
+				kind = branch;
 			};
 		};
 		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
@@ -14362,8 +14362,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
+				branch = fix-dylib-issue;
+				kind = branch;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -14418,32 +14418,32 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
+				branch = fix-dylib-issue;
+				kind = branch;
 			};
 		};
 		43BE57A6278BA4EB00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
+				branch = fix-dylib-issue;
+				kind = branch;
 			};
 		};
 		43BE57D6278BA4ED00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
+				branch = fix-dylib-issue;
+				kind = branch;
 			};
 		};
 		43BE57EE278BA50600491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
+				branch = fix-dylib-issue;
+				kind = branch;
 			};
 		};
 		43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */ = {
