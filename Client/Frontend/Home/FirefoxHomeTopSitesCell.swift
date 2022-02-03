@@ -163,13 +163,13 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
 
     func applyTheme() {
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
+        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
         faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
         faviconBG.layer.borderColor = TopSiteCellUX.borderColor.cgColor
         faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         faviconBG.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         selectedOverlay.backgroundColor = TopSiteCellUX.overlayColor
         titleLabel.backgroundColor = UIColor.clear
-        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
     }
 }
 
