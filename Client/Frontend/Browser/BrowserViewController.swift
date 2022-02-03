@@ -60,7 +60,6 @@ class BrowserViewController: UIViewController {
     var statusBarOverlay: UIView = UIView()
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
-    fileprivate var homePanelIsInline = false
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
@@ -727,10 +726,9 @@ class BrowserViewController: UIViewController {
     /// - Parameter inline: Inline is true when the firefox homepage is created from the tab tray, a long press on the tab bar to open a new tab or by pressing the home page button on the tab bar.
     ///                     Inline is false when it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showFirefoxHome(inline: Bool) {
-        homePanelIsInline = inline
         if self.firefoxHomeViewController == nil {
             // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
-            let trackingValue: TelemetryWrapper.EventValue = homePanelIsInline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
+            let trackingValue: TelemetryWrapper.EventValue = inline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
 
             let firefoxHomeViewController = FirefoxHomeViewController(profile: profile, isZeroSearch: !inline)
