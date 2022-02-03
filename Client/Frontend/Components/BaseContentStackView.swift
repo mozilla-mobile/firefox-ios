@@ -22,7 +22,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         for subview in arrangedSubviews {
             guard let alphaView = subview as? AlphaDimmable else { continue }
-            print("Laurie - Update alpha for view \(subview.debugDescription)")
             alphaView.updateAlphaForSubviews(alpha)
         }
     }

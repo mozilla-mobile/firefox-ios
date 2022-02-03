@@ -185,7 +185,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
         self.verticalConstraints = []
         tableView.snp.makeConstraints { make in
-            // Laurie - todo
             if snappedToBottom {
                 verticalConstraints += [make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height).constraint]
             } else {

@@ -583,8 +583,6 @@ class BrowserViewController: UIViewController {
 
         // Setup the bottom toolbar
         toolbar.snp.remakeConstraints { make in
-            // Laurie - Height to use for ButtonToast ?
-            // Laurie - When rotate on webpage, height isn't ok?
             make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
 
@@ -633,6 +631,8 @@ class BrowserViewController: UIViewController {
             urlBarHeightConstraint = make.height.equalTo(height).constraint
         }
     }
+
+    // MARK: - Tabs Queue
 
     func loadQueuedTabs(receivedURLs: [URL]? = nil) {
         // Chain off of a trivial deferred in order to run on the background queue.

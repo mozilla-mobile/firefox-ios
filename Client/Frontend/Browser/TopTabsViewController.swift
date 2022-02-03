@@ -87,7 +87,6 @@ class TopTabsViewController: UIViewController {
         
         return fader
     }()
-    
 
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
