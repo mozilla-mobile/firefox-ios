@@ -6,7 +6,7 @@ import Foundation
 import Account
 import Shared
 import XCGLogger
-import FxAClient
+import MozillaAppServices
 import SwiftyJSON
 
 private let log = Logger.syncLogger
