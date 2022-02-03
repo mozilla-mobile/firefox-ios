@@ -89,28 +89,14 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // Laurie - todo: class to avoid repetition for UIStackView here
     // Header and footer wrap the urlbar and toolbar to provide background effects on them
     // URLbar can be in header or footer
-    var header: UIStackView = .build { stackView in
-        stackView.backgroundColor = .clear
-        stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
-    }
-
-    var footer: UIStackView = .build { stackView in
-        stackView.backgroundColor = .clear
-        stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
-    }
+    var header: BaseAlphaStackView = .build { _ in }
+    var footer: BaseAlphaStackView = .build { _ in }
 
     // Alert content that appears on top of the footer should be added to this view.
     // ex: Find In Page, SnackBars
-    var bottomContentStackView: UIStackView = .build { stackView in
-        stackView.backgroundColor = .clear
-        stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
-    }
+    var bottomContentStackView: BaseAlphaStackView = .build { _ in }
 
     private var topTouchArea: UIButton!
 
@@ -393,8 +379,6 @@ class BrowserViewController: UIViewController {
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
 
-        scrollController.urlBar = urlBar
-        scrollController.readerModeBar = readerModeBar
         scrollController.header = header
         scrollController.footer = footer
 
