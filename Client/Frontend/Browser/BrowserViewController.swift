@@ -1147,6 +1147,10 @@ class BrowserViewController: UIViewController {
             return
         }
         popToBVC()
+        guard !isShowingJSPromptAlert() else {
+            tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
+            return
+        }
         openedUrlFromExternalSource = true
 
         if let uuid = uuid, let tab = tabManager.getTabForUUID(uuid: uuid) {
@@ -1188,7 +1192,12 @@ class BrowserViewController: UIViewController {
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         popToBVC()
+        guard !isShowingJSPromptAlert() else {
+            tabManager.addTab(nil, isPrivate: isPrivate)
+            return
+        }
         openedUrlFromExternalSource = true
+
         openURLInNewTab(nil, isPrivate: isPrivate)
         let freshTab = tabManager.selectedTab
         freshTab?.updateTimerAndObserving(state: .newTab)
@@ -1216,12 +1225,20 @@ class BrowserViewController: UIViewController {
         guard let currentViewController = navigationController?.topViewController else {
             return
         }
-        currentViewController.dismiss(animated: true, completion: nil)
+        // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
+        if !isShowingJSPromptAlert() {
+            currentViewController.dismiss(animated: true, completion: nil)
+        }
+
         if currentViewController != self {
             _ = self.navigationController?.popViewController(animated: true)
         } else if urlBar.inOverlayMode {
             urlBar.didClickCancel()
         }
+    }
+
+    private func isShowingJSPromptAlert() -> Bool {
+        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
     func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
