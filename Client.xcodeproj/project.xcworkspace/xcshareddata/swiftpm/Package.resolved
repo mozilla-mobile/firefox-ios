@@ -65,6 +65,15 @@
         }
       },
       {
+        "package": "MozillaRustComponentsSwift",
+        "repositoryURL": "https://github.com/mozilla/rust-components-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "53d2f85c6d2e579859605cbc73cc7b194484f83b",
+          "version": "91.0.0"
+        }
+      },
+      {
         "package": "SDWebImage",
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {
