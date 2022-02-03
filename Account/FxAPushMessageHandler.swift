@@ -7,7 +7,7 @@ import SwiftyJSON
 import SyncTelemetry
 import Account
 import os.log
-import FxAClient
+import MozillaAppServices
 
 private let log = Logger.syncLogger
 

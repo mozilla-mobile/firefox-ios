@@ -14,10 +14,7 @@ import Sync
 import XCGLogger
 import SyncTelemetry
 import AuthenticationServices
-import RustLog
-import FxAClient
-import Sync15
-@_exported import Logins
+import MozillaAppServices
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT

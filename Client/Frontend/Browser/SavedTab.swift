@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 import Shared
-import Places
+import MozillaAppServices
 
 class SavedTab: NSObject, NSCoding {
     var isSelected: Bool

@@ -52,7 +52,6 @@
 		1B0DFD25274856D60008EB0A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD24274856D60008EB0A /* SwiftyJSON */; };
 		1B0DFD32274858B10008EB0A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0DFD31274858B10008EB0A /* SwiftyJSON */; };
 		1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3D99F0270E89D0006E1264 /* Telemetry */; };
-		1BE8D1CE278D35E200213777 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE8D1CD278D35E200213777 /* Viaduct */; };
 		1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECC927176FEA00D729BB /* SwiftyJSON */; };
 		1BE9ECCC2717704300D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCB2717704300D729BB /* SwiftyJSON */; };
 		1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1BE9ECCD271770A600D729BB /* SwiftyJSON */; };
@@ -264,12 +263,7 @@
 		3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */; };
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
 		3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */; };
-		43017ECA278E0BFC00CED011 /* RUSTFxAClient.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43017ECB278E0C6700CED011 /* RUSTLogins.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43017ECC278E0C6700CED011 /* RUSTRustLog.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43017ECD278E0C6700CED011 /* RUSTNimbus.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43017ECE278E0C6700CED011 /* RUSTViaduct.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43017ECF278E0C6700CED011 /* RUSTPlaces.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		43118CF3251A9CCA00F24376 /* SiteArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */; };
 		43118D07251A9CD100F24376 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
@@ -327,7 +321,6 @@
 		4368F88A279671D00013419B /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F87B27966E810013419B /* SDWebImage.framework */; };
 		437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B672681256800FB41C1 /* InactiveTabCell.swift */; };
 		437A9B6A2681257F00FB41C1 /* InactiveTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */; };
-		438072B22798D8DE00DE8682 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
 		4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7FE246DAFBE00570811 /* FirefoxColors.swift */; };
 		4392FB20252EC49D00AD3D23 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
 		4392FB34252EC4CE00AD3D23 /* SessionRestoreHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC4869C2195F58300CDA48D /* SessionRestoreHandler.swift */; };
@@ -336,6 +329,9 @@
 		439B008B26E6CE2300DFAF14 /* GroupedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B008A26E6CE2100DFAF14 /* GroupedTabCell.swift */; };
 		43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A5643523CD1E1B00B6857D /* UpdateViewController.swift */; };
 		43A5643923CD1E1C00B6857D /* Update.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A5643623CD1E1B00B6857D /* Update.xcassets */; };
+		43A878FC27AB498E0071C372 /* MozillaAppServices in Frameworks */ = {isa = PBXBuildFile; productRef = 43A878FB27AB498E0071C372 /* MozillaAppServices */; };
+		43A878FD27AB4A110071C372 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		43A878FE27AC39D30071C372 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43AB6FA225DC53D30016B015 /* GoogleTopSiteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9C25DC53D20016B015 /* GoogleTopSiteHelper.swift */; };
 		43AB6FA425DC53D30016B015 /* ASHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9E25DC53D20016B015 /* ASHeaderView.swift */; };
 		43AB6FA525DC53D30016B015 /* ASLibraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9F25DC53D30016B015 /* ASLibraryCell.swift */; };
@@ -354,42 +350,13 @@
 		43AFC11927969A820039DDF4 /* Fuzi.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
-		43BE577E278BA4D900491291 /* Logins in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5777278BA4D900491291 /* Logins */; };
-		43BE57B0278BA4EB00491291 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57A8278BA4EB00491291 /* Nimbus */; };
-		43BE57E2278BA4ED00491291 /* Places in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57D9278BA4ED00491291 /* Places */; };
-		43BE57FB278BA50600491291 /* FxAClient in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE57ED278BA50600491291 /* FxAClient */; };
-		43BE5805278BA52C00491291 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 43BE5804278BA52C00491291 /* RustLog */; };
-		43BE5806278BA7DA00491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
-		43BE5807278BA7EA00491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
-		43BE5808278BA80D00491291 /* RUSTViaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */; };
-		43BE5809278BA9D700491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
-		43BE580A278BA9FD00491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
-		43BE580B278BAA0700491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
-		43BE580E278BABCF00491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
-		43BE580F278BABD000491291 /* RUSTNimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */; };
-		43BE5810278BABD000491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
-		43BE5811278BABD000491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
-		43BE5812278BABD000491291 /* RUSTViaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */; };
-		43BE5815278BB02000491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
-		43BE5816278BE53E00491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
-		43BE5817278BE58B00491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
-		43BE581A278BE5AE00491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
-		43BE581B278BE5AE00491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
-		43BE581C278BE5AE00491291 /* RUSTNimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */; };
-		43BE581D278BE5AE00491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
-		43BE581E278BE5AE00491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
-		43BE581F278BE5AE00491291 /* RUSTViaduct.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */; };
-		43BE5820278BE68100491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
-		43BE5821278BE68100491291 /* RUSTNimbus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */; };
-		43BE5822278BE68100491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
-		43BE5823278BE68100491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
-		43BE5824278BE7D400491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
-		43BE5825278BE7EF00491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
-		43BE5826278BE80A00491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
-		43BE5827278BE81500491291 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
-		43BE5828278BE82B00491291 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
-		43BE582D278CA94000491291 /* RUSTRustLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */; };
-		43BE582E278CC5A000491291 /* RUSTFxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */; };
+		43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		43BE5816278BE53E00491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		43BE581B278BE5AE00491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		43BE5820278BE68100491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		43BE5825278BE7EF00491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		43BE5827278BE81500491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */; };
 		43C6A46E279B8A0800C79856 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
 		43C6A46F279B8A3300C79856 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
@@ -402,14 +369,11 @@
 		43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43E9BDFB255E0904005BCB91 /* TabMoreMenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E9BDFA255E0904005BCB91 /* TabMoreMenuHeader.swift */; };
 		43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F7952425795F69005AEE40 /* SearchTelemetry.swift */; };
-		43F93C2327A86818009833D9 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
-		43F93C2427A8681C009833D9 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43F93C2427A8681C009833D9 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43F93C2527A8682D009833D9 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
 		43F93C2627A86831009833D9 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F87B27966E810013419B /* SDWebImage.framework */; };
-		43F93C2727A86835009833D9 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
-		43F93C2827A8683E009833D9 /* RUSTLogins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RUSTLogins.framework */; };
+		43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43F93C2927A868FF009833D9 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F87B27966E810013419B /* SDWebImage.framework */; };
-		43F93C2A27A86A9B009833D9 /* RUSTPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		4F2A06BE26F8E46E0017DA05 /* TabCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A06BD26F8E46E0017DA05 /* TabCounterTests.swift */; };
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
@@ -1209,13 +1173,6 @@
 			remoteGlobalIDString = 4368F86F27966E810013419B;
 			remoteInfo = SDWebImage;
 		};
-		43BE5813278BAF9A00491291 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43BE57D4278BA4ED00491291;
-			remoteInfo = Places;
-		};
 		7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1390,14 +1347,9 @@
 			files = (
 				43AFC11927969A820039DDF4 /* Fuzi.framework in Copy Frameworks */,
 				4368F85D27966BC30013419B /* Snapkit.framework in Copy Frameworks */,
-				43017ECB278E0C6700CED011 /* RUSTLogins.framework in Copy Frameworks */,
+				43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */,
 				43AFC118279699530039DDF4 /* XCGLogger.framework in Copy Frameworks */,
-				43017ECC278E0C6700CED011 /* RUSTRustLog.framework in Copy Frameworks */,
-				43017ECD278E0C6700CED011 /* RUSTNimbus.framework in Copy Frameworks */,
-				43017ECE278E0C6700CED011 /* RUSTViaduct.framework in Copy Frameworks */,
 				4368F82D279665C20013419B /* Sentry.framework in Copy Frameworks */,
-				43017ECF278E0C6700CED011 /* RUSTPlaces.framework in Copy Frameworks */,
-				43017ECA278E0BFC00CED011 /* RUSTFxAClient.framework in Copy Frameworks */,
 				4368F88027966EA50013419B /* SDWebImage.framework in Copy Frameworks */,
 				C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */,
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
@@ -2172,18 +2124,8 @@
 		43AFC0F027967C000039DDF4 /* Fuzi-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Fuzi-Info.plist"; sourceTree = "<group>"; };
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		43BDBBFD2752FA8600254DE4 /* TabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCell.swift; sourceTree = "<group>"; };
-		43BE578A278BA4D900491291 /* RUSTLogins.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTLogins.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE578B278BA4D900491291 /* RustLogins-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "RustLogins-Info.plist"; sourceTree = "<group>"; };
-		43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTRustLog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE57A3278BA4EA00491291 /* RustRustLog-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "RustRustLog-Info.plist"; sourceTree = "<group>"; };
-		43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTNimbus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE57BB278BA4EB00491291 /* RustNimbus-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "RustNimbus-Info.plist"; sourceTree = "<group>"; };
-		43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTViaduct.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE57D3278BA4EC00491291 /* RustViaDuct-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RustViaDuct-Info.plist"; sourceTree = "<group>"; };
-		43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTPlaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE57EB278BA4ED00491291 /* RustPlaces-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "RustPlaces-Info.plist"; sourceTree = "<group>"; };
-		43BE5802278BA50600491291 /* RUSTFxAClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RUSTFxAClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43BE5803278BA50700491291 /* RustFxAClient-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "RustFxAClient-Info.plist"; sourceTree = "<group>"; };
+		43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RustMozillaAppServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RustMozillaAppServices-Info.plist"; sourceTree = "<group>"; };
 		43C5A0992555DF8100BA37AD /* BottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		43CA482EA439A9C486CCA01D /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Shared.strings; sourceTree = "<group>"; };
 		43D72DB226FCE3550069BDE9 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = "mr.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -4395,9 +4337,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43A878FE27AC39D30071C372 /* RustMozillaAppServices.framework in Frameworks */,
 				43AFC0F527967C320039DDF4 /* Fuzi.framework in Frameworks */,
 				4368F88A279671D00013419B /* SDWebImage.framework in Frameworks */,
-				43BE5806278BA7DA00491291 /* RUSTPlaces.framework in Frameworks */,
 				4368F830279665D50013419B /* Sentry.framework in Frameworks */,
 				433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */,
 				C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */,
@@ -4413,12 +4355,7 @@
 				43AFC0F727967C8A0039DDF4 /* Fuzi.framework in Frameworks */,
 				43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */,
 				4368F889279671B10013419B /* SDWebImage.framework in Frameworks */,
-				43BE581A278BE5AE00491291 /* RUSTFxAClient.framework in Frameworks */,
-				43BE581B278BE5AE00491291 /* RUSTLogins.framework in Frameworks */,
-				43BE581C278BE5AE00491291 /* RUSTNimbus.framework in Frameworks */,
-				43BE581D278BE5AE00491291 /* RUSTPlaces.framework in Frameworks */,
-				43BE581E278BE5AE00491291 /* RUSTRustLog.framework in Frameworks */,
-				43BE581F278BE5AE00491291 /* RUSTViaduct.framework in Frameworks */,
+				43BE581B278BE5AE00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				1B0DFD32274858B10008EB0A /* SwiftyJSON in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
@@ -4438,7 +4375,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				438072B22798D8DE00DE8682 /* RUSTFxAClient.framework in Frameworks */,
+				43A878FD27AB4A110071C372 /* RustMozillaAppServices.framework in Frameworks */,
 				43AFC0DE279678F70039DDF4 /* XCGLogger.framework in Frameworks */,
 				4368F88327966F350013419B /* SDWebImage.framework in Frameworks */,
 				4368F834279665DF0013419B /* Sentry.framework in Frameworks */,
@@ -4452,14 +4389,9 @@
 			files = (
 				43AFC0F327967C1C0039DDF4 /* Fuzi.framework in Frameworks */,
 				4368F84E279669A60013419B /* Snapkit.framework in Frameworks */,
-				43BE582E278CC5A000491291 /* RUSTFxAClient.framework in Frameworks */,
 				4368F82C279665C20013419B /* Sentry.framework in Frameworks */,
-				43BE580E278BABCF00491291 /* RUSTLogins.framework in Frameworks */,
+				43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				4368F87F27966EA50013419B /* SDWebImage.framework in Frameworks */,
-				43BE580F278BABD000491291 /* RUSTNimbus.framework in Frameworks */,
-				43BE5810278BABD000491291 /* RUSTPlaces.framework in Frameworks */,
-				43BE5811278BABD000491291 /* RUSTRustLog.framework in Frameworks */,
-				43BE5812278BABD000491291 /* RUSTViaduct.framework in Frameworks */,
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
@@ -4482,12 +4414,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE5820278BE68100491291 /* RUSTLogins.framework in Frameworks */,
-				43BE5821278BE68100491291 /* RUSTNimbus.framework in Frameworks */,
-				43BE5822278BE68100491291 /* RUSTPlaces.framework in Frameworks */,
-				43BE5823278BE68100491291 /* RUSTRustLog.framework in Frameworks */,
-				43BE5808278BA80D00491291 /* RUSTViaduct.framework in Frameworks */,
-				43BE5807278BA7EA00491291 /* RUSTFxAClient.framework in Frameworks */,
+				43BE5820278BE68100491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C820443825241D3100740B71 /* libSyncTelemetry.a in Frameworks */,
 				C8340C4F24EC69EE00FE91A6 /* libcrypto.a in Frameworks */,
 				C8340C5024EC69EE00FE91A6 /* libssl.a in Frameworks */,
@@ -4509,7 +4436,7 @@
 				43AFC0F627967C3E0039DDF4 /* Fuzi.framework in Frameworks */,
 				4368F888279671710013419B /* SDWebImage.framework in Frameworks */,
 				4368F839279665EF0013419B /* Sentry.framework in Frameworks */,
-				43BE5809278BA9D700491291 /* RUSTLogins.framework in Frameworks */,
+				43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4517,8 +4444,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43F93C2427A8681C009833D9 /* RUSTLogins.framework in Frameworks */,
-				43F93C2327A86818009833D9 /* RUSTPlaces.framework in Frameworks */,
+				43F93C2427A8681C009833D9 /* RustMozillaAppServices.framework in Frameworks */,
 				1BE9ECCA27176FEA00D729BB /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4537,9 +4463,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE5825278BE7EF00491291 /* RUSTLogins.framework in Frameworks */,
-				43BE5824278BE7D400491291 /* RUSTFxAClient.framework in Frameworks */,
-				43BE580A278BA9FD00491291 /* RUSTRustLog.framework in Frameworks */,
+				43BE5825278BE7EF00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */,
 				C877039725222FE6006E38EB /* Shared.framework in Frameworks */,
 			);
@@ -4549,7 +4473,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43F93C2A27A86A9B009833D9 /* RUSTPlaces.framework in Frameworks */,
 				43F93C2927A868FF009833D9 /* SDWebImage.framework in Frameworks */,
 				43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */,
 			);
@@ -4599,47 +4522,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE577E278BA4D900491291 /* Logins in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE5795278BA4EA00491291 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43BE5805278BA52C00491291 /* RustLog in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57AD278BA4EB00491291 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43BE57B0278BA4EB00491291 /* Nimbus in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57C5278BA4EC00491291 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1BE8D1CE278D35E200213777 /* Viaduct in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57DD278BA4ED00491291 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43BE57E2278BA4ED00491291 /* Places in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57F5278BA50600491291 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43BE57FB278BA50600491291 /* FxAClient in Frameworks */,
+				43A878FC27AB498E0071C372 /* MozillaAppServices in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4675,11 +4558,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43BE582D278CA94000491291 /* RUSTRustLog.framework in Frameworks */,
-				43BE5817278BE58B00491291 /* RUSTFxAClient.framework in Frameworks */,
 				4368F85427966A4F0013419B /* Snapkit.framework in Frameworks */,
-				43BE5816278BE53E00491291 /* RUSTLogins.framework in Frameworks */,
-				43BE5815278BB02000491291 /* RUSTPlaces.framework in Frameworks */,
+				43BE5816278BE53E00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				F8324AF62649B540007E4BFA /* Shared.framework in Frameworks */,
 				F8324AFA2649B540007E4BFA /* Sync.framework in Frameworks */,
@@ -4690,8 +4570,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43F93C2827A8683E009833D9 /* RUSTLogins.framework in Frameworks */,
-				43F93C2727A86835009833D9 /* RUSTPlaces.framework in Frameworks */,
+				43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */,
 				43F93C2627A86831009833D9 /* SDWebImage.framework in Frameworks */,
 				43F93C2527A8682D009833D9 /* Sentry.framework in Frameworks */,
 				1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */,
@@ -4704,11 +4583,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				43AFC0F427967C2B0039DDF4 /* Fuzi.framework in Frameworks */,
-				43BE5828278BE82B00491291 /* RUSTPlaces.framework in Frameworks */,
 				4368F85927966A860013419B /* Snapkit.framework in Frameworks */,
-				43BE5827278BE81500491291 /* RUSTLogins.framework in Frameworks */,
-				43BE5826278BE80A00491291 /* RUSTFxAClient.framework in Frameworks */,
-				43BE580B278BAA0700491291 /* RUSTRustLog.framework in Frameworks */,
+				43BE5827278BE81500491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
 				C877039625222FDC006E38EB /* Shared.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
@@ -6457,12 +6333,7 @@
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
-				43BE578B278BA4D900491291 /* RustLogins-Info.plist */,
-				43BE57A3278BA4EA00491291 /* RustRustLog-Info.plist */,
-				43BE57BB278BA4EB00491291 /* RustNimbus-Info.plist */,
-				43BE57D3278BA4EC00491291 /* RustViaDuct-Info.plist */,
-				43BE57EB278BA4ED00491291 /* RustPlaces-Info.plist */,
-				43BE5803278BA50700491291 /* RustFxAClient-Info.plist */,
+				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
 				4368F829279665220013419B /* Sentry-Info.plist */,
 				4368F84B279669740013419B /* Snapkit-Info.plist */,
 				4368F87C27966E810013419B /* SDWebImage-Info.plist */,
@@ -6496,12 +6367,7 @@
 				397848DB1ED86605004C0C0B /* NotificationService.appex */,
 				047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */,
 				F8324A052649A188007E4BFA /* CredentialProvider.appex */,
-				43BE578A278BA4D900491291 /* RUSTLogins.framework */,
-				43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */,
-				43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */,
-				43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */,
-				43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */,
-				43BE5802278BA50600491291 /* RUSTFxAClient.framework */,
+				43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */,
 				4368F828279665220013419B /* Sentry.framework */,
 				4368F84A279669740013419B /* Snapkit.framework */,
 				4368F87B27966E810013419B /* SDWebImage.framework */,
@@ -6793,7 +6659,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				43BE5814278BAF9A00491291 /* PBXTargetDependency */,
 				43118CDF251A9CAD00F24376 /* PBXTargetDependency */,
 				4368F833279665D50013419B /* PBXTargetDependency */,
 			);
@@ -7122,9 +6987,9 @@
 			productReference = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		43BE5774278BA4D900491291 /* RUSTLogins */ = {
+		43BE5774278BA4D900491291 /* RustMozillaAppServices */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RUSTLogins" */;
+			buildConfigurationList = 43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RustMozillaAppServices" */;
 			buildPhases = (
 				43BE577C278BA4D900491291 /* Sources */,
 				43BE577D278BA4D900491291 /* Frameworks */,
@@ -7133,107 +6998,12 @@
 			);
 			dependencies = (
 			);
-			name = RUSTLogins;
+			name = RustMozillaAppServices;
 			packageProductDependencies = (
-				43BE5777278BA4D900491291 /* Logins */,
+				43A878FB27AB498E0071C372 /* MozillaAppServices */,
 			);
 			productName = Shared;
-			productReference = 43BE578A278BA4D900491291 /* RUSTLogins.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		43BE578C278BA4EA00491291 /* RUSTRustLog */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE579D278BA4EA00491291 /* Build configuration list for PBXNativeTarget "RUSTRustLog" */;
-			buildPhases = (
-				43BE5794278BA4EA00491291 /* Sources */,
-				43BE5795278BA4EA00491291 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = RUSTRustLog;
-			packageProductDependencies = (
-				43BE5804278BA52C00491291 /* RustLog */,
-			);
-			productName = Shared;
-			productReference = 43BE57A2278BA4EA00491291 /* RUSTRustLog.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		43BE57A4278BA4EB00491291 /* RUSTNimbus */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE57B5278BA4EB00491291 /* Build configuration list for PBXNativeTarget "RUSTNimbus" */;
-			buildPhases = (
-				43BE57AC278BA4EB00491291 /* Sources */,
-				43BE57AD278BA4EB00491291 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = RUSTNimbus;
-			packageProductDependencies = (
-				43BE57A8278BA4EB00491291 /* Nimbus */,
-			);
-			productName = Shared;
-			productReference = 43BE57BA278BA4EB00491291 /* RUSTNimbus.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		43BE57BC278BA4EC00491291 /* RUSTViaduct */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE57CD278BA4EC00491291 /* Build configuration list for PBXNativeTarget "RUSTViaduct" */;
-			buildPhases = (
-				43BE57C4278BA4EC00491291 /* Sources */,
-				43BE57C5278BA4EC00491291 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = RUSTViaduct;
-			packageProductDependencies = (
-				1BE8D1CD278D35E200213777 /* Viaduct */,
-			);
-			productName = Shared;
-			productReference = 43BE57D2278BA4EC00491291 /* RUSTViaduct.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		43BE57D4278BA4ED00491291 /* RUSTPlaces */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE57E5278BA4ED00491291 /* Build configuration list for PBXNativeTarget "RUSTPlaces" */;
-			buildPhases = (
-				43BE57DC278BA4ED00491291 /* Sources */,
-				43BE57DD278BA4ED00491291 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = RUSTPlaces;
-			packageProductDependencies = (
-				43BE57D9278BA4ED00491291 /* Places */,
-			);
-			productName = Shared;
-			productReference = 43BE57EA278BA4ED00491291 /* RUSTPlaces.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		43BE57EC278BA50600491291 /* RUSTFxAClient */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43BE57FD278BA50600491291 /* Build configuration list for PBXNativeTarget "RUSTFxAClient" */;
-			buildPhases = (
-				43BE57F4278BA50600491291 /* Sources */,
-				43BE57F5278BA50600491291 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = RUSTFxAClient;
-			packageProductDependencies = (
-				43BE57ED278BA50600491291 /* FxAClient */,
-			);
-			productName = Shared;
-			productReference = 43BE5802278BA50600491291 /* RUSTFxAClient.framework */;
+			productReference = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7BEB64401C7345600092C02E /* L10nSnapshotTests */ = {
@@ -7764,12 +7534,7 @@
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
 				3B43E3CF1D95C48D00BBA9DB /* StoragePerfTests */,
 				E69DB07C1E97DEA9008A67E6 /* SyncTelemetryTests */,
-				43BE5774278BA4D900491291 /* RUSTLogins */,
-				43BE578C278BA4EA00491291 /* RUSTRustLog */,
-				43BE57A4278BA4EB00491291 /* RUSTNimbus */,
-				43BE57BC278BA4EC00491291 /* RUSTViaduct */,
-				43BE57D4278BA4ED00491291 /* RUSTPlaces */,
-				43BE57EC278BA50600491291 /* RUSTFxAClient */,
+				43BE5774278BA4D900491291 /* RustMozillaAppServices */,
 				4368F81C279665220013419B /* Sentry */,
 				4368F83E279669740013419B /* Snapkit */,
 				4368F86F27966E810013419B /* SDWebImage */,
@@ -8511,41 +8276,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		43BE5794278BA4EA00491291 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57AC278BA4EB00491291 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57C4278BA4EC00491291 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57DC278BA4ED00491291 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43BE57F4278BA50600491291 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7BEB64431C7345600092C02E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -9239,11 +8969,6 @@
 			isa = PBXTargetDependency;
 			target = 4368F86F27966E810013419B /* SDWebImage */;
 			targetProxy = 4368F88527966F350013419B /* PBXContainerItemProxy */;
-		};
-		43BE5814278BAF9A00491291 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43BE57D4278BA4ED00491291 /* RUSTPlaces */;
-			targetProxy = 43BE5813278BAF9A00491291 /* PBXContainerItemProxy */;
 		};
 		43EFA63E2786562600400DF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -12302,7 +12027,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = "$(SRCROOT)/RustLogins-Info.plist";
+				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12324,7 +12049,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustLogins-Info.plist";
+				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12347,7 +12072,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/RustLogins-Info.plist";
+				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -12369,457 +12094,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustLogins-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
-		43BE579E278BA4EA00491291 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = "$(SRCROOT)/RustRustLog-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		43BE579F278BA4EA00491291 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustRustLog-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		43BE57A0278BA4EA00491291 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/RustRustLog-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		43BE57A1278BA4EA00491291 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustRustLog-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
-		43BE57B6278BA4EB00491291 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = "$(SRCROOT)/RustNimbus-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		43BE57B7278BA4EB00491291 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustNimbus-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		43BE57B8278BA4EB00491291 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/RustNimbus-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		43BE57B9278BA4EB00491291 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustNimbus-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
-		43BE57CE278BA4EC00491291 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = "$(SRCROOT)/RustViaDuct-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		43BE57CF278BA4EC00491291 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustViaDuct-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		43BE57D0278BA4EC00491291 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/RustViaDuct-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		43BE57D1278BA4EC00491291 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustViaDuct-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
-		43BE57E6278BA4ED00491291 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = "$(SRCROOT)/RustPlaces-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		43BE57E7278BA4ED00491291 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustPlaces-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		43BE57E8278BA4ED00491291 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/RustPlaces-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		43BE57E9278BA4ED00491291 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustPlaces-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
-		43BE57FE278BA50600491291 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = "$(SRCROOT)/RustFxAClient-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		43BE57FF278BA50600491291 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustFxAClient-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		43BE5800278BA50600491291 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/RustFxAClient-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		43BE5801278BA50600491291 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				INFOPLIST_FILE = "$(SRCROOT)/RustFxAClient-Info.plist";
+				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -14111,68 +13386,13 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RUSTLogins" */ = {
+		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RustMozillaAppServices" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				43BE5786278BA4D900491291 /* Fennec */,
 				43BE5787278BA4D900491291 /* Fennec_Enterprise */,
 				43BE5788278BA4D900491291 /* Firefox */,
 				43BE5789278BA4D900491291 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		43BE579D278BA4EA00491291 /* Build configuration list for PBXNativeTarget "RUSTRustLog" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43BE579E278BA4EA00491291 /* Fennec */,
-				43BE579F278BA4EA00491291 /* Fennec_Enterprise */,
-				43BE57A0278BA4EA00491291 /* Firefox */,
-				43BE57A1278BA4EA00491291 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		43BE57B5278BA4EB00491291 /* Build configuration list for PBXNativeTarget "RUSTNimbus" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43BE57B6278BA4EB00491291 /* Fennec */,
-				43BE57B7278BA4EB00491291 /* Fennec_Enterprise */,
-				43BE57B8278BA4EB00491291 /* Firefox */,
-				43BE57B9278BA4EB00491291 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		43BE57CD278BA4EC00491291 /* Build configuration list for PBXNativeTarget "RUSTViaduct" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43BE57CE278BA4EC00491291 /* Fennec */,
-				43BE57CF278BA4EC00491291 /* Fennec_Enterprise */,
-				43BE57D0278BA4EC00491291 /* Firefox */,
-				43BE57D1278BA4EC00491291 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		43BE57E5278BA4ED00491291 /* Build configuration list for PBXNativeTarget "RUSTPlaces" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43BE57E6278BA4ED00491291 /* Fennec */,
-				43BE57E7278BA4ED00491291 /* Fennec_Enterprise */,
-				43BE57E8278BA4ED00491291 /* Firefox */,
-				43BE57E9278BA4ED00491291 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		43BE57FD278BA50600491291 /* Build configuration list for PBXNativeTarget "RUSTFxAClient" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43BE57FE278BA50600491291 /* Fennec */,
-				43BE57FF278BA50600491291 /* Fennec_Enterprise */,
-				43BE5800278BA50600491291 /* Firefox */,
-				43BE5801278BA50600491291 /* FirefoxBeta */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
@@ -14331,7 +13551,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 87.2.0;
+				version = 91.0.1;
 			};
 		};
 		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
@@ -14363,7 +13583,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 91.0.0;
+				version = 91.0.1;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -14414,38 +13634,6 @@
 				kind = branch;
 			};
 		};
-		43BE5776278BA4D900491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
-			};
-		};
-		43BE57A6278BA4EB00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
-			};
-		};
-		43BE57D6278BA4ED00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
-			};
-		};
-		43BE57EE278BA50600491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 91.0.0;
-			};
-		};
 		43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nbhasin2/MappaMundi.git";
@@ -14471,11 +13659,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */;
 			productName = Telemetry;
-		};
-		1BE8D1CD278D35E200213777 /* Viaduct */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Viaduct;
 		};
 		1BE9ECC927176FEA00D729BB /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -14532,6 +13715,11 @@
 			package = 4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
 		};
+		43A878FB27AB498E0071C372 /* MozillaAppServices */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = MozillaAppServices;
+		};
 		43AFC0DB279678A80039DDF4 /* XCGLogger */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
@@ -14541,31 +13729,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
-		};
-		43BE5777278BA4D900491291 /* Logins */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43BE5776278BA4D900491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Logins;
-		};
-		43BE57A8278BA4EB00491291 /* Nimbus */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43BE57A6278BA4EB00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Nimbus;
-		};
-		43BE57D9278BA4ED00491291 /* Places */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43BE57D6278BA4ED00491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Places;
-		};
-		43BE57ED278BA50600491291 /* FxAClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43BE57EE278BA50600491291 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = FxAClient;
-		};
-		43BE5804278BA52C00491291 /* RustLog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = RustLog;
 		};
 		43C6A47E27A0679300C79856 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;

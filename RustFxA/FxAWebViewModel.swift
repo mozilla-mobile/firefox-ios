@@ -5,7 +5,7 @@
 import WebKit
 import Foundation
 import Account
-import FxAClient
+import MozillaAppServices
 import Shared
 
 enum FxAPageType {

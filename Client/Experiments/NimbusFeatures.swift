@@ -6,7 +6,7 @@
 /// Eventually, this file may be auto-generated.
 
 import Foundation
-import Nimbus
+import MozillaAppServices
 
 // This struct is populated from JSON coming from nimbus, with for `homescreen`
 // feature id. The default values (i.e. user isn't enrolled in an experiment, or

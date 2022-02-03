@@ -8,7 +8,7 @@ import Sync
 import XCGLogger
 import UserNotifications
 import Account
-import FxAClient
+import MozillaAppServices
 
 private let log = Logger.browserLogger
 

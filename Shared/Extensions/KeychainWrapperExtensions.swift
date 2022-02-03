@@ -4,7 +4,7 @@
 
 import Foundation
 import XCGLogger
-import FxAClient
+import MozillaAppServices
 
 private let log = Logger.keychainLogger
 

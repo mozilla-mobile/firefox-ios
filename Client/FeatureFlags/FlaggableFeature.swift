@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
-import Nimbus
+import MozillaAppServices
 import UIKit
 
 struct FlaggableFeature {
