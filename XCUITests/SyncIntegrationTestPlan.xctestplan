@@ -4,11 +4,15 @@
       "id" : "FB8FB2A0-E461-4F52-AE3D-FB5F222D5262",
       "name" : "Configuration 1",
       "options" : {
+        "environmentVariableEntries" : [
 
+        ],
+        "targetForVariableExpansion" : null
       }
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : false,
     "commandLineArgumentEntries" : [
       {
         "argument" : "FIREFOX_CLEAR_PROFILE"
@@ -19,10 +23,12 @@
     ],
     "environmentVariableEntries" : [
       {
+        "enabled" : false,
         "key" : "FXA_PASSWORD",
         "value" : "$(FXA_PASSWORD)"
       },
       {
+        "enabled" : false,
         "key" : "FXA_EMAIL",
         "value" : "$(FXA_EMAIL)"
       }
