@@ -11,15 +11,17 @@ import Shared
 class HistoryHighlightsTests: XCTestCase {
     typealias manager = HistoryHighlightsManager
 
-    var profile: MockProfile!
-    var tabManager: TabManager!
+    private var profile: MockProfile!
+    private var tabManager: TabManager!
 
     override func setUp() {
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
+        profile._reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
     }
 
     override func tearDown() {
+        profile._shutdown()
         profile = nil
         tabManager = nil
     }
@@ -59,16 +61,13 @@ class HistoryHighlightsTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func testSingleHistoryHighlightExists() {
+    func testHistoryHighlightExists() {
         emptyDB()
 
-        let testSites = ["mozilla", "wikipedia", "amazon"]
-
-        for siteText in testSites {
-            let site = createWebsiteEntry(named: siteText)
-            add(site: site)
-            setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
-        }
+        let testSites = [("mozilla", ""),
+                         ("wikipedia", ""),
+                         ("amazon", "")]
+        createHistoryEntry(siteEntry: testSites)
 
         let expectation = expectation(description: "Highlights")
         let expectedCount = 3
@@ -80,23 +79,53 @@ class HistoryHighlightsTests: XCTestCase {
                 return
             }
 
-            XCTAssertEqual(highlights.count, expectedCount, "There should be one history highlight")
+            XCTAssertEqual(highlights.count, expectedCount, "There should be three history highlight")
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func testSingleHistoryHighlightExists_RemovingExistingTab() {
+    func testHistoryHighlightCount_ForMoreThanNineResult() {
         emptyDB()
 
-        let testSites = ["mozilla", "wikipedia", "amazon"]
+        let testSites = [("mozilla", ""),
+                         ("wikipedia", ""),
+                         ("amazon", ""),
+                         ("github", ""),
+                         ("google", ""),
+                         ("facebook", ""),
+                         ("testSite1", ""),
+                         ("testSite2", ""),
+                         ("testSite3", ""),
+                         ("testSite4", ""),
+                         ("testSite5", "")]
+        createHistoryEntry(siteEntry: testSites)
 
-        for siteText in testSites {
-            let site = createWebsiteEntry(named: siteText)
-            add(site: site)
-            setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
+        let expectation = expectation(description: "Highlights")
+        let expectedCount = 9
+
+        manager.getHighlightsData(with: profile, and: [Tab]()) { highlights in
+
+            guard let highlights = highlights else {
+                XCTFail("Highlights should not be nil.")
+                return
+            }
+
+            XCTAssertEqual(highlights.count, expectedCount, "There should be nine history highlight")
+            expectation.fulfill()
         }
+
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func testSingleHistoryHighlightExists_RemovingOpenTab() {
+        emptyDB()
+
+        let testSites = [("mozilla", ""),
+                         ("wikipedia", ""),
+                         ("amazon", "")]
+        createHistoryEntry(siteEntry: testSites)
 
         let tabs = createTabs(named: "mozilla")
 
@@ -110,8 +139,7 @@ class HistoryHighlightsTests: XCTestCase {
                 return
             }
 
-            XCTAssertEqual(highlights.count, expectedCount, "There should be one history highlight")
-            XCTAssertEqual(highlights.count, expectedCount, "There should be one history highlight")
+            XCTAssertEqual(highlights.count, expectedCount, "There should be two history highlight")
             expectation.fulfill()
         }
 
@@ -124,17 +152,13 @@ class HistoryHighlightsTests: XCTestCase {
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
                          ("amazon", ""),
-                         ("mozilla", "redirect"),
-                         ("amazon", "redirect")]
-
-        for (domain, suffix) in testSites {
-            let site = createWebsiteEntry(named: domain, with: suffix)
-            add(site: site)
-            setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
-        }
+                         ("mozilla", "/redirect"),
+                         ("amazon", "/redirect")]
+        createHistoryEntry(siteEntry: testSites)
 
         let expectation = expectation(description: "Highlights")
-        let expectedCount = 2
+        // 2 groups and 1 invidual item
+        let expectedCount = 3
 
         manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
 
@@ -143,7 +167,7 @@ class HistoryHighlightsTests: XCTestCase {
                 return
             }
 
-            XCTAssertEqual(highlights.count, expectedCount, "There should be one history highlight")
+            XCTAssertEqual(highlights.count, expectedCount, "There should be three history highlight")
             expectation.fulfill()
         }
 
@@ -157,6 +181,14 @@ class HistoryHighlightsTests: XCTestCase {
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess)
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess)
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess)
+    }
+
+    private func createHistoryEntry(siteEntry: [(String, String)]) {
+        for (siteText, suffix) in siteEntry {
+            let site = createWebsiteEntry(named: siteText, with: suffix)
+            add(site: site)
+            setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
+        }
     }
 
     private func createWebsiteEntry(named name: String, with sufix: String = "") -> Site {
@@ -173,6 +205,11 @@ class HistoryHighlightsTests: XCTestCase {
 
         let urlRequest = URLRequest(url: url)
         return tabManager.addTab(urlRequest)
+    }
+
+    private func add(site: Site) {
+        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
+        XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
     }
 
     private func setupData(forTestURL siteURL: String, withTitle title: String, andViewTime viewTime: Int32) {
@@ -207,10 +244,5 @@ class HistoryHighlightsTests: XCTestCase {
                 title: nil
             )
         ).value.isSuccess)
-    }
-
-    private func add(site: Site) {
-        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
-        XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
     }
 }

@@ -31,13 +31,6 @@ class HistoryHighlightsManager {
 
     // MARK: - Public interface
     
-    // Get highlights
-    // Filter from highlights
-    // Have a toggle to include groups
-    // Group highlights
-    // Collate single items & groups
-    // return top 9
-
     public static func getHighlightsData(with profile: Profile,
                                          and tabs: [Tab],
                                          shouldGroupHighlights: Bool = false,
@@ -52,19 +45,21 @@ class HistoryHighlightsManager {
 
             // Filter from highlights
             let filterHighlights = highlights.filter { highlights in
+                // can't filter on host because we want the unique url
                 !tabs.contains { highlights.urlFromString?.host == $0.url?.host }
             }
 
             // Build groups
-            buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
+            if shouldGroupHighlights {
+                buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
 
-                let collatedHighlights = collateForRecentlySaved(from: groups, and: filterHighlights)
-                if collatedHighlights.count > defaultHighlightCount {
-                    completion(Array(collatedHighlights[0...8]))
-                } else {
-                    completion(collatedHighlights)
+                    let collatedHighlights = collateForRecentlySaved(from: groups, and: filterHighlights)
+                    completion(Array(collatedHighlights.prefix(9)))
                 }
+            } else {
+                completion(Array(filterHighlights.prefix(9)))
             }
+
         }
     }
 
@@ -86,16 +81,9 @@ class HistoryHighlightsManager {
 
     // MARK: - Helper functions
 
-
     private static func buildSearchGroups(with profile: Profile,
                                           and highlights: [HistoryHighlight],
                                           completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void) {
-
-        guard shouldGroupHighlights else {
-            completion(nil, highlights)
-            return
-        }
-
         SearchTermGroupsManager.getHighlightGroups(with: profile,
                                                    from: highlights,
                                                    using: .orderedAscending) { groups, filteredItems in
@@ -103,16 +91,27 @@ class HistoryHighlightsManager {
         }
     }
 
-    private static func collateForRecentlySaved(from groups: [ASGroup<HistoryHighlight>]?,
-                                                and sites: [HistoryHighlight]) -> [HighlightItem] {
-        guard let groups = groups, !groups.isEmpty else { return sites }
 
-        var highlightItems: [HighlightItem] = sites
+    /// Collate a history highlight group and individual highlight, the result array alternates them starting with individual highlights. In case one of the items is done we append the content of remaining source
+    /// - Parameters:
+    ///   - groups: Search Groups of history highlights
+    ///   - sites: Individual highlights sites
+    /// - Returns: A  highlight items arrray alternating highlight sites and search groups
+    private static func collateForRecentlySaved(from groups: [ASGroup<HistoryHighlight>]?,
+                                                and highlights: [HistoryHighlight]) -> [HighlightItem] {
+        guard let groups = groups, !groups.isEmpty else { return highlights }
+
+        var highlightItems: [HighlightItem] = highlights
 
         for (index, group) in groups.enumerated() {
+            // add documentation
             let insertIndex = (index * 2) + 1
-//            if insertIndex < 
-            highlightItems.insert(group, at: insertIndex)
+            if insertIndex < highlightItems.count {
+                highlightItems.insert(group, at: insertIndex)
+            } else {
+                highlightItems.append(contentsOf: groups)
+                break
+            }
         }
 
         return highlightItems
