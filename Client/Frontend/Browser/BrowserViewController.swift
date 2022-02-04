@@ -630,7 +630,9 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
+        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
+        let spacerHeight = keyboardHeight - toolBarHeight
         footer.addSpacer(at: 1, spacerHeight: spacerHeight)
     }
 

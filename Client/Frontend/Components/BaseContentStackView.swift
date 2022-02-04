@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import SnapKit
 
 protocol AlphaDimmable {
     func updateAlphaForSubviews(_ alpha: CGFloat)
@@ -36,23 +37,33 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 
     // MARK: - Spacer view
 
+    private var keyboardSpacerHeight: Constraint!
     private var keyboardSpacer: UIView?
 
     func addSpacer(at index: Int, spacerHeight: CGFloat) {
-        guard keyboardSpacer == nil else { return }
+        guard keyboardSpacer == nil else {
+            setKeyboardSpacerHeight(height: spacerHeight)
+            return
+        }
 
         keyboardSpacer = UIView()
         keyboardSpacer?.backgroundColor = .clear
-        keyboardSpacer!.snp.makeConstraints { make in
-            make.height.equalTo(spacerHeight)
-        }
+        setKeyboardSpacerHeight(height: spacerHeight)
         insertArrangedView(keyboardSpacer!, position: 1)
     }
 
     func removeSpacer() {
         guard let keyboardSpacer = self.keyboardSpacer else { return }
         removeArrangedView(keyboardSpacer)
+        keyboardSpacerHeight = nil
         self.keyboardSpacer = nil
+    }
+
+    private func setKeyboardSpacerHeight(height: CGFloat) {
+        guard let keyboardSpacer = self.keyboardSpacer else { return }
+        keyboardSpacer.snp.makeConstraints { make in
+            keyboardSpacerHeight = make.height.equalTo(height).constraint
+        }
     }
 
     // MARK: - NotificationThemeable
