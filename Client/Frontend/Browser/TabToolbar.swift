@@ -346,6 +346,8 @@ class TabToolbar: UIView {
     }
 
     override func draw(_ rect: CGRect) {
+        // No line when the search bar is on top of the toolbar
+        guard !BrowserViewController.foregroundBVC().isBottomSearchBar else { return }
         if let context = UIGraphicsGetCurrentContext() {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
         }

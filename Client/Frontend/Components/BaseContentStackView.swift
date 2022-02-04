@@ -40,19 +40,18 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
     private var keyboardSpacerHeight: Constraint!
     private var keyboardSpacer: UIView?
 
-    func addSpacer(at index: Int, spacerHeight: CGFloat) {
+    func addKeyboardSpacer(at index: Int, spacerHeight: CGFloat) {
         guard keyboardSpacer == nil else {
             setKeyboardSpacerHeight(height: spacerHeight)
             return
         }
 
         keyboardSpacer = UIView()
-        keyboardSpacer?.backgroundColor = .clear
         setKeyboardSpacerHeight(height: spacerHeight)
         insertArrangedView(keyboardSpacer!, position: 1)
     }
 
-    func removeSpacer() {
+    func removeKeyboardSpacer() {
         guard let keyboardSpacer = self.keyboardSpacer else { return }
         removeArrangedView(keyboardSpacer)
         keyboardSpacerHeight = nil
@@ -64,6 +63,28 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
         keyboardSpacer.snp.makeConstraints { make in
             keyboardSpacerHeight = make.height.equalTo(height).constraint
         }
+    }
+
+    // MARK: - Spacer view
+
+    private var insetSpacer: UIView?
+
+    func addBottomInsetSpacer(spacerHeight: CGFloat) {
+        guard insetSpacer == nil else { return }
+
+        insetSpacer = UIView()
+        insetSpacer!.snp.makeConstraints { make in
+            make.height.equalTo(spacerHeight)
+        }
+        addArrangedViewToBottom(insetSpacer!)
+    }
+
+    func removeBottomInsetSpacer() {
+        guard let insetSpacer = self.insetSpacer else { return }
+
+        removeArrangedView(insetSpacer)
+        self.insetSpacer = nil
+        self.layoutIfNeeded()
     }
 
     // MARK: - NotificationThemeable
@@ -82,7 +103,10 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 }
 
 extension BaseAlphaStackView: NotificationThemeable {
+
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
+        keyboardSpacer?.backgroundColor = UIColor.theme.browser.background
+        insetSpacer?.backgroundColor = UIColor.theme.browser.background
     }
 }

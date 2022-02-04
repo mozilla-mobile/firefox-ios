@@ -207,6 +207,7 @@ class URLBarView: UIView, AlphaDimmable {
         super.init(coder: aDecoder)
         commonInit()
     }
+
     func updateSearchEngineImage() {
         guard let profile = profile else { return }
         self.searchIconImageView.image = profile.searchEngines.defaultEngine.image
@@ -216,11 +217,11 @@ class URLBarView: UIView, AlphaDimmable {
         locationContainer.addSubview(locationView)
         
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton, multiStateButton, locationContainer].forEach {
+         homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton,
+         multiStateButton, locationContainer, searchIconImageView].forEach {
             addSubview($0)
         }
 
-        addSubview(searchIconImageView)
         updateSearchEngineImage()
         
         privateModeBadge.add(toParent: self)
@@ -237,20 +238,26 @@ class URLBarView: UIView, AlphaDimmable {
     fileprivate func setupConstraints() {
 
         line.snp.makeConstraints { make in
-            make.bottom.leading.trailing.equalTo(self)
+            if BrowserViewController.foregroundBVC().isBottomSearchBar {
+                make.top.equalTo(self).offset(1)
+            } else {
+                make.bottom.equalTo(self)
+            }
+
+            make.leading.trailing.equalTo(self)
             make.height.equalTo(1)
         }
 
         scrollToTopButton.snp.makeConstraints { make in
             make.top.equalTo(self)
-            make.left.right.equalTo(self.locationContainer)
+            make.left.right.equalTo(locationContainer)
         }
 
         progressBar.snp.makeConstraints { make in
             if BrowserViewController.foregroundBVC().isBottomSearchBar {
-                make.bottom.equalTo(self.snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
+                make.bottom.equalTo(snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
             } else {
-                make.top.equalTo(self.snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
+                make.top.equalTo(snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
             }
 
             make.height.equalTo(URLBarViewUX.ProgressBarHeight)

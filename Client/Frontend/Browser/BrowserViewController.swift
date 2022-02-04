@@ -209,7 +209,7 @@ class BrowserViewController: UIViewController {
         toolbar.warningMenuBadge(setVisible: showWarningBadge)
     }
 
-    let isBottomSearchBar = false // TODO: #9419 Laurie - This will be a setting, only available to iPhone
+    let isBottomSearchBar = true // TODO: #9419 Laurie - This will be a setting, only available to iPhone
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
         let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
@@ -626,21 +626,32 @@ class BrowserViewController: UIViewController {
     private func adjustBottomSearchBarForKeyboard() {
         guard isBottomSearchBar else { return }
         guard let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 else {
-            footer.removeSpacer()
+            footer.removeKeyboardSpacer()
             return
         }
 
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
-        footer.addSpacer(at: 1, spacerHeight: spacerHeight)
+        footer.addKeyboardSpacer(at: 1, spacerHeight: spacerHeight)
     }
 
+    /// Used for dynamic type height adjustment
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
         // Make sure that we have a height to actually base our calculations on
         guard urlBar.locationContainer.bounds.height != 0 else { return }
         let locationViewHeight = urlBar.locationView.bounds.height
         let heightWithPadding = locationViewHeight + 10
+
+        // Adjustment for landscape on the urlbar
+        // need to account for inset and remove it when keyboard is showing
+        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        let isKeyboardShowing = keyboardState != nil
+        if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
+            footer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else {
+            footer.removeBottomInsetSpacer()
+        }
 
         // We have to deactivate the original constraint, and remake the constraint
         // or else funky conflicts happen
