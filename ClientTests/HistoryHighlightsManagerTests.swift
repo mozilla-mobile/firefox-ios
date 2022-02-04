@@ -37,12 +37,13 @@ class HistoryHighlightsTests: XCTestCase {
 
     func testSingleDataExists() {
         emptyDB()
-        setupData(forTestURL: "https://www.mozilla.com", withTitle: "Mozilla Test", andViewTime: 1)
+        setupData(forTestURL: "https://www.mozilla.com/", withTitle: "Mozilla Test", andViewTime: 1)
 
         let singleItemRead = profile.places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(singleItemRead.isSuccess)
         XCTAssertNotNil(singleItemRead.successValue)
         XCTAssertEqual(singleItemRead.successValue!.count, 1)
+        XCTAssertEqual(singleItemRead.successValue![0].url, "https://www.mozilla.com/")
         XCTAssertEqual(singleItemRead.successValue![0].title, "Mozilla Test")
         XCTAssertEqual(singleItemRead.successValue![0].documentType, DocumentType.regular)
         XCTAssertEqual(singleItemRead.successValue![0].totalViewTime, 1)
@@ -146,14 +147,14 @@ class HistoryHighlightsTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func testSingleHistoryHighlightExists_withGroupingEnabled() {
+    func testSingleHistoryHighlightCount_withGroupingEnabled() {
         emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
                          ("amazon", ""),
-                         ("mozilla", "/redirect"),
-                         ("amazon", "/redirect")]
+                         ("mozilla", "group"),
+                         ("amazon", "group")]
         createHistoryEntry(siteEntry: testSites)
 
         let expectation = expectation(description: "Highlights")
@@ -168,6 +169,34 @@ class HistoryHighlightsTests: XCTestCase {
             }
 
             XCTAssertEqual(highlights.count, expectedCount, "There should be three history highlight")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func testSingleHistoryHighlightOrfrt_withGroupingEnabled() {
+        emptyDB()
+
+        let testSites = [("mozilla", ""),
+                         ("wikipedia", ""),
+                         ("amazon", ""),
+                         ("mozilla", "/group"),
+                         ("amazon", "/group")]
+        createHistoryEntry(siteEntry: testSites)
+
+        let expectation = expectation(description: "Highlights")
+
+        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+
+            guard let highlights = highlights else {
+                XCTFail("Highlights should not be nil.")
+                return
+            }
+
+            XCTAssertNotNil((highlights[0] as? HistoryHighlight), "Expected History highlight as the first item")
+            XCTAssertNotNil((highlights[1] as? ASGroup<HistoryHighlight>), "Expected group as second item")
+            XCTAssertNotNil((highlights[2] as? ASGroup<HistoryHighlight>), "Expected group as second item")
             expectation.fulfill()
         }
 
@@ -192,14 +221,14 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     private func createWebsiteEntry(named name: String, with sufix: String = "") -> Site {
-        let urlString = "https://www.\(name).com\(sufix)"
+        let urlString = "https://www.\(name).com/\(sufix)"
         let urlTitle = "\(name) test"
 
         return Site(url: urlString, title: urlTitle)
     }
 
     private func createTabs(named name: String) -> Tab {
-        guard let url = URL(string:"https://www.\(name).com") else {
+        guard let url = URL(string:"https://www.\(name).com/") else {
             return tabManager.addTab()
         }
 

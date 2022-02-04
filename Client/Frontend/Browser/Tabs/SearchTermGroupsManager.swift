@@ -11,10 +11,6 @@ struct ASGroup<T> {
     var searchTerm: String
     var groupedItems: [T]
     var timestamp: Timestamp
-    // Yoana
-    // This will need average weight as optional from the `HistoryHighlight` weight
-    // alse make timestamp optional
-    // inside STGM, differentiate that
 }
 
 class SearchTermGroupsManager {

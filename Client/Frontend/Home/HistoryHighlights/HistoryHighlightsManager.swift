@@ -46,7 +46,7 @@ class HistoryHighlightsManager {
             // Filter from highlights
             let filterHighlights = highlights.filter { highlights in
                 // can't filter on host because we want the unique url
-                !tabs.contains { highlights.urlFromString?.host == $0.url?.host }
+                !tabs.contains { highlights.urlFromString == $0.url }
             }
 
             // Build groups
