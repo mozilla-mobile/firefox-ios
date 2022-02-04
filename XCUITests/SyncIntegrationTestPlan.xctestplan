@@ -5,9 +5,20 @@
       "name" : "Configuration 1",
       "options" : {
         "environmentVariableEntries" : [
-
+          {
+            "key" : "FXA_EMAIL",
+            "value" : "$(FXA_EMAIL)"
+          },
+          {
+            "key" : "FXA_PASSWORD",
+            "value" : "$(FXA_PASSWORD)"
+          }
         ],
-        "targetForVariableExpansion" : null
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:Client.xcodeproj",
+          "identifier" : "F84B21BD1A090F8100AAB793",
+          "name" : "Client"
+        }
       }
     }
   ],
