@@ -54,6 +54,7 @@ class BrowserViewController: UIViewController {
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var urlBarHeightConstraint: Constraint!
+    var urlBarHeightConstraintValue: CGFloat?
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
@@ -208,6 +209,7 @@ class BrowserViewController: UIViewController {
         toolbar.warningMenuBadge(setVisible: showWarningBadge)
     }
 
+    let isBottomSearchBar = false // TODO: #9419 Laurie - This will be a setting, only available to iPhone
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
         let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
@@ -234,7 +236,7 @@ class BrowserViewController: UIViewController {
             let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
             topTabsViewController.delegate = self
             addChild(topTabsViewController)
-            header.addArrangedViewToTop(topTabsViewController.view, completion: {})
+            header.addArrangedViewToTop(topTabsViewController.view)
             self.topTabsViewController = topTabsViewController
             topTabsViewController.applyTheme()
 
@@ -416,7 +418,7 @@ class BrowserViewController: UIViewController {
         topTouchArea.addTarget(self, action: #selector(tappedTopArea), for: .touchUpInside)
         view.addSubview(topTouchArea)
 
-        // Temporary work around for covering the non-clipped web view content
+        // Work around for covering the non-clipped web view content
         statusBarOverlay = UIView()
         view.addSubview(statusBarOverlay)
 
@@ -426,13 +428,22 @@ class BrowserViewController: UIViewController {
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
 
-        header.addArrangedSubview(urlBar)
+        if isBottomSearchBar {
+            footer.addArrangedSubview(urlBar)
+        } else {
+            header.addArrangedSubview(urlBar)
+        }
         view.addSubview(header)
-        view.addSubviews(bottomContentStackView)
+        view.addSubview(bottomContentStackView)
 
         toolbar = TabToolbar()
         footer.addArrangedSubview(toolbar)
         view.addSubview(footer)
+
+        // Laurie - Remove, used to debug
+        header.accessibilityLabel = "HEADER"
+        footer.accessibilityLabel = "FOOTER"
+        bottomContentStackView.accessibilityLabel = "ALERT STACKVIEW"
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -535,8 +546,13 @@ class BrowserViewController: UIViewController {
         }
 
         header.snp.makeConstraints { make in
-            scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
-            make.left.right.equalTo(self.view)
+            if isBottomSearchBar {
+                make.left.right.top.equalTo(self.view)
+                make.height.equalTo(0) // Setting to 0 since no content will be added to the top
+            } else {
+                scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
+                make.left.right.equalTo(self.view)
+            }
         }
 
         webViewContainerBackdrop.snp.makeConstraints { make in
@@ -580,23 +596,42 @@ class BrowserViewController: UIViewController {
             make.bottom.equalTo(footer.snp.top)
         }
 
-        bottomContentStackView.snp.remakeConstraints { make in
-            make.left.right.equalTo(view)
-            make.centerX.equalTo(view)
-            make.width.equalTo(view.safeArea.width)
-
-            // Height is set by content - this removes run time error
-            make.height.greaterThanOrEqualTo(0)
-
-            if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
-                make.bottom.equalTo(view).offset(-keyboardHeight)
-            } else if !toolbar.isHidden {
-                make.bottom.lessThanOrEqualTo(footer.snp.top)
-                make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
-            } else {
-                make.bottom.equalTo(view.safeArea.bottom)
-            }
+        bottomContentStackView.snp.remakeConstraints  { make in
+            adjustBottomContentStackView(make)
         }
+
+        adjustBottomSearchBarForKeyboard()
+    }
+
+    private func adjustBottomContentStackView(_ make: ConstraintMaker) {
+        make.left.right.equalTo(view)
+        make.centerX.equalTo(view)
+        make.width.equalTo(view.safeArea.width)
+
+        // Height is set by content - this removes run time error
+        make.height.greaterThanOrEqualTo(0)
+        bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+
+        if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
+            let searchBarAdjustment = isBottomSearchBar ? urlBarHeightConstraintValue ?? 0 : 0
+            make.bottom.equalTo(view).offset(-keyboardHeight - searchBarAdjustment)
+        } else if !toolbar.isHidden {
+            make.bottom.lessThanOrEqualTo(footer.snp.top)
+            make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
+        } else {
+            make.bottom.equalTo(view.safeArea.bottom)
+        }
+    }
+
+    private func adjustBottomSearchBarForKeyboard() {
+        guard isBottomSearchBar else { return }
+        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 else {
+            footer.removeSpacer()
+            return
+        }
+
+        let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
+        footer.addSpacer(at: 1, spacerHeight: spacerHeight)
     }
 
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
@@ -611,6 +646,7 @@ class BrowserViewController: UIViewController {
         urlBar.snp.makeConstraints { make in
             let height = heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
             urlBarHeightConstraint = make.height.equalTo(height).constraint
+            urlBarHeightConstraintValue = height
         }
     }
 
@@ -870,8 +906,15 @@ class BrowserViewController: UIViewController {
         addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.snp.makeConstraints { make in
-            make.top.equalTo(self.header.snp.bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.top.equalTo(header.snp.bottom)
+            make.left.right.bottom.equalTo(view)
+            // TODO: Laurie - make it possible for search bar
+//            make.left.right.equalTo(view)
+
+//            // Account for search bar if at bottom
+//            let urlBarHeight = urlBarHeightConstraintValue ?? 0
+//            let offSet = isBottomSearchBar ? urlBarHeight : 0
+//            make.bottom.equalTo(view).offset(-offSet)
         }
 
         firefoxHomeViewController?.view?.isHidden = true
@@ -880,12 +923,11 @@ class BrowserViewController: UIViewController {
     }
 
     func hideSearchController() {
-        if let searchController = self.searchController {
-            searchController.willMove(toParent: nil)
-            searchController.view.removeFromSuperview()
-            searchController.removeFromParent()
-            firefoxHomeViewController?.view?.isHidden = false
-        }
+        guard let searchController = self.searchController else { return }
+        searchController.willMove(toParent: nil)
+        searchController.view.removeFromSuperview()
+        searchController.removeFromParent()
+        firefoxHomeViewController?.view?.isHidden = false
     }
 
     func destroySearchController() {

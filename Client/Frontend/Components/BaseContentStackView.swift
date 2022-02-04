@@ -12,7 +12,10 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        applyTheme()
         setupStyle()
+        setupObservers()
     }
 
     required init(coder: NSCoder) {
@@ -27,8 +30,48 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
     }
 
     private func setupStyle() {
-        backgroundColor = .clear
         axis = .vertical
         distribution = .fillProportionally
+    }
+
+    // MARK: - Spacer view
+
+    private var keyboardSpacer: UIView?
+
+    func addSpacer(at index: Int, spacerHeight: CGFloat) {
+        guard keyboardSpacer == nil else { return }
+
+        keyboardSpacer = UIView()
+        keyboardSpacer?.backgroundColor = .clear
+        keyboardSpacer!.snp.makeConstraints { make in
+            make.height.equalTo(spacerHeight)
+        }
+        insertArrangedView(keyboardSpacer!, position: 1)
+    }
+
+    func removeSpacer() {
+        guard let keyboardSpacer = self.keyboardSpacer else { return }
+        removeArrangedView(keyboardSpacer)
+        self.keyboardSpacer = nil
+    }
+
+    // MARK: - NotificationThemeable
+
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+    }
+
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+}
+
+extension BaseAlphaStackView: NotificationThemeable {
+    func applyTheme() {
+        backgroundColor = UIColor.theme.browser.background
     }
 }

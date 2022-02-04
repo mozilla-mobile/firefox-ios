@@ -3,6 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
+
+private let log = Logger.browserLogger
 
 extension UIStackView {
 
@@ -15,24 +18,23 @@ extension UIStackView {
         UIView.animate(withDuration: 0.1, animations: { self.isHidden = false })
     }
 
-    func addArrangedViewToTop(_ view: UIView, animated: Bool = true, completion: @escaping () -> Void) {
-        view.layoutIfNeeded()
-
-        UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
-            self.insertArrangedSubview(view, at: 0)
-        }, completion: { _ in
-            completion()
-        })
+    func addArrangedViewToTop(_ view: UIView, animated: Bool = true, completion: (() -> Void)? = nil) {
+        insertArrangedView(view, position: 0, animated: animated, completion: completion)
     }
 
-    func addArrangedViewToBottom(_ view: UIView, animated: Bool = true, completion: @escaping () -> Void) {
-        view.layoutIfNeeded()
+    func addArrangedViewToBottom(_ view: UIView, animated: Bool = true, completion: (() -> Void)? = nil) {
+        let animateClosure = { self.addArrangedSubview(view) }
+        animateAddingView(view, animateClosure: animateClosure, animated: animated, completion: completion)
+    }
 
-        UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
-            self.addArrangedSubview(view)
-        }, completion: { _ in
-            completion()
-        })
+    func insertArrangedView(_ view: UIView, position: Int, animated: Bool = true, completion: (() -> Void)? = nil) {
+        guard position < arrangedSubviews.count, position >= 0 else {
+            log.warning("Couldn't insert subview \(view.debugDescription) into stackview \(self.debugDescription)")
+            return
+        }
+
+        let animateClosure = { self.insertArrangedSubview(view, at: position) }
+        animateAddingView(view, animateClosure: animateClosure, animated: animated, completion: completion)
     }
 
     func removeArrangedView(_ view: UIView, animated: Bool = true) {
@@ -47,5 +49,18 @@ extension UIStackView {
             self.removeArrangedSubview($0)
             $0.removeFromSuperview()
         }
+    }
+
+    private func animateAddingView(_ view: UIView,
+                                   animateClosure: @escaping () -> Void,
+                                   animated: Bool = true,
+                                   completion: (() -> Void)?) {
+        view.layoutIfNeeded()
+
+        UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
+            animateClosure()
+        }, completion: { _ in
+            completion?()
+        })
     }
 }

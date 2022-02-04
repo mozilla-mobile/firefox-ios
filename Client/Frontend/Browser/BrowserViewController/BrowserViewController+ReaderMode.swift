@@ -70,9 +70,9 @@ extension BrowserViewController {
             readerModeBar.isBottomPresented = isBottomSearchBar
             readerModeBar.delegate = self
             if isBottomSearchBar {
-                footer.addArrangedViewToTop(readerModeBar, completion: {})
+                footer.addArrangedViewToTop(readerModeBar)
             } else {
-                header.addArrangedViewToBottom(readerModeBar, completion: {})
+                header.addArrangedViewToBottom(readerModeBar)
             }
 
             self.readerModeBar = readerModeBar
@@ -177,7 +177,6 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 readerModeStyle = style
             }
 
-            // TODO: Laurie - isBottomPresented
             let readerModeViewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
                                                                readerModeStyle: readerModeStyle)
             let readerModeStyleViewController = ReaderModeStyleViewController.initReaderModeViewController(viewModel: readerModeViewModel)

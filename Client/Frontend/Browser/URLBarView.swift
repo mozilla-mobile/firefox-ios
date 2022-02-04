@@ -247,7 +247,12 @@ class URLBarView: UIView, AlphaDimmable {
         }
 
         progressBar.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
+            if BrowserViewController.foregroundBVC().isBottomSearchBar {
+                make.bottom.equalTo(self.snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
+            } else {
+                make.top.equalTo(self.snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
+            }
+
             make.height.equalTo(URLBarViewUX.ProgressBarHeight)
             make.left.right.equalTo(self)
         }
