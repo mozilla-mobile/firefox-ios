@@ -46,9 +46,9 @@ protocol TabDisplayer: AnyObject {
 }
 
 enum TabDisplaySection: Int, CaseIterable {
+    case inactiveTabs
     case groupedTabs
     case regularTabs
-    case inactiveTabs
 
     var title: String? {
         switch self {
@@ -106,9 +106,11 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
 
     var shouldEnableInactiveTabs: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.inactiveTabs) else { return false }
-
-        return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+        return true
+        
+//        guard featureFlags.isFeatureActiveForBuild(.inactiveTabs) else { return false }
+//
+//        return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
 
     var orderedTabs: [Tab] {
@@ -227,45 +229,51 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
     private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        
         guard !self.isPrivate else {
             self.tabGroups = nil
             self.filteredTabs = allTabs
             completion(nil, allTabs)
             return
         }
+        
         guard tabDisplayType == .TabGrid else {
             self.filteredTabs = allTabs
             completion(nil, allTabs)
             return
         }
-        guard shouldEnableInactiveTabs else {
-            if !self.isPrivate && shouldEnableGroupedTabs {
-                SearchTermGroupsManager.getTabGroups(with: profile,
-                                              from: tabManager.normalTabs,
-                                              using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-                    self.tabGroups = tabGroups
-                    self.filteredTabs = filteredActiveTabs
-                    completion(tabGroups, filteredActiveTabs)
-                }
-                return
-            }
-            self.tabGroups = nil
-            self.filteredTabs = allTabs
-            completion(nil, allTabs)
-            return
-        }
+        
+//        guard shouldEnableInactiveTabs else {
+//            if !self.isPrivate && shouldEnableGroupedTabs {
+//                SearchTermGroupsManager.getTabGroups(with: profile,
+//                                              from: tabManager.normalTabs,
+//                                              using: .orderedAscending) { tabGroups, filteredActiveTabs  in
+//                    self.tabGroups = tabGroups
+//                    self.filteredTabs = filteredActiveTabs
+//                    completion(tabGroups, filteredActiveTabs)
+//                }
+//                return
+//            }
+//            self.tabGroups = nil
+//            self.filteredTabs = allTabs
+//            completion(nil, allTabs)
+//            return
+//        }
+        
         guard allTabs.count > 0, let inactiveViewModel = inactiveViewModel else {
             self.tabGroups = nil
             self.filteredTabs = [Tab]()
             completion(nil, [Tab]())
             return
         }
+        
         guard allTabs.count > 1 else {
             self.tabGroups = nil
             self.filteredTabs = allTabs
             completion(nil, allTabs)
             return
         }
+        
         let selectedTab = tabManager.selectedTab
         // Make sure selected tab has latest time
         selectedTab?.lastExecutedTime = Date.now()
@@ -477,12 +485,12 @@ extension TabDisplayManager: UICollectionViewDataSource {
             return dataStore.count + (tabGroups?.count ?? 0)
         }
         switch TabDisplaySection(rawValue: section) {
+        case .inactiveTabs:
+            return shouldEnableInactiveTabs ? (isPrivate ? 0 : 1) : 0
         case .groupedTabs:
             return shouldEnableGroupedTabs ? (isPrivate ? 0 : 1) : 0
         case .regularTabs:
             return dataStore.count
-        case .inactiveTabs:
-            return shouldEnableInactiveTabs ? (isPrivate ? 0 : 1) : 0
         case .none:
             return 0
         }
@@ -511,6 +519,14 @@ extension TabDisplayManager: UICollectionViewDataSource {
         }
         assert(tabDisplayer != nil)
         switch TabDisplaySection(rawValue: indexPath.section) {
+        case .inactiveTabs:
+            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
+                inactiveCell.inactiveTabsViewModel = inactiveViewModel
+                inactiveCell.hasExpanded = isInactiveViewExpanded
+                inactiveCell.delegate = self
+                inactiveCell.tableView.reloadData()
+                cell = inactiveCell
+            }
         case .groupedTabs:
             if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.Identifier, for: indexPath) as? GroupedTabCell {
                 groupedCell.tabDisplayManagerDelegate = self
@@ -524,14 +540,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
         case .regularTabs:
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
-        case .inactiveTabs:
-            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
-                inactiveCell.inactiveTabsViewModel = inactiveViewModel
-                inactiveCell.hasExpanded = isInactiveViewExpanded
-                inactiveCell.delegate = self
-                inactiveCell.tableView.reloadData()
-                cell = inactiveCell
-            }
         case .none:
             return cell
         }

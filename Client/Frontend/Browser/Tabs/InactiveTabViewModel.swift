@@ -63,7 +63,24 @@ struct InactiveTabModel: Codable {
     }
 }
 
-class InactiveTabViewModel {
+protocol Testable {
+    func testStubSetup()
+}
+
+protocol InactiveTestableTabViewModel: Testable {
+    var isTesting: Bool { get set }
+    var testInactiveTimeOld: Date { get set }
+}
+
+class InactiveTabViewModel: InactiveTestableTabViewModel {
+    var isTesting: Bool = false
+    
+    var testInactiveTimeOld: Date = Date()
+    
+    func testStubSetup() {
+        isTesting = true
+    }
+    
     private var inactiveTabModel = InactiveTabModel()
     private var tabs = [Tab]()
     private var selectedTab: Tab?
@@ -99,13 +116,16 @@ class InactiveTabViewModel {
 
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
-        let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
-
+//        let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
+        let day14_Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+        let min_Old = Calendar.current.date(byAdding: .day, value: 2, to: noon) ?? Date() // testing only
+        let defaultOldDay = min_Old
+        
         for tab in tabs {
             let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
 
-            if tabDate > day4_Old || tabTimeStamp == 0 {
+            if tabDate > defaultOldDay || tabTimeStamp == 0 {
                 activeTabs.append(tab)
             }
         }
@@ -116,8 +136,12 @@ class InactiveTabViewModel {
     private func updateModelState(state: TabUpdateState) {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
-        let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
-        let day30_Old = Calendar.current.date(byAdding: .day, value: -30, to: noon) ?? Date()
+//        let day4_Old = Calendar.current.date(byAdding: .day, value: -4, to: noon) ?? Date()
+//        let day30_Old = Calendar.current.date(byAdding: .day, value: -30, to: noon) ?? Date()
+        
+        let day14_Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+        let min_Old = Calendar.current.date(byAdding: .day, value: 2, to: noon) ?? Date() // testing only
+        let defaultOldDay = min_Old
         
         let hasRunInactiveTabFeatureBefore = InactiveTabModel.hasRunInactiveTabFeatureBefore
         if hasRunInactiveTabFeatureBefore == false { InactiveTabModel.hasRunInactiveTabFeatureBefore = true }
@@ -137,14 +161,31 @@ class InactiveTabViewModel {
             if tabType?.currentState == nil { inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .normal }
             
             if tab == selectedTab && state == .sameSession {
+                
                 inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .normal
-            } else if (tabType?.nextState == .shouldBecomeInactive || tabType?.nextState == .shouldBecomeRecentlyClosed) && state == .sameSession {
+                
+            } else if (tabType?.nextState == .shouldBecomeInactive || tabType?.nextState == .shouldBecomeRecentlyClosed) &&
+                        state == .sameSession {
                 continue
-            } else if tab == selectedTab || tabDate > day4_Old || tabTimeStamp == 0 {
+                
+            } else if tab == selectedTab || tabDate > defaultOldDay || tabTimeStamp == 0 {
                 
                 inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .normal
                 
-            } else if tabDate <= day4_Old && tabDate >= day30_Old {
+            } else if tabDate <= defaultOldDay  {
+                
+                if hasRunInactiveTabFeatureBefore == false {
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = .shouldBecomeInactive
+                } else if state == .coldStart {
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .inactive
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = nil
+                } else if state == .sameSession && tabType?.currentState != .inactive {
+                    inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = .shouldBecomeInactive
+                }
+                
+            }
+            /*
+            else if tabDate <= defaultOldDay && tabDate >= day30_Old {
                 
                 if hasRunInactiveTabFeatureBefore == false {
                     inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = .shouldBecomeInactive
@@ -165,8 +206,8 @@ class InactiveTabViewModel {
                 } else if state == .sameSession && tabType?.currentState != .recentlyClosed {
                     inactiveTabModel.tabWithStatus[tab.tabUUID]?.nextState = .shouldBecomeRecentlyClosed
                 }
-
             }
+             */
         }
         
         InactiveTabModel.save(tabModel: inactiveTabModel)

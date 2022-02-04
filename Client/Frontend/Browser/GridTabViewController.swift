@@ -667,23 +667,12 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = floor((collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
-        case .groupedTabs:
-            let width = collectionView.frame.size.width
-            if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
-                let height: CGFloat = GroupedTabCellProperties.CellUX.defaultCellHeight * CGFloat(groupCount)
-                    return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
-            } else {
-                return CGSize(width: 0, height: 0)
-            }
-        case .regularTabs, .none:
-            guard tabDisplayManager.filteredTabs.count > 0 else { return CGSize(width: 0, height: 0) }
-            return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         case .inactiveTabs:
             if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
             let minInactiveCellHeight = Int(InactiveTabCellUX.headerAndRowHeight)
             // Default height for footer and recently closed cell
             let headerFooterCellCombinedHeight = minInactiveCellHeight*3
-            var totalHeight = headerFooterCellCombinedHeight + minInactiveCellHeight
+            var totalHeight = headerFooterCellCombinedHeight + minInactiveCellHeight + Int(InactiveTabCellUX.closeAllTabRowHeight)
             let width = collectionView.frame.size.width - 30
 
             if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
@@ -698,6 +687,17 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             } else {
                 return CGSize(width: width >= 0 ? Int(width) : 0, height: totalHeight)
             }
+        case .groupedTabs:
+            let width = collectionView.frame.size.width
+            if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
+                let height: CGFloat = GroupedTabCellProperties.CellUX.defaultCellHeight * CGFloat(groupCount)
+                    return CGSize(width: width >= 0 ? Int(width) : 0, height: Int(height))
+            } else {
+                return CGSize(width: 0, height: 0)
+            }
+        case .regularTabs, .none:
+            guard tabDisplayManager.filteredTabs.count > 0 else { return CGSize(width: 0, height: 0) }
+            return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         }
     }
 
