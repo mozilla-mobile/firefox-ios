@@ -1378,3 +1378,5 @@ trigger_map:
   workflow: Deploy_Prod_Beta
 - pull_request_target_branch: main
   workflow: RunUnitTests
+- pull_request_target_branch: epic-branch/*
+  workflow: RunUnitTests
