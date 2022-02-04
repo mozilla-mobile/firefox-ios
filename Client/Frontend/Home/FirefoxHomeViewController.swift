@@ -682,18 +682,19 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
                 headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
                 let attributes = collectionView.layoutAttributesForItem(at: indexPath)
-                    if let frame = attributes?.frame, headerView.convert(frame, from: collectionView).height > 1 {
-                        // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view. Invalidating the timer prevents from showing contextual hint at the wrong position.
-                        timer?.invalidate()
-                        if didRotate && hasPresentedContextualHint {
-                            contextualSourceView = headerView.titleLabel
-                            didRotate = false
-                        } else if !hasPresentedContextualHint && contextualHintViewController.viewModel.shouldPresentContextualHint(profile: profile) {
-                            contextualSourceView = headerView.titleLabel
-                            contextualHintPresentTimer()
-                        }
+                if let frame = attributes?.frame, headerView.convert(frame, from: collectionView).height > 1 {
+                    // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view. Invalidating the timer prevents from showing contextual hint at the wrong position.
+                    timer?.invalidate()
+                    if didRotate && hasPresentedContextualHint {
+                        contextualSourceView = headerView.titleLabel
+                        didRotate = false
+                    } else if !hasPresentedContextualHint && contextualHintViewController.viewModel.shouldPresentContextualHint(profile: profile) {
+                        contextualSourceView = headerView.titleLabel
+                        contextualHintPresentTimer()
+                    }
                 }
                 return headerView
+
             case .recentlySaved:
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)

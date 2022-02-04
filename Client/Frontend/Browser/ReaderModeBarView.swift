@@ -43,7 +43,7 @@ protocol ReaderModeBarViewDelegate {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 
-class ReaderModeBarView: UIView {
+class ReaderModeBarView: UIView, AlphaDimmable {
     var delegate: ReaderModeBarViewDelegate?
 
     var readStatusButton: UIButton!

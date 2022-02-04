@@ -58,13 +58,10 @@ class BrowserViewController: UIViewController {
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: UIView = UIView()
-    fileprivate(set) var toolbar: TabToolbar?
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
-    fileprivate var homePanelIsInline = false
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
-    let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
     var chronTabsUserResearch: ChronTabsUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
@@ -91,11 +88,16 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // These views wrap the urlbar and toolbar to provide background effects on them
-    var header: UIView!
-    var footer: UIView!
-    fileprivate var topTouchArea: UIButton!
-    let urlBarTopTabsContainer = UIView(frame: .zero)
+    // Header and footer wrap the urlbar and toolbar to provide background effects on them
+    // URLbar can be in header or footer
+    var header: BaseAlphaStackView = .build { _ in }
+    var footer: BaseAlphaStackView = .build { _ in }
+
+    // Alert content that appears on top of the footer should be added to this view.
+    // ex: Find In Page, SnackBars
+    var bottomContentStackView: BaseAlphaStackView = .build { _ in }
+
+    private var topTouchArea: UIButton!
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
@@ -104,7 +106,6 @@ class BrowserViewController: UIViewController {
     var webViewContainerBackdrop: UIView!
 
     var scrollController = TabScrollingController()
-
     fileprivate var keyboardState: KeyboardState?
     var hasTriedToPresentETPAlready = false
     var hasTriedToPresentDBCardAlready = false
@@ -115,12 +116,12 @@ class BrowserViewController: UIViewController {
     // TODO: weak references?
     var ignoredNavigation = Set<WKNavigation>()
     var typedNavigation = [WKNavigation: VisitType]()
+    var toolbar = TabToolbar()
     var navigationToolbar: TabToolbarProtocol {
-        return toolbar ?? urlBar
+        return toolbar.isHidden ? urlBar : toolbar
     }
 
     var topTabsViewController: TopTabsViewController?
-    let topTabsContainer = UIView()
 
     // Keep track of allowed `URLRequest`s from `webView(_:decidePolicyFor:decisionHandler:)` so
     // that we can obtain the originating `URLRequest` when a `URLResponse` is received. This will
@@ -180,20 +181,12 @@ class BrowserViewController: UIViewController {
         applyTheme()
     }
 
-    func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
+    func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
         return previousTraitCollection.verticalSizeClass != .compact && previousTraitCollection.horizontalSizeClass != .regular
     }
 
     func shouldShowTopTabsForTraitCollection(_ newTraitCollection: UITraitCollection) -> Bool {
         return newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
-    }
-
-    func toggleSnackBarVisibility(show: Bool) {
-        if show {
-            UIView.animate(withDuration: 0.1, animations: { self.alertStackView.isHidden = false })
-        } else {
-            alertStackView.isHidden = true
-        }
     }
 
     fileprivate func constraintsForLibraryDrawerView(_ make: SnapKit.ConstraintMaker) {
@@ -212,61 +205,49 @@ class BrowserViewController: UIViewController {
         let showWarningBadge = actionNeeded
 
         urlBar.warningMenuBadge(setVisible: showWarningBadge)
-        toolbar?.warningMenuBadge(setVisible: showWarningBadge)
+        toolbar.warningMenuBadge(setVisible: showWarningBadge)
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
-        let showToolbar = shouldShowFooterForTraitCollection(newCollection)
+        let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
-        toolbar?.addNewTabButton.isHidden = showToolbar
-        toolbar?.removeFromSuperview()
-        toolbar?.tabToolbarDelegate = nil
-        toolbar = nil
+        toolbar.addNewTabButton.isHidden = showToolbar
 
         if showToolbar {
-            toolbar = TabToolbar()
-            footer.addSubview(toolbar!)
-            toolbar?.tabToolbarDelegate = self
-            toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-            toolbar?.applyTheme()
-            toolbar?.addNewTabButton.isHidden = true
-            toolbar?.updateMiddleButtonState(currentMiddleButtonState ?? .search)
+            toolbar.isHidden = false
+            toolbar.tabToolbarDelegate = self
+            toolbar.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            toolbar.applyTheme()
+            toolbar.updateMiddleButtonState(currentMiddleButtonState ?? .search)
             updateTabCountUsingTabManager(self.tabManager)
+        } else {
+            toolbar.tabToolbarDelegate = nil
+            toolbar.isHidden = true
         }
 
         appMenuBadgeUpdate()
 
-        if showTopTabs {
-            if topTabsViewController == nil {
-                let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-                topTabsViewController.delegate = self
-                addChild(topTabsViewController)
-                topTabsViewController.view.frame = topTabsContainer.frame
-                topTabsContainer.addSubview(topTabsViewController.view)
-                topTabsViewController.view.snp.makeConstraints { make in
-                    make.edges.equalTo(topTabsContainer)
-                    make.height.equalTo(TopTabsUX.TopTabsViewHeight)
-                }
-                self.topTabsViewController = topTabsViewController
-                topTabsViewController.applyTheme()
-            }
-            topTabsContainer.snp.updateConstraints { make in
-                make.height.equalTo(TopTabsUX.TopTabsViewHeight)
-            }
+        if showTopTabs, topTabsViewController == nil {
+            let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+            topTabsViewController.delegate = self
+            addChild(topTabsViewController)
+            header.addArrangedViewToTop(topTabsViewController.view, completion: {})
+            self.topTabsViewController = topTabsViewController
+            topTabsViewController.applyTheme()
+
         } else {
-            topTabsContainer.snp.updateConstraints { make in
-                make.height.equalTo(0)
+            if let topTabsView = topTabsViewController?.view {
+                header.removeArrangedView(topTabsView)
             }
-            topTabsViewController?.view.removeFromSuperview()
             topTabsViewController?.removeFromParent()
             topTabsViewController = nil
         }
 
-        view.setNeedsUpdateConstraints()
-        firefoxHomeViewController?.view.setNeedsUpdateConstraints()
+        header.setNeedsLayout()
+        view.layoutSubviews()
 
         if let tab = tabManager.selectedTab,
                let webView = tab.webView {
@@ -386,11 +367,8 @@ class BrowserViewController: UIViewController {
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
 
-        scrollController.urlBar = urlBar
-        scrollController.readerModeBar = readerModeBar
         scrollController.header = header
         scrollController.footer = footer
-        scrollController.snackBars = alertStackView
 
         updateToolbarStateForTraitCollection(traitCollection)
 
@@ -447,16 +425,14 @@ class BrowserViewController: UIViewController {
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
-        header = urlBarTopTabsContainer
-        urlBarTopTabsContainer.addSubview(urlBar)
-        urlBarTopTabsContainer.addSubview(topTabsContainer)
-        view.addSubview(header)
 
-        view.addSubview(alertStackView)
-        footer = UIView()
+        header.addArrangedSubview(urlBar)
+        view.addSubview(header)
+        view.addSubviews(bottomContentStackView)
+
+        toolbar = TabToolbar()
+        footer.addArrangedSubview(toolbar)
         view.addSubview(footer)
-        alertStackView.axis = .vertical
-        alertStackView.alignment = .center
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -551,16 +527,11 @@ class BrowserViewController: UIViewController {
         setupMiddleButtonStatus(isLoading: false)
     }
 
-    fileprivate func setupConstraints() {
-        topTabsContainer.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self.header)
-            make.top.equalTo(urlBarTopTabsContainer)
-        }
+    // MARK: - Constraints
 
+    private func setupConstraints() {
         urlBar.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
-            self.urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
-            make.top.equalTo(topTabsContainer.snp.bottom)
+            urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
         }
 
         header.snp.makeConstraints { make in
@@ -573,7 +544,62 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func adjustURLBarHeightBasedOnLocationViewHeight() {
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+
+        topTouchArea.snp.remakeConstraints { make in
+            make.top.left.right.equalTo(view)
+            make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
+        }
+
+        readerModeBar?.snp.remakeConstraints { make in
+            make.height.equalTo(UIConstants.ToolbarHeight)
+        }
+
+        webViewContainer.snp.remakeConstraints { make in
+            make.left.right.equalTo(view)
+            make.top.equalTo(header.snp.bottom)
+            make.bottom.equalTo(footer.snp.top)
+        }
+
+        // Setup the bottom toolbar
+        toolbar.snp.remakeConstraints { make in
+            make.height.equalTo(UIConstants.BottomToolbarHeight)
+        }
+
+        footer.snp.remakeConstraints { make in
+            scrollController.footerBottomConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            make.leading.trailing.equalTo(view)
+        }
+
+        // Remake constraints even if we're already showing the home controller.
+        // The home controller may change sizes if we tap the URL bar while on about:home.
+        firefoxHomeViewController?.view.snp.remakeConstraints { make in
+            make.top.equalTo(header.snp.bottom)
+            make.left.right.equalTo(view)
+            make.bottom.equalTo(footer.snp.top)
+        }
+
+        bottomContentStackView.snp.remakeConstraints { make in
+            make.left.right.equalTo(view)
+            make.centerX.equalTo(view)
+            make.width.equalTo(view.safeArea.width)
+
+            // Height is set by content - this removes run time error
+            make.height.greaterThanOrEqualTo(0)
+
+            if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
+                make.bottom.equalTo(view).offset(-keyboardHeight)
+            } else if !toolbar.isHidden {
+                make.bottom.lessThanOrEqualTo(toolbar.snp.top)
+                make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
+            } else {
+                make.bottom.equalTo(view.safeArea.bottom)
+            }
+        }
+    }
+
+    private func adjustURLBarHeightBasedOnLocationViewHeight() {
         // Make sure that we have a height to actually base our calculations on
         guard urlBar.locationContainer.bounds.height != 0 else { return }
         let locationViewHeight = urlBar.locationView.bounds.height
@@ -583,10 +609,12 @@ class BrowserViewController: UIViewController {
         // or else funky conflicts happen
         urlBarHeightConstraint.deactivate()
         urlBar.snp.makeConstraints { make in
-            let height =  heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
-            self.urlBarHeightConstraint = make.height.equalTo(height).constraint
+            let height = heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
+            urlBarHeightConstraint = make.height.equalTo(height).constraint
         }
     }
+
+    // MARK: - Tabs Queue
 
     func loadQueuedTabs(receivedURLs: [URL]? = nil) {
         // Chain off of a trivial deferred in order to run on the background queue.
@@ -661,7 +689,7 @@ class BrowserViewController: UIViewController {
         isCrashAlertShowing = true
     }
 
-    // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in
+    // The logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in
     // the profile, that means that this is a fresh install and we do not show the What's New. If we do have
     // that value, we compare it to the major version of the running app. If it is different then this is an
     // upgrade, downgrades are not possible, so we can show the What's New page.
@@ -685,93 +713,22 @@ class BrowserViewController: UIViewController {
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
-        footer.alpha = 1
+        toolbar.isHidden = false
 
-        [header, footer, readerModeBar].forEach { view in
-                view?.transform = .identity
+        [header, footer].forEach { view in
+            view?.transform = .identity
         }
 
         statusBarOverlay.isHidden = false
-    }
-
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-
-        topTouchArea.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
-        }
-
-        readerModeBar?.snp.remakeConstraints { make in
-            make.top.equalTo(self.header.snp.bottom)
-            make.height.equalTo(UIConstants.ToolbarHeight)
-            make.leading.trailing.equalTo(self.view)
-        }
-
-        webViewContainer.snp.remakeConstraints { make in
-            make.left.right.equalTo(self.view)
-
-            if let readerModeBarBottom = readerModeBar?.snp.bottom {
-                make.top.equalTo(readerModeBarBottom)
-            } else {
-                make.top.equalTo(self.header.snp.bottom)
-            }
-
-            let findInPageHeight = (findInPageBar == nil) ? 0 : UIConstants.ToolbarHeight
-            if let toolbar = self.toolbar {
-                make.bottom.equalTo(toolbar.snp.top).offset(-findInPageHeight)
-            } else {
-                make.bottom.equalTo(self.view).offset(-findInPageHeight)
-            }
-        }
-
-        // Setup the bottom toolbar
-        toolbar?.snp.remakeConstraints { make in
-            make.edges.equalTo(self.footer)
-            make.height.equalTo(UIConstants.BottomToolbarHeight)
-        }
-
-        footer.snp.remakeConstraints { make in
-            scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp.bottom).constraint
-            make.leading.trailing.equalTo(self.view)
-        }
-
-        urlBar.setNeedsUpdateConstraints()
-
-        // Remake constraints even if we're already showing the home controller.
-        // The home controller may change sizes if we tap the URL bar while on about:home.
-        firefoxHomeViewController?.view.snp.remakeConstraints { make in
-            make.top.equalTo(self.urlBar.snp.bottom)
-            make.left.right.equalTo(self.view)
-            if self.homePanelIsInline {
-                make.bottom.equalTo(self.toolbar?.snp.top ?? self.view.snp.bottom)
-            } else {
-                make.bottom.equalTo(self.view.snp.bottom)
-            }
-        }
-
-        alertStackView.snp.remakeConstraints { make in
-            make.centerX.equalTo(self.view)
-            make.width.equalTo(self.view.safeArea.width)
-            if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view), keyboardHeight > 0 {
-                make.bottom.equalTo(self.view).offset(-keyboardHeight)
-            } else if let toolbar = self.toolbar {
-                make.bottom.lessThanOrEqualTo(toolbar.snp.top)
-                make.bottom.lessThanOrEqualTo(self.view.safeArea.bottom)
-            } else {
-                make.bottom.equalTo(self.view.safeArea.bottom)
-            }
-        }
     }
 
     /// Show the firefox home page
     /// - Parameter inline: Inline is true when the firefox homepage is created from the tab tray, a long press on the tab bar to open a new tab or by pressing the home page button on the tab bar.
     ///                     Inline is false when it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showFirefoxHome(inline: Bool) {
-        homePanelIsInline = inline
         if self.firefoxHomeViewController == nil {
             // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
-            let trackingValue: TelemetryWrapper.EventValue = homePanelIsInline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
+            let trackingValue: TelemetryWrapper.EventValue = inline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
 
             let firefoxHomeViewController = FirefoxHomeViewController(profile: profile, isZeroSearch: !inline)
@@ -800,7 +757,7 @@ class BrowserViewController: UIViewController {
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
-    fileprivate func hideFirefoxHome() {
+    private func hideFirefoxHome() {
         guard let firefoxHomeViewController = self.firefoxHomeViewController else {
             return
         }
@@ -913,7 +870,7 @@ class BrowserViewController: UIViewController {
         addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.snp.makeConstraints { make in
-            make.top.equalTo(self.urlBar.snp.bottom)
+            make.top.equalTo(self.header.snp.bottom)
             make.left.right.bottom.equalTo(self.view)
         }
 
@@ -1034,7 +991,7 @@ class BrowserViewController: UIViewController {
         }
 
         navigationToolbar.updateMiddleButtonState(state)
-        if toolbar != nil {
+        if !toolbar.isHidden {
             urlBar.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
         }
         currentMiddleButtonState = state
@@ -1443,6 +1400,7 @@ extension BrowserViewController {
     }
 }
 
+// MARK: - TabDelegate
 extension BrowserViewController: TabDelegate {
 
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
@@ -1517,31 +1475,16 @@ extension BrowserViewController: TabDelegate {
         webView.removeFromSuperview()
     }
 
-    fileprivate func findSnackbar(_ barToFind: SnackBar) -> Int? {
-        let bars = alertStackView.arrangedSubviews
-        for (index, bar) in bars.enumerated() where bar === barToFind {
-            return index
-        }
-        return nil
+    func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
+        updateFindInPageVisibility(visible: true)
+        findInPageBar?.text = selection
     }
 
-    func showBar(_ bar: SnackBar, animated: Bool) {
-        view.layoutIfNeeded()
-        UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
-            self.alertStackView.insertArrangedSubview(bar, at: 0)
-            self.view.layoutIfNeeded()
-        })
+    func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
+        openSearchNewTab(isPrivate: tab.isPrivate, selection)
     }
 
-    func removeBar(_ bar: SnackBar, animated: Bool) {
-        UIView.animate(withDuration: animated ? 0.25 : 0, animations: {
-            bar.removeFromSuperview()
-        })
-    }
-
-    func removeAllBars() {
-        alertStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-    }
+    // MARK: Snack bar
 
     func tab(_ tab: Tab, didAddSnackbar bar: SnackBar) {
         // If the Tab that had a SnackBar added to it is not currently
@@ -1551,23 +1494,17 @@ extension BrowserViewController: TabDelegate {
             return
         }
 
-        showBar(bar, animated: true)
+        bottomContentStackView.addArrangedViewToBottom(bar, completion: {
+            self.view.layoutIfNeeded()
+        })
     }
 
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar) {
-        removeBar(bar, animated: true)
-    }
-
-    func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
-        updateFindInPageVisibility(visible: true)
-        findInPageBar?.text = selection
-    }
-
-    func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
-        openSearchNewTab(isPrivate: tab.isPrivate, selection)
+        bottomContentStackView.removeArrangedView(bar)
     }
 }
 
+// MARK: - LibraryPanelDelegate
 extension BrowserViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToSignIn() {
         let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
@@ -1815,10 +1752,10 @@ extension BrowserViewController: TabManagerDelegate {
 
         updateTabCountUsingTabManager(tabManager)
 
-        removeAllBars()
+        bottomContentStackView.removeAllArrangedViews()
         if let bars = selected?.bars {
-            for bar in bars {
-                showBar(bar, animated: true)
+            bars.forEach { bar in
+                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded()})
             }
         }
 
@@ -1901,7 +1838,7 @@ extension BrowserViewController: TabManagerDelegate {
             [
                 toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                toast.bottomAnchor.constraint(equalTo: self.alertStackView.bottomAnchor)
+                toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
             ]
         }
     }
@@ -1916,7 +1853,7 @@ extension BrowserViewController: TabManagerDelegate {
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            toolbar?.updateTabCount(count, animated: animated)
+            toolbar.updateTabCount(count, animated: animated)
             urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
             topTabsViewController?.updateTabCount(count, animated: animated)
         }
@@ -2276,7 +2213,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         UIView.animate(withDuration: state.animationDuration, delay: 0,
                        options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
-            self.alertStackView.layoutIfNeeded()
+            self.bottomContentStackView.layoutIfNeeded()
         })
     }
 
@@ -2290,7 +2227,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         UIView.animate(withDuration: state.animationDuration, delay: 0,
                        options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
-            self.alertStackView.layoutIfNeeded()
+            self.bottomContentStackView.layoutIfNeeded()
         })
     }
 }

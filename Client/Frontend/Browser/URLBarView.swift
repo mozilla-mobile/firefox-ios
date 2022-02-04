@@ -49,7 +49,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
 }
 
-class URLBarView: UIView {
+class URLBarView: UIView, AlphaDimmable {
     // Additional UIAppearance-configurable properties
     @objc dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
         didSet {
