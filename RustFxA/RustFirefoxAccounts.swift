@@ -4,8 +4,7 @@
 
 import UIKit
 import Shared
-import FxAClient
-import Viaduct
+import MozillaAppServices
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
@@ -311,7 +310,7 @@ public struct FxAUserProfile: Codable, Equatable {
     public let avatarUrl: String?
     public let displayName: String?
 
-    init(profile: FxAClient.Profile) {
+    init(profile: Profile) {
         uid = profile.uid
         email = profile.email
         avatarUrl = profile.avatar

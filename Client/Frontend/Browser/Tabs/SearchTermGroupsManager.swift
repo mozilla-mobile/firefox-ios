@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import Storage
-import Places
+import MozillaAppServices
 
 struct ASGroup<T> {
     var searchTerm: String
