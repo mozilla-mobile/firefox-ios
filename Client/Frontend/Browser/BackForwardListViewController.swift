@@ -187,8 +187,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             if snappedToBottom {
                 verticalConstraints += [make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height).constraint]
             } else {
-                let window = UIWindow.keyWindow?.filter { $0.isKeyWindow }.first
-                var statusBarHeight statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+                let statusBarHeight = UIWindow.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
                 verticalConstraints += [make.top.equalTo(self.view).offset(bvc.header.frame.height + statusBarHeight).constraint]
             }
         }
