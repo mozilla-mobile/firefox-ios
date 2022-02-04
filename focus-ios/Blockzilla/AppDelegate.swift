@@ -308,6 +308,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
         AppDelegate.needsAuthenticated = true
+        showSplashView()
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
@@ -341,7 +342,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     
     func hideSplashView() {
         browserViewController.activateUrlBarOnHomeView()
-        splashView.animateHidden(true, duration: 0.25)
+        splashView.alpha = 0
+        splashView.isHidden = true
         splashView.removeFromSuperview()
     }
     
@@ -351,7 +353,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         splashView.snp.makeConstraints { make in
             make.edges.equalTo(window!)
         }
-        splashView.animateHidden(false, duration: 0.25)
+        splashView.alpha = 1
+        splashView.isHidden = false
     }
 }
 
