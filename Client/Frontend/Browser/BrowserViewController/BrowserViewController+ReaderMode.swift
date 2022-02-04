@@ -67,8 +67,14 @@ extension BrowserViewController {
     func showReaderModeBar(animated: Bool) {
         if self.readerModeBar == nil {
             let readerModeBar = ReaderModeBarView(frame: CGRect.zero)
+            readerModeBar.isBottomPresented = isBottomSearchBar
             readerModeBar.delegate = self
-            header.addArrangedViewToBottom(readerModeBar, completion: {})
+            if isBottomSearchBar {
+                footer.addArrangedViewToTop(readerModeBar, completion: {})
+            } else {
+                header.addArrangedViewToBottom(readerModeBar, completion: {})
+            }
+
             self.readerModeBar = readerModeBar
         }
 
@@ -171,19 +177,25 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 readerModeStyle = style
             }
 
-            let readerModeStyleViewController = ReaderModeStyleViewController()
+            // TODO: Laurie - isBottomPresented
+            let readerModeViewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
+                                                               readerModeStyle: readerModeStyle)
+            let readerModeStyleViewController = ReaderModeStyleViewController.initReaderModeViewController(viewModel: readerModeViewModel)
             readerModeStyleViewController.delegate = self
-            readerModeStyleViewController.readerModeStyle = readerModeStyle
             readerModeStyleViewController.modalPresentationStyle = .popover
 
             let setupPopover = { [unowned self] in
                 guard let popoverPresentationController = readerModeStyleViewController.popoverPresentationController else { return }
 
+                let arrowDirection: UIPopoverArrowDirection = isBottomSearchBar ? .down : .up
+                let ySpacing = isBottomSearchBar ? -1 : UIConstants.ToolbarHeight
+
                 popoverPresentationController.backgroundColor = UIColor.Photon.White100
                 popoverPresentationController.delegate = self
                 popoverPresentationController.sourceView = readerModeBar
-                popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
-                popoverPresentationController.permittedArrowDirections = .up
+                popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: ySpacing,
+                                                                  width: 1, height: 1)
+                popoverPresentationController.permittedArrowDirections = arrowDirection
             }
 
             setupPopover()

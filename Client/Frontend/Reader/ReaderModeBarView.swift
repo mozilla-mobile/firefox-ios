@@ -46,6 +46,7 @@ protocol ReaderModeBarViewDelegate {
 class ReaderModeBarView: UIView, AlphaDimmable {
     var delegate: ReaderModeBarViewDelegate?
 
+    var isBottomPresented: Bool = false
     var readStatusButton: UIButton!
     var settingsButton: UIButton!
     var listStatusButton: UIButton!
@@ -93,11 +94,11 @@ class ReaderModeBarView: UIView, AlphaDimmable {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         context.setLineWidth(0.5)
-        context.setStrokeColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1.0)
         context.setStrokeColor(UIColor.Photon.Grey50.cgColor)
         context.beginPath()
-        context.move(to: CGPoint(x: 0, y: frame.height))
-        context.addLine(to: CGPoint(x: frame.width, y: frame.height))
+        let yPosition = isBottomPresented ? 0 : frame.height
+        context.move(to: CGPoint(x: 0, y: yPosition))
+        context.addLine(to: CGPoint(x: frame.width, y: yPosition))
         context.strokePath()
     }
 
