@@ -885,7 +885,8 @@ class BrowserViewController: UIViewController {
         }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let searchController = SearchViewController(profile: profile, isPrivate: isPrivate, tabManager: tabManager)
+        let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
+        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, tabManager: tabManager)
         searchController.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
@@ -907,14 +908,10 @@ class BrowserViewController: UIViewController {
         view.addSubview(searchController.view)
         searchController.view.snp.makeConstraints { make in
             make.top.equalTo(header.snp.bottom)
-            make.left.right.bottom.equalTo(view)
-            // TODO: Laurie - make it possible for search bar
-//            make.left.right.equalTo(view)
+            make.left.right.equalTo(view)
 
-//            // Account for search bar if at bottom
-//            let urlBarHeight = urlBarHeightConstraintValue ?? 0
-//            let offSet = isBottomSearchBar ? urlBarHeight : 0
-//            make.bottom.equalTo(view).offset(-offSet)
+            let constraintTarget = isBottomSearchBar ? footer.snp.top : view.snp.bottom
+            make.bottom.equalTo(constraintTarget)
         }
 
         firefoxHomeViewController?.view?.isHidden = true

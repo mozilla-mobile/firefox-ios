@@ -50,30 +50,36 @@ struct ClientTabsSearchWrapper {
     var tab: RemoteTab
 }
 
+struct SearchViewModel {
+    let isPrivate: Bool
+    let isBottomSearchBar: Bool
+    // TODO: Move logic in view model
+}
+
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     }
-    fileprivate let isPrivate: Bool
-    fileprivate var suggestClient: SearchSuggestClient?
-    fileprivate var remoteClientTabs = [ClientTabsSearchWrapper]()
-    fileprivate var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
-    fileprivate var openedTabs = [Tab]()
-    fileprivate var filteredOpenedTabs = [Tab]()
-    fileprivate var tabManager: TabManager
+    private let viewModel: SearchViewModel
+    private var suggestClient: SearchSuggestClient?
+    private var remoteClientTabs = [ClientTabsSearchWrapper]()
+    private var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
+    private var openedTabs = [Tab]()
+    private var filteredOpenedTabs = [Tab]()
+    private var tabManager: TabManager
     
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
-    fileprivate let searchEngineContainerView = UIView()
-    fileprivate let searchEngineScrollView = ButtonScrollView()
-    fileprivate let searchEngineScrollViewContent = UIView()
+    private let searchEngineContainerView = UIView()
+    private let searchEngineScrollView = ButtonScrollView()
+    private let searchEngineScrollViewContent = UIView()
 
-    fileprivate lazy var bookmarkedBadge: UIImage = {
+    private lazy var bookmarkedBadge: UIImage = {
         return UIImage(named: "bookmark_results")!
     }()
     
-    fileprivate lazy var openAndSyncTabBadge: UIImage = {
+    private lazy var openAndSyncTabBadge: UIImage = {
         return UIImage(named: "sync_open_tab")!
     }()
 
@@ -82,9 +88,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     var experimental: Variables?
     static var userAgent: String?
 
-    
-    init(profile: Profile, isPrivate: Bool, tabManager: TabManager) {
-        self.isPrivate = isPrivate
+    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager) {
+        self.viewModel = viewModel
         self.tabManager = tabManager
         self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
         super.init(profile: profile)
@@ -148,19 +153,20 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         reloadData()
     }
 
-    fileprivate func layoutSearchEngineScrollView() {
+    private func layoutSearchEngineScrollView() {
         let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
         searchEngineScrollView.snp.remakeConstraints { make in
             make.left.right.top.equalToSuperview()
             if keyboardHeight == 0 {
                 make.bottom.equalTo(view.safeArea.bottom)
             } else {
-                make.bottom.equalTo(view).offset(-keyboardHeight)
+                let offset = viewModel.isBottomSearchBar ? 0 : keyboardHeight
+                make.bottom.equalTo(view).offset(-offset)
             }
         }
     }
 
-    fileprivate func layoutSearchEngineScrollViewContent() {
+    private func layoutSearchEngineScrollViewContent() {
         searchEngineScrollViewContent.snp.remakeConstraints { make in
             make.center.equalTo(self.searchEngineScrollView).priority(10)
             //left-align the engines on iphones, center on ipad
@@ -183,7 +189,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             querySuggestClient()
 
             // Show the default search engine first.
-            if !isPrivate {
+            if !viewModel.isPrivate {
                 let ua = SearchViewController.userAgent ?? "FxSearch"
                 suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine, userAgent: ua)
             }
@@ -193,12 +199,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    fileprivate var quickSearchEngines: [OpenSearchEngine] {
+    private var quickSearchEngines: [OpenSearchEngine] {
         var engines = searchEngines.quickSearchEngines
 
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
-        if isPrivate || !searchEngines.shouldShowSearchSuggestions {
+        if viewModel.isPrivate || !searchEngines.shouldShowSearchSuggestions {
             engines?.insert(searchEngines.defaultEngine, at: 0)
         }
 
@@ -216,7 +222,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         querySuggestClient()
     }
 
-    fileprivate func layoutTable() {
+    private func layoutTable() {
         tableView.snp.remakeConstraints { make in
             make.top.equalTo(self.view.snp.top)
             make.leading.trailing.equalTo(self.view)
@@ -321,7 +327,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }, completion: nil)
     }
 
-    fileprivate func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
+    private func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
         layoutSearchEngineScrollView()
 
         UIView.animate(withDuration: keyboardState.animationDuration, delay: 0,
@@ -330,7 +336,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         })
     }
     
-    fileprivate func getCachedTabs() {
+    private func getCachedTabs() {
         assert(Thread.isMainThread)
         // Short circuit if the user is not logged in
         guard profile.hasSyncableAccount() else { return }
@@ -350,7 +356,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
     
     func searchTabs(for searchString: String) {
-        let currentTabs = self.isPrivate ? self.tabManager.privateTabs : self.tabManager.normalTabs
+        let currentTabs = viewModel.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
 
         // Small helper function to do case insensitive searching.
         // We split the search query by spaces so we can simulate full text search.
@@ -410,7 +416,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
     
-    fileprivate func querySuggestClient() {
+    private func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
         if searchQuery.isEmpty || !searchEngines.shouldShowSearchSuggestions || searchQuery.looksLikeAURL() {
@@ -461,6 +467,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         self.data = data
         tableView.reloadData()
     }
+
+    // MARK: - Table view delegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SearchListSection(rawValue: indexPath.section)! {
@@ -552,7 +560,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return attributedString
     }
     
-    fileprivate func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell, oneLineCell: OneLineTableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
+    private func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell, oneLineCell: OneLineTableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
         case .searchSuggestions:
@@ -637,6 +645,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 }
 
+// MARK: - Keyboard shortcuts
 extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
         let initialSection = SearchListSection.bookmarksAndHistory.rawValue
@@ -713,7 +722,7 @@ fileprivate extension String {
  * UIScrollView that prevents buttons from interfering with scroll.
  */
 fileprivate class ButtonScrollView: UIScrollView {
-    fileprivate override func touchesShouldCancel(in view: UIView) -> Bool {
+    override func touchesShouldCancel(in view: UIView) -> Bool {
         return true
     }
 }
