@@ -591,7 +591,7 @@ class BrowserViewController: UIViewController {
             if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
                 make.bottom.equalTo(view).offset(-keyboardHeight)
             } else if !toolbar.isHidden {
-                make.bottom.lessThanOrEqualTo(toolbar.snp.top)
+                make.bottom.lessThanOrEqualTo(footer.snp.top)
                 make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
             } else {
                 make.bottom.equalTo(view.safeArea.bottom)
