@@ -187,13 +187,8 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             if snappedToBottom {
                 verticalConstraints += [make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height).constraint]
             } else {
-                var statusBarHeight: CGFloat = 0
-                if #available(iOS 13.0, *) {
-                    let window = UIApplication.shared.windows.filter { $0.isKeyWindow }.first
-                    statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-                } else {
-                    statusBarHeight = UIApplication.shared.statusBarFrame.height
-                }
+                let window = UIWindow.keyWindow?.filter { $0.isKeyWindow }.first
+                var statusBarHeight statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
                 verticalConstraints += [make.top.equalTo(self.view).offset(bvc.header.frame.height + statusBarHeight).constraint]
             }
         }
