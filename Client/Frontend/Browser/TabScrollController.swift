@@ -28,6 +28,7 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
+            scrollView?.keyboardDismissMode = .onDrag
             featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? configureRefreshControl() : nil
         }
     }
@@ -234,7 +235,6 @@ private extension TabScrollingController {
         footerBottomOffset = clamp(updatedOffset, min: 0, max: bottomScrollHeight)
 
         header?.updateAlphaForSubviews(scrollAlpha)
-        footer?.updateAlphaForSubviews(scrollAlpha)
     }
 
     func isHeaderDisplayedForGivenOffset(_ offset: CGFloat) -> Bool {
@@ -266,7 +266,6 @@ private extension TabScrollingController {
             self.headerTopOffset = headerOffset
             self.footerBottomOffset = footerOffset
             self.header?.updateAlphaForSubviews(alpha)
-            self.footer?.updateAlphaForSubviews(alpha)
             self.header?.superview?.layoutIfNeeded()
         }
 
