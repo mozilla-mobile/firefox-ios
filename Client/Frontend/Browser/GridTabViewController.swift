@@ -670,8 +670,10 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         case .inactiveTabs:
             if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
             let minInactiveCellHeight = Int(InactiveTabCellUX.headerAndRowHeight)
+            let roundedContainerPaddingClosed = 5
+            let roundedContainerPaddingOpened = 20
             // Default height for footer and recently closed cell
-            let headerFooterCellCombinedHeight = minInactiveCellHeight*3
+            let headerFooterCellCombinedHeight = minInactiveCellHeight*3 + roundedContainerPaddingOpened
             var totalHeight = headerFooterCellCombinedHeight + minInactiveCellHeight + Int(InactiveTabCellUX.closeAllTabRowHeight)
             let width = collectionView.frame.size.width - 30
 
@@ -680,7 +682,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
                 totalHeight = minInactiveCellHeight*inactiveTabs.count + headerFooterCellCombinedHeight
             }
 
-            totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : minInactiveCellHeight
+            totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : minInactiveCellHeight + roundedContainerPaddingClosed
 
             if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: Int(collectionView.frame.size.width/2), height: totalHeight)

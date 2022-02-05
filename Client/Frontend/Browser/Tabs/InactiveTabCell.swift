@@ -6,22 +6,22 @@ import Foundation
 import SnapKit
 import UIKit
 import Shared
+import SwiftUI
 
 enum InactiveTabSection: Int, CaseIterable {
     case inactive
-//    case recentlyClosed
     case closeAllTabsButton
 }
 
 protocol InactiveTabsDelegate {
     func toggleInactiveTabSection(hasExpanded: Bool)
     func didSelectInactiveTab(tab: Tab?)
-    func didTapRecentlyClosed()
+    func didTapCloseAllTabs()
 }
 
 struct InactiveTabCellUX {
-    static let headerAndRowHeight: CGFloat = 45
-    static let closeAllTabRowHeight: CGFloat = 80
+    static let headerAndRowHeight: CGFloat = 48
+    static let closeAllTabRowHeight: CGFloat = 100
 }
 
 class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate {
@@ -51,6 +51,13 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         tableView.delegate = self
         return tableView
     }()
+    
+    lazy private var containerView: UIView = .build { view in
+        view.layer.cornerRadius = 13
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.clear.cgColor
+        view.backgroundColor = .Photon.LightGrey20
+    }
 
     convenience init(viewModel: InactiveTabViewModel) {
         self.init()
@@ -59,7 +66,9 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubviews(tableView)
+        containerView.addSubviews(tableView)
+        addSubviews(containerView)
+//        addSubviews(tableView)
         setupConstraints()
         applyTheme()
     }
@@ -69,9 +78,20 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
     }
 
     private func setupConstraints() {
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        containerView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(5)
+            make.bottom.equalToSuperview().offset(-5)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
         }
+        
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(containerView).offset(10)
+            make.bottom.equalTo(containerView).offset(-10)
+            make.leading.equalTo(containerView).offset(10)
+            make.trailing.equalTo(containerView).offset(-10)
+        }
+        
         self.bringSubviewToFront(tableView)
     }
 
@@ -84,8 +104,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         switch InactiveTabSection(rawValue: section) {
         case .inactive:
             return inactiveTabsViewModel?.inactiveTabs.count ?? 0
-//        case .recentlyClosed:
-//            return 1
         case .closeAllTabsButton:
             return 1
         case .none:
@@ -106,6 +124,7 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
             let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabsTableIdentifier, for: indexPath) as! OneLineTableViewCell
+            cell.bottomSeparatorView.isHidden = false
             cell.customization = .inactiveCell
             cell.backgroundColor = .clear
             cell.accessoryView = nil
@@ -118,17 +137,9 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
             return cell
         case .closeAllTabsButton:
             if let closeAllButtonCell = tableView.dequeueReusableCell(withIdentifier: InactiveTabsCloseAllButtonIdentifier, for: indexPath) as? CellWithRoundedButton {
-                closeAllButtonCell.updateMidConstraint()
                 return closeAllButtonCell
             }
             return tableView.dequeueReusableCell(withIdentifier: InactiveTabsTableIdentifier, for: indexPath) as! OneLineTableViewCell
-//        case .recentlyClosed:
-//            cell.titleLabel.text = String.TabsTrayRecentlyCloseTabsSectionTitle
-//            cell.leftImageView.image = nil
-//            cell.shouldLeftAlignTitle = true
-//            cell.updateMidConstraint()
-//            cell.accessoryType = .disclosureIndicator
-//            return cell
         case .none:
             return tableView.dequeueReusableCell(withIdentifier: InactiveTabsTableIdentifier, for: indexPath) as! OneLineTableViewCell
         }
@@ -139,8 +150,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none, .closeAllTabsButton:
             return nil
-//        case .recentlyClosed:
-//            return String.TabsTrayRecentlyClosedTabsDescritpion
         }
     }
     
@@ -149,8 +158,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none, .closeAllTabsButton:
             return CGFloat.leastNormalMagnitude
-//        case .recentlyClosed:
-//            return InactiveTabCellUX.headerAndRowHeight
         }
     }
     
@@ -164,8 +171,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
             }
         case .closeAllTabsButton, .none:
             print("nothing")
-//        case .recentlyClosed, .none:
-//            delegate?.didTapRecentlyClosed()
         }
         
     }
@@ -182,8 +187,16 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
             return headerView
         case .closeAllTabsButton:
             return nil
-//        case .recentlyClosed:
-//            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+//            IMPLEMENT ME!!!
+//            objects.remove(at: indexPath.row)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
     }
     
@@ -199,8 +212,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
             return InactiveTabCellUX.headerAndRowHeight
         case .closeAllTabsButton:
             return CGFloat.leastNormalMagnitude
-//        case .recentlyClosed:
-//            return CGFloat.leastNormalMagnitude
         }
     }
 
@@ -210,8 +221,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
             return InactiveTabCellUX.headerAndRowHeight
         case .closeAllTabsButton:
             return CGFloat.leastNormalMagnitude
-//        case .recentlyClosed:
-//            return CGFloat.leastNormalMagnitude
         }
     }
     

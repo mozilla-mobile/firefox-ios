@@ -582,7 +582,7 @@ extension TabDisplayManager: GroupedTabDelegate {
 
 // MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
-    func didTapRecentlyClosed() {
+    func didTapCloseAllTabs() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedList, extras: nil)
         self.tabDisplayCompletionDelegate?.displayRecentlyClosedTabs()
     }

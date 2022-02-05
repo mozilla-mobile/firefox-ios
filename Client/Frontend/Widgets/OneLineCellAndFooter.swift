@@ -58,6 +58,12 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
         label.numberOfLines = 1
         return label
     }()
+
+    lazy var bottomSeparatorView: UIView = .build { separatorLine in
+        //separator hidden by default
+        separatorLine.isHidden = true
+        separatorLine.backgroundColor = UIColor.Photon.Grey40
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -76,6 +82,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         self.selectionStyle = .default
         midView.addSubview(titleLabel)
+        containerView.addSubviews(bottomSeparatorView)
         containerView.addSubview(leftImageView)
         containerView.addSubview(midView)
 
@@ -88,7 +95,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
         }
-
+        
         leftImageView.snp.makeConstraints { make in
             make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
@@ -111,6 +118,13 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
             make.centerY.equalTo(midView.snp.centerY)
             make.leading.equalTo(midView.snp.leading)
             make.trailing.equalTo(midView.snp.trailing)
+        }
+        
+        bottomSeparatorView.snp.makeConstraints { make in
+            make.height.equalTo(0.7)
+            make.bottom.equalTo(containerView.snp.bottom)
+            make.leading.equalTo(titleLabel.snp.leading)
+            make.trailing.equalTo(titleLabel.snp.trailing)
         }
         
         selectedBackgroundView = selectedView

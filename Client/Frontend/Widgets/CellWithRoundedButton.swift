@@ -12,19 +12,6 @@ struct CellWithRoundedButtonUX {
 }
 
 class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
-    // Tableview cell items
-    
-//    override var indentationLevel: Int {
-//        didSet {
-//            containerView.snp.remakeConstraints { make in
-//                make.height.equalTo(44)
-//                make.top.bottom.equalToSuperview()
-//                make.leading.equalToSuperview().offset(indentationLevel * Int(indentationWidth))
-//                make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
-//            }
-//        }
-//    }
-    
     var selectedView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
@@ -40,7 +27,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
         button.setTitleColor(.black, for: .normal)
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 13.5
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
         button.accessibilityIdentifier = "roundedButton"
@@ -57,73 +44,30 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
     }
     
     let containerView = UIView()
-//    let midView = UIView()
     var shouldLeftAlignTitle = false
     var customization: OneLineTableViewCustomization = .regular
     func initialViewSetup() {
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         self.selectionStyle = .default
-//        midView.addSubview(roundedButton)
-//        containerView.addSubview(roundedButton)
-
+        
         contentView.addSubview(roundedButton)
-//        bringSubviewToFront(containerView)
-        
-        
         roundedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
         
         roundedButton.snp.makeConstraints { make in
             make.height.equalTo(50)
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(contentView.snp.trailing).offset(-18)
-//            make.top.equalTo(contentView.snp.top).offset(7)
-//            make.bottom.equalTo(contentView.snp.bottom).offset(-7)
-            make.leading.equalTo(contentView.snp.leading).offset(18)
+            make.trailing.equalTo(contentView.snp.trailing).offset(-23)
+            make.leading.equalTo(contentView.snp.leading).offset(23)
         }
-        
-//        containerView.snp.makeConstraints { make in
-//            make.height.equalTo(44)
-//            make.top.bottom.equalToSuperview()
-//            make.leading.equalToSuperview()
-//            make.trailing.equalToSuperview()
-//        }
 
-//        midView.snp.makeConstraints { make in
-//            make.height.equalTo(42)
-//            make.centerY.equalToSuperview()
-//            make.trailing.equalTo(containerView.snp.trailing).offset(-7)
-//        }
-        
         selectedBackgroundView = selectedView
         applyTheme()
     }
     
-    func updateMidConstraint() {
-//        containerView.snp.remakeConstraints { make in
-//            make.height.equalTo(44)
-//            make.top.bottom.equalToSuperview()
-//            make.leading.equalToSuperview()
-//            make.trailing.equalToSuperview()
-//        }
-        
-//        midView.snp.remakeConstraints { make in
-//            make.height.equalTo(42)
-//            make.centerY.equalToSuperview()
-//            make.trailing.equalTo(containerView.snp.trailing).offset(-7)
-//        }
-    }
-    
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
-        if theme == .dark {
-            self.backgroundColor = .clear
-//            self.titleLabel.textColor = .white
-        } else {
-            self.backgroundColor = .clear
-//            self.titleLabel.textColor = .black
-        }
+        self.backgroundColor = .clear
     }
     
     override func prepareForReuse() {
