@@ -612,6 +612,14 @@ class BrowserViewController: UIViewController {
         make.height.greaterThanOrEqualTo(0)
         bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
+        if isBottomSearchBar {
+            adjustBottomContentBottomSearchBar(make)
+        } else {
+            adjustBottomContentTopSearchBar(make)
+        }
+    }
+
+    private func adjustBottomContentTopSearchBar(_ make: ConstraintMaker) {
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             let searchBarAdjustment = isBottomSearchBar ? urlBarHeightConstraintValue ?? 0 : 0
             make.bottom.equalTo(view).offset(-keyboardHeight - searchBarAdjustment)
@@ -621,6 +629,11 @@ class BrowserViewController: UIViewController {
         } else {
             make.bottom.equalTo(view.safeArea.bottom)
         }
+    }
+
+    private func adjustBottomContentBottomSearchBar(_ make: ConstraintMaker) {
+        make.bottom.lessThanOrEqualTo(footer.snp.top)
+        make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
     }
 
     private func adjustBottomSearchBarForKeyboard() {
@@ -633,7 +646,8 @@ class BrowserViewController: UIViewController {
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
-        footer.addKeyboardSpacer(at: 1, spacerHeight: spacerHeight)
+        let index = readerModeBar == nil ? 1 : 2
+        footer.addKeyboardSpacer(at: index, spacerHeight: spacerHeight)
     }
 
     /// Used for dynamic type height adjustment
