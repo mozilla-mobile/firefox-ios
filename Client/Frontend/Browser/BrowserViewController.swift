@@ -441,6 +441,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(footer)
 
         // Laurie - Remove, used to debug
+        statusBarOverlay.accessibilityLabel = "OVERLAY"
         header.accessibilityLabel = "HEADER"
         footer.accessibilityLabel = "FOOTER"
         bottomContentStackView.accessibilityLabel = "ALERT STACKVIEW"
@@ -548,7 +549,8 @@ class BrowserViewController: UIViewController {
         header.snp.makeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(self.view)
-                make.height.equalTo(0) // Setting to 0 since no content will be added to the top
+                // Making sure we cover at least the status bar
+                make.bottom.equalTo(self.view.safeArea.top)
             } else {
                 scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
                 make.left.right.equalTo(self.view)
