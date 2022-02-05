@@ -85,7 +85,11 @@ extension BrowserViewController {
 
     func hideReaderModeBar(animated: Bool) {
         guard let readerModeBar = readerModeBar else { return }
-        header.removeArrangedView(readerModeBar)
+        if isBottomSearchBar {
+            footer.removeArrangedView(readerModeBar)
+        } else {
+            header.removeArrangedView(readerModeBar)
+        }
         self.readerModeBar = nil
         updateViewConstraints()
     }
