@@ -113,7 +113,7 @@ extension String {
         
         public struct Toolbar {
             public static let SearchBarPlacementForNewUsers = MZLocalizedString("ContextualHint.SearchBarPlacement.NewUsers", value: "To make entering info easier, the toolbar is now at the bottom by default.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device.", lastUpdated: .v98)
-            public static let SearchBarPlacementForExistingUsers = MZLocalizedString("ContextualHint.SearchBarPlacement.ExistingUsers", value: "Now you can move the toolbar to the bottom, so it's easier to enter info", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen.", lastUpdated: .v98)
+            public static let SearchBarPlacementForExistingUsers = MZLocalizedString("ContextualHint.SearchBarPlacement.ExistingUsers", value: "Now you can move the toolbar to the bottom, so it’s easier to enter info", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen.", lastUpdated: .v98)
             public static let SearchBarPlacementButtonText = MZLocalizedString("ContextualHints.SearchBarPlacement.CallToAction", value: "Toolbar Settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar.", lastUpdated: .v98)
         }
         
@@ -310,7 +310,7 @@ extension String {
                 public static let SwitchTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.SwitchTitle", value: "Tap logo to change wallpaper", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off.", lastUpdated: .v98)
                 public static let SwitchDescription = MZLocalizedString("Settings.Home.Option.Wallpaper.SwitchDescription", value: "Cycle through and update image without leaving the homepage.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the string describing the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off.", lastUpdated: .v98)
                 public static let WallpaperUpdatedToastLabel = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToast", value: "Wallpaper Updated!", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated.", lastUpdated: .v98)
-                public static let WallpaperUpdatedToastButton = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToastButton", value: "View", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page.", lastUpdated: .v98)
+                public static let WallpaperUpdatedToastButton = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToastButton", value: "View", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper.", lastUpdated: .v98)
                 
                 // Accessibilitiy
                 struct AccessibilityLabels {
@@ -426,8 +426,8 @@ extension String {
 extension String {
     /** NOTE:
      Strings with the following IDs may be removed after confirming with Product:
-     - ActivityStream.Pocket.SectionTitle       --> replaced by
-     - ActivityStream.Pocket.SectionTitle2     --> replaced by
+     - `ActivityStream.Pocket.SectionTitle`      --> replaced by `FirefoxHome.Pocket.SectionTitle`
+     - `ActivityStream.Pocket.SectionTitle2`    --> replaced by `FirefoxHome.Pocket.SectionTitle`
      */
     public static let ASPocketTitle = MZLocalizedString("ActivityStream.Pocket.SectionTitle", value: "Trending on Pocket", comment: "Section title label for Recommended by Pocket section", lastUpdated: .unknown)
     public static let ASPocketTitle2 = MZLocalizedString("ActivityStream.Pocket.SectionTitle2", value: "Recommended by Pocket", comment: "Section title label for Recommended by Pocket section", lastUpdated: .unknown)
