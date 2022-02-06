@@ -670,25 +670,27 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         case .inactiveTabs:
             if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
             let minInactiveCellHeight = Int(InactiveTabCellUX.headerAndRowHeight)
-            let roundedContainerPaddingClosed = 5
-            let roundedContainerPaddingOpened = 20
-            // Default height for footer and recently closed cell
-            let headerFooterCellCombinedHeight = minInactiveCellHeight*3 + roundedContainerPaddingOpened
-            var totalHeight = headerFooterCellCombinedHeight + minInactiveCellHeight + Int(InactiveTabCellUX.closeAllTabRowHeight)
+            let roundedContainerPaddingClosed = 10
+            let roundedContainerAdditionalPaddingOpened = 50
+            let closeAllButtonHeight = Int(InactiveTabCellUX.closeAllTabRowHeight)
+            let headerHeightWithRoundedCorner = minInactiveCellHeight + roundedContainerPaddingClosed
+
+            var totalHeight = headerHeightWithRoundedCorner
             let width = collectionView.frame.size.width - 30
 
             if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
                 // Calculate height based on number of tabs in the inactive tab section section
-                totalHeight = minInactiveCellHeight*inactiveTabs.count + headerFooterCellCombinedHeight
+                totalHeight = minInactiveCellHeight*inactiveTabs.count + roundedContainerPaddingClosed + roundedContainerAdditionalPaddingOpened + closeAllButtonHeight
             }
 
-            totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : minInactiveCellHeight + roundedContainerPaddingClosed
+            totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : headerHeightWithRoundedCorner
 
             if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: Int(collectionView.frame.size.width/2), height: totalHeight)
             } else {
                 return CGSize(width: width >= 0 ? Int(width) : 0, height: totalHeight)
             }
+            
         case .groupedTabs:
             let width = collectionView.frame.size.width
             if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
