@@ -677,10 +677,14 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
             var totalHeight = headerHeightWithRoundedCorner
             let width = collectionView.frame.size.width - 30
-
-            if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
+            
+            if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs {
+                if inactiveTabs.isEmpty {
+                    totalHeight = 0
+                } else if inactiveTabs.count > 0 {
                 // Calculate height based on number of tabs in the inactive tab section section
                 totalHeight = minInactiveCellHeight*inactiveTabs.count + roundedContainerPaddingClosed + roundedContainerAdditionalPaddingOpened + closeAllButtonHeight
+                }
             }
 
             totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : headerHeightWithRoundedCorner
