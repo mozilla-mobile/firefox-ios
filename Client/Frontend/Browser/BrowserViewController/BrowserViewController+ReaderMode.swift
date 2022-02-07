@@ -105,7 +105,8 @@ extension BrowserViewController {
         let backList = webView.backForwardList.backList
         let forwardList = webView.backForwardList.forwardList
 
-        guard let currentURL = webView.backForwardList.currentItem?.url, let readerModeURL = currentURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) else { return }
+        guard let currentURL = webView.backForwardList.currentItem?.url,
+                let readerModeURL = currentURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) else { return }
 
         if backList.count > 1 && backList.last?.url == readerModeURL {
             webView.go(to: backList.last!)
@@ -144,7 +145,7 @@ extension BrowserViewController {
         } else if forwardList.count > 0 && forwardList.first?.url == originalURL {
             webView.go(to: forwardList.first!)
         } else if let nav = webView.load(URLRequest(url: originalURL)) {
-            self.ignoreNavigationInTab(tab, navigation: nav)
+            ignoreNavigationInTab(tab, navigation: nav)
         }
     }
 
@@ -156,10 +157,11 @@ extension BrowserViewController {
            let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
             readerModeStyle = style
         }
+
         readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
-        self.readerModeStyleViewController(ReaderModeStyleViewController(),
-                                           didConfigureStyle: readerModeStyle,
-                                           isUsingUserDefinedColor: false)
+        readerModeStyleViewController(ReaderModeStyleViewController(),
+                                      didConfigureStyle: readerModeStyle,
+                                      isUsingUserDefinedColor: false)
     }
     
     func appyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {
@@ -173,7 +175,8 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 
         switch buttonType {
         case .settings:
-            guard let readerMode = tabManager.selectedTab?.getContentScript(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active else { return }
+            guard let readerMode = tabManager.selectedTab?.getContentScript(name: "ReaderMode") as? ReaderMode,
+                    readerMode.state == ReaderModeState.active else { break }
 
             var readerModeStyle = DefaultReaderModeStyle
             if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
@@ -208,17 +211,18 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 updateDisplayedPopoverProperties = setupPopover
             }
 
-            self.present(readerModeStyleViewController, animated: true, completion: nil)
+            present(readerModeStyleViewController, animated: true, completion: nil)
 
         case .markAsRead:
             guard let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
-                  let record = profile.readingList.getRecordWithURL(url).value.successValue else { return }
+                  let record = profile.readingList.getRecordWithURL(url).value.successValue else { break }
 
             profile.readingList.updateRecord(record, unread: false) // TODO Check result, can this fail?
             readerModeBar.unread = false
 
         case .markAsUnread:
-            guard let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue else { return }
+            guard let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
+                    let record = profile.readingList.getRecordWithURL(url).value.successValue else { break }
 
             profile.readingList.updateRecord(record, unread: true) // TODO Check result, can this fail?
             readerModeBar.unread = true
@@ -226,7 +230,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
         case .addToReadingList:
             guard let tab = tabManager.selectedTab,
                   let rawURL = tab.url, rawURL.isReaderModeURL,
-                  let url = rawURL.decodeReaderModeURL else { return }
+                  let url = rawURL.decodeReaderModeURL else { break }
 
             profile.readingList.createRecordWithURL(url.absoluteString,
                                                     title: tab.title ?? "",
@@ -236,7 +240,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 
         case .removeFromReadingList:
             guard let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
-                  let record = profile.readingList.getRecordWithURL(url).value.successValue else { return }
+                  let record = profile.readingList.getRecordWithURL(url).value.successValue else { break }
 
             profile.readingList.deleteRecord(record) // TODO Check result, can this fail?
             readerModeBar.added = false
