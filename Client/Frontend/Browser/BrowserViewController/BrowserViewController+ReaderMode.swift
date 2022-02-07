@@ -71,7 +71,6 @@ extension BrowserViewController {
     func showReaderModeBar(animated: Bool) {
         if self.readerModeBar == nil {
             let readerModeBar = ReaderModeBarView(frame: CGRect.zero)
-            readerModeBar.isBottomPresented = isBottomSearchBar
             readerModeBar.delegate = self
             if isBottomSearchBar {
                 footer.addArrangedViewToTop(readerModeBar)

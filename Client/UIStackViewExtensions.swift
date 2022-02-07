@@ -28,7 +28,7 @@ extension UIStackView {
     }
 
     func insertArrangedView(_ view: UIView, position: Int, animated: Bool = true, completion: (() -> Void)? = nil) {
-        guard position < arrangedSubviews.count, position >= 0 else {
+        guard position <= arrangedSubviews.count, position >= 0 else {
             log.warning("Couldn't insert subview \(view.debugDescription) into stackview \(self.debugDescription)")
             return
         }

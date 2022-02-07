@@ -30,12 +30,6 @@ class SearchBarSettingsViewController: SettingsTableViewController {
         return [section]
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        // laurie - need to update?
-//        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag

@@ -33,6 +33,10 @@ final class SearchBarSettingsViewModel {
         self.prefs = prefs
     }
 
+    static var isEnabled: Bool {
+        return UIDevice.current.userInterfaceIdiom != .pad
+    }
+
     var searchBarTitle: String {
         searchBarPosition.getLocalizedTitle
     }
@@ -75,6 +79,9 @@ private extension SearchBarSettingsViewModel {
                         forKey: PrefsKeys.KeySearchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
         recordPreferenceChange(searchBarPosition)
+
+        let notificationObject = [PrefsKeys.KeySearchBarPosition: searchBarPosition]
+        NotificationCenter.default.post(name: .SearchBarPositionDidChange, object: notificationObject)
     }
 
     /// New user defaults to bottom search bar, existing users keep their existing search bar position

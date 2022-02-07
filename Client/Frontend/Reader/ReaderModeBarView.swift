@@ -43,10 +43,13 @@ protocol ReaderModeBarViewDelegate {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 
-class ReaderModeBarView: UIView, AlphaDimmable {
+class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
     var delegate: ReaderModeBarViewDelegate?
 
-    var isBottomPresented: Bool = false
+    var parent: UIStackView?
+    private var isBottomPresented: Bool {
+        BrowserViewController.foregroundBVC().isBottomSearchBar
+    }
     var readStatusButton: UIButton!
     var settingsButton: UIButton!
     var listStatusButton: UIButton!

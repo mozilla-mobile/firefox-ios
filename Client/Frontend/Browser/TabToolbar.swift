@@ -296,6 +296,9 @@ class TabToolbar: UIView {
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
+    private var isBottomSearchBar: Bool {
+        return BrowserViewController.foregroundBVC().isBottomSearchBar
+    }
 
     fileprivate override init(frame: CGRect) {
         actionButtons = [backButton, forwardButton, multiStateButton, addNewTabButton, tabsButton, appMenuButton]
@@ -347,7 +350,7 @@ class TabToolbar: UIView {
 
     override func draw(_ rect: CGRect) {
         // No line when the search bar is on top of the toolbar
-        guard !BrowserViewController.foregroundBVC().isBottomSearchBar else { return }
+        guard !isBottomSearchBar else { return }
         if let context = UIGraphicsGetCurrentContext() {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
         }

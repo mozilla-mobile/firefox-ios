@@ -94,6 +94,11 @@ class BrowserViewController: UIViewController {
     var header: BaseAlphaStackView = .build { _ in }
     var footer: BaseAlphaStackView = .build { _ in }
 
+    var isBottomSearchBar: Bool {
+        guard SearchBarSettingsViewModel.isEnabled else { return false}
+        return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+    }
+
     // Alert content that appears on top of the footer should be added to this view.
     // ex: Find In Page, SnackBars
     var bottomContentStackView: BaseAlphaStackView = .build { _ in }
@@ -182,6 +187,23 @@ class BrowserViewController: UIViewController {
         applyTheme()
     }
 
+    @objc func searchBarPositionDidChange(notification: Notification) {
+        guard let dict = notification.object as? NSDictionary,
+              let newSearchBarPosition = dict[PrefsKeys.KeySearchBarPosition] as? SearchBarPosition else { return }
+
+        let newParent = newSearchBarPosition == .bottom ? footer : header
+        urlBar.removeFromParent()
+        urlBar.addToParent(parent: newParent)
+
+        if let readerModeBar = readerModeBar {
+            readerModeBar.removeFromParent()
+            readerModeBar.addToParent(parent: newParent, addToTop: newSearchBarPosition == .bottom)
+        }
+
+        updateViewConstraints()
+        toolbar.setNeedsDisplay()
+    }
+
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
         return previousTraitCollection.verticalSizeClass != .compact && previousTraitCollection.horizontalSizeClass != .regular
     }
@@ -209,7 +231,6 @@ class BrowserViewController: UIViewController {
         toolbar.warningMenuBadge(setVisible: showWarningBadge)
     }
 
-    let isBottomSearchBar = true // TODO: #9419 Laurie - This will be a setting, only available to iPhone
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
         let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
@@ -402,6 +423,8 @@ class BrowserViewController: UIViewController {
                                                name: .FirefoxAccountStateChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged),
                                                name: .DisplayThemeChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(searchBarPositionDidChange),
+                                               name: .SearchBarPositionDidChange, object: nil)
     }
 
     func addSubviews() {
@@ -429,9 +452,9 @@ class BrowserViewController: UIViewController {
         urlBar.tabToolbarDelegate = self
 
         if isBottomSearchBar {
-            footer.addArrangedSubview(urlBar)
+            urlBar.addToParent(parent: footer)
         } else {
-            header.addArrangedSubview(urlBar)
+            urlBar.addToParent(parent: header)
         }
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
@@ -439,12 +462,6 @@ class BrowserViewController: UIViewController {
         toolbar = TabToolbar()
         footer.addArrangedSubview(toolbar)
         view.addSubview(footer)
-
-        // Laurie - Remove, used to debug
-        statusBarOverlay.accessibilityLabel = "OVERLAY"
-        header.accessibilityLabel = "HEADER"
-        footer.accessibilityLabel = "FOOTER"
-        bottomContentStackView.accessibilityLabel = "ALERT STACKVIEW"
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -546,7 +563,15 @@ class BrowserViewController: UIViewController {
             urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
         }
 
-        header.snp.makeConstraints { make in
+        webViewContainerBackdrop.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
+    }
+
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+
+        header.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(self.view)
                 // Making sure we cover at least the status bar
@@ -556,14 +581,6 @@ class BrowserViewController: UIViewController {
                 make.left.right.equalTo(self.view)
             }
         }
-
-        webViewContainerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-    }
-
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
@@ -623,8 +640,7 @@ class BrowserViewController: UIViewController {
 
     private func adjustBottomContentTopSearchBar(_ make: ConstraintMaker) {
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
-            let searchBarAdjustment = isBottomSearchBar ? urlBarHeightConstraintValue ?? 0 : 0
-            make.bottom.equalTo(view).offset(-keyboardHeight - searchBarAdjustment)
+            make.bottom.equalTo(view).offset(-keyboardHeight)
         } else if !toolbar.isHidden {
             make.bottom.lessThanOrEqualTo(footer.snp.top)
             make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
