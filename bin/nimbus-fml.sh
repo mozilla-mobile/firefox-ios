@@ -41,13 +41,14 @@ The script structure was adopted from the similar script "sdk_generator.sh" writ
 This script should be executed as a "Run Build Script" phase from Xcode.
 
 USAGE:
-    ${CMDNAME} [OPTIONS] <FML_PATH>
+    ${CMDNAME} [OPTIONS] <MANIFEST_PATH>
 
 ARGS:
-    <FML_PATH>  The path to the FML yaml file to parse. default: \$SCRIPT_INPUT_FILE_0 environment variable.
+    <MANIFEST_PATH>  The path to the FML yaml file to parse. default: \$SCRIPT_INPUT_FILE_0 environment variable.
 
 OPTIONS:
     -o, --output  <PATH>             Folder to place generated FML code in. Default: \$SOURCE_ROOT/\$PROJECT/Generated
+    -n, --namespace <NIMBUS_NAMESPACE> The module where Nimbus is imported from. Default: no external module
     -h, --help                       Display this help message.
 HEREDOC
 )
@@ -56,14 +57,19 @@ helptext() {
     echo "$USAGE"
 }
 
-FML_PATH=
+MANIFEST_PATH=
 OUTPUT_DIR="${SOURCE_ROOT}/${PROJECT}/Generated"
-AS_VERSION=v91.0.0
+NAMESPACE=
+AS_VERSION=v91.0.1
 
 while (( "$#" )); do
     case "$1" in
         -o|--output)
             OUTPUT_DIR=$2
+            shift 2
+            ;;
+        -n|--namespace)
+            NAMESPACE=$2
             shift 2
             ;;
         -h|--help)
@@ -79,18 +85,18 @@ while (( "$#" )); do
             exit 1
             ;;
         *) # preserve positional arguments
-            FML_PATH=$1
+            MANIFEST_PATH=$1
             shift
             ;;
     esac
 done
 
-if [ -z $FML_PATH ]; then
+if [ -z $MANIFEST_PATH ]; then
     if [ -z "$SCRIPT_INPUT_FILE_COUNT" ] || [ "$SCRIPT_INPUT_FILE_COUNT" -eq 0 ]; then
         echo "Error: No input files provided for the Nimbus Feature Manifest."
         exit 2
     fi
-    FML_PATH=$SCRIPT_INPUT_FILE_0
+    MANIFEST_PATH=$SCRIPT_INPUT_FILE_0
 fi
 
 if [ -z "$SOURCE_ROOT" ]; then
@@ -138,10 +144,17 @@ else
     exit 2
 fi
 
+
 ## The `MOZ_BUNDLE_DISPLAY_NAME` has the name of the scheme
 ## we use it as a channel in the Feature Manifest. 
 ## We seperate the first word of it, since Fennec builds sometimes have the user name after the scheme
 SCHEME=${MOZ_BUNDLE_DISPLAY_NAME%% *}
-$BINARY_PATH $FML_PATH -o $OUTPUT_DIR/FML.swift ios features --classname NimbusFML --channel $SCHEME
+$BINARY_PATH $MANIFEST_PATH -o $OUTPUT_DIR/FxNimbus.swift ios features --classname FxNimbus --channel $SCHEME
+
+# The FML doesn't currenlty support adding a custom import, so we do this in this script.
+# See: https://mozilla-hub.atlassian.net/browse/EXP-2199
+if [ ! -z $NAMESPACE]; then
+    echo -e "import $NAMESPACE\n$(cat $OUTPUT_DIR/FxNimbus.swift)" > $OUTPUT_DIR/FxNimbus.swift
+fi
 
 exit 0
