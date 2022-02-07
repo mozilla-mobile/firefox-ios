@@ -846,35 +846,30 @@ class BrowserViewController: UIViewController {
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-        if !urlBar.inOverlayMode {
-            guard let url = url else {
-                hideFirefoxHome()
-                urlBar.locationView.reloadButton.reloadButtonState = .disabled
-                return
-            }
+        guard let url = url else {
+            hideFirefoxHome()
+            urlBar.locationView.reloadButton.reloadButtonState = .disabled
+            return
+        }
 
-            if isAboutHomeURL {
-                showFirefoxHome(inline: true)
+        if isAboutHomeURL {
+            showFirefoxHome(inline: true)
 
-                if focusUrlBar {
-                    if let viewcontroller = presentedViewController as? OnViewDismissable {
-                        viewcontroller.onViewDismissed = { [weak self] in
-                            let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-                            if shouldEnterOverlay {
-                                self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                            }
+            if focusUrlBar {
+                if let viewcontroller = presentedViewController as? OnViewDismissable {
+                    viewcontroller.onViewDismissed = { [weak self] in
+                        let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+                        if shouldEnterOverlay {
+                            self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                         }
-                    } else {
-                        self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     }
+                } else {
+                    self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                 }
-            } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
-                hideFirefoxHome()
-                urlBar.shouldHideReloadButton(false)
             }
-
-        } else if isAboutHomeURL {
-            showFirefoxHome(inline: false)
+        } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
+            hideFirefoxHome()
+            urlBar.shouldHideReloadButton(false)
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
