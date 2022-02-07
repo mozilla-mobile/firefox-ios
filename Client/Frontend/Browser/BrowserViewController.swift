@@ -189,7 +189,8 @@ class BrowserViewController: UIViewController {
 
     @objc func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
-              let newSearchBarPosition = dict[PrefsKeys.KeySearchBarPosition] as? SearchBarPosition else { return }
+              let newSearchBarPosition = dict[PrefsKeys.KeySearchBarPosition] as? SearchBarPosition,
+              urlBar != nil else { return }
 
         let newParent = newSearchBarPosition == .bottom ? footer : header
         urlBar.removeFromParent()
