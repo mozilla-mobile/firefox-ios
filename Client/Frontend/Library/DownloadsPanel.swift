@@ -7,8 +7,9 @@ import Shared
 import Storage
 
 private struct DownloadsPanelUX {
+    static let WelcomeScreenTopPadding: CGFloat = 120
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemWidth = 170
+    static let WelcomeScreenItemWidth: CGFloat = 170
     static let HeaderHeight: CGFloat = 28
 }
 
@@ -272,14 +273,14 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         overlayView.addSubview(welcomeLabel)
         
         NSLayoutConstraint.activate([
-            logoImageView.topAnchor.constraint(equalTo: overlayView.topAnchor, constant: 120),
+            logoImageView.topAnchor.constraint(equalTo: overlayView.topAnchor, constant: DownloadsPanelUX.WelcomeScreenTopPadding),
             logoImageView.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 60),
             logoImageView.widthAnchor.constraint(equalToConstant: 60),
             
             welcomeLabel.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
-            welcomeLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: CGFloat(DownloadsPanelUX.WelcomeScreenPadding)),
-            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(DownloadsPanelUX.WelcomeScreenItemWidth))
+            welcomeLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: DownloadsPanelUX.WelcomeScreenPadding),
+            welcomeLabel.widthAnchor.constraint(equalToConstant: DownloadsPanelUX.WelcomeScreenItemWidth)
         ])
 
         return overlayView
