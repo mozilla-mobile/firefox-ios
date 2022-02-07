@@ -77,7 +77,7 @@ open class TabToolbarHelper: NSObject {
             toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
         default:
             toolbar.multiStateButton.setImage(ImageHome, for: .normal)
-            toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
+            toolbar.multiStateButton.accessibilityLabel = .TabToolbarHomeAccessibilityLabel
             middleButtonState = .home
         }
     }
