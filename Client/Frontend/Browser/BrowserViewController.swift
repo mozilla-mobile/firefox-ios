@@ -1240,7 +1240,7 @@ class BrowserViewController: UIViewController {
 
         if currentViewController != self {
             _ = self.navigationController?.popViewController(animated: true)
-        } else if urlBar.inOverlayMode {
+        } else if let urlBar = urlBar, urlBar.inOverlayMode {
             urlBar.didClickCancel()
         }
     }
