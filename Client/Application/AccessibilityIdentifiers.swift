@@ -95,5 +95,11 @@ public struct AccessibilityIdentifiers {
         struct ClearData {
             static let clearPrivatedata = "ClearPrivateData"
         }
+
+        struct SearchBar {
+            static let searchBarSetting = "SearchBarSetting"
+            static let topSetting = "TopSearchBar"
+            static let bottomSetting = "BottomSearchBar"
+        }
     }
 }

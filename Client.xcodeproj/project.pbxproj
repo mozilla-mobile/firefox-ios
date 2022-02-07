@@ -455,6 +455,8 @@
 		8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */; };
 		8ADED7EE276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */; };
 		8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */; };
+		8AE1E1CB27B18F560024C45E /* SearchBarSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1CA27B18F560024C45E /* SearchBarSettingsViewController.swift */; };
+		8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */; };
 		8AED23C527AC1F9500DE7E97 /* BaseContentStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */; };
 		8AEE284B276A973400C7104D /* RatingPromptManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE284A276A973400C7104D /* RatingPromptManagerTests.swift */; };
 		8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C62756BA34003207D1 /* LoginsHelper.js */; };
@@ -2693,6 +2695,8 @@
 		8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionsTests.swift; sourceTree = "<group>"; };
 		8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeDaysOfUseCounter.swift; sourceTree = "<group>"; };
 		8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeDaysOfUseCounterTests.swift; sourceTree = "<group>"; };
+		8AE1E1CA27B18F560024C45E /* SearchBarSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarSettingsViewController.swift; sourceTree = "<group>"; };
+		8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarSettingsViewModel.swift; sourceTree = "<group>"; };
 		8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseContentStackView.swift; sourceTree = "<group>"; };
 		8AEE284A276A973400C7104D /* RatingPromptManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManagerTests.swift; sourceTree = "<group>"; };
 		8AEE62C62756BA34003207D1 /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LoginsHelper.js; path = AllFrames/AtDocumentStart/LoginsHelper.js; sourceTree = "<group>"; };
@@ -4861,6 +4865,7 @@
 				F85C7F0D2711C555004BDBA4 /* SettingsViewController.swift */,
 				D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */,
 				CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */,
+				8AE1E1CE27B191160024C45E /* SearchBar */,
 				EB9A178D20E525DF00B12184 /* ThemeSettingsController.swift */,
 				66CE54A720FCF6CF00CC310B /* WebsiteDataManagementViewController.swift */,
 				6669B5E1211418A200CA117B /* WebsiteDataSearchResultsViewController.swift */,
@@ -5311,6 +5316,15 @@
 				7B42406D1CA04CAC009B5C28 /* Menu.xcassets */,
 			);
 			path = Menu;
+			sourceTree = "<group>";
+		};
+		8AE1E1CE27B191160024C45E /* SearchBar */ = {
+			isa = PBXGroup;
+			children = (
+				8AE1E1CA27B18F560024C45E /* SearchBarSettingsViewController.swift */,
+				8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */,
+			);
+			path = SearchBar;
 			sourceTree = "<group>";
 		};
 		8AED23C327AC1F8700DE7E97 /* Components */ = {
@@ -8591,6 +8605,7 @@
 				43AB6FA425DC53D30016B015 /* ASHeaderView.swift in Sources */,
 				C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */,
 				CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */,
+				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,
 				8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
@@ -8744,6 +8759,7 @@
 				437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */,
 				439B008B26E6CE2300DFAF14 /* GroupedTabCell.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
+				8AE1E1CB27B18F560024C45E /* SearchBarSettingsViewController.swift in Sources */,
 				9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */,
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeIcon.swift in Sources */,
