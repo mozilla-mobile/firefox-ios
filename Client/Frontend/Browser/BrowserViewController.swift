@@ -805,6 +805,10 @@ class BrowserViewController: UIViewController {
             firefoxHomeViewController.didMove(toParent: self)
         }
 
+        if self.readerModeBar != nil {
+            hideReaderModeBar(animated: false)
+        }
+
         firefoxHomeViewController?.applyTheme()
 
         // We have to run this animation, even if the view is already showing
