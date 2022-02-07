@@ -126,18 +126,36 @@ class OpenPassBookHelper: NSObject {
     fileprivate var url: URL
 
     fileprivate let browserViewController: BrowserViewController
+    fileprivate let cookieStore: WKHTTPCookieStore
+    fileprivate lazy var session = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: .ephemeral)
 
-    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
+    required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let mimeType = response.mimeType, mimeType == MIMEType.Passbook, PKAddPassesViewController.canAddPasses(),
             let responseURL = response.url, !forceDownload else { return nil }
         self.url = responseURL
         self.browserViewController = browserViewController
+        self.cookieStore = cookieStore
         super.init()
     }
 
     func open() {
-        guard let passData = try? Data(contentsOf: url) else { return }
-
+        // add webview cookies to download session
+        self.cookieStore.getAllCookies { [weak self] cookies in
+            guard let self = self else { return }
+            for cookie in cookies {
+                self.session.configuration.httpCookieStorage?.setCookie(cookie)
+            }
+            self.session.dataTask(with: self.url) { (data, response, error) in
+                guard let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data else {
+                    self.presentErrorAlert()
+                    return
+                }
+                self.open(passData: data)
+            }.resume()
+        }
+    }
+    
+    private func open(passData: Data) {
         do {
             let pass = try PKPass(data: passData)
 
@@ -147,16 +165,24 @@ class OpenPassBookHelper: NSObject {
             } else {
                 if let addController = PKAddPassesViewController(pass: pass) {
                     browserViewController.present(addController, animated: true, completion: nil)
+                } else {
+                    presentErrorAlert(pass: pass)
                 }
             }
         } catch {
-            let alertController = UIAlertController(title: .UnableToAddPassErrorTitle, message: .UnableToAddPassErrorMessage, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss, style: .cancel) { (action) in
-                    // Do nothing.
-            })
-            browserViewController.present(alertController, animated: true, completion: nil)
+            presentErrorAlert()
             return
         }
+    }
+    
+    private func presentErrorAlert(pass: PKPass? = nil) {
+        let detail = pass == nil ? "" : " \(pass!.localizedName) \(pass!.localizedDescription)"
+        let message = .UnableToAddPassErrorMessage + detail
+        let alertController = UIAlertController(title: .UnableToAddPassErrorTitle, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss, style: .cancel) { (action) in
+            // Do nothing.
+        })
+        browserViewController.present(alertController, animated: true, completion: nil)
     }
 }
 
