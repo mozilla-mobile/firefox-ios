@@ -793,7 +793,6 @@ class SendAnonymousUsageDataSetting: BoolSetting {
                 AdjustHelper.setEnabled($0)
                 Glean.shared.setUploadEnabled($0)
                 Experiments.setTelemetrySetting($0)
-                Experiments.shared.resetTelemetryIdentifiers()
             }
         )
         // We make sure to set this on initialization, in case the setting is turned off

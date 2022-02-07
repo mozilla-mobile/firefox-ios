@@ -75,6 +75,9 @@ enum Experiments {
     
     static func setTelemetrySetting(_ setting: Bool) {
         telemetrySetting = setting
+        if !setting {
+            shared.resetTelemetryIdentifiers()
+        }
         updateGlobalUserParticipation()
     }
     
