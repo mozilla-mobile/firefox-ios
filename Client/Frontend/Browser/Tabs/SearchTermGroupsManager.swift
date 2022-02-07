@@ -228,7 +228,7 @@ class SearchTermGroupsManager {
                 return firstSiteATimestamp < secondSiteTimestamp
 
             } else if let firstHighlight = $0 as? HistoryHighlight, let secondHighlight = $1 as? HistoryHighlight {
-                return firstHighlight.score < secondHighlight.score
+                return firstHighlight.score > secondHighlight.score
             } else {
                 fatalError("Error: We should never pass a type \(T.self) to this function.")
             }

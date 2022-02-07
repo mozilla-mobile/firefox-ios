@@ -44,7 +44,6 @@ open class Site: Identifiable {
 
     public let url: String
     public let title: String
-    public var highlightScore: Double? = nil
     open var metadata: PageMetadata?
      // Sites may have multiple favicons. We'll return the largest.
     open var icon: Favicon?

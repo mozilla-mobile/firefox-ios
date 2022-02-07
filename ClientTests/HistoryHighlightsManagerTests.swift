@@ -175,7 +175,7 @@ class HistoryHighlightsTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func testSingleHistoryHighlightOrfrt_withGroupingEnabled() {
+    func testSingleHistoryHighlightOrder_withGroupingEnabled() {
         emptyDB()
 
         let testSites = [("mozilla", ""),

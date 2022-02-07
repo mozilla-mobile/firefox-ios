@@ -31,9 +31,12 @@ class HistoryHighlightsManager {
 
     // MARK: - Public interface
 
-    /// Get HistoryHighlitght from A~S then filter open tabs from the history highlight result there should not be duplicated
-    /// after apply group logic if `shouldGroupHighlights` is set to true and finally collate indidual HistoryHighlight with `ASGroup<HistoryHighlight>`
+    /// Fetches HistoryHighlight from A~S, and then filters currently open
+    /// tabs against history highlights in order to avoid duplicated items. Then,
+    /// if `shouldGroupHighlights` is set to true, applies group logic and finally, 
+    /// collates indivdual HistoryHighlight with `ASGroup<HistoryHighlight>`
     /// to return the top nine results alternating betwen them.
+    ///
     /// - Parameters:
     ///   - profile: The user's `Profile` info
     ///   - tabs: List of `Tab` to filter open tabs from the highlight item list
@@ -97,9 +100,13 @@ class HistoryHighlightsManager {
     }
 
 
-    /// Collate a `HistoryHighlight` group and individual `HistoryHighlight`, the result array alternates them starting with individual highlights.
-    ///  Because groups could be nil, the `HighlightItem` array get initialized with the `HistoryHighlight` array and if groups are not nil are inserted in the odd index of the array.
-    ///  In case the individual items are done, the rest of the group array gets appended to the result array
+    /// Collate `HistoryHighlight` groups and individual `HistoryHighlight` items, such that
+    /// the resulting array alternates between them, starting with individual highlights.
+    /// Because groups could be nil, the `HighlightItem` array gets initialized with the 
+    /// `HistoryHighlight` array and, if not `nil`, groups are then inserted in the odd index
+    /// of the array. In case the individual items are done, the rest of the group array gets 
+    /// appended to the result array.
+    ///
     /// - Parameters:
     ///   - groups: Search Groups of `ASGroup<HistoryHighlight>`
     ///   - highlights: Individual `HistoryHighlight`
