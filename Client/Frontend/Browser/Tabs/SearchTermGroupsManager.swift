@@ -15,7 +15,6 @@ struct ASGroup<T> {
 
 class SearchTermGroupsManager {
 
-    // Yoana, SITE here needs to change to HistoryHighlight
     public static func getHighlightGroups(
         with profile: Profile,
         from highlights: [HistoryHighlight],
@@ -41,7 +40,7 @@ class SearchTermGroupsManager {
     /// - Parameters:
     ///   - profile: The user's `Profile` info
     ///   - items: List of items we want to make the groups from. This is a generic type and
-    ///   currently only supports `Tab` and `URL`
+    ///   currently only supports `Tab`, `URL` and `HistoryHighlight`
     ///   - ordering: Order in which we want to return groups, `.orderedAscending` or
     ///   `.orderedDescending`. `.orderedSame` is also possible, but will return the exact
     ///   order of the group that was provided. Note: this does not affect the groups' items,
@@ -229,10 +228,7 @@ class SearchTermGroupsManager {
                 return firstSiteATimestamp < secondSiteTimestamp
 
             } else if let firstHighlight = $0 as? HistoryHighlight, let secondHighlight = $1 as? HistoryHighlight {
-//                let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
-//                let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
                 return firstHighlight.score < secondHighlight.score
-
             } else {
                 fatalError("Error: We should never pass a type \(T.self) to this function.")
             }

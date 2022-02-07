@@ -30,26 +30,32 @@ class HistoryHighlightsManager {
     private static var shouldGroupHighlights = false
 
     // MARK: - Public interface
-    
+
+    /// Get HistoryHighlitght from A~S then filter open tabs from the history highlight result there should not be duplicated
+    /// after apply group logic if `shouldGroupHighlights` is set to true and finally collate indidual HistoryHighlight with `ASGroup<HistoryHighlight>`
+    /// to return the top nine results alternating betwen them.
+    /// - Parameters:
+    ///   - profile: The user's `Profile` info
+    ///   - tabs: List of `Tab` to filter open tabs from the highlight item list
+    ///   - shouldGroupHighlights: Toggle to support highlight groups in the future for now is set to false
+    ///   - completion: completion handler than contains either a list of `HistoryHighlights` if `shouldGroupHighlights` is set to false
+    ///   or a combine list of `HistoryHighlights` and `ASGroup<HistoryHighlights>`if is true
     public static func getHighlightsData(with profile: Profile,
                                          and tabs: [Tab],
                                          shouldGroupHighlights: Bool = false,
                                          completion: @escaping ([HighlightItem]?) -> Void) {
-        // Get highlights
         HistoryHighlightsManager.shouldGroupHighlights = shouldGroupHighlights
         fetchHighlights(with: profile) { highlights in
+
             guard let highlights = highlights, !highlights.isEmpty else {
                 completion(nil)
                 return
             }
 
-            // Filter from highlights
             let filterHighlights = highlights.filter { highlights in
-                // can't filter on host because we want the unique url
                 !tabs.contains { highlights.urlFromString == $0.url }
             }
 
-            // Build groups
             if shouldGroupHighlights {
                 buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
 
@@ -59,10 +65,8 @@ class HistoryHighlightsManager {
             } else {
                 completion(Array(filterHighlights.prefix(9)))
             }
-
         }
     }
-
 
     // MARK: - Data fetching functions
 
@@ -73,6 +77,7 @@ class HistoryHighlightsManager {
         profile.places.getHighlights(weights: HistoryHighlightWeights(viewTime: self.defaultViewTimeWeight,
                                                                       frequency: self.defaultFrequencyWeight),
                                      limit: limit).uponQueue(.main) { result in
+
             guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
 
             completion(ASHighlights)
@@ -92,11 +97,13 @@ class HistoryHighlightsManager {
     }
 
 
-    /// Collate a history highlight group and individual highlight, the result array alternates them starting with individual highlights. In case one of the items is done we append the content of remaining source
+    /// Collate a `HistoryHighlight` group and individual `HistoryHighlight`, the result array alternates them starting with individual highlights.
+    ///  Because groups could be nil, the `HighlightItem` array get initialized with the `HistoryHighlight` array and if groups are not nil are inserted in the odd index of the array.
+    ///  In case the individual items are done, the rest of the group array gets appended to the result array
     /// - Parameters:
-    ///   - groups: Search Groups of history highlights
-    ///   - sites: Individual highlights sites
-    /// - Returns: A  highlight items arrray alternating highlight sites and search groups
+    ///   - groups: Search Groups of `ASGroup<HistoryHighlight>`
+    ///   - highlights: Individual `HistoryHighlight`
+    /// - Returns: A  `HighlightItem` arrray alternating `HistoryHighlight` and search `ASGroup<HistoryHighlight>`
     private static func collateForRecentlySaved(from groups: [ASGroup<HistoryHighlight>]?,
                                                 and highlights: [HistoryHighlight]) -> [HighlightItem] {
         guard let groups = groups, !groups.isEmpty else { return highlights }
@@ -104,7 +111,6 @@ class HistoryHighlightsManager {
         var highlightItems: [HighlightItem] = highlights
 
         for (index, group) in groups.enumerated() {
-            // add documentation
             let insertIndex = (index * 2) + 1
             if insertIndex < highlightItems.count {
                 highlightItems.insert(group, at: insertIndex)
