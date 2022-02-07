@@ -53,7 +53,6 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
     }
 }
 
-// Laurie - dummy change to retrigger BR - to remove
 extension BrowserViewController {
     func updateReaderModeBar() {
         guard let readerModeBar = readerModeBar else { return }
