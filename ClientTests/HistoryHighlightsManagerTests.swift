@@ -15,12 +15,16 @@ class HistoryHighlightsTests: XCTestCase {
     private var tabManager: TabManager!
 
     override func setUp() {
+        super.setUp()
+
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile._reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
     }
 
     override func tearDown() {
+        super.tearDown()
+        
         profile._shutdown()
         profile = nil
         tabManager = nil

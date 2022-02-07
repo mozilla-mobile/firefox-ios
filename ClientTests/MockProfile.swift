@@ -138,7 +138,6 @@ open class MockProfile: Client.Profile {
         readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
         let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
         places = RustPlaces(databasePath: placesDatabasePath)
-        _ = places.reopenIfClosed()
         legacyPlaces = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
         recommendations = legacyPlaces
         history = legacyPlaces
