@@ -27,7 +27,6 @@ class HistoryHighlightsManager {
     private static let defaultViewTimeWeight = 10.0
     private static let defaultFrequencyWeight = 4.0
     private static let defaultHighlightCount = 9
-    private static var shouldGroupHighlights = false
 
     // MARK: - Public interface
 
@@ -47,7 +46,7 @@ class HistoryHighlightsManager {
                                          and tabs: [Tab],
                                          shouldGroupHighlights: Bool = false,
                                          completion: @escaping ([HighlightItem]?) -> Void) {
-        HistoryHighlightsManager.shouldGroupHighlights = shouldGroupHighlights
+
         fetchHighlights(with: profile) { highlights in
 
             guard let highlights = highlights, !highlights.isEmpty else {

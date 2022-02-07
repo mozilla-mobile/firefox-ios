@@ -44,7 +44,7 @@ class HistoryHighlightsTests: XCTestCase {
         XCTAssertNotNil(singleItemRead.successValue)
         XCTAssertEqual(singleItemRead.successValue!.count, 1)
         XCTAssertEqual(singleItemRead.successValue![0].url, "https://www.mozilla.com/")
-        XCTAssertEqual(singleItemRead.successValue![0].title, "Mozilla Test")
+        XCTAssertEqual(singleItemRead.successValue![0].title?.lowercased(), "mozilla test")
         XCTAssertEqual(singleItemRead.successValue![0].documentType, DocumentType.regular)
         XCTAssertEqual(singleItemRead.successValue![0].totalViewTime, 1)
     }
@@ -62,7 +62,7 @@ class HistoryHighlightsTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func testHistoryHighlightExists() {
+    func testHistoryHighlightCount() {
         emptyDB()
 
         let testSites = [("mozilla", ""),
