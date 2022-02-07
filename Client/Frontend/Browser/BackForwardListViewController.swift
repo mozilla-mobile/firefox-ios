@@ -75,7 +75,10 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         super.viewDidLoad()
         view.addSubview(shadow)
         view.addSubview(tableView)
-        snappedToBottom = bvc?.shouldShowToolbarForTraitCollection(traitCollection) ?? false
+
+        let toolBarShouldShow = bvc?.shouldShowToolbarForTraitCollection(traitCollection) ?? false
+        let isBottomSearchBar = bvc?.isBottomSearchBar ?? false
+        snappedToBottom = toolBarShouldShow || isBottomSearchBar
 
         tableView.snp.makeConstraints { make in
             make.height.equalTo(0)
@@ -150,7 +153,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         guard let bvc = self.bvc else {
             return
         }
-        if bvc.shouldShowToolbarForTraitCollection(newCollection) != snappedToBottom {
+        if bvc.shouldShowToolbarForTraitCollection(newCollection) != snappedToBottom, !bvc.isBottomSearchBar {
             tableView.snp.updateConstraints { make in
                 if snappedToBottom {
                     make.bottom.equalTo(self.view).offset(0)
