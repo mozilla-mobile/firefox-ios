@@ -69,7 +69,6 @@ extension PhotonActionSheetProtocol {
             } else {
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     controller.modalPresentationStyle = .fullScreen
-                    
                 }
             }
             controller.presentingModalViewControllerDelegate = vcDelegate
