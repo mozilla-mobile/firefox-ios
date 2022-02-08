@@ -7932,7 +7932,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(SRCROOT)/Client/Generated/FML.swift",
+				"$(SRCROOT)/Client/Generated/FxNimbus.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

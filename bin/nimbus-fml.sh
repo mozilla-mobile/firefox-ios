@@ -153,7 +153,7 @@ $BINARY_PATH $MANIFEST_PATH -o $OUTPUT_DIR/FxNimbus.swift ios features --classna
 
 # The FML doesn't currenlty support adding a custom import, so we do this in this script.
 # See: https://mozilla-hub.atlassian.net/browse/EXP-2199
-if [ ! -z $NAMESPACE]; then
+if [[ ! -z $NAMESPACE ]]; then
     echo -e "import $NAMESPACE\n$(cat $OUTPUT_DIR/FxNimbus.swift)" > $OUTPUT_DIR/FxNimbus.swift
 fi
 
