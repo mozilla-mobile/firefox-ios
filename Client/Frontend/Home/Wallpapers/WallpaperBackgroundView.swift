@@ -24,7 +24,7 @@ class WallpaperBackgroundView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        updateGradientColor()
+        updateGradient()
         setupNotifications()
         updateImageTo(wallpaperManager.currentWallpaperImage)
     }
@@ -108,11 +108,20 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func updateGradientColor() {
-        let contrastColour = LegacyThemeManager.instance.currentName == .dark ? 0.0 : 1.0
+        struct GradientValues {
+            let start: CGFloat
+            let transition: CGFloat
+            let end: CGFloat
+        }
+        
+        let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
+        let contrastColour = isDarkTheme ? 0.0 : 1.0
+        let gradientValue = isDarkTheme ? GradientValues(start: 0.38, transition: 0.35, end: 0.32) : GradientValues(start: 0.31, transition: 0.28, end: 0.25)
+        
         gradientView.configureGradient(
-            colors: [UIColor(white: contrastColour, alpha: 0.4),
-                     UIColor(white: contrastColour, alpha: 0.35),
-                     UIColor(white: contrastColour , alpha: 0.3)],
+            colors: [UIColor(white: contrastColour, alpha: gradientValue.start),
+                     UIColor(white: contrastColour, alpha: gradientValue.transition),
+                     UIColor(white: contrastColour , alpha: gradientValue.end)],
             positions: [0, 0.5, 0.8],
             startPoint: .zero,
             endPoint: CGPoint(x: 0, y: 1)
@@ -130,6 +139,7 @@ class WallpaperBackgroundView: UIView {
 
         switch wallpaperManager.currentWallpaper.type {
         // No gradient exists for default wallpaper OR firefox default wallpapers.
+        case .themed(type: .projectHouse): gradientView.alpha = 1.0
         default: gradientView.alpha = 0.0
         }
 
