@@ -7,11 +7,6 @@ import Shared
 import Storage
 import MozillaAppServices
 
-protocol HighlightItem {}
-
-extension ASGroup: HighlightItem {}
-extension HistoryHighlight: HighlightItem {}
-
 extension HistoryHighlight {
     var urlFromString: URL? {
         return URL(string: url)
@@ -58,6 +53,8 @@ class HistoryHighlightsManager {
                 !tabs.contains { highlights.urlFromString == $0.url }
             }
 
+            print("YRD highlight list after filter \(filterHighlights)")
+
             if shouldGroupHighlights {
                 buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
 
@@ -65,6 +62,7 @@ class HistoryHighlightsManager {
                     completion(Array(collatedHighlights.prefix(9)))
                 }
             } else {
+                print("YRD highlight list final result \(filterHighlights.prefix(9))")
                 completion(Array(filterHighlights.prefix(9)))
             }
         }
@@ -81,6 +79,8 @@ class HistoryHighlightsManager {
                                      limit: limit).uponQueue(.main) { result in
 
             guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
+
+            print("YRD highlight list \(ASHighlights)")
 
             completion(ASHighlights)
         }

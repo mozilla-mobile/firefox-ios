@@ -24,7 +24,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     /// available such that we always have the appropriate number of columns for the
     /// rest of the dynamic calculations.
     var numberOfColumns: Int {
-        guard let count = viewModel?.historyItems.count else { return 0 }
+        guard let count = viewModel?.historyItems?.count else { return 0 }
         return Int(ceil(Double(count) / Double(HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn)))
     }
 
@@ -92,6 +92,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
                                                heightDimension: .estimated(HistoryHighlightsCollectionCellUX.estimatedCellHeight)),
             subitems: [item, item, item]
         )
+        verticalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
 
         let section = NSCollectionLayoutSection(group: verticalGroup)
         section.orthogonalScrollingBehavior = .continuous
@@ -102,7 +103,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
 // MARK: - Collection View Data Source
 extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let count = viewModel?.historyItems.count else { return 0 }
+        guard let count = viewModel?.historyItems?.count else { return 0 }
 
         // If there are less than or equal items to the max number of items allowed per column,
         // we can return the standard count, as we don't need to display filler cells.
@@ -118,18 +119,18 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HistoryHighlightsCell.cellIdentifier, for: indexPath) as! HistoryHighlightsCell
         let hideBottomLine = isBottomCell(indexPath: indexPath,
-                                          totalItems: viewModel?.historyItems.count)
+                                          totalItems: viewModel?.historyItems?.count)
         let cornersToRound = determineCornerToRound(indexPath: indexPath,
-                                                    totalItems: viewModel?.historyItems.count)
+                                                    totalItems: viewModel?.historyItems?.count)
 
         // TODO: `item` can be either single url or a search group. We must differentiate
         // here and then update the cell accordingly.
-        if let item = viewModel?.historyItems[safe: indexPath.row] {
+        if let item = viewModel?.historyItems?[safe: indexPath.row] {
 
-            let itemURL = item.url?.absoluteString ?? ""
-            let site = Site(url: itemURL, title: item.displayTitle, bookmarked: true)
+//            let itemURL = item.url?.absoluteString ?? ""
+//            let site = Site(url: itemURL, title: item.displayTitle, bookmarked: true)
 
-            let cellOptions = RecentlyVisitedCellOptions(title: site.title,
+            let cellOptions = RecentlyVisitedCellOptions(title: item.showTitle, //site.title,
                                                          shouldHideBottomLine: hideBottomLine,
                                                          with: cornersToRound,
                                                          and: nil,

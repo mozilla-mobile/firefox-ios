@@ -298,7 +298,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
-        self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM()
+        self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM(with: profile)
         self.pocketViewModel = FxHomePocketViewModel(profile: profile, isZeroSearch: isZeroSearch)
         self.experiments = experiments
         super.init(collectionViewLayout: flowLayout)
@@ -725,7 +725,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             case .historyHighlights:
                 if !hasSentHistoryHighlightsSectionEvent
                     && isHistoryHightlightsSectionEnabled
-                    && !historyHighlightsViewModel.historyItems.isEmpty {
+                    && !(historyHighlightsViewModel.historyItems?.isEmpty ?? false) {
                     TelemetryWrapper.recordEvent(category: .action,
                                                  method: .view,
                                                  object: .historyImpressions,
@@ -780,20 +780,15 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: width, height: cellSize.height)
 
         case .historyHighlights:
-            // Returns the total height based on a variable column/row layout
-            let itemCount = historyHighlightsViewModel.historyItems.count
-            for number in 1...HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
-                if itemCount >= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
-                    cellSize.height *= CGFloat(HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn)
-                    break
-                }
 
-                if itemCount == number {
-                    cellSize.height *= CGFloat(number)
-                    break
-                }
+            guard let items = historyHighlightsViewModel.historyItems, !items.isEmpty else {
+                return CGSize(width: cellSize.width, height: .zero)
+
             }
 
+            // Returns the total height based on a variable column/row layout
+            let rowNumber = items.count < HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn ? items.count : HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
+            cellSize.height *= CGFloat(rowNumber)
             return cellSize
 
         default:
@@ -966,6 +961,7 @@ extension FirefoxHomeViewController {
 
     private func configureHistoryHighlightsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let historyCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
+
         historyHighlightsViewModel.onTapItem = { [weak self] in
             // TODO: When the data is hooked up, this will actually send a user to
             // the correct place in history

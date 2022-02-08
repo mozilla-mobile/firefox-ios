@@ -7,7 +7,8 @@ import Foundation
 class FxHomeHistoryHightlightsVM {
 
     // MARK: - Properties & Variables
-    var historyItems = [Tab]()
+    var historyItems: [HighlightItem]?
+    private var profile: Profile
     private var tabManager: TabManager
     private var foregroundBVC: BrowserViewController
 
@@ -19,10 +20,14 @@ class FxHomeHistoryHightlightsVM {
     }
 
     // MARK: - Inits
-    init(with tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+    init(with profile: Profile,
+         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
          foregroundBVC: BrowserViewController = BrowserViewController.foregroundBVC()) {
+        self.profile = profile
         self.tabManager = tabManager
         self.foregroundBVC = foregroundBVC
+
+        loadItems()
     }
 
     // MARK: - Public methods
@@ -39,17 +44,12 @@ class FxHomeHistoryHightlightsVM {
     }
 
     // MARK: - Private Methods
+
     private func loadItems() {
-        configureData()
-        var items = [Tab]()
+        guard historyItems == nil else { return }
 
-        items.append(contentsOf: recentTabs)
-
-        historyItems.removeAll()
-
-        for item in items {
-            historyItems.append(item)
-            if historyItems.count == maxItemsAllowed { break }
+        HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
+            self?.historyItems = highlights
         }
     }
 
