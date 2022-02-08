@@ -71,7 +71,9 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     private var delegate: SearchBarPreferenceDelegateMock?
     func testSavedSearchPosition_onBottomSettingCallsDelegate() {
         let expectation = expectation(description: "Delegate is called")
-        let viewModel = createViewModel(withDefaultPosition: .top)
+        let viewModel = createViewModel()
+        callSetting(viewModel.topSetting)
+
         delegate = SearchBarPreferenceDelegateMock(completion: {
             expectation.fulfill()
             XCTAssertEqual(viewModel.bottomSetting.isChecked(), true)
@@ -84,7 +86,9 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testSavedSearchPosition_onTopSettingCallsDelegate() {
         let expectation = expectation(description: "Delegate is called")
-        let viewModel = createViewModel(withDefaultPosition: .bottom)
+        let viewModel = createViewModel()
+        callSetting(viewModel.bottomSetting)
+        
         delegate = SearchBarPreferenceDelegateMock(completion: {
             expectation.fulfill()
             XCTAssertEqual(viewModel.topSetting.isChecked(), true)
@@ -97,7 +101,15 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     // MARK: Notification
 
-    func testNotificationSent() {
+    func testNotificationSent_onBottomSetting() {
+        expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
+        let viewModel = createViewModel()
+        callSetting(viewModel.bottomSetting)
+
+        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+    }
+
+    func testNotificationSent_onTopSetting() {
         expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
         let viewModel = createViewModel()
         callSetting(viewModel.topSetting)
@@ -109,7 +121,8 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: { notification in
             self.verifyNotification(expectedPosition: .top, notification: notification)
         })
-        let viewModel = createViewModel()
+        let (viewModel, prefs) = createViewModelWithPrefs()
+        setDefault(prefs, defaultPosition: .bottom)
         callSetting(viewModel.topSetting)
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
@@ -119,7 +132,8 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: { notification in
             self.verifyNotification(expectedPosition: .bottom, notification: notification)
         })
-        let viewModel = createViewModel()
+        let (viewModel, prefs) = createViewModelWithPrefs()
+        setDefault(prefs, defaultPosition: .top)
         callSetting(viewModel.bottomSetting)
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
@@ -129,26 +143,25 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 // MARK: Helper methods
 private extension SearchBarSettingsViewModelTests {
 
-    func createViewModel(withDefaultPosition defaultPosition: SearchBarPosition? = nil) -> SearchBarSettingsViewModel {
+    func createViewModel() -> SearchBarSettingsViewModel {
+        return createViewModelWithPrefs().0
+    }
+
+    func createViewModelWithPrefs() -> (SearchBarSettingsViewModel, Prefs) {
         let mockPrefs = MockProfile().prefs
         mockPrefs.clearAll()
         let viewModel = SearchBarSettingsViewModel(prefs: mockPrefs)
 
-        switch defaultPosition {
-        case .bottom:
-            callSetting(viewModel.bottomSetting)
-        case .top:
-            callSetting(viewModel.topSetting)
-        case .none:
-            break
-        }
-
-        return SearchBarSettingsViewModel(prefs: mockPrefs)
+        return (viewModel, mockPrefs)
     }
 
     func callSetting(_ setting: CheckmarkSetting) {
         let dummyNavController = UINavigationController()
         setting.onClick(dummyNavController)
+    }
+
+    func setDefault(_ prefs: Prefs, defaultPosition: SearchBarPosition) {
+        prefs.setString(defaultPosition.rawValue, forKey: PrefsKeys.KeySearchBarPosition)
     }
 
     func verifyNotification(expectedPosition: SearchBarPosition,
