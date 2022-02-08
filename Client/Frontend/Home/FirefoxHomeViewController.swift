@@ -348,23 +348,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         view.addSubview(contextualSourceView)
         contextualSourceView.backgroundColor = .clear
 
-        if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
-            self.view.addSubview(defaultBrowserCard)
-            NSLayoutConstraint.activate([
-                defaultBrowserCard.topAnchor.constraint(equalTo: view.topAnchor),
-                defaultBrowserCard.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
-                defaultBrowserCard.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                defaultBrowserCard.widthAnchor.constraint(equalToConstant: 380),
-
-                collectionView.topAnchor.constraint(equalTo: defaultBrowserCard.bottomAnchor),
-                collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            ])
-
-            defaultBrowserCard.dismissClosure = {
-                self.dismissDefaultBrowserCard()
-            }
+        if shouldShowDefaultBrowserCard {
+            showDefaultBrowserCard()
         }
 
         NSLayoutConstraint.activate([
@@ -438,16 +423,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         applyTheme()
     }
 
-    public func dismissDefaultBrowserCard() {
-        self.defaultBrowserCard.removeFromSuperview()
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-    }
-
     @objc func reload(notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged,
@@ -472,7 +447,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
     }
 
-    @objc func dismissOverlayMode() {
+    @objc private func dismissOverlayMode() {
         BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         if let gestureRecognizers = collectionView.gestureRecognizers {
             for (index, gesture) in gestureRecognizers.enumerated() {
@@ -483,7 +458,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         }
     }
 
-    func presentContextualHint() {
+    // MARK: - Contextual hint
+
+    private func presentContextualHint() {
         overlayView.isHidden = false
         hasPresentedContextualHint = true
 
@@ -508,11 +485,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         present(contextualHintViewController, animated: true, completion: nil)
     }
 
-    func contextualHintPresentTimer() {
+    private func contextualHintPresentTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1.25, target: self, selector: #selector(presentContextualOverlay), userInfo: nil, repeats: false)
     }
 
-    @objc func presentContextualOverlay() {
+    @objc private func presentContextualOverlay() {
         guard BrowserViewController.foregroundBVC().searchController == nil,
               presentedViewController == nil else {
                   timer?.invalidate()
@@ -520,6 +497,47 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         }
         presentContextualHint()
     }
+
+    // MARK: - Default browser card
+
+    private var shouldShowDefaultBrowserCard: Bool {
+        if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    private func showDefaultBrowserCard() {
+        self.view.addSubview(defaultBrowserCard)
+        NSLayoutConstraint.activate([
+            defaultBrowserCard.topAnchor.constraint(equalTo: view.topAnchor),
+            defaultBrowserCard.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
+            defaultBrowserCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            defaultBrowserCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            defaultBrowserCard.heightAnchor.constraint(equalToConstant: 264),
+
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        defaultBrowserCard.dismissClosure = {
+            self.dismissDefaultBrowserCard()
+        }
+    }
+
+    public func dismissDefaultBrowserCard() {
+        self.defaultBrowserCard.removeFromSuperview()
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    // MARK: - Headers
 
     private func getHeaderSize(forSection section: Int) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
