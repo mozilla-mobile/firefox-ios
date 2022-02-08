@@ -34,7 +34,9 @@ final class SearchBarSettingsViewModel {
     }
 
     static var isEnabled: Bool {
-        return UIDevice.current.userInterfaceIdiom != .pad
+        let isiPad = UIDevice.current.userInterfaceIdiom != .pad
+        let isFeatureEnabled = FeatureFlagsManager.shared.isFeatureActiveForBuild(.bottomSearchBar)
+        return !isiPad && isFeatureEnabled
     }
 
     var searchBarTitle: String {

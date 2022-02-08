@@ -71,7 +71,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                         titleText: .AppSettingsBlockPopups),
            ]
 
-        if featureFlags.isFeatureActiveForBuild(.bottomSearchBar) && SearchBarSettingsViewModel.isEnabled {
+        if SearchBarSettingsViewModel.isEnabled {
             generalSettings.insert(SearchBarSetting(settings: self), at: 5)
         }
 
