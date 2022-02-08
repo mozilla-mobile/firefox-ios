@@ -614,43 +614,43 @@ class BrowserViewController: UIViewController {
             make.bottom.equalTo(footer.snp.top)
         }
 
-        bottomContentStackView.snp.remakeConstraints  { make in
-            adjustBottomContentStackView(make)
+        bottomContentStackView.snp.remakeConstraints { remake in
+            adjustBottomContentStackView(remake)
         }
 
         adjustBottomSearchBarForKeyboard()
     }
 
-    private func adjustBottomContentStackView(_ make: ConstraintMaker) {
-        make.left.right.equalTo(view)
-        make.centerX.equalTo(view)
-        make.width.equalTo(view.safeArea.width)
+    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+        remake.left.right.equalTo(view)
+        remake.centerX.equalTo(view)
+        remake.width.equalTo(view.safeArea.width)
 
         // Height is set by content - this removes run time error
-        make.height.greaterThanOrEqualTo(0)
+        remake.height.greaterThanOrEqualTo(0)
         bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         if isBottomSearchBar {
-            adjustBottomContentBottomSearchBar(make)
+            adjustBottomContentBottomSearchBar(remake)
         } else {
-            adjustBottomContentTopSearchBar(make)
+            adjustBottomContentTopSearchBar(remake)
         }
     }
 
-    private func adjustBottomContentTopSearchBar(_ make: ConstraintMaker) {
+    private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
-            make.bottom.equalTo(view).offset(-keyboardHeight)
+            remake.bottom.equalTo(view).offset(-keyboardHeight)
         } else if !toolbar.isHidden {
-            make.bottom.lessThanOrEqualTo(footer.snp.top)
-            make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
+            remake.bottom.lessThanOrEqualTo(footer.snp.top)
+            remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         } else {
-            make.bottom.equalTo(view.safeArea.bottom)
+            remake.bottom.equalTo(view.safeArea.bottom)
         }
     }
 
-    private func adjustBottomContentBottomSearchBar(_ make: ConstraintMaker) {
-        make.bottom.lessThanOrEqualTo(footer.snp.top)
-        make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
+    private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+        remake.bottom.lessThanOrEqualTo(footer.snp.top)
+        remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
     }
 
     private func adjustBottomSearchBarForKeyboard() {
