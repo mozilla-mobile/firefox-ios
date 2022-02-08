@@ -94,10 +94,10 @@ class BrowserViewController: UIViewController {
     var header: BaseAlphaStackView = .build { _ in }
     var footer: BaseAlphaStackView = .build { _ in }
 
-    var isBottomSearchBar: Bool {
-        guard SearchBarSettingsViewModel.isEnabled else { return false}
+    lazy var isBottomSearchBar: Bool = {
+        guard SearchBarSettingsViewModel.isEnabled else { return false }
         return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
-    }
+    }()
 
     // Alert content that appears on top of the footer should be added to this view.
     // ex: Find In Page, SnackBars
@@ -192,7 +192,8 @@ class BrowserViewController: UIViewController {
               let newSearchBarPosition = dict[PrefsKeys.KeySearchBarPosition] as? SearchBarPosition,
               urlBar != nil else { return }
 
-        let newParent = newSearchBarPosition == .bottom ? footer : header
+        let newPositionIsBottom = newSearchBarPosition == .bottom
+        let newParent = newPositionIsBottom ? footer : header
         urlBar.removeFromParent()
         urlBar.addToParent(parent: newParent)
 
@@ -201,6 +202,7 @@ class BrowserViewController: UIViewController {
             readerModeBar.addToParent(parent: newParent, addToTop: newSearchBarPosition == .bottom)
         }
 
+        isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         toolbar.setNeedsDisplay()
     }
