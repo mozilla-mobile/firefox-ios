@@ -454,11 +454,7 @@ class BrowserViewController: UIViewController {
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
 
-        if isBottomSearchBar {
-            urlBar.addToParent(parent: footer)
-        } else {
-            urlBar.addToParent(parent: header)
-        }
+        urlBar.addToParent(parent: isBottomSearchBar ? footer : header)
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
 
