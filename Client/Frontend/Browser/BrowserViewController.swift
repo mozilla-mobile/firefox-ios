@@ -1240,7 +1240,7 @@ class BrowserViewController: UIViewController {
 
         if currentViewController != self {
             _ = self.navigationController?.popViewController(animated: true)
-        } else if urlBar.inOverlayMode {
+        } else if let urlBar = urlBar, urlBar.inOverlayMode {
             urlBar.didClickCancel()
         }
     }
@@ -1474,7 +1474,7 @@ extension BrowserViewController: TabDelegate {
 
         let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
         sessionRestoreHelper.delegate = self
-        tab.addContentScript(sessionRestoreHelper, name: SessionRestoreHelper.name())
+        tab.addContentScriptToPage(sessionRestoreHelper, name: SessionRestoreHelper.name())
 
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self

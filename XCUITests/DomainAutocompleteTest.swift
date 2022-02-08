@@ -29,7 +29,10 @@ class DomainAutocompleteTest: BaseTestCase {
 
     func test1Autocomplete() {
         // Basic autocompletion cases
-        navigator.goto(URLBarOpen)
+            // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
+        navigator.openURL("www.mozilla.org")
+        waitUntilPageLoad()
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         app.textFields["address"].typeText("w")
 
         waitForValueContains(app.textFields["address"], value: website["value"]!)
@@ -45,6 +48,10 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Test that deleting characters works correctly with autocomplete
     func test3AutocompleteDeletingChars() {
+        // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
+        navigator.openURL("www.mozilla.org")
+        waitUntilPageLoad()
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         app.textFields["address"].typeText("www.moz")
 
         // First delete the autocompleted part
