@@ -575,7 +575,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 oneLineCell.leftImageView.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)
-                appendButton.setImage(UIImage(named: SearchViewControllerUX.SearchAppendImage)?.withRenderingMode(.alwaysTemplate), for: .normal)
+                appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
                 appendButton.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
                 appendButton.sizeToFit()
@@ -642,6 +642,19 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
             searchQuery = newQuery + " "
         }
+    }
+
+    private var searchAppendImage: UIImage? {
+        var searchAppendImage = UIImage(named: SearchViewControllerUX.SearchAppendImage)
+
+        if viewModel.isBottomSearchBar, let image = searchAppendImage, let cgImage = image.cgImage {
+            searchAppendImage = UIImage(
+                cgImage: cgImage,
+                scale: image.scale,
+                orientation: .downMirrored
+            )
+        }
+        return searchAppendImage
     }
 }
 
