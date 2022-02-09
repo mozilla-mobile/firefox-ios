@@ -115,7 +115,7 @@ workflows:
             Branch | ${BITRISE_GIT_BRANCH}
             Warnings-in-code | ${SHOW_WARNING_COUNT}
             Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
-        - buttons: |+
+        - buttons: |
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
@@ -136,7 +136,7 @@ workflows:
             Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
             Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
             Branch | ${BITRISE_GIT_BRANCH}
-        - buttons: |+
+        - buttons: |
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
@@ -300,7 +300,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.4core
   RunAllXCUITests:
     steps: []
@@ -884,8 +884,7 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: This step is to build, archive and upload Firefox Beta on nightly
-      basis
+    description: This step is to build, archive and upload Firefox Beta on nightly basis
     meta:
       bitrise.io:
         stack: osx-xcode-13.1.x
