@@ -332,7 +332,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             }
         }
 
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: nil)
+        let notificationObject = [Tab.privateModeKey: isPrivate]
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
     }
 
     /// Find the previously selected cell, which is still displayed as selected

@@ -164,6 +164,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var contextualSourceView = UIView()
     fileprivate var isZeroSearch: Bool
     fileprivate var wallpaperManager: WallpaperManager
+
+    // Privacy of home page is controlled throught notifications since tab manager selected tab
+    // isn't always the proper privacy mode that should be reflected on the home page
+    private var isPrivate: Bool
+
     var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
     var historyHighlightsViewModel: FxHomeHistoryHightlightsVM
@@ -233,8 +238,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         else { return false }
 
         let tabManager = BrowserViewController.foregroundBVC().tabManager
-        return !(tabManager.selectedTab?.isPrivate ?? false)
-            && !tabManager.recentlyAccessedNormalTabs.isEmpty
+        return !isPrivate && !tabManager.recentlyAccessedNormalTabs.isEmpty
     }
 
     var shouldShowJumpBackInSection: Bool {
@@ -290,6 +294,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.wallpaperManager = wallpaperManager
+        self.isPrivate = BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? true
 
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
@@ -453,11 +458,24 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         switch notification.name {
         case .DisplayThemeChanged,
                 .DynamicFontChanged,
-                .WallpaperDidChange,
-                .TabsPrivacyModeChanged:
+                .WallpaperDidChange:
             reloadAll(shouldUpdateData: false)
+        case .TabsPrivacyModeChanged:
+            adjustPrivacySensitiveSections(notification: notification)
         default:
             reloadAll()
+        }
+    }
+
+    private func adjustPrivacySensitiveSections(notification: Notification) {
+        guard let dict = notification.object as? NSDictionary,
+              let isPrivate = dict[Tab.privateModeKey] as? Bool
+        else { return }
+
+        self.isPrivate = isPrivate
+        if let jumpbackInSection = jumpBackInViewModel.parentCollectionViewIndex?.section {
+            let indexSet = IndexSet([jumpbackInSection])
+            collectionView.reloadSections(indexSet)
         }
     }
 
@@ -939,6 +957,7 @@ extension FirefoxHomeViewController {
         jumpBackInViewModel.onTapGroup = { [weak self] tab in
             self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
         }
+        jumpBackInViewModel.parentCollectionViewIndex = indexPath
         jumpBackInCell.reloadLayout()
         jumpBackInCell.setNeedsLayout()
 

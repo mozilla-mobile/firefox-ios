@@ -468,7 +468,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         }
 
         selectTab(nextSelectedTab)
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: nil)
+
+        let notificationObject = [Tab.privateModeKey: nextSelectedTab?.isPrivate ?? true]
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
         return result
     }
 
