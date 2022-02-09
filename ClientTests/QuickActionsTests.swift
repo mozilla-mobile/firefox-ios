@@ -19,7 +19,6 @@ class QuickActionsTest: XCTestCase {
         profile = TabManagerMockProfile()
         tabManager = TabManager(profile: profile, imageStore: nil)
         browserViewController = SpyBrowserViewController(profile: profile, tabManager: tabManager)
-        browserViewController.isBottomSearchBar = false
         browserViewController.addSubviews()
         quickActions = QuickActions.sharedInstance
     }
