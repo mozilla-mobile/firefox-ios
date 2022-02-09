@@ -5,21 +5,38 @@
 import Foundation
 import Shared
 
+protocol WallpaperDownloadProtocol {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
+}
+
+extension URLSession: WallpaperDownloadProtocol {}
+
 class WallpaperNetworkUtility: WallpaperFilePathProtocol, Loggable {
     
+    // MARK: - Variables
     private static let wallpaperURLScheme = "MozWallpaperURLScheme"
+    lazy var downloadProtocol: WallpaperDownloadProtocol = {
+        return URLSession.shared
+    }()
     
-    init() { }
-    
+    // MARK: - Public interfaces
     public func downloadTaskFor(id: WallpaperImageResourceName) {
-        downloadResourceFrom(urlPath: id.portraitPath, andLocalPath: id.portrait)
-        downloadResourceFrom(urlPath: id.landscapePath, andLocalPath: id.landscape)
+        // Prioritize downloading the image matching the current orientation
+        if UIDevice.current.orientation.isLandscape {
+            downloadResourceFrom(urlPath: id.landscapePath, andLocalPath: id.landscape)
+            downloadResourceFrom(urlPath: id.portraitPath, andLocalPath: id.portrait)
+            
+        } else {
+            downloadResourceFrom(urlPath: id.portraitPath, andLocalPath: id.portrait)
+            downloadResourceFrom(urlPath: id.landscapePath, andLocalPath: id.landscape)
+        }
     }
     
+    // MARK: - Private methods
     private func downloadResourceFrom(urlPath: String, andLocalPath localPath: String) {
         guard let url = buildURLWith(path: urlPath) else { return }
         
-        let downloadTask = URLSession.shared.dataTask(with: url) { data, response, error in
+        downloadProtocol.dataTask(with: url) { data, response, error in
             
             if let error = error {
                 self.browserLog.debug("Error fetching wallpaper: \(error.localizedDescription)")
@@ -33,11 +50,15 @@ class WallpaperNetworkUtility: WallpaperFilePathProtocol, Loggable {
                 return
             }
             
-            guard let data = data, let image = UIImage(data: data) else { return }
+            guard let data = data, let image = UIImage(data: data) else {
+                self.browserLog.error("")
+                return
+            }
             
             let storageUtility = WallpaperStorageUtility()
             do {
                 try storageUtility.store(image: image, forKey: localPath)
+                
             } catch let error {
                 self.browserLog.error("Error saving downloaded image - \(error.localizedDescription)")
             }

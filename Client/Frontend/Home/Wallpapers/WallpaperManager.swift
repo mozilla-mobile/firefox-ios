@@ -18,13 +18,16 @@ struct WallpaperManager {
     }
     
     var currentWallpaperImage: UIImage? {
-        return storageManager.getCurrentWallaperImage()
+        return storageManager.getCurrentWallpaperImage()
     }
 
     var currentWallpaper: Wallpaper {
         guard let currentWallpaper = storageManager.getCurrentWallpaperObject() else {
-            // Returning the default wallpaper if nothing else is currently set
-            // as default will always exist
+            // Returning the default wallpaper if nothing else is currently set,
+            // as default will always exist. The reason this is returned is this manner
+            // is that, on fresh app installation, no wallpaper will be set. Thus,
+            // if this variable is accessed, it would return nil, when a wallpaper
+            // actually be required.
             return dataManager.availableWallpapers[0]
         }
 

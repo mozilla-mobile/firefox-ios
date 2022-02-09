@@ -36,17 +36,14 @@ struct WallpaperImageResourceName {
 
 class WallpaperResourceManager {
     
-    init() { }
-    
     // MARK: - Resource verification
     func verifyResources(for specialWallpapers: [Wallpaper]) {
         specialWallpapers.forEach { wallpaper in
             if wallpaper.meetsDateAndLocaleCriteria && !verifyResourceExists(for: wallpaper) {
                 let networkUtility = WallpaperNetworkUtility()
                 networkUtility.downloadTaskFor(id: getResourceNames(for: wallpaper.name))
-            }
-            
-            if !wallpaper.meetsDateAndLocaleCriteria {
+                
+            } else if !wallpaper.meetsDateAndLocaleCriteria {
                 deleteResources(for: wallpaper)
             }
             
@@ -57,18 +54,17 @@ class WallpaperResourceManager {
         switch wallpaper.type {
         case .defaultBackground: return true
         case .themed(type: .firefox): return verify(.bundled, for: wallpaper)
-        default: return verify(.downloaded, for: wallpaper)
+        case .themed(type: .projectHouse): return verify(.downloaded, for: wallpaper)
         }
     }
     
     // MARK: - Resource retrieval
     
     func getImageSet(for wallpaper: Wallpaper) -> WallpaperImageSet {
-        
         switch wallpaper.type {
         case .defaultBackground, .themed(type: .firefox):
             return getResourceOf(type: .bundled, for: wallpaper)
-        default:
+        case .themed(type: .projectHouse):
             return getResourceOf(type: .downloaded, for: wallpaper)
         }
     }

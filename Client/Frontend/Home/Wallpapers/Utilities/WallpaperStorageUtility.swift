@@ -81,7 +81,7 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
     ///   - key: The image's key identifier, usually it's name
     func store(image: UIImage, forKey key: String) throws {
         guard let pngRepresentation = image.pngData(),
-              let saveFilePath = self.filePath(forKey: key)
+              let saveFilePath = filePath(forKey: key)
         else { return }
         
         do {
@@ -92,7 +92,7 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
             try pngRepresentation.write(to: saveFilePath, options: .atomic)
             
         } catch let error {
-            self.browserLog.debug("Wallpaper - error writing file to disk: \(error)")
+            browserLog.debug("Wallpaper - error writing file to disk: \(error)")
             throw error
         }
     }
@@ -100,20 +100,15 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
     // MARK: - Wallpaper retrieval
     func getCurrentWallpaperObject() -> Wallpaper? {
         if let savedWallpaper = userDefaults.object(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperObject) as? Data {
-            let decoder = JSONDecoder()
-            if let wallpaper = try? decoder.decode(Wallpaper.self, from: savedWallpaper) {
-                return wallpaper
-            }
+            return try? JSONDecoder().decode(Wallpaper.self, from: savedWallpaper)
         }
 
         return nil
     }
 
-    func getCurrentWallaperImage() -> UIImage? {
+    func getCurrentWallpaperImage() -> UIImage? {
         let key = UIDevice.current.orientation.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
-        guard let image = getImageResource(for: key) else { return nil }
-
-        return image
+        return getImageResource(for: key)
     }
     
     func getImageResource(for key: String) -> UIImage? {
