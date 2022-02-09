@@ -33,7 +33,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     var isWallpaperSectionEnabled: Bool {
-        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.customWallpaper)
+        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.wallpapers)
         guard isFeatureEnabled else { return false }
         return true
     }

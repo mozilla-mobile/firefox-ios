@@ -17,8 +17,9 @@ extension FeatureFlagsProtocol {
 /// An enum describing the featureID of all features, historical, avalable, or in development.
 /// Please add new features alphabetically.
 enum FeatureFlagName: String, CaseIterable {
+    case adjustEnvironmentProd
+    case bottomSearchBar
     case chronologicalTabs
-    case customWallpaper
     case inactiveTabs
     case groupedTabs
     case historyHighlights
@@ -30,8 +31,7 @@ enum FeatureFlagName: String, CaseIterable {
     case shakeToRestore
     case startAtHome
     case reportSiteIssue
-    case adjustEnvironmentProd
-    case bottomSearchBar
+    case wallpapers
 }
 
 /// Manages feature flags for the application.
@@ -117,15 +117,20 @@ class FeatureFlagsManager {
     public func initializeFeatures(with profile: Profile) {
         features.removeAll()
 
+        let adjustEnvironmentProd = FlaggableFeature(withID: .adjustEnvironmentProd,
+                                                     and: profile,
+                                                     enabledFor: [.release])
+        features[.adjustEnvironmentProd] = adjustEnvironmentProd
+
+        let bottomSearchBar = FlaggableFeature(withID: .bottomSearchBar,
+                                               and: profile,
+                                               enabledFor: [.release, .beta, .developer])
+        features[.bottomSearchBar] = bottomSearchBar
+        
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
                                          and: profile,
                                          enabledFor: [])
         features[.chronologicalTabs] = chronTabs
-
-        let customWallpaper = FlaggableFeature(withID: .customWallpaper,
-                                               and: profile,
-                                               enabledFor: [.developer])
-        features[.customWallpaper] = customWallpaper
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
                                             and: profile,
@@ -186,14 +191,9 @@ class FeatureFlagsManager {
         
         features[.reportSiteIssue] = reportSiteIssue
 
-        let adjustEnvironmentProd = FlaggableFeature(withID: .adjustEnvironmentProd,
-                                                     and: profile,
-                                                     enabledFor: [.release])
-        features[.adjustEnvironmentProd] = adjustEnvironmentProd
-
-        let bottomSearchBar = FlaggableFeature(withID: .bottomSearchBar,
-                                               and: profile,
-                                               enabledFor: [.release, .beta, .developer])
-        features[.bottomSearchBar] = bottomSearchBar
+        let wallpapers = FlaggableFeature(withID: .wallpapers,
+                                          and: profile,
+                                          enabledFor: [.beta, .developer])
+        features[.wallpapers] = wallpapers
     }
 }

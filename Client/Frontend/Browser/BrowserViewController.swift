@@ -353,6 +353,7 @@ class BrowserViewController: UIViewController {
         }
 
         tabManager.startAtHomeCheck()
+        verifyWallpaperAssets()
     }
 
     // MARK: - Lifecycle
@@ -790,6 +791,15 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    private func verifyWallpaperAssets() {
+        let verificationQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
+                                              qos: .utility)
+        verificationQueue.async {
+            let wallpaperManager = WallpaperManager()
+            wallpaperManager.runResourceVerification()
+        }
+    }
+    
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
@@ -811,7 +821,9 @@ class BrowserViewController: UIViewController {
             let trackingValue: TelemetryWrapper.EventValue = inline ? .openHomeFromPhotonMenuButton : .openHomeFromAwesomebar
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .firefoxHomepage, value: trackingValue, extras: nil)
 
-            let firefoxHomeViewController = FirefoxHomeViewController(profile: profile, isZeroSearch: !inline)
+            let firefoxHomeViewController = FirefoxHomeViewController(
+                profile: profile,
+                isZeroSearch: !inline)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController
@@ -2477,4 +2489,3 @@ extension BrowserViewController {
         return (UIApplication.shared.delegate as! AppDelegate).browserViewController
     }
 }
-
