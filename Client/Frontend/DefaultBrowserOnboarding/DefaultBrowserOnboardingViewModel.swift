@@ -42,30 +42,42 @@ struct DefaultBrowserOnboardingModel {
 }
 
 class DefaultBrowserOnboardingViewModel {
-    //  Internal vars
-    var model: DefaultBrowserOnboardingModel?
+
     var goToSettings: (() -> Void)?
+    var model: DefaultBrowserOnboardingModel?
+
+    private static let maxSessionCount = 3
 
     init() {
-        setupUpdateModel()
+        setupModel()
     }
     
-    private func setupUpdateModel() {
-        model = DefaultBrowserOnboardingModel(titleText: String.DefaultBrowserCardTitle, descriptionText: [String.DefaultBrowserCardDescription, String.DefaultBrowserOnboardingDescriptionStep1, String.DefaultBrowserOnboardingDescriptionStep2, String.DefaultBrowserOnboardingDescriptionStep3], imageText: String.DefaultBrowserOnboardingScreenshot)
+    private func setupModel() {
+        model = DefaultBrowserOnboardingModel(
+            titleText: String.DefaultBrowserCardTitle,
+            descriptionText: descriptionText,
+            imageText: String.DefaultBrowserOnboardingScreenshot
+        )
+    }
+
+    private var descriptionText: [String] {
+        [String.DefaultBrowserCardDescription,
+         String.DefaultBrowserOnboardingDescriptionStep1,
+         String.DefaultBrowserOnboardingDescriptionStep2,
+         String.DefaultBrowserOnboardingDescriptionStep3]
     }
     
     static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
         // Only show on fresh install
         guard InstallType.get() == .fresh else { return false }
-        // Show on 3rd session
-        let maxSessionCount = 3
+
+        let didShow = UserDefaults.standard.bool(forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
+        guard !didShow else { return false }
+
         var shouldShow = false
         // Get the session count from preferences
         let currentSessionCount = userPrefs.intForKey(PrefsKeys.SessionCount) ?? 0
-        let didShow = UserDefaults.standard.bool(forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
-        guard !didShow else { return false }
-        
-        if currentSessionCount == maxSessionCount {
+        if currentSessionCount == DefaultBrowserOnboardingViewModel.maxSessionCount {
             shouldShow = true
             UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
         }

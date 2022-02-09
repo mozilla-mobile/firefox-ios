@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import SnapKit
 
 protocol AlphaDimmable {
     func updateAlphaForSubviews(_ alpha: CGFloat)
@@ -12,7 +13,10 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        applyTheme()
         setupStyle()
+        setupObservers()
     }
 
     required init(coder: NSCoder) {
@@ -27,8 +31,82 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
     }
 
     private func setupStyle() {
-        backgroundColor = .clear
         axis = .vertical
         distribution = .fillProportionally
+    }
+
+    // MARK: - Spacer view
+
+    private var keyboardSpacerHeight: Constraint!
+    private var keyboardSpacer: UIView?
+
+    func addKeyboardSpacer(at index: Int, spacerHeight: CGFloat) {
+        guard keyboardSpacer == nil else {
+            setKeyboardSpacerHeight(height: spacerHeight)
+            return
+        }
+
+        keyboardSpacer = UIView()
+        setKeyboardSpacerHeight(height: spacerHeight)
+        insertArrangedView(keyboardSpacer!, position: index)
+    }
+
+    func removeKeyboardSpacer() {
+        guard let keyboardSpacer = self.keyboardSpacer else { return }
+        removeArrangedView(keyboardSpacer)
+        keyboardSpacerHeight = nil
+        self.keyboardSpacer = nil
+    }
+
+    private func setKeyboardSpacerHeight(height: CGFloat) {
+        guard let keyboardSpacer = self.keyboardSpacer else { return }
+        keyboardSpacer.snp.makeConstraints { make in
+            keyboardSpacerHeight = make.height.equalTo(height).constraint
+        }
+    }
+
+    // MARK: - Spacer view
+
+    private var insetSpacer: UIView?
+
+    func addBottomInsetSpacer(spacerHeight: CGFloat) {
+        guard insetSpacer == nil else { return }
+
+        insetSpacer = UIView()
+        insetSpacer!.snp.makeConstraints { make in
+            make.height.equalTo(spacerHeight)
+        }
+        addArrangedViewToBottom(insetSpacer!)
+    }
+
+    func removeBottomInsetSpacer() {
+        guard let insetSpacer = self.insetSpacer else { return }
+
+        removeArrangedView(insetSpacer)
+        self.insetSpacer = nil
+        self.layoutIfNeeded()
+    }
+
+    // MARK: - NotificationThemeable
+
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
+    }
+
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+}
+
+extension BaseAlphaStackView: NotificationThemeable {
+
+    func applyTheme() {
+        backgroundColor = UIColor.theme.browser.background
+        keyboardSpacer?.backgroundColor = UIColor.theme.browser.background
+        insetSpacer?.backgroundColor = UIColor.theme.browser.background
     }
 }

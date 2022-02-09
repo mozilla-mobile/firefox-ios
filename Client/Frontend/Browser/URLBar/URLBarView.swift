@@ -49,7 +49,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
 }
 
-class URLBarView: UIView, AlphaDimmable {
+class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
     // Additional UIAppearance-configurable properties
     @objc dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
         didSet {
@@ -65,6 +65,8 @@ class URLBarView: UIView, AlphaDimmable {
             }
         }
     }
+
+    var parent: UIStackView?
     var searchEngines: SearchEngines?
     weak var delegate: URLBarDelegate?
     weak var tabToolbarDelegate: TabToolbarDelegate?
@@ -191,6 +193,9 @@ class URLBarView: UIView, AlphaDimmable {
     }
 
     var profile: Profile? = nil
+    private var isBottomSearchBar: Bool {
+        BrowserViewController.foregroundBVC().isBottomSearchBar
+    }
     
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
@@ -207,6 +212,7 @@ class URLBarView: UIView, AlphaDimmable {
         super.init(coder: aDecoder)
         commonInit()
     }
+
     func updateSearchEngineImage() {
         guard let profile = profile else { return }
         self.searchIconImageView.image = profile.searchEngines.defaultEngine.image
@@ -216,11 +222,11 @@ class URLBarView: UIView, AlphaDimmable {
         locationContainer.addSubview(locationView)
         
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton, multiStateButton, locationContainer].forEach {
+         homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton,
+         multiStateButton, locationContainer, searchIconImageView].forEach {
             addSubview($0)
         }
 
-        addSubview(searchIconImageView)
         updateSearchEngineImage()
         
         privateModeBadge.add(toParent: self)
@@ -236,18 +242,18 @@ class URLBarView: UIView, AlphaDimmable {
 
     fileprivate func setupConstraints() {
 
-        line.snp.makeConstraints { make in
-            make.bottom.leading.trailing.equalTo(self)
-            make.height.equalTo(1)
-        }
-
         scrollToTopButton.snp.makeConstraints { make in
             make.top.equalTo(self)
-            make.left.right.equalTo(self.locationContainer)
+            make.left.right.equalTo(locationContainer)
         }
 
         progressBar.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
+            if isBottomSearchBar {
+                make.bottom.equalTo(snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
+            } else {
+                make.top.equalTo(snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
+            }
+
             make.height.equalTo(URLBarViewUX.ProgressBarHeight)
             make.left.right.equalTo(self)
         }
@@ -331,6 +337,18 @@ class URLBarView: UIView, AlphaDimmable {
 
     override func updateConstraints() {
         super.updateConstraints()
+
+        line.snp.remakeConstraints { make in
+            if isBottomSearchBar {
+                make.top.equalTo(self).offset(1)
+            } else {
+                make.bottom.equalTo(self)
+            }
+
+            make.leading.trailing.equalTo(self)
+            make.height.equalTo(1)
+        }
+
         if inOverlayMode {
             searchIconImageView.alpha = 1
             // In overlay mode, we always show the location view full width
@@ -799,6 +817,7 @@ extension URLBarView {
 
 }
 
+// MARK: - NotificationThemeable
 extension URLBarView: NotificationThemeable {
     func applyTheme() {
         locationView.applyTheme()
@@ -823,6 +842,7 @@ extension URLBarView: NotificationThemeable {
     }
 }
 
+// MARK: - PrivateModeUI
 extension URLBarView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         if UIDevice.current.userInterfaceIdiom != .pad {
@@ -834,88 +854,5 @@ extension URLBarView: PrivateModeUI {
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)
 
         applyTheme()
-    }
-}
-
-// We need a subclass so we can setup the shadows correctly
-// This subclass creates a strong shadow on the URLBar
-class TabLocationContainerView: UIView {
-
-    private struct LocationContainerUX {
-        static let CornerRadius: CGFloat = 8
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        let layer = self.layer
-        layer.cornerRadius = LocationContainerUX.CornerRadius
-        layer.masksToBounds = false
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class ToolbarTextField: AutocompleteTextField {
-
-    @objc dynamic var clearButtonTintColor: UIColor? {
-        didSet {
-            // Clear previous tinted image that's cache and ask for a relayout
-            tintedClearImage = nil
-            setNeedsLayout()
-        }
-    }
-
-    fileprivate var tintedClearImage: UIImage?
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        guard let image = UIImage.templateImageNamed("topTabs-closeTabs") else { return }
-        if tintedClearImage == nil {
-            if let clearButtonTintColor = clearButtonTintColor {
-                tintedClearImage = image.tinted(withColor: clearButtonTintColor)
-            } else {
-                tintedClearImage = image
-            }
-        }
-        // Since we're unable to change the tint color of the clear image, we need to iterate through the
-        // subviews, find the clear button, and tint it ourselves.
-        // https://stackoverflow.com/questions/55046917/clear-button-on-text-field-not-accessible-with-voice-over-swift
-        if let clearButton = value(forKey: "_clearButton") as? UIButton {
-            clearButton.setImage(tintedClearImage, for: [])
-
-        }
-    }
-
-    // The default button size is 19x19, make this larger
-    override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
-        let r = super.clearButtonRect(forBounds: bounds)
-        let grow: CGFloat = 16
-        let r2 = CGRect(x: r.minX - grow/2, y:r.minY - grow/2, width: r.width + grow, height: r.height + grow)
-        return r2
-    }
-}
-
-extension ToolbarTextField: NotificationThemeable {
-    func applyTheme() {
-        backgroundColor = UIColor.theme.textField.backgroundInOverlay
-        textColor = UIColor.theme.textField.textAndTint
-        clearButtonTintColor = textColor
-        tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
-    }
-
-    // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
-    static func applyUIMode(isPrivate: Bool) {
-       textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
     }
 }

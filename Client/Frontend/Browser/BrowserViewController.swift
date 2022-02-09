@@ -54,6 +54,7 @@ class BrowserViewController: UIViewController {
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var urlBarHeightConstraint: Constraint!
+    var urlBarHeightConstraintValue: CGFloat?
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
@@ -92,6 +93,11 @@ class BrowserViewController: UIViewController {
     // URLbar can be in header or footer
     var header: BaseAlphaStackView = .build { _ in }
     var footer: BaseAlphaStackView = .build { _ in }
+
+    lazy var isBottomSearchBar: Bool = {
+        guard SearchBarSettingsViewModel.isEnabled else { return false }
+        return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+    }()
 
     // Alert content that appears on top of the footer should be added to this view.
     // ex: Find In Page, SnackBars
@@ -181,6 +187,26 @@ class BrowserViewController: UIViewController {
         applyTheme()
     }
 
+    @objc func searchBarPositionDidChange(notification: Notification) {
+        guard let dict = notification.object as? NSDictionary,
+              let newSearchBarPosition = dict[PrefsKeys.KeySearchBarPosition] as? SearchBarPosition,
+              urlBar != nil else { return }
+
+        let newPositionIsBottom = newSearchBarPosition == .bottom
+        let newParent = newPositionIsBottom ? footer : header
+        urlBar.removeFromParent()
+        urlBar.addToParent(parent: newParent)
+
+        if let readerModeBar = readerModeBar {
+            readerModeBar.removeFromParent()
+            readerModeBar.addToParent(parent: newParent, addToTop: newSearchBarPosition == .bottom)
+        }
+
+        isBottomSearchBar = newPositionIsBottom
+        updateViewConstraints()
+        toolbar.setNeedsDisplay()
+    }
+
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
         return previousTraitCollection.verticalSizeClass != .compact && previousTraitCollection.horizontalSizeClass != .regular
     }
@@ -234,7 +260,7 @@ class BrowserViewController: UIViewController {
             let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
             topTabsViewController.delegate = self
             addChild(topTabsViewController)
-            header.addArrangedViewToTop(topTabsViewController.view, completion: {})
+            header.addArrangedViewToTop(topTabsViewController.view)
             self.topTabsViewController = topTabsViewController
             topTabsViewController.applyTheme()
 
@@ -400,6 +426,8 @@ class BrowserViewController: UIViewController {
                                                name: .FirefoxAccountStateChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged),
                                                name: .DisplayThemeChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(searchBarPositionDidChange),
+                                               name: .SearchBarPositionDidChange, object: nil)
     }
 
     func addSubviews() {
@@ -416,7 +444,7 @@ class BrowserViewController: UIViewController {
         topTouchArea.addTarget(self, action: #selector(tappedTopArea), for: .touchUpInside)
         view.addSubview(topTouchArea)
 
-        // Temporary work around for covering the non-clipped web view content
+        // Work around for covering the non-clipped web view content
         statusBarOverlay = UIView()
         view.addSubview(statusBarOverlay)
 
@@ -426,9 +454,9 @@ class BrowserViewController: UIViewController {
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
 
-        header.addArrangedSubview(urlBar)
+        urlBar.addToParent(parent: isBottomSearchBar ? footer : header)
         view.addSubview(header)
-        view.addSubviews(bottomContentStackView)
+        view.addSubview(bottomContentStackView)
 
         toolbar = TabToolbar()
         footer.addArrangedSubview(toolbar)
@@ -534,11 +562,6 @@ class BrowserViewController: UIViewController {
             urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
         }
 
-        header.snp.makeConstraints { make in
-            scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
-            make.left.right.equalTo(self.view)
-        }
-
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
@@ -546,6 +569,17 @@ class BrowserViewController: UIViewController {
 
     override func updateViewConstraints() {
         super.updateViewConstraints()
+
+        header.snp.remakeConstraints { make in
+            if isBottomSearchBar {
+                make.left.right.top.equalTo(self.view)
+                // Making sure we cover at least the status bar
+                make.bottom.equalTo(self.view.safeArea.top)
+            } else {
+                scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
+                make.left.right.equalTo(self.view)
+            }
+        }
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
@@ -580,30 +614,75 @@ class BrowserViewController: UIViewController {
             make.bottom.equalTo(footer.snp.top)
         }
 
-        bottomContentStackView.snp.remakeConstraints { make in
-            make.left.right.equalTo(view)
-            make.centerX.equalTo(view)
-            make.width.equalTo(view.safeArea.width)
+        bottomContentStackView.snp.remakeConstraints { remake in
+            adjustBottomContentStackView(remake)
+        }
 
-            // Height is set by content - this removes run time error
-            make.height.greaterThanOrEqualTo(0)
+        adjustBottomSearchBarForKeyboard()
+    }
 
-            if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
-                make.bottom.equalTo(view).offset(-keyboardHeight)
-            } else if !toolbar.isHidden {
-                make.bottom.lessThanOrEqualTo(toolbar.snp.top)
-                make.bottom.lessThanOrEqualTo(view.safeArea.bottom)
-            } else {
-                make.bottom.equalTo(view.safeArea.bottom)
-            }
+    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+        remake.left.right.equalTo(view)
+        remake.centerX.equalTo(view)
+        remake.width.equalTo(view.safeArea.width)
+
+        // Height is set by content - this removes run time error
+        remake.height.greaterThanOrEqualTo(0)
+        bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+
+        if isBottomSearchBar {
+            adjustBottomContentBottomSearchBar(remake)
+        } else {
+            adjustBottomContentTopSearchBar(remake)
         }
     }
 
+    private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+        if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
+            remake.bottom.equalTo(view).offset(-keyboardHeight)
+        } else if !toolbar.isHidden {
+            remake.bottom.lessThanOrEqualTo(footer.snp.top)
+            remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
+        } else {
+            remake.bottom.equalTo(view.safeArea.bottom)
+        }
+    }
+
+    private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+        remake.bottom.lessThanOrEqualTo(footer.snp.top)
+        remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
+    }
+
+    private func adjustBottomSearchBarForKeyboard() {
+        guard isBottomSearchBar else { return }
+        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 else {
+            footer.removeKeyboardSpacer()
+            return
+        }
+
+        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
+        let spacerHeight = keyboardHeight - toolBarHeight
+        let index = readerModeBar == nil ? 1 : 2
+        footer.addKeyboardSpacer(at: index, spacerHeight: spacerHeight)
+    }
+
+    /// Used for dynamic type height adjustment
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
         // Make sure that we have a height to actually base our calculations on
         guard urlBar.locationContainer.bounds.height != 0 else { return }
         let locationViewHeight = urlBar.locationView.bounds.height
         let heightWithPadding = locationViewHeight + 10
+
+        // Adjustment for landscape on the urlbar
+        // need to account for inset and remove it when keyboard is showing
+        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        let isKeyboardShowing = keyboardState != nil
+        if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
+            footer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else {
+            footer.removeBottomInsetSpacer()
+        }
 
         // We have to deactivate the original constraint, and remake the constraint
         // or else funky conflicts happen
@@ -611,6 +690,7 @@ class BrowserViewController: UIViewController {
         urlBar.snp.makeConstraints { make in
             let height = heightWithPadding > UIConstants.TopToolbarHeightMax ? UIConstants.TopToolbarHeight : heightWithPadding
             urlBarHeightConstraint = make.height.equalTo(height).constraint
+            urlBarHeightConstraintValue = height
         }
     }
 
@@ -740,6 +820,10 @@ class BrowserViewController: UIViewController {
             firefoxHomeViewController.didMove(toParent: self)
         }
 
+        if self.readerModeBar != nil {
+            hideReaderModeBar(animated: false)
+        }
+
         firefoxHomeViewController?.applyTheme()
 
         // We have to run this animation, even if the view is already showing
@@ -781,35 +865,30 @@ class BrowserViewController: UIViewController {
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-        if !urlBar.inOverlayMode {
-            guard let url = url else {
-                hideFirefoxHome()
-                urlBar.locationView.reloadButton.reloadButtonState = .disabled
-                return
-            }
+        guard let url = url else {
+            hideFirefoxHome()
+            urlBar.locationView.reloadButton.reloadButtonState = .disabled
+            return
+        }
 
-            if isAboutHomeURL {
-                showFirefoxHome(inline: true)
+        if isAboutHomeURL {
+            showFirefoxHome(inline: true)
 
-                if focusUrlBar {
-                    if let viewcontroller = presentedViewController as? OnViewDismissable {
-                        viewcontroller.onViewDismissed = { [weak self] in
-                            let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-                            if shouldEnterOverlay {
-                                self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                            }
+            if focusUrlBar {
+                if let viewcontroller = presentedViewController as? OnViewDismissable {
+                    viewcontroller.onViewDismissed = { [weak self] in
+                        let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+                        if shouldEnterOverlay {
+                            self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                         }
-                    } else {
-                        self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                     }
+                } else {
+                    self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                 }
-            } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
-                hideFirefoxHome()
-                urlBar.shouldHideReloadButton(false)
             }
-
-        } else if isAboutHomeURL {
-            showFirefoxHome(inline: false)
+        } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
+            hideFirefoxHome()
+            urlBar.shouldHideReloadButton(false)
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -849,7 +928,8 @@ class BrowserViewController: UIViewController {
         }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let searchController = SearchViewController(profile: profile, isPrivate: isPrivate, tabManager: tabManager)
+        let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
+        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, tabManager: tabManager)
         searchController.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
@@ -870,8 +950,11 @@ class BrowserViewController: UIViewController {
         addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.snp.makeConstraints { make in
-            make.top.equalTo(self.header.snp.bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.top.equalTo(header.snp.bottom)
+            make.left.right.equalTo(view)
+
+            let constraintTarget = isBottomSearchBar ? footer.snp.top : view.snp.bottom
+            make.bottom.equalTo(constraintTarget)
         }
 
         firefoxHomeViewController?.view?.isHidden = true
@@ -880,12 +963,11 @@ class BrowserViewController: UIViewController {
     }
 
     func hideSearchController() {
-        if let searchController = self.searchController {
-            searchController.willMove(toParent: nil)
-            searchController.view.removeFromSuperview()
-            searchController.removeFromParent()
-            firefoxHomeViewController?.view?.isHidden = false
-        }
+        guard let searchController = self.searchController else { return }
+        searchController.willMove(toParent: nil)
+        searchController.view.removeFromSuperview()
+        searchController.removeFromParent()
+        firefoxHomeViewController?.view?.isHidden = false
     }
 
     func destroySearchController() {

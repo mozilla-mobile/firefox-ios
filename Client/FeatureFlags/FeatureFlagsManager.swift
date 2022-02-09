@@ -31,6 +31,7 @@ enum FeatureFlagName: String, CaseIterable {
     case startAtHome
     case reportSiteIssue
     case adjustEnvironmentProd
+    case bottomSearchBar
 }
 
 /// Manages feature flags for the application.
@@ -189,5 +190,10 @@ class FeatureFlagsManager {
                                                      and: profile,
                                                      enabledFor: [.release])
         features[.adjustEnvironmentProd] = adjustEnvironmentProd
+
+        let bottomSearchBar = FlaggableFeature(withID: .bottomSearchBar,
+                                               and: profile,
+                                               enabledFor: [.release, .beta, .developer])
+        features[.bottomSearchBar] = bottomSearchBar
     }
 }

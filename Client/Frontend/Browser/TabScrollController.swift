@@ -28,6 +28,7 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
+            scrollView?.keyboardDismissMode = .onDrag
             featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? configureRefreshControl() : nil
         }
     }
@@ -37,7 +38,9 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
 
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
-    var toolbarsShowing: Bool { return headerTopOffset == 0 }
+    var toolbarsShowing: Bool {
+        return isBottomSearchBar ? headerTopOffset == 0 : footerBottomOffset == 0
+    }
 
     fileprivate var isZoomedOut: Bool = false
     fileprivate var lastZoomedScale: CGFloat = 0
@@ -68,15 +71,15 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
     fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
-    fileprivate var topScrollHeight: CGFloat {
-        guard let headerHeight = header?.frame.height else { return 0 }
-        return headerHeight
-    }
+    fileprivate var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
     fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }
 
     fileprivate var lastContentOffset: CGFloat = 0
     fileprivate var scrollDirection: ScrollDirection = .down
     fileprivate var toolbarState: ToolbarState = .visible
+    private var isBottomSearchBar: Bool {
+        return BrowserViewController.foregroundBVC().isBottomSearchBar
+    }
 
     override init() {
         super.init()
@@ -99,8 +102,8 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
             return
         }
         toolbarState = .visible
-        let durationRatio = abs(headerTopOffset / topScrollHeight)
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * durationRatio)
+
+        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * showDurationRatio)
         self.animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
@@ -116,8 +119,8 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
             return
         }
         toolbarState = .collapsed
-        let durationRatio = abs((topScrollHeight + headerTopOffset) / topScrollHeight)
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * durationRatio)
+
+        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
         self.animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
@@ -231,9 +234,7 @@ private extension TabScrollingController {
         updatedOffset = footerBottomOffset + delta
         footerBottomOffset = clamp(updatedOffset, min: 0, max: bottomScrollHeight)
 
-        let alpha = 1 - abs(headerTopOffset / topScrollHeight)
-        header?.updateAlphaForSubviews(alpha)
-        footer?.updateAlphaForSubviews(alpha)
+        header?.updateAlphaForSubviews(scrollAlpha)
     }
 
     func isHeaderDisplayedForGivenOffset(_ offset: CGFloat) -> Bool {
@@ -265,7 +266,6 @@ private extension TabScrollingController {
             self.headerTopOffset = headerOffset
             self.footerBottomOffset = footerOffset
             self.header?.updateAlphaForSubviews(alpha)
-            self.footer?.updateAlphaForSubviews(alpha)
             self.header?.superview?.layoutIfNeeded()
         }
 
@@ -279,6 +279,36 @@ private extension TabScrollingController {
 
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height ?? 0
+    }
+
+    var showDurationRatio: CGFloat {
+        var durationRatio: CGFloat
+        if isBottomSearchBar {
+            durationRatio = abs(footerBottomOffset / bottomScrollHeight)
+        } else {
+            durationRatio = abs(headerTopOffset / topScrollHeight)
+        }
+        return durationRatio
+    }
+
+    var hideDurationRation: CGFloat {
+        var durationRatio: CGFloat
+        if isBottomSearchBar {
+            durationRatio = abs((bottomScrollHeight + footerBottomOffset) / bottomScrollHeight)
+        } else {
+            durationRatio = abs((topScrollHeight + headerTopOffset) / topScrollHeight)
+        }
+        return durationRatio
+    }
+
+    var scrollAlpha: CGFloat {
+        var alpha: CGFloat
+        if isBottomSearchBar {
+            alpha = 1 - abs(footerBottomOffset / bottomScrollHeight)
+        } else {
+            alpha = 1 - abs(headerTopOffset / topScrollHeight)
+        }
+        return alpha
     }
 }
 
