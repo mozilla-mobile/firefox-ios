@@ -23,7 +23,7 @@ features:
             "description": "",
             "use-html-content": true,
             "icon": "letter",
-            "keep-for-days": 100
+            "keep-for-days": null
           }
     defaults: null
   nimbus-validation:
@@ -103,8 +103,8 @@ types:
           default: letter
           description: "Describes the icon of spotlight"
         keep-for-days:
-          type: Int
-          default: 100
+          type: Option<Int>
+          default: null
           description: "Number of days to keep"
           required: true
   enums:
