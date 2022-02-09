@@ -335,6 +335,7 @@ class NavigationTest: BaseTestCase {
         // Now disable the Block PopUps option
         navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
+        waitForExistence(switchBlockPopUps, timeout: 5)
         switchBlockPopUps.tap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")

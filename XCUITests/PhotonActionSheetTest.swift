@@ -107,7 +107,7 @@ class PhotonActionSheetTest: BaseTestCase {
             waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
         }
-
+        waitForExistence(fennecElement, timeout: 5)
         fennecElement.tap()
         waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 10)
     }
