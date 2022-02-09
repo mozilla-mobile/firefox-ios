@@ -5,16 +5,26 @@
 import MozillaAppServices
 
 protocol HighlightItem {
-    var showTitle: String { get }
+    var displayTitle: String { get }
+    var url2: URL? { get }
 }
 
 extension ASGroup: HighlightItem {
-    var showTitle: String {
+    var displayTitle: String {
         return searchTerm
     }
+
+    var url2: URL? {
+        return nil
+    }
 }
+
 extension HistoryHighlight: HighlightItem {
-    var showTitle: String {
+    var displayTitle: String {
         return title ?? url
+    }
+
+    var url2: URL? {
+        return URL(string: url)
     }
 }

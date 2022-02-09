@@ -127,16 +127,20 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         // here and then update the cell accordingly.
         if let item = viewModel?.historyItems?[safe: indexPath.row] {
 
-//            let itemURL = item.url?.absoluteString ?? ""
-//            let site = Site(url: itemURL, title: item.displayTitle, bookmarked: true)
+            let itemURL = item.url2?.absoluteString ?? ""
+            let site = Site(url: itemURL, title: item.displayTitle)
 
-            let cellOptions = RecentlyVisitedCellOptions(title: item.showTitle, //site.title,
+            let cellOptions = RecentlyVisitedCellOptions(title: site.title,
                                                          shouldHideBottomLine: hideBottomLine,
                                                          with: cornersToRound,
                                                          and: nil,
                                                          andIsFillerCell: false)
 
             cell.updateCell(with: cellOptions)
+
+            viewModel?.getFavIcon(for: site) { image in
+                cell.heroImage.image = image
+            }
 
         } else {
             // A filler cell
@@ -146,6 +150,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
             cell.updateCell(with: cellOptions)
         }
+
 
         return cell
     }

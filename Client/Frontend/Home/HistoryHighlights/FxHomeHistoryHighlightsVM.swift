@@ -3,6 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Storage
+import UIKit
 
 class FxHomeHistoryHightlightsVM {
 
@@ -11,6 +13,7 @@ class FxHomeHistoryHightlightsVM {
     private var profile: Profile
     private var tabManager: TabManager
     private var foregroundBVC: BrowserViewController
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     var onTapItem: (() -> Void)?
 
@@ -43,10 +46,17 @@ class FxHomeHistoryHightlightsVM {
 //        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
     }
 
+    // good candidate for protocol because is used in JumpBackIn and here
+    func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
+        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
+            completion(image)
+        }
+    }
+
     // MARK: - Private Methods
 
     private func loadItems() {
-        guard historyItems == nil else { return }
+        print("YRD loadItems hightlights")
 
         HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
             self?.historyItems = highlights

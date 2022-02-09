@@ -86,7 +86,6 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             itemTitle.isHidden = isFillerCell
             heroImage.isHidden = isFillerCell
             bottomLine.isHidden = isFillerCell
-//            self.isUserInteractionEnabled = isFillerCell
         }
     }
 

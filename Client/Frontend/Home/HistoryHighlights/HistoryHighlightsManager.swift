@@ -53,7 +53,7 @@ class HistoryHighlightsManager {
                 !tabs.contains { highlights.urlFromString == $0.url }
             }
 
-            print("YRD highlight list after filter \(filterHighlights)")
+//            print("YRD highlight list after filter \(filterHighlights)")
 
             if shouldGroupHighlights {
                 buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
@@ -80,7 +80,7 @@ class HistoryHighlightsManager {
 
             guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
 
-            print("YRD highlight list \(ASHighlights)")
+//            print("YRD highlight list \(ASHighlights)")
 
             completion(ASHighlights)
         }
