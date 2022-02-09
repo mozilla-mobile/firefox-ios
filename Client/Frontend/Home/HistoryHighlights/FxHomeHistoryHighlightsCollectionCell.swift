@@ -118,8 +118,8 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HistoryHighlightsCell.cellIdentifier, for: indexPath) as! HistoryHighlightsCell
-        let hideBottomLine = isBottomCell(indexPath: indexPath,
-                                          totalItems: viewModel?.historyItems?.count)
+        let hideBottomLine = false //isBottomCell(indexPath: indexPath,
+//                                          totalItems: viewModel?.historyItems?.count)
         let cornersToRound = determineCornerToRound(indexPath: indexPath,
                                                     totalItems: viewModel?.historyItems?.count)
 
@@ -181,56 +181,17 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     }
 
     private func determineCornerToRound(indexPath: IndexPath, totalItems: Int?) -> UIRectCorner {
-        guard let totalItems = totalItems else { return [] }
-        var cornersToRound = UIRectCorner()
+        guard totalItems != nil else { return [] }
 
-        if isTopLeftCell(index: indexPath.row) { cornersToRound.insert(.topLeft) }
-        if isTopRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.topRight) }
-        if isBottomLeftCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.bottomLeft) }
-        if isBottomRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.bottomRight) }
-
-        return cornersToRound
-    }
-
-    private func isTopLeftCell(index: Int) -> Bool {
-        if index == 0 { return true }
-
-        return false
-    }
-
-    private func isTopRightCell(index: Int, totalItems: Int) -> Bool {
-        let topRightIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * (numberOfColumns - 1))
-        if index == topRightIndex { return true }
-
-        return false
-    }
-
-    private func isBottomLeftCell(index: Int, totalItems: Int) -> Bool {
-        var bottomLeftIndex: Int {
-            if totalItems <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
-                return totalItems - 1
-            } else {
-                return HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn - 1
-            }
+        // Is top row cell
+        if indexPath.row % HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn == 0 {
+            return [.topRight, .topLeft]
+        } else if indexPath.row % HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn == 2 {
+            // Is bottom row cell
+            return [.bottomLeft, .bottomRight]
         }
 
-        if index == bottomLeftIndex { return true }
-
-        return false
-    }
-
-    private func isBottomRightCell(index: Int, totalItems: Int) -> Bool {
-        var bottomRightIndex: Int {
-            if totalItems <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
-                return totalItems - 1
-            } else {
-                return (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * numberOfColumns) - 1
-            }
-        }
-
-        if index == bottomRightIndex { return true }
-
-        return false
+        return []
     }
 }
 
