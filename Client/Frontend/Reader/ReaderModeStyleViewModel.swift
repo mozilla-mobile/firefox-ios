@@ -6,10 +6,10 @@ import Foundation
 
 // MARK: - ReaderModeStyleViewModel
 
-// TODO: move all logic from VC in this view model
 struct ReaderModeStyleViewModel {
     static let RowHeight = 50.0
-    static let PresentationSpace = 13.0 // For top or bottom presentation
+    // For top or bottom presentation
+    static let PresentationSpace = 13.0
 
     static let SeparatorLineThickness = 1.0
 

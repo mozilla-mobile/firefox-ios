@@ -53,7 +53,6 @@ struct ClientTabsSearchWrapper {
 struct SearchViewModel {
     let isPrivate: Bool
     let isBottomSearchBar: Bool
-    // TODO: Move logic in view model
 }
 
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
