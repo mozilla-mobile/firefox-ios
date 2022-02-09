@@ -318,7 +318,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
                                                   .HomePanelPrefsChanged,
                                                   .DisplayThemeChanged,
                                                   .TabClosed,
-                                                  .WallpaperDidChange]
+                                                  .WallpaperDidChange,
+                                                  .TabsPrivacyModeChanged]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
     }
 
@@ -452,7 +453,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         switch notification.name {
         case .DisplayThemeChanged,
                 .DynamicFontChanged,
-                .WallpaperDidChange:
+                .WallpaperDidChange,
+                .TabsPrivacyModeChanged:
             reloadAll(shouldUpdateData: false)
         default:
             reloadAll()

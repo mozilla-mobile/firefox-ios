@@ -460,16 +460,15 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         if selectedTab.isPrivate {
             nextSelectedTab = mostRecentTab(inTabs: normalTabs)
+        } else if privateTabs.isEmpty {
+            nextSelectedTab = addTab(isPrivate: true)
+            result = .createdNewTab
         } else {
-            if privateTabs.isEmpty {
-                nextSelectedTab = addTab(isPrivate: true)
-                result = .createdNewTab
-            } else {
-                nextSelectedTab = mostRecentTab(inTabs: privateTabs)
-            }
+            nextSelectedTab = mostRecentTab(inTabs: privateTabs)
         }
 
         selectTab(nextSelectedTab)
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: nil)
         return result
     }
 
