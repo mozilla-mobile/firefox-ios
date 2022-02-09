@@ -52,7 +52,7 @@ enum TabDisplaySection: Int, CaseIterable {
 
     var title: String? {
         switch self {
-        case .regularTabs: return .ASPocketTitle2
+        case .regularTabs: return .FirefoxHomepage.Pocket.SectionTitle
         case .inactiveTabs: return .RecentlySavedSectionTitle
         default: return nil
         }

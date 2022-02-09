@@ -127,7 +127,7 @@ extension FxHomePocketCollectionCell: UICollectionViewDataSource {
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomePocketDiscoverMoreCell.cellIdentifier, for: indexPath) as! FxHomePocketDiscoverMoreCell
-            cell.itemTitle.text = .PocketMoreStoriesText
+            cell.itemTitle.text = .FirefoxHomepage.Pocket.DiscoverMore
             return cell
         }
     }
@@ -160,7 +160,7 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
                                                                        maxSize: FxHomePocketCollectionCellUX.discoverMoreMaxFontSize)
         label.numberOfLines = 0
-        label.textAlignment = .center
+        label.textAlignment = .left
     }
 
     // MARK: - Init

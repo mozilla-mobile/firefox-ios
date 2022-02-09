@@ -67,7 +67,7 @@ class FxHomePocketViewModel {
         if isStoryCell(index: index) {
             return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
         } else {
-            return Site(url: Pocket.MoreStoriesURL.absoluteString, title: .PocketMoreStoriesText)
+            return Site(url: Pocket.MoreStoriesURL.absoluteString, title: .FirefoxHomepage.Pocket.DiscoverMore)
         }
     }
 
