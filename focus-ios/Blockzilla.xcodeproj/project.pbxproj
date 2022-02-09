@@ -30,9 +30,6 @@
 		16ABCD2621406D5500CABBF4 /* Intents.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16ABCD2821406D5500CABBF4 /* Intents.strings */; };
 		16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
-		1B56C58527221B1C00BB1152 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 1B56C58427221B1C00BB1152 /* Nimbus */; };
-		1B56C58727221B1C00BB1152 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 1B56C58627221B1C00BB1152 /* RustLog */; };
-		1B56C58927221B1C00BB1152 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 1B56C58827221B1C00BB1152 /* Viaduct */; };
 		1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D199EF120D813D300CDF976 /* DragAndDropTest.swift */; };
 		1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D3BEDF820C5E6C70019B722 /* FindInPage.js */; };
 		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
@@ -45,6 +42,9 @@
 		30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFF97F21810BF20055707C /* SearchSuggestClient.swift */; };
 		31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */; };
 		3AEC0B3E267DE30A007B7850 /* URIFixupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */; };
+		45D96F3127B196E100096BC0 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3027B196E100096BC0 /* Nimbus */; };
+		45D96F3327B196E100096BC0 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3227B196E100096BC0 /* RustLog */; };
+		45D96F3527B196E100096BC0 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3427B196E100096BC0 /* Viaduct */; };
 		4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1284851FC5E242001A775B /* TPSettingsTest.swift */; };
 		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
 		4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */; };
@@ -122,6 +122,7 @@
 		C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD12742A00300E76AE6 /* MenuActionable.swift */; };
 		C8EADCD42742A0AB00E76AE6 /* MenuItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */; };
 		C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F3EABE2762558F00C2AF0C /* SplashView.swift */; };
+		CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = CDFA746E27ABD43D0055FE55 /* Glean */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -1090,13 +1091,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B56C58527221B1C00BB1152 /* Nimbus in Frameworks */,
 				F85F7A292655AD5800395515 /* SnapKit in Frameworks */,
-				1B56C58727221B1C00BB1152 /* RustLog in Frameworks */,
-				1B56C58927221B1C00BB1152 /* Viaduct in Frameworks */,
+				CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */,
 				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
 				F8B92FBE279EC73700183998 /* Sentry in Frameworks */,
+				45D96F3127B196E100096BC0 /* Nimbus in Frameworks */,
+				45D96F3327B196E100096BC0 /* RustLog in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
+				45D96F3527B196E100096BC0 /* Viaduct in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1739,10 +1741,11 @@
 				F85F7A282655AD5800395515 /* SnapKit */,
 				F85F7A2A2655AD5800395515 /* Fuzi */,
 				F85F7A2E2655AD5800395515 /* Telemetry */,
-				1B56C58427221B1C00BB1152 /* Nimbus */,
-				1B56C58627221B1C00BB1152 /* RustLog */,
-				1B56C58827221B1C00BB1152 /* Viaduct */,
 				F8B92FBD279EC73700183998 /* Sentry */,
+				CDFA746E27ABD43D0055FE55 /* Glean */,
+				45D96F3027B196E100096BC0 /* Nimbus */,
+				45D96F3227B196E100096BC0 /* RustLog */,
+				45D96F3427B196E100096BC0 /* Viaduct */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -1922,6 +1925,7 @@
 				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
 				1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
 				F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
 			projectDirPath = "";
@@ -5478,8 +5482,16 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
+				kind = exactVersion;
+				version = 91.0.0;
+			};
+		};
+		CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mozilla/glean-swift";
+			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 90.0.0;
+				minimumVersion = 43.0.2;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -5517,20 +5529,25 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1B56C58427221B1C00BB1152 /* Nimbus */ = {
+		45D96F3027B196E100096BC0 /* Nimbus */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Nimbus;
 		};
-		1B56C58627221B1C00BB1152 /* RustLog */ = {
+		45D96F3227B196E100096BC0 /* RustLog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = RustLog;
 		};
-		1B56C58827221B1C00BB1152 /* Viaduct */ = {
+		45D96F3427B196E100096BC0 /* Viaduct */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Viaduct;
+		};
+		CDFA746E27ABD43D0055FE55 /* Glean */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */;
+			productName = Glean;
 		};
 		F85F7A282655AD5800395515 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
