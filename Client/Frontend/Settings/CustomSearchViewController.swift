@@ -118,6 +118,11 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         return nil
     }
+    
+    func updateSaveButton() {
+        let isEnabled = !self.engineTitle.isEmptyOrWhitespace() && !(self.urlString?.isEmptyOrWhitespace() ?? true)
+        self.navigationItem.rightBarButtonItem?.isEnabled = isEnabled
+    }
 
     override func generateSettings() -> [SettingSection] {
 
@@ -135,6 +140,7 @@ class CustomSearchViewController: SettingsTableViewController {
                 return
             }
             self.engineTitle = title
+            self.updateSaveButton()
         })
         titleField.textField.text = engineTitle
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
@@ -145,6 +151,7 @@ class CustomSearchViewController: SettingsTableViewController {
             return true
         }, settingDidChange: {fieldText in
             self.urlString = fieldText
+            self.updateSaveButton()
         })
 
         urlField.textField.autocapitalizationType = .none
@@ -158,7 +165,8 @@ class CustomSearchViewController: SettingsTableViewController {
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
-
+        
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
         return settings
     }
 
