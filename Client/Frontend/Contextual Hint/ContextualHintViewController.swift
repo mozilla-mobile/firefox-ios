@@ -16,9 +16,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     // MARK: - Properties
     
     var onViewDismissed: (() -> Void)? = nil
-    
-    // Orientation independent screen size
-    private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
 
     // UI
     private lazy var closeButton: UIButton = .build { [weak self] button in
