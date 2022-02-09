@@ -214,7 +214,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     // MARK: - Section availability variables
     var shouldShowFxLogoHeader: Bool {
-        return featureFlags.isFeatureActiveForBuild(.customWallpaper)
+        return featureFlags.isFeatureActiveForBuild(.wallpapers)
     }
 
     var isTopSitesSectionEnabled: Bool {
@@ -1261,8 +1261,7 @@ extension FirefoxHomeViewController {
         let localesAnimationIsAvailableFor = ["en_US", "es_US"]
         guard profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil,
               !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
-              localesAnimationIsAvailableFor.contains(Locale.current.identifier),
-              UIAccessibility.isReduceMotionEnabled
+              localesAnimationIsAvailableFor.contains(Locale.current.identifier)
         else { return false }
 
         return true

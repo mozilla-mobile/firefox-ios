@@ -11,31 +11,32 @@ struct WallpaperManager {
     // MARK: - Variables
     private let userDefaults: UserDefaults
     private let dataManager: WallpaperDataManager
-    private let storageManager: WallpaperStorageManager
+    private let storageManager: WallpaperStorageUtility
 
-    var wallpapers: [Wallpaper] {
-        return dataManager.availableWallpapers
+    var numberOfWallpapers: Int {
+        return dataManager.availableWallpapers.count
     }
-
+    
     var currentWallpaperImage: UIImage? {
-        let key = UIDevice.current.orientation.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
-
-        return storageManager.retrieveSavedImageWith(key: key)
+        return storageManager.getCurrentWallpaperImage()
     }
 
     var currentWallpaper: Wallpaper {
-        guard let currentWallpaper = storageManager.retrieveCurrentWallpaperObject() else {
-            // Returning the default wallpaper if nothing else is currently set
-            // as default will always exist
-            return wallpapers[0]
+        guard let currentWallpaper = storageManager.getCurrentWallpaperObject() else {
+            // Returning the default wallpaper if nothing else is currently set,
+            // as default will always exist. The reason this is returned is this manner
+            // is that, on fresh app installation, no wallpaper will be set. Thus,
+            // if this variable is accessed, it would return nil, when a wallpaper
+            // actually be required.
+            return dataManager.availableWallpapers[0]
         }
 
         return currentWallpaper
     }
 
-    var currentIndex: Int? {
+    var currentlySelectedWallpaperIndex: Int? {
         // If no wallpaper was ever set, then we must be at index 0
-        guard let currentWallpaper = storageManager.retrieveCurrentWallpaperObject() else { return 0 }
+        guard let currentWallpaper = storageManager.getCurrentWallpaperObject() else { return 0 }
 
         for (index, wallpaper) in dataManager.availableWallpapers.enumerated() {
             if wallpaper == currentWallpaper { return index }
@@ -52,35 +53,49 @@ struct WallpaperManager {
     /// being turned on, as `false` is what UserDefaults returns when a bool does not
     /// exist for a key.
     var switchWallpaperFromLogoEnabled: Bool {
-        // ROUX - update button behaviour based on this thing
         get { return !userDefaults.bool(forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
         set { userDefaults.set(!newValue, forKey: PrefsKeys.WallpaperManagerLogoSwitchPreference) }
     }
 
     // MARK: - Initializer
     init(with userDefaults: UserDefaults = UserDefaults.standard,
-         wallpaperData: WallpaperDataManager = WallpaperDataManager(),
-         wallpaperStorageManager: WallpaperStorageManager = WallpaperStorageManager()) {
+         wallpaperDataManager: WallpaperDataManager = WallpaperDataManager(),
+         wallpaperStorageManager: WallpaperStorageUtility = WallpaperStorageUtility()
+    ) {
         self.userDefaults = userDefaults
-        self.dataManager = wallpaperData
+        self.dataManager = wallpaperDataManager
         self.storageManager = wallpaperStorageManager
     }
 
     // MARK: - Public methods
-    public func updateTo(index: Int) {
+    public func updateSelectedWallpaperIndex(to index: Int) {
         let wallpapers = dataManager.availableWallpapers
         guard index <= (wallpapers.count - 1) else { return }
-        updateSelectedWallpaper(to: wallpapers[index])
+        storageManager.store(dataManager.availableWallpapers[index],
+                             and: dataManager.getImageSet(at: index))
     }
 
     public func cycleWallpaper() {
-        let newIndex = calculateIndex(using: currentIndex,
-                                      and: dataManager.availableWallpapers)
-        updateTo(index: newIndex)
+        let newIndex = calculateNextIndex(using: currentlySelectedWallpaperIndex,
+                                          and: dataManager.availableWallpapers)
+        updateSelectedWallpaperIndex(to: newIndex)
+    }
+    
+    public func getImageAt(index: Int, inLandscape: Bool) -> UIImage? {
+        let image = dataManager.getImageSet(at: index)
+        return inLandscape ? image.landscape : image.portrait
+    }
+    
+    public func runResourceVerification() {
+        dataManager.verifyResources()
     }
 
     // MARK: - Private functions
-    private func calculateIndex(using currentIndex: Int?, and wallpaperArray: [Wallpaper]) -> Int {
+    private func calculateNextIndex(
+        using currentIndex: Int?,
+        and wallpaperArray: [Wallpaper]
+    ) -> Int {
+        
         guard let currentIndex = currentIndex else { return 0 }
 
         let newIndex = currentIndex + 1
@@ -91,10 +106,5 @@ struct WallpaperManager {
         }
         
         return newIndex
-    }
-
-    // MARK: - Wallpaper storage
-    private func updateSelectedWallpaper(to wallpaper: Wallpaper) {
-        storageManager.store(wallpaper)
     }
 }

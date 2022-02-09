@@ -60,11 +60,6 @@ extension WallpaperType: Codable {
     }
 }
 
-struct WallpaperImageSet {
-    let portrait: UIImage?
-    let landscape: UIImage?
-}
-
 // MARK: - Collection types
 /// This enum will outline all types of different wallpaper collections we currently
 /// and may offer in the future. As such, there may be items here that are outdated.
@@ -78,16 +73,9 @@ struct Wallpaper: Codable, Equatable {
     // MARK: - Variables
     let name: String
     let type: WallpaperType
+    private let shipDate: Date?
     private let expiryDate: Date?
     private let locales: [String]?
-
-    var image: WallpaperImageSet {
-        var fileName = name
-        if UIDevice.current.userInterfaceIdiom == .pad { fileName += "_pad" }
-
-        return WallpaperImageSet(portrait: UIImage(named: fileName),
-                                 landscape: UIImage(named: fileName + "_ls"))
-    }
 
     var telemetryMetadata: [String: String] {
         var metadata = [String: String]()
@@ -103,41 +91,42 @@ struct Wallpaper: Codable, Equatable {
         return metadata
     }
 
-    var isEligibleForDisplay: Bool {
+    var meetsDateAndLocaleCriteria: Bool {
         if type == .defaultBackground { return true }
 
-        switch (expiryDate, locales) {
-        case (nil, nil): return true
-        case (let date?, nil): return checkEligibilityFor(date: date)
-        case (nil, let locales?): return checkEligibilityFor(locales: locales)
-        case (let date?, let locales?):
-            return checkEligibilityFor(date: date) && checkEligibilityFor(locales: locales)
+        switch (checkDateEligibility(), locales) {
+        case (true, nil): return true
+        case (false, nil): return false
+        case (false, _): return false
+        case (true, let locales?): return locales.contains(Locale.current.identifier)
         }
     }
 
     // MARK: - Initializer
     init(named name: String,
          ofType type: WallpaperType,
-         expiringOn date: Date? = nil,
+         shippingOn appearanceDate: Date? = nil,
+         expiringOn expiryDate: Date? = nil,
          limitedToLocale locale: [String]? = nil) {
         self.name = name
-        self.expiryDate = date
+        self.expiryDate = expiryDate
+        self.shipDate = appearanceDate
         self.type = type
         self.locales = locale
     }
 
     // MARK: - Private helper methods
-    /// Checking if a date of format `yyyyMMdd` is
-    private func checkEligibilityFor(date expiryDate: Date) -> Bool {
+    /// Checks to make sure that, if the wallpaper has time limits, they are respected.
+    private func checkDateEligibility() -> Bool {
         let currentDate = Date()
 
-        if currentDate <= expiryDate { return true }
-        return false
-    }
-
-    private func checkEligibilityFor(locales: [String]) -> Bool {
-        if locales.contains(Locale.current.identifier) { return true }
-        return false
+        switch (shipDate, expiryDate) {
+        case (nil, nil): return true
+        case (let ship?, nil): return currentDate >= ship
+        case (nil, let expiry?): return currentDate <= expiry
+        case (let ship?, let expiry?): return (currentDate >= ship) && (currentDate <= expiry)
+        }
     }
 }
+
 

@@ -17,7 +17,7 @@ struct FlaggableFeature {
         switch featureID {
         case .chronologicalTabs:
             return PrefsKeys.ChronTabsPrefKey
-        case .customWallpaper:
+        case .wallpapers:
             return PrefsKeys.CustomWallpaperPrefKey
         case .inactiveTabs:
             return PrefsKeys.KeyEnableInactiveTabs
@@ -95,7 +95,7 @@ struct FlaggableFeature {
         switch featureID {
         case .startAtHome:
             return StartAtHomeSetting.afterFourHours.rawValue
-        case .customWallpaper:
+        case .wallpapers:
             // In this case, we want to enable the tap banner to cycle through
             // wallpapers behaviour by default.
             return UserFeaturePreference.enabled.rawValue
