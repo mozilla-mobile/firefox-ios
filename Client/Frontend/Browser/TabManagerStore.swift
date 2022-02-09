@@ -48,7 +48,7 @@ class TabManagerStore: FeatureFlagsProtocol {
     fileprivate func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
         var savedTabs = [SavedTab]()
         var savedUUIDs = Set<String>()
-        for tab in tabs {
+        for tab in tabs where !tab.isPrivate {
             tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
             tab.screenshotUUID = tab.screenshotUUID ?? UUID()
             tab.firstCreatedTime = tab.firstCreatedTime ?? tab.sessionData?.lastUsedTime ?? Date.now()
