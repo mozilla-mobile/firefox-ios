@@ -637,9 +637,11 @@ workflows:
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
-    - carthage@3.2:
+    - script@1:
         inputs:
-        - carthage_options: " --platform ios --cache-builds"
+        - content: |-
+            ./bootstrap.sh
+        title: Run bootstrap
     - script@1:
         inputs:
         - content: |-
@@ -653,18 +655,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
-    - script@1:
-        title: Move glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-
-            # Move Glean script to source folder from
-            # MozillaAppServices.framework as we don't
-            # want to ship our app with Glean shell
-            # script inside A~S framework
-
-            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
     - script@1:
         inputs:
         - content: |-
@@ -774,9 +764,11 @@ workflows:
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
-    - carthage@3.2:
+    - script@1:
         inputs:
-        - carthage_options: " --platform ios --cache-builds"
+        - content: |-
+            ./bootstrap.sh
+        title: Run bootstrap
     - script@1:
         inputs:
         - content: |-
@@ -790,19 +782,6 @@ workflows:
             rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
-    - script@1:
-        title: Move glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-
-            # Move Glean script to source folder from
-            # MozillaAppServices.framework as we don't
-            # want to ship our app with Glean shell
-            # script inside A~S framework
-
-            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -822,11 +801,7 @@ workflows:
             set -e
             # debug log
             set -x
-
-            npm install
-            npm run build
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+            ./content_blocker_update.sh
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
@@ -929,18 +904,6 @@ workflows:
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
     - script@1:
-        title: Move glean sdk_generator
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash # fail if any commands fails set -e # debug log set -x
-
-            # Move Glean script to source folder from
-            # MozillaAppServices.framework as we don't
-            # want to ship our app with Glean shell
-            # script inside A~S framework
-
-            mv Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh ./
-    - script@1:
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -961,10 +924,7 @@ workflows:
             # debug log
             set -x
 
-            npm install
-            npm run build
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+            ./content_blocker_update.sh
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
