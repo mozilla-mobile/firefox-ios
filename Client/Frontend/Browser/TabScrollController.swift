@@ -34,9 +34,12 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
     }
 
     weak var header: BaseAlphaStackView?
-    weak var footer: BaseAlphaStackView?
+    weak var overKeyboardContainer: BaseAlphaStackView?
+    weak var bottomContainer: BaseAlphaStackView?
 
-    var footerBottomConstraint: Constraint?
+    // TODO: make comments
+    var overKeyboardContainerConstraint: Constraint?
+    var bottomContainerConstraint: Constraint?
     var headerTopConstraint: Constraint?
     var toolbarsShowing: Bool {
         return isBottomSearchBar ? headerTopOffset == 0 : footerBottomOffset == 0
@@ -55,8 +58,10 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
 
     fileprivate var footerBottomOffset: CGFloat = 0 {
         didSet {
-            footerBottomConstraint?.update(offset: footerBottomOffset)
-            footer?.superview?.setNeedsLayout()
+            overKeyboardContainerConstraint?.update(offset: footerBottomOffset)
+            bottomContainerConstraint?.update(offset: footerBottomOffset)
+            overKeyboardContainer?.superview?.setNeedsLayout()
+            bottomContainer?.superview?.setNeedsLayout()
         }
     }
 
@@ -72,7 +77,11 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
     fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     fileprivate var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
-    fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }
+    fileprivate var bottomScrollHeight: CGFloat {
+        let bottomContainerHeight = bottomContainer?.frame.height ?? 0
+        let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
+        return overKeyboardHeight + bottomContainerHeight
+    }
 
     fileprivate var lastContentOffset: CGFloat = 0
     fileprivate var scrollDirection: ScrollDirection = .down
@@ -83,17 +92,6 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
 
     override init() {
         super.init()
-    }
-
-    private func configureRefreshControl() {
-        scrollView?.refreshControl = UIRefreshControl()
-        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
-    }
-
-    @objc private func reload() {
-        guard let tab = tab else { return }
-        tab.reloadPage()
-        TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
     func showToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
@@ -110,23 +108,6 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
             headerOffset: 0,
             footerOffset: 0,
             alpha: 1,
-            completion: completion)
-    }
-
-    func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
-        if toolbarState == .collapsed {
-            completion?(true)
-            return
-        }
-        toolbarState = .collapsed
-
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
-        self.animateToolbarsWithOffsets(
-            animated,
-            duration: actualDuration,
-            headerOffset: -topScrollHeight,
-            footerOffset: bottomScrollHeight,
-            alpha: 0,
             completion: completion)
     }
 
@@ -159,14 +140,42 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
         self.isZoomedOut = false
         self.lastZoomedScale = 0
     }
+}
 
-    fileprivate func roundNum(_ num: CGFloat) -> CGFloat {
+// MARK: - Private
+private extension TabScrollingController {
+    func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
+        if toolbarState == .collapsed {
+            completion?(true)
+            return
+        }
+        toolbarState = .collapsed
+
+        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
+        self.animateToolbarsWithOffsets(
+            animated,
+            duration: actualDuration,
+            headerOffset: -topScrollHeight,
+            footerOffset: bottomScrollHeight,
+            alpha: 0,
+            completion: completion)
+    }
+
+    func configureRefreshControl() {
+        scrollView?.refreshControl = UIRefreshControl()
+        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
+    }
+
+    @objc func reload() {
+        guard let tab = tab else { return }
+        tab.reloadPage()
+        TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
+    }
+
+    func roundNum(_ num: CGFloat) -> CGFloat {
         return round(100 * num) / 100
     }
 
-}
-
-private extension TabScrollingController {
     func tabIsLoading() -> Bool {
         return tab?.loading ?? true
     }

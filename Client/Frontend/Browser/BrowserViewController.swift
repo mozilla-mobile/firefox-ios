@@ -89,10 +89,11 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
 
-    // Header and footer wrap the urlbar and toolbar to provide background effects on them
-    // URLbar can be in header or footer
+    // Header can contain the top url bar, bottomContainer only containts toolbar
+    // OverKeyboardContainer contains the reader mode and maybe the bottom url bar
     var header: BaseAlphaStackView = .build { _ in }
-    var footer: BaseAlphaStackView = .build { _ in }
+    var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
+    var bottomContainer: BaseAlphaStackView = .build { _ in }
 
     lazy var isBottomSearchBar: Bool = {
         guard SearchBarSettingsViewModel.isEnabled else { return false }
@@ -193,7 +194,7 @@ class BrowserViewController: UIViewController {
               urlBar != nil else { return }
 
         let newPositionIsBottom = newSearchBarPosition == .bottom
-        let newParent = newPositionIsBottom ? footer : header
+        let newParent = newPositionIsBottom ? overKeyboardContainer : header
         urlBar.removeFromParent()
         urlBar.addToParent(parent: newParent)
 
@@ -395,7 +396,8 @@ class BrowserViewController: UIViewController {
         clipboardBarDisplayHandler?.delegate = self
 
         scrollController.header = header
-        scrollController.footer = footer
+        scrollController.overKeyboardContainer = overKeyboardContainer
+        scrollController.bottomContainer = bottomContainer
 
         updateToolbarStateForTraitCollection(traitCollection)
 
@@ -455,13 +457,14 @@ class BrowserViewController: UIViewController {
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
 
-        urlBar.addToParent(parent: isBottomSearchBar ? footer : header)
+        urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
+        view.addSubview(overKeyboardContainer)
 
         toolbar = TabToolbar()
-        footer.addArrangedSubview(toolbar)
-        view.addSubview(footer)
+        bottomContainer.addArrangedSubview(toolbar)
+        view.addSubview(bottomContainer)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -594,7 +597,7 @@ class BrowserViewController: UIViewController {
         webViewContainer.snp.remakeConstraints { make in
             make.left.right.equalTo(view)
             make.top.equalTo(header.snp.bottom)
-            make.bottom.equalTo(footer.snp.top)
+            make.bottom.equalTo(bottomContainer.snp.top)
         }
 
         // Setup the bottom toolbar
@@ -602,8 +605,13 @@ class BrowserViewController: UIViewController {
             make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
 
-        footer.snp.remakeConstraints { make in
-            scrollController.footerBottomConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+        overKeyboardContainer.snp.remakeConstraints { make in
+            scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+            make.leading.trailing.equalTo(view)
+        }
+
+        bottomContainer.snp.remakeConstraints { make in
+            scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
             make.leading.trailing.equalTo(view)
         }
 
@@ -612,7 +620,8 @@ class BrowserViewController: UIViewController {
         firefoxHomeViewController?.view.snp.remakeConstraints { make in
             make.top.equalTo(header.snp.bottom)
             make.left.right.equalTo(view)
-            make.bottom.equalTo(footer.snp.top)
+            let homePageBottomOffset: CGFloat = isBottomSearchBar ? urlBarHeightConstraintValue ?? 0 : 0
+            make.bottom.equalTo(bottomContainer.snp.top).offset(-homePageBottomOffset)
         }
 
         bottomContentStackView.snp.remakeConstraints { remake in
@@ -642,7 +651,7 @@ class BrowserViewController: UIViewController {
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
         } else if !toolbar.isHidden {
-            remake.bottom.lessThanOrEqualTo(footer.snp.top)
+            remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
             remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         } else {
             remake.bottom.equalTo(view.safeArea.bottom)
@@ -650,14 +659,14 @@ class BrowserViewController: UIViewController {
     }
 
     private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
-        remake.bottom.lessThanOrEqualTo(footer.snp.top)
+        remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
     }
 
     private func adjustBottomSearchBarForKeyboard() {
         guard isBottomSearchBar else { return }
         guard let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 else {
-            footer.removeKeyboardSpacer()
+            overKeyboardContainer.removeKeyboardSpacer()
             return
         }
 
@@ -665,7 +674,7 @@ class BrowserViewController: UIViewController {
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         let index = readerModeBar == nil ? 1 : 2
-        footer.addKeyboardSpacer(at: index, spacerHeight: spacerHeight)
+        overKeyboardContainer.addKeyboardSpacer(at: index, spacerHeight: spacerHeight)
     }
 
     /// Used for dynamic type height adjustment
@@ -680,9 +689,9 @@ class BrowserViewController: UIViewController {
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
         let isKeyboardShowing = keyboardState != nil
         if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
-            footer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
         } else {
-            footer.removeBottomInsetSpacer()
+            overKeyboardContainer.removeBottomInsetSpacer()
         }
 
         // We have to deactivate the original constraint, and remake the constraint
@@ -805,7 +814,7 @@ class BrowserViewController: UIViewController {
         urlBar.updateAlphaForSubviews(1)
         toolbar.isHidden = false
 
-        [header, footer].forEach { view in
+        [header, overKeyboardContainer].forEach { view in
             view?.transform = .identity
         }
 
@@ -830,6 +839,7 @@ class BrowserViewController: UIViewController {
             addChild(firefoxHomeViewController)
             view.addSubview(firefoxHomeViewController.view)
             firefoxHomeViewController.didMove(toParent: self)
+            view.bringSubviewToFront(overKeyboardContainer)
         }
 
         if self.readerModeBar != nil {
@@ -965,7 +975,7 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(header.snp.bottom)
             make.left.right.equalTo(view)
 
-            let constraintTarget = isBottomSearchBar ? footer.snp.top : view.snp.bottom
+            let constraintTarget = isBottomSearchBar ? overKeyboardContainer.snp.top : view.snp.bottom
             make.bottom.equalTo(constraintTarget)
         }
 

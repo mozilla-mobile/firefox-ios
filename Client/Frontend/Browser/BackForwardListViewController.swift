@@ -33,6 +33,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         let blurEffect = UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         tableView.backgroundView = blurEffectView
+        tableView.showsHorizontalScrollIndicator = false
 
         return tableView
     }()
@@ -189,7 +190,10 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         self.verticalConstraints = []
         tableView.snp.makeConstraints { make in
             if snappedToBottom {
-                verticalConstraints += [make.bottom.equalTo(self.view).offset(-bvc.footer.frame.height).constraint]
+                let keyboardContainerHeight = bvc.overKeyboardContainer.frame.height
+                let toolbarContainerheight = bvc.bottomContainer.frame.height
+                let offset = keyboardContainerHeight + toolbarContainerheight
+                verticalConstraints += [make.bottom.equalTo(self.view).offset(-offset).constraint]
             } else {
                 let statusBarHeight = UIWindow.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
                 verticalConstraints += [make.top.equalTo(self.view).offset(bvc.header.frame.height + statusBarHeight).constraint]
