@@ -17,11 +17,6 @@ class FxHomeHistoryHightlightsVM {
 
     var onTapItem: (() -> Void)?
 
-    private var recentTabs = [Tab]()
-    private var maxItemsAllowed: Int {
-        HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * HistoryHighlightsCollectionCellConstants.maxNumberOfColumns
-    }
-
     // MARK: - Inits
     init(with profile: Profile,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
@@ -38,7 +33,7 @@ class FxHomeHistoryHightlightsVM {
         loadItems()
     }
 
-    public func switchTo() {
+    public func switchTo(_ highlight: HighlightItem) {
         if foregroundBVC.urlBar.inOverlayMode {
             foregroundBVC.urlBar.leaveOverlayMode()
         }
@@ -56,15 +51,8 @@ class FxHomeHistoryHightlightsVM {
     // MARK: - Private Methods
 
     private func loadItems() {
-        print("YRD loadItems hightlights")
-
         HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
             self?.historyItems = highlights
         }
-    }
-
-    private func configureData() {
-        recentTabs.removeAll()
-        recentTabs = tabManager.recentlyAccessedNormalTabs
     }
 }

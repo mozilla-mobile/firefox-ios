@@ -92,7 +92,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
                                                heightDimension: .estimated(HistoryHighlightsCollectionCellUX.estimatedCellHeight)),
             subitems: [item, item, item]
         )
-        verticalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
+//        verticalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
 
         let section = NSCollectionLayoutSection(group: verticalGroup)
         section.orthogonalScrollingBehavior = .continuous
@@ -186,17 +186,53 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     }
 
     private func determineCornerToRound(indexPath: IndexPath, totalItems: Int?) -> UIRectCorner {
-        guard totalItems != nil else { return [] }
+        guard let totalItems = totalItems else { return [] }
 
-        // Is top row cell
-        if indexPath.row % HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn == 0 {
-            return [.topRight, .topLeft]
-        } else if indexPath.row % HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn == 2 {
-            // Is bottom row cell
-            return [.bottomLeft, .bottomRight]
+        var cornersToRound = UIRectCorner()
+
+        if isTopLeftCell(index: indexPath.row) { cornersToRound.insert(.topLeft) }
+        if isTopRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.topRight) }
+        if isBottomLeftCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.bottomLeft) }
+        if isBottomRightCell(index: indexPath.row, totalItems: totalItems) { cornersToRound.insert(.bottomRight) }
+
+        return cornersToRound
+    }
+
+    private func isTopLeftCell(index: Int) -> Bool {
+       return index == 0
+    }
+
+    private func isTopRightCell(index: Int, totalItems: Int) -> Bool {
+        let topRightIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * (numberOfColumns - 1))
+        return index == topRightIndex
+    }
+
+    private func isBottomLeftCell(index: Int, totalItems: Int) -> Bool {
+        var bottomLeftIndex: Int {
+            if totalItems <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
+                return totalItems - 1
+            } else {
+                return HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn - 1
+            }
         }
 
-        return []
+        if index == bottomLeftIndex { return true }
+
+        return false
+    }
+
+    private func isBottomRightCell(index: Int, totalItems: Int) -> Bool {
+        var bottomRightIndex: Int {
+            if totalItems <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
+                return totalItems - 1
+            } else {
+                return (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * numberOfColumns) - 1
+            }
+        }
+
+        if index == bottomRightIndex { return true }
+
+        return false
     }
 }
 
@@ -204,8 +240,8 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: In a separate ticket, we will be handling the taps of the cells to
         // do the respective thing they should do.
-//        if let tab = viewModel?.historyItems[safe: indexPath.row] {
-            viewModel?.switchTo()
-//        }
+        if let highlight = viewModel?.historyItems?[safe: indexPath.row] {
+            viewModel?.switchTo(highlight)
+        }
     }
 }

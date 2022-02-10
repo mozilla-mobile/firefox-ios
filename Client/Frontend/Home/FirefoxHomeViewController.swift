@@ -783,7 +783,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
             guard let items = historyHighlightsViewModel.historyItems, !items.isEmpty else {
                 return CGSize(width: cellSize.width, height: .zero)
-
             }
 
             // Returns the total height based on a variable column/row layout
