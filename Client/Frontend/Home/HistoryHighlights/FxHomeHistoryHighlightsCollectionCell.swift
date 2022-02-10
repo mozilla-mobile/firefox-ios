@@ -92,7 +92,6 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
                                                heightDimension: .estimated(HistoryHighlightsCollectionCellUX.estimatedCellHeight)),
             subitems: [item, item, item]
         )
-//        verticalGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
 
         let section = NSCollectionLayoutSection(group: verticalGroup)
         section.orthogonalScrollingBehavior = .continuous
@@ -118,29 +117,43 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HistoryHighlightsCell.cellIdentifier, for: indexPath) as! HistoryHighlightsCell
-        let hideBottomLine = false //isBottomCell(indexPath: indexPath,
-//                                          totalItems: viewModel?.historyItems?.count)
+        let hideBottomLine = isBottomCell(indexPath: indexPath,
+                                          totalItems: viewModel?.historyItems?.count)
         let cornersToRound = determineCornerToRound(indexPath: indexPath,
                                                     totalItems: viewModel?.historyItems?.count)
 
-        // TODO: `item` can be either single url or a search group. We must differentiate
-        // here and then update the cell accordingly.
+        // TODO: Yoana Clean up massive code block
         if let item = viewModel?.historyItems?[safe: indexPath.row] {
 
-            let itemURL = item.url2?.absoluteString ?? ""
-            let site = Site(url: itemURL, title: item.displayTitle)
+            if item.type == .item {
+                let itemURL = item.url2?.absoluteString ?? ""
+                let site = Site(url: itemURL, title: item.displayTitle)
 
-            let cellOptions = RecentlyVisitedCellOptions(title: site.title,
-                                                         shouldHideBottomLine: hideBottomLine,
-                                                         with: cornersToRound,
-                                                         and: nil,
-                                                         andIsFillerCell: false)
+                let cellOptions = RecentlyVisitedCellOptions(title: site.title,
+                                                             description: nil,
+                                                             shouldHideBottomLine: hideBottomLine,
+                                                             with: cornersToRound,
+                                                             and: nil,
+                                                             andIsFillerCell: false)
 
-            cell.updateCell(with: cellOptions)
+                cell.updateCell(with: cellOptions)
 
-            viewModel?.getFavIcon(for: site) { image in
-                cell.heroImage.image = image
+                viewModel?.getFavIcon(for: site) { image in
+                    cell.heroImage.image = image
+                }
+            } else {
+
+                // TODO: Yoana How it gets the group icon?
+                let cellOptions = RecentlyVisitedCellOptions(title: item.displayTitle,
+                                                             description: item.description,
+                                                             shouldHideBottomLine: hideBottomLine,
+                                                             with: cornersToRound,
+                                                             and: nil,
+                                                             andIsFillerCell: false)
+
+                cell.updateCell(with: cellOptions)
             }
+
 
         } else {
             // A filler cell

@@ -15,7 +15,7 @@ class FxHomeHistoryHightlightsVM {
     private var foregroundBVC: BrowserViewController
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
-    var onTapItem: (() -> Void)?
+    var onTapItem: ((HighlightItem) -> Void)?
 
     // MARK: - Inits
     init(with profile: Profile,
@@ -37,7 +37,7 @@ class FxHomeHistoryHightlightsVM {
         if foregroundBVC.urlBar.inOverlayMode {
             foregroundBVC.urlBar.leaveOverlayMode()
         }
-        onTapItem?()
+        onTapItem?(highlight)
 //        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
     }
 
@@ -51,7 +51,7 @@ class FxHomeHistoryHightlightsVM {
     // MARK: - Private Methods
 
     private func loadItems() {
-        HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
+        HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs, shouldGroupHighlights: true) { [weak self] highlights in
             self?.historyItems = highlights
         }
     }

@@ -961,10 +961,13 @@ extension FirefoxHomeViewController {
     private func configureHistoryHighlightsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let historyCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
 
-        historyHighlightsViewModel.onTapItem = { [weak self] in
-            // TODO: When the data is hooked up, this will actually send a user to
-            // the correct place in history
-            self?.openHistory(UIButton())
+        historyHighlightsViewModel.onTapItem = { [weak self] highlight in
+            guard let url = highlight.url2 else {
+                self?.openHistory(UIButton())
+                return
+            }
+
+            self?.homePanelDelegate?.homePanel(didSelectURL: url, visitType: .link, isGoogleTopSite: false)
         }
 
         historyCell.viewModel = historyHighlightsViewModel

@@ -11,21 +11,24 @@ private struct RecentlyVisitedCellUX {
 
 struct RecentlyVisitedCellOptions {
     let title: String
-    let heroImage: UIImage?
+    let description: String?
+    let favIconImage: UIImage?
     let corners: UIRectCorner?
     let hideBottomLine: Bool
     let isFillerCell: Bool
 
     init(title: String,
+         description: String?,
          shouldHideBottomLine: Bool,
          with corners: UIRectCorner? = nil,
          and heroImage: UIImage? = nil,
          andIsFillerCell: Bool) {
 
         self.title = title
+        self.description = description
         self.hideBottomLine = shouldHideBottomLine
         self.corners = corners
-        self.heroImage = heroImage
+        self.favIconImage = heroImage
         self.isFillerCell = andIsFillerCell
     }
 
@@ -34,6 +37,7 @@ struct RecentlyVisitedCellOptions {
          andIsFillerCell: Bool) {
 
         self.init(title: "",
+                  description: "",
                   shouldHideBottomLine: shouldHideBottomLine,
                   with: corners,
                   and: nil,
@@ -110,6 +114,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     // MARK: - Public methods
     public func updateCell(with options: RecentlyVisitedCellOptions) {
         itemTitle.text = options.title
+        itemDescription.text = options.description
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
         itemDescription.isHidden = itemDescription.text?.isEmpty ?? false
