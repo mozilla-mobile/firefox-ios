@@ -86,6 +86,10 @@ struct WallpaperManager {
         return inLandscape ? image.landscape : image.portrait
     }
     
+    public func getAccessibilityHintForWallpaper(at index: Int) -> String {
+        return dataManager.availableWallpapers[index].accessibilityHint
+    }
+    
     public func runResourceVerification() {
         dataManager.verifyResources()
     }

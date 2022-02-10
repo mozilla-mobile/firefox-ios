@@ -73,6 +73,7 @@ struct Wallpaper: Codable, Equatable {
     // MARK: - Variables
     let name: String
     let type: WallpaperType
+    let accessibilityHint: String
     private let shipDate: Date?
     private let expiryDate: Date?
     private let locales: [String]?
@@ -105,10 +106,12 @@ struct Wallpaper: Codable, Equatable {
     // MARK: - Initializer
     init(named name: String,
          ofType type: WallpaperType,
+         withAccessibiltyHint accessibilityHint: String,
          shippingOn appearanceDate: Date? = nil,
          expiringOn expiryDate: Date? = nil,
          limitedToLocale locale: [String]? = nil) {
         self.name = name
+        self.accessibilityHint = accessibilityHint
         self.expiryDate = expiryDate
         self.shipDate = appearanceDate
         self.type = type

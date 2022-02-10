@@ -63,6 +63,8 @@ class WallpaperSettingsViewController: UIViewController {
         toggle.addTarget(self,
                          action: #selector(self.didChangeSwitchState(_:)),
                          for: .valueChanged)
+        toggle.isAccessibilityElement = true
+        toggle.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.ToggleButton
     }
 
     private lazy var switchLine: UIView = .build { _ in }
@@ -280,6 +282,8 @@ extension WallpaperSettingsViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier, for: indexPath) as! WallpaperSettingCollectionCell
         let image = viewModel.wallpaperManager.getImageAt(index: indexPath.row, inLandscape: UIDevice.current.orientation.isLandscape)
         cell.updateImage(to: image)
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = viewModel.wallpaperManager.getAccessibilityHintForWallpaper(at: indexPath.row)
 
         return cell
     }
