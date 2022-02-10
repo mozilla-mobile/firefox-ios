@@ -208,6 +208,7 @@ class BrowserViewController: UIViewController {
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         toolbar.setNeedsDisplay()
+        urlBar.setNeedsDisplay()
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
