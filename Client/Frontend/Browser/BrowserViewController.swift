@@ -102,7 +102,9 @@ class BrowserViewController: UIViewController {
 
     // Alert content that appears on top of the footer should be added to this view.
     // ex: Find In Page, SnackBars
-    var bottomContentStackView: BaseAlphaStackView = .build { _ in }
+    var bottomContentStackView: BaseAlphaStackView = .build { stackview in
+        stackview.isClearBackground = true
+    }
 
     private var topTouchArea: UIButton!
 

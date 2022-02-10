@@ -11,6 +11,7 @@ protocol AlphaDimmable {
 
 class BaseAlphaStackView: UIStackView, AlphaDimmable {
 
+    var isClearBackground = false
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -105,8 +106,9 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 extension BaseAlphaStackView: NotificationThemeable {
 
     func applyTheme() {
-        backgroundColor = UIColor.theme.browser.background
-        keyboardSpacer?.backgroundColor = UIColor.theme.browser.background
-        insetSpacer?.backgroundColor = UIColor.theme.browser.background
+        let color = isClearBackground ? .clear : UIColor.theme.browser.background
+        backgroundColor = color
+        keyboardSpacer?.backgroundColor = color
+        insetSpacer?.backgroundColor = color
     }
 }
