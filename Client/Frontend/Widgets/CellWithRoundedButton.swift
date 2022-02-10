@@ -23,7 +23,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setImage(UIImage(named: "trash-icon"), for: .normal)
         button.tintColor = .black
-        button.backgroundColor = .Photon.LightGrey40
+        button.backgroundColor = .Photon.LightGrey30
         button.setTitleColor(.black, for: .normal)
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
@@ -31,6 +31,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
         button.accessibilityIdentifier = "roundedButton"
+        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         return button
     }()
     
@@ -42,6 +43,8 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    var buttonClosure: (() -> Void)?
     
     let containerView = UIView()
     var shouldLeftAlignTitle = false
@@ -57,8 +60,10 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
             make.height.equalTo(50)
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(contentView.snp.trailing).offset(-23)
-            make.leading.equalTo(contentView.snp.leading).offset(23)
+            let trailingOffSet = UIDevice.current.userInterfaceIdiom == .pad ? -100 : -23
+            let leadingOffSet = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
+            make.trailing.equalTo(contentView.snp.trailing).offset(trailingOffSet)
+            make.leading.equalTo(contentView.snp.leading).offset(leadingOffSet)
         }
 
         selectedBackgroundView = selectedView
@@ -75,5 +80,9 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
         self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         applyTheme()
+    }
+    
+    @objc func buttonPressed() {
+        self.buttonClosure?()
     }
 }

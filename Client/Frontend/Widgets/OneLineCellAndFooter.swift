@@ -61,7 +61,6 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
 
     lazy var bottomSeparatorView: UIView = .build { separatorLine in
         //separator hidden by default
-        separatorLine.isHidden = true
         separatorLine.backgroundColor = UIColor.Photon.Grey40
     }
     
@@ -124,7 +123,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
             make.height.equalTo(0.7)
             make.bottom.equalTo(containerView.snp.bottom)
             make.leading.equalTo(titleLabel.snp.leading)
-            make.trailing.equalTo(titleLabel.snp.trailing)
+            make.trailing.equalTo(containerView.snp.trailing)
         }
         
         selectedBackgroundView = selectedView
@@ -133,7 +132,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
     
     func updateMidConstraint() {
         leftImageView.snp.updateConstraints { update in
-            let leadingLeft = customization == .regular ? 15 : customization == .inactiveCell ? 5 : 15
+            let leadingLeft = customization == .regular ? 15 : customization == .inactiveCell ? 16 : 15
             update.leading.equalTo(containerView.snp.leading).offset(leadingLeft)
         }
 

@@ -17,6 +17,7 @@ protocol InactiveTabsDelegate {
     func toggleInactiveTabSection(hasExpanded: Bool)
     func didSelectInactiveTab(tab: Tab?)
     func didTapCloseAllTabs()
+    func shouldCloseInactiveTab(tab: Tab)
 }
 
 struct InactiveTabCellUX {
@@ -56,7 +57,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         view.layer.cornerRadius = 13
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.clear.cgColor
-        view.backgroundColor = .Photon.LightGrey20
     }
 
     convenience init(viewModel: InactiveTabViewModel) {
@@ -68,15 +68,19 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         super.init(frame: frame)
         containerView.addSubviews(tableView)
         addSubviews(containerView)
-//        addSubviews(tableView)
         setupConstraints()
         applyTheme()
+        setupNotifcation()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    private func setupNotifcation() {
+        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
+    }
+    
     private func setupConstraints() {
         containerView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(5)
@@ -84,12 +88,12 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
-        
+
         tableView.snp.makeConstraints { make in
             make.top.equalTo(containerView).offset(10)
             make.bottom.equalTo(containerView).offset(-10)
-            make.leading.equalTo(containerView).offset(10)
-            make.trailing.equalTo(containerView).offset(-10)
+            make.leading.equalTo(containerView)
+            make.trailing.equalTo(containerView)
         }
         
         self.bringSubviewToFront(tableView)
@@ -124,7 +128,7 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
             let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabsTableIdentifier, for: indexPath) as! OneLineTableViewCell
-            cell.bottomSeparatorView.isHidden = false
+//            cell.bottomSeparatorView.isHidden = false
             cell.customization = .inactiveCell
             cell.backgroundColor = .clear
             cell.accessoryView = nil
@@ -137,6 +141,9 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
             return cell
         case .closeAllTabsButton:
             if let closeAllButtonCell = tableView.dequeueReusableCell(withIdentifier: InactiveTabsCloseAllButtonIdentifier, for: indexPath) as? CellWithRoundedButton {
+                closeAllButtonCell.buttonClosure = {
+                    self.delegate?.didTapCloseAllTabs()
+                }
                 return closeAllButtonCell
             }
             return tableView.dequeueReusableCell(withIdentifier: InactiveTabsTableIdentifier, for: indexPath) as! OneLineTableViewCell
@@ -172,7 +179,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         case .closeAllTabsButton, .none:
             print("nothing")
         }
-        
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -190,13 +196,25 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         }
     }
     
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        let section = indexPath.section
+        switch InactiveTabSection(rawValue: section) {
+        case .inactive:
+            return .delete
+        case .closeAllTabsButton, .none:
+            return .none
+        }
+    }
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-//            IMPLEMENT ME!!!
-//            objects.remove(at: indexPath.row)
-//            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+        let section = indexPath.section
+        guard editingStyle == .delete else { return }
+        switch InactiveTabSection(rawValue: section) {
+        case .inactive:
+            if let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] {
+                delegate?.shouldCloseInactiveTab(tab: tab)
+            }
+        case .closeAllTabsButton, .none: return
         }
     }
     
@@ -231,10 +249,12 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         return tab.url?.domainURL
     }
 
-    func applyTheme() {
+    @objc func applyTheme() {
         self.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         tableView.reloadData()
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        containerView.backgroundColor = theme == .normal ? .white : .Photon.DarkGrey50
     }
 }
 
@@ -268,7 +288,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable {
         let titleLabel = UILabel()
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = UIFont.systemFont(ofSize: FirefoxHomeHeaderViewUX.sectionHeaderSize, weight: .bold)
+        titleLabel.font = UIFont.systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -312,12 +332,14 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable {
         moreButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.leading.equalTo(titleLabel.snp.trailing)
-            let insetValue = UIDevice.current.userInterfaceIdiom == .pad ? 8 : 12
-            make.trailing.equalTo(self.safeArea.trailing).inset(insetValue)
+            make.top.equalToSuperview().offset(12.5)
+            make.trailing.equalTo(self.safeArea.trailing).inset(28)
         }
+        
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.safeArea.leading).inset(5)
+            make.top.equalToSuperview().offset(12.5)
+            make.leading.equalTo(self.safeArea.leading).offset(16)
             make.centerX.equalToSuperview()
         }
         

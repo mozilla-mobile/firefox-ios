@@ -527,12 +527,12 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
     }
 
     // TabDisplayCompletionDelegate
-    func displayRecentlyClosedTabs() {
-        recentlyClosedTabsPanel = RecentlyClosedTabsPanel(profile: profile)
-        recentlyClosedTabsPanel!.title = .RecentlyClosedTabsButtonTitle
-        recentlyClosedTabsPanel!.recentlyClosedTabsDelegate = self
-        navigationController?.pushViewController(recentlyClosedTabsPanel!, animated: true)
-    }
+//    func displayRecentlyClosedTabs() {
+//        recentlyClosedTabsPanel = RecentlyClosedTabsPanel(profile: profile)
+//        recentlyClosedTabsPanel!.title = .RecentlyClosedTabsButtonTitle
+//        recentlyClosedTabsPanel!.recentlyClosedTabsDelegate = self
+//        navigationController?.pushViewController(recentlyClosedTabsPanel!, animated: true)
+//    }
 
     func completedAnimation(for type: TabAnimationType) {
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
@@ -670,8 +670,8 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         case .inactiveTabs:
             if tabDisplayManager.isPrivate { return CGSize(width: 0, height: 0) }
             let minInactiveCellHeight = Int(InactiveTabCellUX.headerAndRowHeight)
-            let roundedContainerPaddingClosed = 10
-            let roundedContainerAdditionalPaddingOpened = 50
+            let roundedContainerPaddingClosed = 30
+            let roundedContainerAdditionalPaddingOpened = 40
             let closeAllButtonHeight = Int(InactiveTabCellUX.closeAllTabRowHeight)
             let headerHeightWithRoundedCorner = minInactiveCellHeight + roundedContainerPaddingClosed
 
@@ -680,7 +680,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             
             if let inactiveTabs = tabDisplayManager.inactiveViewModel?.inactiveTabs {
                 if inactiveTabs.isEmpty {
-                    totalHeight = 0
+                    return CGSize(width: 0, height: 0)
                 } else if inactiveTabs.count > 0 {
                 // Calculate height based on number of tabs in the inactive tab section section
                 totalHeight = minInactiveCellHeight*inactiveTabs.count + roundedContainerPaddingClosed + roundedContainerAdditionalPaddingOpened + closeAllButtonHeight
@@ -690,7 +690,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : headerHeightWithRoundedCorner
 
             if UIDevice.current.userInterfaceIdiom == .pad {
-                return CGSize(width: Int(collectionView.frame.size.width/2), height: totalHeight)
+                return CGSize(width: Int(collectionView.frame.size.width/1.5), height: totalHeight)
             } else {
                 return CGSize(width: width >= 0 ? Int(width) : 0, height: totalHeight)
             }
@@ -767,13 +767,8 @@ protocol TabCellDelegate: AnyObject {
 }
 
 extension GridTabViewController: NotificationThemeable {
-
     @objc func applyTheme() {
         webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         collectionView.backgroundColor = UIColor.theme.tabTray.background
-        let indexPath = IndexPath(row: 0, section: 1)
-        if let cell = collectionView.cellForItem(at: indexPath) as? InactiveTabCell {
-            cell.applyTheme()
-        }
     }
 }
