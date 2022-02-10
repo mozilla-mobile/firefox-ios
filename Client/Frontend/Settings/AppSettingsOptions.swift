@@ -792,9 +792,12 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             settingDidChange: {
                 AdjustHelper.setEnabled($0)
                 Glean.shared.setUploadEnabled($0)
-                Experiments.shared.resetTelemetryIdentifiers()
+                Experiments.setTelemetrySetting($0)
             }
         )
+        // We make sure to set this on initialization, in case the setting is turned off
+        // in which case, we would to make sure that users are opted out of experiments
+        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
     }
 
     override var accessibilityIdentifier: String? { return "SendAnonymousUsageData" }
@@ -819,10 +822,13 @@ class StudiesToggleSetting: BoolSetting {
             prefs: prefs, prefKey: AppConstants.PrefStudiesToggle, defaultValue: true,
             attributedTitleText: NSAttributedString(string: .SettingsStudiesToggleTitle),
             attributedStatusText: statusText,
-            settingDidChange: { enabled in
-                Experiments.shared.globalUserParticipation = enabled
+            settingDidChange: {
+                Experiments.setStudiesSetting($0)
             }
         )
+        // We make sure to set this on initialization, in case the setting is turned off
+        // in which case, we would to make sure that users are opted out of experiments
+        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.PrefStudiesToggle) ?? true)
     }
 
     override var accessibilityIdentifier: String? { return "StudiesToggle" }
