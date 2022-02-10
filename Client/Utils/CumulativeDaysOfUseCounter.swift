@@ -5,7 +5,7 @@
 import Foundation
 
 // Counter to know if a user has used the app a certain number of days in a row, used for `RatingPromptManager` requirements.
-class CumulativeDaysOfUseCounter {
+final class CumulativeDaysOfUseCounter {
 
     private let calendar = Calendar.current
     private let maximumNumberOfDaysToCollect = 7
@@ -21,7 +21,7 @@ class CumulativeDaysOfUseCounter {
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRequiredCumulativeDaysOfUseCount.rawValue) }
     }
 
-    private var daysOfUse: [Date]? {
+    var daysOfUse: [Date]? {
         get { UserDefaults.standard.array(forKey: UserDefaultsKey.keyArrayDaysOfUse.rawValue) as? [Date] }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyArrayDaysOfUse.rawValue) }
     }
