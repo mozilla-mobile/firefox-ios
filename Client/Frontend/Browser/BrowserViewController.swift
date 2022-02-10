@@ -599,7 +599,7 @@ class BrowserViewController: UIViewController {
         webViewContainer.snp.remakeConstraints { make in
             make.left.right.equalTo(view)
             make.top.equalTo(header.snp.bottom)
-            make.bottom.equalTo(bottomContainer.snp.top)
+            make.bottom.equalTo(overKeyboardContainer.snp.top)
         }
 
         // Setup the bottom toolbar
