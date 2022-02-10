@@ -340,7 +340,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
 
         line.snp.remakeConstraints { make in
             if isBottomSearchBar {
-                make.top.equalTo(self).offset(1)
+                make.top.equalTo(self).offset(0)
             } else {
                 make.bottom.equalTo(self)
             }

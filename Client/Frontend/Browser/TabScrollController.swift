@@ -8,12 +8,12 @@ import SnapKit
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
 class TabScrollingController: NSObject, FeatureFlagsProtocol {
-    enum ScrollDirection {
+    private enum ScrollDirection {
         case up
         case down
     }
 
-    enum ToolbarState {
+    private enum ToolbarState {
         case collapsed
         case visible
         case animating
@@ -34,66 +34,76 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
     }
 
     weak var header: BaseAlphaStackView?
-    weak var footer: BaseAlphaStackView?
+    weak var overKeyboardContainer: BaseAlphaStackView?
+    weak var bottomContainer: BaseAlphaStackView?
 
-    var footerBottomConstraint: Constraint?
+    var overKeyboardContainerConstraint: Constraint?
+    var bottomContainerConstraint: Constraint?
     var headerTopConstraint: Constraint?
+
     var toolbarsShowing: Bool {
-        return isBottomSearchBar ? headerTopOffset == 0 : footerBottomOffset == 0
+        let bottomShowing = overKeyboardContainerOffset == 0 && bottomContainerOffset == 0
+        return isBottomSearchBar ? bottomShowing : headerTopOffset == 0
     }
 
-    fileprivate var isZoomedOut: Bool = false
-    fileprivate var lastZoomedScale: CGFloat = 0
-    fileprivate var isUserZoom: Bool = false
+    private var isZoomedOut: Bool = false
+    private var lastZoomedScale: CGFloat = 0
+    private var isUserZoom: Bool = false
 
-    fileprivate var headerTopOffset: CGFloat = 0 {
+    private var headerTopOffset: CGFloat = 0 {
         didSet {
             headerTopConstraint?.update(offset: headerTopOffset)
             header?.superview?.setNeedsLayout()
         }
     }
 
-    fileprivate var footerBottomOffset: CGFloat = 0 {
+    private var overKeyboardContainerOffset: CGFloat = 0 {
         didSet {
-            footerBottomConstraint?.update(offset: footerBottomOffset)
-            footer?.superview?.setNeedsLayout()
+            overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
+            overKeyboardContainer?.superview?.setNeedsLayout()
         }
     }
 
-    fileprivate lazy var panGesture: UIPanGestureRecognizer = {
+    private var bottomContainerOffset: CGFloat = 0 {
+        didSet {
+            bottomContainerConstraint?.update(offset: bottomContainerOffset)
+            bottomContainer?.superview?.setNeedsLayout()
+        }
+    }
+
+    private lazy var panGesture: UIPanGestureRecognizer = {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
         return panGesture
     }()
 
-    fileprivate var scrollView: UIScrollView? { return tab?.webView?.scrollView }
-    fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
-    fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
-    fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
-    fileprivate var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
-    fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }
+    private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
+    private var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
+    private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
+    private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
+    private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
 
-    fileprivate var lastContentOffset: CGFloat = 0
-    fileprivate var scrollDirection: ScrollDirection = .down
-    fileprivate var toolbarState: ToolbarState = .visible
+    // Over keyboard content and bottom content
+    private var overKeyboardScrollHeight: CGFloat {
+        let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
+        return overKeyboardHeight
+    }
+
+    private var bottomContainerScrollHeight: CGFloat {
+        let bottomContainerHeight = bottomContainer?.frame.height ?? 0
+        return bottomContainerHeight
+    }
+
+    private var lastContentOffset: CGFloat = 0
+    private var scrollDirection: ScrollDirection = .down
+    private var toolbarState: ToolbarState = .visible
     private var isBottomSearchBar: Bool {
         return BrowserViewController.foregroundBVC().isBottomSearchBar
     }
 
     override init() {
         super.init()
-    }
-
-    private func configureRefreshControl() {
-        scrollView?.refreshControl = UIRefreshControl()
-        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
-    }
-
-    @objc private func reload() {
-        guard let tab = tab else { return }
-        tab.reloadPage()
-        TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
     func showToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
@@ -108,25 +118,9 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
             animated,
             duration: actualDuration,
             headerOffset: 0,
-            footerOffset: 0,
+            bottomContainerOffset: 0,
+            overKeyboardOffset: 0,
             alpha: 1,
-            completion: completion)
-    }
-
-    func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
-        if toolbarState == .collapsed {
-            completion?(true)
-            return
-        }
-        toolbarState = .collapsed
-
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
-        self.animateToolbarsWithOffsets(
-            animated,
-            duration: actualDuration,
-            headerOffset: -topScrollHeight,
-            footerOffset: bottomScrollHeight,
-            alpha: 0,
             completion: completion)
     }
 
@@ -159,14 +153,43 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
         self.isZoomedOut = false
         self.lastZoomedScale = 0
     }
+}
 
-    fileprivate func roundNum(_ num: CGFloat) -> CGFloat {
+// MARK: - Private
+private extension TabScrollingController {
+    func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
+        if toolbarState == .collapsed {
+            completion?(true)
+            return
+        }
+        toolbarState = .collapsed
+
+        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
+        self.animateToolbarsWithOffsets(
+            animated,
+            duration: actualDuration,
+            headerOffset: -topScrollHeight,
+            bottomContainerOffset: bottomContainerScrollHeight,
+            overKeyboardOffset: overKeyboardScrollHeight,
+            alpha: 0,
+            completion: completion)
+    }
+
+    func configureRefreshControl() {
+        scrollView?.refreshControl = UIRefreshControl()
+        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
+    }
+
+    @objc func reload() {
+        guard let tab = tab else { return }
+        tab.reloadPage()
+        TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
+    }
+
+    func roundNum(_ num: CGFloat) -> CGFloat {
         return round(100 * num) / 100
     }
 
-}
-
-private extension TabScrollingController {
     func tabIsLoading() -> Bool {
         return tab?.loading ?? true
     }
@@ -199,9 +222,11 @@ private extension TabScrollingController {
                     scrollWithDelta(delta)
                 }
 
-                if headerTopOffset == -topScrollHeight && footerBottomOffset == bottomScrollHeight {
+                let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
+                let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
+                if headerTopOffset == -topScrollHeight && bottomContainerCollapsed && overKeyboardContainerCollapsed {
                     toolbarState = .collapsed
-                } else if headerTopOffset == 0 {
+                } else if toolbarsShowing {
                     toolbarState = .visible
                 } else {
                     toolbarState = .animating
@@ -225,14 +250,17 @@ private extension TabScrollingController {
             return
         }
 
-        var updatedOffset = headerTopOffset - delta
+        let updatedOffset = headerTopOffset - delta
         headerTopOffset = clamp(updatedOffset, min: -topScrollHeight, max: 0)
         if isHeaderDisplayedForGivenOffset(updatedOffset) {
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
 
-        updatedOffset = footerBottomOffset + delta
-        footerBottomOffset = clamp(updatedOffset, min: 0, max: bottomScrollHeight)
+        let bottomUpdatedOffset = bottomContainerOffset + delta
+        bottomContainerOffset = clamp(bottomUpdatedOffset, min: 0, max: bottomContainerScrollHeight)
+
+        let overKeyboardUpdatedOffset = overKeyboardContainerOffset + delta
+        overKeyboardContainerOffset = clamp(overKeyboardUpdatedOffset, min: 0, max: overKeyboardScrollHeight)
 
         header?.updateAlphaForSubviews(scrollAlpha)
     }
@@ -250,7 +278,13 @@ private extension TabScrollingController {
         return y
     }
 
-    func animateToolbarsWithOffsets(_ animated: Bool, duration: TimeInterval, headerOffset: CGFloat, footerOffset: CGFloat, alpha: CGFloat, completion: ((_ finished: Bool) -> Void)?) {
+    func animateToolbarsWithOffsets(_ animated: Bool,
+                                    duration: TimeInterval,
+                                    headerOffset: CGFloat,
+                                    bottomContainerOffset: CGFloat,
+                                    overKeyboardOffset: CGFloat,
+                                    alpha: CGFloat,
+                                    completion: ((_ finished: Bool) -> Void)?) {
         guard let scrollView = scrollView else { return }
         let initialContentOffset = scrollView.contentOffset
 
@@ -264,7 +298,8 @@ private extension TabScrollingController {
                 scrollView.contentOffset = CGPoint(x: initialContentOffset.x, y: initialContentOffset.y + self.topScrollHeight)
             }
             self.headerTopOffset = headerOffset
-            self.footerBottomOffset = footerOffset
+            self.bottomContainerOffset = bottomContainerOffset
+            self.overKeyboardContainerOffset = overKeyboardOffset
             self.header?.updateAlphaForSubviews(alpha)
             self.header?.superview?.layoutIfNeeded()
         }
@@ -281,10 +316,12 @@ private extension TabScrollingController {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height ?? 0
     }
 
+    // Duration for hiding bottom containers is taken from overKeyboard since it's longer to hide
+    // That way we ensure animation has proper timing
     var showDurationRatio: CGFloat {
         var durationRatio: CGFloat
         if isBottomSearchBar {
-            durationRatio = abs(footerBottomOffset / bottomScrollHeight)
+            durationRatio = abs(overKeyboardContainerOffset / overKeyboardScrollHeight)
         } else {
             durationRatio = abs(headerTopOffset / topScrollHeight)
         }
@@ -294,21 +331,17 @@ private extension TabScrollingController {
     var hideDurationRation: CGFloat {
         var durationRatio: CGFloat
         if isBottomSearchBar {
-            durationRatio = abs((bottomScrollHeight + footerBottomOffset) / bottomScrollHeight)
+            durationRatio = abs((overKeyboardScrollHeight + overKeyboardContainerOffset) / overKeyboardScrollHeight)
         } else {
             durationRatio = abs((topScrollHeight + headerTopOffset) / topScrollHeight)
         }
         return durationRatio
     }
 
+    // Scroll alpha is only for header views since status bar has an overlay
+    // Bottom content doesn't have alpha since it's completely hidden
     var scrollAlpha: CGFloat {
-        var alpha: CGFloat
-        if isBottomSearchBar {
-            alpha = 1 - abs(footerBottomOffset / bottomScrollHeight)
-        } else {
-            alpha = 1 - abs(headerTopOffset / topScrollHeight)
-        }
-        return alpha
+        return 1 - abs(headerTopOffset / topScrollHeight)
     }
 }
 

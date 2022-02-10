@@ -62,7 +62,7 @@ private extension TrayToBrowserAnimator {
         bvc.urlBar.isTransitioning = true
 
         // Re-calculate the starting transforms for header/footer views in case we switch orientation
-        resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
+        resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.overKeyboardContainer])
         transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container: container)
         
         let frameResizeClosure = {
@@ -210,7 +210,7 @@ private extension BrowserToTrayAnimator {
                 toggleWebViewVisibility(true, usingTabManager: bvc.tabManager)
                 bvc.firefoxHomeViewController?.view.isHidden = false
 
-                resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
+                resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.overKeyboardContainer])
                 bvc.urlBar.isTransitioning = false
                 transitionContext.completeTransition(true)
             })
@@ -219,10 +219,10 @@ private extension BrowserToTrayAnimator {
 }
 
 private func transformHeaderFooterForBVC(_ bvc: BrowserViewController, toFrame finalFrame: CGRect, container: UIView) {
-    let footerForTransform = footerTransform(bvc.footer.frame, toFrame: finalFrame, container: container)
+    let footerForTransform = footerTransform(bvc.overKeyboardContainer.frame, toFrame: finalFrame, container: container)
     let headerForTransform = headerTransform(bvc.header.frame, toFrame: finalFrame, container: container)
 
-    bvc.footer.transform = footerForTransform
+    bvc.overKeyboardContainer.transform = footerForTransform
     bvc.header.transform = headerForTransform
     bvc.readerModeBar?.transform = headerForTransform
 }
