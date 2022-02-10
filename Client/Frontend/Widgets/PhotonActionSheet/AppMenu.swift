@@ -68,7 +68,6 @@ extension PhotonActionSheetProtocol {
             if #available(iOS 14.0, *) {} else if UIDevice.current.userInterfaceIdiom == .phone {
                 controller.modalPresentationStyle = .fullScreen
             }
-            }
             controller.presentingModalViewControllerDelegate = vcDelegate
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .settings)
             
