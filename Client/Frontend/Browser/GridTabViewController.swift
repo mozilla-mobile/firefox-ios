@@ -297,6 +297,12 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
             return
         }
 
+        // Ensure Firefox home page is refreshed if privacy mode was changed
+        if tabManager.selectedTab?.isPrivate != isPrivate {
+            let notificationObject = [Tab.privateModeKey: isPrivate]
+            NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
+        }
+
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 }

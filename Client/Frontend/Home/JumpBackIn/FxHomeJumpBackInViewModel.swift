@@ -27,6 +27,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     // MARK: - Properties
     var onTapGroup: ((Tab) -> Void)?
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
+    var parentCollectionViewIndex: IndexPath?
 
     private var recentTabs: [Tab] = [Tab]()
     private var recentGroups: [ASGroup<Tab>]?
