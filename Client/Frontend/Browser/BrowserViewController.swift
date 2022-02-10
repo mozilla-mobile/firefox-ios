@@ -609,6 +609,7 @@ class BrowserViewController: UIViewController {
 
         overKeyboardContainer.snp.remakeConstraints { make in
             scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+            if !isBottomSearchBar { make.height.equalTo(0) }
             make.leading.trailing.equalTo(view)
         }
 
