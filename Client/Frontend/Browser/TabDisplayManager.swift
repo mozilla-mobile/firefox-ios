@@ -108,7 +108,9 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
     var shouldEnableInactiveTabs: Bool {
         guard featureFlags.isFeatureActiveForBuild(.inactiveTabs) else { return false }
-        return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+        // TODO: Nimbus Setup and update the following return statement
+        // return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+        return true
     }
 
     var orderedTabs: [Tab] {
@@ -225,12 +227,21 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
-    func tabsSetupHelper(tabGroups: [ASGroup<Tab>]?, filteredTabs: [Tab]) {
+    private func tabsSetupHelper(tabGroups: [ASGroup<Tab>]?, filteredTabs: [Tab]) {
         self.tabGroups = tabGroups
         self.filteredTabs = filteredTabs
     }
 
-    func getTabsWithInactiveTabsDisabled(tabsToBuildFrom: [Tab], allTabs: [Tab], completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
+    private func setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: [Tab], allTabs: [Tab], completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
+
+        // no groups for when we have less than 2 active tabs
+        guard shouldEnableGroupedTabs, tabsToBuildFrom.count > 1 else {
+            tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
+            completion(nil, allTabs)
+            return
+        }
+
+        // build groups when
         if shouldEnableGroupedTabs {
             SearchTermGroupsManager.getTabGroups(with: profile,
                                                  from: tabsToBuildFrom,
@@ -240,9 +251,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             }
             return
         }
-
-        tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
-        completion(nil, allTabs)
     }
 
     private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
@@ -262,37 +270,15 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         
         // Inactive tabs - disabled
         if !shouldEnableInactiveTabs {
-            getTabsWithInactiveTabsDisabled(tabsToBuildFrom: tabManager.normalTabs, allTabs: allTabs, completion: completion)
-//            if shouldEnableGroupedTabs {
-//                SearchTermGroupsManager.getTabGroups(with: profile,
-//                                                     from: tabManager.normalTabs,
-//                                                     using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-//                    tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
-//                    completion(tabGroups, filteredActiveTabs)
-//                }
-//                return
-//            }
-//            self.tabGroups = nil
-//            self.filteredTabs = allTabs
-//            completion(nil, allTabs)
-            return
+
+            // check if groups are enabled and setup from normal tabs
+            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, allTabs: allTabs, completion: completion)
+
         } else {
             // Inactive tabs - enabled
             guard let inactiveViewModel = inactiveViewModel else {
-                getTabsWithInactiveTabsDisabled(tabsToBuildFrom: tabManager.normalTabs, allTabs: allTabs, completion: completion)
-//                if !self.isPrivate && shouldEnableGroupedTabs {
-//                    SearchTermGroupsManager.getTabGroups(with: profile,
-//                                                         from: tabManager.normalTabs,
-//                                                         using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-//                        self.tabGroups = tabGroups
-//                        self.filteredTabs = filteredActiveTabs
-//                        completion(tabGroups, filteredActiveTabs)
-//                    }
-//                    return
-//                }
-//                self.tabGroups = nil
-//                self.filteredTabs = allTabs
-//                completion(nil, allTabs)
+                // check if groups are enabled and setup from all tabs
+                setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, allTabs: allTabs, completion: completion)
                 return
             }
 
@@ -306,40 +292,9 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             
             // keep inactive tabs collapsed
             self.isInactiveViewExpanded = false
-            
-            if shouldEnableGroupedTabs {
-            // groups settings - enabled
 
-                // no groups for when we have less than 2 active abs
-                guard activeTabs.count > 1 else {
-                    tabsSetupHelper(tabGroups: nil, filteredTabs: activeTabs)
-//                    self.tabGroups = nil
-//                    self.filteredTabs = activeTabs
-                    completion(nil, activeTabs)
-                    return
-                }
-                
-                // make groups from active tabs
-                getTabsWithInactiveTabsDisabled(tabsToBuildFrom: activeTabs, allTabs: allTabs, completion: completion)
-                return
-//                if !self.isPrivate && shouldEnableGroupedTabs {
-//                    SearchTermGroupsManager.getTabGroups(with: profile,
-//                                                         from: activeTabs,
-//                                                         using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-////                        self.tabGroups = tabGroups
-////                        self.filteredTabs = filteredActiveTabs
-//                        tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
-//                        completion(tabGroups, filteredActiveTabs)
-//                    }
-//                    return
-//                }
-            } else {
-            // groups settings - disabled
-//                self.tabGroups = nil
-//                self.filteredTabs = activeTabs
-                tabsSetupHelper(tabGroups: nil, filteredTabs: activeTabs)
-                completion(tabGroups, activeTabs)
-            }
+            // check if groups are enabled and setup groups from active tabs only
+            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: activeTabs, allTabs: allTabs, completion: completion)
         }
     }
 
