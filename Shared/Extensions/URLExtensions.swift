@@ -316,6 +316,11 @@ extension URL {
         }
         return urls[0] == urls[1]
     }
+    
+    public var isFxHomeUrl: Bool {
+        return absoluteString.hasPrefix("internal://local/about/home")
+    }
+    
 }
 
 // Extensions to deal with ReaderMode URLs

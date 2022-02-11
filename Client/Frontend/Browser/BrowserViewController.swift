@@ -877,7 +877,7 @@ class BrowserViewController: UIViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
 
-        let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile)
+        let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile, tabManager: tabManager)
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
 
