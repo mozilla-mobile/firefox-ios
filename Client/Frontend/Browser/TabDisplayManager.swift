@@ -232,12 +232,12 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         self.filteredTabs = filteredTabs
     }
 
-    private func setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: [Tab], allTabs: [Tab], completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
+    private func setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: [Tab], completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
 
         // no groups for when we have less than 2 active tabs
         guard shouldEnableGroupedTabs, tabsToBuildFrom.count > 1 else {
-            tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
-            completion(nil, allTabs)
+            tabsSetupHelper(tabGroups: nil, filteredTabs: tabsToBuildFrom)
+            completion(nil, tabsToBuildFrom)
             return
         }
 
@@ -255,8 +255,9 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
     private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        
-        guard !self.isPrivate else {
+
+        // We should not make a single tab inactive as that would be the selected tab
+        guard !self.isPrivate, allTabs.count > 1 else {
             tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
             completion(nil, allTabs)
             return
@@ -272,13 +273,13 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         if !shouldEnableInactiveTabs {
 
             // check if groups are enabled and setup from normal tabs
-            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, allTabs: allTabs, completion: completion)
+            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, completion: completion)
 
         } else {
             // Inactive tabs - enabled
             guard let inactiveViewModel = inactiveViewModel else {
                 // check if groups are enabled and setup from all tabs
-                setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, allTabs: allTabs, completion: completion)
+                setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, completion: completion)
                 return
             }
 
@@ -294,7 +295,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             self.isInactiveViewExpanded = false
 
             // check if groups are enabled and setup groups from active tabs only
-            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: activeTabs, allTabs: allTabs, completion: completion)
+            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: activeTabs, completion: completion)
         }
     }
 
@@ -484,6 +485,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
         }
         switch TabDisplaySection(rawValue: section) {
         case .inactiveTabs:
+            // Hide inactive tray if there are no inactive tabs
+            guard let vm = inactiveViewModel, vm.inactiveTabs.count > 0 else { return 0 }
             return shouldEnableInactiveTabs ? (isPrivate ? 0 : 1) : 0
         case .groupedTabs:
             return shouldEnableGroupedTabs ? (isPrivate ? 0 : 1) : 0
@@ -585,37 +588,37 @@ extension TabDisplayManager: GroupedTabDelegate {
 // MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
     
-    func shouldCloseInactiveTab(tab: Tab) {
-        if let inactiveTabs = inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
-            self.tabManager.removeTabs([tab])
-            
-            let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-            self.inactiveViewModel?.updateInactiveTabs(with: self.tabManager.selectedTab, tabs: allTabs)
-            let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
+    // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs
+    private func removeInactiveTabAndReloadView(tabs: [Tab]) {
+        self.tabManager.removeTabs(tabs)
+        
+        let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        self.inactiveViewModel?.updateInactiveTabs(with: self.tabManager.selectedTab, tabs: allTabs)
+        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
 
-            collectionView.reloadItems(at: [indexPath])
+        collectionView.reloadItems(at: [indexPath])
+        
+        // Only scroll if inactive tabs contain at least single tab
+        if let inactiveTabs = inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
             collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
-            
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
         }
     }
     
+    func shouldCloseInactiveTab(tab: Tab) {
+        removeInactiveTabAndReloadView(tabs: [tab])
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
+    }
+    
     func didTapCloseAllTabs() {
+        // Haptic feedback for when a user closes all inactive tabs
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
+        
+        // Close all inactive tabs
         if let inactiveTabs = inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
-            self.tabManager.removeTabs(inactiveTabs)
-            
-            let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-            self.inactiveViewModel?.updateInactiveTabs(with: self.tabManager.selectedTab, tabs: allTabs)
-            let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
-
-            collectionView.reloadItems(at: [indexPath])
-            collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
-            
+            removeInactiveTabAndReloadView(tabs: inactiveTabs)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabCloseAllButton, extras: nil)
         }
-
     }
 
     func didSelectInactiveTab(tab: Tab?) {

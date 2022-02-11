@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var tabTrayController: GridTabViewController!
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
@@ -123,14 +122,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
         
-        
         setupRootViewController()
-        self.tabTrayController = GridTabViewController(tabManager: self.tabManager, profile: profile)
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
-
-//        setupRootViewController()
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
@@ -173,6 +168,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
+        browserViewController.updateState = .coldStart
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -324,7 +320,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC(), tray: self.tabTrayController)
+            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC())
         }
         return true
     }

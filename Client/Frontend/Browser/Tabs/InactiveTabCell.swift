@@ -23,6 +23,9 @@ protocol InactiveTabsDelegate {
 struct InactiveTabCellUX {
     static let headerAndRowHeight: CGFloat = 48
     static let closeAllTabRowHeight: CGFloat = 100
+    static let roundedContainerPaddingClosed: CGFloat = 30
+    static let roundedContainerAdditionalPaddingOpened: CGFloat  = 40
+    static let inactiveTabTrayWidthPadding: CGFloat = 30
 }
 
 class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate {
@@ -44,7 +47,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         tableView.tableHeaderView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
-//        tableView.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
         tableView.separatorStyle = .none
         tableView.separatorColor = .clear
         tableView.isScrollEnabled = false
@@ -128,7 +130,6 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
             let cell = tableView.dequeueReusableCell(withIdentifier: InactiveTabsTableIdentifier, for: indexPath) as! OneLineTableViewCell
-//            cell.bottomSeparatorView.isHidden = false
             cell.customization = .inactiveCell
             cell.backgroundColor = .clear
             cell.accessoryView = nil
