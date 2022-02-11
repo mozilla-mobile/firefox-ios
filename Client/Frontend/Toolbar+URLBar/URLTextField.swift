@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 class URLTextField: UITextField {
     weak var accessibilityActionsSource: AccessibilityActionsSource?
@@ -16,7 +17,7 @@ class URLTextField: UITextField {
         }
     }
 
-    fileprivate override var canBecomeFirstResponder: Bool {
+    internal override var canBecomeFirstResponder: Bool {
         return false
     }
 
