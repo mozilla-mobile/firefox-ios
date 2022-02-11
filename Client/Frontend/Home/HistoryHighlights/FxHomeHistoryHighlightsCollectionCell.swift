@@ -12,6 +12,8 @@ struct HistoryHighlightsCollectionCellConstants {
 
 struct HistoryHighlightsCollectionCellUX {
     static let estimatedCellHeight: CGFloat = 65
+    static let verticalPadding: CGFloat = 8
+    static let horizontalPadding: CGFloat = 16
 }
 
 class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell {
@@ -42,6 +44,10 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         collectionView.delegate = self
         collectionView.register(HistoryHighlightsCell.self,
                                 forCellWithReuseIdentifier: HistoryHighlightsCell.cellIdentifier)
+        collectionView.contentInset = UIEdgeInsets(top: HistoryHighlightsCollectionCellUX.verticalPadding,
+                                                   left: HistoryHighlightsCollectionCellUX.horizontalPadding,
+                                                   bottom: HistoryHighlightsCollectionCellUX.verticalPadding,
+                                                   right: HistoryHighlightsCollectionCellUX.horizontalPadding)
 
         return collectionView
     }()
@@ -117,53 +123,21 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HistoryHighlightsCell.cellIdentifier, for: indexPath) as! HistoryHighlightsCell
+
         let hideBottomLine = isBottomCell(indexPath: indexPath,
                                           totalItems: viewModel?.historyItems?.count)
         let cornersToRound = determineCornerToRound(indexPath: indexPath,
                                                     totalItems: viewModel?.historyItems?.count)
 
-        // TODO: Yoana Clean up massive code block
-        if let item = viewModel?.historyItems?[safe: indexPath.row] {
-
-            if item.type == .item {
-                let itemURL = item.url2?.absoluteString ?? ""
-                let site = Site(url: itemURL, title: item.displayTitle)
-
-                let cellOptions = RecentlyVisitedCellOptions(title: site.title,
-                                                             description: nil,
-                                                             shouldHideBottomLine: hideBottomLine,
-                                                             with: cornersToRound,
-                                                             and: nil,
-                                                             andIsFillerCell: false)
-
-                cell.updateCell(with: cellOptions)
-
-                viewModel?.getFavIcon(for: site) { image in
-                    cell.heroImage.image = image
-                }
-            } else {
-
-                // TODO: Yoana How it gets the group icon?
-                let cellOptions = RecentlyVisitedCellOptions(title: item.displayTitle,
-                                                             description: item.description,
-                                                             shouldHideBottomLine: hideBottomLine,
-                                                             with: cornersToRound,
-                                                             and: nil,
-                                                             andIsFillerCell: false)
-
-                cell.updateCell(with: cellOptions)
-            }
-        } else {
-            // A filler cell
-            let cellOptions = RecentlyVisitedCellOptions(shouldHideBottomLine: hideBottomLine,
-                                                         with: cornersToRound,
-                                                         andIsFillerCell: true)
-
-            cell.updateCell(with: cellOptions)
+        guard let item = viewModel?.historyItems?[safe: indexPath.row] else {
+            return configureFillerCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound)
         }
 
-
-        return cell
+        if item.type == .item {
+            return configureIndividualHighlightCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound, item: item)
+        } else {
+            return configureIndividualHighlightCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound, item: item)
+        }
     }
 
     // MARK: - Cell helper functions
@@ -244,6 +218,67 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         if index == bottomRightIndex { return true }
 
         return false
+    }
+
+    private func configureIndividualHighlightCell(_ cell: UICollectionViewCell,
+                                                  hideBottomLine: Bool,
+                                                  cornersToRound: UIRectCorner,
+                                                  item: HighlightItem) -> UICollectionViewCell {
+
+        guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
+
+
+        let itemURL = item.url2?.absoluteString ?? ""
+        let site = Site(url: itemURL, title: item.displayTitle)
+
+        let cellOptions = RecentlyVisitedCellOptions(title: site.title,
+                                                     description: nil,
+                                                     shouldHideBottomLine: hideBottomLine,
+                                                     with: cornersToRound,
+                                                     and: nil,
+                                                     andIsFillerCell: false)
+
+        cell.updateCell(with: cellOptions)
+
+        viewModel?.getFavIcon(for: site) { image in
+            cell.heroImage.image = image
+        }
+
+        return cell
+    }
+
+    private func configureGroupHighlightCell(_ cell: UICollectionViewCell,
+                                             hideBottomLine: Bool,
+                                             cornersToRound: UIRectCorner,
+                                             item: HighlightItem) -> UICollectionViewCell {
+
+        guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
+
+        let cellOptions = RecentlyVisitedCellOptions(title: item.displayTitle,
+                                                     description: item.description,
+                                                     shouldHideBottomLine: hideBottomLine,
+                                                     with: cornersToRound,
+                                                     and: nil,
+                                                     andIsFillerCell: false)
+
+        cell.updateCell(with: cellOptions)
+
+        return cell
+
+    }
+
+    private func configureFillerCell(_ cell: UICollectionViewCell,
+                                     hideBottomLine: Bool,
+                                     cornersToRound: UIRectCorner) -> UICollectionViewCell {
+
+        guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
+
+        let cellOptions = RecentlyVisitedCellOptions(shouldHideBottomLine: hideBottomLine,
+                                                     with: cornersToRound,
+                                                     andIsFillerCell: true)
+
+        cell.updateCell(with: cellOptions)
+        return cell
     }
 }
 

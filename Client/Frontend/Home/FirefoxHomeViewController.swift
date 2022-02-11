@@ -595,9 +595,19 @@ extension FirefoxHomeViewController {
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .historyHighlights: return FirefoxHomeUX.historyHighlightsCellHeight
             case .topSites: return 0 //calculated dynamically
-            case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight // TODO: Take a look it works but breaks recently saved
+            case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight
             case .customizeHome: return FirefoxHomeUX.customizeHomeHeight
             case .logoHeader: return FirefoxHomeUX.logoHeaderHeight
+            }
+        }
+
+        // Pocket and historyHighlight should have full width and add inset in their respective sections
+        // TODO: Fix pocket cell layout to be able to see next column
+        var parentMinimunInset: CGFloat {
+            switch self {
+//            case .pocket: return 0
+            case .historyHighlights: return 0
+            default: return FirefoxHomeUX.minimumInsets
             }
         }
 
@@ -614,7 +624,7 @@ extension FirefoxHomeViewController {
             var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
             let window = UIWindow.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
-            insets += FirefoxHomeUX.minimumInsets + safeAreaInsets
+            insets += parentMinimunInset + safeAreaInsets
             return insets
         }
 
@@ -781,8 +791,10 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
             // Returns the total height based on a variable column/row layout
             let rowNumber = items.count < HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn ? items.count : HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
-            cellSize.height *= CGFloat(rowNumber)
-            return cellSize
+
+            let sectionHeight = (cellSize.height * CGFloat(rowNumber)) + HistoryHighlightsCollectionCellUX.verticalPadding * 2
+            return CGSize(width: cellSize.width,
+                          height: sectionHeight)
 
         default:
             return cellSize
