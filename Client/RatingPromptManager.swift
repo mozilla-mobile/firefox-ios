@@ -8,7 +8,7 @@ import Shared
 import Storage
 
 // The `RatingPromptManager` handles app store review requests and the internal logic of when they can be presented to a user.
-class RatingPromptManager {
+final class RatingPromptManager {
 
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter

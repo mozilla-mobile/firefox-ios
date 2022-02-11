@@ -14,29 +14,41 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
     override func setUp() {
         super.setUp()
         counter = CumulativeDaysOfUseCounter()
+        counter.reset()
     }
 
     override func tearDown() {
         super.tearDown()
-        counter.reset()
         counter = nil
     }
 
     func testByDefaultCounter_isFalse() {
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertNil(counter.daysOfUse)
     }
 
     func testUpdateCounterOnce_isFalse() {
         counter.updateCounter()
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 1)
     }
 
-    func testUpdateCounterFiveTimeSameDay_isFalse() {
-        for _ in 0...4 {
+    func testUpdateCounter5TimesSameDay_isFalse() {
+        for _ in 0...5 {
             counter.updateCounter()
         }
 
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 1)
+    }
+
+    func testUpdateCounterMoreThan5TimesSameDay_isFalse() {
+        for _ in 0...10 {
+            counter.updateCounter()
+        }
+
+        XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 1)
     }
 
     func testUpdateCounterFiveTimeDifferentDaysWithOneDayBetween_isFalse() {
@@ -45,6 +57,7 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
         addUsageDays(from: 4, to: 5, currentDate: currentDate)
 
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 5)
     }
 
     func testUpdateCounterFiveTimeDifferentDaysWithDaysBetween_isFalse() {
@@ -53,6 +66,7 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
         addUsageDays(from: 6, to: 8, currentDate: currentDate)
 
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 4)
     }
 
     func testUpdateCounterFiveTimeDifferentDaysInARow_isTrue() {
@@ -60,6 +74,7 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
         addUsageDays(from: 0, to: 4, currentDate: currentDate)
 
         XCTAssertTrue(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 5)
     }
 
     func testUpdateCounterFiveTimeValidWithinSevenDays_isTrue() {
@@ -68,6 +83,7 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
         addUsageDays(from: 6, to: 6, currentDate: currentDate)
 
         XCTAssertTrue(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 6)
     }
 
     func testUpdateCounterFiveTimeInARowThenNoUsageForTwoDays_isFalse() {
@@ -77,6 +93,7 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
         addUsageDays(from: 7, to: 8, currentDate: currentDate) // 2 days no usage + 2 cumulative days
 
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 5)
     }
 
     func testUpdateCounterMultipleTimesDailyForMultipleDaysExpectDay5_isFalse() {
@@ -100,11 +117,13 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
 
         // Day 5: Nothing
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 4)
 
         // Day 6: Opens the app 2 times
         updateCounter(numberOfDays: 5, currentDate: currentDate)
         updateCounter(numberOfDays: 5, currentDate: currentDate)
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 5)
     }
 
     func testUpdateCounterMultipleTimesDailyForMultipleDays_isTrue() {
@@ -129,26 +148,31 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
         // Day 5: Opens the app 1 time
         updateCounter(numberOfDays: 4, currentDate: currentDate)
         XCTAssertTrue(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 5)
 
         // Day 6: Opens the app 2 times
         updateCounter(numberOfDays: 5, currentDate: currentDate)
         updateCounter(numberOfDays: 5, currentDate: currentDate)
         XCTAssertTrue(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 6)
 
         // Day 9: Opens the app 2 times
         updateCounter(numberOfDays: 8, currentDate: currentDate)
         updateCounter(numberOfDays: 8, currentDate: currentDate)
         XCTAssertFalse(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 5)
     }
 
     func testHadFiveCumulativeDaysInPastCanBeTrueAgain() {
         // Day 1 to 5: daily usage
         let currentDate = Date()
         addUsageDays(from: 0, to: 4, currentDate: currentDate)
+        XCTAssertEqual(counter.daysOfUse?.count, 5)
 
-        // 3 days break then day 9 to 13: daily usage
-        addUsageDays(from: 8, to: 13, currentDate: currentDate)
+        // 4 days break then day 9 to 13: daily usage
+        addUsageDays(from: 9, to: 13, currentDate: currentDate)
         XCTAssertTrue(counter.hasRequiredCumulativeDaysOfUse)
+        XCTAssertEqual(counter.daysOfUse?.count, 5)
     }
 }
 

@@ -21,7 +21,7 @@ class CumulativeDaysOfUseCounter {
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRequiredCumulativeDaysOfUseCount.rawValue) }
     }
 
-    private var daysOfUse: [Date]? {
+    var daysOfUse: [Date]? {
         get { UserDefaults.standard.array(forKey: UserDefaultsKey.keyArrayDaysOfUse.rawValue) as? [Date] }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyArrayDaysOfUse.rawValue) }
     }
