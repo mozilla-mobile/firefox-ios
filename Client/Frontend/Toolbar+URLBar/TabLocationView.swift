@@ -68,8 +68,8 @@ class TabLocationView: UIView {
         return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
     }()
 
-    lazy var urlTextField: UITextField = {
-        let urlTextField = DisplayTextField()
+    lazy var urlTextField: URLTextField = {
+        let urlTextField = URLTextField()
 
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
         urlTextField.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 250), for: .horizontal)
@@ -415,120 +415,5 @@ extension TabLocationView: TabEventHandler {
 
     func tabDidGainFocus(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
-    }
-}
-
-enum ReloadButtonState: String {
-    case reload = "Reload"
-    case stop = "Stop"
-    case disabled = "Disabled"
-}
-
-class StatefulButton: UIButton {
-    convenience init(frame: CGRect, state: ReloadButtonState) {
-        self.init(frame: frame)
-        reloadButtonState = state
-    }
-
-    required override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    var _reloadButtonState = ReloadButtonState.disabled
-    
-    var reloadButtonState: ReloadButtonState {
-        get {
-            return _reloadButtonState
-        }
-        set (newReloadButtonState) {
-            _reloadButtonState = newReloadButtonState
-            switch _reloadButtonState {
-            case .reload:
-                setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
-            case .stop:
-                setImage(UIImage.templateImageNamed("nav-stop"), for: .normal)
-            case .disabled:
-                self.isHidden = true
-            }
-        }
-    }
-}
-
-class ReaderModeButton: UIButton {
-    var selectedTintColor: UIColor?
-    var unselectedTintColor: UIColor?
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        adjustsImageWhenHighlighted = false
-        setImage(UIImage.templateImageNamed("reader"), for: .normal)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override var isSelected: Bool {
-        didSet {
-            self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor
-        }
-    }
-
-    override open var isHighlighted: Bool {
-        didSet {
-            self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor
-        }
-    }
-
-    override var tintColor: UIColor! {
-        didSet {
-            self.imageView?.tintColor = self.tintColor
-        }
-    }
-
-    var _readerModeState = ReaderModeState.unavailable
-
-    var readerModeState: ReaderModeState {
-        get {
-            return _readerModeState
-        }
-        set (newReaderModeState) {
-            _readerModeState = newReaderModeState
-            switch _readerModeState {
-            case .available:
-                self.isEnabled = true
-                self.isSelected = false
-            case .unavailable:
-                self.isEnabled = false
-                self.isSelected = false
-            case .active:
-                self.isEnabled = true
-                self.isSelected = true
-            }
-        }
-    }
-}
-
-private class DisplayTextField: UITextField {
-    weak var accessibilityActionsSource: AccessibilityActionsSource?
-
-    override var accessibilityCustomActions: [UIAccessibilityCustomAction]? {
-        get {
-            return accessibilityActionsSource?.accessibilityCustomActionsForView(self)
-        }
-        set {
-            super.accessibilityCustomActions = newValue
-        }
-    }
-
-    fileprivate override var canBecomeFirstResponder: Bool {
-        return false
-    }
-
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: TabLocationViewUX.Spacing, dy: 0)
     }
 }
