@@ -17,7 +17,7 @@ private let log = Logger.browserLogger
 struct FirefoxHomeUX {
     static let homeHorizontalCellHeight: CGFloat = 120
     static let recentlySavedCellHeight: CGFloat = 136
-    static let historyHighlightsCellHeight: CGFloat = 70
+    static let historyHighlightsCellHeight: CGFloat = 68
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
     static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let spacingBetweenSections: CGFloat = 24
@@ -259,14 +259,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     var isHistoryHightlightsSectionEnabled: Bool {
-        get {
-            guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
-                  featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled
-            else { return false }
-            let tabManager = BrowserViewController.foregroundBVC().tabManager
-
-            return !tabManager.recentlyAccessedNormalTabs.isEmpty
-        }
+        return featureFlags.isFeatureActiveForBuild(.historyHighlights)
+        && featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled
     }
 
     var isPocketSectionEnabled: Bool {
@@ -601,7 +595,7 @@ extension FirefoxHomeViewController {
             case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
             case .historyHighlights: return FirefoxHomeUX.historyHighlightsCellHeight
             case .topSites: return 0 //calculated dynamically
-            case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight
+            case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight // TODO: Take a look it works but breaks recently saved
             case .customizeHome: return FirefoxHomeUX.customizeHomeHeight
             case .logoHeader: return FirefoxHomeUX.logoHeaderHeight
             }

@@ -50,10 +50,8 @@ class HistoryHighlightsManager {
             }
 
             let filterHighlights = highlights.filter { highlights in
-                !tabs.contains { highlights.urlFromString == $0.url }
+                !tabs.contains { highlights.urlFromString == $0.lastKnownUrl }
             }
-
-//            print("YRD highlight list after filter \(filterHighlights)")
 
             if shouldGroupHighlights {
                 buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
@@ -62,7 +60,6 @@ class HistoryHighlightsManager {
                     completion(Array(collatedHighlights.prefix(9)))
                 }
             } else {
-                print("YRD highlight list final result \(filterHighlights.prefix(9))")
                 completion(Array(filterHighlights.prefix(9)))
             }
         }

@@ -153,8 +153,6 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
                 cell.updateCell(with: cellOptions)
             }
-
-
         } else {
             // A filler cell
             let cellOptions = RecentlyVisitedCellOptions(shouldHideBottomLine: hideBottomLine,
@@ -251,8 +249,6 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
 extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: In a separate ticket, we will be handling the taps of the cells to
-        // do the respective thing they should do.
         if let highlight = viewModel?.historyItems?[safe: indexPath.row] {
             viewModel?.switchTo(highlight)
         }
