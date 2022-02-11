@@ -6,6 +6,7 @@ import UIKit
 
 class ToolbarTextField: AutocompleteTextField {
 
+    // MARK: - Variables
     @objc dynamic var clearButtonTintColor: UIColor? {
         didSet {
             // Clear previous tinted image that's cache and ask for a relayout
@@ -14,8 +15,9 @@ class ToolbarTextField: AutocompleteTextField {
         }
     }
 
-    fileprivate var tintedClearImage: UIImage?
+    private var tintedClearImage: UIImage?
 
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -24,6 +26,7 @@ class ToolbarTextField: AutocompleteTextField {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View setup
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -40,7 +43,6 @@ class ToolbarTextField: AutocompleteTextField {
         // https://stackoverflow.com/questions/55046917/clear-button-on-text-field-not-accessible-with-voice-over-swift
         if let clearButton = value(forKey: "_clearButton") as? UIButton {
             clearButton.setImage(tintedClearImage, for: [])
-
         }
     }
 
@@ -53,6 +55,7 @@ class ToolbarTextField: AutocompleteTextField {
     }
 }
 
+// MARK: - Theme protocols
 extension ToolbarTextField: NotificationThemeable {
     func applyTheme() {
         backgroundColor = UIColor.theme.textField.backgroundInOverlay

@@ -7,6 +7,9 @@ import SnapKit
 import Shared
 
 class TabToolbar: UIView {
+
+    // MARK: - Variables
+    
     weak var tabToolbarDelegate: TabToolbarDelegate?
 
     let tabsButton = TabsButton()
@@ -25,6 +28,7 @@ class TabToolbar: UIView {
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
 
+    // MARK: - Initializers
     private override init(frame: CGRect) {
         actionButtons = [backButton, forwardButton, multiStateButton, addNewTabButton, tabsButton, appMenuButton]
         super.init(frame: frame)
@@ -41,6 +45,12 @@ class TabToolbar: UIView {
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - View Setup
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
@@ -65,10 +75,6 @@ class TabToolbar: UIView {
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
     }
 
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     func addButtons(_ buttons: [UIButton]) {
         buttons.forEach { contentView.addArrangedSubview($0) }
     }
@@ -88,6 +94,7 @@ class TabToolbar: UIView {
     }
 }
 
+// MARK: - TabToolbarProtocol
 extension TabToolbar: TabToolbarProtocol {
     var homeButton: ToolbarButton { multiStateButton }
 
@@ -122,6 +129,7 @@ extension TabToolbar: TabToolbarProtocol {
     }
 }
 
+// MARK: - Theme protocols
 extension TabToolbar: NotificationThemeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background

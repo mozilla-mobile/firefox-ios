@@ -5,11 +5,14 @@
 import UIKit
 
 class ToolbarBadge: UIView {
+
+    // MARK: - Variables
     private let badgeSize: CGFloat
     private let badgeOffset = CGFloat(10)
     private let background: UIImageView
     private let badge: UIImageView
 
+    // MARK: - Initializers
     init(imageName: String, imageMask: String, size: CGFloat) {
         badgeSize = size
         background = UIImageView(image: UIImage(imageLiteralResourceName: imageMask))
@@ -30,6 +33,7 @@ class ToolbarBadge: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View setup
     func layout(onButton button: UIView) {
         snp.remakeConstraints { make in
             make.size.equalTo(badgeSize)
