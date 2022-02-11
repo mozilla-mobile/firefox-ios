@@ -92,6 +92,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     fileprivate let collectionView: UICollectionView
     fileprivate weak var tabDisplayer: TabDisplayer?
     private let tabReuseIdentifer: String
+    private var hasSentInactiveTabShownEvent: Bool = false
     var profile: Profile
     private var inactiveNimbusExperimentStatus: Bool = false
 
@@ -106,11 +107,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
 
     var shouldEnableInactiveTabs: Bool {
-        return true
-        
-//        guard featureFlags.isFeatureActiveForBuild(.inactiveTabs) else { return false }
-//
-//        return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+        guard featureFlags.isFeatureActiveForBuild(.inactiveTabs) else { return false }
+        return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
     }
 
     var orderedTabs: [Tab] {
@@ -227,54 +225,74 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
 
+    func tabsSetupHelper(tabGroups: [ASGroup<Tab>]?, filteredTabs: [Tab]) {
+        self.tabGroups = tabGroups
+        self.filteredTabs = filteredTabs
+    }
+
+    func getTabsWithInactiveTabsDisabled(tabsToBuildFrom: [Tab], allTabs: [Tab], completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
+        if shouldEnableGroupedTabs {
+            SearchTermGroupsManager.getTabGroups(with: profile,
+                                                 from: tabsToBuildFrom,
+                                                 using: .orderedAscending) { tabGroups, filteredActiveTabs  in
+                self.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
+                completion(tabGroups, filteredActiveTabs)
+            }
+            return
+        }
+
+        tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
+        completion(nil, allTabs)
+    }
+
     private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         
         guard !self.isPrivate else {
-            self.tabGroups = nil
-            self.filteredTabs = allTabs
+            tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
             completion(nil, allTabs)
             return
         }
-        
+    
         guard tabDisplayType == .TabGrid else {
-            self.filteredTabs = allTabs
+            tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
             completion(nil, allTabs)
             return
         }
         
         // Inactive tabs - disabled
         if !shouldEnableInactiveTabs {
-            if !self.isPrivate && shouldEnableGroupedTabs {
-                SearchTermGroupsManager.getTabGroups(with: profile,
-                                              from: tabManager.normalTabs,
-                                              using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-                    self.tabGroups = tabGroups
-                    self.filteredTabs = filteredActiveTabs
-                    completion(tabGroups, filteredActiveTabs)
-                }
-                return
-            }
-            self.tabGroups = nil
-            self.filteredTabs = allTabs
-            completion(nil, allTabs)
+            getTabsWithInactiveTabsDisabled(tabsToBuildFrom: tabManager.normalTabs, allTabs: allTabs, completion: completion)
+//            if shouldEnableGroupedTabs {
+//                SearchTermGroupsManager.getTabGroups(with: profile,
+//                                                     from: tabManager.normalTabs,
+//                                                     using: .orderedAscending) { tabGroups, filteredActiveTabs  in
+//                    tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
+//                    completion(tabGroups, filteredActiveTabs)
+//                }
+//                return
+//            }
+//            self.tabGroups = nil
+//            self.filteredTabs = allTabs
+//            completion(nil, allTabs)
             return
         } else {
             // Inactive tabs - enabled
             guard let inactiveViewModel = inactiveViewModel else {
-                if !self.isPrivate && shouldEnableGroupedTabs {
-                    SearchTermGroupsManager.getTabGroups(with: profile,
-                                                  from: tabManager.normalTabs,
-                                                  using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-                        self.tabGroups = tabGroups
-                        self.filteredTabs = filteredActiveTabs
-                        completion(tabGroups, filteredActiveTabs)
-                    }
-                    return
-                }
-                self.tabGroups = nil
-                self.filteredTabs = allTabs
-                completion(nil, allTabs)
+                getTabsWithInactiveTabsDisabled(tabsToBuildFrom: tabManager.normalTabs, allTabs: allTabs, completion: completion)
+//                if !self.isPrivate && shouldEnableGroupedTabs {
+//                    SearchTermGroupsManager.getTabGroups(with: profile,
+//                                                         from: tabManager.normalTabs,
+//                                                         using: .orderedAscending) { tabGroups, filteredActiveTabs  in
+//                        self.tabGroups = tabGroups
+//                        self.filteredTabs = filteredActiveTabs
+//                        completion(tabGroups, filteredActiveTabs)
+//                    }
+//                    return
+//                }
+//                self.tabGroups = nil
+//                self.filteredTabs = allTabs
+//                completion(nil, allTabs)
                 return
             }
 
@@ -292,30 +310,35 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             if shouldEnableGroupedTabs {
             // groups settings - enabled
 
-                // no groups for
+                // no groups for when we have less than 2 active abs
                 guard activeTabs.count > 1 else {
-                    self.tabGroups = nil
-                    self.filteredTabs = activeTabs
+                    tabsSetupHelper(tabGroups: nil, filteredTabs: activeTabs)
+//                    self.tabGroups = nil
+//                    self.filteredTabs = activeTabs
                     completion(nil, activeTabs)
                     return
                 }
                 
                 // make groups from active tabs
-                if !self.isPrivate && shouldEnableGroupedTabs {
-                    SearchTermGroupsManager.getTabGroups(with: profile,
-                                                  from: activeTabs,
-                                                  using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-                        self.tabGroups = tabGroups
-                        self.filteredTabs = filteredActiveTabs
-                        completion(tabGroups, filteredActiveTabs)
-                    }
-                    return
-                }
-                
+                getTabsWithInactiveTabsDisabled(tabsToBuildFrom: activeTabs, allTabs: allTabs, completion: completion)
+                return
+//                if !self.isPrivate && shouldEnableGroupedTabs {
+//                    SearchTermGroupsManager.getTabGroups(with: profile,
+//                                                         from: activeTabs,
+//                                                         using: .orderedAscending) { tabGroups, filteredActiveTabs  in
+////                        self.tabGroups = tabGroups
+////                        self.filteredTabs = filteredActiveTabs
+//                        tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
+//                        completion(tabGroups, filteredActiveTabs)
+//                    }
+//                    return
+//                }
             } else {
             // groups settings - disabled
-                self.tabGroups = nil
-                self.filteredTabs = activeTabs
+//                self.tabGroups = nil
+//                self.filteredTabs = activeTabs
+                tabsSetupHelper(tabGroups: nil, filteredTabs: activeTabs)
+                completion(tabGroups, activeTabs)
             }
         }
     }
@@ -546,6 +569,10 @@ extension TabDisplayManager: UICollectionViewDataSource {
                 inactiveCell.delegate = self
                 inactiveCell.tableView.reloadData()
                 cell = inactiveCell
+                if !hasSentInactiveTabShownEvent {
+                    hasSentInactiveTabShownEvent = true
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabShown, extras: nil)
+                }
             }
         case .groupedTabs:
             if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.Identifier, for: indexPath) as? GroupedTabCell {
@@ -604,19 +631,17 @@ extension TabDisplayManager: GroupedTabDelegate {
 extension TabDisplayManager: InactiveTabsDelegate {
     
     func shouldCloseInactiveTab(tab: Tab) {
-//        self.tabManager.removeTabs([tab])
         if let inactiveTabs = inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
             self.tabManager.removeTabs([tab])
             
             let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
             self.inactiveViewModel?.updateInactiveTabs(with: self.tabManager.selectedTab, tabs: allTabs)
             let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
-            
+
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
             
-            //        ADD TELEMETRY - CLOSE INACTIVE TABS
-            //        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedList, extras: nil)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
         }
     }
     
@@ -629,12 +654,11 @@ extension TabDisplayManager: InactiveTabsDelegate {
             let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
             self.inactiveViewModel?.updateInactiveTabs(with: self.tabManager.selectedTab, tabs: allTabs)
             let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
-            
+
             collectionView.reloadItems(at: [indexPath])
             collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
             
-            //        ADD TELEMETRY - CLOSE ALL TABS
-            //        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedList, extras: nil)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabCloseAllButton, extras: nil)
         }
 
     }
