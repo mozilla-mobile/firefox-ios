@@ -28,15 +28,15 @@ class StatefulButton: UIButton {
 
     // MARK: - Variables
     
-    var _reloadButtonState = ReloadButtonState.disabled
+    private var savedReloadButtonState = ReloadButtonState.disabled
 
     var reloadButtonState: ReloadButtonState {
         get {
-            return _reloadButtonState
+            return savedReloadButtonState
         }
         set (newReloadButtonState) {
-            _reloadButtonState = newReloadButtonState
-            switch _reloadButtonState {
+            savedReloadButtonState = newReloadButtonState
+            switch savedReloadButtonState {
             case .reload:
                 setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
             case .stop:
