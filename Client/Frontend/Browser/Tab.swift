@@ -494,6 +494,18 @@ class Tab: NSObject {
         checkTabCount(failures: 0)
         #endif
     }
+    
+    /// When a user clears ALL history, `sessionData` and `historyList` need to be purged, and close the webView.
+    func clearAndResetTabHistory() {
+        guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
+        
+        url = currentlyOpenUrl
+        sessionData = SessionData(currentPage: 0, urls: [currentlyOpenUrl], lastUsedTime: Date.now())
+        historyList = [currentlyOpenUrl]
+        webView = nil
+        
+        close()
+    }
 
     func close() {
         contentScriptManager.uninstall(tab: self)
@@ -526,12 +538,18 @@ class Tab: NSObject {
     }
 
     var historyList: [URL] {
-        func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
-        var tabs = self.backList?.map(listToUrl) ?? [URL]()
-        if let url = url {
-            tabs.append(url)
+        get {
+            func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
+            
+            var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
+            if let url = url {
+                historyUrls.append(url)
+            }
+            return historyUrls
         }
-        return tabs
+        
+        set { }
+        
     }
 
     var title: String? {
@@ -911,9 +929,8 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     }
 
     func addContentScript(_ helper: TabContentScript, name: String, forTab tab: Tab) {
-        if let _ = helpers[name] {
-            assertionFailure("Duplicate helper added: \(name)")
-        }
+        // If a helper script already exists on a tab, skip adding this duplicate.
+        guard helpers[name] == nil else { return }
 
         helpers[name] = helper
 
@@ -925,9 +942,8 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     }
 
     func addContentScriptToPage(_ helper: TabContentScript, name: String, forTab tab: Tab) {
-        if let _ = helpers[name] {
-            assertionFailure("Duplicate helper added: \(name)")
-        }
+        // If a helper script already exists on the page, skip adding this duplicate.
+        guard helpers[name] == nil else { return }
 
         helpers[name] = helper
 

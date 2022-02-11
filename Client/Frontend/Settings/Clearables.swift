@@ -28,8 +28,11 @@ class ClearableError: MaybeErrorType {
 // Clears our browsing history, including favicons and thumbnails.
 class HistoryClearable: Clearable {
     let profile: Profile
-    init(profile: Profile) {
+    let tabManager: TabManager
+    
+    init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
+        self.tabManager = tabManager
     }
 
     var label: String { .ClearableHistory }
@@ -46,6 +49,9 @@ class HistoryClearable: Clearable {
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
+            
+            self.tabManager.clearAllTabsHistory()
+            
             return Deferred(value: success)
         }
     }
