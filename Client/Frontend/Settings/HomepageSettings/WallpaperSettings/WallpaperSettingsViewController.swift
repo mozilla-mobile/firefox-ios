@@ -175,7 +175,7 @@ class WallpaperSettingsViewController: UIViewController {
     }
     
     private func highlightCurrentlySelectedCell() {
-        guard let rowIndex = viewModel.wallpaperManager.currentIndex else { return }
+        guard let rowIndex = viewModel.wallpaperManager.currentlySelectedWallpaperIndex else { return }
         let currentIndex = IndexPath(row: rowIndex, section: 0)
         collectionView.selectItem(at: currentIndex,
                                   animated: false,
@@ -275,12 +275,12 @@ class WallpaperSettingsViewController: UIViewController {
 // MARK: - Collection View Data Source
 extension WallpaperSettingsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.wallpaperManager.wallpapers.count
+        return viewModel.wallpaperManager.numberOfWallpapers
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier, for: indexPath) as! WallpaperSettingCollectionCell
-        let image = UIDevice.current.orientation.isLandscape ? viewModel.wallpaperManager.wallpapers[indexPath.row].image.landscape : viewModel.wallpaperManager.wallpapers[indexPath.row].image.portrait
+        let image = viewModel.wallpaperManager.getImageAt(index: indexPath.row, inLandscape: UIDevice.current.orientation.isLandscape)
         cell.updateImage(to: image)
 
         return cell
@@ -291,7 +291,7 @@ extension WallpaperSettingsViewController: UICollectionViewDataSource {
 extension WallpaperSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
-        viewModel.wallpaperManager.updateTo(index: indexPath.row)
+        viewModel.wallpaperManager.updateSelectedWallpaperIndex(to: indexPath.row)
         showToast()
 
         TelemetryWrapper.recordEvent(category: .action,
