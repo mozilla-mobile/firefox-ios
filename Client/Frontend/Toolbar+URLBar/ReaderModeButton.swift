@@ -39,15 +39,15 @@ class ReaderModeButton: UIButton {
         }
     }
 
-    var _readerModeState = ReaderModeState.unavailable
+    var savedReaderModeState = ReaderModeState.unavailable
 
     var readerModeState: ReaderModeState {
         get {
-            return _readerModeState
+            return savedReaderModeState
         }
         set (newReaderModeState) {
-            _readerModeState = newReaderModeState
-            switch _readerModeState {
+            savedReaderModeState = newReaderModeState
+            switch savedReaderModeState {
             case .available:
                 self.isEnabled = true
                 self.isSelected = false
