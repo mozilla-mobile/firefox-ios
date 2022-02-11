@@ -90,8 +90,7 @@ class InactiveTabViewModel {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
         let day14_Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
-        let min_Old = Calendar.current.date(byAdding: .minute, value: -1, to: currentDate) ?? Date() // testing only
-        let defaultOldDay = min_Old
+        let defaultOldDay = day14_Old
         
         let hasRunInactiveTabFeatureBefore = InactiveTabModel.hasRunInactiveTabFeatureBefore
         if hasRunInactiveTabFeatureBefore == false { InactiveTabModel.hasRunInactiveTabFeatureBefore = true }

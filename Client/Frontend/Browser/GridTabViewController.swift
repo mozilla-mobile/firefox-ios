@@ -527,13 +527,6 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
     }
 
     // TabDisplayCompletionDelegate
-//    func displayRecentlyClosedTabs() {
-//        recentlyClosedTabsPanel = RecentlyClosedTabsPanel(profile: profile)
-//        recentlyClosedTabsPanel!.title = .RecentlyClosedTabsButtonTitle
-//        recentlyClosedTabsPanel!.recentlyClosedTabsDelegate = self
-//        navigationController?.pushViewController(recentlyClosedTabsPanel!, animated: true)
-//    }
-
     func completedAnimation(for type: TabAnimationType) {
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
@@ -678,16 +671,15 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             let inactiveTabs = inactiveTabViewModel.inactiveTabs
 
             // Calculate height based on number of tabs in the inactive tab section section
-            totalHeight = InactiveTabCellUX.headerAndRowHeight*CGFloat(inactiveTabs.count) + InactiveTabCellUX.roundedContainerPaddingClosed + InactiveTabCellUX.roundedContainerAdditionalPaddingOpened + closeAllButtonHeight
+            let calculatedInactiveTabsTotalHeight = InactiveTabCellUX.headerAndRowHeight*CGFloat(inactiveTabs.count) + InactiveTabCellUX.roundedContainerPaddingClosed + InactiveTabCellUX.roundedContainerAdditionalPaddingOpened + closeAllButtonHeight
 
-            totalHeight = tabDisplayManager.isInactiveViewExpanded ? totalHeight : headerHeightWithRoundedCorner
+            totalHeight = tabDisplayManager.isInactiveViewExpanded ? calculatedInactiveTabsTotalHeight : headerHeightWithRoundedCorner
 
             if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: collectionView.frame.size.width/1.5, height: totalHeight)
             } else {
                 return CGSize(width: width >= 0 ? width : 0, height: totalHeight)
             }
-            
         case .groupedTabs:
             let width = collectionView.frame.size.width
             if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {

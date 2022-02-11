@@ -241,7 +241,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             return
         }
 
-        // build groups when
+        // build groups
         if shouldEnableGroupedTabs {
             SearchTermGroupsManager.getTabGroups(with: profile,
                                                  from: tabsToBuildFrom,
