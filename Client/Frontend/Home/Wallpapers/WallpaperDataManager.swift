@@ -124,13 +124,15 @@ struct WallpaperDataManager {
     
     private func firefoxDefaultCollection() -> [WallpaperCollection] {
         return [WallpaperCollection(
+            wallpaperFileNames: [WallpaperID(name: "fxSunrise",
+                                             accessibilityID: accessibilityIDs.FxSunriseWallpaper)],
+            ofType: .themed(type: .firefox)),
+                WallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "fxCerulean",
                                              accessibilityID: accessibilityIDs.FxCeruleanWallpaper),
                                  WallpaperID(name: "fxAmethyst",
-                                             accessibilityID: accessibilityIDs.FxAmethystWallpaper),
-                                 WallpaperID(name: "fxSunrise",
-                                             accessibilityID: accessibilityIDs.FxSunriseWallpaper)],
-            ofType: .themed(type: .firefox))]
+                                             accessibilityID: accessibilityIDs.FxAmethystWallpaper)],
+            ofType: .themed(type: .firefoxOverlay))]
     }
     
     private func allSpecialCollections() -> [WallpaperCollection]? {

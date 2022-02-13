@@ -13,7 +13,7 @@ private struct WallpaperSettingsUX {
     
     struct FractionalWidths {
         static let third: CGFloat = 1/3
-        static let quarter: CGFLoat = 1/4
+        static let quarter: CGFloat = 1/4
         static let sixth: CGFloat = 1/6
     }
     
@@ -201,7 +201,8 @@ class WallpaperSettingsViewController: UIViewController {
     
     private func getCompositionalLayout() -> UICollectionViewCompositionalLayout {
         typealias FractionalWidths = WallpaperSettingsUX.FractionalWidths
-        let deviceFractionalWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ?? FractionalWidths.quarter : FractionalWidths.third
+        
+        let deviceFractionalWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FractionalWidths.quarter : FractionalWidths.third
         let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? FractionalWidths.sixth : deviceFractionalWidth
         
         let itemSize = NSCollectionLayoutSize(

@@ -65,6 +65,7 @@ extension WallpaperType: Codable {
 /// and may offer in the future. As such, there may be items here that are outdated.
 enum WallpaperCollectionType: String, Codable {
     case firefox
+    case firefoxOverlay
     case projectHouse
 }
 
