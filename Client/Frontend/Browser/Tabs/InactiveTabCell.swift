@@ -21,11 +21,11 @@ protocol InactiveTabsDelegate {
 }
 
 struct InactiveTabCellUX {
-    static let headerAndRowHeight: CGFloat = 48
-    static let closeAllTabRowHeight: CGFloat = 100
-    static let roundedContainerPaddingClosed: CGFloat = 30
-    static let roundedContainerAdditionalPaddingOpened: CGFloat  = 40
-    static let inactiveTabTrayWidthPadding: CGFloat = 30
+    static let HeaderAndRowHeight: CGFloat = 48
+    static let CloseAllTabRowHeight: CGFloat = 100
+    static let RoundedContainerPaddingClosed: CGFloat = 30
+    static let RoundedContainerAdditionalPaddingOpened: CGFloat  = 40
+    static let InactiveTabTrayWidthPadding: CGFloat = 30
 }
 
 class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate {
@@ -120,9 +120,9 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive, .none:
-            return InactiveTabCellUX.headerAndRowHeight
+            return InactiveTabCellUX.HeaderAndRowHeight
         case .closeAllTabsButton:
-            return InactiveTabCellUX.closeAllTabRowHeight
+            return InactiveTabCellUX.CloseAllTabRowHeight
         }
     }
 
@@ -228,7 +228,7 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
-            return InactiveTabCellUX.headerAndRowHeight
+            return InactiveTabCellUX.HeaderAndRowHeight
         case .closeAllTabsButton:
             return CGFloat.leastNormalMagnitude
         }
@@ -237,7 +237,7 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
-            return InactiveTabCellUX.headerAndRowHeight
+            return InactiveTabCellUX.HeaderAndRowHeight
         case .closeAllTabsButton:
             return CGFloat.leastNormalMagnitude
         }

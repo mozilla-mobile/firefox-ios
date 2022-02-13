@@ -664,14 +664,14 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             guard !tabDisplayManager.isPrivate, let inactiveTabViewModel = tabDisplayManager.inactiveViewModel, inactiveTabViewModel.activeTabs.count > 0 else {
                 return CGSize(width: 0, height: 0)
             }
-            let closeAllButtonHeight = InactiveTabCellUX.closeAllTabRowHeight
-            let headerHeightWithRoundedCorner = InactiveTabCellUX.headerAndRowHeight + InactiveTabCellUX.roundedContainerPaddingClosed
+            let closeAllButtonHeight = InactiveTabCellUX.CloseAllTabRowHeight
+            let headerHeightWithRoundedCorner = InactiveTabCellUX.HeaderAndRowHeight + InactiveTabCellUX.RoundedContainerPaddingClosed
             var totalHeight = headerHeightWithRoundedCorner
-            let width: CGFloat = collectionView.frame.size.width - InactiveTabCellUX.inactiveTabTrayWidthPadding
+            let width: CGFloat = collectionView.frame.size.width - InactiveTabCellUX.InactiveTabTrayWidthPadding
             let inactiveTabs = inactiveTabViewModel.inactiveTabs
 
             // Calculate height based on number of tabs in the inactive tab section section
-            let calculatedInactiveTabsTotalHeight = InactiveTabCellUX.headerAndRowHeight*CGFloat(inactiveTabs.count) + InactiveTabCellUX.roundedContainerPaddingClosed + InactiveTabCellUX.roundedContainerAdditionalPaddingOpened + closeAllButtonHeight
+            let calculatedInactiveTabsTotalHeight = InactiveTabCellUX.HeaderAndRowHeight*CGFloat(inactiveTabs.count) + InactiveTabCellUX.RoundedContainerPaddingClosed + InactiveTabCellUX.RoundedContainerAdditionalPaddingOpened + closeAllButtonHeight
 
             totalHeight = tabDisplayManager.isInactiveViewExpanded ? calculatedInactiveTabsTotalHeight : headerHeightWithRoundedCorner
 
