@@ -450,7 +450,7 @@ workflows:
             # fastlane update_fastlane
             fastlane -v
 
-            fastlane snapshot update
+            #fastlane snapshot update
 
             ./l10n-screenshots.sh en-US
         title: Generate screenshots
