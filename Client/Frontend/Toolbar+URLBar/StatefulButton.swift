@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Foundation
 import UIKit
 
 enum ReloadButtonState: String {
@@ -13,6 +14,7 @@ enum ReloadButtonState: String {
 class StatefulButton: UIButton {
 
     // MARK: - Initializers
+
     convenience init(frame: CGRect, state: ReloadButtonState) {
         self.init(frame: frame)
         reloadButtonState = state
@@ -25,8 +27,6 @@ class StatefulButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    // MARK: - Variables
     
     private var savedReloadButtonState = ReloadButtonState.disabled
 

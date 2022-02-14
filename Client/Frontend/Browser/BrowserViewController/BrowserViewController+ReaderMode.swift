@@ -14,8 +14,12 @@ extension BrowserViewController: ReaderModeDelegate {
     }
 
     func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
-        self.showReaderModeBar(animated: true)
-        tab.showContent(true)
+        // If this reader mode availability state change is for the tab that we currently show, then update
+        // the button. Otherwise do nothing and the button will be updated when the tab is made active.
+        if tabManager.selectedTab === tab {
+            self.showReaderModeBar(animated: true)
+            tab.showContent(true)
+        }
     }
 
     func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
@@ -24,7 +28,7 @@ extension BrowserViewController: ReaderModeDelegate {
 }
 
 extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
-    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, 
+    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController,
                                        didConfigureStyle style: ReaderModeStyle,
                                        isUsingUserDefinedColor: Bool) {
         var newStyle = style
@@ -35,33 +39,31 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
         // Persist the new style to the profile
         let encodedStyle: [String: Any] = style.encodeAsDictionary()
         profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
+
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {
-            if let tab = tabManager[tabIndex] {
-                if let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode {
-                    if readerMode.state == ReaderModeState.active {
-                        readerMode.style = ReaderModeStyle(theme: newStyle.theme,
-                                                           fontType: ReaderModeFontType(type: newStyle.fontType.rawValue),
-                                                           fontSize: newStyle.fontSize)
-                    }
-                }
-            }
+            guard let tab = tabManager[tabIndex],
+                  let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode,
+                  readerMode.state == ReaderModeState.active else { continue }
+
+            readerMode.style = ReaderModeStyle(theme: newStyle.theme,
+                                               fontType: ReaderModeFontType(type: newStyle.fontType.rawValue),
+                                               fontSize: newStyle.fontSize)
         }
     }
 }
 
 extension BrowserViewController {
     func updateReaderModeBar() {
-        if let readerModeBar = readerModeBar {
-            readerModeBar.applyTheme()
+        guard let readerModeBar = readerModeBar else { return }
+        readerModeBar.applyTheme()
 
-            if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue {
-                readerModeBar.unread = record.unread
-                readerModeBar.added = true
-            } else {
-                readerModeBar.unread = true
-                readerModeBar.added = false
-            }
+        if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue {
+            readerModeBar.unread = record.unread
+            readerModeBar.added = true
+        } else {
+            readerModeBar.unread = true
+            readerModeBar.added = false
         }
     }
 
@@ -69,23 +71,29 @@ extension BrowserViewController {
         if self.readerModeBar == nil {
             let readerModeBar = ReaderModeBarView(frame: CGRect.zero)
             readerModeBar.delegate = self
-            view.insertSubview(readerModeBar, belowSubview: header)
+            if isBottomSearchBar {
+                overKeyboardContainer.addArrangedViewToTop(readerModeBar)
+            } else {
+                header.addArrangedViewToBottom(readerModeBar)
+            }
+
             self.readerModeBar = readerModeBar
-            scrollController.readerModeBar = self.readerModeBar
         }
 
         updateReaderModeBar()
 
-        self.updateViewConstraints()
+        updateViewConstraints()
     }
 
     func hideReaderModeBar(animated: Bool) {
-        if let readerModeBar = self.readerModeBar {
-            readerModeBar.removeFromSuperview()
-            self.readerModeBar = nil
-            self.updateViewConstraints()
-            scrollController.readerModeBar = self.readerModeBar
+        guard let readerModeBar = readerModeBar else { return }
+        if isBottomSearchBar {
+            overKeyboardContainer.removeArrangedView(readerModeBar)
+        } else {
+            header.removeArrangedView(readerModeBar)
         }
+        self.readerModeBar = nil
+        updateViewConstraints()
     }
 
     /// There are two ways we can enable reader mode. In the simplest case we open a URL to our internal reader mode
@@ -99,7 +107,8 @@ extension BrowserViewController {
         let backList = webView.backForwardList.backList
         let forwardList = webView.backForwardList.forwardList
 
-        guard let currentURL = webView.backForwardList.currentItem?.url, let readerModeURL = currentURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) else { return }
+        guard let currentURL = webView.backForwardList.currentItem?.url,
+                let readerModeURL = currentURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) else { return }
 
         if backList.count > 1 && backList.last?.url == readerModeURL {
             webView.go(to: backList.last!)
@@ -108,11 +117,11 @@ extension BrowserViewController {
         } else {
             // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
             webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).readerize()") { object, error in
-                if let readabilityResult = ReadabilityResult(object: object as AnyObject?) {
-                    try? self.readerModeCache.put(currentURL, readabilityResult)
-                    if let nav = webView.load(PrivilegedRequest(url: readerModeURL) as URLRequest) {
-                        self.ignoreNavigationInTab(tab, navigation: nav)
-                    }
+                guard let readabilityResult = ReadabilityResult(object: object as AnyObject?) else { return }
+
+                try? self.readerModeCache.put(currentURL, readabilityResult)
+                if let nav = webView.load(PrivilegedRequest(url: readerModeURL) as URLRequest) {
+                    self.ignoreNavigationInTab(tab, navigation: nav)
                 }
             }
         }
@@ -124,24 +133,21 @@ extension BrowserViewController {
     /// of the page is either to the left or right in the BackForwardList. If that is the case, we navigate there.
 
     func disableReaderMode() {
-        if let tab = tabManager.selectedTab,
-            let webView = tab.webView {
-            let backList = webView.backForwardList.backList
-            let forwardList = webView.backForwardList.forwardList
+        guard let tab = tabManager.selectedTab,
+              let webView = tab.webView else { return }
 
-            if let currentURL = webView.backForwardList.currentItem?.url {
-                if let originalURL = currentURL.decodeReaderModeURL {
-                    if backList.count > 1 && backList.last?.url == originalURL {
-                        webView.go(to: backList.last!)
-                    } else if forwardList.count > 0 && forwardList.first?.url == originalURL {
-                        webView.go(to: forwardList.first!)
-                    } else {
-                        if let nav = webView.load(URLRequest(url: originalURL)) {
-                            self.ignoreNavigationInTab(tab, navigation: nav)
-                        }
-                    }
-                }
-            }
+        let backList = webView.backForwardList.backList
+        let forwardList = webView.backForwardList.forwardList
+
+        guard let currentURL = webView.backForwardList.currentItem?.url,
+              let originalURL = currentURL.decodeReaderModeURL else { return }
+
+        if backList.count > 1 && backList.last?.url == originalURL {
+            webView.go(to: backList.last!)
+        } else if forwardList.count > 0 && forwardList.first?.url == originalURL {
+            webView.go(to: forwardList.first!)
+        } else if let nav = webView.load(URLRequest(url: originalURL)) {
+            ignoreNavigationInTab(tab, navigation: nav)
         }
     }
 
@@ -149,15 +155,15 @@ extension BrowserViewController {
         guard notification.name == .DynamicFontChanged else { return }
 
         var readerModeStyle = DefaultReaderModeStyle
-        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-            if let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
-                readerModeStyle = style
-            }
+        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+           let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
+            readerModeStyle = style
         }
+
         readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
-        self.readerModeStyleViewController(ReaderModeStyleViewController(), 
-                                           didConfigureStyle: readerModeStyle, 
-                                           isUsingUserDefinedColor: false)
+        readerModeStyleViewController(ReaderModeStyleViewController(),
+                                      didConfigureStyle: readerModeStyle,
+                                      isUsingUserDefinedColor: false)
     }
     
     func appyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {
@@ -171,67 +177,76 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 
         switch buttonType {
         case .settings:
-            if let readerMode = tabManager.selectedTab?.getContentScript(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active {
-                var readerModeStyle = DefaultReaderModeStyle
-                if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-                    if let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
-                        readerModeStyle = style
-                    }
-                }
+            guard let readerMode = tabManager.selectedTab?.getContentScript(name: "ReaderMode") as? ReaderMode,
+                    readerMode.state == ReaderModeState.active else { break }
 
-                let readerModeStyleViewController = ReaderModeStyleViewController()
-                readerModeStyleViewController.delegate = self
-                readerModeStyleViewController.readerModeStyle = readerModeStyle
-                readerModeStyleViewController.modalPresentationStyle = .popover
-
-                let setupPopover = { [unowned self] in
-                    if let popoverPresentationController = readerModeStyleViewController.popoverPresentationController {
-                        popoverPresentationController.backgroundColor = UIColor.Photon.White100
-                        popoverPresentationController.delegate = self
-                        popoverPresentationController.sourceView = readerModeBar
-                        popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
-                        popoverPresentationController.permittedArrowDirections = .up
-                    }
-                }
-
-                setupPopover()
-
-                if readerModeStyleViewController.popoverPresentationController != nil {
-                    displayedPopoverController = readerModeStyleViewController
-                    updateDisplayedPopoverProperties = setupPopover
-                }
-
-                self.present(readerModeStyleViewController, animated: true, completion: nil)
+            var readerModeStyle = DefaultReaderModeStyle
+            if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+               let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
+                readerModeStyle = style
             }
+
+            let readerModeViewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
+                                                               readerModeStyle: readerModeStyle)
+            let readerModeStyleViewController = ReaderModeStyleViewController.initReaderModeViewController(viewModel: readerModeViewModel)
+            readerModeStyleViewController.delegate = self
+            readerModeStyleViewController.modalPresentationStyle = .popover
+
+            let setupPopover = { [unowned self] in
+                guard let popoverPresentationController = readerModeStyleViewController.popoverPresentationController else { return }
+
+                let arrowDirection: UIPopoverArrowDirection = isBottomSearchBar ? .down : .up
+                let ySpacing = isBottomSearchBar ? -1 : UIConstants.ToolbarHeight
+
+                popoverPresentationController.backgroundColor = UIColor.Photon.White100
+                popoverPresentationController.delegate = self
+                popoverPresentationController.sourceView = readerModeBar
+                popoverPresentationController.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: ySpacing,
+                                                                  width: 1, height: 1)
+                popoverPresentationController.permittedArrowDirections = arrowDirection
+            }
+
+            setupPopover()
+
+            if readerModeStyleViewController.popoverPresentationController != nil {
+                displayedPopoverController = readerModeStyleViewController
+                updateDisplayedPopoverProperties = setupPopover
+            }
+
+            present(readerModeStyleViewController, animated: true, completion: nil)
 
         case .markAsRead:
-            if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue {
-                profile.readingList.updateRecord(record, unread: false) // TODO Check result, can this fail?
-                readerModeBar.unread = false
-            }
+            guard let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
+                  let record = profile.readingList.getRecordWithURL(url).value.successValue else { break }
+
+            profile.readingList.updateRecord(record, unread: false) // TODO Check result, can this fail?
+            readerModeBar.unread = false
 
         case .markAsUnread:
-            if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue {
-                profile.readingList.updateRecord(record, unread: true) // TODO Check result, can this fail?
-                readerModeBar.unread = true
-            }
+            guard let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
+                    let record = profile.readingList.getRecordWithURL(url).value.successValue else { break }
+
+            profile.readingList.updateRecord(record, unread: true) // TODO Check result, can this fail?
+            readerModeBar.unread = true
 
         case .addToReadingList:
-            if let tab = tabManager.selectedTab,
-                let rawURL = tab.url, rawURL.isReaderModeURL,
-                let url = rawURL.decodeReaderModeURL {
-                profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name) // TODO Check result, can this fail?
-                readerModeBar.added = true
-                readerModeBar.unread = true
-            }
+            guard let tab = tabManager.selectedTab,
+                  let rawURL = tab.url, rawURL.isReaderModeURL,
+                  let url = rawURL.decodeReaderModeURL else { break }
+
+            profile.readingList.createRecordWithURL(url.absoluteString,
+                                                    title: tab.title ?? "",
+                                                    addedBy: UIDevice.current.name) // TODO Check result, can this fail?
+            readerModeBar.added = true
+            readerModeBar.unread = true
 
         case .removeFromReadingList:
-            if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
-                let record = profile.readingList.getRecordWithURL(url).value.successValue {
-                profile.readingList.deleteRecord(record) // TODO Check result, can this fail?
-                readerModeBar.added = false
-                readerModeBar.unread = false
-            }
+            guard let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
+                  let record = profile.readingList.getRecordWithURL(url).value.successValue else { break }
+
+            profile.readingList.deleteRecord(record) // TODO Check result, can this fail?
+            readerModeBar.added = false
+            readerModeBar.unread = false
         }
     }
 }

@@ -103,7 +103,7 @@ class TabLocationView: UIView {
     }()
 
     private lazy var readerModeButton: ReaderModeButton = {
-        let readerModeButton = ReaderModeButton(frame: .zero)
+        let readerModeButton = ReaderModeButton()
         readerModeButton.addTarget(self, action: #selector(tapReaderModeButton), for: .touchUpInside)
         readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReaderModeButton)))
         readerModeButton.isAccessibilityElement = true
@@ -128,7 +128,7 @@ class TabLocationView: UIView {
         reloadButton.isAccessibilityElement = true
         return reloadButton
     }()
-
+    
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
@@ -187,11 +187,6 @@ class TabLocationView: UIView {
             make.width.equalTo(TabLocationViewUX.TPIconSize)
             make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
-        
-        readerModeButton.snp.makeConstraints { make in
-            make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
-        }
 
         pageOptionsButton.snp.makeConstraints { make in
             make.size.equalTo(TabLocationViewUX.ButtonSize)
@@ -200,6 +195,11 @@ class TabLocationView: UIView {
         separatorLineForPageOptions.snp.makeConstraints { make in
             make.width.equalTo(1)
             make.height.equalTo(26)
+        }
+
+        readerModeButton.snp.makeConstraints { make in
+            make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
 
         reloadButton.snp.makeConstraints { make in
@@ -371,7 +371,7 @@ extension TabLocationView: NotificationThemeable {
         urlTextField.textColor = UIColor.theme.textField.textAndTint
         readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
         readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
-
+        
         pageOptionsButton.selectedTintColor = UIColor.theme.urlbar.pageOptionsSelected
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
@@ -401,6 +401,7 @@ extension TabLocationView: TabEventHandler {
 
         } else {
             lockImage = UIImage(imageLiteralResourceName: "lock_verified").withTintColor(pageOptionsButton.tintColor, renderingMode: .alwaysTemplate)
+
         }
 
         switch blocker.status {
