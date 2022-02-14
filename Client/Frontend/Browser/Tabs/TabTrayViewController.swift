@@ -420,33 +420,33 @@ extension TabTrayViewController {
 
 // MARK: - RemoteTabsPanel : LibraryPanelDelegate
 extension TabTrayViewController: RemotePanelDelegate {
-        func remotePanelDidRequestToSignIn() {
-            fxaSignInOrCreateAccountHelper()
-        }
-        
-        func remotePanelDidRequestToCreateAccount() {
-            fxaSignInOrCreateAccountHelper()
-        }
-        
-        func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-            self.openInNewTab?(url, isPrivate)
-            self.dismissVC()
-        }
-        
-        func remotePanel(didSelectURL url: URL, visitType: VisitType) {
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
-            self.didSelectUrl?(url, visitType)
-            self.dismissVC()
-        }
+    func remotePanelDidRequestToSignIn() {
+        fxaSignInOrCreateAccountHelper()
+    }
+
+    func remotePanelDidRequestToCreateAccount() {
+        fxaSignInOrCreateAccountHelper()
+    }
+
+    func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+        self.openInNewTab?(url, isPrivate)
+        self.dismissVC()
+    }
+
+    func remotePanel(didSelectURL url: URL, visitType: VisitType) {
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+        self.didSelectUrl?(url, visitType)
+        self.dismissVC()
+    }
     
-        // Sign In and Create Account Helper
-        func fxaSignInOrCreateAccountHelper() {
-            let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
-            let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams, flowType: .emailLoginFlow, referringPage: .tabTray, profile: viewModel.profile)
-            (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
-                self?.viewModel.reloadRemoteTabs()
-            }
-            presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: controller, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+    // Sign In and Create Account Helper
+    func fxaSignInOrCreateAccountHelper() {
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams, flowType: .emailLoginFlow, referringPage: .tabTray, profile: viewModel.profile)
+        (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
+            self?.viewModel.reloadRemoteTabs()
         }
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: controller, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+    }
 }
