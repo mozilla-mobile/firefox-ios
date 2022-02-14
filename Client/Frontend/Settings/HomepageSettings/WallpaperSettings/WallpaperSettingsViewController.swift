@@ -77,11 +77,14 @@ class WallpaperSettingsViewController: UIViewController {
     }
 
     // MARK: - Variables
+    var notificationCenter: NotificationCenter
     private var viewModel: WallpaperSettingsViewModel
 
     // MARK: - Initializers
-    init(with viewModel: WallpaperSettingsViewModel) {
+    init(with viewModel: WallpaperSettingsViewModel,
+         and notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -91,7 +94,7 @@ class WallpaperSettingsViewController: UIViewController {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - View Lifecycle
@@ -101,7 +104,8 @@ class WallpaperSettingsViewController: UIViewController {
         setupView()
         setupCurrentState()
         applyTheme()
-        setupNotifications()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
         reloadLayout()
     }
 
@@ -212,24 +216,6 @@ class WallpaperSettingsViewController: UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
 
-
-    // MARK: - Notifications
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
-    }
-
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
-        }
-    }
-
     // MARK: - Actions
     @objc func didChangeSwitchState(_ sender: UISwitch!) {
         viewModel.wallpaperManager.switchWallpaperFromLogoEnabled = sender.isOn
@@ -269,6 +255,18 @@ class WallpaperSettingsViewController: UIViewController {
         }
 
         navigationController.done()
+    }
+}
+
+// MARK: - Notifications
+extension WallpaperSettingsViewController: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
     }
 }
 

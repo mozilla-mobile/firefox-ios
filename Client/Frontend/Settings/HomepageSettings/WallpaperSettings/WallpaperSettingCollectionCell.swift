@@ -6,7 +6,7 @@ import Foundation
 
 class WallpaperSettingCollectionCell: UICollectionViewCell, ReusableCell {
 
-    // MARK: - Variables
+    // MARK: - UI Element
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -25,16 +25,20 @@ class WallpaperSettingCollectionCell: UICollectionViewCell, ReusableCell {
         selectedView.alpha = 0.0
     }
 
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+    
     override var isSelected: Bool {
         didSet { selectedView.alpha = isSelected ? 1.0 : 0.0 }
     }
-
+    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupView()
-        setupNotifications()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
         applyTheme()
     }
 
@@ -43,7 +47,7 @@ class WallpaperSettingCollectionCell: UICollectionViewCell, ReusableCell {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - View
@@ -81,27 +85,22 @@ class WallpaperSettingCollectionCell: UICollectionViewCell, ReusableCell {
         ])
     }
 
-    // MARK: - Notifications
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
+    // MARK: - Methods
+    public func updateImage(to image: UIImage?) {
+        guard let image = image else { return }
+        imageView.image = image
     }
+}
 
-    @objc private func handleNotifications(_ notification: Notification) {
+// MARK: - Notifications
+extension WallpaperSettingCollectionCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
         default:
             break
         }
-    }
-
-    // MARK: - Methods
-    public func updateImage(to image: UIImage?) {
-        guard let image = image else { return }
-        imageView.image = image
     }
 }
 

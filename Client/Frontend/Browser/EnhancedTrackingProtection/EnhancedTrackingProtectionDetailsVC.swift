@@ -59,11 +59,14 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 
     // MARK: - Variables
     var viewModel: EnhancedTrackingProtectionDetailsVM
+    var notificationCenter: NotificationCenter
 
     // MARK: - View Lifecycle
 
-    init(viewModel: EnhancedTrackingProtectionDetailsVM) {
+    init(with viewModel: EnhancedTrackingProtectionDetailsVM,
+         and notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -73,13 +76,13 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupNotifications()
+        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -146,19 +149,6 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
         ])
     }
 
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
-    }
-
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
-        }
-    }
-
     private func updateViewDetails() {
         siteTitleLabel.text = viewModel.topLevelDomain
         siteInfoImage.image = viewModel.image
@@ -189,5 +179,16 @@ extension EnhancedTrackingProtectionDetailsVC: NotificationThemeable {
         }
         connectionVerifierLabel.textColor = UIColor.theme.etpMenu.subtextColor
         setNeedsStatusBarAppearanceUpdate()
+    }
+}
+
+// MARK: - Notifiable
+extension EnhancedTrackingProtectionDetailsVC: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 }
