@@ -102,12 +102,14 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     // MARK: Notification
 
     func testNoNotificationSent_withoutDefaultPref() {
+        InstallType.set(type: .fresh)
         let expectation = expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
         expectation.isInverted = true
 
         let viewModel = createViewModel()
-        callSetting(viewModel.bottomSetting)
+        let searchBarPosition = viewModel.searchBarPosition
 
+        XCTAssertEqual(searchBarPosition, .bottom)
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
     }
 
