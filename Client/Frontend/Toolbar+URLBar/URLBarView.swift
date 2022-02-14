@@ -4,6 +4,7 @@
 
 import Shared
 import SnapKit
+import UIKit
 
 private struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor.Photon.Grey40

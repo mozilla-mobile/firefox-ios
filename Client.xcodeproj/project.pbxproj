@@ -453,6 +453,11 @@
 		8A9AC469276D10FD0047F5B0 /* FxHomePocketCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC468276D10FD0047F5B0 /* FxHomePocketCollectionCell.swift */; };
 		8A9AC46B276D11280047F5B0 /* FxHomePocketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC46A276D11280047F5B0 /* FxHomePocketViewModel.swift */; };
 		8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */; };
+		8AD40FBB27BAD2C000672675 /* StatefulButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FBA27BAD2C000672675 /* StatefulButton.swift */; };
+		8AD40FBD27BAD32D00672675 /* TabToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FBC27BAD32D00672675 /* TabToolbarHelper.swift */; };
+		8AD40FBF27BAD36D00672675 /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FBE27BAD36D00672675 /* ToolbarButton.swift */; };
+		8AD40FC127BAD3AE00672675 /* URLTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC027BAD3AE00672675 /* URLTextField.swift */; };
+		8AD40FC227BAD6F900672675 /* ReaderModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FB927BAD28100672675 /* ReaderModeButton.swift */; };
 		8AD5702F27AB4DEA005BFDC8 /* UIStackViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5702E27AB4DEA005BFDC8 /* UIStackViewExtensions.swift */; };
 		8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */; };
 		8ADED7EE276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */; };
@@ -2707,6 +2712,11 @@
 		8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapperTests.swift; sourceTree = "<group>"; };
 		8AAD4900BB6F4DF6056B581F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8AB04613B101195AADCC1F1B /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = "cs.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		8AD40FB927BAD28100672675 /* ReaderModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeButton.swift; sourceTree = "<group>"; };
+		8AD40FBA27BAD2C000672675 /* StatefulButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulButton.swift; sourceTree = "<group>"; };
+		8AD40FBC27BAD32D00672675 /* TabToolbarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabToolbarHelper.swift; sourceTree = "<group>"; };
+		8AD40FBE27BAD36D00672675 /* ToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButton.swift; sourceTree = "<group>"; };
+		8AD40FC027BAD3AE00672675 /* URLTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTextField.swift; sourceTree = "<group>"; };
 		8AD440CBBF202B15E74E186D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Search.strings; sourceTree = "<group>"; };
 		8AD5702E27AB4DEA005BFDC8 /* UIStackViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExtensions.swift; sourceTree = "<group>"; };
 		8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionsTests.swift; sourceTree = "<group>"; };
@@ -5348,6 +5358,42 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		8AD40FB727BAD1D600672675 /* Toolbar+URLBar */ = {
+			isa = PBXGroup;
+			children = (
+				8AD40FB927BAD28100672675 /* ReaderModeButton.swift */,
+				8AD40FBA27BAD2C000672675 /* StatefulButton.swift */,
+				E4CD9F2C1A6DC91200318571 /* TabLocationView.swift */,
+				8AE1E1D427B1AEED0024C45E /* TabLocationContainerView.swift */,
+				D314E7F51A37B98700426A76 /* TabToolbar.swift */,
+				8AD40FBC27BAD32D00672675 /* TabToolbarHelper.swift */,
+				8AD40FBE27BAD36D00672675 /* ToolbarButton.swift */,
+				8AE1E1D627B1AF020024C45E /* ToolbarTextField.swift */,
+				0BF0DB931A8545800039F300 /* URLBarView.swift */,
+				8AD40FC027BAD3AE00672675 /* URLTextField.swift */,
+			);
+			path = "Toolbar+URLBar";
+			sourceTree = "<group>";
+		};
+		8AD40FB827BAD1DD00672675 /* TabContentsScripts */ = {
+			isa = PBXGroup;
+			children = (
+				D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */,
+				D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */,
+				D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */,
+				D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */,
+				A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */,
+				A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */,
+				0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */,
+				D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */,
+				D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */,
+				F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */,
+				D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */,
+				39F4C1092045DB2E00746155 /* FocusHelper.swift */,
+			);
+			path = TabContentsScripts;
+			sourceTree = "<group>";
+		};
 		8AE1E1CE27B191160024C45E /* SearchBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -5355,16 +5401,6 @@
 				8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */,
 			);
 			path = SearchBar;
-			sourceTree = "<group>";
-		};
-		8AE1E1D327B1AED30024C45E /* URLBar */ = {
-			isa = PBXGroup;
-			children = (
-				0BF0DB931A8545800039F300 /* URLBarView.swift */,
-				8AE1E1D427B1AEED0024C45E /* TabLocationContainerView.swift */,
-				8AE1E1D627B1AF020024C45E /* ToolbarTextField.swift */,
-			);
-			path = URLBar;
 			sourceTree = "<group>";
 		};
 		8AED23C327AC1F8700DE7E97 /* Components */ = {
@@ -5858,7 +5894,6 @@
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
-				8AE1E1D327B1AED30024C45E /* URLBar */,
 				C849E45F26B9C36600260F0B /* EnhancedTrackingProtection */,
 				23F2C365244E44FA00FA4496 /* Tabs */,
 				D38F02D01C05127100175932 /* Authenticator.swift */,
@@ -5872,29 +5907,19 @@
 				C4F3B2991CFCF93A00966259 /* ButtonToast.swift */,
 				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
 				31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */,
-				D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */,
-				D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */,
 				D0625C97208E87F10081F3B2 /* DownloadQueue.swift */,
 				D04D1B852097859B0074B35F /* DownloadToast.swift */,
 				D03F8EB12004014E003C2224 /* FaviconHandler.swift */,
 				D3B6923C1B9F9444004B87A4 /* FindInPageBar.swift */,
-				D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */,
 				EBB8950B2193994A00EB91A0 /* FirefoxTabContentBlocker.swift */,
-				39F4C1092045DB2E00746155 /* FocusHelper.swift */,
-				D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */,
 				39DD030C1CD53E1900BC09B3 /* HomePageHelper.swift */,
 				8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */,
-				D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */,
-				0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */,
 				7482205B1DBAB56300EEEA72 /* MailProviders.swift */,
 				744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */,
 				D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */,
-				A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */,
-				A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */,
 				7BA8D1C61BA037F500C8AE9E /* OpenInHelper.swift */,
 				D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */,
 				74821FC41DB56A2500EEEA72 /* OpenWithSettingsViewController.swift */,
-				D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */,
 				D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */,
 				FA6B2AC11D41F02D00429414 /* Punycode.swift */,
 				FA9294001D6584A200AC8D33 /* QRCode.xcassets */,
@@ -5906,16 +5931,13 @@
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				23D57E6D25ED6F2700883FAD /* SearchViewController.swift */,
 				74C027441B2A348C001B1E88 /* SessionData.swift */,
-				F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */,
 				3BF56D261CDBBE1F00AC4D75 /* SimpleToast.swift */,
 				E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */,
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
-				E4CD9F2C1A6DC91200318571 /* TabLocationView.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */,
 				DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */,
 				E698FFD91B4AADF40001F623 /* TabScrollController.swift */,
-				D314E7F51A37B98700426A76 /* TabToolbar.swift */,
 				D301AAED1A3A55B70078DD1D /* GridTabViewController.swift */,
 				396CDB54203C5B870034A3A3 /* TabTrayController+KeyCommands.swift */,
 				D029A04820A62DB0001DB72F /* TemporaryDocument.swift */,
@@ -5927,7 +5949,6 @@
 				C4E3983C1D21F1E7004E89BA /* TopTabsViews.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				884CA7482344A301002E4711 /* TextContentDetector.swift */,
-				D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */,
 				63306D3821103EAE00F25400 /* SavedTab.swift */,
 				1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */,
 				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
@@ -6645,6 +6666,8 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				8AD40FB827BAD1DD00672675 /* TabContentsScripts */,
+				8AD40FB727BAD1D600672675 /* Toolbar+URLBar */,
 				8AED23C327AC1F8700DE7E97 /* Components */,
 				4331A9B927193DEF005E8080 /* Contextual Hint */,
 				C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */,
@@ -8647,6 +8670,7 @@
 				C84266752728462900382274 /* AccessibilityIdentifiers.swift in Sources */,
 				274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
+				8AD40FBD27BAD32D00672675 /* TabToolbarHelper.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
 				048B4C7924A53E7B001B56E8 /* TodayModel.swift in Sources */,
 				2386E4E624F8358E0072EF17 /* DefaultBrowserCard.swift in Sources */,
@@ -8719,7 +8743,7 @@
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
 				8AED23C527AC1F9500DE7E97 /* BaseContentStackView.swift in Sources */,
-				DFC30BDB27A8724300FAA8B3 /* WallpaperStorageManager.swift in Sources */,
+				DFC30BDB27A8724300FAA8B3 /* WallpaperStorageUtility.swift in Sources */,
 				DFC30BDB27A8724300FAA8B3 /* WallpaperStorageUtility.swift in Sources */,
 				DA9FD88924E213E500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
@@ -8805,6 +8829,7 @@
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				DFACDFAA274D489B00A94EEC /* FxHomeHistoryHighlightsVM.swift in Sources */,
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
+				8AD40FBB27BAD2C000672675 /* StatefulButton.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* DynamicFontHelper.swift in Sources */,
 				C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */,
@@ -8833,6 +8858,7 @@
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				8A9AC465276CEC4E0047F5B0 /* FxHomeHorizontalCell.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
+				8AD40FC127BAD3AE00672675 /* URLTextField.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				396B97232704DB7C006C12BC /* NimbusFeatures.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
@@ -8876,6 +8902,7 @@
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
 				884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */,
+				8AD40FBF27BAD36D00672675 /* ToolbarButton.swift in Sources */,
 				C8656D77270F858900E199EA /* TabsSettingsViewControler.swift in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
@@ -8902,6 +8929,7 @@
 				C849E46126B9C39B00260F0B /* EnhancedTrackingProtectionVC.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCellAndFooter.swift in Sources */,
+				8AD40FC227BAD6F900672675 /* ReaderModeButton.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
 				4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */,
 				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
