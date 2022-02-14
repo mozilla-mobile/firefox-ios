@@ -159,7 +159,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
     fileprivate var timer: Timer?
-    fileprivate var contextualSourceView = UIView()
+    private var contextualHintFrame: CGRect?
     fileprivate var isZeroSearch: Bool
     fileprivate var wallpaperManager: WallpaperManager
     private var viewModel: FirefoxHomeViewModel
@@ -262,26 +262,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
         view.addSubviews(overlayView)
-        view.addSubview(contextualSourceView)
-        contextualSourceView.backgroundColor = .clear
 
-        if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
-            self.view.addSubview(defaultBrowserCard)
-            NSLayoutConstraint.activate([
-                defaultBrowserCard.topAnchor.constraint(equalTo: view.topAnchor),
-                defaultBrowserCard.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
-                defaultBrowserCard.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                defaultBrowserCard.widthAnchor.constraint(equalToConstant: 380),
-
-                collectionView.topAnchor.constraint(equalTo: defaultBrowserCard.bottomAnchor),
-                collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            ])
-
-            defaultBrowserCard.dismissClosure = {
-                self.dismissDefaultBrowserCard()
-            }
+        if shouldShowDefaultBrowserCard {
+            showDefaultBrowserCard()
         }
 
         NSLayoutConstraint.activate([
@@ -355,16 +338,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         applyTheme()
     }
 
-    public func dismissDefaultBrowserCard() {
-        self.defaultBrowserCard.removeFromSuperview()
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-    }
-
     @objc func reload(notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged,
@@ -392,6 +365,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         if let highlightIndex = viewModel.enabledSections.firstIndex(of: FirefoxHomeSectionType.historyHighlights) {
             let indexSet = IndexSet([highlightIndex])
             collectionView.reloadSections(indexSet)
+        } else {
+            reloadAll()
         }
     }
 
@@ -408,7 +383,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
     }
 
-    @objc func dismissOverlayMode() {
+    @objc private func dismissOverlayMode() {
         BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
         if let gestureRecognizers = collectionView.gestureRecognizers {
             for (index, gesture) in gestureRecognizers.enumerated() {
@@ -419,7 +394,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         }
     }
 
-    func presentContextualHint() {
+    // MARK: - Contextual hint
+
+    private func presentContextualHint() {
         overlayView.isHidden = false
         hasPresentedContextualHint = true
 
@@ -427,9 +404,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         contextualHintViewController.preferredContentSize = contentSize
         contextualHintViewController.modalPresentationStyle = .popover
 
-        if let popoverPresentationController = contextualHintViewController.popoverPresentationController {
-            popoverPresentationController.sourceView = contextualSourceView
-            popoverPresentationController.sourceRect = contextualSourceView.bounds
+        if let popoverPresentationController = contextualHintViewController.popoverPresentationController,
+           let frame = contextualHintFrame {
+            popoverPresentationController.sourceView = view
+            popoverPresentationController.sourceRect = frame
             popoverPresentationController.permittedArrowDirections = .down
             popoverPresentationController.delegate = self
         }
@@ -444,11 +422,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         present(contextualHintViewController, animated: true, completion: nil)
     }
 
-    func contextualHintPresentTimer() {
+    private func contextualHintPresentTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1.25, target: self, selector: #selector(presentContextualOverlay), userInfo: nil, repeats: false)
     }
 
-    @objc func presentContextualOverlay() {
+    @objc private func presentContextualOverlay() {
         guard BrowserViewController.foregroundBVC().searchController == nil,
               presentedViewController == nil else {
                   timer?.invalidate()
@@ -456,6 +434,47 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         }
         presentContextualHint()
     }
+
+    // MARK: - Default browser card
+
+    private var shouldShowDefaultBrowserCard: Bool {
+        if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    private func showDefaultBrowserCard() {
+        self.view.addSubview(defaultBrowserCard)
+        NSLayoutConstraint.activate([
+            defaultBrowserCard.topAnchor.constraint(equalTo: view.topAnchor),
+            defaultBrowserCard.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
+            defaultBrowserCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            defaultBrowserCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            defaultBrowserCard.heightAnchor.constraint(equalToConstant: 264),
+
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        defaultBrowserCard.dismissClosure = {
+            self.dismissDefaultBrowserCard()
+        }
+    }
+
+    public func dismissDefaultBrowserCard() {
+        self.defaultBrowserCard.removeFromSuperview()
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    // MARK: - Headers
 
     private func getHeaderSize(forSection section: Int) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
@@ -496,19 +515,10 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
                 headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
                 headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
-                let attributes = collectionView.layoutAttributesForItem(at: indexPath)
-                    if let frame = attributes?.frame, headerView.convert(frame, from: collectionView).height > 1 {
-                        // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view. Invalidating the timer prevents from showing contextual hint at the wrong position.
-                        timer?.invalidate()
-                        if didRotate && hasPresentedContextualHint {
-                            contextualSourceView = headerView.titleLabel
-                            didRotate = false
-                        } else if !hasPresentedContextualHint && contextualHintViewController.viewModel.shouldPresentContextualHint(profile: viewModel.profile) {
-                            contextualSourceView = headerView.titleLabel
-                            contextualHintPresentTimer()
-                        }
-                }
+                prepareJumpBackInContextualHint(indexPath, onView: headerView)
+
                 return headerView
+
             case .recentlySaved:
                 headerView.moreButton.isHidden = false
                 headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
@@ -542,6 +552,23 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         }
         default:
             return UICollectionReusableView()
+        }
+    }
+
+    private func prepareJumpBackInContextualHint(_ indexPath: IndexPath, onView headerView: ASHeaderView) {
+        guard contextualHintViewController.viewModel.shouldPresentContextualHint(profile: viewModel.profile) else { return }
+
+        let frame = collectionView.convert(headerView.frame, to: collectionView)
+        guard !frame.isEmpty else { return }
+        contextualHintFrame = frame
+
+        // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view.
+        // Invalidating the timer prevents from showing contextual hint at the wrong position.
+        timer?.invalidate()
+        if didRotate && hasPresentedContextualHint {
+            didRotate = false
+        } else if !hasPresentedContextualHint {
+            contextualHintPresentTimer()
         }
     }
 
@@ -1194,11 +1221,11 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     // Dismiss the popover if the device is being rotated.
     // This is used by the Share UIActivityViewController action sheet on iPad
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
-        guard hasPresentedContextualHint else {
+        guard hasPresentedContextualHint, let frame = contextualHintFrame else {
             popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
             return
         }
-        rect.pointee = contextualSourceView.bounds
+        rect.pointee = frame
     }
 
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {

@@ -86,8 +86,8 @@ class LibraryViewController: UIViewController {
     }()
 
     // MARK: - Initializers
-    init(profile: Profile) {
-        self.viewModel = LibraryViewModel(withProfile: profile)
+    init(profile: Profile, tabManager: TabManager) {
+        self.viewModel = LibraryViewModel(withProfile: profile, tabManager: tabManager)
 
         super.init(nibName: nil, bundle: nil)
     }

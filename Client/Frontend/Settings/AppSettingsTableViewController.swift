@@ -66,11 +66,14 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             HomeSetting(settings: self),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
+            SiriPageSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
                         titleText: .AppSettingsBlockPopups),
            ]
 
-        generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        if SearchBarSettingsViewModel.isEnabled {
+            generalSettings.insert(SearchBarSetting(settings: self), at: 5)
+        }
 
         if featureFlags.isFeatureActiveForBuild(.groupedTabs) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
             generalSettings.insert(TabsSetting(), at: 3)

@@ -40,6 +40,7 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let StartAtHome = "startAtHome"
     public static let PullToRefresh = "pullToRefresh"
+    public static let KeySearchBarPosition = "SearchBarPosition"
 
     // Firefox contextual hint
     public static let ContextualHintJumpBackinKey = "ContextualHintJumpBackin"
