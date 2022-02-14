@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 enum ReloadButtonState: String {
     case reload = "Reload"
@@ -11,6 +12,8 @@ enum ReloadButtonState: String {
 }
 
 class StatefulButton: UIButton {
+
+    // MARK: - Initializers
 
     convenience init(frame: CGRect, state: ReloadButtonState) {
         self.init(frame: frame)
@@ -24,8 +27,8 @@ class StatefulButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    var savedReloadButtonState = ReloadButtonState.disabled
+    
+    private var savedReloadButtonState = ReloadButtonState.disabled
 
     var reloadButtonState: ReloadButtonState {
         get {

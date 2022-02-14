@@ -2,10 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import UIKit
 
 class ToolbarTextField: AutocompleteTextField {
 
+    // MARK: - Variables
     @objc dynamic var clearButtonTintColor: UIColor? {
         didSet {
             // Clear previous tinted image that's cache and ask for a relayout
@@ -14,7 +15,9 @@ class ToolbarTextField: AutocompleteTextField {
         }
     }
 
-    fileprivate var tintedClearImage: UIImage?
+    private var tintedClearImage: UIImage?
+
+    // MARK: - Initializers
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,6 +26,8 @@ class ToolbarTextField: AutocompleteTextField {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - View setup
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -40,7 +45,6 @@ class ToolbarTextField: AutocompleteTextField {
         // https://stackoverflow.com/questions/55046917/clear-button-on-text-field-not-accessible-with-voice-over-swift
         if let clearButton = value(forKey: "_clearButton") as? UIButton {
             clearButton.setImage(tintedClearImage, for: [])
-
         }
     }
 
@@ -52,6 +56,8 @@ class ToolbarTextField: AutocompleteTextField {
         return r2
     }
 }
+
+// MARK: - Theme protocols
 
 extension ToolbarTextField: NotificationThemeable {
     func applyTheme() {

@@ -39,7 +39,7 @@ class TabLocationView: UIView {
     var tapRecognizer: UITapGestureRecognizer!
     var contentView: UIStackView!
 
-    fileprivate let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
+    private let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
 
     @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
@@ -49,7 +49,7 @@ class TabLocationView: UIView {
         didSet {
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
-            trackingProtectionButton.isHidden = !["https", "http"].contains(url?.scheme ?? "")
+            trackingProtectionButton.isHidden = isTrackingProtectionHidden
             setNeedsUpdateConstraints()
         }
     }
@@ -59,23 +59,8 @@ class TabLocationView: UIView {
             return readerModeButton.readerModeState
         }
         set (newReaderModeState) {
-            if newReaderModeState != self.readerModeButton.readerModeState {
-                let wasHidden = readerModeButton.isHidden
-                self.readerModeButton.readerModeState = newReaderModeState
-                readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
-                if wasHidden != readerModeButton.isHidden {
-                    UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
-                    if !readerModeButton.isHidden {
-                        // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAvailableVoiceOverAnnouncement)
-                        }
-                    }
-                }
-                UIView.animate(withDuration: 0.1, animations: { () -> Void in
-                    self.readerModeButton.alpha = newReaderModeState == .unavailable ? 0 : 1
-                })
-            }
+            guard newReaderModeState != self.readerModeButton.readerModeState else { return }
+            setReaderModeState(newReaderModeState)
         }
     }
 
@@ -237,6 +222,8 @@ class TabLocationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Accessibility
+
     private lazy var _accessibilityElements = [urlTextField, readerModeButton, reloadButton, pageOptionsButton, trackingProtectionButton]
 
     override var accessibilityElements: [Any]? {
@@ -253,6 +240,8 @@ class TabLocationView: UIView {
             $0.isAccessibilityElement = enabled
         }
     }
+
+    // MARK: - User actions
 
     @objc func tapReaderModeButton() {
         delegate?.tabLocationViewDidTapReaderMode(self)
@@ -300,7 +289,7 @@ class TabLocationView: UIView {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 
-    fileprivate func updateTextWithURL() {
+    private func updateTextWithURL() {
         if let host = url?.host, AppConstants.MOZ_PUNYCODE {
             urlTextField.text = url?.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         } else {
@@ -310,6 +299,31 @@ class TabLocationView: UIView {
         if let scheme = url?.scheme, let range = url?.absoluteString.range(of: "\(scheme)://") {
             urlTextField.text = url?.absoluteString.replacingCharacters(in: range, with: "")
         }
+    }
+}
+
+// MARK: - Private
+private extension TabLocationView {
+    var isTrackingProtectionHidden: Bool {
+        !["https", "http"].contains(url?.scheme ?? "")
+    }
+
+    func setReaderModeState(_ newReaderModeState: ReaderModeState) {
+        let wasHidden = readerModeButton.isHidden
+        self.readerModeButton.readerModeState = newReaderModeState
+        readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
+        if wasHidden != readerModeButton.isHidden {
+            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
+            if !readerModeButton.isHidden {
+                // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                    UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAvailableVoiceOverAnnouncement)
+                }
+            }
+        }
+        UIView.animate(withDuration: 0.1, animations: { () -> Void in
+            self.readerModeButton.alpha = newReaderModeState == .unavailable ? 0 : 1
+        })
     }
 }
 

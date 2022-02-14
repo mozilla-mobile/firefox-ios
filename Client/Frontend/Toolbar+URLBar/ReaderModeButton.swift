@@ -6,8 +6,7 @@ import UIKit
 
 class ReaderModeButton: UIButton {
 
-    var selectedTintColor: UIColor?
-    var unselectedTintColor: UIColor?
+    // MARK: - Initializers
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -18,6 +17,11 @@ class ReaderModeButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Variables
+    
+    var selectedTintColor: UIColor?
+    var unselectedTintColor: UIColor?
 
     override var isSelected: Bool {
         didSet {
@@ -37,7 +41,7 @@ class ReaderModeButton: UIButton {
         }
     }
 
-    var savedReaderModeState = ReaderModeState.unavailable
+    private var savedReaderModeState = ReaderModeState.unavailable
 
     var readerModeState: ReaderModeState {
         get {

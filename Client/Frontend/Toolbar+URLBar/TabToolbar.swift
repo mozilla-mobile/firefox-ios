@@ -3,8 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
+import SnapKit
+import Shared
 
 class TabToolbar: UIView {
+
+    // MARK: - Variables
+
     weak var tabToolbarDelegate: TabToolbarDelegate?
 
     let tabsButton = TabsButton()
@@ -16,17 +21,19 @@ class TabToolbar: UIView {
     let multiStateButton = ToolbarButton()
     let actionButtons: [NotificationThemeable & UIButton]
 
-    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
-    fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
-    fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
-
-    var helper: TabToolbarHelper?
-    private let contentView = UIStackView()
     private var isBottomSearchBar: Bool {
         return BrowserViewController.foregroundBVC().isBottomSearchBar
     }
 
-    fileprivate override init(frame: CGRect) {
+    private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
+    private let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    private let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
+
+    var helper: TabToolbarHelper?
+    private let contentView = UIStackView()
+
+    // MARK: - Initializers
+    private override init(frame: CGRect) {
         actionButtons = [backButton, forwardButton, multiStateButton, addNewTabButton, tabsButton, appMenuButton]
         super.init(frame: frame)
         setupAccessibility()
@@ -42,6 +49,12 @@ class TabToolbar: UIView {
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - View Setup
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
@@ -66,10 +79,6 @@ class TabToolbar: UIView {
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
     }
 
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     func addButtons(_ buttons: [UIButton]) {
         buttons.forEach { contentView.addArrangedSubview($0) }
     }
@@ -77,12 +86,13 @@ class TabToolbar: UIView {
     override func draw(_ rect: CGRect) {
         // No line when the search bar is on top of the toolbar
         guard !isBottomSearchBar else { return }
+
         if let context = UIGraphicsGetCurrentContext() {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
         }
     }
 
-    fileprivate func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
+    private func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
         context.setStrokeColor(UIColor.black.withAlphaComponent(0.05).cgColor)
         context.setLineWidth(2)
         context.move(to: CGPoint(x: start.x, y: start.y))
@@ -91,6 +101,7 @@ class TabToolbar: UIView {
     }
 }
 
+// MARK: - TabToolbarProtocol
 extension TabToolbar: TabToolbarProtocol {
     var homeButton: ToolbarButton { multiStateButton }
 
@@ -124,6 +135,8 @@ extension TabToolbar: TabToolbarProtocol {
         tabsButton.updateTabCount(count, animated: animated)
     }
 }
+
+// MARK: - Theme protocols
 
 extension TabToolbar: NotificationThemeable, PrivateModeUI {
     func applyTheme() {

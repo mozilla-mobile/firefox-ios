@@ -248,17 +248,6 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             make.left.right.equalTo(locationContainer)
         }
 
-        progressBar.snp.makeConstraints { make in
-            if isBottomSearchBar {
-                make.bottom.equalTo(snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
-            } else {
-                make.top.equalTo(snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
-            }
-
-            make.height.equalTo(URLBarViewUX.ProgressBarHeight)
-            make.left.right.equalTo(self)
-        }
-
         locationView.snp.makeConstraints { make in
             make.edges.equalTo(self.locationContainer)
         }
@@ -348,6 +337,17 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
 
             make.leading.trailing.equalTo(self)
             make.height.equalTo(1)
+        }
+
+        progressBar.snp.remakeConstraints { make in
+            if isBottomSearchBar {
+                make.bottom.equalTo(snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
+            } else {
+                make.top.equalTo(snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
+            }
+
+            make.height.equalTo(URLBarViewUX.ProgressBarHeight)
+            make.left.right.equalTo(self)
         }
 
         if inOverlayMode {
