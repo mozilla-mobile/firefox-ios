@@ -30,8 +30,6 @@ final class SearchBarSettingsViewModel {
 
     private let prefs: Prefs
     init(prefs: Prefs) {
-        prefs.clearAll()
-        InstallType.set(type: .fresh)
         self.prefs = prefs
     }
 
