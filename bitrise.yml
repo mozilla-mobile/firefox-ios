@@ -450,8 +450,6 @@ workflows:
             # fastlane update_fastlane
             fastlane -v
 
-            gem install fastlane
-
             fastlane snapshot update
 
             ./l10n-screenshots.sh en-US
