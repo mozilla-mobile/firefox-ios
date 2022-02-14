@@ -450,6 +450,8 @@ workflows:
             # fastlane update_fastlane
             fastlane -v
 
+            gem install fastlane
+
             ./l10n-screenshots.sh en-US
         title: Generate screenshots
     - deploy-to-bitrise-io@1.10:
