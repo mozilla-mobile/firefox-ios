@@ -7,6 +7,7 @@ import UIKit
 class ReaderModeButton: UIButton {
 
     // MARK: - Initializers
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         adjustsImageWhenHighlighted = false
@@ -21,6 +22,7 @@ class ReaderModeButton: UIButton {
     
     var selectedTintColor: UIColor?
     var unselectedTintColor: UIColor?
+
     override var isSelected: Bool {
         didSet {
             self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor

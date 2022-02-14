@@ -494,7 +494,7 @@ extension TelemetryWrapper {
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
         let value = value?.rawValue ?? ""
         switch (category, method, object, value, extras) {
-        // Bookmarks
+        // MARK: Bookmarks
         case (.action, .view, .bookmarksPanel, let from, _):
             GleanMetrics.Bookmarks.viewList[from].add()
         case (.action, .add, .bookmark, let from, _):
@@ -505,19 +505,19 @@ extension TelemetryWrapper {
             GleanMetrics.Bookmarks.open[from].add()
         case (.action, .change, .bookmark, let from, _):
             GleanMetrics.Bookmarks.edit[from].add()
-        // Reader Mode
+        // MARK: Reader Mode
         case (.action, .tap, .readerModeOpenButton, _, _):
             GleanMetrics.ReaderMode.open.add()
         case (.action, .tap, .readerModeCloseButton, _, _):
             GleanMetrics.ReaderMode.close.add()
-        // Reading List
+        // MARK: Reading List
         case (.action, .add, .readingListItem, let from, _):
             GleanMetrics.ReadingList.add[from].add()
         case (.action, .delete, .readingListItem, let from, _):
             GleanMetrics.ReadingList.delete[from].add()
         case (.action, .open, .readingListItem, _, _):
             GleanMetrics.ReadingList.open.add()
-        // Top Site
+        // MARK: Top Site
         case (.action, .tap, .topSiteTile, _, let extras):
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.TopSite.pressedTileOrigin[homePageOrigin].add()
@@ -529,7 +529,8 @@ extension TelemetryWrapper {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
             }
-        // Preferences
+
+        // MARK: Preferences
         case (.action, .change, .setting, _, let extras):
             if let preference = extras?[EventExtraKey.preference.rawValue] as? String, let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
                 GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to, preference: preference))
@@ -537,11 +538,13 @@ extension TelemetryWrapper {
                 let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
                 Sentry.shared.send(message: msg, severity: .debug)
             }
-        // QR Codes
+
+        // MARK: QR Codes
         case (.action, .scan, .qrCodeText, _, _),
              (.action, .scan, .qrCodeURL, _, _):
             GleanMetrics.QrCode.scanned.add()
-        // Tabs
+
+        // MARK: Tabs
         case (.action, .add, .tab, let privateOrNormal, _):
             GleanMetrics.Tabs.open[privateOrNormal].add()
         case (.action, .close, .tab, let privateOrNormal, _):
@@ -568,13 +571,16 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.navigateTabBackSwipe.add()
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
-        // Settings Menu
+
+        // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
-        // Start Search Button
+
+        // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
-        // Default Browser
+
+        // MARK: Default Browser
         case (.action, .tap, .dismissDefaultBrowserCard, _, _):
             GleanMetrics.DefaultBrowserCard.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserCard, _, _):
@@ -585,7 +591,8 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
-        // Onboarding
+
+        // MARK: Onboarding
         case (.action, .press, .dismissedOnboarding, _, let extras):
             if let slideNum = extras?["slide-num"] as? Int32 {
                 GleanMetrics.Onboarding.finish.record(GleanMetrics.Onboarding.FinishExtra(slideNum: slideNum))
@@ -609,7 +616,8 @@ extension TelemetryWrapper {
             GleanMetrics.Onboarding.syncScreenSignUp.add()
         case(.action, .press, .syncScreenStartBrowse, _, _):
             GleanMetrics.Onboarding.syncScreenBrowse.add()
-        // Widget
+
+        // MARK: Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()
         case (.action, .open, .largeTabsOpenUrl, _, _):
@@ -627,7 +635,7 @@ extension TelemetryWrapper {
         case (.action, .open, .mediumTopSitesWidget, _, _):
             GleanMetrics.Widget.mTopSitesWidget.add()
 
-        // Pocket
+        // MARK: Pocket
         case (.action, .tap, .pocketStory, _, let extras):
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.Pocket.openStoryOrigin[homePageOrigin].add()
@@ -642,17 +650,18 @@ extension TelemetryWrapper {
         case (.action, .view, .pocketSectionImpression, _, _):
             GleanMetrics.Pocket.sectionImpressions.add()
 
-        // Library
+        // MARK: Library
         case (.action, .tap, .libraryPanel, let type, _):
             GleanMetrics.Library.panelPressed[type].add()
-        // Sync
+        // MARK: Sync
         case (.action, .open, .syncTab, _, _):
             GleanMetrics.Sync.openTab.add()
         case (.action, .tap, .syncSignIn, _, _):
             GleanMetrics.Sync.signInSyncPressed.add()
         case (.action, .tap, .syncCreateAccount, _, _):
             GleanMetrics.Sync.createAccountPressed.add()
-        // App menu
+
+        // MARK: App menu
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
         case (.action, .tap, .signIntoSync, _, _):
@@ -674,7 +683,7 @@ extension TelemetryWrapper {
         case (.action, .open, .settings, _, _):
             GleanMetrics.AppMenu.settings.add()
 
-        // Page Menu
+        // MARK: Page Menu
         case (.action, .tap, .sharePageWith, _, _):
             GleanMetrics.PageActionMenu.sharePageWith.add()
         case (.action, .tap, .sendToDevice, _, _):
@@ -694,7 +703,7 @@ extension TelemetryWrapper {
         case (.action, .tap, .requestMobileSite, _, _):
             GleanMetrics.PageActionMenu.requestMobileSite.add()
 
-        // Inactive Tab Tray
+        // MARK: Inactive Tab Tray
         case (.action, .tap, .inactiveTabTray, EventValue.openInactiveTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openInactiveTab.add()
         case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabExpand.rawValue, _):
@@ -706,7 +715,7 @@ extension TelemetryWrapper {
         case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
 
-        // Tab Groups
+        // MARK: Tab Groups
         case (.action, .view, .tabTray, EventValue.tabGroupWithExtras.rawValue, let extras):
            let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra.init(averageTabsInAllGroups: extras?["\(EventExtraKey.averageTabsInAllGroups)"] as? Int32, groupsTwoTabsOnly: extras?["\(EventExtraKey.groupsWithTwoTabsOnly)"] as? Int32, groupsWithMoreThanTwoTab: extras?["\(EventExtraKey.groupsWithTwoMoreTab)"] as? Int32, totalNumOfGroups: extras?["\(EventExtraKey.totalNumberOfGroups)"] as? Int32, totalTabsInAllGroups: extras?["\(EventExtraKey.totalTabsInAllGroups)"] as? Int32)
             GleanMetrics.Tabs.groupedTab.record(groupedTabExtras)
@@ -715,7 +724,7 @@ extension TelemetryWrapper {
         case (.action, .tap, .groupedTabPerformSearch, _, _):
             GleanMetrics.Tabs.groupedTabSearch.add()
             
-        // Firefox Homepage
+        // MARK: Firefox Homepage
         case (.action, .view, .firefoxHomepage, EventValue.fxHomepageOrigin.rawValue, let extras):
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.firefoxHomepageOrigin[homePageOrigin].add()

@@ -87,7 +87,6 @@ class TopTabsViewController: UIViewController {
         
         return fader
     }()
-    
 
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
@@ -133,8 +132,12 @@ class TopTabsViewController: UIViewController {
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links onto the "New Tab" button.
-            let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
-            newTab.addInteraction(dropInteraction)
+        let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
+        newTab.addInteraction(dropInteraction)
+
+        view.snp.makeConstraints { make in
+            make.height.equalTo(TopTabsUX.TopTabsViewHeight)
+        }
 
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)

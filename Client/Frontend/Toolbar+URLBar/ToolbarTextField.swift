@@ -18,6 +18,7 @@ class ToolbarTextField: AutocompleteTextField {
     private var tintedClearImage: UIImage?
 
     // MARK: - Initializers
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -27,6 +28,7 @@ class ToolbarTextField: AutocompleteTextField {
     }
 
     // MARK: - View setup
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -56,6 +58,7 @@ class ToolbarTextField: AutocompleteTextField {
 }
 
 // MARK: - Theme protocols
+
 extension ToolbarTextField: NotificationThemeable {
     func applyTheme() {
         backgroundColor = UIColor.theme.textField.backgroundInOverlay

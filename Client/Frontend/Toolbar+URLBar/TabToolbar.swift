@@ -9,7 +9,7 @@ import Shared
 class TabToolbar: UIView {
 
     // MARK: - Variables
-    
+
     weak var tabToolbarDelegate: TabToolbarDelegate?
 
     let tabsButton = TabsButton()
@@ -20,6 +20,10 @@ class TabToolbar: UIView {
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
     let actionButtons: [NotificationThemeable & UIButton]
+
+    private var isBottomSearchBar: Bool {
+        return BrowserViewController.foregroundBVC().isBottomSearchBar
+    }
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     private let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
@@ -80,6 +84,9 @@ class TabToolbar: UIView {
     }
 
     override func draw(_ rect: CGRect) {
+        // No line when the search bar is on top of the toolbar
+        guard !isBottomSearchBar else { return }
+
         if let context = UIGraphicsGetCurrentContext() {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
         }
@@ -130,6 +137,7 @@ extension TabToolbar: TabToolbarProtocol {
 }
 
 // MARK: - Theme protocols
+
 extension TabToolbar: NotificationThemeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background

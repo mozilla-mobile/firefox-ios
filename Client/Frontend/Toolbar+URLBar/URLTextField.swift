@@ -17,7 +17,7 @@ class URLTextField: UITextField {
         }
     }
 
-    internal override var canBecomeFirstResponder: Bool {
+    override var canBecomeFirstResponder: Bool {
         return false
     }
 
