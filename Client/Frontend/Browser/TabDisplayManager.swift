@@ -26,7 +26,6 @@ enum TabAnimationType {
 
 protocol TabDisplayCompletionDelegate: AnyObject {
     func completedAnimation(for: TabAnimationType)
-//    func displayRecentlyClosedTabs()
 }
 
 @objc protocol TabSelectionDelegate: AnyObject {
