@@ -101,9 +101,20 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     // MARK: Notification
 
+    func testNoNotificationSent_withoutDefaultPref() {
+        let expectation = expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
+        expectation.isInverted = true
+
+        let viewModel = createViewModel()
+        callSetting(viewModel.bottomSetting)
+
+        waitForExpectations(timeout: expectationWaitTime, handler: nil)
+    }
+
     func testNotificationSent_onBottomSetting() {
         expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
-        let viewModel = createViewModel()
+        let (viewModel, prefs) = createViewModelWithPrefs()
+        setDefault(prefs, defaultPosition: .top)
         callSetting(viewModel.bottomSetting)
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
@@ -111,7 +122,8 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     func testNotificationSent_onTopSetting() {
         expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
-        let viewModel = createViewModel()
+        let (viewModel, prefs) = createViewModelWithPrefs()
+        setDefault(prefs, defaultPosition: .bottom)
         callSetting(viewModel.topSetting)
 
         waitForExpectations(timeout: expectationWaitTime, handler: nil)
