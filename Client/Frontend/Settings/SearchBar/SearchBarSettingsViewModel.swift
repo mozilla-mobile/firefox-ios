@@ -46,7 +46,8 @@ final class SearchBarSettingsViewModel {
     var searchBarPosition: SearchBarPosition {
         let defaultPosition = getDefaultSearchPosition()
         guard let raw = prefs.stringForKey(PrefsKeys.KeySearchBarPosition) else {
-            saveSearchBarPosition(defaultPosition)
+            // Do not notify if it's the default position being saved
+            saveSearchBarPosition(defaultPosition, shouldNotify: false)
             return defaultPosition
         }
 
@@ -76,12 +77,13 @@ final class SearchBarSettingsViewModel {
 // MARK: Private
 private extension SearchBarSettingsViewModel {
 
-    func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
+    func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition, shouldNotify: Bool = true) {
         prefs.setString(searchBarPosition.rawValue,
                         forKey: PrefsKeys.KeySearchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
         recordPreferenceChange(searchBarPosition)
 
+        guard shouldNotify else { return }
         let notificationObject = [PrefsKeys.KeySearchBarPosition: searchBarPosition]
         NotificationCenter.default.post(name: .SearchBarPositionDidChange, object: notificationObject)
     }
