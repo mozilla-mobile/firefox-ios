@@ -452,6 +452,8 @@ workflows:
 
             gem install fastlane
 
+            fastlane snapshot update
+
             ./l10n-screenshots.sh en-US
         title: Generate screenshots
     - deploy-to-bitrise-io@1.10:
