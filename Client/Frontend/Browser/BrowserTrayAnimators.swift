@@ -30,7 +30,7 @@ private extension TrayToBrowserAnimator {
         bvc.view.frame = transitionContext.finalFrame(for: bvc)
 
         // Hide browser components
-        bvc.toggleSnackBarVisibility(show: false)
+        bvc.bottomContentStackView.toggleStackViewVisibility(show: false)
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.firefoxHomeViewController?.view.isHidden = true
 
@@ -58,11 +58,11 @@ private extension TrayToBrowserAnimator {
         container.layoutIfNeeded()
 
         let finalFrame = calculateExpandedCellFrameFromBVC(bvc)
-        bvc.footer.alpha = shouldDisplayFooterForBVC(bvc) ? 1 : 0
+        bvc.toolbar.isHidden = !shouldDisplayToolbarForBVC(bvc)
         bvc.urlBar.isTransitioning = true
 
         // Re-calculate the starting transforms for header/footer views in case we switch orientation
-        resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
+        resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.overKeyboardContainer])
         transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container: container)
         
         let frameResizeClosure = {
@@ -93,8 +93,8 @@ private extension TrayToBrowserAnimator {
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
             tabCollectionViewSnapshot.removeFromSuperview()
-            bvc.footer.alpha = 1
-            bvc.toggleSnackBarVisibility(show: true)
+            bvc.toolbar.isHidden = false
+            bvc.bottomContentStackView.toggleStackViewVisibility(show: true)
             toggleWebViewVisibility(true, usingTabManager: bvc.tabManager)
             bvc.webViewContainerBackdrop.isHidden = false
             bvc.firefoxHomeViewController?.view.isHidden = false
@@ -158,7 +158,7 @@ private extension BrowserToTrayAnimator {
         // Hide views we don't want to show during the animation in the BVC
         bvc.firefoxHomeViewController?.view.isHidden = true
         bvc.statusBarOverlay.isHidden = true
-        bvc.toggleSnackBarVisibility(show: false)
+        bvc.bottomContentStackView.toggleStackViewVisibility(show: false)
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.urlBar.isTransitioning = true
 
@@ -193,7 +193,7 @@ private extension BrowserToTrayAnimator {
                 tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
 
                 bvc.urlBar.updateAlphaForSubviews(0)
-                bvc.footer.alpha = 0
+                bvc.toolbar.isHidden = true
                 tabCollectionViewSnapshot.alpha = 1
                 
                 if !UIAccessibility.isReduceMotionEnabled {
@@ -206,11 +206,11 @@ private extension BrowserToTrayAnimator {
                 tabCollectionViewSnapshot.removeFromSuperview()
                 tabTray.collectionView.isHidden = false
 
-                bvc.toggleSnackBarVisibility(show: true)
+                bvc.bottomContentStackView.toggleStackViewVisibility(show: true)
                 toggleWebViewVisibility(true, usingTabManager: bvc.tabManager)
                 bvc.firefoxHomeViewController?.view.isHidden = false
 
-                resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
+                resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.overKeyboardContainer])
                 bvc.urlBar.isTransitioning = false
                 transitionContext.completeTransition(true)
             })
@@ -219,10 +219,10 @@ private extension BrowserToTrayAnimator {
 }
 
 private func transformHeaderFooterForBVC(_ bvc: BrowserViewController, toFrame finalFrame: CGRect, container: UIView) {
-    let footerForTransform = footerTransform(bvc.footer.frame, toFrame: finalFrame, container: container)
+    let footerForTransform = footerTransform(bvc.overKeyboardContainer.frame, toFrame: finalFrame, container: container)
     let headerForTransform = headerTransform(bvc.header.frame, toFrame: finalFrame, container: container)
 
-    bvc.footer.transform = footerForTransform
+    bvc.overKeyboardContainer.transform = footerForTransform
     bvc.header.transform = headerForTransform
     bvc.readerModeBar?.transform = headerForTransform
 }
@@ -272,21 +272,21 @@ private func calculateExpandedCellFrameFromBVC(_ bvc: BrowserViewController) -> 
 
     // If we're navigating to a home panel and we were expecting to show the toolbar, add more height to end frame since
     // there is no toolbar for home panels
-    if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
+    if !bvc.shouldShowToolbarForTraitCollection(bvc.traitCollection) {
         return frame
     }
 
-    if let url = bvc.tabManager.selectedTab?.url, bvc.toolbar == nil, let internalPage = InternalURL(url), internalPage.isAboutURL {
+    if let url = bvc.tabManager.selectedTab?.url, bvc.toolbar.isHidden, let internalPage = InternalURL(url), internalPage.isAboutURL {
         frame.size.height += UIConstants.BottomToolbarHeight
     }
 
     return frame
 }
 
-private func shouldDisplayFooterForBVC(_ bvc: BrowserViewController) -> Bool {
+private func shouldDisplayToolbarForBVC(_ bvc: BrowserViewController) -> Bool {
     guard let url = bvc.tabManager.selectedTab?.url else { return false }
     let isAboutPage = InternalURL(url)?.isAboutURL ?? false
-    return bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) && !isAboutPage
+    return bvc.shouldShowToolbarForTraitCollection(bvc.traitCollection) && !isAboutPage
 }
 
 private func toggleWebViewVisibility(_ show: Bool, usingTabManager tabManager: TabManager) {
