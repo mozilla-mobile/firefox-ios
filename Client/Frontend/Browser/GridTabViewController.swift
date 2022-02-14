@@ -661,25 +661,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         let cellWidth = floor((collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
-            guard !tabDisplayManager.isPrivate, let inactiveTabViewModel = tabDisplayManager.inactiveViewModel, inactiveTabViewModel.activeTabs.count > 0 else {
-                return CGSize(width: 0, height: 0)
-            }
-            let closeAllButtonHeight = InactiveTabCellUX.CloseAllTabRowHeight
-            let headerHeightWithRoundedCorner = InactiveTabCellUX.HeaderAndRowHeight + InactiveTabCellUX.RoundedContainerPaddingClosed
-            var totalHeight = headerHeightWithRoundedCorner
-            let width: CGFloat = collectionView.frame.size.width - InactiveTabCellUX.InactiveTabTrayWidthPadding
-            let inactiveTabs = inactiveTabViewModel.inactiveTabs
-
-            // Calculate height based on number of tabs in the inactive tab section section
-            let calculatedInactiveTabsTotalHeight = InactiveTabCellUX.HeaderAndRowHeight*CGFloat(inactiveTabs.count) + InactiveTabCellUX.RoundedContainerPaddingClosed + InactiveTabCellUX.RoundedContainerAdditionalPaddingOpened + closeAllButtonHeight
-
-            totalHeight = tabDisplayManager.isInactiveViewExpanded ? calculatedInactiveTabsTotalHeight : headerHeightWithRoundedCorner
-
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                return CGSize(width: collectionView.frame.size.width/1.5, height: totalHeight)
-            } else {
-                return CGSize(width: width >= 0 ? width : 0, height: totalHeight)
-            }
+            return calculateInactiveTabSizeHelper(collectionView)
         case .groupedTabs:
             let width = collectionView.frame.size.width
             if let groupCount = tabDisplayManager.tabGroups?.count, groupCount > 0 {
@@ -691,6 +673,28 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         case .regularTabs, .none:
             guard tabDisplayManager.filteredTabs.count > 0 else { return CGSize(width: 0, height: 0) }
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
+        }
+    }
+    
+    private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
+        guard !tabDisplayManager.isPrivate, let inactiveTabViewModel = tabDisplayManager.inactiveViewModel, inactiveTabViewModel.activeTabs.count > 0 else {
+            return CGSize(width: 0, height: 0)
+        }
+        let closeAllButtonHeight = InactiveTabCellUX.CloseAllTabRowHeight
+        let headerHeightWithRoundedCorner = InactiveTabCellUX.HeaderAndRowHeight + InactiveTabCellUX.RoundedContainerPaddingClosed
+        var totalHeight = headerHeightWithRoundedCorner
+        let width: CGFloat = collectionView.frame.size.width - InactiveTabCellUX.InactiveTabTrayWidthPadding
+        let inactiveTabs = inactiveTabViewModel.inactiveTabs
+
+        // Calculate height based on number of tabs in the inactive tab section section
+        let calculatedInactiveTabsTotalHeight = InactiveTabCellUX.HeaderAndRowHeight*CGFloat(inactiveTabs.count) + InactiveTabCellUX.RoundedContainerPaddingClosed + InactiveTabCellUX.RoundedContainerAdditionalPaddingOpened + closeAllButtonHeight
+
+        totalHeight = tabDisplayManager.isInactiveViewExpanded ? calculatedInactiveTabsTotalHeight : headerHeightWithRoundedCorner
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return CGSize(width: collectionView.frame.size.width/1.5, height: totalHeight)
+        } else {
+            return CGSize(width: width >= 0 ? width : 0, height: totalHeight)
         }
     }
 
