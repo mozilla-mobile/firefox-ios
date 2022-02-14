@@ -21,25 +21,16 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     // MARK: - Properties
     var viewModel: FxHomeHistoryHightlightsVM?
 
-    // MARK: - Variables
-    /// We calculate the number of columns dynamically based on the numbers of items
-    /// available such that we always have the appropriate number of columns for the
-    /// rest of the dynamic calculations.
-    var numberOfColumns: Int {
-        guard let count = viewModel?.historyItems?.count else { return 0 }
-        return Int(ceil(Double(count) / Double(HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn)))
-    }
-
     // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewCompositionalLayout(section: layoutSection)
         let collectionView = UICollectionView(frame: .zero,
-                                              collectionViewLayout: compositionalLayout)
+                                              collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = true
         collectionView.alwaysBounceVertical = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = UIColor.clear
-        collectionView.clipsToBounds = true
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(HistoryHighlightsCell.self,
@@ -53,11 +44,6 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     }()
 
     // MARK: - Inits
-    convenience init(frame: CGRect,
-                     and viewModel: FxHomeHistoryHightlightsVM) {
-        self.init(frame: frame)
-        setupLayout()
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,6 +54,12 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         fatalError("init(coder:) has not been implemented")
     }
 
+    func reloadLayout() {
+        collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: layoutSection)
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.reloadData()
+    }
+
     // MARK: - Helper methods
     private func setupLayout() {
         contentView.addSubview(collectionView)
@@ -75,12 +67,12 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
 
-    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
+    private var layoutSection: NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(HistoryHighlightsCollectionCellUX.estimatedCellHeight))
@@ -88,27 +80,28 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
 
         let groupWidth: NSCollectionLayoutDimension
         if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
-            groupWidth = NSCollectionLayoutDimension.fractionalWidth(1)
+            groupWidth = NSCollectionLayoutDimension.fractionalWidth(0.85)
         } else {
             groupWidth = NSCollectionLayoutDimension.fractionalWidth(1/3)
         }
 
+        let subItems = Array(repeating: item, count: viewModel?.numberOfRows ?? 1)
         let verticalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: groupWidth,
                                                heightDimension: .estimated(HistoryHighlightsCollectionCellUX.estimatedCellHeight)),
-            subitems: [item, item, item]
-        )
+            subitems: subItems)
 
         let section = NSCollectionLayoutSection(group: verticalGroup)
         section.orthogonalScrollingBehavior = .continuous
-        return UICollectionViewCompositionalLayout(section: section)
-    }()
+        return section
+    }
 }
 
 // MARK: - Collection View Data Source
 extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let count = viewModel?.historyItems?.count else { return 0 }
+        guard let viewModel = viewModel,
+                let count = viewModel.historyItems?.count else { return 0 }
 
         // If there are less than or equal items to the max number of items allowed per column,
         // we can return the standard count, as we don't need to display filler cells.
@@ -117,7 +110,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         if count <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
             return count
         } else {
-            return numberOfColumns * HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
+            return viewModel.numberOfColumns * HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
         }
     }
 
@@ -161,8 +154,10 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     }
 
     private func isBottomOfColumn(with currentIndex: Int, totalItems: Int) -> Bool {
+        guard let viewModel = viewModel else { return false }
+
         var bottomCellIndex: Int
-        for column in 1...numberOfColumns {
+        for column in 1...viewModel.numberOfColumns {
             bottomCellIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * column) - 1
             if currentIndex == bottomCellIndex { return true }
         }
@@ -188,7 +183,9 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     }
 
     private func isTopRightCell(index: Int, totalItems: Int) -> Bool {
-        let topRightIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * (numberOfColumns - 1))
+        guard let viewModel = viewModel else { return false }
+
+        let topRightIndex = (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * (viewModel.numberOfColumns - 1))
         return index == topRightIndex
     }
 
@@ -207,11 +204,13 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     }
 
     private func isBottomRightCell(index: Int, totalItems: Int) -> Bool {
+        guard let viewModel = viewModel else { return false }
+
         var bottomRightIndex: Int {
             if totalItems <= HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn {
                 return totalItems - 1
             } else {
-                return (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * numberOfColumns) - 1
+                return (HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn * viewModel.numberOfColumns) - 1
             }
         }
 

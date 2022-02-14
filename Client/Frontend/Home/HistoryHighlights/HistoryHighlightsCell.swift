@@ -141,12 +141,12 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             heroImage.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
 
             textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 12),
-            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -2),
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             bottomLine.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
-            bottomLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            bottomLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             bottomLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }

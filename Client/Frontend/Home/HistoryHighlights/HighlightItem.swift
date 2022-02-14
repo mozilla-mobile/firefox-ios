@@ -26,7 +26,7 @@ extension ASGroup: HighlightItem {
     }
 
     var description: String? {
-        // TODO: Yoana check what to do for the string "sites"
+        // TODO: YRD check what to do for the string "sites"
         return "\(groupedItems.count) sites"
     }
 

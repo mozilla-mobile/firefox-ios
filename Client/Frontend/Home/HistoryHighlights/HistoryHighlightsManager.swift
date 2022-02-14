@@ -77,8 +77,6 @@ class HistoryHighlightsManager {
 
             guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
 
-//            print("YRD highlight list \(ASHighlights)")
-
             completion(ASHighlights)
         }
     }

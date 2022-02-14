@@ -14,8 +14,29 @@ class FxHomeHistoryHightlightsVM {
     private var tabManager: TabManager
     private var foregroundBVC: BrowserViewController
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private var hasSentSectionEvent = false
 
     var onTapItem: ((HighlightItem) -> Void)?
+
+    // MARK: - Variables
+    /// We calculate the number of columns dynamically based on the numbers of items
+    /// available such that we always have the appropriate number of columns for the
+    /// rest of the dynamic calculations.
+    var numberOfColumns: Int {
+        guard let count = historyItems?.count else { return 0 }
+
+        return Int(ceil(Double(count) / Double(HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn)))
+    }
+
+    var numberOfRows: Int {
+        guard let count = historyItems?.count else { return 0 }
+
+        return count < HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn ? count : HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
+    }
+
+    var hasData: Bool {
+        return !(historyItems?.isEmpty ?? true)
+    }
 
     // MARK: - Inits
     init(with profile: Profile,
@@ -33,12 +54,23 @@ class FxHomeHistoryHightlightsVM {
         loadItems()
     }
 
+    public func recordSectionHasShown() {
+        if !hasSentSectionEvent {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .historyImpressions,
+                                         value: nil,
+                                         extras: nil)
+            hasSentSectionEvent = true
+        }
+    }
+
     public func switchTo(_ highlight: HighlightItem) {
         if foregroundBVC.urlBar.inOverlayMode {
             foregroundBVC.urlBar.leaveOverlayMode()
         }
         onTapItem?(highlight)
-//        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .jumpBackInSectionTabOpened)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .historyHighlightsItemOpened)
     }
 
     // good candidate for protocol because is used in JumpBackIn and here
