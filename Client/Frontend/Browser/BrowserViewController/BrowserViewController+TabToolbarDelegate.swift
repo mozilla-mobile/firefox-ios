@@ -74,88 +74,18 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        var whatsNewAction: PhotonActionSheetItem?
-        let showBadgeForWhatsNew = shouldShowWhatsNew()
-        if showBadgeForWhatsNew {
-            // Set the version number of the app, so the What's new will stop showing
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-            // Redraw the toolbar so the badge hides from the appMenu button.
-            updateToolbarStateForTraitCollection(view.traitCollection)
-        }
-        whatsNewAction = PhotonActionSheetItem(title: .WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
-            if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
-                self.openURLInNewTab(whatsNewURL)
-            }
-        }
-
-        // ensure that any keyboards or spinners are dismissed before presenting the menu
+        // Ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         libraryDrawerViewController?.close(immediately: true)
-        var actions: [[PhotonActionSheetItem]] = []
 
-        let syncAction = syncMenuButton(showFxA: presentSignInViewController)
-        let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
-        let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
-            PhotonActionSheetItem(title: .AppMenuPasswords, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
-                guard let navController = self.navigationController else { return }
-                let navigationHandler: ((_ url: URL?) -> Void) = { url in
-                    UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
-                    self.openURLInNewTab(url)
-                }
-                            
-                if AppAuthenticator.canAuthenticateDeviceOwner() {
-                    if LoginOnboarding.shouldShow() {
-                        let loginOnboardingViewController = LoginOnboardingViewController(shownFromAppMenu: true)
-                        loginOnboardingViewController.doneHandler = {
-                            loginOnboardingViewController.dismiss(animated: true)
-                        }
-                        
-                        loginOnboardingViewController.proceedHandler = {
-                            loginOnboardingViewController.dismiss(animated: true) {
-                                LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                                    guard let loginsVC = loginsVC else { return }
-                                    loginsVC.shownFromAppMenu = true
-                                    let navController = ThemedNavigationController(rootViewController: loginsVC)
-                                    self.present(navController, animated: true)
-                                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
-                                }
-                            }
-                        }
-                        
-                        let navController = ThemedNavigationController(rootViewController: loginOnboardingViewController)
-                        self.present(navController, animated: true)
-                        
-                        LoginOnboarding.setShown()
-                    } else {
-                        LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                            guard let loginsVC = loginsVC else { return }
-                            loginsVC.shownFromAppMenu = true
-                            let navController = ThemedNavigationController(rootViewController: loginsVC)
-                            self.present(navController, animated: true)
-                            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
-                        }
-                    }
-                } else {
-                    let navController = ThemedNavigationController(rootViewController: DevicePasscodeRequiredViewController(shownFromAppMenu: true))
-                    self.present(navController, animated: true)
-                }
-            }
-        
-        let section0 = getLibraryActions(vcDelegate: self)
-        var section1 = getOtherPanelActions(vcDelegate: self)
-        let section2 = getSettingsAction(vcDelegate: self)
-        
-        let optionalActions = [viewLogins, syncAction].compactMap { $0 }
-        if !optionalActions.isEmpty {
-            section1.append(contentsOf: optionalActions)
-        }
-        
-        if let whatsNewAction = whatsNewAction {
-            section1.append(whatsNewAction)
-        }
-        
-        actions.append(contentsOf: [section0, section1, section2])
+        var menuHelper = ToolbarMenuActionHelper(profile: profile,
+                                                 tabManager: tabManager,
+                                                 showFXAClosure: presentSignInViewController)
+        menuHelper.delegate = self
+        menuHelper.settingsDelegate = self
+
+        let actions = menuHelper.getToolbarActions(navigationController: navigationController,
+                                                   pageOptionsVC: self)
 
         presentSheetWith(actions: actions, on: self, from: button)
     }
@@ -240,3 +170,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 }
 
+extension BrowserViewController: ToolBarActionMenuDelegate {
+    func presentViewController(viewController: UIViewController) {
+        self.present(viewController, animated: true)
+    }
+
+    func updateToolbarState() {
+        updateToolbarStateForTraitCollection(view.traitCollection)
+    }
+}

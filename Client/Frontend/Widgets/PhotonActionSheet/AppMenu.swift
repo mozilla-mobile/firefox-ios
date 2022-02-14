@@ -7,8 +7,8 @@ import Account
 
 extension PhotonActionSheetProtocol {
 
-    //Returns a list of actions which is used to build a menu
-    //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
+    // Returns a list of actions which is used to build a menu
+    // OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
     func getLibraryActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         let bookmarks = PhotonActionSheetItem(title: .AppMenuBookmarks, iconString: "menu-panel-Bookmarks") { _, _ in
             let bvc = vcDelegate as? BrowserViewController
@@ -122,12 +122,11 @@ extension PhotonActionSheetProtocol {
         return items
     }
 
-    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ flowType: FxAPageType,_ referringPage: ReferringPage) -> Void) -> PhotonActionSheetItem? {
-        //profile.getAccount()?.updateProfile()
-
+    func syncMenuButton(showFxA: @escaping (FXAClosureType) -> Void) -> PhotonActionSheetItem? {
         let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
-            showFxA(fxaParams, .emailLoginFlow, .appMenu)
+            let params = FXAClosureType(fxaParams, .emailLoginFlow, .appMenu)
+            showFxA(params)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
         }
 
