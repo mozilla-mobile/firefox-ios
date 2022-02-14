@@ -99,8 +99,8 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     }()
 
     // MARK: - Lifecycle
-    override init(profile: Profile) {
-        self.clearHistoryHelper = ClearHistoryHelper(profile: profile)
+    init(profile: Profile, tabManager: TabManager) {
+        self.clearHistoryHelper = ClearHistoryHelper(profile: profile, tabManager: tabManager)
         super.init(profile: profile)
 
         [ Notification.Name.FirefoxAccountChanged,
@@ -333,6 +333,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     func onNotificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
+            groupedSites = DateGroupedTableData<Site>()
             reloadData()
 
             if profile.hasSyncableAccount() {

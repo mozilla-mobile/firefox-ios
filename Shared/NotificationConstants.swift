@@ -64,5 +64,7 @@ extension Notification.Name {
 
     public static let TabClosed = Notification.Name("TabClosed")
 
+    public static let TabsPrivacyModeChanged = Notification.Name("TabsPrivacyModeChanged")
+
     public static let OpenClearRecentHistory = Notification.Name("OpenClearRecentHistory")
 }

@@ -324,12 +324,16 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
                 tabManager.addTab(isPrivate: true)
             }
         }
+
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
             if let tab = tab {
                 self.tabManager.selectTab(tab)
             }
         }
+
+        let notificationObject = [Tab.privateModeKey: isPrivate]
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
     }
 
     /// Find the previously selected cell, which is still displayed as selected
