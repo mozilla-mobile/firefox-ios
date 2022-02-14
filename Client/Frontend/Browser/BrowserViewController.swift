@@ -150,10 +150,7 @@ class BrowserViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
-
-        let daysOfUseCounter = CumulativeDaysOfUseCounter()
-        daysOfUseCounter.updateCounter()
-        self.ratingPromptManager = RatingPromptManager(profile: profile, daysOfUseCounter: daysOfUseCounter)
+        self.ratingPromptManager = RatingPromptManager(profile: profile)
 
         super.init(nibName: nil, bundle: nil)
         didInit()

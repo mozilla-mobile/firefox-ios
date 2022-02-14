@@ -33,7 +33,7 @@ final class RatingPromptManager {
     ///   - profile: User's profile data
     ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
     init(profile: Profile,
-         daysOfUseCounter: CumulativeDaysOfUseCounter) {
+         daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter()) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
     }
@@ -46,9 +46,11 @@ final class RatingPromptManager {
         }
     }
 
-    /// Updates bookmark and pinned site data asynchronously.
+    /// Update rating prompt data. Bookmarks and pinned sites data is loaded asynchronously.
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done - Used in unit tests
     func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
+        daysOfUseCounter.updateCounter()
+
         let group = DispatchGroup()
         updateBookmarksCount(group: group)
         updateUserPinnedSitesCount(group: group)
