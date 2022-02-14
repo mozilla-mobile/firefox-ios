@@ -52,10 +52,11 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
         tableView.isScrollEnabled = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
-    lazy private var containerView: UIView = .build { view in
+    private var containerView: UIView = .build { view in
         view.layer.cornerRadius = 13
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.clear.cgColor
@@ -84,20 +85,18 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
     }
     
     private func setupConstraints() {
-        containerView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(5)
-            make.bottom.equalToSuperview().offset(-5)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
 
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(containerView).offset(10)
-            make.bottom.equalTo(containerView).offset(-10)
-            make.leading.equalTo(containerView)
-            make.trailing.equalTo(containerView)
-        }
-        
         self.bringSubviewToFront(tableView)
     }
 
@@ -279,30 +278,22 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable {
             moreButton.setImage(state?.image, for: .normal)
         }
     }
-    
-    lazy var containerView: UIView = {
-        let containerView = UIView()
-        return titleLabel
-    }()
-    
-    lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
+
+    lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         titleLabel.font = UIFont.systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
-        return titleLabel
-    }()
+
+    }
     
-    lazy var moreButton: UIButton = {
-        let button = UIButton()
+    lazy var moreButton: UIButton = .build { button in
         button.isHidden = true
-        button.setImage(state?.image, for: .normal)
+        button.setImage(self.state?.image, for: .normal)
         button.contentHorizontalAlignment = .right
-        return button
-    }()
+    }
 
     var title: String? {
         willSet(newTitle) {
@@ -329,21 +320,18 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.addSubview(titleLabel)
         contentView.addSubview(moreButton)
-        
-        moreButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.leading.equalTo(titleLabel.snp.trailing)
-            make.top.equalToSuperview().offset(12.5)
-            make.trailing.equalTo(self.safeArea.trailing).inset(28)
-        }
-        
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12.5)
-            make.leading.equalTo(self.safeArea.leading).offset(16)
-            make.centerX.equalToSuperview()
-        }
-        
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 17),
+            titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            moreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            moreButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            moreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 17),
+            moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -28),
+        ])
+
         applyTheme()
     }
 

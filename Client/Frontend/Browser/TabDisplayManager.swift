@@ -589,18 +589,21 @@ extension TabDisplayManager: InactiveTabsDelegate {
     
     // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
+        // Remove inactive tabs from tab manager
         self.tabManager.removeTabs(tabs)
         
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         self.inactiveViewModel?.updateInactiveTabs(with: self.tabManager.selectedTab, tabs: allTabs)
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
 
-        collectionView.reloadItems(at: [indexPath])
-        
-        // Only scroll if inactive tabs contain at least single tab
-        if let inactiveTabs = inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
-            collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+        // Refresh store when we have no inactive tabs in the list
+        guard let inactiveVm = self.inactiveViewModel, inactiveVm.inactiveTabs.count > 0 else {
+            refreshStore()
+            return
         }
+
+        collectionView.reloadItems(at: [indexPath])
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
     }
     
     func shouldCloseInactiveTab(tab: Tab) {

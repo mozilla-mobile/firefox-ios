@@ -12,11 +12,10 @@ struct CellWithRoundedButtonUX {
 }
 
 class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
-    var selectedView: UIView = {
-        let view = UIView()
+
+    private let selectedView: UIView = .build { view in
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
-        return view
-    }()
+    }
     
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
@@ -32,6 +31,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
         button.layer.borderColor = UIColor.clear.cgColor
         button.accessibilityIdentifier = "roundedButton"
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -56,15 +56,16 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
         contentView.addSubview(roundedButton)
         roundedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
         
-        roundedButton.snp.makeConstraints { make in
-            make.height.equalTo(50)
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-            let trailingOffSet = UIDevice.current.userInterfaceIdiom == .pad ? -100 : -23
-            let leadingOffSet = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
-            make.trailing.equalTo(contentView.snp.trailing).offset(trailingOffSet)
-            make.leading.equalTo(contentView.snp.leading).offset(leadingOffSet)
-        }
+        let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
+        let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
+
+        NSLayoutConstraint.activate([
+            roundedButton.heightAnchor.constraint(equalToConstant: 50),
+            roundedButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            roundedButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            roundedButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: trailingOffSet),
+            roundedButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -leadingOffSet),
+        ])
 
         selectedBackgroundView = selectedView
         applyTheme()
