@@ -88,13 +88,10 @@ class TabLocationView: UIView {
         return urlTextField
     }()
 
-    lazy var trackingProtectionButton: UIButton = {
-        let trackingProtectionButton = UIButton()
-        trackingProtectionButton.setImage(UIImage.templateImageNamed("lock_verified"), for: .normal)
+    // laurie - a11y identifiers
+    lazy var trackingProtectionButton: LockButton = {
+        let trackingProtectionButton = LockButton()
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
-        // Laurie - TODO: Double check color here -  //UIColor.Photon.Grey50
-        trackingProtectionButton.tintColor = UIColor.theme.browser.tint
-        trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
         trackingProtectionButton.clipsToBounds = false
         trackingProtectionButton.accessibilityIdentifier = "TabLocationView.trackingProtectionButton"
         return trackingProtectionButton
@@ -324,9 +321,8 @@ extension TabLocationView: AccessibilityActionsSource {
 extension TabLocationView: NotificationThemeable {
     func applyTheme() {
         urlTextField.textColor = UIColor.theme.textField.textAndTint
-        readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
-        readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
-        trackingProtectionButton.tintColor = UIColor.theme.browser.tint
+        readerModeButton.applyTheme()
+        trackingProtectionButton.applyTheme()
 
         let color = LegacyThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
         menuBadge.badge.tintBackground(color: color)
