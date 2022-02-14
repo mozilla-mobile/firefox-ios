@@ -5,6 +5,7 @@
 import SnapKit
 import Shared
 import Storage
+import Foundation
 
 enum TabTrayViewAction {
     case addTab
@@ -17,10 +18,14 @@ protocol TabTrayViewDelegate: UIViewController {
 }
 
 class TabTrayViewController: UIViewController {
+    
+    // MARK: - Variables
     var viewModel: TabTrayViewModel
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)?
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)?
+    var notificationCenter: NotificationCenter
     
+    // MARK: - UI Elements
     // Buttons & Menus
     lazy var deleteButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"),
@@ -136,13 +141,14 @@ class TabTrayViewController: UIViewController {
         return .lightContent
     }
 
-    // Initializers
+    // MARK: - Initializers
     init(tabTrayDelegate: TabTrayDelegate? = nil,
          profile: Profile,
          showChronTabs: Bool = false,
          tabToFocus: Tab? = nil,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager) {
-
+         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+         and notificationCenter: NotificationCenter = NotificationCenter.default) {
+        self.notificationCenter = notificationCenter
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
                                           profile: profile,
                                           showChronTabs: showChronTabs,
@@ -150,7 +156,13 @@ class TabTrayViewController: UIViewController {
                                           tabManager: tabManager)
 
         super.init(nibName: nil, bundle: nil)
-        setupNotifications()
+        
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged,
+                                       .ProfileDidStartSyncing,
+                                       .ProfileDidFinishSyncing,
+                                       .TabClosed])
+        
     }
 
     required init?(coder: NSCoder) {
@@ -158,10 +170,10 @@ class TabTrayViewController: UIViewController {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
-    // Lifecycle
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -226,13 +238,6 @@ class TabTrayViewController: UIViewController {
         }
     }
 
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .ProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .TabClosed, object: nil)
-    }
-
     fileprivate func updateTitle() {
         if let newTitle = viewModel.navTitle(for: navigationMenu.selectedSegmentIndex,
                                              foriPhone: !shouldUseiPadSetup) {
@@ -258,7 +263,7 @@ class TabTrayViewController: UIViewController {
         }
     }
 
-    fileprivate func switchBetweenLocalPanels(withPrivateMode privateMode: Bool) {
+    private func switchBetweenLocalPanels(withPrivateMode privateMode: Bool) {
         if children.first != viewModel.tabTrayView {
             hideCurrentPanel()
             showPanel(viewModel.tabTrayView)
@@ -268,7 +273,7 @@ class TabTrayViewController: UIViewController {
         updatePrivateUIState()
     }
 
-    fileprivate func showPanel(_ panel: UIViewController) {
+    private func showPanel(_ panel: UIViewController) {
         addChild(panel)
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
@@ -283,7 +288,7 @@ class TabTrayViewController: UIViewController {
         updateTitle()
     }
 
-    fileprivate func hideCurrentPanel() {
+    private func hideCurrentPanel() {
         if let panel = children.first {
             panel.willMove(toParent: nil)
             panel.beginAppearanceTransition(false, animated: true)
@@ -293,7 +298,7 @@ class TabTrayViewController: UIViewController {
         }
     }
 
-    fileprivate func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
+    private func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if shouldUseiPadSetup {
             if navigationMenu.selectedSegmentIndex == 2 {
                 navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
@@ -308,20 +313,6 @@ class TabTrayViewController: UIViewController {
                 newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : nil
             }
             setToolbarItems(newToolbarItems, animated: true)
-        }
-    }
-    
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
-            updateButtonTitle(notification)
-        case .TabClosed:
-            countLabel.text = viewModel.normalTabsCount
-            iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), forSegmentAt: 0)
-        default:
-            break
         }
     }
     
@@ -350,6 +341,24 @@ class TabTrayViewController: UIViewController {
     }
 }
 
+// MARK: - Notifiable protocol
+extension TabTrayViewController: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
+            updateButtonTitle(notification)
+        case .TabClosed:
+            countLabel.text = viewModel.normalTabsCount
+            iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), forSegmentAt: 0)
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Theme protocol
 extension TabTrayViewController: NotificationThemeable {
      @objc func applyTheme() {
          view.backgroundColor = UIColor.theme.tabTray.background
@@ -365,12 +374,14 @@ extension TabTrayViewController: NotificationThemeable {
      }
  }
 
+// MARK: - UIToolbarDelegate
 extension TabTrayViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
 }
 
+// MARK: - Adaptive & Popover Presentation Delegates
 extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
     // Returning None here, for the iPhone makes sure that the Popover is actually presented as a
     // Popover and not as a full-screen modal, which is the default on compact device classes.
@@ -408,7 +419,6 @@ extension TabTrayViewController {
 }
 
 // MARK: - RemoteTabsPanel : LibraryPanelDelegate
-
 extension TabTrayViewController: RemotePanelDelegate {
         func remotePanelDidRequestToSignIn() {
             fxaSignInOrCreateAccountHelper()

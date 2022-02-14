@@ -54,6 +54,7 @@ class ASHeaderView: UICollectionReusableView {
     static let verticalInsets: CGFloat = 4
     var sectionType: ASHeaderViewType = .normal
     private var titleLeadingConstraint: NSLayoutConstraint?
+    var notificationCenter: NotificationCenter = NotificationCenter.default
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -77,7 +78,8 @@ class ASHeaderView: UICollectionReusableView {
         titleLeadingConstraint?.isActive = true
 
         applyTheme()
-        setupObservers()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -85,23 +87,7 @@ class ASHeaderView: UICollectionReusableView {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    // MARK: - Notifications
-    private func setupObservers() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
-    }
-
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Helper functions
@@ -120,9 +106,21 @@ class ASHeaderView: UICollectionReusableView {
     }
 }
 
+// MARK: - Theme
 extension ASHeaderView: NotificationThemeable {
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         moreButton.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
+    }
+}
+
+// MARK: - Notifiable
+extension ASHeaderView: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 }

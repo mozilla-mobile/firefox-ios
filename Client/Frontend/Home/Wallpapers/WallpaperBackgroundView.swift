@@ -19,13 +19,17 @@ class WallpaperBackgroundView: UIView {
 
     // MARK: - Variables
     private var wallpaperManager = WallpaperManager()
+    var notificationCenter: NotificationCenter = NotificationCenter.default
 
     // MARK: - Initializers & Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         updateGradient()
-        setupNotifications()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged,
+                                       .WallpaperDidChange])
+
         updateImageTo(wallpaperManager.currentWallpaperImage)
     }
 
@@ -35,7 +39,7 @@ class WallpaperBackgroundView: UIView {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     private func setupView() {
@@ -54,30 +58,6 @@ class WallpaperBackgroundView: UIView {
             gradientView.bottomAnchor.constraint(equalTo: bottomAnchor),
             gradientView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
-    }
-
-    // MARK: - Notifications
-    private func setupNotifications() {
-        let refreshEvents: [Notification.Name] = [.DisplayThemeChanged,
-                                                  .WallpaperDidChange]
-        refreshEvents.forEach {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(handleNotifications),
-                                                   name: $0,
-                                                   object: nil)
-        }
-    }
-
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .WallpaperDidChange:
-            updateImageTo(wallpaperManager.currentWallpaperImage)
-            updateGradient()
-        case .DisplayThemeChanged:
-            updateGradient()
-        default:
-            break
-        }
     }
 
     // MARK: - Methods
@@ -143,5 +123,20 @@ class WallpaperBackgroundView: UIView {
         default: gradientView.alpha = 0.0
         }
 
+    }
+}
+
+// MARK: - Notifiable
+extension WallpaperBackgroundView: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .WallpaperDidChange:
+            updateImageTo(wallpaperManager.currentWallpaperImage)
+            updateGradient()
+        case .DisplayThemeChanged:
+            updateGradient()
+        default:
+            break
+        }
     }
 }

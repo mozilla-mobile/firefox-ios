@@ -164,13 +164,17 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         label.textColor = .label
     }
     
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+    
     // MARK: - Inits
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
         setupLayout()
-        setupNotifications()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
         applyTheme()
     }
     
@@ -179,7 +183,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -214,23 +218,6 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         ])
     }
     
-    // MARK: - Notifications
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
-    }
-    
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
-        }
-    }
-    
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
             itemTitle.textColor = UIColor.Photon.LightGrey10
@@ -239,4 +226,16 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         }
     }
     
+}
+
+// MARK: - Notifiable
+extension RecentlySavedCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            break
+        }
+    }
 }

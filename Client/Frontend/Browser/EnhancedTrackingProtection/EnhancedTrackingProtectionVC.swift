@@ -365,7 +365,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     @objc func connectionDetailsTapped() {
-        let detailsVC = EnhancedTrackingProtectionDetailsVC(viewModel: viewModel.getDetailsViewModel(withCachedImage: heroImage.image))
+        let detailsVC = EnhancedTrackingProtectionDetailsVC(with: viewModel.getDetailsViewModel(withCachedImage: heroImage.image))
         detailsVC.modalPresentationStyle = .pageSheet
         self.present(detailsVC, animated: true)
     }

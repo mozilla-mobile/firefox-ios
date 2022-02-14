@@ -202,6 +202,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     var tabs: [Tab]? = nil
     var selectedTab: Tab? = nil
     var searchGroupName: String = ""
+    var notificationCenter: NotificationCenter = NotificationCenter.default
    
     lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -225,7 +226,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
-        setupNotifcations()
+        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
     
     required init?(coder: NSCoder) {
@@ -236,10 +237,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         super.layoutSubviews()
         guard let flowlayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         flowlayout.invalidateLayout()
-    }
-    
-    private func setupNotifcations() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
     }
     
     func initialViewSetup() {
@@ -343,14 +340,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         delegate?.performSearchOfGroupInNewTab(searchTerm: titleLabel.text)
     }
     
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabs?.count ?? 0
     }
@@ -367,6 +356,17 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell), let tab = tabs?[indexPath.item] {
             delegate?.closeTab(tab: tab)
+        }
+    }
+}
+
+// MARK: - Notifiable
+extension GroupedTabContainerCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
         }
     }
 }

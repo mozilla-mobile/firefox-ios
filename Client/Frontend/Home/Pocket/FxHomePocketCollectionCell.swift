@@ -155,6 +155,7 @@ extension FxHomePocketCollectionCell: UICollectionViewDelegate {
 /// A cell to be placed at the last position in the Pocket section
 class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
 
+    // MARK: - UI Elements
     let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
@@ -163,13 +164,16 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
         label.textAlignment = .left
     }
 
-    // MARK: - Init
-
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+    
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
         applyTheme()
-        setupObservers()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
@@ -182,12 +186,8 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = nil
     }
 
-    private func setupObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
-    }
-
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Helpers
@@ -206,16 +206,9 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
             itemTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
-
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
 }
 
+// MARK: - Theme
 extension FxHomePocketDiscoverMoreCell: NotificationThemeable {
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
@@ -225,5 +218,16 @@ extension FxHomePocketDiscoverMoreCell: NotificationThemeable {
         }
 
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+    }
+}
+
+// MARK: - Notifiable
+extension FxHomePocketDiscoverMoreCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 }
