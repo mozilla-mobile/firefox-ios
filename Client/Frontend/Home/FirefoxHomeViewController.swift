@@ -449,6 +449,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         if let jumpbackInSection = jumpBackInViewModel.parentCollectionViewIndex?.section {
             let indexSet = IndexSet([jumpbackInSection])
             collectionView.reloadSections(indexSet)
+        } else {
+            reloadAll()
         }
     }
 
