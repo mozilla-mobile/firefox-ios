@@ -81,19 +81,6 @@ extension PhotonActionSheetProtocol {
     
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         var items: [PhotonActionSheetItem] = []
-        let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-        let imageModeTitle: String = noImageEnabled ? .AppMenuShowImageMode : .AppMenuNoImageMode
-        let iconString = noImageEnabled ? "menu-ShowImages" : "menu-NoImageMode"
-        let noImageMode = PhotonActionSheetItem(title: imageModeTitle, iconString: iconString, isEnabled: noImageEnabled) { action,_ in
-            NoImageModeHelper.toggle(isEnabled: action.isEnabled, profile: self.profile, tabManager: self.tabManager)
-            if noImageEnabled {
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesDisabled)
-            } else {
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesEnabled)
-            }
-        }
-
-        items.append(noImageMode)
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
         let nightModeTitle: String = nightModeEnabled ? .AppMenuTurnOffNightMode : .AppMenuTurnOnNightMode

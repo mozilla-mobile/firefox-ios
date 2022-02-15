@@ -1169,6 +1169,29 @@ class SiriPageSetting: Setting {
     }
 }
 
+class NoImageModeSetting: BoolSetting {
+
+    init(settings: SettingsTableViewController) {
+        let noImageEnabled = NoImageModeHelper.isActivated(settings.profile.prefs)
+        let didChange = { (isEnabled: Bool) in
+            NoImageModeHelper.toggle(isEnabled: isEnabled,
+                                     profile: settings.profile,
+                                     tabManager: settings.tabManager)
+        }
+
+        super.init(
+            prefs: settings.profile.prefs, prefKey: NoImageModePrefsKey.NoImageModeStatus, defaultValue: noImageEnabled,
+            attributedTitleText: NSAttributedString(string: .AppMenuNoImageMode),
+            attributedStatusText: nil,
+            settingDidChange: { isEnabled in
+                didChange(isEnabled)
+            }
+        )
+    }
+
+    override var accessibilityIdentifier: String? { return "NoImageMode" }
+}
+
 @available(iOS 14.0, *)
 class DefaultBrowserSetting: Setting {
     override var accessibilityIdentifier: String? { return "DefaultBrowserSettings" }
