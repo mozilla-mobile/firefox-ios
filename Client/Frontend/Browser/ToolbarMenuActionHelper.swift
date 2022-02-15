@@ -37,6 +37,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     private let buttonView: UIButton
     private let selectedTab: Tab?
     private let tabUrl: URL?
+    private let isFileURL: Bool
 
     let profile: Profile
     let tabManager: TabManager
@@ -60,9 +61,11 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
         self.selectedTab = tabManager.selectedTab
         self.tabUrl = selectedTab?.url
+        self.isFileURL = tabUrl?.isFileURL ?? false
     }
 
-    func getToolbarActions(navigationController: UINavigationController?, completion: @escaping ([[PhotonActionSheetItem]]) -> Void) {
+    func getToolbarActions(navigationController: UINavigationController?,
+                           completion: @escaping ([[PhotonActionSheetItem]]) -> Void) {
         var actions: [[PhotonActionSheetItem]] = []
         let firstMiscSection = getFirstMiscSection(navigationController)
 
@@ -74,27 +77,17 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
         } else {
 
-//            if tab.url?.isFileURL ?? false {
-//                let shareFile = PhotonActionSheetItem(title: .AppMenuSharePageTitleString, iconString: "action_share") {  _,_ in
-//                    guard let url = tab.url else { return }
-//
-//                    self.share(fileURL: url, buttonView: buttonView, presentableVC: presentableVC)
-//                }
-//
-//                return [[shareFile]]
-//            }
-
             // Actions on site page need specific data to be loaded
             updateData(dataLoadingCompletion: {
-                // TODO: laurie - PDF edge case
-
                 actions.append(contentsOf: [self.getNewTabSection(),
                                             self.getLibrarySection(),
                                             firstMiscSection,
                                             self.getSecondMiscSection(),
                                             self.getLastSection()])
 
-                completion(actions)
+                DispatchQueue.main.async {
+                    completion(actions)
+                }
             })
         }
     }
@@ -157,6 +150,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let libraryActions = getLibraryActions(vcDelegate: menuActionDelegate)
         append(to: &section, action: libraryActions)
 
+        // laurie - check for isFileURL
+
         // TODO: laurie - Double check show email adress properly
         let syncAction = syncMenuButton(showFxA: showFXAClosure)
         append(to: &section, action: syncAction)
@@ -167,7 +162,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     private func getFirstMiscSection(_ navigationController: UINavigationController?) -> [PhotonActionSheetItem] {
         var section = [PhotonActionSheetItem]()
 
-        if !isHomePage {
+        if !isHomePage && !isFileURL {
             let reportSiteIssueAction = getReportSiteIssueAction()
             append(to: &section, action: reportSiteIssueAction)
 
@@ -192,17 +187,22 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     private func getSecondMiscSection() -> [PhotonActionSheetItem] {
         var section = [PhotonActionSheetItem]()
 
-        let shortAction = getShortcutAction()
-        append(to: &section, action: shortAction)
+        if isFileURL {
+            let shareFileAction = getShareFileAction()
+            append(to: &section, action: shareFileAction)
+        } else {
+            let shortAction = getShortcutAction()
+            append(to: &section, action: shortAction)
 
-        let copyAction = getCopyAction()
-        append(to: &section, action: copyAction)
+            let copyAction = getCopyAction()
+            append(to: &section, action: copyAction)
 
-        let sendToDeviceAction = getSendToDevice()
-        append(to: &section, action: sendToDeviceAction)
+            let sendToDeviceAction = getSendToDevice()
+            append(to: &section, action: sendToDeviceAction)
 
-        let shareAction = getShareAction()
-        append(to: &section, action: shareAction)
+            let shareAction = getShareAction()
+            append(to: &section, action: shareAction)
+        }
 
         return section
     }
@@ -298,6 +298,18 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             navigationController.modalPresentationStyle = .formSheet
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
             self.delegate?.showViewController(viewController: navigationController)
+        }
+    }
+
+    private func getShareFileAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppMenuSharePageTitleString,
+                                     iconString: "action_share") { _, _ in
+
+            guard let tab = self.selectedTab,
+                    let url = tab.canonicalURL?.displayURL,
+                    let presentableVC = self.menuActionDelegate as? PresentableVC else { return }
+
+            self.share(fileURL: url, buttonView: self.buttonView, presentableVC: presentableVC)
         }
     }
 

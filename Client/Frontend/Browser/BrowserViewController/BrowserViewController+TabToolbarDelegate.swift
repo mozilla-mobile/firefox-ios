@@ -88,9 +88,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         menuHelper.menuActionDelegate = self
 
         menuHelper.getToolbarActions(navigationController: navigationController, completion: { actions in
-            DispatchQueue.main.async {
-                self.presentSheetWith(actions: actions, on: self, from: button)
-            }
+            self.presentSheetWith(actions: actions, on: self, from: button)
         })
     }
 
