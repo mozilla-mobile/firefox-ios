@@ -9,7 +9,8 @@ let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
 let urlValueLong = "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
 
-let urlExample = path(forTestPage: "test-example.html")
+// let urlExample = path(forTestPage: "test-example.html")
+let urlExample = "www.example.com"
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
 let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.html"
@@ -23,7 +24,8 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+//        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL("www.mozilla.org")
         waitUntilPageLoad()
         waitForTabsButton()
         // The tabs counter shows the correct number
@@ -37,6 +39,7 @@ class TopTabsTest: BaseTestCase {
         } else {
             navigator.goto(TabTray)
         }
+        print(app.debugDescription)
         waitForExistence(app.cells.staticTexts[urlLabel], timeout: 5)
     }
 
@@ -121,7 +124,8 @@ class TopTabsTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+//        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -376,18 +380,22 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
-        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.openURL("www.example.com")
+        navigator.nowAt(BrowserTab)
+//        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.goto(URLBarOpen)
         navigator.back()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
+//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
-        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.openURL("www.example.com")
+        navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
         navigator.goto(URLBarOpen)
@@ -419,7 +427,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitForExistence(app.buttons["Show Tabs"])
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
-
 
         // Go to Private mode and do the same
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)

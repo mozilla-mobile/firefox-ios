@@ -94,10 +94,12 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
     func testChangeModeInSameTab() {
         if skipPlatform { return }
 
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+//        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-user-agent.html")
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        navigator.nowAt(BrowserTab)
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables["Context Menu"].cells["menu-RequestDesktopSite"])
         navigator.goto(RequestDesktopSite)

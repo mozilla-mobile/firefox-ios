@@ -7,8 +7,10 @@ import XCTest
 class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testLoadReaderContent() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+//        userState.url = path(forTestPage: "test-mozilla-book.html")
+//        navigator.goto(BrowserTab)
+        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
+        navigator.nowAt(BrowserTab)
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         waitForExistence(app.buttons["Reader View"], timeout: 5)
         app.buttons["Reader View"].tap()
@@ -25,8 +27,10 @@ class ReaderViewTest: BaseTestCase {
     
     private func addContentToReaderView() {
         updateScreenGraph()
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+//        userState.url = path(forTestPage: "test-mozilla-book.html")
+//        navigator.goto(BrowserTab)
+        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
+        navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
         waitForExistence(app.buttons["Reader View"], timeout: 5)
         app.buttons["Reader View"].tap()

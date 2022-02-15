@@ -314,10 +314,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(URLBarLongPressMenu) { screenState in
         let menu = app.tables["Context Menu"].firstMatch
 
-        screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
-            UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.cells["menu-PasteAndGo"].firstMatch.tap()
-        }
+//        screenState.gesture(forAction: Action.LoadURL) { userState in
+//            UIPasteboard.general.string = userState.url ?? defaultURL
+//            menu.cells["menu-PasteAndGo"].firstMatch.tap()
+//        }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
@@ -366,10 +366,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             let url = userState.url ?? defaultURL
             // Workaround BB iOS13 be sure tap happens on url bar
             app.textFields.firstMatch.tap()
-            app.textFields.firstMatch.tap()
+//            app.textFields.firstMatch.tap()
             app.textFields.firstMatch.typeText(url)
             app.textFields.firstMatch.typeText("\r")
         }
+        
+//        screenState.gesture(forAction: Action.LoadURLByPasting) { userState in
+//            let url = userState.url ?? defaultURL
+//            // Workaround BB iOS13 be sure tap happens on url bar
+//            app.textFields.firstMatch.tap()
+//            app.textFields.firstMatch.press(forDuration: 1)
+//            app/*@START_MENU_TOKEN@*/.staticTexts["Paste & Go"]/*[[".menus",".menuItems[\"Paste & Go\"].staticTexts[\"Paste & Go\"]",".staticTexts[\"Paste & Go\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+//        }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
             let url = userState.url ?? defaultURL
@@ -809,10 +817,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.textFields["url"], to: URLBarOpen)
-        screenState.gesture(to: URLBarLongPressMenu) {
-            sleep(1)
-            app.textFields["url"].press(forDuration: 1.0)
-        }
+//        screenState.gesture(to: URLBarLongPressMenu) {
+//            sleep(1)
+//            app.textFields["url"].press(forDuration: 1.0)
+//        }
     }
 
     func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
@@ -977,7 +985,7 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
-        performAction(Action.LoadURL)
+        performAction(Action.LoadURLByTyping)
     }
 
     // Opens a URL in a new tab.

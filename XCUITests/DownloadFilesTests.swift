@@ -14,14 +14,14 @@ class DownloadFilesTests: BaseTestCase {
         waitForExistence(app.tables["DownloadsTable"])
 
         let list = app.tables["DownloadsTable"].cells.count
-        if list != 0 {
-            for _ in 0...list-1 {
-                waitForExistence(app.tables["DownloadsTable"].cells.element(boundBy: 0))
-                app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
-                waitForExistence(app.tables.cells.buttons["Delete"])
-                app.tables.cells.buttons["Delete"].tap()
-            }
-        }
+//        if list != 0 {
+//            for _ in 0...list-1 {
+//                waitForExistence(app.tables["DownloadsTable"].cells.element(boundBy: 0))
+//                app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
+//                waitForExistence(app.tables.cells.buttons["Delete"])
+//                app.tables.cells.buttons["Delete"].tap()
+//            }
+//        }
     }
 
     private func deleteItem(itemName: String) {
@@ -189,6 +189,7 @@ class DownloadFilesTests: BaseTestCase {
         waitForExistence(app.buttons["Downloads"])
         app.buttons["Downloads"].tap()
         waitForExistence(app.tables["DownloadsTable"], timeout: 3)
-        checkTheNumberOfDownloadedItems(items: 1)
+//        checkTheNumberOfDownloadedItems(items: 1)
+        checkTheNumberOfDownloadedItems(items: 2)
     }
 }

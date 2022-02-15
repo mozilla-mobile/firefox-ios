@@ -8,7 +8,8 @@ let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not pr
 let website_2 = ["url": "www.example.com", "label": "Example", "value": "example", "link": "More information...", "moreLinkLongPressUrl": "http://www.iana.org/domains/example", "moreLinkLongPressInfo": "iana"]
 let urlAddons = "addons.mozilla.org"
 let urlGoogle = "www.google.com"
-let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
+//let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
+let popUpTestUrl = "https://storage.googleapis.com/mobile_test_assets/test_app/test-popup-blocker.html"
 
 let requestMobileSiteLabel = "Request Mobile Site"
 let requestDesktopSiteLabel = "Request Desktop Site"
@@ -165,7 +166,8 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testLongPressLinkOptions() {
-        navigator.openURL(path(forTestPage: "test-example.html"))
+//        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-example.html")
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitForExistence(app.otherElements.collectionViews.element(boundBy: 0), timeout: 5)
