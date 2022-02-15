@@ -142,9 +142,9 @@ struct WallpaperDataManager {
             from: DateComponents(year: 2022, month: 5, day:1))
         let projectHouse = WallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "trRed",
-                                             accessibilityID: "Turning Red, panda, button"),
+                                             accessibilityID: "Turning Red wallpaper, giant red panda, button"),
                                  WallpaperID(name: "trGroup",
-                                             accessibilityID: "Turning Red, group shot, button")],
+                                             accessibilityID: "Turning Red wallpaper, Mei and friends, button")],
             ofType: .themed(type: .projectHouse),
             expiringOn: houseExpiryDate,
             limitedToLocales: ["en_US", "es_US"])
