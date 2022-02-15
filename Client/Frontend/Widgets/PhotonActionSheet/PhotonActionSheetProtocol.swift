@@ -27,7 +27,13 @@ extension PhotonActionSheetProtocol {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
             popoverVC.sourceRect = view.bounds
-            popoverVC.permittedArrowDirections = .any
+
+            // Arrow is only there on ipad
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                popoverVC.permittedArrowDirections = .any
+            } else {
+                popoverVC.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0)
+            }
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
@@ -39,7 +45,7 @@ extension PhotonActionSheetProtocol {
     }
 
     func fetchPinnedTopSiteStatus(for url: String) -> Deferred<Maybe<Bool>> {
-        return self.profile.history.isPinnedTopSite(url)
+        return profile.history.isPinnedTopSite(url)
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonActionSheetItem] {
@@ -54,7 +60,7 @@ extension PhotonActionSheetProtocol {
             }
         }
         let copyAddressAction = PhotonActionSheetItem(title: .CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
-            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
+            if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: webViewContainer)
