@@ -120,7 +120,7 @@ class WallpaperBackgroundView: UIView {
         switch wallpaperManager.currentWallpaper.type {
         // No gradient exists for default wallpaper OR firefox default wallpapers.
         case .themed(type: .projectHouse),
-                .themed(type: .firefoxOverlay),
+                .themed(type: .firefoxOverlay):
             gradientView.alpha = 1.0
         case .themed(type: .firefox),
                 .defaultBackground:
