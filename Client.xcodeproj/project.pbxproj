@@ -590,8 +590,6 @@
 		C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */; };
 		C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */; };
 		C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
-		C8FB0C75232151BA00031088 /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FB0C74232151BA00031088 /* AppMenu.swift */; };
-		C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FB0C772321523D00031088 /* PageActionMenu.swift */; };
 		CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */; };
 		CA24B52224ABD7D40093848C /* LoginsListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B52024ABD7D40093848C /* LoginsListViewModelTests.swift */; };
 		CA24B53924ABFE250093848C /* LoginsListSelectionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */; };
@@ -3361,8 +3359,6 @@
 		C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDelegateTests.swift; sourceTree = "<group>"; };
 		C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+WebViewDelegates.swift"; sourceTree = "<group>"; };
 		C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+KeyCommands.swift"; sourceTree = "<group>"; };
-		C8FB0C74232151BA00031088 /* AppMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
-		C8FB0C772321523D00031088 /* PageActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageActionMenu.swift; sourceTree = "<group>"; };
 		C93C44278F08256D907675AD /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Shared.strings; sourceTree = "<group>"; };
 		C98040278E99754277805D46 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C98D4AEF8E1B448DC20495E5 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -6372,8 +6368,6 @@
 				D88FDA9E1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift */,
 				D88FDAAE1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift */,
 				EBA3B2CF2268F40C00728BDB /* SyncMenuButton.swift */,
-				C8FB0C74232151BA00031088 /* AppMenu.swift */,
-				C8FB0C772321523D00031088 /* PageActionMenu.swift */,
 			);
 			path = PhotonActionSheet;
 			sourceTree = "<group>";
@@ -8645,7 +8639,6 @@
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
-				C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				D5D052EF2645ACBF00759F85 /* View.swift in Sources */,
@@ -8806,7 +8799,6 @@
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginDetailTableViewCell.swift in Sources */,
 				66CE54A820FCF6CF00CC310B /* WebsiteDataManagementViewController.swift in Sources */,
-				C8FB0C75232151BA00031088 /* AppMenu.swift in Sources */,
 				C8044BD627B96A4E00CEE7AD /* Notifiable.swift in Sources */,
 				C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */,
 				3BB50E201D627539004B33DF /* FirefoxHomeViewController.swift in Sources */,
