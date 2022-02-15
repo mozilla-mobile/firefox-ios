@@ -32,12 +32,12 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
 
     func getToolbarActions(navigationController: UINavigationController?) -> [[PhotonActionSheetItem]] {
         var actions: [[PhotonActionSheetItem]] = []
-        let librarySection = getLibrarySection()
+
         if isHomePage {
-            actions.append(contentsOf: [librarySection, getLastSection()])
+            actions.append(contentsOf: [getLibrarySection(), getLastSection()])
         } else {
-            // todo; laurie - new tab section
-            actions.append(contentsOf: [librarySection,
+            actions.append(contentsOf: [getNewTabSection(),
+                                        getLibrarySection(),
                                         getFirstMiscSection(navigationController),
                                         getSecondMiscSection(),
                                         getLastSection()])
@@ -47,6 +47,23 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
     }
 
     // MARK: - Private
+
+    // TODO: laurie - Abstract BVC from logic here - no as? BrowserViewController
+
+    private func getNewTabSection() -> [PhotonActionSheetItem] {
+        var section = [PhotonActionSheetItem]()
+
+        let newTabAction = PhotonActionSheetItem(title: .KeyboardShortcuts.NewTab,
+                                                 iconString: "quick_action_new_tab",
+                                                 isEnabled: true) { _, _ in
+            guard let bvc = menuActionDelegate as? BrowserViewController else { return }
+            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            bvc.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
+        }
+        append(to: &section, action: newTabAction)
+
+        return section
+    }
 
     private func getLibrarySection() -> [PhotonActionSheetItem] {
         var section = [PhotonActionSheetItem]()
@@ -91,16 +108,14 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
     private func getLastSection() -> [PhotonActionSheetItem] {
         var section = [PhotonActionSheetItem]()
 
-        if isHomePage {
-            let whatsNewAction = getWhatsNewAction()
-            append(to: &section, action: whatsNewAction)
+        let whatsNewAction = getWhatsNewAction()
+        append(to: &section, action: whatsNewAction)
 
-            let helpAction = getHelpAction()
-            section.append(helpAction)
+        let helpAction = getHelpAction()
+        section.append(helpAction)
 
-            let customizeHomePageAction = getCustomizeHomePageAction()
-            append(to: &section, action: customizeHomePageAction)
-        }
+        let customizeHomePageAction = getCustomizeHomePageAction()
+        append(to: &section, action: customizeHomePageAction)
 
         let settingsAction = getSettingsAction(vcDelegate: menuActionDelegate)
         section.append(settingsAction)
@@ -111,7 +126,7 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
     private func getHelpAction() -> PhotonActionSheetItem {
         return PhotonActionSheetItem(title: .AppSettingsHelp,
                                      iconString: "help",
-                                     isEnabled: true) { _, _ in
+                                     isEnabled: isHomePage) { _, _ in
 
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
@@ -124,7 +139,7 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
 
         return PhotonActionSheetItem(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
                                      iconString: "edit",
-                                     isEnabled: true) { _, _ in
+                                     isEnabled: isHomePage) { _, _ in
 
             bvc.homePanelDidRequestToCustomizeHomeSettings()
         }
@@ -132,7 +147,7 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
 
     private func getWhatsNewAction() -> PhotonActionSheetItem? {
         var whatsNewAction: PhotonActionSheetItem?
-        let showBadgeForWhatsNew = shouldShowWhatsNew()
+        let showBadgeForWhatsNew = shouldShowWhatsNew() && isHomePage
         if showBadgeForWhatsNew {
             // Set the version number of the app, so the What's new will stop showing
             profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
