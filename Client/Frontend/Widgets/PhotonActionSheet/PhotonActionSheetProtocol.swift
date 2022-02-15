@@ -40,6 +40,7 @@ extension PhotonActionSheetProtocol {
 
     typealias MenuActionsDelegate = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
 
+    // laurie - clean up
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
         return profile.places.isBookmarked(url: url)
     }

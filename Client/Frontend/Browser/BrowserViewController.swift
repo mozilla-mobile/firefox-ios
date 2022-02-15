@@ -1412,6 +1412,18 @@ class BrowserViewController: UIViewController {
             }
         }
     }
+
+    func showCustomizeHomeSettings() {
+        let settingsTableViewController = AppSettingsTableViewController()
+        settingsTableViewController.profile = self.profile
+        settingsTableViewController.tabManager = self.tabManager
+        settingsTableViewController.settingsDelegate = self
+        settingsTableViewController.deeplinkTo = .customizeHomepage
+
+        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+        controller.presentingModalViewControllerDelegate = self
+        self.present(controller, animated: true, completion: nil)
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
@@ -1646,6 +1658,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     }
 }
 
+// MARK: - RecentlyClosedPanelDelegate
 extension BrowserViewController: RecentlyClosedPanelDelegate {
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
         tabTrayOpenRecentlyClosedTab(url)
@@ -1657,6 +1670,7 @@ extension BrowserViewController: RecentlyClosedPanelDelegate {
     }
 }
 
+// MARK: HomePanelDelegate
 extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
         showLibrary(panel: panel)
@@ -1706,26 +1720,19 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToCustomizeHomeSettings() {
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = self.profile
-        settingsTableViewController.tabManager = self.tabManager
-        settingsTableViewController.settingsDelegate = self
-        settingsTableViewController.deeplinkTo = .customizeHomepage
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.presentingModalViewControllerDelegate = self
-        self.present(controller, animated: true, completion: nil)
+        showCustomizeHomeSettings()
     }
 
     func homePanelDidPresentContextualHint(type: ContextualHintViewType) {
-        self.urlBar.locationTextField?.resignFirstResponder()
+        urlBar.locationTextField?.resignFirstResponder()
     }
 
     func homePanelDidDismissContextualHint(type: ContextualHintViewType) {
-        self.urlBar.locationTextField?.becomeFirstResponder()
+        urlBar.locationTextField?.becomeFirstResponder()
     }
 }
 
+// MARK: - SearchViewController
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
