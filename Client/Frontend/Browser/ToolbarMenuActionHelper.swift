@@ -9,10 +9,12 @@ import Storage
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
+    func addBookmark(url: String, title: String?, favicon: Favicon?)
 
     func openURLInNewTab(_ url: URL?, isPrivate: Bool)
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool, searchFor searchText: String?)
 
+    func showLibrary(panel: LibraryPanelType?)
     func showViewController(viewController: UIViewController)
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?)
     func showMenuPresenter(url: URL, tab: Tab, view: UIView)
@@ -147,10 +149,20 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getLibrarySection() -> [PhotonActionSheetItem] {
         var section = [PhotonActionSheetItem]()
-        let libraryActions = getLibraryActions(vcDelegate: menuActionDelegate)
-        append(to: &section, action: libraryActions)
 
-        // laurie - check for isFileURL
+        if !isFileURL {
+            let bookmarkSection = getBookmarkSection()
+            append(to: &section, action: bookmarkSection)
+
+            let historySection = getHistoryLibraryAction()
+            append(to: &section, action: historySection)
+
+            let downloadSection = getDownloadsLibraryAction()
+            append(to: &section, action: downloadSection)
+
+            let readingListSection = getReadingListSection()
+            append(to: &section, action: readingListSection)
+        }
 
         // TODO: laurie - Double check show email adress properly
         let syncAction = syncMenuButton(showFxA: showFXAClosure)
@@ -163,9 +175,6 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         var section = [PhotonActionSheetItem]()
 
         if !isHomePage && !isFileURL {
-            let reportSiteIssueAction = getReportSiteIssueAction()
-            append(to: &section, action: reportSiteIssueAction)
-
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)
 
@@ -179,6 +188,11 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         if let navigationController = navigationController {
             let passwordsAction = getPasswordAction(navigationController: navigationController)
             append(to: &section, action: passwordsAction)
+        }
+
+        if !isHomePage && !isFileURL {
+            let reportSiteIssueAction = getReportSiteIssueAction()
+            append(to: &section, action: reportSiteIssueAction)
         }
 
         return section
@@ -228,6 +242,19 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     // MARK: - Actions
+
+    private func getHistoryLibraryAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppMenuHistory,
+                                     iconString: "menu-panel-History") { _, _ in
+            self.delegate?.showLibrary(panel: .history)
+        }
+    }
+
+    private func getDownloadsLibraryAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppMenuDownloads, iconString: "menu-panel-Downloads") { _, _ in
+            self.delegate?.showLibrary(panel: .downloads)
+        }
+    }
 
     private func getFindInPageAction() -> PhotonActionSheetItem {
         return PhotonActionSheetItem(title: .AppMenuFindInPageTitleString,
@@ -301,6 +328,67 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
+    private func getReportSiteIssueAction() -> PhotonActionSheetItem? {
+        guard featureFlags.isFeatureActiveForBuild(.reportSiteIssue) else { return nil }
+        return PhotonActionSheetItem(title: .AppMenuReportSiteIssueTitleString,
+                                     iconString: "menu-reportSiteIssue") { _, _ in
+            guard let tabURL = self.tabManager.selectedTab?.url?.absoluteString else { return }
+            self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
+        }
+    }
+
+    private func getHelpAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppSettingsHelp,
+                                     iconString: "help") { _, _ in
+
+            if let url = URL(string: "https://support.mozilla.org/products/ios") {
+                self.delegate?.openURLInNewTab(url, isPrivate: false)
+            }
+        }
+    }
+
+    private func getCustomizeHomePageAction() -> PhotonActionSheetItem? {
+        return PhotonActionSheetItem(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
+                                     iconString: "edit") { _, _ in
+            self.delegate?.showCustomizeHomePage()
+        }
+    }
+
+    // MARK: Whats New
+
+    private func getWhatsNewAction() -> PhotonActionSheetItem? {
+        var whatsNewAction: PhotonActionSheetItem?
+        let showBadgeForWhatsNew = shouldShowWhatsNew()
+        if showBadgeForWhatsNew {
+            // Set the version number of the app, so the What's new will stop showing
+            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+
+            // Redraw the toolbar so the badge hides from the appMenu button.
+            delegate?.updateToolbarState()
+        }
+
+        whatsNewAction = PhotonActionSheetItem(title: .WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
+            if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
+                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
+                self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
+            }
+        }
+        return whatsNewAction
+    }
+
+    // If we do not have the LatestAppVersionProfileKey in the profile, that means that this is a fresh install and we
+    // do not show the What's New. If we do have that value, we compare it to the major version of the running app.
+    // If it is different then this is an upgrade, downgrades are not possible, so we can show the What's New page.
+    private func shouldShowWhatsNew() -> Bool {
+        guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
+            return false // Clean install, never show What's New
+        }
+
+        return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
+    }
+
+    // MARK: Share
+
     private func getShareFileAction() -> PhotonActionSheetItem {
         return PhotonActionSheetItem(title: .AppMenuSharePageTitleString,
                                      iconString: "action_share") { _, _ in
@@ -351,14 +439,101 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         presentableVC.present(controller, animated: true, completion: nil)
     }
 
-    private func getReportSiteIssueAction() -> PhotonActionSheetItem? {
-        guard featureFlags.isFeatureActiveForBuild(.reportSiteIssue) else { return nil }
-        return PhotonActionSheetItem(title: .AppMenuReportSiteIssueTitleString,
-                                     iconString: "menu-reportSiteIssue") { _, _ in
-            guard let tabURL = self.tabManager.selectedTab?.url?.absoluteString else { return }
-            self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
+    // MARK: Reading list
+
+    private func getReadingListSection() -> [PhotonActionSheetItem] {
+        var section = [PhotonActionSheetItem]()
+
+        let libraryAction = getReadingListLibraryAction()
+        section.append(libraryAction)
+
+        if !isHomePage {
+            let readingListAction = getAddReadingListAction()
+            section.append(readingListAction)
+        }
+
+        return section
+    }
+
+    private func getReadingListLibraryAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppMenuReadingList,
+                                                iconString: "menu-panel-ReadingList") { _, _ in
+            self.delegate?.showLibrary(panel: .readingList)
         }
     }
+
+    private func getAddReadingListAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppMenuAddToReadingListTitleString,
+                                     iconString: "addToReadingList") { _, _ in
+
+            guard let tab = self.selectedTab,
+                  let url = self.tabUrl?.displayURL else { return }
+
+            self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
+            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
+            self.delegate?.showToast(message: .AppMenuAddToReadingListConfirmMessage, toastAction: .addToReadingList, url: nil)
+        }
+    }
+
+    // MARK: Bookmark
+
+    private func getBookmarkSection() -> [PhotonActionSheetItem] {
+        var section = [PhotonActionSheetItem]()
+
+        let libraryAction = getBookmarkLibraryAction()
+        section.append(libraryAction)
+
+        if !isHomePage {
+            let bookmarkAction = getBookmarkAction()
+            section.append(bookmarkAction)
+        }
+
+        return section
+    }
+
+    private func getBookmarkLibraryAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppMenuBookmarks,
+                                     iconString: "menu-panel-Bookmarks") { _, _ in
+            self.delegate?.showLibrary(panel: .bookmarks)
+        }
+    }
+
+    private func getBookmarkAction() -> PhotonActionSheetItem {
+        let addBookmarkAction = getAddBookmarkAction()
+        let removeBookmarkAction = getRemoveBookmarkAction()
+
+        let isBookmarked = isBookmarked ?? false
+        return isBookmarked ? removeBookmarkAction : addBookmarkAction
+    }
+
+    private func getAddBookmarkAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppMenuAddBookmarkTitleString2,
+                                     iconString: "menu-Bookmark") { _, _ in
+
+            guard let tab = self.selectedTab,
+                  let url = tab.canonicalURL?.displayURL else { return }
+
+            self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
+            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
+        }
+    }
+
+    private func getRemoveBookmarkAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppMenuRemoveBookmarkTitleString,
+                                     iconString: "menu-Bookmark-Remove") { _, _ in
+
+            guard let url = self.tabUrl?.displayURL else { return }
+
+            self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
+                guard result.isSuccess else { return }
+                self.delegate?.showToast(message: .AppMenuRemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url.absoluteString)
+            }
+
+            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
+        }
+    }
+
+    // MARK: Shortcut
 
     private func getShortcutAction() -> PhotonActionSheetItem {
         let addShortcutAction = getAddShortcutAction()
@@ -406,42 +581,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
-    private func getHelpAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppSettingsHelp,
-                                     iconString: "help") { _, _ in
-
-            if let url = URL(string: "https://support.mozilla.org/products/ios") {
-                self.delegate?.openURLInNewTab(url, isPrivate: false)
-            }
-        }
-    }
-
-    private func getCustomizeHomePageAction() -> PhotonActionSheetItem? {
-        return PhotonActionSheetItem(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
-                                     iconString: "edit") { _, _ in
-            self.delegate?.showCustomizeHomePage()
-        }
-    }
-
-    private func getWhatsNewAction() -> PhotonActionSheetItem? {
-        var whatsNewAction: PhotonActionSheetItem?
-        let showBadgeForWhatsNew = shouldShowWhatsNew()
-        if showBadgeForWhatsNew {
-            // Set the version number of the app, so the What's new will stop showing
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-
-            // Redraw the toolbar so the badge hides from the appMenu button.
-            delegate?.updateToolbarState()
-        }
-
-        whatsNewAction = PhotonActionSheetItem(title: .WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
-            if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
-                self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
-            }
-        }
-        return whatsNewAction
-    }
+    // MARK: Password
 
     typealias NavigationHandlerType = ((_ url: URL?) -> Void)
     private func getPasswordAction(navigationController: UINavigationController?) -> PhotonActionSheetItem? {
@@ -509,17 +649,6 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         delegate?.showViewController(viewController: navController)
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
-    }
-
-    // If we do not have the LatestAppVersionProfileKey in the profile, that means that this is a fresh install and we
-    // do not show the What's New. If we do have that value, we compare it to the major version of the running app.
-    // If it is different then this is an upgrade, downgrades are not possible, so we can show the What's New page.
-    private func shouldShowWhatsNew() -> Bool {
-        guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
-            return false // Clean install, never show What's New
-        }
-
-        return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
     }
 
     // MARK: - Conveniance

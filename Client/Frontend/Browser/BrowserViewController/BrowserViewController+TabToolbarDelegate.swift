@@ -179,7 +179,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showViewController(viewController: UIViewController) {
-        self.present(viewController, animated: true)
+        present(viewController, animated: true)
     }
 
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?) {
@@ -188,14 +188,14 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             let toast = ButtonToast(labelText: message, buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
                 isButtonTapped ? self.addBookmark(url: url ?? "") : nil
             }
-            self.show(toast: toast)
+            show(toast: toast)
         default:
-            SimpleToast().showAlertWithText(message, bottomContainer: self.webViewContainer)
+            SimpleToast().showAlertWithText(message, bottomContainer: webViewContainer)
         }
     }
 
     func showMenuPresenter(url: URL, tab: Tab, view: UIView) {
-        self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
+        presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
     }
 
     func showFindInPage() {
