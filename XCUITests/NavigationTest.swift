@@ -328,6 +328,7 @@ class NavigationTest: BaseTestCase {
 
         // Check that there are no pop ups
         navigator.openURL(popUpTestUrl)
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "blocker.html")
         waitForExistence(app.webViews.staticTexts["Blocked Element"])
 
