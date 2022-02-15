@@ -12,6 +12,9 @@ class ReaderModeButton: UIButton {
         super.init(frame: frame)
         adjustsImageWhenHighlighted = false
         setImage(UIImage.templateImageNamed("reader"), for: .normal)
+        imageView?.contentMode = .scaleAspectFit
+        contentHorizontalAlignment = .left
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -66,7 +69,7 @@ class ReaderModeButton: UIButton {
 
 extension ReaderModeButton: NotificationThemeable {
     func applyTheme() {
-        readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
-        readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
+        selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
+        unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
     }
 }

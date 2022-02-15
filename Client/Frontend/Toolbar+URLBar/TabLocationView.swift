@@ -103,8 +103,6 @@ class TabLocationView: UIView {
         readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReaderModeButton)))
         readerModeButton.isAccessibilityElement = true
         readerModeButton.isHidden = true
-        readerModeButton.imageView?.contentMode = .scaleAspectFit
-        readerModeButton.contentHorizontalAlignment = .left
         readerModeButton.accessibilityLabel = .TabLocationReaderModeAccessibilityLabel
         readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
         readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: .TabLocationReaderModeAddToReadingListAccessibilityLabel, target: self, selector: #selector(readerModeCustomAction))]
