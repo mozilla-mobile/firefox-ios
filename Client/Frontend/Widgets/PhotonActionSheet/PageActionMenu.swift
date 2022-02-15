@@ -16,6 +16,8 @@ enum ButtonToastAction {
 }
 
 extension PhotonActionSheetProtocol where Self: FeatureFlagsProtocol {
+
+    // laurie - clean up this
     fileprivate func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
         let helper = ShareExtensionHelper(url: fileURL, tab: tabManager.selectedTab)
         let controller = helper.createActivityViewController { completed, activityType in
@@ -31,6 +33,7 @@ extension PhotonActionSheetProtocol where Self: FeatureFlagsProtocol {
         presentableVC.present(controller, animated: true, completion: nil)
     }
 
+    // laurie - clean up this
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage: @escaping () -> Void,
