@@ -289,3 +289,25 @@ preferences:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2022-10-01"
+
+browser_menu:
+  browser_menu_action:
+    type: event
+    description: The user has tapped on a browser menu item.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3004
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3015
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-02"
+    extra_keys:
+      item:
+        description: |
+          A string containing the name of the item the user tapped:
+          settings, open_in_firefox, open_in_chrome, open_in_default_browser,
+          share, copy_url, desktop_view_off, desktop_view_on, find_in_page,
+          add_to_shortcuts, remove_from_shortcuts
+        type: string
