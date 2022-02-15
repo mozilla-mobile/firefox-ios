@@ -14,8 +14,11 @@ class TrackingProtectionTests: BaseTestCase {
 
     // Smoketest
     func testTrackingProtection() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+//        navigator.goto(URLBarOpen)
+//        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(TrackingProtectionSettings)
 
         // Make sure ETP is enabled by default
@@ -25,22 +28,33 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
-        navigator.goto(BrowserTab)
+        app.buttons["Settings"].tap()
+        app.buttons["Done"].tap()
+        navigator.nowAt(NewTabScreen)
+        app.textFields.firstMatch.tap()
+        navigator.nowAt(URLBarOpen)
+//        navigator.goto(BrowserTab)
+        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
+        sleep(2)
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 80)
         waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
-        navigator.goto(BrowserTab)
+        navigator.nowAt(BrowserTab)
+//        navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(BrowserTab)
+//        navigator.goto(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 70)
         waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
+        navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)

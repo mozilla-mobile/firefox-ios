@@ -48,7 +48,7 @@ class PhotonActionSheetTest: BaseTestCase {
 //        navigator.goto(BrowserTab)
         navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 20)
         let pageObjectButton = app.buttons["TabLocationView.pageOptionsButton"]
         // Fix to bug 1467393, url bar long press is shown sometimes instead of the share menu
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
@@ -95,11 +95,12 @@ class PhotonActionSheetTest: BaseTestCase {
     }*/
 
     private func openNewShareSheet() {
+        navigator.nowAt(URLBarOpen)
         navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-example.html")
-        waitUntilPageLoad()
+        sleep(5)
+        waitForTabsButton()
         navigator.nowAt(BrowserTab)
         waitForNoExistence(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
-        sleep(1)
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 5)
         app.tables["Context Menu"].staticTexts["Share"].tap()

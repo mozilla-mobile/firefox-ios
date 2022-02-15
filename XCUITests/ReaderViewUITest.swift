@@ -12,7 +12,7 @@ class ReaderViewTest: BaseTestCase {
         navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
         navigator.nowAt(BrowserTab)
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        waitForExistence(app.buttons["Reader View"], timeout: 5)
+        waitForExistence(app.buttons["Reader View"], timeout: 45)
         app.buttons["Reader View"].tap()
         // The settings of reader view are shown as well as the content of the web site
         waitForExistence(app.buttons["Display Settings"], timeout: 5)
@@ -32,8 +32,7 @@ class ReaderViewTest: BaseTestCase {
         navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
         navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
-        sleep(1)
-        waitForExistence(app.buttons["Reader View"], timeout: 15)
+        waitForExistence(app.buttons["Reader View"], timeout: 35)
         app.buttons["Reader View"].tap()
         waitUntilPageLoad()
         waitForExistence(app.buttons["Add to Reading List"])

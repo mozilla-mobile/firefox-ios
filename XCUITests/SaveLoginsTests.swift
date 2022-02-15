@@ -33,7 +33,7 @@ class SaveLoginTest: BaseTestCase {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
 
-        waitForExistence(app.buttons["submit"], timeout: 3)
+        waitForExistence(app.buttons["submit"], timeout: 50)
 //        app.textFields.element(boundBy:1).tap()
 //        app.textFields.element(boundBy: 1).typeText("username1")
 //        app.secureTextFields.firstMatch.tap()
@@ -198,7 +198,7 @@ class SaveLoginTest: BaseTestCase {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         // Provided text fields are completely empty
-        waitForExistence(app.webViews.staticTexts["Username:"])
+        waitForExistence(app.webViews.staticTexts["Username:"], timeout: 50)
         
         // Fill in the username text box
         app.webViews.textFields.element(boundBy: 0).tap()
@@ -224,7 +224,7 @@ class SaveLoginTest: BaseTestCase {
         }
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
-        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)
+        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 60)
         let emailValue = app.webViews.textFields.element(boundBy: 0).value!
         XCTAssertEqual(emailValue as! String, mailLogin)
         let passwordValue = app.webViews.secureTextFields.element(boundBy: 0).value!
