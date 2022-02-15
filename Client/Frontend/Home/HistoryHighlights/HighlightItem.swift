@@ -12,7 +12,7 @@ enum HighlightItemType {
 protocol HighlightItem {
     var displayTitle: String { get }
     var description: String? { get }
-    var url2: URL? { get }
+    var siteUrl: URL? { get }
     var type: HighlightItemType { get }
 }
 
@@ -26,11 +26,10 @@ extension ASGroup: HighlightItem {
     }
 
     var description: String? {
-        // TODO: YRD check what to do for the string "sites"
-        return "\(groupedItems.count) sites"
+        return "\(groupedItems.count)"
     }
 
-    var url2: URL? {
+    var siteUrl: URL? {
         return nil
     }
 }
@@ -48,7 +47,7 @@ extension HistoryHighlight: HighlightItem {
         return nil
     }
 
-    var url2: URL? {
+    var siteUrl: URL? {
         return URL(string: url)
     }
 }

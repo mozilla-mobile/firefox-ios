@@ -761,7 +761,7 @@ extension FirefoxHomeViewController {
         guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else { return UICollectionViewCell() }
 
         viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
-            guard let url = highlight.url2 else {
+            guard let url = highlight.siteUrl else {
                 self?.openHistory(UIButton())
                 return
             }

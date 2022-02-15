@@ -227,7 +227,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
 
-        let itemURL = item.url2?.absoluteString ?? ""
+        let itemURL = item.siteUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
 
         let cellOptions = RecentlyVisitedCellOptions(title: site.title,

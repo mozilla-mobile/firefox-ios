@@ -55,7 +55,6 @@ class HistoryHighlightsManager {
 
             if shouldGroupHighlights {
                 buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
-
                     let collatedHighlights = collateForRecentlySaved(from: groups, and: filterHighlights)
                     completion(Array(collatedHighlights.prefix(9)))
                 }
