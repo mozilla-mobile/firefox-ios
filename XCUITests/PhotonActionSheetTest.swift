@@ -96,7 +96,7 @@ class PhotonActionSheetTest: BaseTestCase {
 
     private func openNewShareSheet() {
         navigator.nowAt(URLBarOpen)
-        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-example.html")
+        navigator.openURL("example.com")
         sleep(5)
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -107,7 +107,7 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
-        var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+        var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         if iPad() {
             waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)

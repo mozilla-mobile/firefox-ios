@@ -174,10 +174,11 @@ class TopTabsTest: BaseTestCase {
         navigator.back()
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+//        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL("example.com")
         waitUntilPageLoad()
         waitForTabsButton()
-
+        sleep(5)
         if iPad() {
             waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
             app.buttons["TopTabsViewController.tabsButton"].tap()

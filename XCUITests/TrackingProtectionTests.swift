@@ -42,6 +42,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 80)
         waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
 //        navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
