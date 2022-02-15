@@ -1271,6 +1271,32 @@ class ThemeSetting: Setting {
     }
 }
 
+class SearchBarSetting: Setting {
+    let viewModel: SearchBarSettingsViewModel
+
+    override var accessoryView: UIImageView? { return disclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting }
+
+    override var status: NSAttributedString {
+        return NSAttributedString(string: viewModel.searchBarTitle )
+    }
+
+    override var style: UITableViewCell.CellStyle { return .value1 }
+
+    init(settings: SettingsTableViewController) {
+        self.viewModel = SearchBarSettingsViewModel(prefs: settings.profile.prefs)
+        super.init(title: NSAttributedString(string: viewModel.title,
+                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = SearchBarSettingsViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+
 extension BrowserViewController {
     /// ⚠️ !! WARNING !! ⚠️
     /// This function opens up x number of new tabs in the background.

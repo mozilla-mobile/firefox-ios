@@ -8,9 +8,11 @@ import WebKit
 class ClearHistoryHelper {
 
     private let profile: Profile
-
-    init(profile: Profile) {
+    private let tabManager: TabManager
+    
+    init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
+        self.tabManager = tabManager
     }
 
     /// Present a prompt that will enable the user to choose how he wants to clear his recent history
@@ -55,6 +57,8 @@ class ClearHistoryHelper {
                 didComplete()
             }
             self.profile.recentlyClosedTabs.clearTabs()
+            self.tabManager.clearAllTabsHistory()
+            NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
         }))
         let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
         alert.addAction(cancelAction)
