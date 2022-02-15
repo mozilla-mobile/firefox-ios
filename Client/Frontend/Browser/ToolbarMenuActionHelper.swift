@@ -41,6 +41,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
+    private let showFXAClosure: (FXAClosureType) -> Void
 
     let profile: Profile
     let tabManager: TabManager
@@ -48,16 +49,12 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
 
-    var showFXAClosure: (FXAClosureType) -> Void
-
     init(profile: Profile,
-         isHomePage: Bool,
          tabManager: TabManager,
          buttonView: UIButton,
          showFXAClosure: @escaping (FXAClosureType) -> Void) {
 
         self.profile = profile
-        self.isHomePage = isHomePage
         self.tabManager = tabManager
         self.buttonView = buttonView
         self.showFXAClosure = showFXAClosure
@@ -65,6 +62,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         self.selectedTab = tabManager.selectedTab
         self.tabUrl = selectedTab?.url
         self.isFileURL = tabUrl?.isFileURL ?? false
+        self.isHomePage = selectedTab?.isFxHomeTab ?? false
     }
 
     func getToolbarActions(navigationController: UINavigationController?,
@@ -333,7 +331,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         guard featureFlags.isFeatureActiveForBuild(.reportSiteIssue) else { return nil }
         return PhotonActionSheetItem(title: .AppMenuReportSiteIssueTitleString,
                                      iconString: "menu-reportSiteIssue") { _, _ in
-            guard let tabURL = self.tabManager.selectedTab?.url?.absoluteString else { return }
+            guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
             self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
         }
     }
@@ -523,7 +521,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
-        let helper = ShareExtensionHelper(url: fileURL, tab: tabManager.selectedTab)
+        let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
         let controller = helper.createActivityViewController { completed, activityType in
             print("Shared downloaded file: \(completed)")
         }
@@ -645,7 +643,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return PhotonActionSheetItem(title: .AddToShortcutsActionTitle,
                                      iconString: "action_pin") { _, _ in
 
-            guard let url = self.tabManager.selectedTab?.url?.displayURL,
+            guard let url = self.selectedTab?.url?.displayURL,
                   let sql = self.profile.history as? SQLiteHistory else { return }
 
             sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
@@ -667,7 +665,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return PhotonActionSheetItem(title: .AppMenuRemoveBookmarkTitleString,
                                      iconString: "menu-Bookmark-Remove") { _, _ in
 
-            guard let url = self.tabManager.selectedTab?.url?.absoluteString else { return }
+            guard let url = self.selectedTab?.url?.absoluteString else { return }
 
             self.profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
                 if result.isSuccess {

@@ -13,11 +13,15 @@ protocol PhotonActionSheetProtocol {
 
 extension PhotonActionSheetProtocol {
     typealias PresentableVC = UIViewController & UIPopoverPresentationControllerDelegate
-    typealias MenuAction = () -> Void
-    typealias IsPrivateTab = Bool
-    typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
+    typealias MenuActionsDelegate = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
 
-    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = .CloseButtonTitle, suppressPopover: Bool? = false) {
+    func presentSheetWith(title: String? = nil,
+                          actions: [[PhotonActionSheetItem]],
+                          on viewController: PresentableVC,
+                          from view: UIView,
+                          closeButtonTitle: String = .CloseButtonTitle,
+                          suppressPopover: Bool? = false) {
+
         let style: UIModalPresentationStyle =  !(suppressPopover ?? false) ? .popover : .overCurrentContext
         let sheet = PhotonActionSheet(title: title, actions: actions, closeButtonTitle: closeButtonTitle, style: style)
         sheet.modalPresentationStyle = style
@@ -36,17 +40,6 @@ extension PhotonActionSheetProtocol {
             }
         }
         viewController.present(sheet, animated: true, completion: nil)
-    }
-
-    typealias MenuActionsDelegate = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
-
-    // laurie - clean up
-    func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
-        return profile.places.isBookmarked(url: url)
-    }
-
-    func fetchPinnedTopSiteStatus(for url: String) -> Deferred<Maybe<Bool>> {
-        return profile.history.isPinnedTopSite(url)
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonActionSheetItem] {
