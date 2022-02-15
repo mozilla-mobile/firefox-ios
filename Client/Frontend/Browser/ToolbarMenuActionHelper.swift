@@ -14,54 +14,120 @@ protocol ToolBarActionMenuDelegate: AnyObject {
 typealias FXAClosureType = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
 struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
 
-    private let prefs: Prefs
+    private let isHomePage: Bool
     let profile: Profile
     let tabManager: TabManager
 
-    weak var settingsDelegate: SettingsDelegate?
     weak var delegate: ToolBarActionMenuDelegate?
+    weak var menuActionDelegate: MenuActionsDelegate?
 
     var showFXAClosure: (FXAClosureType) -> Void
 
-    init(profile: Profile, tabManager: TabManager, showFXAClosure: @escaping (FXAClosureType) -> Void) {
+    init(profile: Profile, isHomePage: Bool, tabManager: TabManager, showFXAClosure: @escaping (FXAClosureType) -> Void) {
         self.profile = profile
-        self.prefs = profile.prefs
+        self.isHomePage = isHomePage
         self.tabManager = tabManager
         self.showFXAClosure = showFXAClosure
     }
 
-    // If we do not have the LatestAppVersionProfileKey in the profile, that means that this is a fresh install and we
-    // do not show the What's New. If we do have that value, we compare it to the major version of the running app.
-    // If it is different then this is an upgrade, downgrades are not possible, so we can show the What's New page.
-    func shouldShowWhatsNew() -> Bool {
-        guard let latestMajorAppVersion = prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
-            return false // Clean install, never show What's New
+    func getToolbarActions(navigationController: UINavigationController?) -> [[PhotonActionSheetItem]] {
+        var actions: [[PhotonActionSheetItem]] = []
+        let librarySection = getLibrarySection()
+        if isHomePage {
+            actions.append(contentsOf: [librarySection, getLastSection()])
+        } else {
+            // todo; laurie - new tab section
+            actions.append(contentsOf: [librarySection,
+                                        getFirstMiscSection(navigationController),
+                                        getSecondMiscSection(),
+                                        getLastSection()])
         }
 
-        return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
+        return actions
     }
 
-    // TODO: laurie rename PageOptionsVC ?
-    func getToolbarActions(navigationController: UINavigationController?, pageOptionsVC: PageOptionsVC) -> [[PhotonActionSheetItem]] {
-        var actions: [[PhotonActionSheetItem]] = []
+    // MARK: - Private
+
+    private func getLibrarySection() -> [PhotonActionSheetItem] {
+        var section = [PhotonActionSheetItem]()
+        let libraryActions = getLibraryActions(vcDelegate: menuActionDelegate)
+        append(to: &section, action: libraryActions)
 
         let syncAction = syncMenuButton(showFxA: showFXAClosure)
-        let section0 = getLibraryActions(vcDelegate: pageOptionsVC)
-        var section1 = getOtherPanelActions(vcDelegate: pageOptionsVC)
-        let section2 = getSettingsAction(vcDelegate: pageOptionsVC)
-        let viewLogins = getViewLoginsAction(navigationController: navigationController)
+        append(to: &section, action: syncAction)
 
-        let optionalActions = [viewLogins, syncAction].compactMap { $0 }
-        if !optionalActions.isEmpty {
-            section1.append(contentsOf: optionalActions)
+        return section
+    }
+
+    private func getFirstMiscSection(_ navigationController: UINavigationController?) -> [PhotonActionSheetItem] {
+        var section = [PhotonActionSheetItem]()
+
+        let nightModeAction = getNightModeAction()
+        append(to: &section, action: nightModeAction)
+
+        if let navigationController = navigationController {
+            let viewLogins = getViewLoginsAction(navigationController: navigationController)
+            append(to: &section, action: viewLogins)
         }
 
-        if let whatsNewAction = getWhatsNewAction() {
-            section1.append(whatsNewAction)
+        // TODO: laurie - find in page
+        // TODO: laurie - passwords
+        // TODO: laurie - request desktop site - beta only
+
+        return section
+    }
+
+    private func getSecondMiscSection() -> [PhotonActionSheetItem] {
+        var section = [PhotonActionSheetItem]()
+
+        // TODO: laurie - shortcuts
+        // TODO: laurie - copy link
+        // TODO: laurie - send link to device
+        // TODO: laurie - share
+
+        return section
+    }
+
+    private func getLastSection() -> [PhotonActionSheetItem] {
+        var section = [PhotonActionSheetItem]()
+
+        if isHomePage {
+            let whatsNewAction = getWhatsNewAction()
+            append(to: &section, action: whatsNewAction)
+
+            let helpAction = getHelpAction()
+            section.append(helpAction)
+
+            let customizeHomePageAction = getCustomizeHomePageAction()
+            append(to: &section, action: customizeHomePageAction)
         }
 
-        actions.append(contentsOf: [section0, section1, section2])
-        return actions
+        let settingsAction = getSettingsAction(vcDelegate: menuActionDelegate)
+        section.append(settingsAction)
+
+        return section
+    }
+
+    private func getHelpAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .AppSettingsHelp,
+                                     iconString: "help",
+                                     isEnabled: true) { _, _ in
+
+            if let url = URL(string: "https://support.mozilla.org/products/ios") {
+                self.delegate?.openURLInNewTab(url, isPrivate: false)
+            }
+        }
+    }
+
+    private func getCustomizeHomePageAction() -> PhotonActionSheetItem? {
+        guard let bvc = menuActionDelegate as? BrowserViewController else { return nil }
+
+        return PhotonActionSheetItem(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
+                                     iconString: "edit",
+                                     isEnabled: true) { _, _ in
+
+            bvc.homePanelDidRequestToCustomizeHomeSettings()
+        }
     }
 
     private func getWhatsNewAction() -> PhotonActionSheetItem? {
@@ -69,7 +135,7 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
         let showBadgeForWhatsNew = shouldShowWhatsNew()
         if showBadgeForWhatsNew {
             // Set the version number of the app, so the What's new will stop showing
-            prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
 
             // Redraw the toolbar so the badge hides from the appMenu button.
             delegate?.updateToolbarState()
@@ -86,7 +152,7 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
 
     typealias NavigationHandlerType = ((_ url: URL?) -> Void)
     private func getViewLoginsAction(navigationController: UINavigationController?) -> PhotonActionSheetItem? {
-        let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: prefs)
+        let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
         guard isLoginsButtonShowing else { return nil }
 
         return PhotonActionSheetItem(title: .AppMenuPasswords,
@@ -135,10 +201,10 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
     }
 
     private func showLoginListVC(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
-        guard let settingsDelegate = settingsDelegate else { return }
+        guard let menuActionDelegate = menuActionDelegate else { return }
         LoginListViewController.create(authenticateInNavigationController: navigationController,
                                        profile: self.profile,
-                                       settingsDelegate: settingsDelegate,
+                                       settingsDelegate: menuActionDelegate,
                                        webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
             presentLoginList(loginsVC)
         }
@@ -151,5 +217,30 @@ struct ToolbarMenuActionHelper: PhotonActionSheetProtocol {
         delegate?.presentViewController(viewController: navController)
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .logins)
+    }
+
+    // If we do not have the LatestAppVersionProfileKey in the profile, that means that this is a fresh install and we
+    // do not show the What's New. If we do have that value, we compare it to the major version of the running app.
+    // If it is different then this is an upgrade, downgrades are not possible, so we can show the What's New page.
+    private func shouldShowWhatsNew() -> Bool {
+        guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
+            return false // Clean install, never show What's New
+        }
+
+        return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
+    }
+
+    // MARK: - Conveniance
+
+    private func append(to items: inout [PhotonActionSheetItem], action: PhotonActionSheetItem?) {
+        if let action = action {
+            items.append(action)
+        }
+    }
+
+    private func append(to items: inout [PhotonActionSheetItem], action: [PhotonActionSheetItem]?) {
+        if let action = action {
+            items.append(contentsOf: action)
+        }
     }
 }

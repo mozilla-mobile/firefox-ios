@@ -78,14 +78,15 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         libraryDrawerViewController?.close(immediately: true)
 
+        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? true
         var menuHelper = ToolbarMenuActionHelper(profile: profile,
+                                                 isHomePage: isHomePage,
                                                  tabManager: tabManager,
                                                  showFXAClosure: presentSignInViewController)
         menuHelper.delegate = self
-        menuHelper.settingsDelegate = self
+        menuHelper.menuActionDelegate = self
 
-        let actions = menuHelper.getToolbarActions(navigationController: navigationController,
-                                                   pageOptionsVC: self)
+        let actions = menuHelper.getToolbarActions(navigationController: navigationController)
 
         presentSheetWith(actions: actions, on: self, from: button)
     }

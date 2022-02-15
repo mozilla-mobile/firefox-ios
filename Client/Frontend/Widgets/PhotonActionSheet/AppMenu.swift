@@ -9,29 +9,30 @@ extension PhotonActionSheetProtocol {
 
     // Returns a list of actions which is used to build a menu
     // OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
-    func getLibraryActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
+    func getLibraryActions(vcDelegate: MenuActionsDelegate?) -> [PhotonActionSheetItem]? {
+        guard let bvc = vcDelegate as? BrowserViewController else { return nil }
+
         let bookmarks = PhotonActionSheetItem(title: .AppMenuBookmarks, iconString: "menu-panel-Bookmarks") { _, _ in
-            let bvc = vcDelegate as? BrowserViewController
-            bvc?.showLibrary(panel: .bookmarks)
+            bvc.showLibrary(panel: .bookmarks)
         }
+
         let history = PhotonActionSheetItem(title: .AppMenuHistory, iconString: "menu-panel-History") { _, _ in
-            let bvc = vcDelegate as? BrowserViewController
-            bvc?.showLibrary(panel: .history)
+            bvc.showLibrary(panel: .history)
         }
+
         let downloads = PhotonActionSheetItem(title: .AppMenuDownloads, iconString: "menu-panel-Downloads") { _, _ in
-            let bvc = vcDelegate as? BrowserViewController
-            bvc?.showLibrary(panel: .downloads)
+            bvc.showLibrary(panel: .downloads)
         }
+
         let readingList = PhotonActionSheetItem(title: .AppMenuReadingList, iconString: "menu-panel-ReadingList") { _, _ in
-            let bvc = vcDelegate as? BrowserViewController
-            bvc?.showLibrary(panel: .readingList)
+            bvc.showLibrary(panel: .readingList)
         }
 
         return [bookmarks, history, downloads, readingList]
     }
     
     // Not part of AppMenu, but left for future use. 
-    func getHomeAction(vcDelegate: Self.PageOptionsVC) -> [PhotonActionSheetItem] {
+    func getHomeAction(vcDelegate: Self.MenuActionsDelegate) -> [PhotonActionSheetItem] {
         guard let tab = self.tabManager.selectedTab else { return [] }
         
         let openHomePage = PhotonActionSheetItem(title: .AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _, _ in
@@ -47,7 +48,7 @@ extension PhotonActionSheetProtocol {
         return [openHomePage]
     }
 
-    func getSettingsAction(vcDelegate: Self.PageOptionsVC) -> [PhotonActionSheetItem] {
+    func getSettingsAction(vcDelegate: MenuActionsDelegate?) -> PhotonActionSheetItem {
         // This method is being called when we the user sees the menu, not just when it's constructed.
         // In that case, we can let sendExposureEvent default to true.
         let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
@@ -73,13 +74,14 @@ extension PhotonActionSheetProtocol {
             // Wait to present VC in an async dispatch queue to prevent a case where dismissal
             // of this popover on iPad seems to block the presentation of the modal VC.
             DispatchQueue.main.async {
-                vcDelegate.present(controller, animated: true, completion: nil)
+                // TODO: Laurie - use other delegate? standardize
+                vcDelegate?.present(controller, animated: true, completion: nil)
             }
         }
-        return [openSettings]
+        return openSettings
     }
     
-    func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
+    func getNightModeAction() -> [PhotonActionSheetItem] {
         var items: [PhotonActionSheetItem] = []
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)

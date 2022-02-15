@@ -32,7 +32,7 @@ extension PhotonActionSheetProtocol {
         viewController.present(sheet, animated: true, completion: nil)
     }
 
-    typealias PageOptionsVC = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
+    typealias MenuActionsDelegate = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
         return profile.places.isBookmarked(url: url)
