@@ -905,17 +905,9 @@ class BrowserViewController: UIViewController {
                 userHasPressedHomeButton = false
                 
             } else if focusUrlBar {
-                if let viewcontroller = presentedViewController as? OnViewDismissable {
-                    viewcontroller.onViewDismissed = { [weak self] in
-                        let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-                        if shouldEnterOverlay {
-                            self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                        }
-                    }
-                } else {
-                    self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                }
+                enterOverlayMode()
             }
+            
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideFirefoxHome()
             urlBar.shouldHideReloadButton(false)
@@ -923,6 +915,19 @@ class BrowserViewController: UIViewController {
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
+        }
+    }
+    
+    private func enterOverlayMode() {
+        if let viewcontroller = presentedViewController as? OnViewDismissable {
+            viewcontroller.onViewDismissed = { [weak self] in
+                let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+                if shouldEnterOverlay {
+                    self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                }
+            }
+        } else {
+            self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
         }
     }
 
