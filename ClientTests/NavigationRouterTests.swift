@@ -108,14 +108,14 @@ class NavigationRouterTests: XCTestCase {
 
     func testNavigationPath_handleNormalTab_isExternalSourceTrue() {
         let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=false")
-        NavigationPath.handle(nav: path, with: browserViewController, tray: gridTab)
+        NavigationPath.handle(nav: path, with: browserViewController)
 
         XCTAssertTrue(browserViewController.openedUrlFromExternalSource, "openedUrlFromExternalSource needs to be true for start at home feature")
     }
 
     func testNavigationPath_handlePrivateTab_isExternalSourceTrue() {
         let path = buildNavigationPath(url: "widget-medium-quicklink-open-url?private=true")
-        NavigationPath.handle(nav: path, with: browserViewController, tray: gridTab)
+        NavigationPath.handle(nav: path, with: browserViewController)
 
         XCTAssertTrue(browserViewController.openedUrlFromExternalSource, "openedUrlFromExternalSource needs to be true for start at home feature")
     }
@@ -125,7 +125,7 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertEqual(browserViewController.tabManager.privateTabs.count, 1, "There should be one private tab")
 
         let path = buildNavigationPath(url: "widget-medium-quicklink-close-private-tabs")
-        NavigationPath.handle(nav: path, with: browserViewController, tray: gridTab)
+        NavigationPath.handle(nav: path, with: browserViewController)
 
         XCTAssertEqual(browserViewController.tabManager.privateTabs.count, 0, "There should be no private tab anymore")
     }
