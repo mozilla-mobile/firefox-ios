@@ -5,6 +5,7 @@
 import UIKit
 import SnapKit
 import Telemetry
+import Glean
 
 protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
@@ -464,6 +465,7 @@ class URLBar: UIView {
         delegate?.urlBar(self, didSubmitText: clipboardString)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
+        GleanMetrics.UrlInteraction.pasteAndGo.record()
     }
 
     @objc func pasteAndGoFromContextMenu() {
@@ -913,6 +915,7 @@ extension URLBar: UIDragInteractionDelegate {
         guard let url = url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
         let dragItem = UIDragItem(itemProvider: itemProvider)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
+        GleanMetrics.UrlInteraction.dragStarted.record()
         return [dragItem]
     }
 

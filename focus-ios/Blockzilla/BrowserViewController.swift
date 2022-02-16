@@ -964,6 +964,7 @@ extension BrowserViewController: UIDropInteractionDelegate {
             self.urlBar.fillUrlBar(text: url.absoluteString)
             self.submit(url: url)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
+            GleanMetrics.UrlInteraction.dropEnded.record()
         }
     }
 }

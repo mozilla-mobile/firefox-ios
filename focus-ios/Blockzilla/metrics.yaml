@@ -311,3 +311,41 @@ browser_menu:
           share, copy_url, desktop_view_off, desktop_view_on, find_in_page,
           add_to_shortcuts, remove_from_shortcuts
         type: string
+
+url_interaction:
+  drag_started:
+    type: event
+    description: Drag interaction started.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2999
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-15"
+  drop_ended:
+    type: event
+    description: Drop interaction ended.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2999
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-15"
+  paste_and_go:
+    type: event
+    description: Paste url and navigate.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3001
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-15"
