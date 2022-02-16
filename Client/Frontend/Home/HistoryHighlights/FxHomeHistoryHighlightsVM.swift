@@ -37,6 +37,17 @@ class FxHomeHistoryHightlightsVM {
     var hasData: Bool {
         return !(historyItems?.isEmpty ?? true)
     }
+    
+    var groupWidthWeight: NSCollectionLayoutDimension {
+        let groupWidth: NSCollectionLayoutDimension
+        if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
+            let weight = numberOfColumns == 1 ? 0.9 : 0.8
+            groupWidth = NSCollectionLayoutDimension.fractionalWidth(weight)
+        } else {
+            groupWidth = NSCollectionLayoutDimension.fractionalWidth(1/3)
+        }
+        return groupWidth
+    }
 
     // MARK: - Inits
     init(with profile: Profile,

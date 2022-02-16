@@ -121,7 +121,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
                                                titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlySaved))
 
         let historyHighlightsSetting = BoolSetting(with: .historyHighlights,
-                                                   titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentSearches))
+                                                   titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited))
 
         let wallpaperSetting = WallpaperSettings(settings: self)
 

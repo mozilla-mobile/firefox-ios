@@ -56,10 +56,10 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     }
 
     // Pocket and historyHighlight should have full width and add inset in their respective sections
-    // TODO: Fix pocket cell layout to be able to see next column
+    // TODO: Fix pocket cell layout to be able to see next column to enable set full width here and set inset in section
     var parentMinimunInset: CGFloat {
         switch self {
-//            case .pocket: return 0
+//        case .pocket: return 0
         case .historyHighlights: return 0
         default: return FirefoxHomeUX.minimumInsets
         }

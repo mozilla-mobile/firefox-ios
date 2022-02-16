@@ -78,13 +78,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
                                                heightDimension: .estimated(HistoryHighlightsCollectionCellUX.estimatedCellHeight))
         )
 
-        let groupWidth: NSCollectionLayoutDimension
-        if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
-            groupWidth = NSCollectionLayoutDimension.fractionalWidth(0.85)
-        } else {
-            groupWidth = NSCollectionLayoutDimension.fractionalWidth(1/3)
-        }
-
+        let groupWidth = viewModel?.groupWidthWeight ?? NSCollectionLayoutDimension.fractionalWidth(1)
         let subItems = Array(repeating: item, count: viewModel?.numberOfRows ?? 1)
         let verticalGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(widthDimension: groupWidth,
@@ -226,10 +220,12 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
-
         let itemURL = item.siteUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
 
+        // TODO: YRD option for title because title is nil we only have the url
+        // site.tileURL.absoluteString
+        // site.tileURL.shortDisplayString
         let cellOptions = RecentlyVisitedCellOptions(title: site.title,
                                                      description: nil,
                                                      shouldHideBottomLine: hideBottomLine,

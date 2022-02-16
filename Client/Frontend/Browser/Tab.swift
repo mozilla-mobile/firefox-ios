@@ -336,8 +336,9 @@ class Tab: NSObject {
                 shouldResetTabGroupData = true
             // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
             } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
-                let key = tabGroupData.tabHistoryMetadatakey()
-                if key.referrerUrl != nextUrl {
+                if tabGroupData.tabHistoryMetadatakey().referrerUrl != nextUrl {
+                    tabGroupData.tabAssociatedSearchUrl = nextUrl
+                    let key = tabGroupData.tabHistoryMetadatakey()
                     let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
                     updateObservationForKey(key: key, observation: observation)
                     tabGroupData.tabAssociatedNextUrl = nextUrl
@@ -595,6 +596,12 @@ class Tab: NSObject {
         }
 
         return lastTitle
+    }
+    
+    var shouldUpdateObservation: Bool {
+        tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
+            tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
+            tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue
     }
 
     var displayFavicon: Favicon? {
