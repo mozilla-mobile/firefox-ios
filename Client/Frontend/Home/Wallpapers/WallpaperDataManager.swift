@@ -8,7 +8,7 @@ import Foundation
 /// accessibility strings for voice-over.
 private struct WallpaperID {
     let name: String
-    let accessibilityID: String
+    let accessibilityLabel: String
 }
     
 /// A internal model for projects with wallpapers that are timed.
@@ -64,7 +64,7 @@ struct WallpaperDataManager {
         // Default wallpaper should always be first in the array.
         wallpapers.append(Wallpaper(named: "defaultBackground",
                                     ofType: .defaultBackground,
-                                    withAccessibiltyHint: accessibilityIDs.DefaultWallpaper))
+                                    withAccessibiltyLabel: accessibilityIDs.DefaultWallpaper))
         
         if let themedWallpapers = getWallpapers(from: allWallpaperCollections()) {
             wallpapers.append(contentsOf: themedWallpapers)
@@ -98,7 +98,7 @@ struct WallpaperDataManager {
 
                     let wallpaper = Wallpaper(named: wallpaperID.name,
                                               ofType: collection.type,
-                                              withAccessibiltyHint: wallpaperID.accessibilityID,
+                                              withAccessibiltyLabel: wallpaperID.accessibilityLabel,
                                               expiringOn: collection.expiryDate,
                                               limitedToLocale: collection.locales)
 
@@ -125,13 +125,13 @@ struct WallpaperDataManager {
     private func firefoxDefaultCollection() -> [WallpaperCollection] {
         return [WallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "fxSunrise",
-                                             accessibilityID: accessibilityIDs.FxSunriseWallpaper)],
+                                             accessibilityLabel: accessibilityIDs.FxSunriseWallpaper)],
             ofType: .themed(type: .firefox)),
                 WallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "fxCerulean",
-                                             accessibilityID: accessibilityIDs.FxCeruleanWallpaper),
+                                             accessibilityLabel: accessibilityIDs.FxCeruleanWallpaper),
                                  WallpaperID(name: "fxAmethyst",
-                                             accessibilityID: accessibilityIDs.FxAmethystWallpaper)],
+                                             accessibilityLabel: accessibilityIDs.FxAmethystWallpaper)],
             ofType: .themed(type: .firefoxOverlay))]
     }
     
@@ -142,9 +142,9 @@ struct WallpaperDataManager {
             from: DateComponents(year: 2022, month: 5, day:1))
         let projectHouse = WallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "trRed",
-                                             accessibilityID: "Turning Red wallpaper, giant red panda, button"),
+                                             accessibilityLabel: "Turning Red wallpaper, giant red panda"),
                                  WallpaperID(name: "trGroup",
-                                             accessibilityID: "Turning Red wallpaper, Mei and friends, button")],
+                                             accessibilityLabel: "Turning Red wallpaper, Mei and friends")],
             ofType: .themed(type: .projectHouse),
             expiringOn: houseExpiryDate,
             limitedToLocales: ["en_US", "es_US"])

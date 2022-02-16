@@ -19,7 +19,6 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         button.setTitle("", for: .normal)
         button.backgroundColor = .clear
         button.accessibilityIdentifier = a11y.logoButton
-        button.isAccessibilityElement = true
         button.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.FxHomepageWallpaperButton
     }
 
