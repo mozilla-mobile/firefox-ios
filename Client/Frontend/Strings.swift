@@ -313,7 +313,7 @@ extension String {
                 public static let WallpaperUpdatedToastButton = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToastButton", value: "View", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper.", lastUpdated: .v98)
                 
                 // Accessibilitiy
-                struct AccessibilityLabels {
+                public struct AccessibilityLabels {
                     public static let FxHomepageWallpaperButton = MZLocalizedString("FxHomepage.Wallpaper.ButtonLabel", value: "Firefox logo, change the wallpaper, button", comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper", lastUpdated: .v98)
                     public static let ToggleButton = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.ToggleButton", value: "Homepage wallpaper cycle toggle", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.", lastUpdated: .v98)
                     public static let DefaultWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper", value: "Default clear wallpaper, button", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.", lastUpdated: .v98)
