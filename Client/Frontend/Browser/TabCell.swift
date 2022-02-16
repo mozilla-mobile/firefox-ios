@@ -134,7 +134,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
             closeButton.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.CloseButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.CloseButtonSize),
             closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
-            closeButton.rightAnchor.constraint(equalTo: title.rightAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
 
             titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: 6),
             titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: 6),
