@@ -8,17 +8,17 @@ import SnapKit
 import Shared
 
 // This file is main table view used for the action sheet
+class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, NotificationThemeable {
 
-class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, NotificationThemeable {
-    fileprivate(set) var actions: [[PhotonActionSheetItem]]
-
+    // MARK: - Variables
+    private var actions: [[PhotonActionSheetItem]]
     private var site: Site?
     private let style: PresentationStyle
     private var tintColor = UIColor.theme.actionMenu.foreground
     private var heightConstraint: Constraint?
-    var tableView = UITableView(frame: .zero, style: .grouped)
+    private var tableView = UITableView(frame: .zero, style: .grouped)
 
-    lazy var tapRecognizer: UITapGestureRecognizer = {
+    private lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(dismiss))
         tapRecognizer.numberOfTapsRequired = 1
@@ -27,7 +27,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         return tapRecognizer
     }()
 
-    lazy var closeButton: UIButton = {
+    private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
@@ -43,6 +43,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             self.transitioningDelegate = photonTransitionDelegate
         }
     }
+
+    // MARK: - Init
 
     init(site: Site, actions: [PhotonActionSheetItem], closeButtonTitle: String = .CloseButtonTitle) {
         self.site = site
@@ -69,6 +71,13 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    deinit {
+        tableView.dataSource = nil
+        tableView.delegate = nil
+    }
+
+    // MARK: - View cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,47 +137,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         NotificationCenter.default.addObserver(self, selector: #selector(reduceTransparencyChanged), name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
     }
 
-    @objc func reduceTransparencyChanged() {
-        // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
-        applyTheme()
-    }
-
-    func applyTheme() {
-        if style == .popover {
-            view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
-        } else {
-            tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
-        }
-
-        // Apply or remove the background blur effect
-        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
-            if UIAccessibility.isReduceTransparencyEnabled {
-                // Remove the visual effect and the background alpha
-                visualEffectView.effect = nil
-                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
-            } else {
-                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
-            }
-        }
-
-        tintColor = UIColor.theme.actionMenu.foreground
-        closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
-        tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
-        
-        tableView.reloadData()
-    }
-
-    @objc func stopRotateSyncIcon() {
-        ensureMainThread {
-            self.tableView.reloadData()
-        }
-    }
-
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         tableView.removeObserver(self, forKeyPath: "contentSize")
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -205,23 +178,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if style == .popover {
-            self.preferredContentSize = tableView.contentSize
-        }
-    }
-    
-    // Nested tableview rows get additional height
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let section = actions[safe: indexPath.section], let action = section[safe: indexPath.row] {
-            if let custom = action.customHeight {
-                return custom(action)
-            }
-        }
-
-        return UITableView.automaticDimension
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var frameHeight: CGFloat
@@ -232,6 +188,47 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             // The height of the menu should be no more than 85 percent of the screen
             heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.90)).constraint
         }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if self.traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
+            || self.traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+            updateViewConstraints()
+        }
+    }
+
+    // MARK: - Theme
+
+    @objc func reduceTransparencyChanged() {
+        // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
+        applyTheme()
+    }
+
+    func applyTheme() {
+        if style == .popover {
+            view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
+        } else {
+            tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
+        }
+
+        // Apply or remove the background blur effect
+        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
+            if UIAccessibility.isReduceTransparencyEnabled {
+                // Remove the visual effect and the background alpha
+                visualEffectView.effect = nil
+                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
+            } else {
+                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
+            }
+        }
+
+        tintColor = UIColor.theme.actionMenu.foreground
+        closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
+        tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
+        
+        tableView.reloadData()
     }
 
     private func applyBackgroundBlur() {
@@ -247,22 +244,10 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
 
+    // MARK: - Actions
+
     @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         self.dismiss(animated: true, completion: nil)
-    }
-
-    deinit {
-        tableView.dataSource = nil
-        tableView.delegate = nil
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        if self.traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
-            || self.traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
-            updateViewConstraints()
-        }
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
@@ -272,21 +257,28 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         return true
     }
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return actions.count
+    @objc func stopRotateSyncIcon() {
+        ensureMainThread {
+            self.tableView.reloadData()
+        }
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return actions[section].count
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if style == .popover {
+            self.preferredContentSize = tableView.contentSize
+        }
     }
+}
 
+// MARK: - UITableViewDelegate
+extension PhotonActionSheet: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var action = actions[indexPath.section][indexPath.row]
         guard let handler = action.tapHandler else {
             self.dismiss(nil)
             return
         }
-        
+
         // Switches can be toggled on/off without dismissing the menu
         if action.accessory == .Switch {
             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -302,6 +294,28 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         return handler(action, self.tableView(tableView, cellForRowAt: indexPath))
     }
+}
+
+// MARK: - UITableViewDataSource
+extension PhotonActionSheet: UITableViewDataSource {
+    // Nested tableview rows get additional height
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let section = actions[safe: indexPath.section], let action = section[safe: indexPath.row] {
+            if let custom = action.customHeight {
+                return custom(action)
+            }
+        }
+
+        return UITableView.automaticDimension
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return actions.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return actions[section].count
+    }
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         return false
@@ -312,7 +326,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let action = actions[indexPath.section][indexPath.row]
         cell.tintColor = self.tintColor
         cell.configure(with: action)
-        
+
         // For menus other than ETP, don't show top and bottom separator lines
         if (title == nil) {
             cell.bottomBorder.isHidden = !(indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1])
@@ -323,11 +337,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0
     }
-    
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             if site != nil {
@@ -345,7 +359,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         return PhotonActionSheetUX.SeparatorRowHeight
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let site = site {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SiteHeaderName) as! PhotonActionSheetSiteHeaderView
