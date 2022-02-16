@@ -134,7 +134,7 @@ class FeatureFlagsManager {
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
                                             and: profile,
-                                            enabledFor: [.developer])
+                                            enabledFor: [.developer, .beta])
         features[.inactiveTabs] = inactiveTabs
 
         let groupedTabs = FlaggableFeature(withID: .groupedTabs,

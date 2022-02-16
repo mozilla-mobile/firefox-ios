@@ -454,9 +454,11 @@ extension TelemetryWrapper {
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
         case openInactiveTab = "openInactiveTab"
+        case inactiveTabShown = "inactive-Tab-Shown"
         case inactiveTabExpand = "inactivetab-expand"
         case inactiveTabCollapse = "inactivetab-collapse"
-        case openRecentlyClosedList = "openRecentlyClosedList"
+        case inactiveTabCloseAllButton = "inactive-tab-close-all-button"
+        case inactiveTabSwipeClose = "inactive-tab-swipe-close"
         case openRecentlyClosedTab = "openRecentlyClosedTab"
         case tabGroupWithExtras = "tabGroupWithExtras"
         case closeGroupedTab = "recordCloseGroupedTab"
@@ -483,6 +485,10 @@ extension TelemetryWrapper {
         var description: String {
             return self.rawValue
         }
+        
+        // Inactive Tab
+        case inactiveTabsCollapsed = "collapsed"
+        case inactiveTabsExpanded = "expanded"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -707,20 +713,24 @@ extension TelemetryWrapper {
         case (.action, .tap, .inactiveTabTray, EventValue.openInactiveTab.rawValue, _):
             GleanMetrics.InactiveTabsTray.openInactiveTab.add()
         case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabExpand.rawValue, _):
-            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray[EventValue.inactiveTabExpand.rawValue].add()
+            let expandedExtras = GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra(toggleType: EventExtraKey.inactiveTabsExpanded.rawValue)
+            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray.record(expandedExtras)
         case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabCollapse.rawValue, _):
-            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray[EventValue.inactiveTabCollapse.rawValue].add()
-        case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedList.rawValue, _):
-            GleanMetrics.InactiveTabsTray.openRecentlyClosedList.add()
-        case (.action, .tap, .inactiveTabTray, EventValue.openRecentlyClosedTab.rawValue, _):
-            GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
+            let collapsedExtras = GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra(toggleType: EventExtraKey.inactiveTabsCollapsed.rawValue)
+            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray.record(collapsedExtras)
+        case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabSwipeClose.rawValue, _):
+            GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose.add()
+        case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabCloseAllButton.rawValue, _):
+            GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn.add()
+        case (.action, .tap, .inactiveTabTray, EventValue.inactiveTabShown.rawValue, _):
+            GleanMetrics.InactiveTabsTray.inactiveTabShown.add()
 
         // MARK: Tab Groups
         case (.action, .view, .tabTray, EventValue.tabGroupWithExtras.rawValue, let extras):
            let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra.init(averageTabsInAllGroups: extras?["\(EventExtraKey.averageTabsInAllGroups)"] as? Int32, groupsTwoTabsOnly: extras?["\(EventExtraKey.groupsWithTwoTabsOnly)"] as? Int32, groupsWithMoreThanTwoTab: extras?["\(EventExtraKey.groupsWithTwoMoreTab)"] as? Int32, totalNumOfGroups: extras?["\(EventExtraKey.totalNumberOfGroups)"] as? Int32, totalTabsInAllGroups: extras?["\(EventExtraKey.totalTabsInAllGroups)"] as? Int32)
             GleanMetrics.Tabs.groupedTab.record(groupedTabExtras)
         case (.action, .tap, .groupedTab, EventValue.closeGroupedTab.rawValue, _):
-            GleanMetrics.InactiveTabsTray.openRecentlyClosedTab.add()
+            GleanMetrics.Tabs.groupedTabClosed.add()
         case (.action, .tap, .groupedTabPerformSearch, _, _):
             GleanMetrics.Tabs.groupedTabSearch.add()
             

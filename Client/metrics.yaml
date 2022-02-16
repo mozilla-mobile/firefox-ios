@@ -1595,7 +1595,7 @@ tabs:
         type: quantity
     expires: "2022-07-01"
   grouped_tab_closed:
-    type: event
+    type: counter
     description: |
       Recorded when a user closes the tab in a group
     bugs:
@@ -1891,59 +1891,68 @@ wallpaper_analytics:
 # Inactive Tabs metrics
 inactive_tabs_tray:
   toggle_inactive_tab_tray:
-    type: labeled_counter
+    type: event
     description: |
       Counts the number of times user toggle (expand or collapse)
       inactive tab section.
-    labels:
-      - inactivetab-expand
-      - inactivetab-collapse
+    extra_keys:
+      toggle_type:
+        type: string
+        description: |
+          We either send "collapsed" or "expanded"
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-1738
     data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
       - https://github.com/mozilla-mobile/firefox-ios/pull/8799
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
+    expires: "2022-08-01"
   open_inactive_tab:
     type: counter
     description: |
-      Counts the number of times user opens an inactive tab.
+      Recorded when a user taps on an inactive tab
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1738
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3065
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8799
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
-  open_recently_closed_list:
+    expires: "2022-08-01"
+  inactive_tabs_close_all_btn:
     type: counter
     description: |
-      Counts the number of times user opens recently closed
-      section from inactive tabs tray.
+      Recorded when a user taps on close all inactive tabs button
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1942
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3065
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8799
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
-  open_recently_closed_tab:
+    expires: "2022-08-01"
+  inactive_tab_swipe_close:
     type: counter
     description: |
-      Counts the number of times the Go To Settings button on
-      default browser card is clicked.
+      Recorded when a user swipes to close an inactive tab
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1877
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3065
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8799
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
+    expires: "2022-08-01"
+  inactive_tab_shown:
+    type: counter
+    description: |
+      Recorded when a user is shown inactive tab view
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3065
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-08-01"
 
 browser_search:
   with_ads:
