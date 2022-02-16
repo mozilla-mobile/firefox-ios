@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 class WallpaperSettingCollectionCell: UICollectionViewCell, ReusableCell {
 
@@ -10,6 +11,8 @@ class WallpaperSettingCollectionCell: UICollectionViewCell, ReusableCell {
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        // Prevent iOS image recognition in VoiceOver from scanning the image.
+        imageView.accessibilityTraits = .none
     }
 
     private lazy var borderView: UIView = .build { borderView in

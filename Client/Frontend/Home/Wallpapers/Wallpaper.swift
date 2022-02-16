@@ -65,6 +65,7 @@ extension WallpaperType: Codable {
 /// and may offer in the future. As such, there may be items here that are outdated.
 enum WallpaperCollectionType: String, Codable {
     case firefox
+    case firefoxOverlay
     case projectHouse
 }
 
@@ -73,6 +74,7 @@ struct Wallpaper: Codable, Equatable {
     // MARK: - Variables
     let name: String
     let type: WallpaperType
+    let accessibilityLabel: String
     private let shipDate: Date?
     private let expiryDate: Date?
     private let locales: [String]?
@@ -105,10 +107,12 @@ struct Wallpaper: Codable, Equatable {
     // MARK: - Initializer
     init(named name: String,
          ofType type: WallpaperType,
+         withAccessibiltyLabel accessibilityLabel: String,
          shippingOn appearanceDate: Date? = nil,
          expiringOn expiryDate: Date? = nil,
          limitedToLocale locale: [String]? = nil) {
         self.name = name
+        self.accessibilityLabel = accessibilityLabel
         self.expiryDate = expiryDate
         self.shipDate = appearanceDate
         self.type = type

@@ -11,8 +11,12 @@ private struct WallpaperSettingsUX {
     static let switchTitleFontMaxSize = 53.0
     static let switchDescriptionFontMaxSize = 43.0
     
-    static let thirdFractionalWidth: CGFloat = 1/3
-    static let sixthFractionalWidth: CGFloat = 1/6
+    struct FractionalWidths {
+        static let third: CGFloat = 1/3
+        static let quarter: CGFloat = 1/4
+        static let sixth: CGFloat = 1/6
+    }
+    
     static let inset: CGFloat = 3.5
 }
 
@@ -63,6 +67,7 @@ class WallpaperSettingsViewController: UIViewController {
         toggle.addTarget(self,
                          action: #selector(self.didChangeSwitchState(_:)),
                          for: .valueChanged)
+        toggle.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.ToggleButton
     }
 
     private lazy var switchLine: UIView = .build { _ in }
@@ -194,7 +199,10 @@ class WallpaperSettingsViewController: UIViewController {
     }
     
     private func getCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? WallpaperSettingsUX.sixthFractionalWidth : WallpaperSettingsUX.thirdFractionalWidth
+        typealias FractionalWidths = WallpaperSettingsUX.FractionalWidths
+        
+        let deviceFractionalWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FractionalWidths.quarter : FractionalWidths.third
+        let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? FractionalWidths.sixth : deviceFractionalWidth
         
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(fractionalWidth),
@@ -280,6 +288,9 @@ extension WallpaperSettingsViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier, for: indexPath) as! WallpaperSettingCollectionCell
         let image = viewModel.wallpaperManager.getImageAt(index: indexPath.row, inLandscape: UIDevice.current.orientation.isLandscape)
         cell.updateImage(to: image)
+        cell.isAccessibilityElement = true
+        cell.accessibilityTraits = .button
+        cell.accessibilityLabel = viewModel.wallpaperManager.getAccessibilityLabelForWallpaper(at: indexPath.row)
 
         return cell
     }
