@@ -123,7 +123,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         if item.type == .item {
             return configureIndividualHighlightCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound, item: item)
         } else {
-            return configureIndividualHighlightCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound, item: item)
+            return configureGroupHighlightCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound, item: item)
         }
     }
 

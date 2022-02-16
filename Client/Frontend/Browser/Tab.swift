@@ -310,6 +310,7 @@ class Tab: NSObject {
     }
     
     func updateObservationForKey(key: HistoryMetadataKey, observation: HistoryMetadataObservation) {
+        print("**** YRD url \(key.url)")
         if let profile = self.browserViewController?.profile {
             _ = profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
         }
@@ -339,7 +340,8 @@ class Tab: NSObject {
                 if tabGroupData.tabHistoryMetadatakey().referrerUrl != nextUrl {
                     tabGroupData.tabAssociatedSearchUrl = nextUrl
                     let key = tabGroupData.tabHistoryMetadatakey()
-                    let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
+                    print("YRD title \(getTabTrayTitle())")
+                    let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: getTabTrayTitle())
                     updateObservationForKey(key: key, observation: observation)
                     tabGroupData.tabAssociatedNextUrl = nextUrl
                 }
@@ -373,6 +375,17 @@ class Tab: NSObject {
         case .none:
             tabGroupData.tabHistoryCurrentState = state.rawValue
         }
+    }
+    
+    func getTabTrayTitle() -> String? {
+        let baseDomain = sessionData?.urls.last?.baseDomain ?? url?.baseDomain
+        var backUpName: String = "" // In case display title is empty
+        if let baseDomain = baseDomain {
+            backUpName = baseDomain.contains("local") ? .AppMenuOpenHomePageTitleString : baseDomain
+        } else if let url = url, let about = InternalURL(url)?.aboutComponent {
+            backUpName = about
+        }
+        return displayTitle.isEmpty ? backUpName : displayTitle
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -564,11 +577,10 @@ class Tab: NSObject {
                 lastObservation.referrerUrl == key.referrerUrl &&
                 lastObservation.searchTerm == key.searchTerm {
                 return title
-            } else if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
-                tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
-                tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
+                
+            } else if shouldUpdateObservation {
                 let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
-                    updateObservationForKey(key: key, observation: observation)
+                updateObservationForKey(key: key, observation: observation)
                 lastObservation.keyUrl = key.url
                 lastObservation.referrerUrl = key.referrerUrl
                 lastObservation.searchTerm = key.searchTerm
