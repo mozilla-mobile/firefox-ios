@@ -83,7 +83,11 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
             make.height.equalTo(58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
-            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
+            if let accessoryView = accessoryView {
+                make.trailing.equalTo(accessoryView.snp.leading)
+            } else {
+                make.trailing.equalToSuperview()
+            }
         }
 
         leftImageView.snp.makeConstraints { make in
@@ -149,7 +153,11 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
             make.height.equalTo(58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
-            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
+            if let accessoryView = accessoryView {
+                make.trailing.equalTo(accessoryView.snp.leading)
+            } else {
+                make.trailing.equalToSuperview()
+            }
         }
     }
 }
