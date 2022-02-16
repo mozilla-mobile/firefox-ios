@@ -33,7 +33,13 @@ enum MenuButtonToastAction {
     case removePinPage
 }
 
-typealias FXAClosureType = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
+typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
+
+/// ToolbarMenuActionHelper handles the hamburger menu in the toolbar.
+/// There is three different types of hamburger menu:
+///     - The home page menu, determined with isHomePage variable
+///     - The file URL menu, shown when the user is on a url of type `file://`
+///     - The site menu, determined by the absence of isHomePage and isFileURL
 class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private let isHomePage: Bool
@@ -41,7 +47,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
-    private let showFXAClosure: (FXAClosureType) -> Void
+    private let showFXASyncAction: (FXASyncClosure) -> Void
 
     let profile: Profile
     let tabManager: TabManager
@@ -49,15 +55,21 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
 
+    /// ToolbarMenuActionHelper init
+    /// - Parameters:
+    ///   - profile: the user's profile
+    ///   - tabManager: the tab manager
+    ///   - buttonView: the view from which the menu will be shown
+    ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
-         showFXAClosure: @escaping (FXAClosureType) -> Void) {
+         showFXASyncAction: @escaping (FXASyncClosure) -> Void) {
 
         self.profile = profile
         self.tabManager = tabManager
         self.buttonView = buttonView
-        self.showFXAClosure = showFXAClosure
+        self.showFXASyncAction = showFXASyncAction
 
         self.selectedTab = tabManager.selectedTab
         self.tabUrl = selectedTab?.url
@@ -163,8 +175,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             append(to: &section, action: readingListSection)
         }
 
-        // TODO: laurie - Double check show email adress properly
-        let syncAction = syncMenuButton(showFxA: showFXAClosure)
+        let syncAction = syncMenuButton(showFxA: showFXASyncAction)
         append(to: &section, action: syncAction)
 
         return section
@@ -416,10 +427,10 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return items
     }
 
-    private func syncMenuButton(showFxA: @escaping (FXAClosureType) -> Void) -> PhotonActionSheetItem? {
+    private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonActionSheetItem? {
         let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
-            let params = FXAClosureType(fxaParams, .emailLoginFlow, .appMenu)
+            let params = FXASyncClosure(fxaParams, .emailLoginFlow, .appMenu)
             showFxA(params)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
         }

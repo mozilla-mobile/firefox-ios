@@ -14,7 +14,6 @@ class LockButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            print("Laurie - Button is isHighlighted: \(isHighlighted)")
             self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
         }
     }
