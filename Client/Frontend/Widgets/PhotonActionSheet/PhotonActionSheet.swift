@@ -109,6 +109,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             tableView.snp.makeConstraints { make in
                 make.top.bottom.equalTo(self.view)
                 make.width.equalTo(width)
+                make.leading.equalTo(self.view.safeArea.leading)
             }
         } else {
             tableView.snp.makeConstraints { make in
