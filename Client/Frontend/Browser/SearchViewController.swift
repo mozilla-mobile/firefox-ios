@@ -167,11 +167,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     private func layoutSearchEngineScrollViewContent() {
         searchEngineScrollViewContent.snp.remakeConstraints { make in
-            make.width.greaterThanOrEqualTo(self.view)
-            make.centerY.equalTo(self.searchEngineScrollView).priority(10)
+            make.center.equalTo(self.searchEngineScrollView).priority(10)
             //left-align the engines on iphones, center on ipad
             if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
                 make.leading.equalTo(self.searchEngineScrollView).priority(1000)
+                make.width.greaterThanOrEqualTo(self.view)
             } else {
                 make.leading.greaterThanOrEqualTo(self.searchEngineScrollView).priority(1000)
             }
