@@ -342,13 +342,12 @@ class NavigationTest: BaseTestCase {
         waitForExistence(switchBlockPopUps, timeout: 5)
         switchBlockPopUps.tap()
         let switchValueAfter = switchBlockPopUps.value!
-//        XCTAssertEqual(switchValueAfter as? String, "0")
-        XCTAssertEqual(switchValueAfter as? String, "1")
+        XCTAssertEqual(switchValueAfter as? String, "0")
 
         // Check that now pop ups are shown, two sites loaded
         navigator.openURL(popUpTestUrl)
         waitUntilPageLoad()
-        waitForExistence(app.webViews.staticTexts["Example"], timeout: 100)
+        waitForExistence(app.webViews.staticTexts.firstMatch, timeout: 100)
         waitForValueContains(app.textFields["url"], value: "example.com")
         let numTabsAfter = app.buttons["Show Tabs"].value
         XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
