@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import SnapKit
 import Shared
 
 // MARK: PhotonActionSheetCellUX
@@ -14,7 +13,7 @@ struct PhotonActionSheetCellUX {
     static let CellSideOffset = 20
     static let TitleLabelOffset = 10
     static let CellTopBottomOffset = 12
-    static let StatusIconSize: CGFloat = 24
+    static let StatusIconSize = CGSize(width: 24, height: 24)
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let Padding: CGFloat = 16
@@ -35,7 +34,7 @@ class PhotonActionSheetCell: UITableViewCell {
         let label = UILabel()
         label.minimumScaleFactor = 0.75 // Scale the font if we run out of space
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        label.adjustsFontSizeToFitWidth = true
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
 
@@ -51,7 +50,8 @@ class PhotonActionSheetCell: UITableViewCell {
 
     private lazy var titleLabel: UILabel = {
         let label = createLabel()
-        label.numberOfLines = 4
+        label.numberOfLines = 0
+        label.lineBreakMode = .byTruncatingTail
         label.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
         return label
     }()
@@ -63,9 +63,13 @@ class PhotonActionSheetCell: UITableViewCell {
         return label
     }()
 
-    private lazy var statusIcon: UIImageView = {
-        return createIconImageView()
-    }()
+    private lazy var statusIcon: UIImageView = .build { icon in
+        icon.contentMode = .scaleAspectFit
+        icon.clipsToBounds = true
+        icon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        icon.setContentHuggingPriority(.required, for: .horizontal)
+        icon.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
 
     private lazy var disclosureLabel: UILabel = {
         let label = UILabel()
@@ -74,12 +78,10 @@ class PhotonActionSheetCell: UITableViewCell {
 
     private let toggleSwitch = ToggleSwitch()
 
-    private lazy var selectedOverlay: UIView = {
-        let selectedOverlay = UIView()
+    private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.backgroundColor = PhotonActionSheetCellUX.SelectedOverlayColor
         selectedOverlay.isHidden = true
-        return selectedOverlay
-    }()
+    }
 
     private lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
@@ -88,27 +90,34 @@ class PhotonActionSheetCell: UITableViewCell {
         return disclosureIndicator
     }()
 
-    private lazy var stackView: UIStackView = {
-        let stackView = UIStackView()
+    private lazy var stackView: UIStackView = .build { stackView in
         stackView.spacing = PhotonActionSheetCellUX.Padding
         stackView.alignment = .center
         stackView.axis = .horizontal
-        return stackView
-    }()
+        stackView.distribution = .fillProportionally
+    }
+
+    private lazy var textStackView: UIStackView = .build { textStackView in
+        textStackView.spacing = PhotonActionSheetCellUX.VerticalPadding
+        textStackView.setContentHuggingPriority(.required, for: .horizontal)
+        textStackView.alignment = .leading
+        textStackView.axis = .vertical
+        textStackView.distribution = .fillProportionally
+    }
 
     override var isSelected: Bool {
         didSet {
-            self.selectedOverlay.isHidden = !isSelected
+            selectedOverlay.isHidden = !isSelected
         }
     }
 
-    let bottomBorder = UIView()
+    lazy var bottomBorder: UIView = .build { _ in }
 
     // MARK: - init
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.statusIcon.image = nil
+        statusIcon.image = nil
         disclosureIndicator.removeFromSuperview()
         disclosureLabel.removeFromSuperview()
         toggleSwitch.mainView.removeFromSuperview()
@@ -122,15 +131,12 @@ class PhotonActionSheetCell: UITableViewCell {
 
         isAccessibilityElement = true
         contentView.addSubview(selectedOverlay)
+        translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
 
         // Setup our StackViews
-        let textStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
-        textStackView.spacing = PhotonActionSheetCellUX.VerticalPadding
-        textStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        textStackView.alignment = .leading
-        textStackView.axis = .vertical
-
+        textStackView.addArrangedSubview(titleLabel)
+        textStackView.addArrangedSubview(subtitleLabel)
         stackView.addArrangedSubview(textStackView)
         stackView.addArrangedSubview(statusIcon)
         contentView.addSubview(stackView)
@@ -145,34 +151,29 @@ class PhotonActionSheetCell: UITableViewCell {
     // MARK: - Setup
 
     private func setupConstraints() {
-        selectedOverlay.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
-        }
+        let padding = PhotonActionSheetCellUX.Padding
+        let topBottomPadding = PhotonActionSheetCellUX.topBottomPadding
+        // Laurie - remove this
+        stackView.accessibilityLabel = "stackView"
+        textStackView.accessibilityLabel = "textStackView"
+        selectedOverlay.accessibilityLabel = "selectedOverlay"
+        statusIcon.accessibilityLabel = "statusIcon"
+        bottomBorder.accessibilityLabel = "ALLOOOOO"
 
-        stackView.snp.makeConstraints { make in
-            let padding = PhotonActionSheetCellUX.Padding
-            let topPadding = PhotonActionSheetCellUX.topBottomPadding
-            make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding,
-                                                               left: padding,
-                                                               bottom: topPadding,
-                                                               right: padding))
-        }
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topBottomPadding),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -topBottomPadding),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
 
-        statusIcon.snp.makeConstraints { make in
-            make.size.equalTo(PhotonActionSheetCellUX.StatusIconSize)
-        }
+            selectedOverlay.topAnchor.constraint(equalTo: contentView.topAnchor),
+            selectedOverlay.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            selectedOverlay.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            selectedOverlay.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 
-        addSubBorder()
-    }
-
-    func addSubBorder() {
-        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
-        self.contentView.addSubview(bottomBorder)
-        bottomBorder.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(1)
-        }
+            statusIcon.widthAnchor.constraint(equalToConstant: PhotonActionSheetCellUX.StatusIconSize.width),
+            statusIcon.heightAnchor.constraint(equalToConstant: PhotonActionSheetCellUX.StatusIconSize.height),
+        ])
     }
     
     func configure(with action: PhotonActionSheetItem) {
@@ -180,16 +181,11 @@ class PhotonActionSheetCell: UITableViewCell {
         titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
         titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
-        titleLabel.adjustsFontSizeToFitWidth = false
-        titleLabel.numberOfLines = 0
-        titleLabel.lineBreakMode = .byTruncatingTail
-        titleLabel.minimumScaleFactor = 0.5
         action.customRender?(titleLabel, contentView)
 
         subtitleLabel.text = action.text
         subtitleLabel.textColor = UIColor.theme.tableView.rowText
         subtitleLabel.isHidden = action.text == nil
-        subtitleLabel.numberOfLines = 0
 
         accessibilityIdentifier = action.iconString ?? action.accessibilityId
         accessibilityLabel = action.title
@@ -207,6 +203,28 @@ class PhotonActionSheetCell: UITableViewCell {
 
         setupBadgeOverlay(action: action)
         setupAccessory(action: action)
+        addSubBorder(action: action)
+    }
+
+    private func addSubBorder(action: PhotonActionSheetItem) {
+        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
+        contentView.addSubview(bottomBorder)
+
+        var constraints = [NSLayoutConstraint]()
+        // Determine if border should be at top or bottom when flipping
+        let top = bottomBorder.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 1)
+        let bottom = bottomBorder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        let anchor = action.isFlipped ? top : bottom
+
+        let borderConstraints = [
+            anchor,
+            bottomBorder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            bottomBorder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            bottomBorder.heightAnchor.constraint(equalToConstant: 1)
+        ]
+        constraints.append(contentsOf: borderConstraints)
+
+        NSLayoutConstraint.activate(constraints)
     }
 
     private func setupActionName(action: PhotonActionSheetItem, name: String) {
@@ -234,10 +252,11 @@ class PhotonActionSheetCell: UITableViewCell {
             let image = UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
             statusIcon.image = image
             statusIcon.addSubview(label)
-            label.snp.makeConstraints { (make) in
-                make.centerX.equalTo(statusIcon)
-                make.centerY.equalTo(statusIcon)
-            }
+
+            NSLayoutConstraint.activate([
+                label.centerXAnchor.constraint(equalTo: statusIcon.centerXAnchor),
+                label.centerYAnchor.constraint(equalTo: statusIcon.centerYAnchor),
+            ])
 
         case .None:
             break

@@ -153,7 +153,7 @@ class PhotonActionSheetViewModel {
         let topSpacing = view.frame.size.height - estimatedRowNumber * rowHeight
 
         // Align menu icons with popover icons
-        let leftRightSpacing = view.frame.size.width / 2 - PhotonActionSheetCellUX.Padding - PhotonActionSheetCellUX.StatusIconSize / 2
+        let leftRightSpacing = view.frame.size.width / 2 - PhotonActionSheetCellUX.Padding - PhotonActionSheetCellUX.StatusIconSize.width / 2
 
         return UIEdgeInsets(top: topSpacing,
                             left: leftRightSpacing,

@@ -27,20 +27,18 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
         return tapRecognizer
     }()
 
-    private lazy var closeButton: UIButton = {
-        let button = UIButton()
+    private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
-        button.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.close"
-        return button
-    }()
+    }
 
     var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
         didSet {
-            self.transitioningDelegate = photonTransitionDelegate
+            transitioningDelegate = photonTransitionDelegate
         }
     }
 
@@ -163,15 +161,15 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
         let maxHeight = frameHeight - buttonHeight
 
         // The height of the menu should be no more than 90 percent of the screen
-        let height = min(self.tableView.contentSize.height, maxHeight * 0.90)
+        let height = min(tableView.contentSize.height, maxHeight * 0.90)
         tableViewHeightConstraint?.constant = height
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if self.traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
-            || self.traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+        if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
+            || traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
             updateViewConstraints()
         }
     }
@@ -202,6 +200,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.widthAnchor.constraint(greaterThanOrEqualToConstant: width),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ]
         constraints.append(contentsOf: tableViewConstraints)
     }
@@ -220,7 +219,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
 
     // The width used for the .centered and .bottom style
     private var centeredAndBottomWidth: CGFloat {
-        let minimumWidth = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth)
+        let minimumWidth = min(view.frame.size.width, PhotonActionSheetUX.MaxWidth)
         return minimumWidth - (PhotonActionSheetUX.Padding * 2)
     }
 
@@ -264,7 +263,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
                                                 saturationDeltaFactor: 1.8,
                                                 maskImage: nil)
         let imageView = UIImageView(image: blurredImage)
-        view.addSubview(imageView)
+        view.insertSubview(imageView, belowSubview: tableView)
     }
 
     // MARK: - Actions
@@ -285,7 +284,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if viewModel.presentationStyle == .popover {
-            self.preferredContentSize = tableView.contentSize
+            preferredContentSize = tableView.contentSize
         }
     }
 }
@@ -349,8 +348,8 @@ extension PhotonActionSheet: UITableViewDataSource {
         // TODO: Laurie - Test this on all sheets again
         // Hide separator line when needed
         if viewModel.toolbarMenuInversed {
-            let rowIsFirst = indexPath.row == 0 && indexPath.section == 0
-            cell.bottomBorder.isHidden = rowIsFirst
+            let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+            cell.bottomBorder.isHidden = rowIsLastInSection
 
         } else if viewModel.modalStyle == .popover {
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
