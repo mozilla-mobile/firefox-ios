@@ -303,6 +303,7 @@ class Tab: NSObject {
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
+        observeURLChanges(delegate: self)
 
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
     }
@@ -938,6 +939,12 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 
     func getContentScript(_ name: String) -> TabContentScript? {
         return helpers[name]
+    }
+}
+
+extension Tab : URLChangeDelegate {
+    func tab(_ tab: Tab, urlDidChangeTo url: URL) {
+        tab.temporaryDocument = nil
     }
 }
 
