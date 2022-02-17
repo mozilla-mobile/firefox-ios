@@ -83,20 +83,26 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let firstMiscSection = getFirstMiscSection(navigationController)
 
         if isHomePage {
-            actions.append(contentsOf: [getLibrarySection(),
-                                        firstMiscSection,
-                                        getLastSection()])
+            actions.append(contentsOf: [
+                getLibrarySection(),
+                firstMiscSection,
+                getLastSection()
+            ])
+
             completion(actions)
 
         } else {
 
             // Actions on site page need specific data to be loaded
             updateData(dataLoadingCompletion: {
-                actions.append(contentsOf: [self.getNewTabSection(),
-                                            self.getLibrarySection(),
-                                            firstMiscSection,
-                                            self.getSecondMiscSection(),
-                                            self.getLastSection()])
+                actions.append(contentsOf: [
+                    self.getNewTabSection(),
+                    self.getLibrarySection(),
+                    firstMiscSection,
+                    self.getSecondMiscSection(),
+                    self.getLastSection()
+                ])
+
 
                 DispatchQueue.main.async {
                     completion(actions)
@@ -147,8 +153,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     private func getNewTabSection() -> [PhotonActionSheetItem] {
         var section = [PhotonActionSheetItem]()
         let newTabAction = PhotonActionSheetItem(title: .KeyboardShortcuts.NewTab,
-                                                 iconString: "quick_action_new_tab",
-                                                 isEnabled: true) { _, _ in
+                                                 iconString: "quick_action_new_tab") { _, _ in
 
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.delegate?.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false, searchFor: nil)
@@ -261,7 +266,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getDownloadsLibraryAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuDownloads, iconString: "menu-panel-Downloads") { _, _ in
+        return PhotonActionSheetItem(title: .AppMenuDownloads,
+                                     iconString: "menu-panel-Downloads") { _, _ in
             self.delegate?.showLibrary(panel: .downloads)
         }
     }
@@ -373,7 +379,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let title = variables.getText("settings-title") ?? .AppMenuSettingsTitleString
         let icon = variables.getString("settings-icon") ?? "menu-Settings"
 
-        let openSettings = PhotonActionSheetItem(title: title, iconString: icon) { _, _ in
+        let openSettings = PhotonActionSheetItem(title: title,
+                                                 iconString: icon) { _, _ in
             let settingsTableViewController = AppSettingsTableViewController()
             settingsTableViewController.profile = self.profile
             settingsTableViewController.tabManager = self.tabManager
@@ -401,7 +408,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
         let nightModeTitle: String = nightModeEnabled ? .AppMenuTurnOffNightMode : .AppMenuTurnOnNightMode
-        let nightMode = PhotonActionSheetItem(title: nightModeTitle, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { _, _ in
+        let nightMode = PhotonActionSheetItem(title: nightModeTitle,
+                                              iconString: "menu-NightMode",
+                                              isEnabled: nightModeEnabled) { _, _ in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
 
             if nightModeEnabled {
@@ -439,7 +448,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let needsReAuth = rustAccount.accountNeedsReauth()
 
         guard let userProfile = rustAccount.userProfile else {
-            return PhotonActionSheetItem(title: .AppMenuBackUpAndSyncData, iconString: "menu-sync", handler: action)
+            return PhotonActionSheetItem(title: .AppMenuBackUpAndSyncData,
+                                         iconString: "menu-sync",
+                                         handler: action)
         }
 
         let title: String = {
@@ -457,7 +468,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
         let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
         let iconTint: UIColor? = needsReAuth ? UIColor.Photon.Yellow60 : nil
-        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, iconType: iconType, iconTint: iconTint, handler: action)
+        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL,
+                                               iconType: iconType, iconTint: iconTint, handler: action)
         return syncOption
     }
 
@@ -474,7 +486,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             delegate?.updateToolbarState()
         }
 
-        whatsNewAction = PhotonActionSheetItem(title: .WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew) { _, _ in
+        whatsNewAction = PhotonActionSheetItem(title: .WhatsNewString,
+                                               iconString: "whatsnew",
+                                               isEnabled: showBadgeForWhatsNew) { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
@@ -564,7 +578,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getReadingListLibraryAction() -> PhotonActionSheetItem {
         return PhotonActionSheetItem(title: .AppMenuReadingList,
-                                                iconString: "menu-panel-ReadingList") { _, _ in
+                                     iconString: "menu-panel-ReadingList") { _, _ in
             self.delegate?.showLibrary(panel: .readingList)
         }
     }

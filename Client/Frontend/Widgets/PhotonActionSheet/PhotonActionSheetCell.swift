@@ -8,13 +8,13 @@ import SnapKit
 import Shared
 
 // MARK: PhotonActionSheetCellUX
-private struct PhotonActionSheetCellUX {
+struct PhotonActionSheetCellUX {
     static let LabelColor = UIConstants.SystemBlueColor
     static let BorderWidth = CGFloat(0.5)
     static let CellSideOffset = 20
     static let TitleLabelOffset = 10
     static let CellTopBottomOffset = 12
-    static let StatusIconSize = 24
+    static let StatusIconSize: CGFloat = 24
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let Padding: CGFloat = 16
@@ -173,9 +173,6 @@ class PhotonActionSheetCell: UITableViewCell {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(1)
         }
-
-        // Hiding bottom border by default
-        bottomBorder.isHidden = true
     }
     
     func configure(with action: PhotonActionSheetItem) {
@@ -197,6 +194,10 @@ class PhotonActionSheetCell: UITableViewCell {
         accessibilityIdentifier = action.iconString ?? action.accessibilityId
         accessibilityLabel = action.title
         selectionStyle = action.tapHandler != nil ? .default : .none
+
+        if action.isFlipped {
+            contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        }
 
         if let iconName = action.iconString {
             setupActionName(action: action, name: iconName)

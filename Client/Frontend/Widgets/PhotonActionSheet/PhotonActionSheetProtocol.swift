@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Storage
+import UIKit
 
 protocol PhotonActionSheetProtocol {
     var tabManager: TabManager { get }
@@ -15,16 +16,12 @@ extension PhotonActionSheetProtocol {
     typealias PresentableVC = UIViewController & UIPopoverPresentationControllerDelegate
     typealias MenuActionsDelegate = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
 
-    func presentSheetWith(title: String? = nil,
-                          actions: [[PhotonActionSheetItem]],
+    func presentSheetWith(viewModel: PhotonActionSheetViewModel,
                           on viewController: PresentableVC,
-                          from view: UIView,
-                          closeButtonTitle: String = .CloseButtonTitle,
-                          suppressPopover: Bool? = false) {
+                          from view: UIView) {
 
-        let style: UIModalPresentationStyle =  !(suppressPopover ?? false) ? .popover : .overCurrentContext
-        let sheet = PhotonActionSheet(title: title, actions: actions, closeButtonTitle: closeButtonTitle, style: style)
-        sheet.modalPresentationStyle = style
+        let sheet = PhotonActionSheet(viewModel: viewModel)
+        sheet.modalPresentationStyle = viewModel.modalStyle
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
 
         if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
@@ -32,6 +29,13 @@ extension PhotonActionSheetProtocol {
             popoverVC.sourceView = view
             popoverVC.sourceRect = view.bounds
 
+            // TODO: Laurie - test margins on iPad
+            if viewModel.toolbarMenuInversed {
+                let margins = PhotonActionSheetUX.getPopOverMargins(view: view)
+                popoverVC.popoverLayoutMargins = margins
+            }
+
+            // TODO: Laurie - can this be in View model?
             // Arrow is only there on ipad
             if UIDevice.current.userInterfaceIdiom == .pad {
                 popoverVC.permittedArrowDirections = .any

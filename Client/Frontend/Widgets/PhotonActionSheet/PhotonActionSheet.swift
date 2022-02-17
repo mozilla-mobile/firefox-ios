@@ -6,17 +6,71 @@ import Foundation
 import Storage
 import SnapKit
 import Shared
+import UIKit
+
+class PhotonActionSheetViewModel {
+
+    var actions: [[PhotonActionSheetItem]]
+    var modalStyle: UIModalPresentationStyle
+
+    var closeButtonTitle: String? = nil
+    var site: Site? = nil
+    var title: String? = nil
+    var tintColor = UIColor.theme.actionMenu.foreground
+
+    var presentationStyle: PresentationStyle {
+        return modalStyle.getPhotonPresentationStyle()
+    }
+
+    init(actions: [[PhotonActionSheetItem]],
+         site: Site? = nil,
+         modalStyle: UIModalPresentationStyle) {
+        self.actions = actions
+        self.site = site
+        self.modalStyle = modalStyle
+    }
+
+    init(actions: [[PhotonActionSheetItem]],
+         closeButtonTitle: String? = nil,
+         title: String? = nil,
+         modalStyle: UIModalPresentationStyle,
+         toolbarMenuInversed: Bool = false) {
+
+        self.actions = actions
+        self.closeButtonTitle = closeButtonTitle
+        self.title = title
+        self.modalStyle = modalStyle
+
+        self.toolbarMenuInversed = toolbarMenuInversed
+        setToolbarMenuStyle()
+    }
+
+    // TODO: Laurie - explanation of what this is
+    var toolbarMenuInversed: Bool = false
+    func setToolbarMenuStyle() {
+        guard toolbarMenuInversed else { return }
+
+        // Inverse database
+        actions = actions.map { $0.reversed() }
+        actions.reverse()
+
+        // Flip cells
+        actions.forEach { $0.forEach { $0.isFlipped = true } }
+    }
+}
+
+// TODO: Laurie - Put logic from action sheet here
+
+// TODO: Laurie - Test on iPad
+// TODO: Laurie - Test all photon action sheet are properly setup
 
 // This file is main table view used for the action sheet
 class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, NotificationThemeable {
 
     // MARK: - Variables
-    private var actions: [[PhotonActionSheetItem]]
-    private var site: Site?
-    private let style: PresentationStyle
-    private var tintColor = UIColor.theme.actionMenu.foreground
     private var heightConstraint: Constraint?
     private var tableView = UITableView(frame: .zero, style: .grouped)
+    private var viewModel: PhotonActionSheetViewModel!
 
     private lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
@@ -46,26 +100,14 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
 
     // MARK: - Init
 
-    init(site: Site, actions: [PhotonActionSheetItem], closeButtonTitle: String = .CloseButtonTitle) {
-        self.site = site
-        self.actions = [actions]
-        self.style = .centered
+    init(viewModel: PhotonActionSheetViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.closeButton.setTitle(closeButtonTitle, for: .normal)
-    }
 
-    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = .CloseButtonTitle, style presentationStyle: UIModalPresentationStyle? = nil) {
-        self.actions = actions
-        if let presentationStyle = presentationStyle {
-            self.style = presentationStyle == .popover ? .popover : .bottom
-        } else {
-            self.style = .centered
-        }
-        super.init(nibName: nil, bundle: nil)
-        self.title = title
-        self.closeButton.setTitle(closeButtonTitle, for: .normal)
-
-        self.tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
+        title = viewModel.title
+        modalPresentationStyle = viewModel.modalStyle
+        closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
+        tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -75,6 +117,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
     deinit {
         tableView.dataSource = nil
         tableView.delegate = nil
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - View cycle
@@ -82,9 +125,9 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if style == .centered {
+        if viewModel.presentationStyle == .centered {
             applyBackgroundBlur()
-            self.tintColor = UIConstants.SystemBlueColor
+            viewModel.tintColor = UIConstants.SystemBlueColor
         }
 
         view.addGestureRecognizer(tapRecognizer)
@@ -103,30 +146,32 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
         
         let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
 
-        if style == .bottom {
+        if viewModel.presentationStyle == .bottom {
             self.view.addSubview(closeButton)
             closeButton.snp.makeConstraints { make in
-                make.centerX.equalTo(self.view.snp.centerX)
+                make.centerX.equalTo(view.snp.centerX)
                 make.width.equalTo(width)
                 make.height.equalTo(PhotonActionSheetUX.CloseButtonHeight)
-                make.bottom.equalTo(self.view.safeArea.bottom).inset(PhotonActionSheetUX.Padding)
+                make.bottom.equalTo(view.safeArea.bottom).inset(PhotonActionSheetUX.Padding)
             }
         }
 
-        if style == .popover {
+        if viewModel.presentationStyle == .popover {
+            // TODO: Laurie - Change width for toolbarMenu
             let width = UIDevice.current.userInterfaceIdiom == .pad ? 400 : 250
             tableView.snp.makeConstraints { make in
-                make.top.bottom.equalTo(self.view)
+                make.top.bottom.equalTo(view)
                 make.width.equalTo(width)
             }
+
         } else {
             tableView.snp.makeConstraints { make in
-                make.centerX.equalTo(self.view.snp.centerX)
-                switch style {
+                make.centerX.equalTo(view.snp.centerX)
+                switch viewModel.presentationStyle {
                 case .bottom, .popover:
                     make.bottom.equalTo(closeButton.snp.top).offset(-PhotonActionSheetUX.Padding)
                 case .centered:
-                    make.centerY.equalTo(self.view.snp.centerY)
+                    make.centerY.equalTo(view.snp.centerY)
                 }
                 make.width.equalTo(width)
             }
@@ -145,6 +190,8 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        applyTheme()
+
         tableView.bounces = false
         tableView.delegate = self
         tableView.dataSource = self
@@ -159,7 +206,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         // Don't show separators on ETP menu
-        if title != nil {
+        if viewModel.title != nil {
             tableView.separatorStyle = .none
         }
         tableView.separatorColor = UIColor.clear
@@ -167,25 +214,29 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
 
-        tableView.tableFooterView = UIView()
-
-        applyTheme()
+        if viewModel.toolbarMenuInversed {
+            tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        }
+        tableView.reloadData()
 
         DispatchQueue.main.async {
             // Pick up the correct/final tableview.contentsize in order to set the height.
             // Without async dispatch, the contentsize is wrong.
             self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
         }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
         var frameHeight: CGFloat
         frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-        let maxHeight = frameHeight - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
+        let buttonHeight = viewModel.presentationStyle == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0
+        let maxHeight = frameHeight - buttonHeight
         tableView.snp.makeConstraints { make in
             heightConstraint?.deactivate()
-            // The height of the menu should be no more than 85 percent of the screen
+            // The height of the menu should be no more than 90 percent of the screen
             heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.90)).constraint
         }
     }
@@ -207,7 +258,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
     }
 
     func applyTheme() {
-        if style == .popover {
+        if viewModel.presentationStyle == .popover {
             view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
         } else {
             tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
@@ -224,11 +275,9 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
             }
         }
 
-        tintColor = UIColor.theme.actionMenu.foreground
+        viewModel.tintColor = UIColor.theme.actionMenu.foreground
         closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
         tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
-        
-        tableView.reloadData()
     }
 
     private func applyBackgroundBlur() {
@@ -247,7 +296,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
     // MARK: - Actions
 
     @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
@@ -264,7 +313,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if style == .popover {
+        if viewModel.presentationStyle == .popover {
             self.preferredContentSize = tableView.contentSize
         }
     }
@@ -273,7 +322,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
 // MARK: - UITableViewDelegate
 extension PhotonActionSheet: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var action = actions[indexPath.section][indexPath.row]
+        let action = viewModel.actions[indexPath.section][indexPath.row]
         guard let handler = action.tapHandler else {
             self.dismiss(nil)
             return
@@ -284,7 +333,7 @@ extension PhotonActionSheet: UITableViewDelegate {
             let generator = UIImpactFeedbackGenerator(style: .medium)
             generator.impactOccurred()
             action.isEnabled = !action.isEnabled
-            actions[indexPath.section][indexPath.row] = action
+            viewModel.actions[indexPath.section][indexPath.row] = action
             self.tableView.deselectRow(at: indexPath, animated: true)
             self.tableView.reloadData()
         } else {
@@ -300,7 +349,7 @@ extension PhotonActionSheet: UITableViewDelegate {
 extension PhotonActionSheet: UITableViewDataSource {
     // Nested tableview rows get additional height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let section = actions[safe: indexPath.section], let action = section[safe: indexPath.row] {
+        if let section = viewModel.actions[safe: indexPath.section], let action = section[safe: indexPath.row] {
             if let custom = action.customHeight {
                 return custom(action)
             }
@@ -310,11 +359,11 @@ extension PhotonActionSheet: UITableViewDataSource {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return actions.count
+        return viewModel.actions.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return actions[section].count
+        return viewModel.actions[section].count
     }
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
@@ -323,13 +372,22 @@ extension PhotonActionSheet: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
-        let action = actions[indexPath.section][indexPath.row]
-        cell.tintColor = self.tintColor
+        let action = viewModel.actions[indexPath.section][indexPath.row]
+        cell.tintColor = viewModel.tintColor
         cell.configure(with: action)
 
-        // For menus other than ETP, don't show top and bottom separator lines
-        if (title == nil) {
-            cell.bottomBorder.isHidden = !(indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1])
+        // TODO: Laurie - Test this on all sheets again
+        // Hide separator line when needed
+        if viewModel.toolbarMenuInversed {
+            let rowIsFirst = indexPath.row == 0 && indexPath.section == 0
+            cell.bottomBorder.isHidden = rowIsFirst
+
+        } else if viewModel.modalStyle == .popover {
+            let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+            let isLastSection = indexPath.section == tableView.numberOfSections - 1
+            let rowIsLast = isLastRow && isLastSection
+
+            cell.bottomBorder.isHidden = rowIsLast
         }
         return cell
     }
@@ -344,15 +402,15 @@ extension PhotonActionSheet: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            if site != nil {
+            if viewModel.site != nil {
                 return PhotonActionSheetUX.TitleHeaderSectionHeightWithSite
-            } else if title != nil {
+            } else if viewModel.title != nil {
                 return PhotonActionSheetUX.TitleHeaderSectionHeight
             } else {
                 return 0
             }
         } else {
-            if site != nil || title != nil {
+            if viewModel.site != nil || viewModel.title != nil {
                 return PhotonActionSheetUX.SeparatorRowHeight
             }
         }
@@ -361,17 +419,17 @@ extension PhotonActionSheet: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let site = site {
+        if let site = viewModel.site {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SiteHeaderName) as! PhotonActionSheetSiteHeaderView
-            header.tintColor = self.tintColor
+            header.tintColor = viewModel.tintColor
             header.configure(with: site)
             return header
-        } else if let title = title {
+        } else if let title = viewModel.title {
             if section > 0 {
                 return tableView.dequeueReusableHeaderFooterView(withIdentifier: "SeparatorSectionHeader")
             } else {
                 let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
-                header.tintColor = self.tintColor
+                header.tintColor = viewModel.tintColor
                 header.configure(with: title)
                 return header
             }

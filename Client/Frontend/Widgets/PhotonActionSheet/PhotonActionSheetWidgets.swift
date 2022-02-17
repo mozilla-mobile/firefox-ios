@@ -27,12 +27,41 @@ struct PhotonActionSheetUX {
     static let SeparatorRowHeight: CGFloat = 8
     static let TitleHeaderSectionHeight: CGFloat = 40
     static let TitleHeaderSectionHeightWithSite: CGFloat = 70
+    static let BottomPopOverSheetSpacing: CGFloat = 32
+
+    static func getPopOverMargins(view: UIView) -> UIEdgeInsets {
+        // Top spacing: Make sure at least half of a cell height is visible at the top of the popover if content is scrollable
+        let rowHeight = PhotonActionSheetUX.RowHeight
+        let estimatedRowNumber = (view.frame.size.height - 3 * PhotonActionSheetUX.SeparatorRowHeight) / rowHeight
+        let topSpacing = view.frame.size.height - estimatedRowNumber * rowHeight
+
+        // Align menu icons with popover icons
+        let leftRightSpacing = view.frame.size.width / 2 - PhotonActionSheetCellUX.Padding - PhotonActionSheetCellUX.StatusIconSize / 2
+
+        return UIEdgeInsets(top: topSpacing,
+                            left: leftRightSpacing,
+                            bottom: PhotonActionSheetUX.BottomPopOverSheetSpacing,
+                            right: leftRightSpacing)
+    }
 }
 
 public enum PresentationStyle {
     case centered // used in the home panels
     case bottom // used to display the menu on phone sized devices
     case popover // when displayed on the iPad
+}
+
+extension UIModalPresentationStyle {
+    func getPhotonPresentationStyle() -> PresentationStyle {
+        switch self {
+        case .popover:
+            return .popover
+        case .overFullScreen:
+            return .centered
+        default:
+            return .bottom
+        }
+    }
 }
 
 public enum PhotonActionSheetCellAccessoryType {
@@ -49,7 +78,8 @@ public enum PhotonActionSheetIconType {
     case None
 }
 
-public struct PhotonActionSheetItem {
+// MARK: - PhotonActionSheetItem
+public class PhotonActionSheetItem {
     public enum IconAlignment {
         case left
         case right
@@ -71,6 +101,10 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var tapHandler: ((PhotonActionSheetItem, UITableViewCell) -> Void)?
     public fileprivate(set) var badgeIconName: String?
 
+    // Flip the cells for the toolbar menu since content needs to appear at the bottom
+    // Both cells and tableview are flipped so content already appears at bottom when the menu is opened
+    public var isFlipped: Bool = false
+
     // Enable title customization beyond what the interface provides,
     public var customRender: ((_ title: UILabel, _ contentView: UIView) -> Void)?
 
@@ -80,7 +114,12 @@ public struct PhotonActionSheetItem {
     // Normally the icon name is used, but if there is no icon, this is used.
     public var accessibilityId: String?
 
-    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, iconTint: UIColor? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil, handler: ((PhotonActionSheetItem, UITableViewCell) -> Void)? = nil) {
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil,
+         iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left,
+         iconTint: UIColor? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None,
+         accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil,
+         handler: ((PhotonActionSheetItem, UITableViewCell) -> Void)? = nil) {
+
         self.title = title
         self.iconString = iconString
         self.iconURL = iconURL
@@ -97,6 +136,7 @@ public struct PhotonActionSheetItem {
     }
 }
 
+// MARK: - PhotonActionSheetTitleHeaderView
 class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
     static let Padding: CGFloat = 18
 
@@ -151,6 +191,7 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
     }
 }
 
+// MARK: - PhotonActionSheetSiteHeaderView
 class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
     static let Padding: CGFloat = 12
     static let VerticalPadding: CGFloat = 2
@@ -242,6 +283,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
     }
 }
 
+// MARK: - PhotonActionSheetSeparator
 class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
 
     let separatorLineView = UIView()

@@ -117,8 +117,12 @@ class DownloadHelper: NSObject {
         }
 
         let actions = [[filenameItem], [downloadFileItem]]
+        let viewModel = PhotonActionSheetViewModel(actions: actions,
+                                                   closeButtonTitle: .CancelString,
+                                                   title: download.filename,
+                                                   modalStyle: .overCurrentContext)
 
-        browserViewController.presentSheetWith(title: download.filename, actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: .CancelString, suppressPopover: true)
+        browserViewController.presentSheetWith(viewModel: viewModel, on: browserViewController, from: browserViewController.urlBar)
     }
 }
 

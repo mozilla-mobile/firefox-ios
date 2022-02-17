@@ -117,8 +117,8 @@ extension HomePanelContextMenu {
     func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
         guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
 
-        let contextMenu = PhotonActionSheet(site: site, actions: actions)
-        contextMenu.modalPresentationStyle = .overFullScreen
+        let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
+        let contextMenu = PhotonActionSheet(viewModel: viewModel)
         contextMenu.modalTransitionStyle = .crossDissolve
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)

@@ -124,10 +124,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             }
         })
 
-        let sheet = PhotonActionSheet(actions: [[newBookmark, newFolder, newSeparator]])
-        sheet.modalPresentationStyle = .overFullScreen
+        let viewModel = PhotonActionSheetViewModel(actions: [[newBookmark, newFolder, newSeparator]], modalStyle: .overFullScreen)
+        let sheet = PhotonActionSheet(viewModel: viewModel)
         sheet.modalTransitionStyle = .crossDissolve
-        self.present(sheet, animated: true)
+        present(sheet, animated: true)
     }
 
     override func viewDidAppear(_ animated: Bool) {
