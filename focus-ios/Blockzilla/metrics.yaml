@@ -437,3 +437,41 @@ url_interaction:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-02-15"
+
+siri:
+  open_favorite_site:
+    type: event
+    description: Siri request open favorite site.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-16"
+  erase_and_open:
+    type: event
+    description: Siri request erase session and open.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-16"
+  erase_in_background:
+    type: event
+    description: Siri request erase session.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-16"
