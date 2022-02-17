@@ -161,7 +161,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
     fileprivate var timer: Timer?
-    private var contextualHintFrame: CGRect?
     fileprivate var isZeroSearch: Bool
     fileprivate var wallpaperManager: WallpaperManager
 
@@ -179,13 +178,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         return manager
     }()
 
-    var contextualHintViewController = ContextualHintViewController(hintType: .jumpBackIn)
+    var contextualHintViewController: ContextualHintViewController
 
-    lazy var overlayView: UIView = .build { [weak self] overlayView in
-        overlayView.backgroundColor = UIColor.Photon.Grey90A10
-        overlayView.isHidden = true
-    }
-
+//    lazy var overlayView: UIView = .build { [weak self] overlayView in
+//        overlayView.backgroundColor = .systemTeal//UIColor.Photon.Grey90A10
+//        overlayView.isHidden = true
+//    }
+//
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
@@ -301,6 +300,11 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM()
         self.pocketViewModel = FxHomePocketViewModel(profile: profile, isZeroSearch: isZeroSearch)
         self.experiments = experiments
+        
+        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn, with: profile)
+        self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
+        
+
         super.init(collectionViewLayout: flowLayout)
 
         pocketViewModel.onTapTileAction = { [weak self] url in
@@ -350,18 +354,18 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
-        view.addSubviews(overlayView)
+//        view.addSubviews(overlayView)
 
         if shouldShowDefaultBrowserCard {
             showDefaultBrowserCard()
         }
 
         NSLayoutConstraint.activate([
-            overlayView.topAnchor.constraint(equalTo: view.topAnchor),
-            overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
+//            overlayView.topAnchor.constraint(equalTo: view.topAnchor),
+//            overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+//            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -479,43 +483,49 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     // MARK: - Contextual hint
+    private func prepareJumpBackInContextualHint(_ indexPath: IndexPath, onView headerView: ASHeaderView) {
+        guard contextualHintViewController.shouldPresentHint() else { return }
 
-    private func presentContextualHint() {
-        overlayView.isHidden = false
-        hasPresentedContextualHint = true
-
-        let contentSize = CGSize(width: 325, height: contextualHintViewController.heightForDescriptionLabel)
-        contextualHintViewController.preferredContentSize = contentSize
         contextualHintViewController.modalPresentationStyle = .popover
-
-        if let popoverPresentationController = contextualHintViewController.popoverPresentationController,
-           let frame = contextualHintFrame {
-            popoverPresentationController.sourceView = view
-            popoverPresentationController.sourceRect = frame
-            popoverPresentationController.permittedArrowDirections = .down
-            popoverPresentationController.delegate = self
-        }
-
+        contextualHintViewController.popoverPresentationController?.sourceView = headerView.titleLabel
+        contextualHintViewController.popoverPresentationController?.permittedArrowDirections = .down
+        contextualHintViewController.popoverPresentationController?.delegate = self
+        
         contextualHintViewController.onViewDismissed = { [weak self] in
-            self?.overlayView.isHidden = true
             self?.homePanelDelegate?.homePanelDidDismissContextualHint(type: .jumpBackIn)
         }
 
-        contextualHintViewController.viewModel.markContextualHintPresented(profile: profile)
+        // Using a timer for the first presentation of contextual hint due to many
+        // reloads that happen on the collection view. Invalidating the timer
+        // prevents from showing contextual hint at the wrong position.
+        timer?.invalidate()
+        if didRotate && hasPresentedContextualHint {
+            didRotate = false
+        } else if !hasPresentedContextualHint {
+            contextualHintPresentTimer()
+        }
+    }
+
+
+    private func presentContextualHint() {
+        hasPresentedContextualHint = true
+        contextualHintViewController.contextualHintPresented()
         homePanelDelegate?.homePanelDidPresentContextualHint(type: .jumpBackIn)
         present(contextualHintViewController, animated: true, completion: nil)
     }
-
+    
     private func contextualHintPresentTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1.25, target: self, selector: #selector(presentContextualOverlay), userInfo: nil, repeats: false)
     }
 
     @objc private func presentContextualOverlay() {
         guard BrowserViewController.foregroundBVC().searchController == nil,
-              presentedViewController == nil else {
-                  timer?.invalidate()
-                  return
+              presentedViewController == nil
+        else {
+            timer?.invalidate()
+            return
         }
+        
         presentContextualHint()
     }
 
@@ -770,23 +780,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 
-    private func prepareJumpBackInContextualHint(_ indexPath: IndexPath, onView headerView: ASHeaderView) {
-        guard contextualHintViewController.viewModel.shouldPresentContextualHint(profile: profile) else { return }
-
-        let frame = collectionView.convert(headerView.frame, to: collectionView)
-        guard !frame.isEmpty else { return }
-        contextualHintFrame = frame
-
-        // Using a timer for the first presentation of contextual hint due to many reloads that happen on the collection view.
-        // Invalidating the timer prevents from showing contextual hint at the wrong position.
-        timer?.invalidate()
-        if didRotate && hasPresentedContextualHint {
-            didRotate = false
-        } else if !hasPresentedContextualHint {
-            contextualHintPresentTimer()
-        }
-    }
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var cellSize = Section(indexPath.section).cellSize(for: self.traitCollection, frameWidth: self.view.frame.width)
 
@@ -1022,11 +1015,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     /// Reload all data including refreshing cells content and fetching data from backend
     /// - Parameter shouldUpdateData: True means backend data should be refetched
     func reloadAll(shouldUpdateData: Bool = true) {
-        // Overlay view is used by contextual hint and reloading the view while the hint is shown can cause the popover to flicker
-        guard overlayView.isHidden else { return }
-
         loadTopSitesData()
-
         guard shouldUpdateData else { return }
         DispatchQueue.global(qos: .userInteractive).async {
             self.reloadSectionsData()
@@ -1449,11 +1438,11 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     // Dismiss the popover if the device is being rotated.
     // This is used by the Share UIActivityViewController action sheet on iPad
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
-        guard hasPresentedContextualHint, let frame = contextualHintFrame else {
+//        guard hasPresentedContextualHint, let frame = contextualHintFrame else {
             popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
-            return
-        }
-        rect.pointee = frame
+//            return
+//        }
+//        rect.pointee = frame
     }
 
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
@@ -1463,7 +1452,6 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         contextualHintViewController.removeFromParent()
         hasPresentedContextualHint = false
-        overlayView.isHidden = true
         return true
     }
 }

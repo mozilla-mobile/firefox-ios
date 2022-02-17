@@ -10,40 +10,43 @@ enum ContextualHintViewType {
     typealias ContextualHints = String.ContextualHints.FirefoxHomepage
     
     case jumpBackIn
+//    case inactiveTabs
     
     func descriptionForHint() -> String {
         switch self {
         case .jumpBackIn:
             return ContextualHints.JumpBackIn.PersonalizedHome
+//        case .inactiveTabs:
+//            return ContextualHints.TabsTray.InactiveTabs.Body
         }
     }
 }
 
 class ContextualHintViewModel {
 
-    var hintType: ContextualHintViewType?
+    var hintType: ContextualHintViewType
+    var profile: Profile
     
-    convenience init(hintType: ContextualHintViewType?) {
-        self.init()
+    init(forHintType hintType: ContextualHintViewType, with profile: Profile) {
         self.hintType = hintType
+        self.profile = profile
     }
     
-    func shouldPresentContextualHint(profile: Profile) -> Bool {
-        guard let type = hintType, isDeviceHintReady else { return false }
-        switch type {
+    func shouldPresentContextualHint() -> Bool {
+        guard isDeviceHintReady else { return false }
+        switch hintType {
         case .jumpBackIn:
-            guard let contextualHintData = profile.prefs.boolForKey(PrefsKeys.ContextualHintJumpBackinKey) else {
+            guard let contextualHintData = profile.prefs.boolForKey(PrefsKeys.ContextualHints.JumpBackinKey) else {
                 return true
             }
             return contextualHintData
         }
     }
     
-    func markContextualHintPresented(profile: Profile) {
-        guard let type = hintType else { return }
-        switch type {
+    func markContextualHintPresented() {
+        switch hintType {
         case .jumpBackIn:
-            profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHintJumpBackinKey)
+            profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHints.JumpBackinKey)
         }
     }
 
