@@ -120,6 +120,10 @@ class BrowserViewController: UIViewController {
     var hasTriedToPresentDBCardAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
+    
+    /// Set to true when the user taps the home button. Used to prevent entering overlay mode.
+    /// Immediately set to false afterwards.
+    var userHasPressedHomeButton = false
 
     // Tracking navigation items to record history types.
     // TODO: weak references?
@@ -150,10 +154,7 @@ class BrowserViewController: UIViewController {
         self.profile = profile
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
-
-        let daysOfUseCounter = CumulativeDaysOfUseCounter()
-        daysOfUseCounter.updateCounter()
-        self.ratingPromptManager = RatingPromptManager(profile: profile, daysOfUseCounter: daysOfUseCounter)
+        self.ratingPromptManager = RatingPromptManager(profile: profile)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -899,19 +900,14 @@ class BrowserViewController: UIViewController {
 
         if isAboutHomeURL {
             showFirefoxHome(inline: true)
-
-            if focusUrlBar {
-                if let viewcontroller = presentedViewController as? OnViewDismissable {
-                    viewcontroller.onViewDismissed = { [weak self] in
-                        let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-                        if shouldEnterOverlay {
-                            self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                        }
-                    }
-                } else {
-                    self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                }
+            
+            if userHasPressedHomeButton {
+                userHasPressedHomeButton = false
+                
+            } else if focusUrlBar {
+                enterOverlayMode()
             }
+            
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideFirefoxHome()
             urlBar.shouldHideReloadButton(false)
@@ -919,6 +915,19 @@ class BrowserViewController: UIViewController {
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
+        }
+    }
+    
+    private func enterOverlayMode() {
+        if let viewcontroller = presentedViewController as? OnViewDismissable {
+            viewcontroller.onViewDismissed = { [weak self] in
+                let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+                if shouldEnterOverlay {
+                    self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+                }
+            }
+        } else {
+            self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
         }
     }
 

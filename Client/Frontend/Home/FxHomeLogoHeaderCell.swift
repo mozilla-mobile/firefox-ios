@@ -19,8 +19,11 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         button.setTitle("", for: .normal)
         button.backgroundColor = .clear
         button.accessibilityIdentifier = a11y.logoButton
+        button.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.FxHomepageWallpaperButton
     }
 
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
     private var userDefaults: UserDefaults = UserDefaults.standard
 
     // MARK: - Initializers
@@ -28,7 +31,8 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         super.init(frame: frame)
         setupView()
         applyTheme()
-        setupObservers()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
     }
 
     required init?(coder: NSCoder) {
@@ -36,7 +40,7 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - UI Setup
@@ -50,22 +54,6 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
             logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             logoButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
-    }
-
-    // MARK: - Observers & Notifications
-    private func setupObservers() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
-    }
-    
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
     }
 
     // MARK: - Animation
@@ -116,11 +104,23 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     }
 }
 
+// MARK: - Theme
 extension FxHomeLogoHeaderCell: NotificationThemeable {
     func applyTheme() {
         let resourceName = "fxHomeHeaderLogo"
         let resourceNameDark = "fxHomeHeaderLogo_dark"
         let imageString = LegacyThemeManager.instance.currentName == .dark ? resourceNameDark : resourceName
         logoButton.setImage(UIImage(imageLiteralResourceName: imageString), for: .normal)
+    }
+}
+
+// MARK: - Notifiable
+extension FxHomeLogoHeaderCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 }

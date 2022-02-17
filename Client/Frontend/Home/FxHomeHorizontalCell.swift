@@ -98,6 +98,9 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     private var imageContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
+    
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
 
     // MARK: - Inits
 
@@ -105,7 +108,8 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         super.init(frame: .zero)
 
         applyTheme()
-        setupObservers()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
@@ -114,7 +118,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -147,10 +151,6 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     func setFallBackFaviconVisibility(isHidden: Bool) {
         fallbackFaviconBackground.isHidden = isHidden
         fallbackFaviconImage.isHidden = isHidden
-    }
-
-    private func setupObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
     }
 
     private func setupLayout() {
@@ -205,16 +205,9 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
         ])
     }
-
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
 }
 
+// MARK: - Theme
 extension FxHomeHorizontalCell: NotificationThemeable {
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
@@ -232,5 +225,16 @@ extension FxHomeHorizontalCell: NotificationThemeable {
         fallbackFaviconBackground.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         fallbackFaviconBackground.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+    }
+}
+
+// MARK: - Notifiable
+extension FxHomeHorizontalCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 }

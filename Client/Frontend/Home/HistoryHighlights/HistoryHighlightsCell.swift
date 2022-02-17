@@ -93,13 +93,17 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         }
     }
 
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+    
     // MARK: - Inits
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
         applyTheme()
-        setupObservers()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
@@ -108,7 +112,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Public methods
@@ -125,10 +129,6 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Setup Helper methods
-    private func setupObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
-    }
-
     private func setupLayout() {
         contentView.addSubview(heroImage)
         contentView.addSubview(textStack)
@@ -150,15 +150,6 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             bottomLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-
-    // MARK: - Nofications
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
 }
 
 extension HistoryHighlightsCell: Themeable {
@@ -169,3 +160,13 @@ extension HistoryHighlightsCell: Themeable {
     }
 }
 
+// MARK: - Notifiable
+extension HistoryHighlightsCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+}

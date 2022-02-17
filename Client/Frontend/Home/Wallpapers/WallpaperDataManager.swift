@@ -4,10 +4,17 @@
 
 import Foundation
 
+/// An internal struct used to define wallpaper names and their respective
+/// accessibility strings for voice-over.
+private struct WallpaperID {
+    let name: String
+    let accessibilityLabel: String
+}
+    
 /// A internal model for projects with wallpapers that are timed.
 private struct WallpaperCollection {
     /// The base file names of the wallpaper assets to be included in the collection.
-    let wallpaperFileNames: [String]
+    let wallpaperIDs: [WallpaperID]
     let type: WallpaperType
     /// The date on which a collection should become available to users.
     let shipDate: Date?
@@ -28,12 +35,12 @@ private struct WallpaperCollection {
     ///         longer visible on May 1, 2022.
     ///   - locales: An optional set of locales used to limit the regions to which
     ///         wallpapers in the collection are shown.
-    init(wallpaperFileNames: [String],
+    init(wallpaperFileNames: [WallpaperID],
          ofType type: WallpaperType,
          shippingOn shipDate: Date? = nil,
          expiringOn expiryDate: Date? = nil,
          limitedToLocales locales: [String]? = nil) {
-        self.wallpaperFileNames = wallpaperFileNames
+        self.wallpaperIDs = wallpaperFileNames
         self.type = type
         self.shipDate = shipDate
         self.expiryDate = expiryDate
@@ -42,6 +49,7 @@ private struct WallpaperCollection {
 }
 
 struct WallpaperDataManager {
+    typealias accessibilityIDs = String.Settings.Homepage.Wallpaper.AccessibilityLabels
     
     private var resourceManager: WallpaperResourceManager
     
@@ -54,7 +62,9 @@ struct WallpaperDataManager {
     var availableWallpapers: [Wallpaper] {
         var wallpapers: [Wallpaper] = []
         // Default wallpaper should always be first in the array.
-        wallpapers.append(Wallpaper(named: "defaultBackground", ofType: .defaultBackground))
+        wallpapers.append(Wallpaper(named: "defaultBackground",
+                                    ofType: .defaultBackground,
+                                    withAccessibiltyLabel: accessibilityIDs.DefaultWallpaper))
         
         if let themedWallpapers = getWallpapers(from: allWallpaperCollections()) {
             wallpapers.append(contentsOf: themedWallpapers)
@@ -84,10 +94,11 @@ struct WallpaperDataManager {
 
         collection.forEach { collection in
             wallpapers.append(
-                contentsOf: collection.wallpaperFileNames.compactMap { wallpaperName in
+                contentsOf: collection.wallpaperIDs.compactMap { wallpaperID in
 
-                    let wallpaper = Wallpaper(named: wallpaperName,
+                    let wallpaper = Wallpaper(named: wallpaperID.name,
                                               ofType: collection.type,
+                                              withAccessibiltyLabel: wallpaperID.accessibilityLabel,
                                               expiringOn: collection.expiryDate,
                                               limitedToLocale: collection.locales)
 
@@ -112,10 +123,16 @@ struct WallpaperDataManager {
     }
     
     private func firefoxDefaultCollection() -> [WallpaperCollection] {
-        return [WallpaperCollection(wallpaperFileNames: ["fxCerulean",
-                                                         "fxAmethyst",
-                                                         "fxSunrise"],
-                                    ofType: .themed(type: .firefox))]
+        return [WallpaperCollection(
+            wallpaperFileNames: [WallpaperID(name: "fxSunrise",
+                                             accessibilityLabel: accessibilityIDs.FxSunriseWallpaper)],
+            ofType: .themed(type: .firefox)),
+                WallpaperCollection(
+            wallpaperFileNames: [WallpaperID(name: "fxCerulean",
+                                             accessibilityLabel: accessibilityIDs.FxCeruleanWallpaper),
+                                 WallpaperID(name: "fxAmethyst",
+                                             accessibilityLabel: accessibilityIDs.FxAmethystWallpaper)],
+            ofType: .themed(type: .firefoxOverlay))]
     }
     
     private func allSpecialCollections() -> [WallpaperCollection]? {
@@ -123,11 +140,14 @@ struct WallpaperDataManager {
 
         let houseExpiryDate = Calendar.current.date(
             from: DateComponents(year: 2022, month: 5, day:1))
-        let projectHouse = WallpaperCollection(wallpaperFileNames: ["trRed",
-                                                                    "trGroup"],
-                                               ofType: .themed(type: .projectHouse),
-                                               expiringOn: houseExpiryDate,
-                                               limitedToLocales: ["en_US", "es_US"])
+        let projectHouse = WallpaperCollection(
+            wallpaperFileNames: [WallpaperID(name: "trRed",
+                                             accessibilityLabel: "Turning Red wallpaper, giant red panda"),
+                                 WallpaperID(name: "trGroup",
+                                             accessibilityLabel: "Turning Red wallpaper, Mei and friends")],
+            ofType: .themed(type: .projectHouse),
+            expiringOn: houseExpiryDate,
+            limitedToLocales: ["en_US", "es_US"])
         
         specialCollections.append(projectHouse)
         
