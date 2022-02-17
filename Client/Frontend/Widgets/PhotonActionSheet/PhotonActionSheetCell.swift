@@ -153,12 +153,6 @@ class PhotonActionSheetCell: UITableViewCell {
     private func setupConstraints() {
         let padding = PhotonActionSheetCellUX.Padding
         let topBottomPadding = PhotonActionSheetCellUX.topBottomPadding
-        // Laurie - remove this
-        stackView.accessibilityLabel = "stackView"
-        textStackView.accessibilityLabel = "textStackView"
-        selectedOverlay.accessibilityLabel = "selectedOverlay"
-        statusIcon.accessibilityLabel = "statusIcon"
-        bottomBorder.accessibilityLabel = "ALLOOOOO"
 
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topBottomPadding),

@@ -33,7 +33,7 @@ extension PhotonActionSheetProtocol {
                 let margins = viewModel.getPopOverMargins(view: view)
                 popoverVC.popoverLayoutMargins = margins
             }
-            popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections()
+            popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: viewController.traitCollection)
         }
         viewController.present(sheet, animated: true, completion: nil)
     }

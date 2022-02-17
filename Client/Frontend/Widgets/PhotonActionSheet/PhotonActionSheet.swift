@@ -7,9 +7,6 @@ import Storage
 import Shared
 import UIKit
 
-// TODO: Laurie - Test on iPad with multitasking view
-// TODO: Laurie - re Test all photon action sheet are properly setup
-
 // This file is main table view used for the action sheet
 class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, NotificationThemeable {
 
@@ -183,7 +180,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
             closeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
             closeButton.heightAnchor.constraint(equalToConstant: PhotonActionSheetUX.CloseButtonHeight),
-            closeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: PhotonActionSheetUX.Padding),
+            closeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -PhotonActionSheetUX.Padding),
 
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -PhotonActionSheetUX.Padding),
@@ -345,8 +342,6 @@ extension PhotonActionSheet: UITableViewDataSource {
         cell.tintColor = viewModel.tintColor
         cell.configure(with: action)
 
-        // TODO: Laurie - Test this on all sheets again
-        // Hide separator line when needed
         if viewModel.toolbarMenuInversed {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.bottomBorder.isHidden = rowIsLastInSection

@@ -64,7 +64,7 @@ class PhotonActionSheetViewModel {
     /// which was causing an unwanted content size change (and menu apparation was wonky).
     var toolbarMenuInversed: Bool = false
     func setToolbarMenuStyle() {
-        guard toolbarMenuInversed, UIDevice.current.userInterfaceIdiom != .pad else { return }
+        guard toolbarMenuInversed else { return }
 
         // Inverse database
         actions = actions.map { $0.reversed() }
@@ -130,8 +130,10 @@ class PhotonActionSheetViewModel {
 
     // MARK: - Pop over style
 
-    func getPossibleArrowDirections() -> UIPopoverArrowDirection {
-        return UIDevice.current.userInterfaceIdiom == .pad ? .any : UIPopoverArrowDirection.init(rawValue: 0)
+    // Laurie - explanation
+    func getPossibleArrowDirections(trait: UITraitCollection) -> UIPopoverArrowDirection {
+        let shouldInverse = PhotonActionSheetViewModel.shouldInverseForTraitCollection(trait: trait)
+        return shouldInverse ? UIPopoverArrowDirection.init(rawValue: 0) : .any
     }
 
     func getPopOverMargins(view: UIView) -> UIEdgeInsets {
@@ -148,6 +150,7 @@ class PhotonActionSheetViewModel {
 
     private func getiPhoneMargins(view: UIView) -> UIEdgeInsets {
         // Top spacing: Make sure at least half of a cell height is visible at the top of the popover if content is scrollable
+        // TODO: Laurie - not working anymore somehow
         let rowHeight = PhotonActionSheetUX.RowHeight
         let estimatedRowNumber = (view.frame.size.height - 3 * PhotonActionSheetUX.SeparatorRowHeight) / rowHeight
         let topSpacing = view.frame.size.height - estimatedRowNumber * rowHeight
@@ -161,8 +164,13 @@ class PhotonActionSheetViewModel {
                             right: leftRightSpacing)
     }
 
+    // Laurie - better names?? - explanation
+    static func shouldInverseForTraitCollection(trait: UITraitCollection) -> Bool {
+        return trait.verticalSizeClass != .compact && trait.horizontalSizeClass != .regular || UIDevice.current.userInterfaceIdiom == .phone
+    }
+
     func popOverWidthForTraitCollection(trait: UITraitCollection) -> CGFloat {
-        let isSmallWidth = trait.verticalSizeClass != .compact && trait.horizontalSizeClass != .regular
-        return isSmallWidth ? 250 : 400
+        let isSmallWidth = PhotonActionSheetViewModel.shouldInverseForTraitCollection(trait: trait)
+        return isSmallWidth ? 300 : 400
     }
 }
