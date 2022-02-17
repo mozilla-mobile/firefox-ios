@@ -381,8 +381,6 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
         
-        tab.temporaryDocument = nil
-        
         if tab == tabManager.selectedTab, navigationAction.navigationType == .linkActivated, tab.adsTelemetryUrlList.count > 0 {
             let adUrl = url.absoluteString
             if tab.adsTelemetryUrlList.contains(adUrl) {
