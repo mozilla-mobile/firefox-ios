@@ -23,7 +23,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r ./test-fixtures/requirements.txt
-    - name: Modifing Package dependencies
+    - name: Modifing Swift Package dependencies
       run: |
         python ./test-fixtures/update-rust-component-version.py
     - name: Get new A-S tag to be used in the PR info
