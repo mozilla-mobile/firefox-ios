@@ -942,7 +942,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     }
 }
 
-extension Tab : URLChangeDelegate {
+extension Tab: URLChangeDelegate {
     func tab(_ tab: Tab, urlDidChangeTo url: URL) {
         tab.temporaryDocument = nil
     }
