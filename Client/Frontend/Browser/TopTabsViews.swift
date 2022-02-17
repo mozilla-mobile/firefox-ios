@@ -37,7 +37,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
 
     let titleText: UILabel = {
         let titleText = UILabel()
-        titleText.textAlignment = .left
+        titleText.textAlignment = .natural
         titleText.isUserInteractionEnabled = false
         titleText.numberOfLines = 1
         titleText.lineBreakMode = .byCharWrapping
