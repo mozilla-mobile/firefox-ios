@@ -560,6 +560,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .enableSearchSuggestions:
             UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
             updateSetting()
+            GleanMetrics
+                .ShowSearchSuggestions
+                .changedFromSettings
+                .record(
+                    GleanMetrics
+                        .ShowSearchSuggestions
+                        .ChangedFromSettingsExtra(isEnabled: sender.isOn)
+                )
         case .showHomeScreenTips:
             updateSetting()
             // This update must occur after the setting has been updated to properly take effect.

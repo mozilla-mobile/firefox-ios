@@ -5,6 +5,7 @@
 import UIKit
 import SnapKit
 import Telemetry
+import Glean
 
 protocol OverlayViewDelegate: AnyObject {
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView)
@@ -444,6 +445,10 @@ class OverlayView: UIView {
     @objc private func didPressArrowButton(sender: UIButton) {
         if let index = arrowButtons.firstIndex(of: sender) {
             delegate?.overlayView(self, didTapArrowText: searchSuggestions[index + 1])
+            GleanMetrics
+                .SearchSuggestions
+                .autocompleteArrowTapped
+                .record()
         }
     }
 
@@ -453,10 +458,28 @@ class OverlayView: UIView {
         delegate?.overlayView(self, didSearchForQuery: immutableSearchSuggestions[sender.getIndex()])
 
         if !Settings.getToggle(.enableSearchSuggestions) { return }
+        let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
+        let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
         if sender.getIndex() == 0 {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected)
+            GleanMetrics
+                .SearchSuggestions
+                .searchTapped
+                .record(
+                    GleanMetrics
+                        .SearchSuggestions
+                        .SearchTappedExtra(engineName: defaultSearchEngineProvider)
+                )
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionSelected)
+            GleanMetrics
+                .SearchSuggestions
+                .suggestionTapped
+                .record(
+                    GleanMetrics
+                        .SearchSuggestions
+                        .SuggestionTappedExtra(engineName: defaultSearchEngineProvider)
+                )
         }
     }
     @objc private func didPressCopy() {

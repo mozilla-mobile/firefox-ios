@@ -5,6 +5,7 @@
 import UIKit
 import SnapKit
 import Telemetry
+import Glean
 
 protocol SearchSuggestionsPromptViewDelegate: AnyObject {
     func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool)
@@ -123,10 +124,12 @@ class SearchSuggestionsPromptView: UIView {
     @objc private func didPressDisable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: false)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionsOff)
+        GleanMetrics.ShowSearchSuggestions.disabledFromPanel.record()
     }
 
     @objc private func didPressEnable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: true)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionsOn)
+        GleanMetrics.ShowSearchSuggestions.enabledFromPanel.record()
     }
 }

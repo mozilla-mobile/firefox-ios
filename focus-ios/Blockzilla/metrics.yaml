@@ -312,6 +312,94 @@ browser_menu:
           add_to_shortcuts, remove_from_shortcuts
         type: string
 
+show_search_suggestions:
+  enabled_from_panel:
+    type: event
+    description: The "yes" option from the suggestion panel has been tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+  disabled_from_panel:
+    type: event
+    description: The "no"" option from the suggestion panel has been tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+  changed_from_settings:
+    type: event
+    description: The enabled state has been changed from the settings screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+    extra_keys:
+      is_enabled:
+        description: The new setting value, true for ON, false for OFF
+        type: boolean
+
+search_suggestions:
+  suggestion_tapped:
+    type: event
+    description: Search suggestion selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+    extra_keys:
+      engine_name:
+        description: The name of the engine used to perform the search.
+        type: string
+  search_tapped:
+    type: event
+    description: The typed text search was selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+    extra_keys:
+      engine_name:
+        description: The name of the engine used to perform the search.
+        type: string
+  autocomplete_arrow_tapped:
+    type: event
+    description: Search suggestion selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-02-14"
+
 url_interaction:
   drag_started:
     type: event
