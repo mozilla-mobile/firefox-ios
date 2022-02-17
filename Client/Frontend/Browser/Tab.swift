@@ -310,7 +310,6 @@ class Tab: NSObject {
     }
     
     func updateObservationForKey(key: HistoryMetadataKey, observation: HistoryMetadataObservation) {
-        print("**** YRD url \(key.url)")
         if let profile = self.browserViewController?.profile {
             _ = profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
         }
@@ -340,8 +339,7 @@ class Tab: NSObject {
                 if tabGroupData.tabHistoryMetadatakey().referrerUrl != nextUrl {
                     tabGroupData.tabAssociatedSearchUrl = nextUrl
                     let key = tabGroupData.tabHistoryMetadatakey()
-                    print("YRD title \(getTabTrayTitle())")
-                    let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: getTabTrayTitle())
+                    let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
                     updateObservationForKey(key: key, observation: observation)
                     tabGroupData.tabAssociatedNextUrl = nextUrl
                 }
