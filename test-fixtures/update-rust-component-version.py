@@ -105,17 +105,23 @@ def update_spm_file(current_tag, current_commit, rust_component_repo_tag, rust_c
     except:
         print("There was a problem updating the spm file")
 
-
 def update_proj_file(current_tag, rust_component_repo_tag, file_name):
-    file = open(file_name, "r+")
-    data = file.read()
-    data = data.replace(current_tag, rust_component_repo_tag)
+    try:
+        file = open(file_name, "r+")
+        data = file.read()
+        data = data.replace(current_tag, rust_component_repo_tag)
+    except:
+        print("Could not read project file")
+    finally:
+        file.close()
 
-    file.close()
-    
-    file = open(file_name, "wt")
-    file.write(data)
-    file.close()
+    try:
+        file = open(file_name, "wt")
+        file.write(data)
+    except:
+        print("Could not update project file")
+    finally:
+        file.close()
 
 def main():
     '''
