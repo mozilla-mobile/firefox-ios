@@ -103,7 +103,6 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                     self.getLastSection()
                 ])
 
-
                 DispatchQueue.main.async {
                     completion(actions)
                 }
@@ -152,13 +151,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getNewTabSection() -> [PhotonActionSheetItem] {
         var section = [PhotonActionSheetItem]()
-        let newTabAction = PhotonActionSheetItem(title: .KeyboardShortcuts.NewTab,
-                                                 iconString: "quick_action_new_tab") { _, _ in
-
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-            self.delegate?.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false, searchFor: nil)
-        }
-        append(to: &section, action: newTabAction)
+        append(to: &section, action: getNewTabAction())
 
         return section
     }
@@ -257,6 +250,15 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     // MARK: - Actions
+
+    private func getNewTabAction() -> PhotonActionSheetItem {
+        return PhotonActionSheetItem(title: .KeyboardShortcuts.NewTab,
+                                                 iconString: "quick_action_new_tab") { _, _ in
+
+            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            self.delegate?.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false, searchFor: nil)
+        }
+    }
 
     private func getHistoryLibraryAction() -> PhotonActionSheetItem {
         return PhotonActionSheetItem(title: .AppMenuHistory,

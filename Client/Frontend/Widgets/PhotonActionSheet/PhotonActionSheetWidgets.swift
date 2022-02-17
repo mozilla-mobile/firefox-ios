@@ -28,21 +28,7 @@ struct PhotonActionSheetUX {
     static let TitleHeaderSectionHeight: CGFloat = 40
     static let TitleHeaderSectionHeightWithSite: CGFloat = 70
     static let BottomPopOverSheetSpacing: CGFloat = 32
-
-    static func getPopOverMargins(view: UIView) -> UIEdgeInsets {
-        // Top spacing: Make sure at least half of a cell height is visible at the top of the popover if content is scrollable
-        let rowHeight = PhotonActionSheetUX.RowHeight
-        let estimatedRowNumber = (view.frame.size.height - 3 * PhotonActionSheetUX.SeparatorRowHeight) / rowHeight
-        let topSpacing = view.frame.size.height - estimatedRowNumber * rowHeight
-
-        // Align menu icons with popover icons
-        let leftRightSpacing = view.frame.size.width / 2 - PhotonActionSheetCellUX.Padding - PhotonActionSheetCellUX.StatusIconSize / 2
-
-        return UIEdgeInsets(top: topSpacing,
-                            left: leftRightSpacing,
-                            bottom: PhotonActionSheetUX.BottomPopOverSheetSpacing,
-                            right: leftRightSpacing)
-    }
+    static let iPadSpacing: CGFloat = 16
 }
 
 public enum PresentationStyle {

@@ -29,19 +29,11 @@ extension PhotonActionSheetProtocol {
             popoverVC.sourceView = view
             popoverVC.sourceRect = view.bounds
 
-            // TODO: Laurie - test margins on iPad
             if viewModel.toolbarMenuInversed {
-                let margins = PhotonActionSheetUX.getPopOverMargins(view: view)
+                let margins = viewModel.getPopOverMargins(view: view)
                 popoverVC.popoverLayoutMargins = margins
             }
-
-            // TODO: Laurie - can this be in View model?
-            // Arrow is only there on ipad
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                popoverVC.permittedArrowDirections = .any
-            } else {
-                popoverVC.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0)
-            }
+            popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections()
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
