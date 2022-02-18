@@ -95,7 +95,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
 extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let viewModel = viewModel,
-                let count = viewModel.historyItems?.count else { return 0 }
+              let count = viewModel.historyItems?.count else { return 0 }
 
         // If there are less than or equal items to the max number of items allowed per column,
         // we can return the standard count, as we don't need to display filler cells.

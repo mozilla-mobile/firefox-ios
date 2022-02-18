@@ -155,7 +155,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     fileprivate var hasPresentedContextualHint = false
     fileprivate var didRotate = false
     fileprivate let flowLayout = UICollectionViewFlowLayout()
-//    fileprivate let experiments: NimbusApi
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
     fileprivate var timer: Timer?
@@ -771,13 +770,10 @@ extension FirefoxHomeViewController {
 
         historyCell.viewModel = viewModel.historyHighlightsViewModel
         historyCell.viewModel?.recordSectionHasShown()
-//        viewModel.historyHighlightsViewModel.updateData {
         historyCell.reloadLayout()
         historyCell.setNeedsLayout()
 
         return historyCell
-//        }
-        
     }
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {

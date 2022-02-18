@@ -6,6 +6,8 @@ import MozillaAppServices
 
 class FirefoxHomeViewModel: FeatureFlagsProtocol {
 
+    // MARK: - Properties
+    
     // Privacy of home page is controlled throught notifications since tab manager selected tab
     // isn't always the proper privacy mode that should be reflected on the home page
     var isPrivate: Bool
@@ -97,6 +99,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         return pocketViewModel.hasData
     }
 
+    // MARK: - Initializers
     init(profile: Profile,
          isZeroSearch: Bool = false,
          isPrivate: Bool,
@@ -111,6 +114,8 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         self.experiments = experiments
         self.isPrivate = isPrivate
     }
+    
+    // MARK: - Interfaces
     
     public func updateEnabledSections() {
         enabledSections.removeAll()

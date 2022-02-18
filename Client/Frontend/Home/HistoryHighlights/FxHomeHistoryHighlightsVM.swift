@@ -84,7 +84,7 @@ class FxHomeHistoryHightlightsVM {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .historyHighlightsItemOpened)
     }
 
-    // good candidate for protocol because is used in JumpBackIn and here
+    // TODO: Good candidate for protocol because is used in JumpBackIn and here
     func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
         siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
             completion(image)
