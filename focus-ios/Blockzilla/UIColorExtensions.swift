@@ -31,7 +31,9 @@ extension UIColor {
     static let magenta70 = UIColor(named: "Magenta70")!
     static let primaryDark = UIColor(named: "PrimaryDark")!
     static let primaryText = UIColor(named: "PrimaryText")!
+    static let purple30 = UIColor(named: "Purple30")!
     static let purple50 = UIColor(named: "Purple50")!
+    static let purple70 = UIColor(named: "Purple70")!
     static let purple80 = UIColor(named: "Purple80")!
     static let red60 = UIColor(named: "Red60")!
     static let scrim = UIColor(named: "Scrim")!

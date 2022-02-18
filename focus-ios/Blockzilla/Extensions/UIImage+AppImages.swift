@@ -14,4 +14,6 @@ extension UIImage {
     static let connectionSecure = UIImage(named: "icon_https")!
     
     static let defaultFavicon = UIImage(named: "icon_favicon")!
+    
+    static let iconStopMenu = UIImage(named: "icon_stop_menu")!
 }
