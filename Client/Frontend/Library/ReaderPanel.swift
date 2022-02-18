@@ -421,7 +421,7 @@ extension ReadingListPanel: LibraryPanelContextMenu {
 
         let removeAction = SingleSheetItem(title: .RemoveContextMenuTitle,
                                            iconString: "action_remove",
-                                           handler: { _, _ in
+                                           tapHandler: { _ in
             self.deleteItem(atIndex: indexPath)
         }).items
 

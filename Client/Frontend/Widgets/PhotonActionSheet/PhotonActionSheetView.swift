@@ -23,13 +23,19 @@ struct PhotonActionSheetViewUX {
     static let IconSize = 16
 }
 
+protocol PhotonActionSheetViewDelegate: AnyObject {
+    func didClick(action: SingleSheetItem?)
+}
+
 // This is the view contained in PhotonActionSheetContainerCell in the PhotonActionSheet table view.
 // More than one PhotonActionSheetView can be in the parent container cell.
-class PhotonActionSheetView: UIView {
+class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
 
     // MARK: - Variables
 
     private var badgeOverlay: BadgeWithBackdrop?
+    private var action: SingleSheetItem?
+    weak var delegate: PhotonActionSheetViewDelegate?
 
     private func createLabel() -> UILabel {
         let label = UILabel()
@@ -106,19 +112,13 @@ class PhotonActionSheetView: UIView {
         textStackView.distribution = .fillProportionally
     }
 
-    // TODO: Laurie - Gesture listener ??
-//    override var isSelected: Bool {
-//        didSet {
-//            selectedOverlay.isHidden = !isSelected
-//        }
-//    }
-
     lazy var bottomBorder: UIView = .build { _ in }
     lazy var verticalBorder: UIView = .build { _ in }
 
     // MARK: - init
 
     override init(frame: CGRect) {
+        self.isSelected = false
         super.init(frame: frame)
     }
 
@@ -126,9 +126,74 @@ class PhotonActionSheetView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Setup
+    // MARK: - Gesture recognizer
+
+    private lazy var tapRecognizer: UITapGestureRecognizer = {
+        let tapRecognizer = UITapGestureRecognizer()
+        tapRecognizer.addTarget(self, action: #selector(didClick))
+        tapRecognizer.numberOfTapsRequired = 1
+        tapRecognizer.cancelsTouchesInView = false
+        tapRecognizer.delegate = self
+        return tapRecognizer
+    }()
+
+    var isSelected: Bool {
+        didSet {
+            selectedOverlay.isHidden = !isSelected
+        }
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        isSelected = true
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        isSelected = false
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        if let touch = touches.first {
+            isSelected = frame.contains(touch.location(in: self))
+        }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        isSelected = false
+    }
+
+    @objc private func didClick(_ gestureRecognizer: UITapGestureRecognizer?) {
+        guard let action = action,
+              let handler = action.tapHandler
+        else {
+            self.delegate?.didClick(action: nil)
+            return
+        }
+
+        print("Laurie - state:\(gestureRecognizer?.state.rawValue)")
+        isSelected = gestureRecognizer?.state == .began || gestureRecognizer?.state == .changed
+
+        // Switches can be toggled on/off without dismissing the menu
+        if action.accessory == .Switch {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+            action.isEnabled = !action.isEnabled
+            // TODO: laurie - test switches - need to reload ?
+            return
+        }
+
+        action.isEnabled = !action.isEnabled
+        handler(action)
+        self.delegate?.didClick(action: action)
+    }
+
+    // MARK: Setup
 
     func configure(with action: SingleSheetItem) {
+        self.action = action
         setupViews()
 
         titleLabel.text = action.title
@@ -143,8 +208,6 @@ class PhotonActionSheetView: UIView {
 
         accessibilityIdentifier = action.iconString ?? action.accessibilityId
         accessibilityLabel = action.title
-        // TODO: laurie - selection
-//        selectionStyle = action.tapHandler != nil ? .default : .none
 
         if action.isFlipped {
             transform = CGAffineTransform(scaleX: 1, y: -1)
@@ -162,12 +225,13 @@ class PhotonActionSheetView: UIView {
     }
 
     func addVerticalBorder(shouldAdd: Bool) {
+        guard shouldAdd else { return }
         verticalBorder.backgroundColor = UIColor.theme.tableView.separator
         addSubview(verticalBorder)
 
         NSLayoutConstraint.activate([
-            verticalBorder.topAnchor.constraint(equalTo: topAnchor, constant: 1),
-            verticalBorder.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 1),
+            verticalBorder.topAnchor.constraint(equalTo: topAnchor),
+            verticalBorder.bottomAnchor.constraint(equalTo: bottomAnchor),
             verticalBorder.leadingAnchor.constraint(equalTo: leadingAnchor),
             verticalBorder.widthAnchor.constraint(equalToConstant: 1)
         ])
@@ -175,9 +239,9 @@ class PhotonActionSheetView: UIView {
 
     private func setupViews() {
         isAccessibilityElement = true
-        addSubview(selectedOverlay)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
+        addGestureRecognizer(tapRecognizer)
 
         // Setup our StackViews
         textStackView.addArrangedSubview(titleLabel)
@@ -186,6 +250,7 @@ class PhotonActionSheetView: UIView {
         stackView.addArrangedSubview(statusIcon)
         addSubview(stackView)
 
+        addSubview(selectedOverlay)
         setupConstraints()
     }
 
@@ -215,7 +280,7 @@ class PhotonActionSheetView: UIView {
 
         var constraints = [NSLayoutConstraint]()
         // Determine if border should be at top or bottom when flipping
-        let top = bottomBorder.topAnchor.constraint(equalTo: topAnchor, constant: 1)
+        let top = bottomBorder.topAnchor.constraint(equalTo: topAnchor)
         let bottom = bottomBorder.bottomAnchor.constraint(equalTo: bottomAnchor)
         let anchor = action.isFlipped ? top : bottom
 

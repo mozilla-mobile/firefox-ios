@@ -40,7 +40,7 @@ class SingleSheetItem {
     private(set) var accessoryText: String?
     private(set) var bold: Bool = false
     private(set) var tabCount: String?
-    private(set) var tapHandler: ((SingleSheetItem, UITableViewCell) -> Void)?
+    private(set) var tapHandler: ((SingleSheetItem) -> Void)?
     private(set) var badgeIconName: String?
 
     // Flip the cells for the toolbar menu since content needs to appear at the bottom
@@ -62,7 +62,7 @@ class SingleSheetItem {
          iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left,
          iconTint: UIColor? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None,
          accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil,
-         handler: ((SingleSheetItem, UITableViewCell) -> Void)? = nil) {
+         tapHandler: ((SingleSheetItem) -> Void)? = nil) {
 
         self.title = title
         self.alternateTitle = alternateTitle
@@ -72,7 +72,7 @@ class SingleSheetItem {
         self.iconAlignment = iconAlignment
         self.isEnabled = isEnabled
         self.accessory = accessory
-        self.tapHandler = handler
+        self.tapHandler = tapHandler
         self.text = text
         self.accessoryText = accessoryText
         self.bold = bold ?? false

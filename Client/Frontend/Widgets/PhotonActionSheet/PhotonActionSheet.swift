@@ -8,21 +8,12 @@ import Shared
 import UIKit
 
 // This file is main table view used for the action sheet
-class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, NotificationThemeable {
+class PhotonActionSheet: UIViewController, NotificationThemeable {
 
     // MARK: - Variables
     private var tableView = UITableView(frame: .zero, style: .grouped)
     private var viewModel: PhotonActionSheetViewModel!
     private var constraints = [NSLayoutConstraint]()
-
-    private lazy var tapRecognizer: UITapGestureRecognizer = {
-        let tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer.addTarget(self, action: #selector(dismiss))
-        tapRecognizer.numberOfTapsRequired = 1
-        tapRecognizer.cancelsTouchesInView = false
-        tapRecognizer.delegate = self
-        return tapRecognizer
-    }()
 
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
@@ -65,7 +56,6 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
 
@@ -265,14 +255,6 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
 
     // MARK: - Actions
 
-    @objc private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
-        dismiss(animated: true, completion: nil)
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return !tableView.frame.contains(touch.location(in: view))
-    }
-
     @objc private func stopRotateSyncIcon() {
         ensureMainThread {
             self.tableView.reloadData()
@@ -286,39 +268,10 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
     }
 }
 
-// MARK: - UITableViewDelegate
-extension PhotonActionSheet: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let action = viewModel.actions[indexPath.section][indexPath.row]
-        // TODO: Laurie Click action
-
-//        guard let handler = action.tapHandler else {
-//            self.dismiss(nil)
-//            return
-//        }
-//
-//        // Switches can be toggled on/off without dismissing the menu
-//        if action.accessory == .Switch {
-//            let generator = UIImpactFeedbackGenerator(style: .medium)
-//            generator.impactOccurred()
-//            action.isEnabled = !action.isEnabled
-//            viewModel.actions[indexPath.section][indexPath.row] = action
-//            self.tableView.deselectRow(at: indexPath, animated: true)
-//            self.tableView.reloadData()
-//        } else {
-//            action.isEnabled = !action.isEnabled
-//            self.dismiss(nil)
-//        }
-//
-//        return handler(action, self.tableView(tableView, cellForRowAt: indexPath))
-    }
-}
-
-// MARK: - UITableViewDataSource
-extension PhotonActionSheet: UITableViewDataSource {
+// MARK: - UITableViewDataSource, UITableViewDelegate
+extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        // TODO: Laurie - handle in child
         guard let section = viewModel.actions[safe: indexPath.section],
               let action = section[safe: indexPath.row],
               let custom = action.items[0].customHeight else { return UITableView.automaticDimension }
@@ -343,6 +296,7 @@ extension PhotonActionSheet: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetContainerCell
         let actions = viewModel.actions[indexPath.section][indexPath.row]
         cell.configure(actions: actions, viewModel: viewModel)
+        cell.delegate = self
 
         if viewModel.toolbarMenuInversed {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
@@ -372,5 +326,12 @@ extension PhotonActionSheet: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return viewModel.getViewHeader(tableView: tableView, section: section)
+    }
+}
+
+// MARK: - PhotonActionSheetViewDelegate
+extension PhotonActionSheet: PhotonActionSheetViewDelegate {
+    func didClick(action: SingleSheetItem?) {
+        dismiss(animated: true, completion: nil)
     }
 }

@@ -39,19 +39,19 @@ extension PhotonActionSheetProtocol {
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonRowItems] {
-        let pasteGoAction = SingleSheetItem(title: .PasteAndGoTitle, iconString: "menu-PasteAndGo") { _, _ in
+        let pasteGoAction = SingleSheetItem(title: .PasteAndGoTitle, iconString: "menu-PasteAndGo") { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
             }
         }.items
 
-        let pasteAction = SingleSheetItem(title: .PasteTitle, iconString: "menu-Paste") { _, _ in
+        let pasteAction = SingleSheetItem(title: .PasteTitle, iconString: "menu-Paste") { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
             }
         }.items
 
-        let copyAddressAction = SingleSheetItem(title: .CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
+        let copyAddressAction = SingleSheetItem(title: .CopyAddressTitle, iconString: "menu-Copy-Link") { _ in
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage,
@@ -78,7 +78,7 @@ extension PhotonActionSheetProtocol {
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenuViewMobileSiteTitleString : .AppMenuViewDesktopSiteTitleString
         }
-        let toggleDesktopSite = SingleSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { _, _ in
+        let toggleDesktopSite = SingleSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { _ in
 
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
@@ -91,7 +91,7 @@ extension PhotonActionSheetProtocol {
 
             let title: String = !isSafelisted ? .TrackingProtectionReloadWithout : .TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
-            let toggleTP = SingleSheetItem(title: title, iconString: imageName) { _, _ in
+            let toggleTP = SingleSheetItem(title: title, iconString: imageName) { _ in
                 ContentBlocker.shared.safelist(enable: !isSafelisted, url: url) {
                     tab.reload()
                 }

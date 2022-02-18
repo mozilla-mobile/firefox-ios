@@ -8,6 +8,7 @@ import Foundation
 // A PhotonActionSheet cell
 class PhotonActionSheetContainerCell: UITableViewCell {
 
+    weak var delegate: PhotonActionSheetViewDelegate?
     private lazy var containerStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill
         stackView.distribution = .fillProportionally
@@ -26,6 +27,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        selectionStyle = .none
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
 
@@ -47,22 +49,6 @@ class PhotonActionSheetContainerCell: UITableViewCell {
         }
     }
 
-    //        // TODO: Laurie - Pass in more than 1 action when needed
-    //
-    //        action.tintColor = viewModel.tintColor
-    //        cell.configure(with: [action])
-    //
-    //        if viewModel.toolbarMenuInversed {
-    //            let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
-    //            cell.hideBottomBorder(isHidden: rowIsLastInSection)
-    //
-    //        } else if viewModel.modalStyle == .popover {
-    //            let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
-    //            let isLastSection = indexPath.section == tableView.numberOfSections - 1
-    //            let rowIsLast = isLastRow && isLastSection
-    //            cell.hideBottomBorder(isHidden: rowIsLast)
-    //        }
-
     // MARK: - Setup
 
     private func setupConstraints() {
@@ -78,6 +64,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
         let childView = PhotonActionSheetView()
         childView.configure(with: action)
         childView.addVerticalBorder(shouldAdd: !containerStackView.arrangedSubviews.isEmpty)
+        childView.delegate = self
         containerStackView.addArrangedSubview(childView)
     }
 
@@ -85,5 +72,12 @@ class PhotonActionSheetContainerCell: UITableViewCell {
         containerStackView.arrangedSubviews
           .compactMap { $0 as? PhotonActionSheetView }
           .forEach { $0.bottomBorder.isHidden = isHidden }
+    }
+}
+
+// MARK: - PhotonActionSheetViewDelegate
+extension PhotonActionSheetContainerCell: PhotonActionSheetViewDelegate {
+    func didClick(action: SingleSheetItem?) {
+        delegate?.didClick(action: action)
     }
 }

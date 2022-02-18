@@ -37,11 +37,11 @@ extension LibraryPanelContextMenu {
     func getRecentlyClosedTabContexMenuActions(for site: Site, recentlyClosedPanelDelegate: RecentlyClosedPanelDelegate?) ->  [PhotonRowItems]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = SingleSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
+        let openInNewTabAction = SingleSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _ in
             recentlyClosedPanelDelegate?.openRecentlyClosedSiteInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = SingleSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
+        let openInNewPrivateTabAction = SingleSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
             recentlyClosedPanelDelegate?.openRecentlyClosedSiteInNewTab(siteURL, isPrivate: true)
         }
 
@@ -51,11 +51,11 @@ extension LibraryPanelContextMenu {
     func getRemoteTabContexMenuActions(for site: Site, remotePanelDelegate: RemotePanelDelegate?) ->  [PhotonRowItems]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = SingleSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
+        let openInNewTabAction = SingleSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _ in
             remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = SingleSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
+        let openInNewPrivateTabAction = SingleSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
             remotePanelDelegate?.remotePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
@@ -66,12 +66,12 @@ extension LibraryPanelContextMenu {
         guard let siteURL = URL(string: site.url) else { return nil }
 
         let openInNewTabAction = SingleSheetItem(title: .OpenInNewTabContextMenuTitle,
-                                                 iconString: "quick_action_new_tab") { _, _ in
+                                                 iconString: "quick_action_new_tab") { _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }.items
         
         let openInNewPrivateTabAction = SingleSheetItem(title: .OpenInNewPrivateTabContextMenuTitle,
-                                                        iconString: "quick_action_new_private_tab") { _, _ in
+                                                        iconString: "quick_action_new_private_tab") { _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }.items
         

@@ -111,7 +111,7 @@ class DownloadHelper: NSObject {
             label.lineBreakMode = .byCharWrapping
         }
 
-        let downloadFileItem = SingleSheetItem(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
+        let downloadFileItem = SingleSheetItem(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
             self.browserViewController.downloadQueue.enqueue(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
