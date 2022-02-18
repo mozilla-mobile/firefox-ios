@@ -771,11 +771,13 @@ extension FirefoxHomeViewController {
 
         historyCell.viewModel = viewModel.historyHighlightsViewModel
         historyCell.viewModel?.recordSectionHasShown()
-        viewModel.historyHighlightsViewModel.updateData()
+//        viewModel.historyHighlightsViewModel.updateData {
         historyCell.reloadLayout()
         historyCell.setNeedsLayout()
 
         return historyCell
+//        }
+        
     }
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
@@ -822,6 +824,14 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         if viewModel.isPocketSectionEnabled {
             viewModel.pocketViewModel.updateData {
                 // TODO: Once section are standardized, reload only the pocket section when data is updated
+                self.collectionView.reloadData()
+            }
+        }
+        
+        
+        if viewModel.isHistoryHightlightsSectionEnabled {
+            // TODO: Once section are standardized, reload only the historyHighligthst section when data is updated
+            viewModel.historyHighlightsViewModel.updateData {
                 self.collectionView.reloadData()
             }
         }

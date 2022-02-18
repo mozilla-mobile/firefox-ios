@@ -57,12 +57,12 @@ class FxHomeHistoryHightlightsVM {
         self.tabManager = tabManager
         self.foregroundBVC = foregroundBVC
 
-        loadItems()
+        loadItems(){}
     }
 
     // MARK: - Public methods
-    public func updateData() {
-        loadItems()
+    public func updateData(completion: @escaping () -> Void) {
+        loadItems(completion: completion)
     }
 
     public func recordSectionHasShown() {
@@ -93,9 +93,10 @@ class FxHomeHistoryHightlightsVM {
 
     // MARK: - Private Methods
 
-    private func loadItems() {
+    private func loadItems(completion: @escaping () -> Void) {
         HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
             self?.historyItems = highlights
+            completion()
         }
     }
 }
