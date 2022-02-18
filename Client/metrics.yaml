@@ -1905,7 +1905,7 @@ cfr_analytics:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
     data_reviews:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-08-01"
@@ -1923,7 +1923,7 @@ cfr_analytics:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
     data_reviews:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-08-01"
@@ -1941,7 +1941,7 @@ cfr_analytics:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
     data_reviews:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-08-01"
