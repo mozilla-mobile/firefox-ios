@@ -78,6 +78,16 @@ extension UIViewController {
     @objc func dismissVC() {
         self.dismiss(animated: true, completion: nil)
     }
+
+    func present(viewController: UIViewController, animated: Bool) {
+        if let presentedViewController = presentedViewController {
+            presentedViewController.dismiss(animated: false, completion: {
+                self.present(viewController, animated: animated, completion: nil)
+            })
+        } else {
+            present(viewController, animated: animated, completion: nil)
+        }
+    }
 }
  
 

@@ -273,6 +273,7 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
+        // Need to handle click outside view for non-popover sheet styles
         guard let touch = touches.first else { return }
         if !tableView.frame.contains(touch.location(in: view)) {
             dismissVC()

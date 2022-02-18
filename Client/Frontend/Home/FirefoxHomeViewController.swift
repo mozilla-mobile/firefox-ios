@@ -115,7 +115,7 @@ extension HomePanelContextMenu {
     }
 
     func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
-        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
+        guard let actions = getContextMenuActions(for: site, with: indexPath) else { return nil }
 
         let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
         let contextMenu = PhotonActionSheet(viewModel: viewModel)
@@ -1409,7 +1409,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 popoverController.permittedArrowDirections = [.up, .down, .left]
                 popoverController.delegate = self
             }
-            self.present(controller, animated: true, completion: nil)
+            self.present(viewController: controller, animated: true)
         })
 
         let removeTopSiteAction = SingleSheetItem(title: .RemoveContextMenuTitle, iconString: "action_remove", tapHandler: { _ in
