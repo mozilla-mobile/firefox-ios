@@ -54,6 +54,7 @@ class WallpaperResourceManager {
         switch wallpaper.type {
         case .defaultBackground: return true
         case .themed(type: .firefox): return verify(.bundled, for: wallpaper)
+        case .themed(type: .firefoxOverlay): return verify(.bundled, for: wallpaper)
         case .themed(type: .projectHouse): return verify(.downloaded, for: wallpaper)
         }
     }
@@ -62,7 +63,9 @@ class WallpaperResourceManager {
     
     func getImageSet(for wallpaper: Wallpaper) -> WallpaperImageSet {
         switch wallpaper.type {
-        case .defaultBackground, .themed(type: .firefox):
+        case .defaultBackground,
+                .themed(type: .firefox),
+                .themed(type: .firefoxOverlay):
             return getResourceOf(type: .bundled, for: wallpaper)
         case .themed(type: .projectHouse):
             return getResourceOf(type: .downloaded, for: wallpaper)
