@@ -36,8 +36,6 @@ class SingleSheetItem {
     private(set) var iconTint: UIColor?
 
     var isEnabled: Bool // Used by toggles like nightmode to switch tint color
-    private(set) var accessory: PhotonActionSheetCellAccessoryType
-    private(set) var accessoryText: String?
     private(set) var bold: Bool = false
     private(set) var tabCount: String?
     private(set) var tapHandler: ((SingleSheetItem) -> Void)?
@@ -60,9 +58,8 @@ class SingleSheetItem {
 
     init(title: String, alternateTitle: String? = nil, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil,
          iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left,
-         iconTint: UIColor? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None,
-         accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil,
-         tapHandler: ((SingleSheetItem) -> Void)? = nil) {
+         iconTint: UIColor? = nil, isEnabled: Bool = false, badgeIconNamed: String? = nil,
+         bold: Bool? = false, tabCount: String? = nil, tapHandler: ((SingleSheetItem) -> Void)? = nil) {
 
         self.title = title
         self.alternateTitle = alternateTitle
@@ -71,10 +68,8 @@ class SingleSheetItem {
         self.iconType = iconType
         self.iconAlignment = iconAlignment
         self.isEnabled = isEnabled
-        self.accessory = accessory
         self.tapHandler = tapHandler
         self.text = text
-        self.accessoryText = accessoryText
         self.bold = bold ?? false
         self.tabCount = tabCount
         self.badgeIconName = badgeIconNamed

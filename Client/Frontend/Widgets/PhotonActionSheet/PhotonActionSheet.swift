@@ -266,6 +266,18 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
             preferredContentSize = tableView.contentSize
         }
     }
+
+    @objc private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
+        dismissVC()
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        guard let touch = touches.first else { return }
+        if !tableView.frame.contains(touch.location(in: view)) {
+            dismissVC()
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -332,6 +344,6 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 // MARK: - PhotonActionSheetViewDelegate
 extension PhotonActionSheet: PhotonActionSheetViewDelegate {
     func didClick(action: SingleSheetItem?) {
-        dismiss(animated: true, completion: nil)
+        dismissVC()
     }
 }

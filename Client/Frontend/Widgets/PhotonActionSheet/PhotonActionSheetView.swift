@@ -173,17 +173,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
             return
         }
 
-        print("Laurie - state:\(gestureRecognizer?.state.rawValue)")
         isSelected = gestureRecognizer?.state == .began || gestureRecognizer?.state == .changed
-
-        // Switches can be toggled on/off without dismissing the menu
-        if action.accessory == .Switch {
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
-            action.isEnabled = !action.isEnabled
-            // TODO: laurie - test switches - need to reload ?
-            return
-        }
 
         action.isEnabled = !action.isEnabled
         handler(action)
@@ -199,7 +189,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         titleLabel.text = action.title
         titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
         titleLabel.textColor = UIColor.theme.tableView.rowText
-        titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
+        titleLabel.textColor = titleLabel.textColor
         action.customRender?(titleLabel, self)
 
         subtitleLabel.text = action.text
@@ -220,7 +210,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         }
 
         setupBadgeOverlay(action: action)
-        setupAccessory(action: action)
         addSubBorder(action: action)
     }
 
@@ -357,22 +346,5 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         let customDarkTheme = UIColor(white: 0.3, alpha: 1)
         let color = LegacyThemeManager.instance.currentName == .dark ? customDarkTheme : UIColor.theme.actionMenu.closeButtonBackground
         badgeOverlay?.badge.tintBackground(color: color)
-    }
-
-    private func setupAccessory(action: SingleSheetItem) {
-        switch action.accessory {
-        case .Text:
-            disclosureLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-            disclosureLabel.text = action.accessoryText
-            disclosureLabel.textColor = titleLabel.textColor
-            stackView.addArrangedSubview(disclosureLabel)
-        case .Disclosure:
-            stackView.addArrangedSubview(disclosureIndicator)
-        case .Switch:
-            toggleSwitch.setOn(action.isEnabled)
-            stackView.addArrangedSubview(toggleSwitch.mainView)
-        case .None:
-            break // Do nothing. The rest are not supported yet.
-        }
     }
 }
