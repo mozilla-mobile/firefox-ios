@@ -8,28 +8,47 @@ import Shared
 
 class ContextualHintViewController: UIViewController, OnViewDismissable {
     
-    // MARK: - Public constants
+    struct UX {
+        static let closeButtonSize = CGSize(width: 35, height: 35)
+        static let closeButtonTrailing: CGFloat = 5
+        
+        static let labelLeading: CGFloat = 16
+        static let labelTop: CGFloat = 10
+        static let labelBottom: CGFloat = 23
+        static let labelTrailing: CGFloat = 3
+    }
     
-    // Note: make sure to use convenience init to set the type of hint while initializing 
-    let viewModel = ContextualHintViewModel()
+    // MARK: - UI Elements
+    private lazy var containerView: UIView = .build { [weak self] view in
+        view.backgroundColor = .clear
+    }
     
-    // MARK: - Properties
-    
-    var onViewDismissed: (() -> Void)? = nil
-
-    // UI
     private lazy var closeButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: "find_close")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(named: "find_close")?.withRenderingMode(.alwaysTemplate),
+                        for: .normal)
         button.tintColor = .white
-        button.addTarget(self, action: #selector(self?.dismissAnimated), for: .touchUpInside)
+        button.addTarget(self,
+                         action: #selector(self?.dismissAnimated),
+                         for: .touchUpInside)
     }
 
-    private lazy var descriptionText: UILabel = .build { [weak self] label in
-        guard let self = self else { return }
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 28)
+    private lazy var descriptionLabel: UILabel = .build { [weak self] label in
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(
+            withTextStyle: .body,
+            maxSize: 28)
         label.textAlignment = .left
-        label.numberOfLines = 0
         label.textColor = .white
+        label.numberOfLines = 0
+    }
+    
+    private lazy var actionButton: UIButton = .build { [weak self] button in
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 28)
+        button.titleLabel?.textAlignment = .left
+        button.titleLabel?.textColor = .white
+        button.titleLabel?.numberOfLines = 0
+        button.addTarget(self,
+                         action: #selector(self?.performAction),
+                         for: .touchUpInside)
     }
     
     private lazy var gradient: CAGradientLayer = {
@@ -44,39 +63,61 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         gradient.locations = [0, 0.63]
         return gradient
     }()
-
+    
     var heightForDescriptionLabel: CGFloat {
-        descriptionText.heightForLabel(descriptionText, width: 185, text: viewModel.hintType?.descriptionForHint())
+        let spacingWidth = UX.labelLeading + UX.closeButtonSize.width + UX.closeButtonTrailing
+        let height = descriptionLabel.heightForLabel(descriptionLabel,
+                                                     width: containerView.frame.width - spacingWidth,
+                                                     text: viewModel.hintType.descriptionForHint())
+        return height + UX.labelTop + UX.labelBottom
     }
-    
-    // Used to set the part of text in center
-    private var containerView = UIView()
 
-    // MARK: - Inits
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    // MARK: - Properties
+    private var viewModel: ContextualHintViewModel
+    internal var onViewSummoned: (() -> Void)? = nil
+    internal var onViewDismissed: (() -> Void)? = nil
+    var isPresenting: Bool = false
+    var hasAlreadyBeenPresented: Bool {
+        return viewModel.hasAlreadyBeenPresented
     }
-    
-    convenience init(hintType: ContextualHintViewType) {
-        self.init()
-        viewModel.hintType = hintType
+
+    // MARK: - Initializers
+    init(with viewModel: ContextualHintViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Lifecycles
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        initialViewSetup()
+        commonInit()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        onViewSummoned?()
+        onViewSummoned = nil
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+        isPresenting = true
+        
         // Portrait orientation: lock enable
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
+                                               andRotateTo: UIInterfaceOrientation.portrait)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        preferredContentSize = CGSize(width: 350, height: heightForDescriptionLabel)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.markContextualHintPresented()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -87,42 +128,77 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        viewModel.sendTelemetryEvent(for: .tapToDismiss)
+        isPresenting = false
         onViewDismissed?()
         onViewDismissed = nil
     }
     
-    func initialViewSetup() {
-        gradient.frame = view.bounds
-        view.layer.addSublayer(gradient)
-        view.addSubview(closeButton)
-        view.addSubview(descriptionText)
-        
-        // Constraints
+    private func commonInit() {
         setupView()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        setupContent()
     }
     
     private func setupView() {
-        descriptionText.text = viewModel.hintType?.descriptionForHint()
+        gradient.frame = view.bounds
+        view.layer.addSublayer(gradient)
+        containerView.addSubview(closeButton)
+        containerView.addSubview(descriptionLabel)
+        view.addSubview(containerView)
         
-        NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
-            closeButton.heightAnchor.constraint(equalToConstant: 44),
-
-            descriptionText.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(18)),
-            descriptionText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: CGFloat(-30)),
-            descriptionText.heightAnchor.constraint(equalToConstant: heightForDescriptionLabel),
-        ])
-
+        setupConstraints()
     }
     
-    // Button Actions
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0),
+            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.closeButtonTrailing),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
+
+            descriptionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.labelTop),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.labelLeading),
+            descriptionLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -UX.labelTrailing),
+            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.labelBottom),
+            
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.topAnchor.constraint(equalTo: view.topAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    private func setupContent() {
+        descriptionLabel.text = viewModel.hintType.descriptionForHint()
+    }
+    
+    // MARK: - Button Actions
     @objc private func dismissAnimated() {
+        viewModel.sendTelemetryEvent(for: .closeButton)
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func performAction() {
+        viewModel.sendTelemetryEvent(for: .performAction)
+    }
+    
+    // MARK: - Interface
+    public func shouldPresentHint() -> Bool {
+        return viewModel.shouldPresentContextualHint()
+    }
+    
+    public func set(
+        anchor: UIView,
+        withArrowDirection arrowDirection: UIPopoverArrowDirection,
+        andDelegate delegate: UIPopoverPresentationControllerDelegate,
+        withActionBeforeAppearing preAction: (() -> Void)? = nil,
+        andOnDismiss postAction: (() -> Void)? = nil
+    ) {
+        self.modalPresentationStyle = .popover
+        self.popoverPresentationController?.sourceView = anchor
+        self.popoverPresentationController?.permittedArrowDirections = arrowDirection
+        self.popoverPresentationController?.delegate = delegate
+        self.onViewSummoned = preAction
+        self.onViewDismissed = postAction
     }
 }

@@ -43,7 +43,9 @@ public struct PrefsKeys {
     public static let KeySearchBarPosition = "SearchBarPosition"
 
     // Firefox contextual hint
-    public static let ContextualHintJumpBackinKey = "ContextualHintJumpBackin"
+    public struct ContextualHints {
+        public static let JumpBackinKey = "ContextualHintJumpBackin"
+    }
 
     // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"

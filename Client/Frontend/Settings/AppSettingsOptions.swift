@@ -625,7 +625,7 @@ class ResetJumpBackInContextualHint: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        self.profile.prefs.removeObjectForKey(PrefsKeys.ContextualHintJumpBackinKey)
+        self.profile.prefs.removeObjectForKey(PrefsKeys.ContextualHints.JumpBackinKey)
     }
 }
 
