@@ -76,7 +76,6 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
     func homePanelDidRequestToCustomizeHomeSettings()
     func homePanelDidPresentContextualHint(type: ContextualHintViewType)
-    func homePanelDidDismissContextualHint(type: ContextualHintViewType)
 }
 
 extension HomePanelDelegate {
@@ -153,6 +152,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    // ROUX check this has presented thing
     fileprivate var hasPresentedContextualHint = false
     fileprivate var didRotate = false
     fileprivate let profile: Profile
@@ -408,7 +408,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: {context in
+        
+        coordinator.animate(alongsideTransition: { context in
             // The AS context menu does not behave correctly. Dismiss it when rotating.
             if let _ = self.presentedViewController as? PhotonActionSheet {
                 self.presentedViewController?.dismiss(animated: true, completion: nil)
@@ -486,15 +487,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     private func prepareJumpBackInContextualHint(_ indexPath: IndexPath, onView headerView: ASHeaderView) {
         guard contextualHintViewController.shouldPresentHint() else { return }
 
-        contextualHintViewController.modalPresentationStyle = .popover
-        contextualHintViewController.popoverPresentationController?.sourceView = headerView.titleLabel
-        contextualHintViewController.popoverPresentationController?.permittedArrowDirections = .down
-        contextualHintViewController.popoverPresentationController?.delegate = self
+        contextualHintViewController.set(
+            anchor: headerView.titleLabel,
+            withArrowDirection: .down,
+            andDelegate: self,
+            withActionBeforeAppearing: {
+                self.homePanelDelegate?.homePanelDidPresentContextualHint(type: .jumpBackIn)
+            })
         
-        contextualHintViewController.onViewDismissed = { [weak self] in
-            self?.homePanelDelegate?.homePanelDidDismissContextualHint(type: .jumpBackIn)
-        }
-
         // Using a timer for the first presentation of contextual hint due to many
         // reloads that happen on the collection view. Invalidating the timer
         // prevents from showing contextual hint at the wrong position.
@@ -506,16 +506,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         }
     }
 
-
-    private func presentContextualHint() {
-        hasPresentedContextualHint = true
-        contextualHintViewController.contextualHintPresented()
-        homePanelDelegate?.homePanelDidPresentContextualHint(type: .jumpBackIn)
-        present(contextualHintViewController, animated: true, completion: nil)
-    }
-    
     private func contextualHintPresentTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1.25, target: self, selector: #selector(presentContextualOverlay), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: 1.25,
+                                     target: self,
+                                     selector: #selector(presentContextualOverlay),
+                                     userInfo: nil,
+                                     repeats: false)
     }
 
     @objc private func presentContextualOverlay() {
@@ -526,7 +522,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             return
         }
         
-        presentContextualHint()
+        present(contextualHintViewController, animated: true, completion: nil)
     }
 
     // MARK: - Default browser card
@@ -1438,11 +1434,9 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     // Dismiss the popover if the device is being rotated.
     // This is used by the Share UIActivityViewController action sheet on iPad
     func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
-//        guard hasPresentedContextualHint, let frame = contextualHintFrame else {
-            popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
-//            return
-//        }
-//        rect.pointee = frame
+        // Do not dismiss if the popover is a CFR
+        if contextualHintViewController.isPresenting { return }
+        popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
     }
 
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {

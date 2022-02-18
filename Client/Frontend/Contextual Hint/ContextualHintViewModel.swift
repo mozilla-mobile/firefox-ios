@@ -6,10 +6,16 @@ import Foundation
 import Shared
 import UIKit
 
-enum ContextualHintViewType {
+enum CFRTelemetryEvent {
+    case closeButton
+    case tapToDismiss
+    case performAction
+}
+
+enum ContextualHintViewType: String {
     typealias ContextualHints = String.ContextualHints.FirefoxHomepage
     
-    case jumpBackIn
+    case jumpBackIn = "JumpBackIn"
 //    case inactiveTabs
     
     func descriptionForHint() -> String {
@@ -24,34 +30,68 @@ enum ContextualHintViewType {
 
 class ContextualHintViewModel {
 
+    // MARK: - Properties
     var hintType: ContextualHintViewType
-    var profile: Profile
+    private var profile: Profile
+    private var hasSentDismissEvent = false
     
+    // Do not present contextual hint in landscape on iPhone
+    private var isDeviceHintReady: Bool {
+        !UIWindow.isLandscape || UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
+    private var prefsKey: String {
+        switch hintType {
+        case .jumpBackIn:
+            return PrefsKeys.ContextualHints.JumpBackinKey
+        }
+    }
+    
+    // MARK: - Initializers
     init(forHintType hintType: ContextualHintViewType, with profile: Profile) {
         self.hintType = hintType
         self.profile = profile
     }
     
+    // MARK: - Interface
     func shouldPresentContextualHint() -> Bool {
         guard isDeviceHintReady else { return false }
-        switch hintType {
-        case .jumpBackIn:
-            guard let contextualHintData = profile.prefs.boolForKey(PrefsKeys.ContextualHints.JumpBackinKey) else {
-                return true
-            }
-            return contextualHintData
+        guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
+            return true
         }
+        return contextualHintData
     }
     
     func markContextualHintPresented() {
-        switch hintType {
-        case .jumpBackIn:
-            profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHints.JumpBackinKey)
-        }
+        profile.prefs.setBool(false, forKey: prefsKey)
     }
-
-    // Do not present contextual hint in landscape on iPhone
-    private var isDeviceHintReady: Bool {
-        !UIWindow.isLandscape || UIDevice.current.userInterfaceIdiom == .pad
+    
+    // MARK: - Telemetry
+    func sendTelemetryEvent(for eventType: CFRTelemetryEvent) {
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: hintType.rawValue]
+        
+        switch eventType {
+        case .closeButton:
+            print("Perform Telemetry")
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .contextualHint,
+                                         value: .dismissCFRFromButton,
+                                         extras: extra)
+            hasSentDismissEvent = true
+        case .tapToDismiss:
+            if hasSentDismissEvent { return }
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .contextualHint,
+                                         value: .dismissCFRFromOutsideTap,
+                                         extras: extra)
+        case .performAction:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .contextualHint,
+                                         value: .pressCFRActionButton,
+                                         extras: extra)
+        }
     }
 }

@@ -12,10 +12,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         static let closeButtonSize = CGSize(width: 35, height: 35)
         static let closeButtonTrailing: CGFloat = 5
         
-        static let labelLeading: CGFloat = 10
+        static let labelLeading: CGFloat = 16
         static let labelTop: CGFloat = 10
-        static let labelBottom: CGFloat = 10
-        static let labelTrailing: CGFloat = 10
+        static let labelBottom: CGFloat = 23
+        static let labelTrailing: CGFloat = 3
     }
     
     // MARK: - UI Elements
@@ -46,6 +46,9 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.textColor = .white
         button.titleLabel?.numberOfLines = 0
+        button.addTarget(self,
+                         action: #selector(self?.performAction),
+                         for: .touchUpInside)
     }
     
     private lazy var gradient: CAGradientLayer = {
@@ -70,13 +73,15 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
 
     // MARK: - Properties
-    var viewModel: ContextualHintViewModel
-    var onViewDismissed: (() -> Void)? = nil
+    private var viewModel: ContextualHintViewModel
+    private var hasSentDismissTelemetry: Bool = false
+    internal var onViewSummoned: (() -> Void)? = nil
+    internal var onViewDismissed: (() -> Void)? = nil
+    var isPresenting: Bool = false
 
     // MARK: - Initializers
     init(with viewModel: ContextualHintViewModel) {
         self.viewModel = viewModel
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -92,8 +97,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        onViewSummoned?()
+        onViewSummoned = nil
         view.setNeedsLayout()
         view.layoutIfNeeded()
+        isPresenting = true
         
         // Portrait orientation: lock enable
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
@@ -107,6 +115,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        viewModel.markContextualHintPresented()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -117,6 +126,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        viewModel.sendTelemetryEvent(for: .tapToDismiss)
+        isPresenting = false
         onViewDismissed?()
         onViewDismissed = nil
     }
@@ -161,15 +172,31 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     // MARK: - Button Actions
     @objc private func dismissAnimated() {
+        viewModel.sendTelemetryEvent(for: .closeButton)
         self.dismiss(animated: true, completion: nil)
     }
     
-    // MARK: - Methods
+    @objc private func performAction() {
+        viewModel.sendTelemetryEvent(for: .performAction)
+    }
+    
+    // MARK: - Interface
     public func shouldPresentHint() -> Bool {
         return viewModel.shouldPresentContextualHint()
     }
     
-    public func contextualHintPresented() {
-        viewModel.markContextualHintPresented()
+    public func set(
+        anchor: UIView,
+        withArrowDirection arrowDirection: UIPopoverArrowDirection,
+        andDelegate delegate: UIPopoverPresentationControllerDelegate,
+        withActionBeforeAppearing preAction: (() -> Void)? = nil,
+        andOnDismiss postAction: (() -> Void)? = nil
+    ) {
+        self.modalPresentationStyle = .popover
+        self.popoverPresentationController?.sourceView = anchor
+        self.popoverPresentationController?.permittedArrowDirections = arrowDirection
+        self.popoverPresentationController?.delegate = delegate
+        self.onViewSummoned = preAction
+        self.onViewDismissed = postAction
     }
 }
