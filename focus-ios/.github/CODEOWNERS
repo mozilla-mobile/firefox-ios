@@ -26,7 +26,7 @@
 # and a limited group of people. We narrowed this down to make sure that no
 # changes go unnoticed.
 
-/bitrise.yml @mozilla-mobile/releng @isabelrios
+/bitrise.yml @mozilla-mobile/releng @isabelrios @jevans-mozilla
 
 # Changes to string files can be reviewed and approved by mergify
 
