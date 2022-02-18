@@ -1878,7 +1878,7 @@ wallpaper_analytics:
       wallpaper_type:
         type: string
         description: |
-          The type of wallpaper set.
+          The name of the wallpaper set.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
     data_reviews:
@@ -1887,6 +1887,64 @@ wallpaper_analytics:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
+
+# CFR Metrics
+cfr_analytics:
+  dismiss_cfr_from_button:
+    type: event
+    description: |
+      Recorded when the user dismisses a CFR by tapping
+      the close button in the CFR. Hint type is sent
+      in the extra keys.
+    extra_keys:
+      hint_type:
+        type: string
+        description: |
+          The type of CFR being interacted with.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-08-01"
+  dismiss_cfr_from_outside_tap:
+    type: event
+    description: |
+      Recorded when the user dismisses a CFR by tapping
+      outside the CFR. Hint type is sent in the extra keys.
+    extra_keys:
+      hint_type:
+        type: string
+        description: |
+          The type of CFR being interacted with.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-08-01"
+  press_cfr_action_button:
+    type: event
+    description: |
+      Recorded when the user taps CFR's action button.
+      Hint type is sent in the extra keys.
+    extra_keys:
+      hint_type:
+        type: string
+        description: |
+          The type of CFR being interacted with.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-08-01"
 
 # Inactive Tabs metrics
 inactive_tabs_tray:
