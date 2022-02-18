@@ -33,12 +33,14 @@ class TabTrayViewController: UIViewController {
                                      target: self,
                                      action: #selector(didTapDeleteTabs(_:)))
         button.accessibilityIdentifier = "closeAllTabsButtonTabTray"
+        button.accessibilityLabel = .TabTrayDeleteMenuButtonAccessibilityLabel
         return button
     }()
 
     lazy var newTabButton: UIBarButtonItem = {
         let button = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapAddTab(_:))))
         button.accessibilityIdentifier = "newTabButtonTabTray"
+        button.accessibilityLabel = .TabTrayAddTabAccessibilityLabel
         return button
     }()
 

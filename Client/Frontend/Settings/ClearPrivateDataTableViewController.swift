@@ -183,7 +183,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         var sectionTitle: String?
         if section == SectionToggles {
-            sectionTitle = .SettingsClearPrivateDataTitle
+            sectionTitle = .SettingsClearPrivateDataSectionName
         } else {
             sectionTitle = nil
         }

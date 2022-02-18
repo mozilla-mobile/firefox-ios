@@ -257,7 +257,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         }
 
         let nextController = RecentlyClosedTabsPanel(profile: profile)
-        nextController.title = .RecentlyClosedTabsButtonTitle
+        nextController.title = .RecentlyClosedTabsPanelTitle
         nextController.libraryPanelDelegate = libraryPanelDelegate
         nextController.recentlyClosedTabsDelegate = BrowserViewController.foregroundBVC()
         refreshControl?.endRefreshing()

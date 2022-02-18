@@ -48,7 +48,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         self.prefs = prefs
         super.init(style: .grouped)
 
-        self.title = .AppMenuOpenHomePageTitleString
+        self.title = .SettingsHomePageSectionName
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -101,8 +101,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         })
         showWebPage.textField.textAlignment = .natural
 
-        return SettingSection(title: NSAttributedString(string: .NewTabSectionName),
-                              footerTitle: NSAttributedString(string: .NewTabSectionNameFooter),
+        return SettingSection(title: NSAttributedString(string: .SettingsHomePageURLSectionTitle),
                               children: [showTopSites, showWebPage])
     }
 
@@ -146,7 +145,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
             sectionItems.append(wallpaperSetting)
         }
 
-        return SettingSection(title: NSAttributedString(string: .SettingsTopSitesCustomizeTitle),
+        return SettingSection(title: NSAttributedString(string: .SettingsCustomizeHomeTitle),
                               footerTitle: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Description),
                               children: sectionItems)
     }
