@@ -68,7 +68,7 @@ class ContextualHintViewModel {
     }
     
     func markContextualHintPresented() {
-        profile.prefs.setBool(false, forKey: prefsKey)
+        profile.prefs.setBool(true, forKey: prefsKey)
     }
     
     // MARK: - Telemetry

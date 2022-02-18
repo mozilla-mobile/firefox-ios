@@ -537,7 +537,7 @@ extension TelemetryWrapper {
             if let position = extras?[EventExtraKey.topSitePosition.rawValue] as? String, let tileType = extras?[EventExtraKey.topSiteTileType.rawValue] as? String {
                 GleanMetrics.TopSite.tilePressed.record(GleanMetrics.TopSite.TilePressedExtra(position: position, tileType: tileType))
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
         // MARK: Preferences
@@ -545,7 +545,7 @@ extension TelemetryWrapper {
             if let preference = extras?[EventExtraKey.preference.rawValue] as? String, let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
                 GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to, preference: preference))
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
         // MARK: QR Codes
@@ -606,7 +606,7 @@ extension TelemetryWrapper {
             if let slideNum = extras?["slide-num"] as? Int32 {
                 GleanMetrics.Onboarding.finish.record(GleanMetrics.Onboarding.FinishExtra(slideNum: slideNum))
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .view, .welcomeScreenView, _, _):
             GleanMetrics.Onboarding.welcomeScreen.add()
@@ -652,7 +652,7 @@ extension TelemetryWrapper {
             if let position = extras?[EventExtraKey.pocketTilePosition.rawValue] as? String {
                 GleanMetrics.Pocket.openStoryPosition["position-"+position].add()
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .view, .pocketSectionImpression, _, _):
             GleanMetrics.Pocket.sectionImpressions.add()
@@ -819,7 +819,7 @@ extension TelemetryWrapper {
                 )
 
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
         case (.action, .change, .wallpaperSettings, .toggleLogoWallpaperButton, _):
@@ -828,7 +828,7 @@ extension TelemetryWrapper {
                     GleanMetrics.WallpaperAnalytics.ToggleLogoWallpaperButtonExtra(changedTo: state)
                 )
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .tap, .wallpaperSettings, .wallpaperSelected, let extras):
             if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
@@ -841,7 +841,7 @@ extension TelemetryWrapper {
                 )
 
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
         // MARK: - Contextual Hints
@@ -850,29 +850,29 @@ extension TelemetryWrapper {
                 GleanMetrics.CfrAnalytics.dismissCfrFromButton.record(
                     GleanMetrics.CfrAnalytics.DismissCfrFromButtonExtra(hintType: hintType))
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .tap, .contextualHint, .dismissCFRFromOutsideTap, let extras):
             if let hintType = extras?[EventExtraKey.cfrType.rawValue] as? String {
                 GleanMetrics.CfrAnalytics.dismissCfrFromOutsideTap.record(
                     GleanMetrics.CfrAnalytics.DismissCfrFromOutsideTapExtra(hintType: hintType))
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .tap, .contextualHint, .pressCFRActionButton, let extras):
             if let hintType = extras?[EventExtraKey.cfrType.rawValue] as? String {
                 GleanMetrics.CfrAnalytics.pressCfrActionButton.record(
                     GleanMetrics.CfrAnalytics.PressCfrActionButtonExtra(hintType: hintType))
             } else {
-                recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
         default:
-            recordUnistrumentedMetric(category: category, method: method, object: object, value: value, extras: extras)
+            recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }
     }
 
-    private static func recordUnistrumentedMetric(
+    private static func recordUninstrumentedMetrics(
         category: EventCategory,
         method: EventMethod,
         object: EventObject,
