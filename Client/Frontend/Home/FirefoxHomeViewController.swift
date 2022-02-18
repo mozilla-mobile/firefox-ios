@@ -1430,7 +1430,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         } else {
             topSiteActions = [PhotonRowItems(pinTopSite), PhotonRowItems(removeTopSiteAction)]
         }
-        
+
         var actions: [PhotonRowItems] = [PhotonRowItems(openInNewTabAction),
                                          PhotonRowItems(openInNewPrivateTabAction),
                                          PhotonRowItems(bookmarkAction),

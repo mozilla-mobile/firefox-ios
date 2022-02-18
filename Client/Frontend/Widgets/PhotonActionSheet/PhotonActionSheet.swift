@@ -342,7 +342,7 @@ extension PhotonActionSheet: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetContainerCell
         let actions = viewModel.actions[indexPath.section][indexPath.row]
-        cell.configure(at: indexPath, actions: actions, viewModel: viewModel)
+        cell.configure(actions: actions, viewModel: viewModel)
 
         if viewModel.toolbarMenuInversed {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1

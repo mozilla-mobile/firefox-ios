@@ -40,7 +40,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
 
     // MARK: Table view
     
-    func configure(at indexPath: IndexPath, actions: PhotonRowItems, viewModel: PhotonActionSheetViewModel) {
+    func configure(actions: PhotonRowItems, viewModel: PhotonActionSheetViewModel) {
         for action in actions.items {
             action.tintColor = viewModel.tintColor
             configure(with: action)
@@ -77,6 +77,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
     func configure(with action: SingleSheetItem) {
         let childView = PhotonActionSheetView()
         childView.configure(with: action)
+        childView.addVerticalBorder(shouldAdd: !containerStackView.arrangedSubviews.isEmpty)
         containerStackView.addArrangedSubview(childView)
     }
 
@@ -84,27 +85,5 @@ class PhotonActionSheetContainerCell: UITableViewCell {
         containerStackView.arrangedSubviews
           .compactMap { $0 as? PhotonActionSheetView }
           .forEach { $0.bottomBorder.isHidden = isHidden }
-    }
-
-    // TODO: Laurie - Add border between child cells
-    private func addVerticalBorder(action: PhotonRowItems) {
-//        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
-//        contentView.addSubview(bottomBorder)
-//
-//        var constraints = [NSLayoutConstraint]()
-//        // Determine if border should be at top or bottom when flipping
-//        let top = bottomBorder.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 1)
-//        let bottom = bottomBorder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-//        let anchor = action.isFlipped ? top : bottom
-//
-//        let borderConstraints = [
-//            anchor,
-//            bottomBorder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//            bottomBorder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//            bottomBorder.heightAnchor.constraint(equalToConstant: 1)
-//        ]
-//        constraints.append(contentsOf: borderConstraints)
-//
-//        NSLayoutConstraint.activate(constraints)
     }
 }

@@ -114,6 +114,7 @@ class PhotonActionSheetView: UIView {
 //    }
 
     lazy var bottomBorder: UIView = .build { _ in }
+    lazy var verticalBorder: UIView = .build { _ in }
 
     // MARK: - init
 
@@ -158,6 +159,18 @@ class PhotonActionSheetView: UIView {
         setupBadgeOverlay(action: action)
         setupAccessory(action: action)
         addSubBorder(action: action)
+    }
+
+    func addVerticalBorder(shouldAdd: Bool) {
+        verticalBorder.backgroundColor = UIColor.theme.tableView.separator
+        addSubview(verticalBorder)
+
+        NSLayoutConstraint.activate([
+            verticalBorder.topAnchor.constraint(equalTo: topAnchor, constant: 1),
+            verticalBorder.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 1),
+            verticalBorder.leadingAnchor.constraint(equalTo: leadingAnchor),
+            verticalBorder.widthAnchor.constraint(equalToConstant: 1)
+        ])
     }
 
     private func setupViews() {
