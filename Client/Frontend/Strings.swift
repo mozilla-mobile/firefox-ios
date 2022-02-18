@@ -106,8 +106,8 @@ extension String {
         
         public struct TabsTray {
             public struct InactiveTabs {
-                public static let InactiveTabsAction = MZLocalizedString("ContextualHints.TabTray.InactiveTabs.CallToAction", value: "Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.", lastUpdated: .v39)
-                public static let InactiveTabsBody = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.", lastUpdated: .v39)
+                public static let Action = MZLocalizedString("ContextualHints.TabTray.InactiveTabs.CallToAction", value: "Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.", lastUpdated: .v39)
+                public static let Body = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.", lastUpdated: .v39)
             }
         }
         
