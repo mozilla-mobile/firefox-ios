@@ -374,17 +374,6 @@ class Tab: NSObject {
             tabGroupData.tabHistoryCurrentState = state.rawValue
         }
     }
-    
-    func getTabTrayTitle() -> String? {
-        let baseDomain = sessionData?.urls.last?.baseDomain ?? url?.baseDomain
-        var backUpName: String = "" // In case display title is empty
-        if let baseDomain = baseDomain {
-            backUpName = baseDomain.contains("local") ? .AppMenuOpenHomePageTitleString : baseDomain
-        } else if let url = url, let about = InternalURL(url)?.aboutComponent {
-            backUpName = about
-        }
-        return displayTitle.isEmpty ? backUpName : displayTitle
-    }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
         if tab.isPrivate {
