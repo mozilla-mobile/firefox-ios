@@ -26,6 +26,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
 enum MenuButtonToastAction {
     case share
     case addToReadingList
+    case removeFromReadingList
     case bookmarkPage
     case removeBookmark
     case copyUrl
@@ -113,6 +114,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     // MARK: - Update data
 
     private let dataQueue = DispatchQueue(label: "com.moz.toolbarMenuAction.queue")
+    private var isInReadingList = false
+    private var isBookmarked = false
+    private var isPinned = false
 
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
@@ -122,6 +126,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let group = DispatchGroup()
         getIsBookmarked(url: url, group: group)
         getIsPinned(url: url, group: group)
+        getIsInReadingList(url: url, group: group)
 
         let dataQueue = DispatchQueue.global(qos: .userInitiated)
         group.notify(queue: dataQueue) {
@@ -129,7 +134,14 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
-    private var isBookmarked: Bool?
+    private func getIsInReadingList(url: String, group: DispatchGroup) {
+        group.enter()
+        let _ = self.profile.readingList.getRecordWithURL(url).uponQueue(.main) { result in
+            self.isInReadingList = result.successValue != nil
+            group.leave()
+        }
+    }
+
     private func getIsBookmarked(url: String, group: DispatchGroup) {
         group.enter()
         profile.places.isBookmarked(url: url).uponQueue(.main) { result in
@@ -138,7 +150,6 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
-    private var isPinned: Bool?
     private func getIsPinned(url: String, group: DispatchGroup) {
         group.enter()
         profile.history.isPinnedTopSite(url).uponQueue(.main) { result in
@@ -569,7 +580,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
         let libraryAction = getReadingListLibraryAction()
         if !isHomePage {
-            let readingListAction = getAddReadingListAction()
+            let readingListAction = getReadingListAction()
             section.append(PhotonRowItems([libraryAction, readingListAction]))
         } else {
             section.append(PhotonRowItems(libraryAction))
@@ -585,8 +596,16 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
+    private func getReadingListAction() -> SingleSheetItem {
+        let addReadingListAction = getAddReadingListAction()
+        let removeReadingListAction = getRemoveReadingListAction()
+
+        return isInReadingList ? removeReadingListAction : addReadingListAction
+    }
+
     private func getAddReadingListAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .AppMenuAddToReadingListTitleString,
+        return SingleSheetItem(title: .Bookmarks.Actions.Add,
+                               alternateTitle: .AppMenuAddToReadingListTitleString,
                                iconString: "addToReadingList") { _, _ in
 
             guard let tab = self.selectedTab,
@@ -595,6 +614,20 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
             self.delegate?.showToast(message: .AppMenuAddToReadingListConfirmMessage, toastAction: .addToReadingList, url: nil)
+        }
+    }
+
+    private func getRemoveReadingListAction() -> SingleSheetItem {
+        return SingleSheetItem(title: .ReaderPanelRemove,
+                               alternateTitle: .ReaderModeBarRemoveFromReadingList,
+                               iconString: "removeFromReadingList") { _, _ in
+
+            guard let url = self.tabUrl?.displayURL?.absoluteString,
+                  let record = self.profile.readingList.getRecordWithURL(url).value.successValue else { return }
+
+            self.profile.readingList.deleteRecord(record)
+            self.delegate?.showToast(message: .ReaderModeAddPageSuccessAcessibilityLabel, toastAction: .removeFromReadingList, url: nil)
+            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .pageActionMenu)
         }
     }
 
@@ -625,12 +658,12 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let addBookmarkAction = getAddBookmarkAction()
         let removeBookmarkAction = getRemoveBookmarkAction()
 
-        let isBookmarked = isBookmarked ?? false
         return isBookmarked ? removeBookmarkAction : addBookmarkAction
     }
 
     private func getAddBookmarkAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .AppMenuAddBookmarkTitleString2,
+        return SingleSheetItem(title: .Bookmarks.Actions.Add,
+                               alternateTitle: .AppMenuAddBookmarkTitleString2,
                                iconString: "menu-Bookmark") { _, _ in
 
             guard let tab = self.selectedTab,
@@ -642,7 +675,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getRemoveBookmarkAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .AppMenuRemoveBookmarkTitleString,
+        return SingleSheetItem(title: .ReaderPanelRemove,
+                               alternateTitle: .AppMenuRemoveBookmarkTitleString,
                                iconString: "menu-Bookmark-Remove") { _, _ in
 
             guard let url = self.tabUrl?.displayURL else { return }
@@ -662,7 +696,6 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let addShortcutAction = getAddShortcutAction()
         let removeShortcutAction = getRemoveShortcutAction()
 
-        let isPinned = isPinned ?? false
         return isPinned ? removeShortcutAction.items : addShortcutAction.items
     }
 
