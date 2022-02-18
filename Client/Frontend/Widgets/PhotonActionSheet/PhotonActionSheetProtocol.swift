@@ -38,24 +38,27 @@ extension PhotonActionSheetProtocol {
         viewController.present(sheet, animated: true, completion: nil)
     }
 
-    func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonActionSheetItem] {
-        let pasteGoAction = PhotonActionSheetItem(title: .PasteAndGoTitle, iconString: "menu-PasteAndGo") { _, _ in
+    func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonRowItems] {
+        let pasteGoAction = SingleSheetItem(title: .PasteAndGoTitle, iconString: "menu-PasteAndGo") { _, _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
             }
-        }
-        let pasteAction = PhotonActionSheetItem(title: .PasteTitle, iconString: "menu-Paste") { _, _ in
+        }.items
+
+        let pasteAction = SingleSheetItem(title: .PasteTitle, iconString: "menu-Paste") { _, _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
             }
-        }
-        let copyAddressAction = PhotonActionSheetItem(title: .CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
+        }.items
+
+        let copyAddressAction = SingleSheetItem(title: .CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: webViewContainer)
             }
-        }
+        }.items
+
         if UIPasteboard.general.string != nil {
             return [pasteGoAction, pasteAction, copyAddressAction]
         } else {
@@ -63,7 +66,7 @@ extension PhotonActionSheetProtocol {
         }
     }
 
-    func getRefreshLongPressMenu(for tab: Tab) -> [PhotonActionSheetItem] {
+    func getRefreshLongPressMenu(for tab: Tab) -> [PhotonRowItems] {
         guard tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return []
         }
@@ -75,24 +78,24 @@ extension PhotonActionSheetProtocol {
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenuViewMobileSiteTitleString : .AppMenuViewDesktopSiteTitleString
         }
-        let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { _, _ in
+        let toggleDesktopSite = SingleSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { _, _ in
 
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
                 Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)
             }
-        }
+        }.items
 
         if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled, helper.blockingStrengthPref == .strict {
             let isSafelisted = helper.status == .safelisted
 
             let title: String = !isSafelisted ? .TrackingProtectionReloadWithout : .TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
-            let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { _, _ in
+            let toggleTP = SingleSheetItem(title: title, iconString: imageName) { _, _ in
                 ContentBlocker.shared.safelist(enable: !isSafelisted, url: url) {
                     tab.reload()
                 }
-            }
+            }.items
             return [toggleDesktopSite, toggleTP]
         } else {
             return [toggleDesktopSite]

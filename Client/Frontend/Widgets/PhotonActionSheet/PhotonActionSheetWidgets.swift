@@ -7,6 +7,7 @@ import Storage
 import SnapKit
 import Shared
 import UIKit
+import MapKit
 
 // UX definitions and misc table components used for the PhotonActionSheet table view.
 
@@ -65,13 +66,25 @@ public enum PhotonActionSheetIconType {
     case None
 }
 
-// MARK: - PhotonActionSheetItem
-public class PhotonActionSheetItem {
-    public enum IconAlignment {
-        case left
-        case right
+public enum IconAlignment {
+    case left
+    case right
+}
+
+// One row one the PhotonActionSheet table view can contain more than one item
+struct PhotonRowItems {
+    var items: [SingleSheetItem]
+    init(_ items: [SingleSheetItem]) {
+        self.items = items
     }
 
+    init(_ item: SingleSheetItem) {
+        self.items = [item]
+    }
+}
+
+// MARK: - SingleSheetItem
+public class SingleSheetItem {
     public fileprivate(set) var title: String
     public fileprivate(set) var text: String?
     public fileprivate(set) var iconString: String?
@@ -85,7 +98,7 @@ public class PhotonActionSheetItem {
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var tabCount: String?
-    public fileprivate(set) var tapHandler: ((PhotonActionSheetItem, UITableViewCell) -> Void)?
+    public fileprivate(set) var tapHandler: ((SingleSheetItem, UITableViewCell) -> Void)?
     public fileprivate(set) var badgeIconName: String?
 
     // Flip the cells for the toolbar menu since content needs to appear at the bottom
@@ -98,7 +111,7 @@ public class PhotonActionSheetItem {
     public var customRender: ((_ title: UILabel, _ contentView: UIView) -> Void)?
 
     // Enable height customization
-    public var customHeight: ((PhotonActionSheetItem) -> CGFloat)?
+    public var customHeight: ((SingleSheetItem) -> CGFloat)?
 
     // Normally the icon name is used, but if there is no icon, this is used.
     public var accessibilityId: String?
@@ -107,7 +120,7 @@ public class PhotonActionSheetItem {
          iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left,
          iconTint: UIColor? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None,
          accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil,
-         handler: ((PhotonActionSheetItem, UITableViewCell) -> Void)? = nil) {
+         handler: ((SingleSheetItem, UITableViewCell) -> Void)? = nil) {
 
         self.title = title
         self.iconString = iconString
@@ -122,6 +135,11 @@ public class PhotonActionSheetItem {
         self.bold = bold ?? false
         self.tabCount = tabCount
         self.badgeIconName = badgeIconNamed
+    }
+
+    // Conveniance
+    var items: PhotonRowItems {
+        return PhotonRowItems(self)
     }
 }
 

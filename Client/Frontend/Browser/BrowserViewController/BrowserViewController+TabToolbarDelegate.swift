@@ -101,7 +101,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
 
-    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {
+    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowItems] {
         guard let selectedTab = tabManager.selectedTab else { return [] }
         let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
         let infinity = "\u{221E}"
@@ -114,12 +114,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             }
         }
 
-        let privateBrowsingMode = PhotonActionSheetItem(title: .KeyboardShortcuts.PrivateBrowsingMode, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _, _ in
+        let privateBrowsingMode = SingleSheetItem(title: .KeyboardShortcuts.PrivateBrowsingMode, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _, _ in
             action()
-        }
-        let normalBrowsingMode = PhotonActionSheetItem(title: .KeyboardShortcuts.NormalBrowsingMode, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _, _ in
+        }.items
+
+        let normalBrowsingMode = SingleSheetItem(title: .KeyboardShortcuts.NormalBrowsingMode, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _, _ in
             action()
-        }
+        }.items
 
         if let tab = self.tabManager.selectedTab {
             return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
@@ -127,19 +128,24 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         return [privateBrowsingMode]
     }
 
-    func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
-        let newTab = PhotonActionSheetItem(title: .KeyboardShortcuts.NewTab, iconString: "quick_action_new_tab", iconType: .Image) { _, _ in
+    func getMoreTabToolbarLongPressActions() -> [PhotonRowItems] {
+        let newTab = SingleSheetItem(title: .KeyboardShortcuts.NewTab, iconString: "quick_action_new_tab", iconType: .Image) { _, _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
-        }
-        let newPrivateTab = PhotonActionSheetItem(title: .KeyboardShortcuts.NewPrivateTab, iconString: "quick_action_new_tab", iconType: .Image) { _, _ in
+        }.items
+
+        let newPrivateTab = SingleSheetItem(title: .KeyboardShortcuts.NewPrivateTab, iconString: "quick_action_new_tab", iconType: .Image) { _, _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}
-        let closeTab = PhotonActionSheetItem(title: .KeyboardShortcuts.CloseCurrentTab, iconString: "tab_close", iconType: .Image) { _, _ in
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
+        }.items
+
+        let closeTab = SingleSheetItem(title: .KeyboardShortcuts.CloseCurrentTab, iconString: "tab_close", iconType: .Image) { _, _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
                 self.updateTabCountUsingTabManager(self.tabManager)
-            }}
+            }
+        }.items
+
         if let tab = self.tabManager.selectedTab {
             return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
         }
@@ -150,7 +156,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard self.presentedViewController == nil else {
             return
         }
-        var actions: [[PhotonActionSheetItem]] = []
+        var actions: [[PhotonRowItems]] = []
         actions.append(getTabToolbarLongPressActionsForModeSwitching())
         actions.append(getMoreTabToolbarLongPressActions())
 

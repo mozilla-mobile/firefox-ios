@@ -127,7 +127,7 @@ class PhotonActionSheetView: UIView {
 
     // MARK: - Setup
 
-    func configure(with action: PhotonActionSheetItem) {
+    func configure(with action: SingleSheetItem) {
         setupViews()
 
         titleLabel.text = action.title
@@ -196,7 +196,7 @@ class PhotonActionSheetView: UIView {
         ])
     }
 
-    private func addSubBorder(action: PhotonActionSheetItem) {
+    private func addSubBorder(action: SingleSheetItem) {
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         addSubview(bottomBorder)
 
@@ -217,7 +217,7 @@ class PhotonActionSheetView: UIView {
         NSLayoutConstraint.activate(constraints)
     }
 
-    private func setupActionName(action: PhotonActionSheetItem, name: String) {
+    private func setupActionName(action: SingleSheetItem, name: String) {
         switch action.iconType {
         case .Image:
             let image = UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
@@ -268,7 +268,7 @@ class PhotonActionSheetView: UIView {
         }
     }
 
-    private func setupBadgeOverlay(action: PhotonActionSheetItem) {
+    private func setupBadgeOverlay(action: SingleSheetItem) {
         guard let name = action.badgeIconName, action.isEnabled, let parent = statusIcon.superview else { return }
         badgeOverlay = BadgeWithBackdrop(imageName: name)
         badgeOverlay?.add(toParent: parent)
@@ -281,7 +281,7 @@ class PhotonActionSheetView: UIView {
         badgeOverlay?.badge.tintBackground(color: color)
     }
 
-    private func setupAccessory(action: PhotonActionSheetItem) {
+    private func setupAccessory(action: SingleSheetItem) {
         switch action.accessory {
         case .Text:
             disclosureLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS

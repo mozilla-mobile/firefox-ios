@@ -290,25 +290,27 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
 extension PhotonActionSheet: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let action = viewModel.actions[indexPath.section][indexPath.row]
-        guard let handler = action.tapHandler else {
-            self.dismiss(nil)
-            return
-        }
+        // TODO: Laurie Click action
 
-        // Switches can be toggled on/off without dismissing the menu
-        if action.accessory == .Switch {
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
-            action.isEnabled = !action.isEnabled
-            viewModel.actions[indexPath.section][indexPath.row] = action
-            self.tableView.deselectRow(at: indexPath, animated: true)
-            self.tableView.reloadData()
-        } else {
-            action.isEnabled = !action.isEnabled
-            self.dismiss(nil)
-        }
-
-        return handler(action, self.tableView(tableView, cellForRowAt: indexPath))
+//        guard let handler = action.tapHandler else {
+//            self.dismiss(nil)
+//            return
+//        }
+//
+//        // Switches can be toggled on/off without dismissing the menu
+//        if action.accessory == .Switch {
+//            let generator = UIImpactFeedbackGenerator(style: .medium)
+//            generator.impactOccurred()
+//            action.isEnabled = !action.isEnabled
+//            viewModel.actions[indexPath.section][indexPath.row] = action
+//            self.tableView.deselectRow(at: indexPath, animated: true)
+//            self.tableView.reloadData()
+//        } else {
+//            action.isEnabled = !action.isEnabled
+//            self.dismiss(nil)
+//        }
+//
+//        return handler(action, self.tableView(tableView, cellForRowAt: indexPath))
     }
 }
 
@@ -316,12 +318,13 @@ extension PhotonActionSheet: UITableViewDelegate {
 extension PhotonActionSheet: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // TODO: Laurie - handle in child
         guard let section = viewModel.actions[safe: indexPath.section],
               let action = section[safe: indexPath.row],
-              let custom = action.customHeight else { return UITableView.automaticDimension }
+              let custom = action.items[0].customHeight else { return UITableView.automaticDimension }
 
         // Nested tableview rows get additional height
-        return custom(action)
+        return custom(action.items[0])
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -338,10 +341,8 @@ extension PhotonActionSheet: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetContainerCell
-        let action = viewModel.actions[indexPath.section][indexPath.row]
-        // TODO: Laurie - Pass in more than 1 action when needed
-        action.tintColor = viewModel.tintColor
-        cell.configure(with: [action])
+        let actions = viewModel.actions[indexPath.section][indexPath.row]
+        cell.configure(at: indexPath, actions: actions, viewModel: viewModel)
 
         if viewModel.toolbarMenuInversed {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
@@ -353,6 +354,7 @@ extension PhotonActionSheet: UITableViewDataSource {
             let rowIsLast = isLastRow && isLastSection
             cell.hideBottomBorder(isHidden: rowIsLast)
         }
+
         return cell
     }
 

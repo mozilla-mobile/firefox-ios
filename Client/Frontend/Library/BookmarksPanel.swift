@@ -86,25 +86,25 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
     
     func addNewBookmarkItemAction() {
-        let newBookmark = PhotonActionSheetItem(title: .BookmarksNewBookmark, iconString: "action_bookmark", handler: { _, _ in
+        let newBookmark = SingleSheetItem(title: .BookmarksNewBookmark, iconString: "action_bookmark", handler: { _, _ in
             guard let bookmarkFolder = self.bookmarkFolder else {
                 return
             }
 
             let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .bookmark, parentBookmarkFolder: bookmarkFolder)
             self.navigationController?.pushViewController(detailController, animated: true)
-        })
+        }).items
 
-        let newFolder = PhotonActionSheetItem(title: .BookmarksNewFolder, iconString: "bookmarkFolder", handler: { _, _ in
+        let newFolder = SingleSheetItem(title: .BookmarksNewFolder, iconString: "bookmarkFolder", handler: { _, _ in
             guard let bookmarkFolder = self.bookmarkFolder else {
                 return
             }
 
             let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .folder, parentBookmarkFolder: bookmarkFolder)
             self.navigationController?.pushViewController(detailController, animated: true)
-        })
+        }).items
 
-        let newSeparator = PhotonActionSheetItem(title: .BookmarksNewSeparator, iconString: "nav-menu", handler: { _, _ in
+        let newSeparator = SingleSheetItem(title: .BookmarksNewSeparator, iconString: "nav-menu", handler: { _, _ in
             let centerVisibleRow = self.centerVisibleRow()
 
             self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID, position: UInt32(centerVisibleRow)) >>== { guid in
@@ -122,9 +122,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                     self.flashRow(at: indexPath)
                 }
             }
-        })
+        }).items
 
-        let viewModel = PhotonActionSheetViewModel(actions: [[newBookmark, newFolder, newSeparator]], modalStyle: .overFullScreen)
+        let viewModel = PhotonActionSheetViewModel(actions: [[newBookmark, newFolder, newSeparator]],
+                                                   modalStyle: .overFullScreen)
         let sheet = PhotonActionSheet(viewModel: viewModel)
         sheet.modalTransitionStyle = .crossDissolve
         present(sheet, animated: true)
@@ -490,24 +491,24 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowItems]? {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else {
             return nil
         }
 
-        let pinTopSite = PhotonActionSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
+        let pinTopSite = SingleSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
             self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
                     SimpleToast().showAlertWithText(.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
                 }
             }
-        })
+        }).items
         actions.append(pinTopSite)
 
-        let removeAction = PhotonActionSheetItem(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
+        let removeAction = SingleSheetItem(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "long-press"])
-        })
+        }).items
         actions.append(removeAction)
 
         return actions

@@ -78,8 +78,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     func getToolbarActions(navigationController: UINavigationController?,
-                           completion: @escaping ([[PhotonActionSheetItem]]) -> Void) {
-        var actions: [[PhotonActionSheetItem]] = []
+                           completion: @escaping ([[PhotonRowItems]]) -> Void) {
+        var actions: [[PhotonRowItems]] = []
         let firstMiscSection = getFirstMiscSection(navigationController)
 
         if isHomePage {
@@ -149,15 +149,15 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     // MARK: - Sections
 
-    private func getNewTabSection() -> [PhotonActionSheetItem] {
-        var section = [PhotonActionSheetItem]()
+    private func getNewTabSection() -> [PhotonRowItems] {
+        var section = [PhotonRowItems]()
         append(to: &section, action: getNewTabAction())
 
         return section
     }
 
-    private func getLibrarySection() -> [PhotonActionSheetItem] {
-        var section = [PhotonActionSheetItem]()
+    private func getLibrarySection() -> [PhotonRowItems] {
+        var section = [PhotonRowItems]()
 
         if !isFileURL {
             let bookmarkSection = getBookmarkSection()
@@ -179,8 +179,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return section
     }
 
-    private func getFirstMiscSection(_ navigationController: UINavigationController?) -> [PhotonActionSheetItem] {
-        var section = [PhotonActionSheetItem]()
+    private func getFirstMiscSection(_ navigationController: UINavigationController?) -> [PhotonRowItems] {
+        var section = [PhotonRowItems]()
 
         if !isHomePage && !isFileURL {
             let findInPageAction = getFindInPageAction()
@@ -206,8 +206,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return section
     }
 
-    private func getSecondMiscSection() -> [PhotonActionSheetItem] {
-        var section = [PhotonActionSheetItem]()
+    private func getSecondMiscSection() -> [PhotonRowItems] {
+        var section = [PhotonRowItems]()
 
         if isFileURL {
             let shareFileAction = getShareFileAction()
@@ -229,8 +229,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return section
     }
 
-    private func getLastSection() -> [PhotonActionSheetItem] {
-        var section = [PhotonActionSheetItem]()
+    private func getLastSection() -> [PhotonRowItems] {
+        var section = [PhotonRowItems]()
 
         if isHomePage {
             let whatsNewAction = getWhatsNewAction()
@@ -251,37 +251,37 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     // MARK: - Actions
 
-    private func getNewTabAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .KeyboardShortcuts.NewTab,
-                                                 iconString: "quick_action_new_tab") { _, _ in
+    private func getNewTabAction() -> PhotonRowItems {
+        return SingleSheetItem(title: .KeyboardShortcuts.NewTab,
+                               iconString: "quick_action_new_tab") { _, _ in
 
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.delegate?.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false, searchFor: nil)
-        }
+        }.items
     }
 
-    private func getHistoryLibraryAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuHistory,
-                                     iconString: "menu-panel-History") { _, _ in
+    private func getHistoryLibraryAction() -> PhotonRowItems {
+        return SingleSheetItem(title: .AppMenuHistory,
+                               iconString: "menu-panel-History") { _, _ in
             self.delegate?.showLibrary(panel: .history)
-        }
+        }.items
     }
 
-    private func getDownloadsLibraryAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuDownloads,
-                                     iconString: "menu-panel-Downloads") { _, _ in
+    private func getDownloadsLibraryAction() -> PhotonRowItems {
+        return SingleSheetItem(title: .AppMenuDownloads,
+                               iconString: "menu-panel-Downloads") { _, _ in
             self.delegate?.showLibrary(panel: .downloads)
-        }
+        }.items
     }
 
-    private func getFindInPageAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuFindInPageTitleString,
-                                     iconString: "menu-FindInPage") { _, _ in
+    private func getFindInPageAction() -> PhotonRowItems {
+        return SingleSheetItem(title: .AppMenuFindInPageTitleString,
+                               iconString: "menu-FindInPage") { _, _ in
             self.delegate?.showFindInPage()
-        }
+        }.items
     }
 
-    private func getRequestDesktopSiteAction() -> PhotonActionSheetItem? {
+    private func getRequestDesktopSiteAction() -> PhotonRowItems? {
         guard let tab = selectedTab else { return nil }
 
         let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
@@ -298,32 +298,32 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             siteTypeTelemetryObject = .requestMobileSite
         }
 
-        return PhotonActionSheetItem(title: toggleActionTitle,
-                                     iconString: toggleActionIcon) { _, _ in
+        return SingleSheetItem(title: toggleActionTitle,
+                               iconString: toggleActionIcon) { _, _ in
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
                 Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: siteTypeTelemetryObject)
             }
-        }
+        }.items
     }
 
-    private func getCopyAction() -> PhotonActionSheetItem? {
+    private func getCopyAction() -> PhotonRowItems? {
 
-        return PhotonActionSheetItem(title: .AppMenuCopyLinkTitleString,
-                                     iconString: "menu-Copy-Link") { _, _ in
+        return SingleSheetItem(title: .AppMenuCopyLinkTitleString,
+                               iconString: "menu-Copy-Link") { _, _ in
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = self.selectedTab?.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
                 self.delegate?.showToast(message: .AppMenuCopyURLConfirmMessage, toastAction: .copyUrl, url: nil)
             }
-        }
+        }.items
     }
 
-    private func getSendToDevice() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .SendLinkToDeviceTitle,
-                                     iconString: "menu-Send-to-Device") { _, _ in
+    private func getSendToDevice() -> PhotonRowItems {
+        return SingleSheetItem(title: .SendLinkToDeviceTitle,
+                               iconString: "menu-Send-to-Device") { _, _ in
             guard let bvc = self.menuActionDelegate as? InstructionsViewControllerDelegate & DevicePickerViewControllerDelegate else { return }
 
             if !self.profile.hasAccount() {
@@ -343,36 +343,36 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             navigationController.modalPresentationStyle = .formSheet
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
             self.delegate?.showViewController(viewController: navigationController)
-        }
+        }.items
     }
 
-    private func getReportSiteIssueAction() -> PhotonActionSheetItem? {
+    private func getReportSiteIssueAction() -> PhotonRowItems? {
         guard featureFlags.isFeatureActiveForBuild(.reportSiteIssue) else { return nil }
-        return PhotonActionSheetItem(title: .AppMenuReportSiteIssueTitleString,
-                                     iconString: "menu-reportSiteIssue") { _, _ in
+        return SingleSheetItem(title: .AppMenuReportSiteIssueTitleString,
+                               iconString: "menu-reportSiteIssue") { _, _ in
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
             self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
-        }
+        }.items
     }
 
-    private func getHelpAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppSettingsHelp,
-                                     iconString: "help") { _, _ in
+    private func getHelpAction() -> PhotonRowItems {
+        return SingleSheetItem(title: .AppSettingsHelp,
+                               iconString: "help") { _, _ in
 
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
             }
-        }
+        }.items
     }
 
-    private func getCustomizeHomePageAction() -> PhotonActionSheetItem? {
-        return PhotonActionSheetItem(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
-                                     iconString: "edit") { _, _ in
+    private func getCustomizeHomePageAction() -> PhotonRowItems? {
+        return SingleSheetItem(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
+                               iconString: "edit") { _, _ in
             self.delegate?.showCustomizeHomePage()
-        }
+        }.items
     }
 
-    private func getSettingsAction() -> PhotonActionSheetItem {
+    private func getSettingsAction() -> PhotonRowItems {
         // This method is being called when we the user sees the menu, not just when it's constructed.
         // In that case, we can let sendExposureEvent default to true.
         let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
@@ -381,8 +381,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let title = variables.getText("settings-title") ?? .AppMenuSettingsTitleString
         let icon = variables.getString("settings-icon") ?? "menu-Settings"
 
-        let openSettings = PhotonActionSheetItem(title: title,
-                                                 iconString: icon) { _, _ in
+        let openSettings = SingleSheetItem(title: title,
+                                           iconString: icon) { _, _ in
             let settingsTableViewController = AppSettingsTableViewController()
             settingsTableViewController.profile = self.profile
             settingsTableViewController.tabManager = self.tabManager
@@ -401,18 +401,18 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             DispatchQueue.main.async {
                 self.delegate?.showViewController(viewController: controller)
             }
-        }
+        }.items
         return openSettings
     }
 
-    private func getNightModeAction() -> [PhotonActionSheetItem] {
-        var items: [PhotonActionSheetItem] = []
+    private func getNightModeAction() -> [PhotonRowItems] {
+        var items: [PhotonRowItems] = []
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
         let nightModeTitle: String = nightModeEnabled ? .AppMenuTurnOffNightMode : .AppMenuTurnOnNightMode
-        let nightMode = PhotonActionSheetItem(title: nightModeTitle,
-                                              iconString: "menu-NightMode",
-                                              isEnabled: nightModeEnabled) { _, _ in
+        let nightMode = SingleSheetItem(title: nightModeTitle,
+                                        iconString: "menu-NightMode",
+                                        isEnabled: nightModeEnabled) { _, _ in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
 
             if nightModeEnabled {
@@ -432,14 +432,14 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                 LegacyThemeManager.instance.current = NormalTheme()
                 NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: false)
             }
-        }
+        }.items
         items.append(nightMode)
 
         return items
     }
 
-    private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonActionSheetItem? {
-        let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
+    private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonRowItems? {
+        let action: ((SingleSheetItem, UITableViewCell) -> Void) = { action, _ in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
             let params = FXASyncClosure(fxaParams, .emailLoginFlow, .appMenu)
             showFxA(params)
@@ -450,9 +450,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let needsReAuth = rustAccount.accountNeedsReauth()
 
         guard let userProfile = rustAccount.userProfile else {
-            return PhotonActionSheetItem(title: .AppMenuBackUpAndSyncData,
-                                         iconString: "menu-sync",
-                                         handler: action)
+            return SingleSheetItem(title: .AppMenuBackUpAndSyncData,
+                                   iconString: "menu-sync",
+                                   handler: action).items
         }
 
         let title: String = {
@@ -470,15 +470,15 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
         let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
         let iconTint: UIColor? = needsReAuth ? UIColor.Photon.Yellow60 : nil
-        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL,
-                                               iconType: iconType, iconTint: iconTint, handler: action)
+        let syncOption = SingleSheetItem(title: title, iconString: iconString, iconURL: iconURL,
+                                         iconType: iconType, iconTint: iconTint, handler: action).items
         return syncOption
     }
 
     // MARK: Whats New
 
-    private func getWhatsNewAction() -> PhotonActionSheetItem? {
-        var whatsNewAction: PhotonActionSheetItem?
+    private func getWhatsNewAction() -> PhotonRowItems? {
+        var whatsNewAction: PhotonRowItems?
         let showBadgeForWhatsNew = shouldShowWhatsNew()
         if showBadgeForWhatsNew {
             // Set the version number of the app, so the What's new will stop showing
@@ -488,14 +488,14 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             delegate?.updateToolbarState()
         }
 
-        whatsNewAction = PhotonActionSheetItem(title: .WhatsNewString,
-                                               iconString: "whatsnew",
-                                               isEnabled: showBadgeForWhatsNew) { _, _ in
+        whatsNewAction = SingleSheetItem(title: .WhatsNewString,
+                                         iconString: "whatsnew",
+                                         isEnabled: showBadgeForWhatsNew) { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
             }
-        }
+        }.items
         return whatsNewAction
     }
 
@@ -512,21 +512,21 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     // MARK: Share
 
-    private func getShareFileAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuSharePageTitleString,
-                                     iconString: "action_share") { _, _ in
+    private func getShareFileAction() -> PhotonRowItems {
+        return SingleSheetItem(title: .AppMenuSharePageTitleString,
+                               iconString: "action_share") { _, _ in
 
             guard let tab = self.selectedTab,
-                    let url = tab.canonicalURL?.displayURL,
-                    let presentableVC = self.menuActionDelegate as? PresentableVC else { return }
+                  let url = tab.canonicalURL?.displayURL,
+                  let presentableVC = self.menuActionDelegate as? PresentableVC else { return }
 
             self.share(fileURL: url, buttonView: self.buttonView, presentableVC: presentableVC)
-        }
+        }.items
     }
 
-    private func getShareAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .ShareContextMenuTitle,
-                                     iconString: "action_share") { _, _ in
+    private func getShareAction() -> PhotonRowItems {
+        return SingleSheetItem(title: .ShareContextMenuTitle,
+                               iconString: "action_share") { _, _ in
 
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
 
@@ -544,7 +544,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             } else {
                 self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
             }
-        }
+        }.items
     }
 
     private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
@@ -564,30 +564,30 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     // MARK: Reading list
 
-    private func getReadingListSection() -> [PhotonActionSheetItem] {
-        var section = [PhotonActionSheetItem]()
+    private func getReadingListSection() -> [PhotonRowItems] {
+        var section = [PhotonRowItems]()
 
         let libraryAction = getReadingListLibraryAction()
-        section.append(libraryAction)
-
         if !isHomePage {
             let readingListAction = getAddReadingListAction()
-            section.append(readingListAction)
+            section.append(PhotonRowItems([libraryAction, readingListAction]))
+        } else {
+            section.append(PhotonRowItems(libraryAction))
         }
 
         return section
     }
 
-    private func getReadingListLibraryAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuReadingList,
-                                     iconString: "menu-panel-ReadingList") { _, _ in
+    private func getReadingListLibraryAction() -> SingleSheetItem {
+        return SingleSheetItem(title: .AppMenuReadingList,
+                               iconString: "menu-panel-ReadingList") { _, _ in
             self.delegate?.showLibrary(panel: .readingList)
         }
     }
 
-    private func getAddReadingListAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuAddToReadingListTitleString,
-                                     iconString: "addToReadingList") { _, _ in
+    private func getAddReadingListAction() -> SingleSheetItem {
+        return SingleSheetItem(title: .AppMenuAddToReadingListTitleString,
+                               iconString: "addToReadingList") { _, _ in
 
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL else { return }
@@ -600,28 +600,28 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     // MARK: Bookmark
 
-    private func getBookmarkSection() -> [PhotonActionSheetItem] {
-        var section = [PhotonActionSheetItem]()
+    private func getBookmarkSection() -> [PhotonRowItems] {
+        var section = [PhotonRowItems]()
 
         let libraryAction = getBookmarkLibraryAction()
-        section.append(libraryAction)
-
         if !isHomePage {
             let bookmarkAction = getBookmarkAction()
-            section.append(bookmarkAction)
+            section.append(PhotonRowItems([libraryAction, bookmarkAction]))
+        } else {
+            section.append(PhotonRowItems(libraryAction))
         }
 
         return section
     }
 
-    private func getBookmarkLibraryAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuBookmarks,
-                                     iconString: "menu-panel-Bookmarks") { _, _ in
+    private func getBookmarkLibraryAction() -> SingleSheetItem {
+        return SingleSheetItem(title: .AppMenuBookmarks,
+                               iconString: "menu-panel-Bookmarks") { _, _ in
             self.delegate?.showLibrary(panel: .bookmarks)
         }
     }
 
-    private func getBookmarkAction() -> PhotonActionSheetItem {
+    private func getBookmarkAction() -> SingleSheetItem {
         let addBookmarkAction = getAddBookmarkAction()
         let removeBookmarkAction = getRemoveBookmarkAction()
 
@@ -629,9 +629,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return isBookmarked ? removeBookmarkAction : addBookmarkAction
     }
 
-    private func getAddBookmarkAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuAddBookmarkTitleString2,
-                                     iconString: "menu-Bookmark") { _, _ in
+    private func getAddBookmarkAction() -> SingleSheetItem {
+        return SingleSheetItem(title: .AppMenuAddBookmarkTitleString2,
+                               iconString: "menu-Bookmark") { _, _ in
 
             guard let tab = self.selectedTab,
                   let url = tab.canonicalURL?.displayURL else { return }
@@ -641,9 +641,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
-    private func getRemoveBookmarkAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuRemoveBookmarkTitleString,
-                                     iconString: "menu-Bookmark-Remove") { _, _ in
+    private func getRemoveBookmarkAction() -> SingleSheetItem {
+        return SingleSheetItem(title: .AppMenuRemoveBookmarkTitleString,
+                               iconString: "menu-Bookmark-Remove") { _, _ in
 
             guard let url = self.tabUrl?.displayURL else { return }
 
@@ -658,17 +658,17 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     // MARK: Shortcut
 
-    private func getShortcutAction() -> PhotonActionSheetItem {
+    private func getShortcutAction() -> PhotonRowItems {
         let addShortcutAction = getAddShortcutAction()
         let removeShortcutAction = getRemoveShortcutAction()
 
         let isPinned = isPinned ?? false
-        return isPinned ? removeShortcutAction : addShortcutAction
+        return isPinned ? removeShortcutAction.items : addShortcutAction.items
     }
 
-    private func getAddShortcutAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AddToShortcutsActionTitle,
-                                     iconString: "action_pin") { _, _ in
+    private func getAddShortcutAction() -> SingleSheetItem {
+        return SingleSheetItem(title: .AddToShortcutsActionTitle,
+                               iconString: "action_pin") { _, _ in
 
             guard let url = self.selectedTab?.url?.displayURL,
                   let sql = self.profile.history as? SQLiteHistory else { return }
@@ -688,9 +688,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
-    private func getRemoveShortcutAction() -> PhotonActionSheetItem {
-        return PhotonActionSheetItem(title: .AppMenuRemoveBookmarkTitleString,
-                                     iconString: "menu-Bookmark-Remove") { _, _ in
+    private func getRemoveShortcutAction() -> SingleSheetItem {
+        return SingleSheetItem(title: .AppMenuRemoveBookmarkTitleString,
+                               iconString: "menu-Bookmark-Remove") { _, _ in
 
             guard let url = self.selectedTab?.url?.absoluteString else { return }
 
@@ -707,14 +707,14 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     // MARK: Password
 
     typealias NavigationHandlerType = ((_ url: URL?) -> Void)
-    private func getPasswordAction(navigationController: UINavigationController?) -> PhotonActionSheetItem? {
+    private func getPasswordAction(navigationController: UINavigationController?) -> PhotonRowItems? {
         let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
         guard isLoginsButtonShowing else { return nil }
 
-        return PhotonActionSheetItem(title: .AppMenuPasswords,
-                                     iconString: "key",
-                                     iconType: .Image,
-                                     iconAlignment: .left) { _, _ in
+        return SingleSheetItem(title: .AppMenuPasswords,
+                               iconString: "key",
+                               iconType: .Image,
+                               iconAlignment: .left) { _, _ in
 
             guard let navigationController = navigationController else { return }
             let navigationHandler: NavigationHandlerType = { url in
@@ -734,7 +734,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                 let navController = ThemedNavigationController(rootViewController: rootViewController)
                 self.delegate?.showViewController(viewController: navController)
             }
-        }
+        }.items
     }
 
     private func showLoginOnboarding(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
@@ -776,13 +776,13 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     // MARK: - Conveniance
 
-    private func append(to items: inout [PhotonActionSheetItem], action: PhotonActionSheetItem?) {
+    private func append(to items: inout [PhotonRowItems], action: PhotonRowItems?) {
         if let action = action {
             items.append(action)
         }
     }
 
-    private func append(to items: inout [PhotonActionSheetItem], action: [PhotonActionSheetItem]?) {
+    private func append(to items: inout [PhotonRowItems], action: [PhotonRowItems]?) {
         if let action = action {
             items.append(contentsOf: action)
         }

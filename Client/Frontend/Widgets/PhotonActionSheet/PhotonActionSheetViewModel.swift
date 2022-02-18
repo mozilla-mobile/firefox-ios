@@ -7,7 +7,7 @@ import UIKit
 
 class PhotonActionSheetViewModel {
 
-    var actions: [[PhotonActionSheetItem]]
+    var actions: [[PhotonRowItems]]
     var modalStyle: UIModalPresentationStyle
 
     var closeButtonTitle: String? = nil
@@ -34,7 +34,7 @@ class PhotonActionSheetViewModel {
         }
     }
 
-    init(actions: [[PhotonActionSheetItem]],
+    init(actions: [[PhotonRowItems]],
          site: Site? = nil,
          modalStyle: UIModalPresentationStyle) {
         self.actions = actions
@@ -42,7 +42,7 @@ class PhotonActionSheetViewModel {
         self.modalStyle = modalStyle
     }
 
-    init(actions: [[PhotonActionSheetItem]],
+    init(actions: [[PhotonRowItems]],
          closeButtonTitle: String? = nil,
          title: String? = nil,
          modalStyle: UIModalPresentationStyle,
@@ -71,7 +71,7 @@ class PhotonActionSheetViewModel {
         actions.reverse()
 
         // Flip cells
-        actions.forEach { $0.forEach { $0.isFlipped = true } }
+        actions.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
     }
 
     // MARK: - TableView

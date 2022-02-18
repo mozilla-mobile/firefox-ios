@@ -616,7 +616,7 @@ extension RemoteTabsTableViewController: LibraryPanelContextMenu {
         return Site(url: String(describing: tab.URL), title: tab.title)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowItems]? {
         return getRemoteTabContexMenuActions(for: site, remotePanelDelegate: remoteTabsPanel?.remotePanelDelegate)
     }
 }

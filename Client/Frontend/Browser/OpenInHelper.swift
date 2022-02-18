@@ -95,12 +95,12 @@ class DownloadHelper: NSObject {
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 
-        var filenameItem: PhotonActionSheetItem
+        var filenameItem: SingleSheetItem
         if let expectedSize = expectedSize {
             let expectedSizeAndHost = "\(expectedSize) — \(host)"
-            filenameItem = PhotonActionSheetItem(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
+            filenameItem = SingleSheetItem(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
         } else {
-            filenameItem = PhotonActionSheetItem(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
+            filenameItem = SingleSheetItem(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
         }
         filenameItem.customHeight = { _ in
             return 80
@@ -111,12 +111,12 @@ class DownloadHelper: NSObject {
             label.lineBreakMode = .byCharWrapping
         }
 
-        let downloadFileItem = PhotonActionSheetItem(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
+        let downloadFileItem = SingleSheetItem(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
             self.browserViewController.downloadQueue.enqueue(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
 
-        let actions = [[filenameItem], [downloadFileItem]]
+        let actions = [[filenameItem.items], [downloadFileItem.items]]
         let viewModel = PhotonActionSheetViewModel(actions: actions,
                                                    closeButtonTitle: .CancelString,
                                                    title: download.filename,

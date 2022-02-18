@@ -9,7 +9,6 @@ import Foundation
 class PhotonActionSheetContainerCell: UITableViewCell {
 
     private lazy var containerStackView: UIStackView = .build { stackView in
-        stackView.spacing = PhotonActionSheetViewUX.Padding
         stackView.alignment = .fill
         stackView.distribution = .fillProportionally
 
@@ -39,6 +38,31 @@ class PhotonActionSheetContainerCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Table view
+    
+    func configure(at indexPath: IndexPath, actions: PhotonRowItems, viewModel: PhotonActionSheetViewModel) {
+        for action in actions.items {
+            action.tintColor = viewModel.tintColor
+            configure(with: action)
+        }
+    }
+
+    //        // TODO: Laurie - Pass in more than 1 action when needed
+    //
+    //        action.tintColor = viewModel.tintColor
+    //        cell.configure(with: [action])
+    //
+    //        if viewModel.toolbarMenuInversed {
+    //            let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+    //            cell.hideBottomBorder(isHidden: rowIsLastInSection)
+    //
+    //        } else if viewModel.modalStyle == .popover {
+    //            let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+    //            let isLastSection = indexPath.section == tableView.numberOfSections - 1
+    //            let rowIsLast = isLastRow && isLastSection
+    //            cell.hideBottomBorder(isHidden: rowIsLast)
+    //        }
+
     // MARK: - Setup
 
     private func setupConstraints() {
@@ -50,12 +74,10 @@ class PhotonActionSheetContainerCell: UITableViewCell {
         ])
     }
 
-    func configure(with actions: [PhotonActionSheetItem]) {
-        for action in actions {
-            let childView = PhotonActionSheetView()
-            childView.configure(with: action)
-            containerStackView.addArrangedSubview(childView)
-        }
+    func configure(with action: SingleSheetItem) {
+        let childView = PhotonActionSheetView()
+        childView.configure(with: action)
+        containerStackView.addArrangedSubview(childView)
     }
 
     func hideBottomBorder(isHidden: Bool) {
@@ -65,7 +87,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
     }
 
     // TODO: Laurie - Add border between child cells
-    private func addVerticalBorder(action: PhotonActionSheetItem) {
+    private func addVerticalBorder(action: PhotonRowItems) {
 //        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
 //        contentView.addSubview(bottomBorder)
 //
