@@ -6,6 +6,7 @@ import Foundation
 import Storage
 import SnapKit
 import Shared
+import UIKit
 
 // UX definitions and misc table components used for the PhotonActionSheet table view.
 
@@ -90,6 +91,8 @@ public class PhotonActionSheetItem {
     // Flip the cells for the toolbar menu since content needs to appear at the bottom
     // Both cells and tableview are flipped so content already appears at bottom when the menu is opened
     public var isFlipped: Bool = false
+
+    public var tintColor: UIColor?
 
     // Enable title customization beyond what the interface provides,
     public var customRender: ((_ title: UILabel, _ contentView: UIView) -> Void)?

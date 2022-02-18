@@ -113,7 +113,7 @@ class PhotonActionSheet: UIViewController, UIGestureRecognizerDelegate, Notifica
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .onDrag
-        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
+        tableView.register(PhotonActionSheetContainerCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
         tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
@@ -337,21 +337,21 @@ extension PhotonActionSheet: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetContainerCell
         let action = viewModel.actions[indexPath.section][indexPath.row]
-        cell.tintColor = viewModel.tintColor
-        cell.configure(with: action)
+        // TODO: Laurie - Pass in more than 1 action when needed
+        action.tintColor = viewModel.tintColor
+        cell.configure(with: [action])
 
         if viewModel.toolbarMenuInversed {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
-            cell.bottomBorder.isHidden = rowIsLastInSection
+            cell.hideBottomBorder(isHidden: rowIsLastInSection)
 
         } else if viewModel.modalStyle == .popover {
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             let isLastSection = indexPath.section == tableView.numberOfSections - 1
             let rowIsLast = isLastRow && isLastSection
-
-            cell.bottomBorder.isHidden = rowIsLast
+            cell.hideBottomBorder(isHidden: rowIsLast)
         }
         return cell
     }
