@@ -416,7 +416,7 @@ extension ReadingListPanel: LibraryPanelContextMenu {
         return Site(url: record.url, title: record.title)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowItems]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
         let removeAction = SingleSheetItem(title: .RemoveContextMenuTitle,

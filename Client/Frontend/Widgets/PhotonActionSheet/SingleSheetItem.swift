@@ -9,8 +9,8 @@ enum IconAlignment {
     case right
 }
 
-// One row one the PhotonActionSheet table view can contain more than one item
-struct PhotonRowItems {
+// One row on the PhotonActionSheet table view can contain more than one item
+struct PhotonRowActions {
     var items: [SingleSheetItem]
     init(_ items: [SingleSheetItem]) {
         self.items = items
@@ -93,7 +93,7 @@ class SingleSheetItem {
     }
 
     // MARK: Conveniance
-    var items: PhotonRowItems {
-        return PhotonRowItems(self)
+    var items: PhotonRowActions {
+        return PhotonRowActions(self)
     }
 }

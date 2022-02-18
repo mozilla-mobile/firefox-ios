@@ -90,7 +90,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         menuHelper.menuActionDelegate = self
 
         menuHelper.getToolbarActions(navigationController: navigationController, completion: { actions in
-            let shouldInverse = PhotonActionSheetViewModel.shouldInverseForTraitCollection(trait: self.traitCollection)
+            let shouldInverse = PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: self.traitCollection)
             let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, toolbarMenuInversed: shouldInverse)
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         })
@@ -101,7 +101,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
 
-    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowItems] {
+    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
         guard let selectedTab = tabManager.selectedTab else { return [] }
         let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
         let infinity = "\u{221E}"
@@ -134,7 +134,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         return [privateBrowsingMode]
     }
 
-    func getMoreTabToolbarLongPressActions() -> [PhotonRowItems] {
+    func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
         let newTab = SingleSheetItem(title: .KeyboardShortcuts.NewTab, iconString: "quick_action_new_tab", iconType: .Image) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
@@ -162,7 +162,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard self.presentedViewController == nil else {
             return
         }
-        var actions: [[PhotonRowItems]] = []
+        var actions: [[PhotonRowActions]] = []
         actions.append(getTabToolbarLongPressActionsForModeSwitching())
         actions.append(getMoreTabToolbarLongPressActions())
 

@@ -7,7 +7,7 @@ import UIKit
 
 class PhotonActionSheetViewModel {
 
-    var items: [[PhotonRowItems]]
+    var actions: [[PhotonRowActions]]
     var modalStyle: UIModalPresentationStyle
 
     var closeButtonTitle: String? = nil
@@ -34,21 +34,21 @@ class PhotonActionSheetViewModel {
         }
     }
 
-    init(actions: [[PhotonRowItems]],
+    init(actions: [[PhotonRowActions]],
          site: Site? = nil,
          modalStyle: UIModalPresentationStyle) {
-        self.items = actions
+        self.actions = actions
         self.site = site
         self.modalStyle = modalStyle
     }
 
-    init(actions: [[PhotonRowItems]],
+    init(actions: [[PhotonRowActions]],
          closeButtonTitle: String? = nil,
          title: String? = nil,
          modalStyle: UIModalPresentationStyle,
          toolbarMenuInversed: Bool = false) {
 
-        self.items = actions
+        self.actions = actions
         self.closeButtonTitle = closeButtonTitle
         self.title = title
         self.modalStyle = modalStyle
@@ -67,11 +67,11 @@ class PhotonActionSheetViewModel {
         guard toolbarMenuInversed else { return }
 
         // Inverse database
-        items = items.map { $0.reversed() }
-        items.reverse()
+        actions = actions.map { $0.reversed() }
+        actions.reverse()
 
         // Flip cells
-        items.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
+        actions.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
     }
 
     // MARK: - TableView
@@ -130,10 +130,11 @@ class PhotonActionSheetViewModel {
 
     // MARK: - Pop over style
 
-    // Laurie - explanation
+    // Arrow direction is .any type on iPad, unless it's in small size.
+    // On iPhone there's never an arrow
     func getPossibleArrowDirections(trait: UITraitCollection) -> UIPopoverArrowDirection {
-        let shouldInverse = PhotonActionSheetViewModel.shouldInverseForTraitCollection(trait: trait)
-        return shouldInverse ? UIPopoverArrowDirection.init(rawValue: 0) : .any
+        let isSmallSize = PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait)
+        return isSmallSize ? UIPopoverArrowDirection.init(rawValue: 0) : .any
     }
 
     func getPopOverMargins(view: UIView) -> UIEdgeInsets {
@@ -164,13 +165,12 @@ class PhotonActionSheetViewModel {
                             right: leftRightSpacing)
     }
 
-    // Laurie - better names?? - explanation
-    static func shouldInverseForTraitCollection(trait: UITraitCollection) -> Bool {
-        return trait.verticalSizeClass != .compact && trait.horizontalSizeClass != .regular || UIDevice.current.userInterfaceIdiom == .phone
+    static func isSmallSizeForTraitCollection(trait: UITraitCollection) -> Bool {
+        return trait.verticalSizeClass == .compact || trait.horizontalSizeClass == .compact
     }
 
     func popOverWidthForTraitCollection(trait: UITraitCollection) -> CGFloat {
-        let isSmallWidth = PhotonActionSheetViewModel.shouldInverseForTraitCollection(trait: trait)
+        let isSmallWidth = PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait)
         return isSmallWidth ? 300 : 400
     }
 }

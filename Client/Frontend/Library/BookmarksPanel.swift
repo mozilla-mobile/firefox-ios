@@ -491,7 +491,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowItems]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else {
             return nil
         }

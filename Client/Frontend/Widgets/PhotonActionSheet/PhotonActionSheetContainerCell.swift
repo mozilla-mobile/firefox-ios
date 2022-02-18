@@ -44,10 +44,10 @@ class PhotonActionSheetContainerCell: UITableViewCell {
 
     // MARK: Table view
     
-    func configure(items: PhotonRowItems, viewModel: PhotonActionSheetViewModel) {
-        for item in items.items {
+    func configure(actions: PhotonRowActions, viewModel: PhotonActionSheetViewModel) {
+        for item in actions.items {
             item.tintColor = viewModel.tintColor
-            item.multipleItemsSetup.isMultiItems = items.items.count > 1
+            item.multipleItemsSetup.isMultiItems = actions.items.count > 1
             configure(with: item)
         }
     }

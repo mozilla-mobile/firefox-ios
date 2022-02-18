@@ -100,7 +100,7 @@ enum HomePanelType: Int {
 
 protocol HomePanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site?
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowItems]?
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]?
     func presentContextMenu(for indexPath: IndexPath)
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
 }
@@ -127,7 +127,7 @@ extension HomePanelContextMenu {
         return contextMenu
     }
 
-    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonRowItems]? {
+    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
         let openInNewTabAction = SingleSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _ in
@@ -138,7 +138,7 @@ extension HomePanelContextMenu {
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
-        return [PhotonRowItems(openInNewTabAction), PhotonRowItems(openInNewPrivateTabAction)]
+        return [PhotonRowActions(openInNewTabAction), PhotonRowActions(openInNewPrivateTabAction)]
     }
 }
 
@@ -1337,7 +1337,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         }
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowItems]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
         var sourceView: UIView?
 
@@ -1424,17 +1424,17 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.removePinTopSite(site)
         })
 
-        let topSiteActions: [PhotonRowItems]
+        let topSiteActions: [PhotonRowActions]
         if let _ = site as? PinnedSite {
-            topSiteActions = [PhotonRowItems(removePinTopSite)]
+            topSiteActions = [PhotonRowActions(removePinTopSite)]
         } else {
-            topSiteActions = [PhotonRowItems(pinTopSite), PhotonRowItems(removeTopSiteAction)]
+            topSiteActions = [PhotonRowActions(pinTopSite), PhotonRowActions(removeTopSiteAction)]
         }
 
-        var actions: [PhotonRowItems] = [PhotonRowItems(openInNewTabAction),
-                                         PhotonRowItems(openInNewPrivateTabAction),
-                                         PhotonRowItems(bookmarkAction),
-                                         PhotonRowItems(shareAction)]
+        var actions = [PhotonRowActions(openInNewTabAction),
+                       PhotonRowActions(openInNewPrivateTabAction),
+                       PhotonRowActions(bookmarkAction),
+                       PhotonRowActions(shareAction)]
 
         switch Section(indexPath.section) {
         case .topSites: actions.append(contentsOf: topSiteActions)

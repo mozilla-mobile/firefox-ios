@@ -38,7 +38,7 @@ extension PhotonActionSheetProtocol {
         viewController.present(sheet, animated: true, completion: nil)
     }
 
-    func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonRowItems] {
+    func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonRowActions] {
         let pasteGoAction = SingleSheetItem(title: .PasteAndGoTitle, iconString: "menu-PasteAndGo") { _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
@@ -66,7 +66,7 @@ extension PhotonActionSheetProtocol {
         }
     }
 
-    func getRefreshLongPressMenu(for tab: Tab) -> [PhotonRowItems] {
+    func getRefreshLongPressMenu(for tab: Tab) -> [PhotonRowActions] {
         guard tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return []
         }

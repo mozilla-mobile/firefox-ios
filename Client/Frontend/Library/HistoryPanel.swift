@@ -589,7 +589,7 @@ extension HistoryPanel: LibraryPanelContextMenu {
         return siteForIndexPath(indexPath)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowItems]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
         let removeAction = SingleSheetItem(title: .DeleteFromHistoryContextMenuTitle, iconString: "action_delete", tapHandler: { _ in
@@ -599,8 +599,8 @@ extension HistoryPanel: LibraryPanelContextMenu {
         let pinTopSite = SingleSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", tapHandler: { _ in
             self.pinToTopSites(site)
         })
-        actions.append(PhotonRowItems(pinTopSite))
-        actions.append(PhotonRowItems(removeAction))
+        actions.append(PhotonRowActions(pinTopSite))
+        actions.append(PhotonRowActions(removeAction))
         return actions
     }
 }
