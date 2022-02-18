@@ -74,10 +74,12 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     // MARK: - Properties
     private var viewModel: ContextualHintViewModel
-    private var hasSentDismissTelemetry: Bool = false
     internal var onViewSummoned: (() -> Void)? = nil
     internal var onViewDismissed: (() -> Void)? = nil
     var isPresenting: Bool = false
+    var hasAlreadyBeenPresented: Bool {
+        return viewModel.hasAlreadyBeenPresented
+    }
 
     // MARK: - Initializers
     init(with viewModel: ContextualHintViewModel) {

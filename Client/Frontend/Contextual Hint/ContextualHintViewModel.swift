@@ -35,6 +35,14 @@ class ContextualHintViewModel {
     private var profile: Profile
     private var hasSentDismissEvent = false
     
+    var hasAlreadyBeenPresented: Bool {
+        guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
+            return false
+        }
+        
+        return contextualHintData
+    }
+    
     // Do not present contextual hint in landscape on iPhone
     private var isDeviceHintReady: Bool {
         !UIWindow.isLandscape || UIDevice.current.userInterfaceIdiom == .pad
@@ -56,10 +64,7 @@ class ContextualHintViewModel {
     // MARK: - Interface
     func shouldPresentContextualHint() -> Bool {
         guard isDeviceHintReady else { return false }
-        guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
-            return true
-        }
-        return contextualHintData
+        return !hasAlreadyBeenPresented
     }
     
     func markContextualHintPresented() {
@@ -72,7 +77,6 @@ class ContextualHintViewModel {
         
         switch eventType {
         case .closeButton:
-            print("Perform Telemetry")
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .contextualHint,

@@ -152,15 +152,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    // ROUX check this has presented thing
-    fileprivate var hasPresentedContextualHint = false
-    fileprivate var didRotate = false
     fileprivate let profile: Profile
     fileprivate let flowLayout = UICollectionViewFlowLayout()
     fileprivate let experiments: NimbusApi
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
-    fileprivate var timer: Timer?
+    fileprivate var contextualHintTimer: Timer?
     fileprivate var isZeroSearch: Bool
     fileprivate var wallpaperManager: WallpaperManager
 
@@ -337,8 +334,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
     }
 
     deinit {
-        timer?.invalidate()
-        timer = nil
+        contextualHintTimer?.invalidate()
+        contextualHintTimer = nil
     }
 
     // MARK: - View lifecycle
@@ -403,7 +400,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        timer?.invalidate()
+        contextualHintTimer?.invalidate()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -417,7 +414,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: { _ in
-            if !self.didRotate { self.didRotate = true }
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
         })
@@ -498,16 +494,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         // Using a timer for the first presentation of contextual hint due to many
         // reloads that happen on the collection view. Invalidating the timer
         // prevents from showing contextual hint at the wrong position.
-        timer?.invalidate()
-        if didRotate && hasPresentedContextualHint {
-            didRotate = false
-        } else if !hasPresentedContextualHint {
+        contextualHintTimer?.invalidate()
+        if !contextualHintViewController.hasAlreadyBeenPresented {
             contextualHintPresentTimer()
         }
     }
 
     private func contextualHintPresentTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1.25,
+        contextualHintTimer = Timer.scheduledTimer(timeInterval: 1.25,
                                      target: self,
                                      selector: #selector(presentContextualOverlay),
                                      userInfo: nil,
@@ -518,7 +512,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, FeatureF
         guard BrowserViewController.foregroundBVC().searchController == nil,
               presentedViewController == nil
         else {
-            timer?.invalidate()
+            contextualHintTimer?.invalidate()
             return
         }
         
@@ -1445,7 +1439,6 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         contextualHintViewController.removeFromParent()
-        hasPresentedContextualHint = false
         return true
     }
 }
