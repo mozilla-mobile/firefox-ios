@@ -4,16 +4,18 @@
 
 import Foundation
 
+protocol PhotonActionSheetContainerCellDelegate: AnyObject {
+    func didClick(item: SingleSheetItem?)
+    func layoutChanged(item: SingleSheetItem)
+}
 
 // A PhotonActionSheet cell
 class PhotonActionSheetContainerCell: UITableViewCell {
 
-    weak var delegate: PhotonActionSheetViewDelegate?
+    weak var delegate: PhotonActionSheetContainerCellDelegate?
     private lazy var containerStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill
         stackView.distribution = .fillProportionally
-
-        // TODO: Laurie - Change alignment when needed
         stackView.axis = .horizontal
     }
 
@@ -42,10 +44,11 @@ class PhotonActionSheetContainerCell: UITableViewCell {
 
     // MARK: Table view
     
-    func configure(actions: PhotonRowItems, viewModel: PhotonActionSheetViewModel) {
-        for action in actions.items {
-            action.tintColor = viewModel.tintColor
-            configure(with: action)
+    func configure(items: PhotonRowItems, viewModel: PhotonActionSheetViewModel) {
+        for item in items.items {
+            item.tintColor = viewModel.tintColor
+            item.multipleItemsSetup.isMultiItems = items.items.count > 1
+            configure(with: item)
         }
     }
 
@@ -60,12 +63,13 @@ class PhotonActionSheetContainerCell: UITableViewCell {
         ])
     }
 
-    func configure(with action: SingleSheetItem) {
+    func configure(with item: SingleSheetItem) {
         let childView = PhotonActionSheetView()
-        childView.configure(with: action)
+        childView.configure(with: item)
         childView.addVerticalBorder(shouldAdd: !containerStackView.arrangedSubviews.isEmpty)
         childView.delegate = self
         containerStackView.addArrangedSubview(childView)
+        containerStackView.axis = item.multipleItemsSetup.axis
     }
 
     func hideBottomBorder(isHidden: Bool) {
@@ -77,7 +81,11 @@ class PhotonActionSheetContainerCell: UITableViewCell {
 
 // MARK: - PhotonActionSheetViewDelegate
 extension PhotonActionSheetContainerCell: PhotonActionSheetViewDelegate {
-    func didClick(action: SingleSheetItem?) {
-        delegate?.didClick(action: action)
+    func didClick(item: SingleSheetItem?) {
+        delegate?.didClick(item: item)
+    }
+
+    func layoutChanged(item: SingleSheetItem) {
+        delegate?.layoutChanged(item: item)
     }
 }

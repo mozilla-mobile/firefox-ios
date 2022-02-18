@@ -24,7 +24,8 @@ struct PhotonActionSheetViewUX {
 }
 
 protocol PhotonActionSheetViewDelegate: AnyObject {
-    func didClick(action: SingleSheetItem?)
+    func didClick(item: SingleSheetItem?)
+    func layoutChanged(item: SingleSheetItem)
 }
 
 // This is the view contained in PhotonActionSheetContainerCell in the PhotonActionSheet table view.
@@ -34,7 +35,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     // MARK: - Variables
 
     private var badgeOverlay: BadgeWithBackdrop?
-    private var action: SingleSheetItem?
+    private var item: SingleSheetItem?
     weak var delegate: PhotonActionSheetViewDelegate?
 
     private func createLabel() -> UILabel {
@@ -166,51 +167,66 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     }
 
     @objc private func didClick(_ gestureRecognizer: UITapGestureRecognizer?) {
-        guard let action = action,
-              let handler = action.tapHandler
+        guard let item = item,
+              let handler = item.tapHandler
         else {
-            self.delegate?.didClick(action: nil)
+            self.delegate?.didClick(item: nil)
             return
         }
 
         isSelected = gestureRecognizer?.state == .began || gestureRecognizer?.state == .changed
 
-        action.isEnabled = !action.isEnabled
-        handler(action)
-        self.delegate?.didClick(action: action)
+        item.isEnabled = !item.isEnabled
+        handler(item)
+        self.delegate?.didClick(item: item)
     }
 
     // MARK: Setup
 
-    func configure(with action: SingleSheetItem) {
-        self.action = action
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+
+        // The layout changes when there's multiple items in a row,
+        // and there's not enough space in one row to show the labels without truncating
+        if let item = item,
+           item.multipleItemsSetup.isMultiItems,
+           item.multipleItemsSetup.axis != .vertical,
+           titleLabel.isTruncated {
+
+            item.multipleItemsSetup.axis = .vertical
+            delegate?.layoutChanged(item: item)
+        }
+    }
+
+    func configure(with item: SingleSheetItem) {
+        self.item = item
         setupViews()
 
-        titleLabel.text = action.title
-        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
+        titleLabel.text = item.currentTitle
+        titleLabel.font = item.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
         titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = titleLabel.textColor
-        action.customRender?(titleLabel, self)
+        item.customRender?(titleLabel, self)
 
-        subtitleLabel.text = action.text
+        subtitleLabel.text = item.text
         subtitleLabel.textColor = UIColor.theme.tableView.rowText
-        subtitleLabel.isHidden = action.text == nil
+        subtitleLabel.isHidden = item.text == nil
 
-        accessibilityIdentifier = action.iconString ?? action.accessibilityId
-        accessibilityLabel = action.title
+        accessibilityIdentifier = item.iconString ?? item.accessibilityId
+        accessibilityLabel = item.currentTitle
 
-        if action.isFlipped {
+        if item.isFlipped {
             transform = CGAffineTransform(scaleX: 1, y: -1)
         }
 
-        if let iconName = action.iconString {
-            setupActionName(action: action, name: iconName)
+        if let iconName = item.iconString {
+            setupActionName(action: item, name: iconName)
         } else {
             statusIcon.removeFromSuperview()
         }
 
-        setupBadgeOverlay(action: action)
-        addSubBorder(action: action)
+        setupBadgeOverlay(action: item)
+        addSubBorder(action: item)
     }
 
     func addVerticalBorder(shouldAdd: Bool) {
@@ -295,7 +311,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
             let image = UIImage(named: name)?.createScaled(PhotonActionSheetUX.IconSize)
             statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
             statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: [.avoidAutoSetImage]) { (img, err, _, _) in
-                if let img = img, self.accessibilityLabel == action.title {
+                if let img = img, self.accessibilityLabel == action.currentTitle {
                     self.statusIcon.image = img.createScaled(PhotonActionSheetUX.IconSize)
                     self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                 }
@@ -346,5 +362,21 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         let customDarkTheme = UIColor(white: 0.3, alpha: 1)
         let color = LegacyThemeManager.instance.currentName == .dark ? customDarkTheme : UIColor.theme.actionMenu.closeButtonBackground
         badgeOverlay?.badge.tintBackground(color: color)
+    }
+}
+
+extension UILabel {
+
+    var isTruncated: Bool {
+        guard frame.size.width != 0, let text = text, let font = font else { return false }
+
+        let maxSize = CGSize(width: frame.size.width, height: CGFloat(Float.infinity))
+        let charSize = font.lineHeight
+        let textSize = text.boundingRect(with: maxSize,
+                                         options: .usesLineFragmentOrigin,
+                                         attributes: [NSAttributedString.Key.font: font],
+                                         context: nil)
+        let linesRoundedUp = Int(ceil(textSize.height/charSize))
+        return linesRoundedUp > 1
     }
 }

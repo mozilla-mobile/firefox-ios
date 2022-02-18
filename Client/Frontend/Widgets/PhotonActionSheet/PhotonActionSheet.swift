@@ -285,20 +285,20 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
 extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let section = viewModel.actions[safe: indexPath.section],
-              let action = section[safe: indexPath.row],
-              let custom = action.items[0].customHeight else { return UITableView.automaticDimension }
+        guard let section = viewModel.items[safe: indexPath.section],
+              let item = section[safe: indexPath.row],
+              let custom = item.items[0].customHeight else { return UITableView.automaticDimension }
 
         // Nested tableview rows get additional height
-        return custom(action.items[0])
+        return custom(item.items[0])
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.actions.count
+        return viewModel.items.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.actions[section].count
+        return viewModel.items[section].count
     }
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
@@ -307,8 +307,8 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetContainerCell
-        let actions = viewModel.actions[indexPath.section][indexPath.row]
-        cell.configure(actions: actions, viewModel: viewModel)
+        let items = viewModel.items[indexPath.section][indexPath.row]
+        cell.configure(items: items, viewModel: viewModel)
         cell.delegate = self
 
         if viewModel.toolbarMenuInversed {
@@ -343,8 +343,12 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 }
 
 // MARK: - PhotonActionSheetViewDelegate
-extension PhotonActionSheet: PhotonActionSheetViewDelegate {
-    func didClick(action: SingleSheetItem?) {
+extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
+    func didClick(item: SingleSheetItem?) {
         dismissVC()
+    }
+
+    func layoutChanged(item: SingleSheetItem) {
+        tableView.reloadData()
     }
 }
