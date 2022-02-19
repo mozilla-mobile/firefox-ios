@@ -17,6 +17,7 @@ struct PhotonActionSheetViewUX {
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let Padding: CGFloat = 16
+    static let InBetweenPadding: CGFloat = 8
     static let HorizontalPadding: CGFloat = 1
     static let topBottomPadding: CGFloat = 10
     static let VerticalPadding: CGFloat = 2
@@ -99,7 +100,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     }()
 
     private lazy var stackView: UIStackView = .build { stackView in
-        stackView.spacing = PhotonActionSheetViewUX.Padding
+        stackView.spacing = PhotonActionSheetViewUX.InBetweenPadding
         stackView.alignment = .center
         stackView.axis = .horizontal
         stackView.distribution = .fillProportionally
