@@ -15,7 +15,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
     weak var delegate: PhotonActionSheetContainerCellDelegate?
     private lazy var containerStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
         stackView.axis = .horizontal
     }
 
@@ -28,13 +28,10 @@ class PhotonActionSheetContainerCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
         selectionStyle = .none
-        translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
 
         contentView.addSubview(containerStackView)
-
         setupConstraints()
     }
 

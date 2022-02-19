@@ -40,8 +40,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
 
     private func createLabel() -> UILabel {
         let label = UILabel()
-        label.minimumScaleFactor = 0.75 // Scale the font if we run out of space
-        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        label.setContentHuggingPriority(.required, for: .vertical)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
@@ -60,6 +59,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         let label = createLabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byTruncatingTail
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
         return label
     }()
@@ -107,10 +107,10 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
 
     private lazy var textStackView: UIStackView = .build { textStackView in
         textStackView.spacing = PhotonActionSheetViewUX.VerticalPadding
-        textStackView.setContentHuggingPriority(.required, for: .horizontal)
-        textStackView.alignment = .leading
+        textStackView.setContentHuggingPriority(.required, for: .vertical)
+        textStackView.alignment = .fill
         textStackView.axis = .vertical
-        textStackView.distribution = .fillProportionally
+        textStackView.distribution = .fill
     }
 
     lazy var bottomBorder: UIView = .build { _ in }
@@ -193,8 +193,9 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
            item.multipleItemsSetup.axis != .vertical,
            titleLabel.isTruncated {
 
-            item.multipleItemsSetup.axis = .vertical
-            delegate?.layoutChanged(item: item)
+            // Disabling this multipleItemsSetup feature for now - will rework to improve
+//            item.multipleItemsSetup.axis = .vertical
+//            delegate?.layoutChanged(item: item)
         }
     }
 
@@ -231,6 +232,9 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
 
     func addVerticalBorder(shouldAdd: Bool) {
         guard shouldAdd else { return }
+        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
+        textStackView.setContentHuggingPriority(.required, for: .horizontal)
+
         verticalBorder.backgroundColor = UIColor.theme.tableView.separator
         addSubview(verticalBorder)
 

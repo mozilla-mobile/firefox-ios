@@ -146,7 +146,7 @@ class PhotonActionSheetViewModel {
     }
 
     private func getIpadMargins(view: UIView) -> UIEdgeInsets {
-        return UIEdgeInsets.init(equalInset: PhotonActionSheetUX.iPadSpacing)
+        return UIEdgeInsets.init(equalInset: PhotonActionSheetUX.Spacing)
     }
 
     private func getiPhoneMargins(view: UIView) -> UIEdgeInsets {
@@ -157,12 +157,12 @@ class PhotonActionSheetViewModel {
         let topSpacing = view.frame.size.height - estimatedRowNumber * rowHeight
 
         // Align menu icons with popover icons
-        let leftRightSpacing = view.frame.size.width / 2 - PhotonActionSheetViewUX.Padding - PhotonActionSheetViewUX.StatusIconSize.width / 2
+        let rightSpacing = view.frame.size.width / 2 - PhotonActionSheetViewUX.Padding - PhotonActionSheetViewUX.StatusIconSize.width / 2
 
         return UIEdgeInsets(top: topSpacing,
-                            left: leftRightSpacing,
+                            left: PhotonActionSheetUX.Spacing,
                             bottom: PhotonActionSheetUX.BottomPopOverSheetSpacing,
-                            right: leftRightSpacing)
+                            right: rightSpacing)
     }
 
     static func isSmallSizeForTraitCollection(trait: UITraitCollection) -> Bool {

@@ -30,7 +30,7 @@ struct PhotonActionSheetUX {
     static let TitleHeaderSectionHeight: CGFloat = 40
     static let TitleHeaderSectionHeightWithSite: CGFloat = 70
     static let BottomPopOverSheetSpacing: CGFloat = 32
-    static let iPadSpacing: CGFloat = 16
+    static let Spacing: CGFloat = 16
 }
 
 public enum PresentationStyle {

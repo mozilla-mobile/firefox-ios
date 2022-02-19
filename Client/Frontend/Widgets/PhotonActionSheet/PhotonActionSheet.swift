@@ -142,8 +142,7 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
 
     private var tableViewHeightConstraint: NSLayoutConstraint?
     private func setTableViewHeight() {
-        var frameHeight: CGFloat
-        frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
+        let frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
         let buttonHeight = viewModel.presentationStyle == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0
         let maxHeight = frameHeight - buttonHeight
 

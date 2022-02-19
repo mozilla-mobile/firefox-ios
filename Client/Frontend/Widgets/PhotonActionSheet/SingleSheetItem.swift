@@ -81,7 +81,7 @@ class SingleSheetItem {
     // Current title looks at the layout direction
     // Horizontal uses the default title, vertical uses the alternate title
     var currentTitle: String {
-        return multipleItemsSetup.axis == .vertical ? title : alternateTitle ?? title
+        return multipleItemsSetup.axis == .horizontal ? title : alternateTitle ?? title
     }
 
     // The layout changes when there's multiple items in a row,
