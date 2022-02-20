@@ -75,9 +75,10 @@ class PhotonActionSheetViewModel {
     }
 
     // Toolbar menu is inversed if hamburger menu is at the bottom
-    // It isn't inversed for edge case of iPhone in landscape mode with top search bar
+    // It isn't inversed for edge case of iPhone in landscape mode with top search bar (when toolbar isn't shown)
     static func hasInversedToolbarMenu(trait: UITraitCollection, isBottomSearchBar: Bool) -> Bool {
-        let isIphoneEdgeCase = !isBottomSearchBar && trait.verticalSizeClass == .compact && trait.horizontalSizeClass == .regular
+        let showingToolbar = trait.verticalSizeClass != .compact && trait.horizontalSizeClass != .regular
+        let isIphoneEdgeCase = !isBottomSearchBar && !showingToolbar
         return PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) && !isIphoneEdgeCase
     }
 
@@ -144,11 +145,11 @@ class PhotonActionSheetViewModel {
         return isSmallSize ? UIPopoverArrowDirection.init(rawValue: 0) : .any
     }
 
-    func getPopOverMargins(view: UIView) -> UIEdgeInsets {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return getIpadMargins(view: view)
+    func getPopOverMargins(trait: UITraitCollection, view: UIView) -> UIEdgeInsets {
+        if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) {
+            return getSmallSizeMargins(view: view)
         } else {
-            return getiPhoneMargins(view: view)
+            return getIpadMargins(view: view)
         }
     }
 
@@ -156,17 +157,13 @@ class PhotonActionSheetViewModel {
         return UIEdgeInsets.init(equalInset: PhotonActionSheetUX.Spacing)
     }
 
-    private func getiPhoneMargins(view: UIView) -> UIEdgeInsets {
-        // Top spacing: Make sure at least half of a cell height is visible at the top of the popover if content is scrollable
-        // TODO: Laurie - not working anymore somehow
-        let rowHeight = PhotonActionSheetUX.RowHeight
-        let estimatedRowNumber = (view.frame.size.height - 3 * PhotonActionSheetUX.SeparatorRowHeight) / rowHeight
-        let topSpacing = view.frame.size.height - estimatedRowNumber * rowHeight
-
+    // Small size is either iPhone or iPad in multitasking mode
+    private func getSmallSizeMargins(view: UIView) -> UIEdgeInsets {
         // Align menu icons with popover icons
-        let rightSpacing = view.frame.size.width / 2 - PhotonActionSheetViewUX.Padding - PhotonActionSheetViewUX.StatusIconSize.width / 2
+        let extraLandscapeSpacing: CGFloat = UIWindow.isLandscape ? 10 : 0
+        let rightSpacing = view.frame.size.width / 2 - PhotonActionSheetUX.Spacing - PhotonActionSheetViewUX.StatusIconSize.width / 2 + extraLandscapeSpacing
 
-        return UIEdgeInsets(top: topSpacing,
+        return UIEdgeInsets(top: PhotonActionSheetUX.Spacing,
                             left: PhotonActionSheetUX.Spacing,
                             bottom: PhotonActionSheetUX.BottomPopOverSheetSpacing,
                             right: rightSpacing)

@@ -29,11 +29,12 @@ extension PhotonActionSheetProtocol {
             popoverVC.sourceView = view
             popoverVC.sourceRect = view.bounds
 
+            let trait = viewController.traitCollection
             if viewModel.toolbarMenuInversed {
-                let margins = viewModel.getPopOverMargins(view: view)
+                let margins = viewModel.getPopOverMargins(trait: trait, view: view)
                 popoverVC.popoverLayoutMargins = margins
             }
-            popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: viewController.traitCollection)
+            popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: trait)
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
