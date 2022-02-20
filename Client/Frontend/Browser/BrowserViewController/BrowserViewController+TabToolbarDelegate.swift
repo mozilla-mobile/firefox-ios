@@ -90,7 +90,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         menuHelper.menuActionDelegate = self
 
         menuHelper.getToolbarActions(navigationController: navigationController, completion: { actions in
-            let shouldInverse = PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: self.traitCollection)
+            let shouldInverse = PhotonActionSheetViewModel.hasInversedToolbarMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
             let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, toolbarMenuInversed: shouldInverse)
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         })

@@ -77,8 +77,6 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
             setupCenteredStyle()
         }
 
-        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
-        tableViewHeightConstraint?.isActive = true
         NSLayoutConstraint.activate(constraints)
 
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon),
@@ -135,22 +133,6 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
         }
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        setTableViewHeight()
-    }
-
-    private var tableViewHeightConstraint: NSLayoutConstraint?
-    private func setTableViewHeight() {
-        let frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-        let buttonHeight = viewModel.presentationStyle == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0
-        let maxHeight = frameHeight - buttonHeight
-
-        // The height of the menu should be no more than 90 percent of the screen
-        let height = min(tableView.contentSize.height, maxHeight * 0.90)
-        tableViewHeightConstraint?.constant = height
-    }
-
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
@@ -181,13 +163,20 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
     private func setupPopoverStyle() {
         let width: CGFloat = viewModel.popOverWidthForTraitCollection(trait: view.traitCollection)
 
-        let tableViewConstraints = [
+        var tableViewConstraints = [
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.widthAnchor.constraint(greaterThanOrEqualToConstant: width),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.widthAnchor.constraint(greaterThanOrEqualToConstant: width),
         ]
+
+        // Can't set this on iPad (not in multitasking) since it causes the menu to take all the width of the screen.
+        if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: view.traitCollection) {
+            tableViewConstraints.append(
+                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            )
+        }
+
         constraints.append(contentsOf: tableViewConstraints)
     }
 

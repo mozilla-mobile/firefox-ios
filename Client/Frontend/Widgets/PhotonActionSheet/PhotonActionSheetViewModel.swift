@@ -74,6 +74,13 @@ class PhotonActionSheetViewModel {
         actions.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
     }
 
+    // Toolbar menu is inversed if hamburger menu is at the bottom
+    // It isn't inversed for edge case of iPhone in landscape mode with top search bar
+    static func hasInversedToolbarMenu(trait: UITraitCollection, isBottomSearchBar: Bool) -> Bool {
+        let isIphoneEdgeCase = !isBottomSearchBar && trait.verticalSizeClass == .compact && trait.horizontalSizeClass == .regular
+        return PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) && !isIphoneEdgeCase
+    }
+
     // MARK: - TableView
 
     func getViewHeader(tableView: UITableView, section: Int) -> UIView? {
@@ -165,6 +172,7 @@ class PhotonActionSheetViewModel {
                             right: rightSpacing)
     }
 
+    // We use small size for iPhone and on iPad in multitasking mode
     static func isSmallSizeForTraitCollection(trait: UITraitCollection) -> Bool {
         return trait.verticalSizeClass == .compact || trait.horizontalSizeClass == .compact
     }
