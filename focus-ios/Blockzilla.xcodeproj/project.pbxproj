@@ -14,7 +14,6 @@
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
 		0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */; };
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
-		120E446A27BD3658007E4F8C /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120E446927BD3658007E4F8C /* TooltipView.swift */; };
 		16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16074B6C2114364C003B671F /* PhotonActionSheet.swift */; };
 		16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 16180DBA212F563800AFE3C2 /* Intents.intentdefinition */; };
 		161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161D90302108085F00C2A74A /* HomeViewToolbar.swift */; };
@@ -316,7 +315,6 @@
 		0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
 		0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingAppearanceTest.swift; sourceTree = "<group>"; };
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
-		120E446927BD3658007E4F8C /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
 		16074B6C2114364C003B671F /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
 		16180DBA212F563800AFE3C2 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
 		161D90302108085F00C2A74A /* HomeViewToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewToolbar.swift; sourceTree = "<group>"; };
@@ -1603,7 +1601,6 @@
 				F8714D2027A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift */,
 				F861799C2795EE9800CFD324 /* InternalExperimentDetailView.swift */,
 				E439815027AAD63200F382B0 /* InternalTelemetrySettingsView.swift */,
-				120E446927BD3658007E4F8C /* TooltipView.swift */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
 			);
 			path = Blockzilla;
@@ -2183,7 +2180,6 @@
 				C8CE05052743F9EA002057C6 /* PhotonActionSheetItem+MenuAction.swift in Sources */,
 				C8C74BF4271D5D310009CE5A /* ActionFooterView.swift in Sources */,
 				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
-				120E446A27BD3658007E4F8C /* TooltipView.swift in Sources */,
 				C8337DFD2710898800093D42 /* ImageCell.swift in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
