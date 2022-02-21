@@ -30,8 +30,8 @@ extension PhotonActionSheetProtocol {
             popoverVC.sourceRect = view.bounds
 
             let trait = viewController.traitCollection
-            if viewModel.toolbarMenuInversed {
-                let margins = viewModel.getPopOverMargins(trait: trait, view: view)
+            if viewModel.isToolbarMenu {
+                let margins = viewModel.getToolbarMenuPopOverMargins(trait: trait, view: view, presentedOn: viewController)
                 popoverVC.popoverLayoutMargins = margins
             }
             popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: trait)

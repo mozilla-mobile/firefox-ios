@@ -14,6 +14,7 @@ class PhotonActionSheetViewModel {
     var site: Site? = nil
     var title: String? = nil
     var tintColor = UIColor.theme.actionMenu.foreground
+    var isToolbarMenu = false
 
     var presentationStyle: PresentationStyle {
         return modalStyle.getPhotonPresentationStyle()
@@ -46,6 +47,7 @@ class PhotonActionSheetViewModel {
          closeButtonTitle: String? = nil,
          title: String? = nil,
          modalStyle: UIModalPresentationStyle,
+         isToolbarMenu: Bool = false,
          toolbarMenuInversed: Bool = false) {
 
         self.actions = actions
@@ -53,6 +55,7 @@ class PhotonActionSheetViewModel {
         self.title = title
         self.modalStyle = modalStyle
 
+        self.isToolbarMenu = isToolbarMenu
         self.toolbarMenuInversed = toolbarMenuInversed
         setToolbarMenuStyle()
     }
@@ -145,27 +148,34 @@ class PhotonActionSheetViewModel {
         return isSmallSize ? UIPopoverArrowDirection.init(rawValue: 0) : .any
     }
 
-    func getPopOverMargins(trait: UITraitCollection, view: UIView) -> UIEdgeInsets {
+    func getToolbarMenuPopOverMargins(trait: UITraitCollection, view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) {
-            return getSmallSizeMargins(view: view)
+            return getSmallSizeMargins(view: view, presentedOn: viewController)
         } else {
             return getIpadMargins(view: view)
         }
     }
 
     private func getIpadMargins(view: UIView) -> UIEdgeInsets {
-        return UIEdgeInsets.init(equalInset: PhotonActionSheetUX.Spacing)
+        return UIEdgeInsets.init(equalInset: PhotonActionSheetUX.BigSpacing)
     }
 
     // Small size is either iPhone or iPad in multitasking mode
-    private func getSmallSizeMargins(view: UIView) -> UIEdgeInsets {
+    private func getSmallSizeMargins(view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         // Align menu icons with popover icons
         let extraLandscapeSpacing: CGFloat = UIWindow.isLandscape ? 10 : 0
         let rightSpacing = view.frame.size.width / 2 - PhotonActionSheetUX.Spacing - PhotonActionSheetViewUX.StatusIconSize.width / 2 + extraLandscapeSpacing
 
-        return UIEdgeInsets(top: PhotonActionSheetUX.Spacing,
+        // Calculate top and bottom spacing
+        let convertedPoint = view.convert(view.frame.origin, to: viewController.view)
+        let viewControllerHeight = viewController.view.frame.size.height
+        let isViewAtTop = convertedPoint.y < viewControllerHeight / 2
+        let top = isViewAtTop ? UIConstants.ToolbarHeight : PhotonActionSheetUX.Spacing
+        let bottom = isViewAtTop ? PhotonActionSheetUX.Spacing : PhotonActionSheetUX.BigSpacing
+
+        return UIEdgeInsets(top: top,
                             left: PhotonActionSheetUX.Spacing,
-                            bottom: PhotonActionSheetUX.BottomPopOverSheetSpacing,
+                            bottom: bottom,
                             right: rightSpacing)
     }
 

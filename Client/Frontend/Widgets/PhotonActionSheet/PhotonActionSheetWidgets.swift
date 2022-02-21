@@ -29,7 +29,7 @@ struct PhotonActionSheetUX {
     static let SeparatorRowHeight: CGFloat = 8
     static let TitleHeaderSectionHeight: CGFloat = 40
     static let TitleHeaderSectionHeightWithSite: CGFloat = 70
-    static let BottomPopOverSheetSpacing: CGFloat = 32
+    static let BigSpacing: CGFloat = 32
     static let Spacing: CGFloat = 16
 }
 
