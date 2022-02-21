@@ -102,7 +102,7 @@ class ActivityStreamTest: BaseTestCase {
         waitUntilPageLoad()
         
 //        navigator.performAction(Action.PinToTopSitesPAM)
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         app.cells["action_pin"].tap()
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -173,7 +173,7 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewTabDefaultTopSite() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Open one of the sites from Topsites and wait until page is loaded
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
@@ -199,7 +199,7 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewPrivateTab() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on apple top site, second cell
         waitForExistence(app.cells["TopSitesCell"].cells["apple"], timeout: 3)
         app.cells["TopSitesCell"].cells["apple"].press(forDuration:1)
@@ -230,7 +230,7 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
@@ -263,7 +263,7 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Share")
         // Comenting out until share sheet can be managed with automated tests issue #5477
         if !iPad() {
-            waitForExistence( app.buttons["Close"], timeout: 10)
+            waitForExistence(app.buttons["Close"], timeout: 10)
             app.buttons["Close"].tap()
         }
     }

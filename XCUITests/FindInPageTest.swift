@@ -22,8 +22,8 @@ class FindInPageTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 15)
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         waitForExistence(app.tables["Context Menu"].cells["menu-FindInPage"], timeout: 10)
         app.tables["Context Menu"].cells["menu-FindInPage"].tap()
 
@@ -85,8 +85,8 @@ class FindInPageTests: BaseTestCase {
         // Workaround until FxSGraph is fixed to allow the previos way with goto
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        waitForExistence(app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/, timeout: 15)
-        app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         // Enter some text to start finding
         app.tables["Context Menu"].cells["menu-FindInPage"].tap()
         app.textFields["FindInPage.searchField"].typeText("The Book of")

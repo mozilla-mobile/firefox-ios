@@ -13,7 +13,7 @@ let url_4 = "test-password-2.html"
 
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables.cells["Add Bookmark"], timeout: 15)
         app.tables.cells["Add Bookmark"].tap()
@@ -118,7 +118,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         bookmark()
 
         //There should be a bookmark
@@ -154,7 +154,7 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         // Now the site should be suggested
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)

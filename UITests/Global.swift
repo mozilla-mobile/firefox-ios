@@ -357,8 +357,8 @@ class BrowserUtils {
 
     class func openLibraryMenu(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
-        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+        tester.waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         tester.waitForAnimationsToFinish()
     }
 
@@ -502,7 +502,7 @@ class SimplePageServer {
 class SearchUtils {
     static func navigateToSearchSettings(_ tester: KIFUITestActor) {
         let engine = SearchUtils.getDefaultEngine().shortName
-        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         tester.waitForAnimationsToFinish()
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.waitForView(withAccessibilityLabel: "Settings")
@@ -597,7 +597,7 @@ class DynamicFontUtils {
 class HomePageUtils {
     static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.tapView(withAccessibilityIdentifier: "Homepage")
     }

@@ -88,12 +88,11 @@ class TabLocationView: UIView {
         return urlTextField
     }()
 
-    // laurie - a11y identifiers
     lazy var trackingProtectionButton: LockButton = {
         let trackingProtectionButton = LockButton()
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.clipsToBounds = false
-        trackingProtectionButton.accessibilityIdentifier = "TabLocationView.trackingProtectionButton"
+        trackingProtectionButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.trackingProtection
         return trackingProtectionButton
     }()
 
@@ -104,7 +103,7 @@ class TabLocationView: UIView {
         readerModeButton.isAccessibilityElement = true
         readerModeButton.isHidden = true
         readerModeButton.accessibilityLabel = .TabLocationReaderModeAccessibilityLabel
-        readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
+        readerModeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.readerModeButton
         readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: .TabLocationReaderModeAddToReadingListAccessibilityLabel, target: self, selector: #selector(readerModeCustomAction))]
         return readerModeButton
     }()
@@ -117,7 +116,7 @@ class TabLocationView: UIView {
         reloadButton.imageView?.contentMode = .scaleAspectFit
         reloadButton.contentHorizontalAlignment = .left
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
-        reloadButton.accessibilityIdentifier = "TabLocationView.reloadButton"
+        reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
         reloadButton.isAccessibilityElement = true
         return reloadButton
     }()

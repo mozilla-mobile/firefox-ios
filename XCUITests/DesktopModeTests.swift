@@ -97,7 +97,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables["Context Menu"].cells["menu-RequestDesktopSite"])
         navigator.goto(RequestDesktopSite)
@@ -131,8 +131,8 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         // Workaround to be sure the snackbar dissapers
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TabLocationView.reloadButton"], timeout: 5)
-        app.buttons["TabLocationView.reloadButton"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton], timeout: 5)
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestMobileSite) // toggle off
         waitUntilPageLoad()
@@ -158,7 +158,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         // Workaround
-        app.buttons["TabLocationView.reloadButton"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
