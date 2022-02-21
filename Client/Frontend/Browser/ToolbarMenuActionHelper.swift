@@ -570,7 +570,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             popoverPresentationController.permittedArrowDirections = .up
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-        presentableVC.present(controller, animated: true, completion: nil)
+        delegate?.showViewController(viewController: controller)
     }
 
     // MARK: Reading list

@@ -1331,7 +1331,7 @@ class BrowserViewController: UIViewController {
             popoverPresentationController.delegate = self
         }
 
-        present(controller, animated: true, completion: nil)
+        present(viewController: controller, animated: true)
     }
 
     @objc func openSettings() {

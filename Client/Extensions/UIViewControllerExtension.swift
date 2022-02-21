@@ -72,7 +72,7 @@ extension UIViewController {
         } else {
             themedNavigationController.modalPresentationStyle = .fullScreen
         }
-        self.present(themedNavigationController, animated: true, completion: nil)
+        present(viewController: themedNavigationController, animated: true)
     }
     
     @objc func dismissVC() {
