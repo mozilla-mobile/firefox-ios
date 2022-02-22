@@ -7,11 +7,6 @@ import Shared
 import Storage
 import MozillaAppServices
 
-protocol HighlightItem {}
-
-extension ASGroup: HighlightItem {}
-extension HistoryHighlight: HighlightItem {}
-
 extension HistoryHighlight {
     var urlFromString: URL? {
         return URL(string: url)
@@ -55,12 +50,11 @@ class HistoryHighlightsManager {
             }
 
             let filterHighlights = highlights.filter { highlights in
-                !tabs.contains { highlights.urlFromString == $0.url }
+                !tabs.contains { highlights.urlFromString == $0.lastKnownUrl }
             }
 
             if shouldGroupHighlights {
                 buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
-
                     let collatedHighlights = collateForRecentlySaved(from: groups, and: filterHighlights)
                     completion(Array(collatedHighlights.prefix(9)))
                 }

@@ -87,7 +87,7 @@ class TestAppDelegate: AppDelegate {
 
         // Don't show the Contextual hint for jump back in section.
         if launchArguments.contains(LaunchArguments.SkipContextualHintJumpBackIn) {
-            profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHints.JumpBackinKey)
+            profile.prefs.setBool(true, forKey: PrefsKeys.ContextualHints.JumpBackinKey)
         }
         
         // Don't show the ETP Coversheet New page.
