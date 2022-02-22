@@ -17,7 +17,31 @@ func registerHandlersForTestMethods(server: GCDWebServer) {
         return GCDWebServerDataResponse(html: "<html><body>\(textNodes)</body></html>")
     }
 
-    ["test-indexeddb-private", "test-window-opener", "test-password", "test-password-submit", "test-password-2", "test-password-submit-2", "empty-login-form", "empty-login-form-submit", "test-example", "test-example-link", "test-mozilla-book", "test-mozilla-org", "test-popup-blocker", "test-user-agent"].forEach {
+    server.addHandler(forMethod: "GET", path: "/test-fixture/test-password.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+        return GCDWebServerDataResponse(html: "<html><head><meta name=\"viewport\" content=\"width=device-width\"></head><body aria-label=\"body\"><form method=\"GET\" action=\"test-password-submit.html\"><p>Username: <input id=\"username\" type=\"text\" value=\"test@example.com\"></p><p>Password: <input id=\"password\" type=\"password\" value=\"verysecret\"></p><p><input type=\"submit\" value=\"Login\" aria-label=\"submit\"/></p></form></body><script>document.getElementById(\"password\").value = Math.random().toString();</script></html>")
+      }
+
+    server.addHandler(forMethod: "GET", path: "/test-fixture/test-password-submit.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+        return GCDWebServerDataResponse(html: "<html><head><meta name=\"viewport\" content=\"width=device-width\"></head><body><p>Password submitted. Nope just a test.</p></body></html>" )
+      }
+
+    server.addHandler(forMethod: "GET", path: "/test-fixture/test-password-2.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+        return GCDWebServerDataResponse(html: "<html><head><meta name=\"viewport\" content=\"width=device-width\"></head><body aria-label=\"body\"><form method=\"GET\" action=\"test-password-submit.html\"><p>Username: <input id=\"username\" type=\"text\" value=\"test@example.com\"></p><p>Password: <input id=\"password\" type=\"password\" value=\"verysecret\"></p><p><input type=\"submit\" value=\"Login\" aria-label=\"submit\"/></p></form></body><script>document.getElementById(\"password\").value = Math.random().toString();</script></html>")
+      }
+
+    server.addHandler(forMethod: "GET", path: "/test-fixture/test-password-submit-2.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+      return GCDWebServerDataResponse(html: "<html><head><meta name=\"viewport\" content=\"width=device-width\"></head><body><p>Password submitted. Nope just a test.</p></body></html>" )
+    }
+
+    server.addHandler(forMethod: "GET", path: "/test-fixture/empty-login-form.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+        return GCDWebServerDataResponse(html: "<html<head<meta name=\"viewport\" content=\"width=device-width\"></head><body aria-label=\"body\"><form method=\"GET\" action=\"test-password-submit.html\"><p>Username: <input id=\"username\" type=\"text\"</p><p>Password: <input id=\"password\" type=\"password\"</p><p><input type=\"submit\" value=\"Login\" aria-label=\"submit\"/></p></form></body><script></script></html>")
+      }
+
+    server.addHandler(forMethod: "GET", path: "/test-fixture/test-example.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+        return GCDWebServerDataResponse(html: "<html><head><title>Example Domain</title></head><body><div><h1>Example Domain</h1><p>This domain is established to be used for illustrative examples in documents. You may use this domain in examples without prior coordination or asking for permission.</p><p><a href=\"http://www.iana.org/domains/example\">More information...</a></p></div></body></html>")
+      }
+
+    ["test-indexeddb-private", "test-window-opener", "test-mozilla-book", "test-popup-blocker", "test-user-agent", "test-mozilla-org"].forEach {
         addHTMLFixture(name: $0, server: server)
     }
 }

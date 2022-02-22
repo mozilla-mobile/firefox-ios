@@ -4,11 +4,9 @@
 
 import XCTest
 
-//let url_1 = "test-example.com"
-let url_1 = "https://storage.googleapis.com/mobile_test_assets/test_app/test-example.html"
+let url_1 = path(forTestPage: "test-example.html")
 let url_2 = ["url": "test-mozilla-org.html", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
 let urlLabelExample_3 = "Example Domain"
-//let url_3 = "localhost:\(serverPort)/test-fixture/test-example.html"
 let urlLabelExample_4 = "Example Login Page 2"
 let url_4 = "test-password-2.html"
 

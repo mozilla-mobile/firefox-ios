@@ -44,7 +44,7 @@ class PhotonActionSheetTest: BaseTestCase {
 
     // Smoketest
     func testShareOptionIsShownFromShortCut() {
-        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-example.html"))
 //        navigator.goto(BrowserTab)
         navigator.nowAt(BrowserTab)
         waitUntilPageLoad()

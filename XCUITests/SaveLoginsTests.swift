@@ -10,8 +10,8 @@ let domainSecondLogin = "test2@example.com"
 let testLoginPage = path(forTestPage: "test-password.html")
 let testSecondLoginPage = path(forTestPage: "test-password-2.html")
 let savedLoginEntry = "test@example.com, http://localhost:\(serverPort)"
-//let urlLogin = path(forTestPage: "empty-login-form.html")
-let urlLogin = "https://storage.googleapis.com/mobile_test_assets/test_app/empty-login-form.html"
+let urlLogin = path(forTestPage: "empty-login-form.html")
+//let urlLogin = "https://storage.googleapis.com/mobile_test_assets/test_app/empty-login-form.html"
 let mailLogin = "iosmztest@mailinator.com"
 //The following seem to be labels that change a lot and make the tests break; aka volatile. Let's keep them in one place.
 let loginsListURLLabel = "Website, \(domain)"
@@ -92,7 +92,7 @@ class SaveLoginTest: BaseTestCase {
         openLoginsSettings()
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         // Save a login and check that it appears on the list
-        saveLogin(givenUrl: "https://storage.googleapis.com/mobile_test_assets/test_app/test-password.html")
+        saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
         waitForExistence(app.tables["Login List"])
 //        XCTAssertTrue(app.staticTexts[domain].exists)
@@ -100,7 +100,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
         //Check to see how it works with multiple entries in the list- in this case, two for now
 //        saveLogin(givenUrl: testSecondLoginPage)
-        saveLogin(givenUrl: "https://storage.googleapis.com/mobile_test_assets/test_app/test-password-2.html")
+        saveLogin(givenUrl: testSecondLoginPage)
         openLoginsSettings()
         waitForExistence(app.tables["Login List"])
 //        XCTAssertTrue(app.staticTexts[domain].exists)

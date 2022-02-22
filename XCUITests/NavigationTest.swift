@@ -166,8 +166,7 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testLongPressLinkOptions() {
-//        navigator.openURL(path(forTestPage: "test-example.html"))
-        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-example.html")
+        navigator.openURL(path(forTestPage: "test-example.html"))
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitForExistence(app.otherElements.collectionViews.element(boundBy: 0), timeout: 5)

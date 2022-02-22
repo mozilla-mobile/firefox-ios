@@ -14,8 +14,6 @@ class TrackingProtectionTests: BaseTestCase {
 
     // Smoketest
     func testTrackingProtection() {
-//        navigator.goto(URLBarOpen)
-//        navigator.back()
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -34,7 +32,7 @@ class TrackingProtectionTests: BaseTestCase {
         app.textFields.firstMatch.tap()
         navigator.nowAt(URLBarOpen)
 //        navigator.goto(BrowserTab)
-        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-example.html"))
         sleep(2)
         waitUntilPageLoad()
 
