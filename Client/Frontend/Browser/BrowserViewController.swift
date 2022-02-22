@@ -1738,11 +1738,7 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidPresentContextualHint(type: ContextualHintViewType) {
-        urlBar.locationTextField?.resignFirstResponder()
-    }
-
-    func homePanelDidDismissContextualHint(type: ContextualHintViewType) {
-        urlBar.locationTextField?.becomeFirstResponder()
+        urlBar.leaveOverlayMode()
     }
 }
 

@@ -37,8 +37,10 @@ class TabTrayViewModel {
     func navTitle(for segmentIndex: Int, foriPhone: Bool) -> String? {
         if foriPhone {
             switch segmentIndex {
-            case 0, 1:
+            case 0:
                 return .TabTrayV2Title
+            case 1:
+                return . TabTrayPrivateBrowsingTitle
             case 2:
                 return .AppMenuSyncedTabsTitleString
             default:

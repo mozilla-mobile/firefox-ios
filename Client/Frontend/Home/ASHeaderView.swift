@@ -67,7 +67,7 @@ class ASHeaderView: UICollectionReusableView {
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -titleInsets),
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.titleTopInset),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.titleTopInset),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
 
