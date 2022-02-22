@@ -372,7 +372,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: rowIsLastInSection)
 
-        } else if viewModel.modalStyle == .popover {
+        } else {
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             let isLastSection = indexPath.section == tableView.numberOfSections - 1
             let rowIsLast = isLastRow && isLastSection
