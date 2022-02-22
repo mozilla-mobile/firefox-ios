@@ -14,7 +14,11 @@ class PhotonActionSheetViewModel {
     var site: Site? = nil
     var title: String? = nil
     var tintColor = UIColor.theme.actionMenu.foreground
+
+    // Toolbar menu specific variables
     var isToolbarMenu = false
+    var isTopToolbarMenu = false
+    var availableToolbarMenuHeight: CGFloat = 0
 
     var presentationStyle: PresentationStyle {
         return modalStyle.getPhotonPresentationStyle()
@@ -99,7 +103,7 @@ class PhotonActionSheetViewModel {
         case .title:
             guard let title = title else { break }
             if section > 0 {
-                return tableView.dequeueReusableHeaderFooterView(withIdentifier: "SeparatorSectionHeader")
+                return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.LineSeparatorSectionHeader)
             } else {
                 let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
                 header.tintColor = tintColor
@@ -108,10 +112,10 @@ class PhotonActionSheetViewModel {
             }
 
         case .other:
-            return defaultHeaderView()
+            return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SeparatorSectionHeader)
         }
 
-        return defaultHeaderView()
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SeparatorSectionHeader)
     }
 
     func getHeaderHeightForSection(section: Int) -> CGFloat {
@@ -133,12 +137,6 @@ class PhotonActionSheetViewModel {
         }
     }
 
-    private func defaultHeaderView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = UIColor.theme.tableView.separator
-        return view
-    }
-
     // MARK: - Pop over style
 
     // Arrow direction is .any type on iPad, unless it's in small size.
@@ -152,11 +150,16 @@ class PhotonActionSheetViewModel {
         if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) {
             return getSmallSizeMargins(view: view, presentedOn: viewController)
         } else {
-            return getIpadMargins(view: view)
+            return getIpadMargins(view: view, presentedOn: viewController)
         }
     }
 
-    private func getIpadMargins(view: UIView) -> UIEdgeInsets {
+    private func getIpadMargins(view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
+        // Save available space
+        let viewControllerHeight = viewController.view.frame.size.height
+        availableToolbarMenuHeight = viewControllerHeight - PhotonActionSheetUX.BigSpacing * 2
+        isTopToolbarMenu = true
+
         return UIEdgeInsets.init(equalInset: PhotonActionSheetUX.BigSpacing)
     }
 
@@ -164,19 +167,23 @@ class PhotonActionSheetViewModel {
     private func getSmallSizeMargins(view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         // Align menu icons with popover icons
         let extraLandscapeSpacing: CGFloat = UIWindow.isLandscape ? 10 : 0
-        let rightSpacing = view.frame.size.width / 2 - PhotonActionSheetUX.Spacing - PhotonActionSheetViewUX.StatusIconSize.width / 2 + extraLandscapeSpacing
+        let rightInset = view.frame.size.width / 2 - PhotonActionSheetUX.Spacing - PhotonActionSheetViewUX.StatusIconSize.width / 2 + extraLandscapeSpacing
 
-        // Calculate top and bottom spacing
+        // Calculate top and bottom insets
         let convertedPoint = view.convert(view.frame.origin, to: viewController.view)
         let viewControllerHeight = viewController.view.frame.size.height
-        let isViewAtTop = convertedPoint.y < viewControllerHeight / 2
-        let top = isViewAtTop ? UIConstants.ToolbarHeight : PhotonActionSheetUX.Spacing
-        let bottom = isViewAtTop ? PhotonActionSheetUX.Spacing : PhotonActionSheetUX.BigSpacing
+        isTopToolbarMenu = convertedPoint.y < viewControllerHeight / 2
+        let topInset = isTopToolbarMenu ? UIConstants.ToolbarHeight : PhotonActionSheetUX.Spacing
+        let bottomInset = isTopToolbarMenu ? PhotonActionSheetUX.Spacing : PhotonActionSheetUX.BigSpacing
 
-        return UIEdgeInsets(top: top,
+        // Save available space so we can calculate the needed menu height later on
+        let buttonSpace = isTopToolbarMenu ? convertedPoint.y + view.frame.height : viewControllerHeight - convertedPoint.y - view.frame.height
+        availableToolbarMenuHeight = viewControllerHeight - buttonSpace - bottomInset - topInset - viewController.view.safeAreaInsets.top
+
+        return UIEdgeInsets(top: topInset,
                             left: PhotonActionSheetUX.Spacing,
-                            bottom: bottom,
-                            right: rightSpacing)
+                            bottom: bottomInset,
+                            right: rightInset)
     }
 
     // We use small size for iPhone and on iPad in multitasking mode

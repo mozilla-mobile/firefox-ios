@@ -24,6 +24,9 @@ struct PhotonActionSheetUX {
     static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
     static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
     static let CellName = "PhotonActionSheetCell"
+    static let LineSeparatorSectionHeader = "LineSeparatorSectionHeader"
+    static let SeparatorSectionHeader = "SeparatorSectionHeader"
+    static let EmptyHeader = "EmptyHeader"
     static let CloseButtonHeight: CGFloat  = 56
     static let TablePadding: CGFloat = 6
     static let SeparatorRowHeight: CGFloat = 8
@@ -214,7 +217,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
 }
 
 // MARK: - PhotonActionSheetSeparator
-class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
+class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView {
 
     let separatorLineView = UIView()
 
@@ -229,6 +232,19 @@ class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
             make.centerY.equalTo(self)
             make.height.equalTo(0.5)
         }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - PhotonActionSheetSeparator
+class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
+
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        contentView.backgroundColor = UIColor.theme.tableView.separator
     }
 
     required init?(coder aDecoder: NSCoder) {

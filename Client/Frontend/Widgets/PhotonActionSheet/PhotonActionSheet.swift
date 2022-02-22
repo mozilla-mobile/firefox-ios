@@ -77,6 +77,8 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
             setupCenteredStyle()
         }
 
+        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+        tableViewHeightConstraint?.isActive = true
         NSLayoutConstraint.activate(constraints)
 
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon),
@@ -104,8 +106,9 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
         tableView.register(PhotonActionSheetContainerCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
         tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
-        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
-        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
+        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SeparatorSectionHeader)
+        tableView.register(PhotonActionSheetLineSeparator.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.LineSeparatorSectionHeader)
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.EmptyHeader)
 
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
@@ -131,6 +134,11 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setTableViewHeight()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -250,7 +258,7 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if viewModel.presentationStyle == .popover {
+        if viewModel.presentationStyle == .popover && !wasHeightOverriden {
             preferredContentSize = tableView.contentSize
         }
     }
@@ -266,6 +274,67 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
         if !tableView.frame.contains(touch.location(in: view)) {
             dismissVC()
         }
+    }
+
+    // MARK: - TableView height
+
+    private var tableViewHeightConstraint: NSLayoutConstraint?
+
+    private func setTableViewHeight() {
+        if viewModel.isToolbarMenu {
+            setToolbarMenuTableViewHeight()
+        } else {
+            setNormalStyleTableViewHeight()
+        }
+    }
+
+    // Needed to override the preferredContentSize, so key value observer doesn't get called
+    private var wasHeightOverriden = false
+
+    /// Toolbar menu table view height is calculated so if there's not enough space for the menu to be shown completely,
+    /// we make sure that the last cell shown is half shown. This indicates to the user that the menu can be scrolled.
+    private func setToolbarMenuTableViewHeight() {
+        let visibleCellsHeight = getViewsHeightSum(views: tableView.visibleCells)
+        let headerCellsHeight = getViewsHeightSum(views: tableView.visibleHeaders)
+
+        let totalCellsHeight = visibleCellsHeight + headerCellsHeight
+        let availableHeight = viewModel.availableToolbarMenuHeight
+        let needsHeightAdjustment = availableHeight - totalCellsHeight < 0
+
+        if needsHeightAdjustment && totalCellsHeight != 0 && !wasHeightOverriden {
+            let newHeight: CGFloat
+            if viewModel.isTopToolbarMenu {
+                let halfCellHeight = (tableView.visibleCells.last?.frame.height ?? 0) / 2
+                newHeight = totalCellsHeight - halfCellHeight
+            } else {
+                let halfCellHeight = (tableView.visibleCells.first?.frame.height ?? 0) / 2
+                newHeight = totalCellsHeight - halfCellHeight * 3
+            }
+
+            wasHeightOverriden = true
+            tableViewHeightConstraint?.constant = newHeight
+            tableView.contentSize.height = newHeight
+            preferredContentSize = tableView.contentSize
+        }
+    }
+
+    private func setNormalStyleTableViewHeight() {
+        let frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
+        let buttonHeight = viewModel.presentationStyle == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0
+        let maxHeight = frameHeight - buttonHeight
+
+        // The height of the menu should be no more than 90 percent of the screen
+        let height = min(tableView.contentSize.height, maxHeight * 0.90)
+        tableViewHeightConstraint?.constant = height
+    }
+
+    private func getViewsHeightSum(views: [UIView]) -> CGFloat {
+        var heights = [CGFloat]()
+        for cell in views {
+            let height = cell.frame.height
+            heights.append(height)
+        }
+        return heights.reduce(0, +)
     }
 }
 
@@ -338,5 +407,38 @@ extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
 
     func layoutChanged(item: SingleSheetItem) {
         tableView.reloadData()
+    }
+}
+
+// MARK: - Visible Headers
+extension UITableView {
+
+    var visibleHeaders: [UITableViewHeaderFooterView] {
+        var visibleHeaders = [UITableViewHeaderFooterView]()
+        for sectionIndex in indexesOfVisibleHeaderSections {
+            guard let sectionHeader = headerView(forSection: sectionIndex) else { continue }
+            visibleHeaders.append(sectionHeader)
+        }
+
+        return visibleHeaders
+    }
+
+    private var indexesOfVisibleHeaderSections: [Int] {
+        var visibleSectionIndexes = [Int]()
+
+        for i in 0..<numberOfSections {
+            let headerRect = rect(forSection: i)
+
+            // The "visible part" of the tableView is based on the content offset and the tableView's size.
+            let visiblePartOfTableView = CGRect(x: contentOffset.x,
+                                                y: contentOffset.y,
+                                                width: bounds.size.width,
+                                                height: bounds.size.height)
+
+            if visiblePartOfTableView.intersects(headerRect) {
+                visibleSectionIndexes.append(i)
+            }
+        }
+        return visibleSectionIndexes
     }
 }
