@@ -11,18 +11,18 @@ enum IconAlignment {
 
 // One row on the PhotonActionSheet table view can contain more than one item
 struct PhotonRowActions {
-    var items: [SingleSheetItem]
-    init(_ items: [SingleSheetItem]) {
+    var items: [SingleActionViewModel]
+    init(_ items: [SingleActionViewModel]) {
         self.items = items
     }
 
-    init(_ item: SingleSheetItem) {
+    init(_ item: SingleActionViewModel) {
         self.items = [item]
     }
 }
 
-// MARK: - SingleSheetItem
-class SingleSheetItem {
+// MARK: - SingleActionViewModel
+class SingleActionViewModel {
     private(set) var text: String?
     private(set) var iconString: String?
     private(set) var iconURL: URL?
@@ -33,7 +33,7 @@ class SingleSheetItem {
     var isEnabled: Bool // Used by toggles like nightmode to switch tint color
     private(set) var bold: Bool = false
     private(set) var tabCount: String?
-    private(set) var tapHandler: ((SingleSheetItem) -> Void)?
+    private(set) var tapHandler: ((SingleActionViewModel) -> Void)?
     private(set) var badgeIconName: String?
 
     // Flip the cells for the toolbar menu since content needs to appear at the bottom
@@ -46,7 +46,7 @@ class SingleSheetItem {
     public var customRender: ((_ title: UILabel, _ contentView: UIView) -> Void)?
 
     // Enable height customization
-    public var customHeight: ((SingleSheetItem) -> CGFloat)?
+    public var customHeight: ((SingleActionViewModel) -> CGFloat)?
 
     // Normally the icon name is used, but if there is no icon, this is used.
     public var accessibilityId: String?
@@ -54,7 +54,7 @@ class SingleSheetItem {
     init(title: String, alternateTitle: String? = nil, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil,
          iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left,
          iconTint: UIColor? = nil, isEnabled: Bool = false, badgeIconNamed: String? = nil,
-         bold: Bool? = false, tabCount: String? = nil, tapHandler: ((SingleSheetItem) -> Void)? = nil) {
+         bold: Bool? = false, tabCount: String? = nil, tapHandler: ((SingleActionViewModel) -> Void)? = nil) {
 
         self.title = title
         self.alternateTitle = alternateTitle

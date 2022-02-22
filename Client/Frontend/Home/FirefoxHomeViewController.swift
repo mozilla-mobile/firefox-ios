@@ -122,11 +122,11 @@ extension HomePanelContextMenu {
     func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = SingleSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _ in
+        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _ in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = SingleSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
@@ -1072,7 +1072,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             return nil
         }
 
-        let openInNewTabAction = SingleSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { [weak self] _ in
+        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { [weak self] _ in
             self?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             if FirefoxHomeSectionType(indexPath.section) == .pocket, let isZeroSearch = self?.isZeroSearch {
                 let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
@@ -1083,14 +1083,14 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             }
         }
 
-        let openInNewPrivateTabAction = SingleSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
-        let bookmarkAction: SingleSheetItem
+        let bookmarkAction: SingleActionViewModel
         if site.bookmarked ?? false {
-            bookmarkAction = SingleSheetItem(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", tapHandler: { _ in
-                self.viewModel.profile.places.deleteBookmarksWtapHandlerithURL(url: site.url) >>== {
+            bookmarkAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", tapHandler: { _ in
+                self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                     self.viewModel.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
                     site.setBookmarked(false)
                 }
@@ -1098,7 +1098,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
             })
         } else {
-            bookmarkAction = SingleSheetItem(title: .BookmarkContextMenuTitle, iconString: "action_bookmark", tapHandler: { _ in
+            bookmarkAction = SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: "action_bookmark", tapHandler: { _ in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
                 _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
 
@@ -1115,7 +1115,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             })
         }
 
-        let shareAction = SingleSheetItem(title: .ShareContextMenuTitle, iconString: "action_share", tapHandler: { _ in
+        let shareAction = SingleActionViewModel(title: .ShareContextMenuTitle, iconString: "action_share", tapHandler: { _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { (_, _) in }
             if UIDevice.current.userInterfaceIdiom == .pad, let popoverController = controller.popoverPresentationController {
@@ -1130,15 +1130,15 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.present(viewController: controller, animated: true)
         })
 
-        let removeTopSiteAction = SingleSheetItem(title: .RemoveContextMenuTitle, iconString: "action_remove", tapHandler: { _ in
+        let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle, iconString: "action_remove", tapHandler: { _ in
             self.hideURLFromTopSites(site)
         })
 
-        let pinTopSite = SingleSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", tapHandler: { _ in
+        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: "action_pin", tapHandler: { _ in
             self.pinTopSite(site)
         })
 
-        let removePinTopSite = SingleSheetItem(title: .RemoveFromShortcutsActionTitle, iconString: "action_unpin", tapHandler: { _ in
+        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle, iconString: "action_unpin", tapHandler: { _ in
             self.removePinTopSite(site)
         })
 

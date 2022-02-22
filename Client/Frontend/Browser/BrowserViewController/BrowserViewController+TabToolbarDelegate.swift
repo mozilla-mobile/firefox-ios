@@ -114,14 +114,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             }
         }
 
-        let privateBrowsingMode = SingleSheetItem(title: .KeyboardShortcuts.PrivateBrowsingMode,
+        let privateBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.PrivateBrowsingMode,
                                                   iconString: "nav-tabcounter",
                                                   iconType: .TabsButton,
                                                   tabCount: tabCount) { _ in
             action()
         }.items
 
-        let normalBrowsingMode = SingleSheetItem(title: .KeyboardShortcuts.NormalBrowsingMode,
+        let normalBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.NormalBrowsingMode,
                                                  iconString: "nav-tabcounter",
                                                  iconType: .TabsButton,
                                                  tabCount: tabCount) { _ in
@@ -135,17 +135,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
-        let newTab = SingleSheetItem(title: .KeyboardShortcuts.NewTab, iconString: "quick_action_new_tab", iconType: .Image) { _ in
+        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab, iconString: "quick_action_new_tab", iconType: .Image) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }.items
 
-        let newPrivateTab = SingleSheetItem(title: .KeyboardShortcuts.NewPrivateTab, iconString: "quick_action_new_tab", iconType: .Image) { _ in
+        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab, iconString: "quick_action_new_tab", iconType: .Image) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
         }.items
 
-        let closeTab = SingleSheetItem(title: .KeyboardShortcuts.CloseCurrentTab, iconString: "tab_close", iconType: .Image) { _ in
+        let closeTab = SingleActionViewModel(title: .KeyboardShortcuts.CloseCurrentTab, iconString: "tab_close", iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
                 self.updateTabCountUsingTabManager(self.tabManager)

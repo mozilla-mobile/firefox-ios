@@ -401,11 +401,11 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - PhotonActionSheetViewDelegate
 extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
-    func didClick(item: SingleSheetItem?) {
+    func didClick(item: SingleActionViewModel?) {
         dismissVC()
     }
 
-    func layoutChanged(item: SingleSheetItem) {
+    func layoutChanged(item: SingleActionViewModel) {
         tableView.reloadData()
     }
 }

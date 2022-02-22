@@ -263,7 +263,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     // MARK: - Actions
 
     private func getNewTabAction() -> PhotonRowActions {
-        return SingleSheetItem(title: .KeyboardShortcuts.NewTab,
+        return SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
                                iconString: "quick_action_new_tab") { _ in
 
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
@@ -272,21 +272,21 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getHistoryLibraryAction() -> PhotonRowActions {
-        return SingleSheetItem(title: .AppMenuHistory,
+        return SingleActionViewModel(title: .AppMenuHistory,
                                iconString: "menu-panel-History") { _ in
             self.delegate?.showLibrary(panel: .history)
         }.items
     }
 
     private func getDownloadsLibraryAction() -> PhotonRowActions {
-        return SingleSheetItem(title: .AppMenuDownloads,
+        return SingleActionViewModel(title: .AppMenuDownloads,
                                iconString: "menu-panel-Downloads") { _ in
             self.delegate?.showLibrary(panel: .downloads)
         }.items
     }
 
     private func getFindInPageAction() -> PhotonRowActions {
-        return SingleSheetItem(title: .AppMenuFindInPageTitleString,
+        return SingleActionViewModel(title: .AppMenuFindInPageTitleString,
                                iconString: "menu-FindInPage") { _ in
             self.delegate?.showFindInPage()
         }.items
@@ -309,7 +309,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             siteTypeTelemetryObject = .requestMobileSite
         }
 
-        return SingleSheetItem(title: toggleActionTitle,
+        return SingleActionViewModel(title: toggleActionTitle,
                                iconString: toggleActionIcon) { _ in
             if let url = tab.url {
                 tab.toggleChangeUserAgent()
@@ -321,7 +321,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getCopyAction() -> PhotonRowActions? {
 
-        return SingleSheetItem(title: .AppMenuCopyLinkTitleString,
+        return SingleActionViewModel(title: .AppMenuCopyLinkTitleString,
                                iconString: "menu-Copy-Link") { _ in
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
@@ -333,7 +333,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getSendToDevice() -> PhotonRowActions {
-        return SingleSheetItem(title: .SendLinkToDeviceTitle,
+        return SingleActionViewModel(title: .SendLinkToDeviceTitle,
                                iconString: "menu-Send-to-Device") { _ in
             guard let bvc = self.menuActionDelegate as? InstructionsViewControllerDelegate & DevicePickerViewControllerDelegate else { return }
 
@@ -359,7 +359,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getReportSiteIssueAction() -> PhotonRowActions? {
         guard featureFlags.isFeatureActiveForBuild(.reportSiteIssue) else { return nil }
-        return SingleSheetItem(title: .AppMenuReportSiteIssueTitleString,
+        return SingleActionViewModel(title: .AppMenuReportSiteIssueTitleString,
                                iconString: "menu-reportSiteIssue") { _ in
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
             self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
@@ -367,7 +367,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getHelpAction() -> PhotonRowActions {
-        return SingleSheetItem(title: .AppSettingsHelp,
+        return SingleActionViewModel(title: .AppSettingsHelp,
                                iconString: "help") { _ in
 
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
@@ -377,7 +377,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getCustomizeHomePageAction() -> PhotonRowActions? {
-        return SingleSheetItem(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
+        return SingleActionViewModel(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
                                iconString: "edit") { _ in
             self.delegate?.showCustomizeHomePage()
         }.items
@@ -392,7 +392,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let title = variables.getText("settings-title") ?? .AppMenuSettingsTitleString
         let icon = variables.getString("settings-icon") ?? "menu-Settings"
 
-        let openSettings = SingleSheetItem(title: title,
+        let openSettings = SingleActionViewModel(title: title,
                                            iconString: icon) { _ in
             let settingsTableViewController = AppSettingsTableViewController()
             settingsTableViewController.profile = self.profile
@@ -421,7 +421,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
         let nightModeTitle: String = nightModeEnabled ? .AppMenuTurnOffNightMode : .AppMenuTurnOnNightMode
-        let nightMode = SingleSheetItem(title: nightModeTitle,
+        let nightMode = SingleActionViewModel(title: nightModeTitle,
                                         iconString: "menu-NightMode",
                                         isEnabled: nightModeEnabled) { _ in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
@@ -450,7 +450,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonRowActions? {
-        let action: ((SingleSheetItem) -> Void) = { action in
+        let action: ((SingleActionViewModel) -> Void) = { action in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
             let params = FXASyncClosure(fxaParams, .emailLoginFlow, .appMenu)
             showFxA(params)
@@ -461,7 +461,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let needsReAuth = rustAccount.accountNeedsReauth()
 
         guard let userProfile = rustAccount.userProfile else {
-            return SingleSheetItem(title: .AppMenuBackUpAndSyncData,
+            return SingleActionViewModel(title: .AppMenuBackUpAndSyncData,
                                    iconString: "menu-sync",
                                    tapHandler: action).items
         }
@@ -481,7 +481,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
         let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
         let iconTint: UIColor? = needsReAuth ? UIColor.Photon.Yellow60 : nil
-        let syncOption = SingleSheetItem(title: title, iconString: iconString, iconURL: iconURL,
+        let syncOption = SingleActionViewModel(title: title, iconString: iconString, iconURL: iconURL,
                                          iconType: iconType, iconTint: iconTint, tapHandler: action).items
         return syncOption
     }
@@ -499,7 +499,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             delegate?.updateToolbarState()
         }
 
-        whatsNewAction = SingleSheetItem(title: .WhatsNewString,
+        whatsNewAction = SingleActionViewModel(title: .WhatsNewString,
                                          iconString: "whatsnew",
                                          isEnabled: showBadgeForWhatsNew) { _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
@@ -524,7 +524,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     // MARK: Share
 
     private func getShareFileAction() -> PhotonRowActions {
-        return SingleSheetItem(title: .AppMenuSharePageTitleString,
+        return SingleActionViewModel(title: .AppMenuSharePageTitleString,
                                iconString: "action_share") { _ in
 
             guard let tab = self.selectedTab,
@@ -536,7 +536,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getShareAction() -> PhotonRowActions {
-        return SingleSheetItem(title: .ShareContextMenuTitle,
+        return SingleActionViewModel(title: .ShareContextMenuTitle,
                                iconString: "action_share") { _ in
 
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
@@ -589,22 +589,22 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return section
     }
 
-    private func getReadingListLibraryAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .AppMenuReadingList,
+    private func getReadingListLibraryAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .AppMenuReadingList,
                                iconString: "menu-panel-ReadingList") { _ in
             self.delegate?.showLibrary(panel: .readingList)
         }
     }
 
-    private func getReadingListAction() -> SingleSheetItem {
+    private func getReadingListAction() -> SingleActionViewModel {
         let addReadingListAction = getAddReadingListAction()
         let removeReadingListAction = getRemoveReadingListAction()
 
         return isInReadingList ? removeReadingListAction : addReadingListAction
     }
 
-    private func getAddReadingListAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .Bookmarks.Actions.Add,
+    private func getAddReadingListAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .Bookmarks.Actions.Add,
                                alternateTitle: .AppMenuAddToReadingListTitleString,
                                iconString: "addToReadingList") { _ in
 
@@ -617,8 +617,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
-    private func getRemoveReadingListAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .ReaderPanelRemove,
+    private func getRemoveReadingListAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .ReaderPanelRemove,
                                alternateTitle: .ReaderModeBarRemoveFromReadingList,
                                iconString: "removeFromReadingList") { _ in
 
@@ -647,22 +647,22 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return section
     }
 
-    private func getBookmarkLibraryAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .AppMenuBookmarks,
+    private func getBookmarkLibraryAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .AppMenuBookmarks,
                                iconString: "menu-panel-Bookmarks") { _ in
             self.delegate?.showLibrary(panel: .bookmarks)
         }
     }
 
-    private func getBookmarkAction() -> SingleSheetItem {
+    private func getBookmarkAction() -> SingleActionViewModel {
         let addBookmarkAction = getAddBookmarkAction()
         let removeBookmarkAction = getRemoveBookmarkAction()
 
         return isBookmarked ? removeBookmarkAction : addBookmarkAction
     }
 
-    private func getAddBookmarkAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .Bookmarks.Actions.Add,
+    private func getAddBookmarkAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .Bookmarks.Actions.Add,
                                alternateTitle: .AppMenuAddBookmarkTitleString2,
                                iconString: "menu-Bookmark") { _ in
 
@@ -674,8 +674,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
-    private func getRemoveBookmarkAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .ReaderPanelRemove,
+    private func getRemoveBookmarkAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .ReaderPanelRemove,
                                alternateTitle: .AppMenuRemoveBookmarkTitleString,
                                iconString: "menu-Bookmark-Remove") { _ in
 
@@ -699,8 +699,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         return isPinned ? removeShortcutAction.items : addShortcutAction.items
     }
 
-    private func getAddShortcutAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .AddToShortcutsActionTitle,
+    private func getAddShortcutAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .AddToShortcutsActionTitle,
                                iconString: "action_pin") { _ in
 
             guard let url = self.selectedTab?.url?.displayURL,
@@ -721,8 +721,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
     }
 
-    private func getRemoveShortcutAction() -> SingleSheetItem {
-        return SingleSheetItem(title: .AppMenuRemoveBookmarkTitleString,
+    private func getRemoveShortcutAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .AppMenuRemoveBookmarkTitleString,
                                iconString: "menu-Bookmark-Remove") { _ in
 
             guard let url = self.selectedTab?.url?.absoluteString else { return }
@@ -744,7 +744,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
         guard isLoginsButtonShowing else { return nil }
 
-        return SingleSheetItem(title: .AppMenuPasswords,
+        return SingleActionViewModel(title: .AppMenuPasswords,
                                iconString: "key",
                                iconType: .Image,
                                iconAlignment: .left) { _ in

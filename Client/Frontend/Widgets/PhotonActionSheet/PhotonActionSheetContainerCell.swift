@@ -5,8 +5,8 @@
 import Foundation
 
 protocol PhotonActionSheetContainerCellDelegate: AnyObject {
-    func didClick(item: SingleSheetItem?)
-    func layoutChanged(item: SingleSheetItem)
+    func didClick(item: SingleActionViewModel?)
+    func layoutChanged(item: SingleActionViewModel)
 }
 
 // A PhotonActionSheet cell
@@ -60,7 +60,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
         ])
     }
 
-    func configure(with item: SingleSheetItem) {
+    func configure(with item: SingleActionViewModel) {
         let childView = PhotonActionSheetView()
         childView.configure(with: item)
         childView.addVerticalBorder(shouldAdd: !containerStackView.arrangedSubviews.isEmpty)
@@ -78,11 +78,11 @@ class PhotonActionSheetContainerCell: UITableViewCell {
 
 // MARK: - PhotonActionSheetViewDelegate
 extension PhotonActionSheetContainerCell: PhotonActionSheetViewDelegate {
-    func didClick(item: SingleSheetItem?) {
+    func didClick(item: SingleActionViewModel?) {
         delegate?.didClick(item: item)
     }
 
-    func layoutChanged(item: SingleSheetItem) {
+    func layoutChanged(item: SingleActionViewModel) {
         delegate?.layoutChanged(item: item)
     }
 }

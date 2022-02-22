@@ -25,8 +25,8 @@ struct PhotonActionSheetViewUX {
 }
 
 protocol PhotonActionSheetViewDelegate: AnyObject {
-    func didClick(item: SingleSheetItem?)
-    func layoutChanged(item: SingleSheetItem)
+    func didClick(item: SingleActionViewModel?)
+    func layoutChanged(item: SingleActionViewModel)
 }
 
 // This is the view contained in PhotonActionSheetContainerCell in the PhotonActionSheet table view.
@@ -36,7 +36,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     // MARK: - Variables
 
     private var badgeOverlay: BadgeWithBackdrop?
-    private var item: SingleSheetItem?
+    private var item: SingleActionViewModel?
     weak var delegate: PhotonActionSheetViewDelegate?
 
     private func createLabel() -> UILabel {
@@ -200,7 +200,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
-    func configure(with item: SingleSheetItem) {
+    func configure(with item: SingleActionViewModel) {
         self.item = item
         setupViews()
 
@@ -284,7 +284,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         ])
     }
 
-    private func addSubBorder(action: SingleSheetItem) {
+    private func addSubBorder(action: SingleActionViewModel) {
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         addSubview(bottomBorder)
 
@@ -305,7 +305,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         NSLayoutConstraint.activate(constraints)
     }
 
-    private func setupActionName(action: SingleSheetItem, name: String) {
+    private func setupActionName(action: SingleActionViewModel, name: String) {
         switch action.iconType {
         case .Image:
             let image = UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
@@ -356,7 +356,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
-    private func setupBadgeOverlay(action: SingleSheetItem) {
+    private func setupBadgeOverlay(action: SingleActionViewModel) {
         guard let name = action.badgeIconName, action.isEnabled, let parent = statusIcon.superview else { return }
         badgeOverlay = BadgeWithBackdrop(imageName: name)
         badgeOverlay?.add(toParent: parent)

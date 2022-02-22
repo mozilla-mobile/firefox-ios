@@ -86,7 +86,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
     
     func addNewBookmarkItemAction() {
-        let newBookmark = SingleSheetItem(title: .BookmarksNewBookmark, iconString: "action_bookmark", tapHandler: { _ in
+        let newBookmark = SingleActionViewModel(title: .BookmarksNewBookmark, iconString: "action_bookmark", tapHandler: { _ in
             guard let bookmarkFolder = self.bookmarkFolder else {
                 return
             }
@@ -95,7 +95,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             self.navigationController?.pushViewController(detailController, animated: true)
         }).items
 
-        let newFolder = SingleSheetItem(title: .BookmarksNewFolder, iconString: "bookmarkFolder", tapHandler: { _ in
+        let newFolder = SingleActionViewModel(title: .BookmarksNewFolder, iconString: "bookmarkFolder", tapHandler: { _ in
             guard let bookmarkFolder = self.bookmarkFolder else {
                 return
             }
@@ -104,7 +104,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             self.navigationController?.pushViewController(detailController, animated: true)
         }).items
 
-        let newSeparator = SingleSheetItem(title: .BookmarksNewSeparator, iconString: "nav-menu", tapHandler: { _ in
+        let newSeparator = SingleActionViewModel(title: .BookmarksNewSeparator, iconString: "nav-menu", tapHandler: { _ in
             let centerVisibleRow = self.centerVisibleRow()
 
             self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID, position: UInt32(centerVisibleRow)) >>== { guid in
@@ -496,7 +496,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
             return nil
         }
 
-        let pinTopSite = SingleSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", tapHandler: { _ in
+        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: "action_pin", tapHandler: { _ in
             self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
                     SimpleToast().showAlertWithText(.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
@@ -505,7 +505,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         }).items
         actions.append(pinTopSite)
 
-        let removeAction = SingleSheetItem(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", tapHandler: { _ in
+        let removeAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", tapHandler: { _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "long-press"])
         }).items

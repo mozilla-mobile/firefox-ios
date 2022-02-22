@@ -95,12 +95,12 @@ class DownloadHelper: NSObject {
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 
-        var filenameItem: SingleSheetItem
+        var filenameItem: SingleActionViewModel
         if let expectedSize = expectedSize {
             let expectedSizeAndHost = "\(expectedSize) — \(host)"
-            filenameItem = SingleSheetItem(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
+            filenameItem = SingleActionViewModel(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
         } else {
-            filenameItem = SingleSheetItem(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
+            filenameItem = SingleActionViewModel(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
         }
         filenameItem.customHeight = { _ in
             return 80
@@ -111,7 +111,7 @@ class DownloadHelper: NSObject {
             label.lineBreakMode = .byCharWrapping
         }
 
-        let downloadFileItem = SingleSheetItem(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
+        let downloadFileItem = SingleActionViewModel(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
             self.browserViewController.downloadQueue.enqueue(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
