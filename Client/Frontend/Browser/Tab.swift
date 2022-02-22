@@ -336,8 +336,9 @@ class Tab: NSObject {
                 shouldResetTabGroupData = true
             // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
             } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
-                let key = tabGroupData.tabHistoryMetadatakey()
-                if key.referrerUrl != nextUrl {
+                if tabGroupData.tabHistoryMetadatakey().referrerUrl != nextUrl {
+                    tabGroupData.tabAssociatedSearchUrl = nextUrl
+                    let key = tabGroupData.tabHistoryMetadatakey()
                     let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
                     updateObservationForKey(key: key, observation: observation)
                     tabGroupData.tabAssociatedNextUrl = nextUrl
@@ -563,11 +564,10 @@ class Tab: NSObject {
                 lastObservation.referrerUrl == key.referrerUrl &&
                 lastObservation.searchTerm == key.searchTerm {
                 return title
-            } else if tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
-                tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
-                tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue {
+                
+            } else if shouldUpdateObservation {
                 let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
-                    updateObservationForKey(key: key, observation: observation)
+                updateObservationForKey(key: key, observation: observation)
                 lastObservation.keyUrl = key.url
                 lastObservation.referrerUrl = key.referrerUrl
                 lastObservation.searchTerm = key.searchTerm
@@ -595,6 +595,12 @@ class Tab: NSObject {
         }
 
         return lastTitle
+    }
+    
+    var shouldUpdateObservation: Bool {
+        tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
+            tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
+            tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue
     }
 
     var displayFavicon: Favicon? {
