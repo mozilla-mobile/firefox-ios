@@ -104,7 +104,7 @@ class TabTrayViewController: UIViewController {
 
     lazy var navigationMenu: UISegmentedControl = {
         var navigationMenu: UISegmentedControl
-        if shouldUseiPadSetup {
+        if shouldUseiPadSetup() {
             navigationMenu = iPadNavigationMenuIdentifiers
         } else {
             navigationMenu = iPhoneNavigationMenuIdentifiers
@@ -185,7 +185,7 @@ class TabTrayViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if shouldUseiPadSetup {
+        if shouldUseiPadSetup() {
             navigationController?.isToolbarHidden = true
         } else {
             navigationController?.isToolbarHidden = false
@@ -201,7 +201,7 @@ class TabTrayViewController: UIViewController {
             window.backgroundColor = .black
         }
         
-        if shouldUseiPadSetup {
+        if shouldUseiPadSetup() {
             iPadViewSetup()
         } else {
             iPhoneViewSetup()
@@ -240,7 +240,7 @@ class TabTrayViewController: UIViewController {
 
     fileprivate func updateTitle() {
         if let newTitle = viewModel.navTitle(for: navigationMenu.selectedSegmentIndex,
-                                             foriPhone: !shouldUseiPadSetup) {
+                                             foriPhone: !shouldUseiPadSetup()) {
             navigationItem.title  = newTitle
         }
     }
@@ -278,7 +278,7 @@ class TabTrayViewController: UIViewController {
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
         view.bringSubviewToFront(navigationToolbar)
-        let topEdgeInset = shouldUseiPadSetup ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
+        let topEdgeInset = shouldUseiPadSetup() ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
         panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
         panel.view.snp.makeConstraints { make in
@@ -299,7 +299,7 @@ class TabTrayViewController: UIViewController {
     }
 
     private func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
-        if shouldUseiPadSetup {
+        if shouldUseiPadSetup() {
             if navigationMenu.selectedSegmentIndex == 2 {
                 navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
                 navigationItem.leftBarButtonItem = nil
@@ -387,7 +387,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     // Popover and not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
 
-        if shouldUseiPadSetup {
+        if shouldUseiPadSetup() {
             return .overFullScreen
         }
 

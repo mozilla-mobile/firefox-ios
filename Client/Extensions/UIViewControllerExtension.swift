@@ -38,15 +38,13 @@ extension UIViewController {
     /// for (width, height) for both fullscreen AND multi-tasking layouts. In some
     /// instances, we may wish to use iPhone layouts on the iPad when its size class
     /// is of type (.compact, .regular).
-    var shouldUseiPadSetup: Bool {
-        get {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                if traitCollection.horizontalSizeClass == .compact { return false }
-                return true
-            }
-
-            return false
+    func shouldUseiPadSetup(traitCollection: UITraitCollection? = nil) -> Bool {
+        let trait = traitCollection == nil ? self.traitCollection : traitCollection
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return trait!.horizontalSizeClass != .compact
         }
+
+        return false
     }
 
     /// This presents a View Controller with a bar button item that can be used to dismiss the VC
