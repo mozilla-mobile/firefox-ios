@@ -7,16 +7,18 @@ import XCTest
 class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testLoadReaderContent() {
-//        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = path(forTestPage: "test-mozilla-book.html")
 //        navigator.goto(BrowserTab)
-        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
+
+        navigator.openURL(path(forTestPage: "find-in-page-test.html"))
         navigator.nowAt(BrowserTab)
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        waitForExistence(app.buttons["Reader View"], timeout: 45)
+        waitForExistence(app.buttons["Reader View"], timeout: 5)
         app.buttons["Reader View"].tap()
         // The settings of reader view are shown as well as the content of the web site
         waitForExistence(app.buttons["Display Settings"], timeout: 5)
-        XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
+//        XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
+        waitForValueContains(app.webViews.staticTexts.firstMatch, value:"The Book of Mozilla")
     }
 
     // TODO: Fine better way to update screen graph when necessary
@@ -29,7 +31,7 @@ class ReaderViewTest: BaseTestCase {
         updateScreenGraph()
 //        userState.url = path(forTestPage: "test-mozilla-book.html")
 //        navigator.goto(BrowserTab)
-        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "find-in-page-test.html"))
         navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
         waitForExistence(app.buttons["Reader View"], timeout: 35)
@@ -62,7 +64,8 @@ class ReaderViewTest: BaseTestCase {
         navigator.goto(LibraryPanel_ReadingList)
 
         // Check that there is one item
-        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+//        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["localhost"]
         waitForExistence(savedToReadingList)
         XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)

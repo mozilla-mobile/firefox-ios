@@ -37,7 +37,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 80)
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 10)
         waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
@@ -47,11 +47,11 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 //        navigator.goto(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL("https://storage.googleapis.com/mobile_test_assets/test_app/test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "find-in-page-test.html"))
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 70)
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 10)
         waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)

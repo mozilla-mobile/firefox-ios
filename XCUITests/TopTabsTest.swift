@@ -9,8 +9,8 @@ let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
 let urlValueLong = "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
 
-// let urlExample = path(forTestPage: "test-example.html")
-let urlExample = "www.example.com"
+let urlExample = path(forTestPage: "test-example.html")
+//let urlExample = "www.example.com"
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
 let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.html"
@@ -39,7 +39,6 @@ class TopTabsTest: BaseTestCase {
         } else {
             navigator.goto(TabTray)
         }
-        print(app.debugDescription)
         waitForExistence(app.cells.staticTexts[urlLabel], timeout: 5)
     }
 
@@ -175,10 +174,9 @@ class TopTabsTest: BaseTestCase {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 //        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        navigator.openURL("example.com")
+        navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         waitForTabsButton()
-        sleep(5)
         if iPad() {
             waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
             app.buttons["TopTabsViewController.tabsButton"].tap()
@@ -395,7 +393,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
-        navigator.openURL("www.example.com")
+        navigator.openURL(path(forTestPage: "test-example.com"))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
