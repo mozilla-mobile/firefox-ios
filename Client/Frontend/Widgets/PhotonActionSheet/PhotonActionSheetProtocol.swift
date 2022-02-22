@@ -52,7 +52,7 @@ extension PhotonActionSheetProtocol {
             }
         }.items
 
-        let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle, iconString: "menu-Copy-Link") { _ in
+        let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle, iconString: ImageIdentifiers.copyLink) { _ in
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage,
@@ -79,7 +79,7 @@ extension PhotonActionSheetProtocol {
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenuViewMobileSiteTitleString : .AppMenuViewDesktopSiteTitleString
         }
-        let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { _ in
+        let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle, iconString: ImageIdentifiers.requestDesktopSite) { _ in
 
             if let url = tab.url {
                 tab.toggleChangeUserAgent()

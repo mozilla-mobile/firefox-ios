@@ -51,7 +51,7 @@ class NoImageModeTests: KIFTestCase {
         } else {
             tester().tapView(withAccessibilityLabel: "Menu")
         }
-        tester().tapView(withAccessibilityIdentifier: "menu-NoImageMode")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.noImageMode)
 
         checkHiding(isOn: true)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")

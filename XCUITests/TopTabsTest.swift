@@ -281,12 +281,12 @@ class TopTabsTest: BaseTestCase {
 //            navigator.nowAt(NewTabScreen)
 //            waitForExistence(app.buttons["Show Tabs"], timeout: 10)
 //            app.buttons["Show Tabs"].press(forDuration: 1)
-//            waitForExistence(app.cells["quick_action_new_tab"])
-//            XCTAssertTrue(app.cells["quick_action_new_tab"].exists)
+//            waitForExistence(app.cells[ImageIdentifiers.newTab])
+//            XCTAssertTrue(app.cells[ImageIdentifiers.newTab].exists)
 //            XCTAssertTrue(app.cells["tab_close"].exists)
 //
 //            // Open New Tab
-//            app.cells["quick_action_new_tab"].tap()
+//            app.cells[ImageIdentifiers.newTab].tap()
 //            navigator.performAction(Action.CloseURLBarOpen)
 //
 //            waitForTabsButton()
@@ -301,7 +301,7 @@ class TopTabsTest: BaseTestCase {
 //
 //            waitForExistence(app.buttons["Show Tabs"])
 //            app.buttons["Show Tabs"].press(forDuration: 1)
-//            waitForExistence(app.cells["quick_action_new_tab"])
+//            waitForExistence(app.cells[ImageIdentifiers.newTab])
 //            app.cells["tab_close"].tap()
 //            navigator.performAction(Action.CloseURLBarOpen)
 //            navigator.nowAt(NewTabScreen)

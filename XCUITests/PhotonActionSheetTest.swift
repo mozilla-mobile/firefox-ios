@@ -28,14 +28,14 @@ class PhotonActionSheetTest: BaseTestCase {
 //
 //        // Check that it has been unpinned
 //        cell.press(forDuration: 2)
-//        waitForExistence(app.cells["action_pin"])
+//        waitForExistence(app.cells[ImageIdentifiers.addShortcut])
     }
 
     func testShareOptionIsShown() {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
         navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 3)
+        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.share], timeout: 3)
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
@@ -97,7 +97,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
         navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 5)
+        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.share], timeout: 5)
         app.tables["Context Menu"].staticTexts["Share"].tap()
 
         // This is not ideal but only way to get the element on iPhone 8

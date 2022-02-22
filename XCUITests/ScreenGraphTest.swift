@@ -97,7 +97,7 @@ class TestUserState: MMUserState {
 let WebPageLoading = "WebPageLoading"
 
 fileprivate class TestActions {
-    static let ToggleNightMode = "menu-NightMode"
+    static let ToggleNightMode = ImageIdentifiers.nightMode
     static let LoadURL = "LoadURL"
     static let LoadURLByTyping = "LoadURLByTyping"
     static let LoadURLByPasting = "LoadURLByPasting"
@@ -155,7 +155,7 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.dismissOnUse = true
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
-        screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
+        screenState.tap(app.cells[ImageIdentifiers.nightMode], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
         }
 

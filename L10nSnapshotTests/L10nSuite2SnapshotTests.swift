@@ -97,7 +97,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.cells["menu-sync"], timeout: 5)
+        waitForExistence(app.tables.cells[ImageIdentifiers.sync], timeout: 5)
         navigator.goto(Intro_FxASignin)
         waitForExistence(app.navigationBars.staticTexts["FxASingin.navBar"], timeout: 10)
         snapshot("FxASignInScreen-01")

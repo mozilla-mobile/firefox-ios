@@ -249,7 +249,7 @@ class NavigationTest: BaseTestCase {
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
         app.textFields["url"].press(forDuration:3)
-        app.tables.cells["menu-Copy-Link"].tap()
+        app.tables.cells[ImageIdentifiers.copyLink].tap()
         
         sleep(2)
         app.textFields["url"].tap()
@@ -388,16 +388,16 @@ class NavigationTest: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
 
-        XCTAssertTrue(app.tables.cells["menu-panel-Bookmarks"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-History"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-Downloads"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-ReadingList"].exists)
-        XCTAssertTrue(app.tables.cells["key"].exists)
-        XCTAssertTrue(app.tables.cells["menu-sync"].exists)
-        XCTAssertTrue(app.tables.cells["menu-NoImageMode"].exists)
-        XCTAssertTrue(app.tables.cells["menu-NightMode"].exists)
-        XCTAssertTrue(app.tables.cells["whatsnew"].exists)
-        XCTAssertTrue(app.tables.cells["menu-Settings"].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.bookmarks].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.history].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.downloads].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.readingList].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.key].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.sync].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.noImageMode].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.nightMode].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.whatsNew].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.settings].exists)
     }
 
     // Smoketest

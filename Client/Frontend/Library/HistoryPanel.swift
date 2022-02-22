@@ -596,7 +596,7 @@ extension HistoryPanel: LibraryPanelContextMenu {
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
 
-        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: "action_pin", tapHandler: { _ in
+        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: ImageIdentifiers.addShortcut, tapHandler: { _ in
             self.pinToTopSites(site)
         })
         actions.append(PhotonRowActions(pinTopSite))

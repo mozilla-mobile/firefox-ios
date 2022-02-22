@@ -197,7 +197,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Select to open in New Tab
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["quick_action_new_tab"].tap()
+        app.tables.cells[ImageIdentifiers.newTab].tap()
         app.buttons["Done"].tap()
         updateScreenGraph()
         // Now there should be two tabs open

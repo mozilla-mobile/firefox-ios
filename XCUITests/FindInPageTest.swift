@@ -24,8 +24,8 @@ class FindInPageTests: BaseTestCase {
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
-        waitForExistence(app.tables["Context Menu"].cells["menu-FindInPage"], timeout: 10)
-        app.tables["Context Menu"].cells["menu-FindInPage"].tap()
+        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.findInPage], timeout: 10)
+        app.tables["Context Menu"].cells[ImageIdentifiers.findInPage].tap()
 
         // Enter some text to start finding
         app.textFields["FindInPage.searchField"].typeText("Book")
@@ -88,7 +88,7 @@ class FindInPageTests: BaseTestCase {
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         // Enter some text to start finding
-        app.tables["Context Menu"].cells["menu-FindInPage"].tap()
+        app.tables["Context Menu"].cells[ImageIdentifiers.findInPage].tap()
         app.textFields["FindInPage.searchField"].typeText("The Book of")
         waitForExistence(app.textFields["The Book of"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
