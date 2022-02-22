@@ -59,7 +59,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     private lazy var titleLabel: UILabel = {
         let label = createLabel()
         label.numberOfLines = 0
-        label.lineBreakMode = .byTruncatingTail
+        label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
         return label
