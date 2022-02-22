@@ -203,7 +203,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     fileprivate func centerVisibleRow() -> Int {
         let visibleCells = tableView.visibleCells
         if let middleCell = visibleCells[safe: visibleCells.count / 2],
-            let middleIndexPath = tableView.indexPath(for: middleCell) {
+           let middleIndexPath = tableView.indexPath(for: middleCell) {
             return middleIndexPath.row
         }
 
@@ -233,7 +233,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         // If this node is a folder and it is not empty, we need
         // to prompt the user before deleting.
         if let bookmarkFolder = bookmarkNode as? BookmarkFolderData,
-            !bookmarkFolder.childGUIDs.isEmpty {
+           !bookmarkFolder.childGUIDs.isEmpty {
             let alertController = UIAlertController(title: .BookmarksDeleteFolderWarningTitle, message: .BookmarksDeleteFolderWarningDescription, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderCancelButtonLabel, style: .cancel))
             alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderDeleteButtonLabel, style: .destructive) { (action) in
@@ -248,7 +248,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     fileprivate func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
         return indexPath.section < numberOfSections(in: tableView) &&
-            indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
+        indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
     }
 
     fileprivate func flashRow(at indexPath: IndexPath) {
@@ -405,9 +405,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty,
-            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? SiteTableViewHeader else {
-            return nil
-        }
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? SiteTableViewHeader else {
+                  return nil
+              }
 
         headerView.titleLabel.text = .RecentlyBookmarkedTitle
         headerView.showBorder(for: .top, true)
@@ -484,9 +484,9 @@ extension BookmarksPanel: LibraryPanelContextMenu {
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         guard let bookmarkNode = indexPath.section == BookmarksSection.recent.rawValue ? recentBookmarks[safe: indexPath.row] : bookmarkNodes[safe: indexPath.row],
-            let bookmarkItem = bookmarkNode as? BookmarkItemData else {
-            return nil
-        }
+              let bookmarkItem = bookmarkNode as? BookmarkItemData else {
+                  return nil
+              }
 
         return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
     }

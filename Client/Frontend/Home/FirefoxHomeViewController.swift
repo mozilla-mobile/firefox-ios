@@ -48,14 +48,14 @@ struct UXSizeClasses {
 
     subscript(sizeClass: UIUserInterfaceSizeClass) -> CGFloat {
         switch sizeClass {
-            case .compact:
-                return self.compact
-            case .regular:
-                return self.regular
-            case .unspecified:
-                return self.unspecified
-            @unknown default:
-                fatalError()
+        case .compact:
+            return self.compact
+        case .regular:
+            return self.regular
+        case .unspecified:
+            return self.unspecified
+        @unknown default:
+            fatalError()
         }
     }
 }
@@ -378,10 +378,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     private func contextualHintPresentTimer() {
         contextualHintTimer = Timer.scheduledTimer(timeInterval: 1.25,
-                                     target: self,
-                                     selector: #selector(presentContextualHint),
-                                     userInfo: nil,
-                                     repeats: false)
+                                                   target: self,
+                                                   selector: #selector(presentContextualHint),
+                                                   userInfo: nil,
+                                                   repeats: false)
     }
 
     @objc private func presentContextualHint() {
@@ -509,7 +509,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             case .logoHeader:
                 headerView.moreButton.isHidden = true
                 return headerView
-        }
+            }
         default:
             return UICollectionReusableView()
         }
@@ -1158,7 +1158,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         case .topSites: actions.append(contentsOf: topSiteActions)
         default: break
         }
-
+        
         return actions
     }
 }

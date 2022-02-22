@@ -138,7 +138,7 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
 
     fileprivate func updateAccessibilityLabel() {
         if let hostname = hostnameLabel.text,
-                  let title = titleLabel.text {
+           let title = titleLabel.text {
             let unreadStatus: String = unread ? .ReaderPanelUnreadAccessibilityLabel : .ReaderPanelReadAccessibilityLabel
             let string = "\(title), \(unreadStatus), \(hostname)"
             var label: AnyObject
@@ -420,8 +420,8 @@ extension ReadingListPanel: LibraryPanelContextMenu {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
         let removeAction = SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                           iconString: "action_remove",
-                                           tapHandler: { _ in
+                                                 iconString: "action_remove",
+                                                 tapHandler: { _ in
             self.deleteItem(atIndex: indexPath)
         }).items
 
