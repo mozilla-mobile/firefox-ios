@@ -1238,6 +1238,22 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController: ShortcutViewDelegate {
+    func rename(shortcut: Shortcut) {
+        let alert = UIAlertController(title: UIConstants.strings.renameShortcut, message: nil, preferredStyle: .alert)
+        alert.addTextField { textfield in
+            textfield.placeholder = UIConstants.strings.renameShortcutAlertPlaceholder
+            textfield.text = shortcut.name
+            textfield.clearButtonMode = .always
+        }
+        
+        alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertSecondaryAction, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert] action in
+            let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !newName.isEmpty, newName != shortcut.name else { return }
+            ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
+        }))
+        self.show(alert, sender: nil)
+    }
     
     func dismissShortcut() {
         guard isIPadRegularDimensions else { return }

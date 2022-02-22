@@ -6,6 +6,28 @@ import UIKit
 
 struct Shortcut: Equatable, Codable {
     var url: URL
+    var name: String
+    
+    init(url: URL, name: String = "") {
+        self.url = url
+        self.name = name.isEmpty ? Shortcut.defaultName(for: url) : name
+    }
+    
+    private static func defaultName(for url: URL) -> String {
+        if let host = url.host {
+            var shortUrl = host.replacingOccurrences(of: "www.", with: "")
+            if shortUrl.hasPrefix("mobile.") {
+                shortUrl = shortUrl.replacingOccurrences(of: "mobile.", with: "")
+            }
+            if shortUrl.hasPrefix("m.") {
+                shortUrl = shortUrl.replacingOccurrences(of: "m.", with: "")
+            }
+            if let domain = shortUrl.components(separatedBy: ".").first?.capitalized {
+                return domain
+            }
+        }
+        return ""
+    }
 }
 
 protocol ShortcutsManagerDelegate: AnyObject {
@@ -61,6 +83,16 @@ class ShortcutsManager {
         }
     }
     
+    func rename(shortcut: Shortcut, newName: String) {
+        var renamedShortcut = shortcut
+        renamedShortcut.name = newName
+        if let index = shortcuts.firstIndex(of: shortcut) {
+            shortcuts[index] = renamedShortcut
+            saveShortcuts()
+            delegate?.shortcutsUpdated()
+        }
+    }
+    
     func shortcutAt(index: Int) -> Shortcut {
         shortcuts[index]
     }
@@ -71,38 +103,5 @@ class ShortcutsManager {
     
     func canSave(shortcut: Shortcut) -> Bool {
         shortcuts.count < UIConstants.maximumNumberOfShortcuts && !isSaved(shortcut: shortcut)
-    }
-    
-    func firstLetterFor(shortcut: Shortcut) -> String {
-        if let host = shortcut.url.host {
-            var shortUrl = host.replacingOccurrences(of: "www.", with: "")
-            if shortUrl.hasPrefix("mobile.") {
-                shortUrl = shortUrl.replacingOccurrences(of: "mobile.", with: "")
-            }
-            if shortUrl.hasPrefix("m.") {
-                shortUrl = shortUrl.replacingOccurrences(of: "m.", with: "")
-            }
-            if let firstLetter = shortUrl.first {
-                let firstLetterString = String(firstLetter).capitalized
-                return firstLetterString
-            }
-        }
-        return ""
-    }
-    
-    func nameFor(shortcut: Shortcut) -> String {
-        if let host = shortcut.url.host {
-            var shortUrl = host.replacingOccurrences(of: "www.", with: "")
-            if shortUrl.hasPrefix("mobile.") {
-                shortUrl = shortUrl.replacingOccurrences(of: "mobile.", with: "")
-            }
-            if shortUrl.hasPrefix("m.") {
-                shortUrl = shortUrl.replacingOccurrences(of: "m.", with: "")
-            }
-            if let domain = shortUrl.components(separatedBy: ".").first?.capitalized {
-                return domain
-            }
-        }
-        return ""
     }
 }

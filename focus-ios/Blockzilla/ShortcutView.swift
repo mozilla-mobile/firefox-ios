@@ -10,6 +10,7 @@ import CoreHaptics
 protocol ShortcutViewDelegate: AnyObject {
     func shortcutTapped(shortcut: Shortcut)
     func removeFromShortcutsAction(shortcut: Shortcut)
+    func rename(shortcut: Shortcut)
     func dismissShortcut()
 }
 
@@ -71,13 +72,13 @@ class ShortcutView: UIView {
             make.center.equalTo(outerView)
         }
         
-        letterLabel.text = ShortcutsManager.shared.firstLetterFor(shortcut: shortcut)
+        letterLabel.text = shortcut.name.first.map(String.init)?.capitalized
         innerView.addSubview(letterLabel)
         letterLabel.snp.makeConstraints { make in
             make.center.equalTo(innerView)
         }
         
-        nameLabel.text = ShortcutsManager.shared.nameFor(shortcut: shortcut)
+        nameLabel.text = shortcut.name
         addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(outerView.snp.bottom).offset(8)
@@ -105,17 +106,22 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: nil,
                                           actionProvider: { _ in
+            let renameAction = UIAction(
+                title: UIConstants.strings.renameShortcut,
+                image: .renameShortcut) { _ in
+                    self.delegate?.rename(shortcut: self.shortcut)
+                }
             
-            let removeFromShortcutsAction = UIAction(title: UIConstants.strings.removeFromShortcuts,
-                                                     image: UIImage(named: "icon_shortcuts_remove"),
-                                                     attributes: .destructive) { _ in
-                guard self == self else { return }
-                let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
-                feedbackGenerator.prepare()
-                CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
-                self.delegate?.removeFromShortcutsAction(shortcut: self.shortcut)
-            }
-            return UIMenu(children: [removeFromShortcutsAction])
+            let removeFromShortcutsAction = UIAction(
+                title: UIConstants.strings.removeFromShortcuts,
+                image: .removeShortcut,
+                attributes: .destructive) { _ in
+                    let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+                    feedbackGenerator.prepare()
+                    CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
+                    self.delegate?.removeFromShortcutsAction(shortcut: self.shortcut)
+                }
+            return UIMenu(children: [removeFromShortcutsAction, renameAction])
         })
     }
     
