@@ -25,9 +25,9 @@ enum ContextualHintViewType: String {
         case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
             
         case .toolbarLocation:
-            switch SearchBarSettingsViewModel.getDefaultSearchPosition() {
-            case .top: return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
-            case .bottom: return CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
+            switch BrowserViewController.foregroundBVC().isBottomSearchBar {
+            case true: return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
+            case false: return CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
             }
         }
     }
@@ -52,6 +52,7 @@ enum ContextualHintViewType: String {
 }
 
 class ContextualHintViewModel {
+    typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 
     // MARK: - Properties
     var hintType: ContextualHintViewType
@@ -60,19 +61,23 @@ class ContextualHintViewModel {
     private var profile: Profile
     private var hasSentDismissEvent = false
     
-    var hasAlreadyBeenPresented: Bool {
-        // Prevent JumpBackIn CFR from being presented if the onboarding
-        // CFR has not yet been presented.
-//        if hintType == .jumpBackIn,
-//           profile.prefs.boolForKey(PrefsKeys.ContextualHints.ToolbarOnboardingKey) {
-//            return false
-//        }
-//
+    private var hasAlreadyBeenPresented: Bool {
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
             return false
         }
         
         return contextualHintData
+    }
+    
+    // Prevent JumpBackIn CFR from being presented if the onboarding
+    // CFR has not yet been presented.
+    private var canJumpBackInBePresented: Bool {
+        if let hasShownOboardingCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
+           hasShownOboardingCFR {
+            return true
+        }
+        
+        return false
     }
     
     // Do not present contextual hint in landscape on iPhone
@@ -82,9 +87,9 @@ class ContextualHintViewModel {
     
     private var prefsKey: String {
         switch hintType {
-        case .inactiveTabs: return PrefsKeys.ContextualHints.InactiveTabsKey
-        case .jumpBackIn: return PrefsKeys.ContextualHints.JumpBackinKey
-        case .toolbarLocation: return PrefsKeys.ContextualHints.ToolbarOnboardingKey
+        case .inactiveTabs: return CFRPrefsKeys.InactiveTabsKey.rawValue
+        case .jumpBackIn: return CFRPrefsKeys.JumpBackinKey.rawValue
+        case .toolbarLocation: return CFRPrefsKeys.ToolbarOnboardingKey.rawValue
         }
     }
     
@@ -97,7 +102,10 @@ class ContextualHintViewModel {
     // MARK: - Interface
     func shouldPresentContextualHint() -> Bool {
         guard isDeviceHintReady else { return false }
-        return !hasAlreadyBeenPresented
+        switch hintType {
+        case .jumpBackIn: return canJumpBackInBePresented && !hasAlreadyBeenPresented
+        default: return !hasAlreadyBeenPresented
+        }
     }
     
     func markContextualHintPresented() {

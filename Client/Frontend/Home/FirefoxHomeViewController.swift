@@ -187,7 +187,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate,
                                               experiments: experiments)
-        let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
+        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
 
@@ -356,7 +356,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: ASHeaderView) {
-        guard contextualHintViewController.shouldPresentHint() else { return }
+        guard contextualHintViewController.shouldPresentHint(),
+              !shouldShowDefaultBrowserCard
+        else { return }
 
         contextualHintViewController.configure(
             anchor: headerView.titleLabel,

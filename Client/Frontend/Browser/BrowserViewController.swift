@@ -72,6 +72,8 @@ class BrowserViewController: UIViewController {
     fileprivate var customSearchBarButton: UIBarButtonItem?
     var updateState: TabUpdateState = .coldStart
     var openedUrlFromExternalSource = false
+    
+    var contextHintVC: ContextualHintViewController
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -155,6 +157,10 @@ class BrowserViewController: UIViewController {
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.ratingPromptManager = RatingPromptManager(profile: profile)
+        
+        let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
+                                                       with: profile)
+        self.contextHintVC = ContextualHintViewController(with: contextViewModel)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -505,6 +511,19 @@ class BrowserViewController: UIViewController {
             show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
         }
         showQueuedAlertIfAvailable()
+        
+        contextHintVC.configure(
+            anchor: urlBar,
+            withArrowDirection: isBottomSearchBar ? .down : .up,
+            andDelegate: self,
+            presentedUsing: { self.presentContextualHint() },
+            withActionBeforeAppearing: { self.homePanelDidPresentContextualHintOf(type: .toolbarLocation) },
+            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) })
+    }
+    
+    private func presentContextualHint() {
+        if shouldShowIntroScreen { return }
+        present(contextHintVC, animated: true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -892,7 +911,7 @@ class BrowserViewController: UIViewController {
             if userHasPressedHomeButton {
                 userHasPressedHomeButton = false
                 
-            } else if focusUrlBar {
+            } else if focusUrlBar && !contextHintVC.shouldPresentHint() {
                 enterOverlayMode()
             }
             
@@ -1734,7 +1753,9 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanelDidPresentContextualHintOf(type: ContextualHintViewType) {
         switch type {
-        case .jumpBackIn: self.urlBar.leaveOverlayMode()
+        case .jumpBackIn,
+                .toolbarLocation:
+            self.urlBar.leaveOverlayMode()
         default: break
         }
     }
