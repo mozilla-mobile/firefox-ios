@@ -6,7 +6,7 @@ import UIKit
 
 struct ToggleSwitch {
     let mainView: UIImageView = {
-        let background = UIImageView(image: UIImage.templateImageNamed("menu-customswitch-background"))
+        let background = UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.customSwitchBackground))
         background.contentMode = .scaleAspectFit
         return background
     }()
@@ -23,7 +23,7 @@ struct ToggleSwitch {
     }
 
     func setOn(_ on: Bool) {
-        foreground.image = on ? UIImage(named: "menu-customswitch-on") : UIImage(named: "menu-customswitch-off")
+        foreground.image = on ? UIImage(named: ImageIdentifiers.customSwitchOn) : UIImage(named: ImageIdentifiers.customSwitchOff)
         mainView.accessibilityIdentifier = on ? "enabled" : "disabled"
         mainView.tintColor = on ? UIColor.theme.general.controlTint : UIColor.theme.general.switchToggle }
 }

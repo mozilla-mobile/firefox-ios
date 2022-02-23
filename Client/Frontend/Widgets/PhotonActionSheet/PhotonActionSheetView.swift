@@ -6,24 +6,7 @@ import Foundation
 import Storage
 import Shared
 
-// MARK: PhotonActionSheetViewUX
-struct PhotonActionSheetViewUX {
-    static let LabelColor = UIConstants.SystemBlueColor
-    static let BorderWidth = CGFloat(0.5)
-    static let CellSideOffset = 20
-    static let TitleLabelOffset = 10
-    static let CellTopBottomOffset = 12
-    static let StatusIconSize = CGSize(width: 24, height: 24)
-    static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
-    static let CornerRadius: CGFloat = 3
-    static let Padding: CGFloat = 16
-    static let InBetweenPadding: CGFloat = 8
-    static let HorizontalPadding: CGFloat = 1
-    static let topBottomPadding: CGFloat = 10
-    static let VerticalPadding: CGFloat = 2
-    static let IconSize = 16
-}
-
+// MARK: - PhotonActionSheetViewDelegate
 protocol PhotonActionSheetViewDelegate: AnyObject {
     func didClick(item: SingleActionViewModel?)
     func layoutChanged(item: SingleActionViewModel)
@@ -32,6 +15,17 @@ protocol PhotonActionSheetViewDelegate: AnyObject {
 // This is the view contained in PhotonActionSheetContainerCell in the PhotonActionSheet table view.
 // More than one PhotonActionSheetView can be in the parent container cell.
 class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
+
+    // MARK: - PhotonActionSheetViewUX
+    struct UX {
+        static let StatusIconSize = CGSize(width: 24, height: 24)
+        static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
+        static let CornerRadius: CGFloat = 3
+        static let Padding: CGFloat = 16
+        static let InBetweenPadding: CGFloat = 8
+        static let topBottomPadding: CGFloat = 10
+        static let VerticalPadding: CGFloat = 2
+    }
 
     // MARK: - Variables
 
@@ -52,7 +46,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         let icon = UIImageView()
         icon.contentMode = .scaleAspectFit
         icon.clipsToBounds = true
-        icon.layer.cornerRadius = PhotonActionSheetViewUX.CornerRadius
+        icon.layer.cornerRadius = UX.CornerRadius
         icon.setContentHuggingPriority(.required, for: .horizontal)
         icon.setContentCompressionResistancePriority(.required, for: .horizontal)
         return icon
@@ -77,7 +71,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     private lazy var statusIcon: UIImageView = .build { icon in
         icon.contentMode = .scaleAspectFit
         icon.clipsToBounds = true
-        icon.layer.cornerRadius = PhotonActionSheetViewUX.CornerRadius
+        icon.layer.cornerRadius = UX.CornerRadius
         icon.setContentHuggingPriority(.required, for: .horizontal)
         icon.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
@@ -90,7 +84,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     private let toggleSwitch = ToggleSwitch()
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
-        selectedOverlay.backgroundColor = PhotonActionSheetViewUX.SelectedOverlayColor
+        selectedOverlay.backgroundColor = UX.SelectedOverlayColor
         selectedOverlay.isHidden = true
     }
 
@@ -102,14 +96,14 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     }()
 
     private lazy var stackView: UIStackView = .build { stackView in
-        stackView.spacing = PhotonActionSheetViewUX.InBetweenPadding
+        stackView.spacing = UX.InBetweenPadding
         stackView.alignment = .center
         stackView.axis = .horizontal
         stackView.distribution = .fillProportionally
     }
 
     private lazy var textStackView: UIStackView = .build { textStackView in
-        textStackView.spacing = PhotonActionSheetViewUX.VerticalPadding
+        textStackView.spacing = UX.VerticalPadding
         textStackView.setContentHuggingPriority(.required, for: .vertical)
         textStackView.alignment = .fill
         textStackView.axis = .vertical
@@ -205,15 +199,14 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     func configure(with item: SingleActionViewModel) {
         self.item = item
         setupViews()
+        applyTheme()
 
         titleLabel.text = item.currentTitle
         titleLabel.font = item.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
-        titleLabel.textColor = UIColor.theme.tableView.rowText
-        titleLabel.textColor = titleLabel.textColor
+
         item.customRender?(titleLabel, self)
 
         subtitleLabel.text = item.text
-        subtitleLabel.textColor = UIColor.theme.tableView.rowText
         subtitleLabel.isHidden = item.text == nil
 
         accessibilityIdentifier = item.iconString ?? item.accessibilityId
@@ -233,8 +226,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         addSubBorder(action: item)
     }
 
-    func addVerticalBorder(shouldAdd: Bool) {
-        guard shouldAdd else { return }
+    func addVerticalBorder(ifShouldBeShown: Bool) {
+        guard ifShouldBeShown else { return }
         titleLabel.setContentHuggingPriority(.required, for: .horizontal)
         textStackView.setContentHuggingPriority(.required, for: .horizontal)
 
@@ -267,8 +260,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func setupConstraints() {
-        let padding = PhotonActionSheetViewUX.Padding
-        let topBottomPadding = PhotonActionSheetViewUX.topBottomPadding
+        let padding = UX.Padding
+        let topBottomPadding = UX.topBottomPadding
 
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: topBottomPadding),
@@ -281,8 +274,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
             selectedOverlay.trailingAnchor.constraint(equalTo: trailingAnchor),
             selectedOverlay.leadingAnchor.constraint(equalTo: leadingAnchor),
 
-            statusIcon.widthAnchor.constraint(equalToConstant: PhotonActionSheetViewUX.StatusIconSize.width),
-            statusIcon.heightAnchor.constraint(equalToConstant: PhotonActionSheetViewUX.StatusIconSize.height),
+            statusIcon.widthAnchor.constraint(equalToConstant: UX.StatusIconSize.width),
+            statusIcon.heightAnchor.constraint(equalToConstant: UX.StatusIconSize.height),
         ])
     }
 
@@ -311,12 +304,12 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
             statusIcon.tintColor = action.iconTint ?? action.tintColor ?? self.tintColor
 
         case .URL:
-            let image = UIImage(named: name)?.createScaled(PhotonActionSheetUX.IconSize)
-            statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
+            let image = UIImage(named: name)?.createScaled(PhotonActionSheet.UX.IconSize)
+            statusIcon.layer.cornerRadius = PhotonActionSheet.UX.IconSize.width / 2
             statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: [.avoidAutoSetImage]) { (img, err, _, _) in
                 if let img = img, self.accessibilityLabel == action.currentTitle {
-                    self.statusIcon.image = img.createScaled(PhotonActionSheetUX.IconSize)
-                    self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
+                    self.statusIcon.image = img.createScaled(PhotonActionSheet.UX.IconSize)
+                    self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.IconSize.width / 2
                 }
             }
 
@@ -368,18 +361,10 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     }
 }
 
-extension UILabel {
-
-    var isTruncated: Bool {
-        guard frame.size.width != 0, let text = text, let font = font else { return false }
-
-        let maxSize = CGSize(width: frame.size.width, height: CGFloat(Float.infinity))
-        let charSize = font.lineHeight
-        let textSize = text.boundingRect(with: maxSize,
-                                         options: .usesLineFragmentOrigin,
-                                         attributes: [NSAttributedString.Key.font: font],
-                                         context: nil)
-        let linesRoundedUp = Int(ceil(textSize.height/charSize))
-        return linesRoundedUp > 1
+extension PhotonActionSheetView: NotificationThemeable {
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.tableView.rowText
+        titleLabel.textColor = titleLabel.textColor
+        subtitleLabel.textColor = UIColor.theme.tableView.rowText
     }
 }

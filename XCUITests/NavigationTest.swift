@@ -199,7 +199,7 @@ class NavigationTest: BaseTestCase {
         app.textFields["url"].press(forDuration: 2)
 
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["menu-Paste"].tap()
+        app.tables.cells[ImageIdentifiers.paste].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -213,7 +213,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.textFields["url"].press(forDuration: 2)
 
-        app.tables.cells["menu-Paste"].tap()
+        app.tables.cells[ImageIdentifiers.paste].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)

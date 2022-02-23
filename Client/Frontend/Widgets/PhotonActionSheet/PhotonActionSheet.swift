@@ -22,6 +22,30 @@ extension PhotonActionSheet: Notifiable {
 // This file is main table view used for the action sheet
 class PhotonActionSheet: UIViewController {
 
+    struct UX {
+        static let MaxWidth: CGFloat = 414
+        static let Padding: CGFloat = 6
+        static let RowHeight: CGFloat = 44
+        static let BorderWidth: CGFloat = 0.5
+        static let BorderColor = UIColor.Photon.Grey30
+        static let CornerRadius: CGFloat = 10
+        static let SiteImageViewSize = 52
+        static let IconSize = CGSize(width: 24, height: 24)
+        static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
+        static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
+        static let CellName = "PhotonActionSheetCell"
+        static let LineSeparatorSectionHeader = "LineSeparatorSectionHeader"
+        static let SeparatorSectionHeader = "SeparatorSectionHeader"
+        static let EmptyHeader = "EmptyHeader"
+        static let CloseButtonHeight: CGFloat  = 56
+        static let TablePadding: CGFloat = 6
+        static let SeparatorRowHeight: CGFloat = 8
+        static let TitleHeaderSectionHeight: CGFloat = 40
+        static let TitleHeaderSectionHeightWithSite: CGFloat = 70
+        static let BigSpacing: CGFloat = 32
+        static let Spacing: CGFloat = 16
+    }
+
     // MARK: - Variables
     private var tableView = UITableView(frame: .zero, style: .grouped)
     private var viewModel: PhotonActionSheetViewModel!
@@ -31,7 +55,7 @@ class PhotonActionSheet: UIViewController {
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-        button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        button.layer.cornerRadius = UX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.close"
@@ -52,7 +76,7 @@ class PhotonActionSheet: UIViewController {
         title = viewModel.title
         modalPresentationStyle = viewModel.modalStyle
         closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
-        tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
+        tableView.estimatedRowHeight = UX.RowHeight
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -113,16 +137,16 @@ class PhotonActionSheet: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .onDrag
-        tableView.register(PhotonActionSheetContainerCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
-        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
-        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
-        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SeparatorSectionHeader)
-        tableView.register(PhotonActionSheetLineSeparator.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.LineSeparatorSectionHeader)
-        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.EmptyHeader)
+        tableView.register(PhotonActionSheetContainerCell.self, forCellReuseIdentifier: UX.CellName)
+        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: UX.SiteHeaderName)
+        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: UX.TitleHeaderName)
+        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: UX.SeparatorSectionHeader)
+        tableView.register(PhotonActionSheetLineSeparator.self, forHeaderFooterViewReuseIdentifier: UX.LineSeparatorSectionHeader)
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: UX.EmptyHeader)
 
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
-        tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        tableView.layer.cornerRadius = UX.CornerRadius
         // Don't show separators on ETP menu
         if viewModel.title != nil {
             tableView.separatorStyle = .none
@@ -133,7 +157,7 @@ class PhotonActionSheet: UIViewController {
         tableView.accessibilityIdentifier = "Context Menu"
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
-        if viewModel.isMainMenuInversed {
+        if viewModel.isMainMenuInverted {
             tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         }
         tableView.reloadData()
@@ -168,11 +192,11 @@ class PhotonActionSheet: UIViewController {
         let bottomConstraints = [
             closeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
-            closeButton.heightAnchor.constraint(equalToConstant: PhotonActionSheetUX.CloseButtonHeight),
-            closeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -PhotonActionSheetUX.Padding),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.CloseButtonHeight),
+            closeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.Padding),
 
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tableView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -PhotonActionSheetUX.Padding),
+            tableView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -UX.Padding),
             tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
         ]
         constraints.append(contentsOf: bottomConstraints)
@@ -212,8 +236,8 @@ class PhotonActionSheet: UIViewController {
 
     // The width used for the .centered and .bottom style
     private var centeredAndBottomWidth: CGFloat {
-        let minimumWidth = min(view.frame.size.width, PhotonActionSheetUX.MaxWidth)
-        return minimumWidth - (PhotonActionSheetUX.Padding * 2)
+        let minimumWidth = min(view.frame.size.width, UX.MaxWidth)
+        return minimumWidth - (UX.Padding * 2)
     }
 
     // MARK: - Theme
@@ -310,7 +334,7 @@ class PhotonActionSheet: UIViewController {
 
     private func setDefaultStyleTableViewHeight() {
         let frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-        let buttonHeight = viewModel.presentationStyle == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0
+        let buttonHeight = viewModel.presentationStyle == .bottom ? UX.CloseButtonHeight : 0
         let maxHeight = frameHeight - buttonHeight
 
         // The height of the menu should be no more than 90 percent of the screen
@@ -349,12 +373,12 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as? PhotonActionSheetContainerCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UX.CellName, for: indexPath) as? PhotonActionSheetContainerCell else { return UITableViewCell() }
         let actions = viewModel.actions[indexPath.section][indexPath.row]
         cell.configure(actions: actions, viewModel: viewModel)
         cell.delegate = self
 
-        if viewModel.isMainMenuInversed {
+        if viewModel.isMainMenuInverted {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: rowIsLastInSection)
 

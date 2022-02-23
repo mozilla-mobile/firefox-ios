@@ -4,11 +4,6 @@
 
 import Foundation
 
-enum IconAlignment {
-    case left
-    case right
-}
-
 // One row on the PhotonActionSheet table view can contain more than one item
 struct PhotonRowActions {
     var items: [SingleActionViewModel]
@@ -23,6 +18,11 @@ struct PhotonRowActions {
 
 // MARK: - SingleActionViewModel
 class SingleActionViewModel {
+
+    enum IconAlignment {
+        case left
+        case right
+    }
 
     // MARK: - Properties
     private(set) var text: String?
@@ -54,10 +54,20 @@ class SingleActionViewModel {
     // Normally the icon name is used, but if there is no icon, this is used.
     public var accessibilityId: String?
 
-    init(title: String, alternateTitle: String? = nil, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil,
-         iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left,
-         iconTint: UIColor? = nil, isEnabled: Bool = false, badgeIconNamed: String? = nil,
-         bold: Bool? = false, tabCount: String? = nil, tapHandler: ((SingleActionViewModel) -> Void)? = nil) {
+    // MARK: - Initializers
+    init(title: String,
+         alternateTitle: String? = nil,
+         text: String? = nil,
+         iconString: String? = nil,
+         iconURL: URL? = nil,
+         iconType: PhotonActionSheetIconType = .Image,
+         iconAlignment: IconAlignment = .left,
+         iconTint: UIColor? = nil,
+         isEnabled: Bool = false,
+         badgeIconNamed: String? = nil,
+         bold: Bool? = false,
+         tabCount: String? = nil,
+         tapHandler: ((SingleActionViewModel) -> Void)? = nil) {
 
         self.title = title
         self.alternateTitle = alternateTitle

@@ -49,7 +49,7 @@ class PhotonActionSheetViewModel {
          title: String? = nil,
          modalStyle: UIModalPresentationStyle,
          isMainMenu: Bool = false,
-         isMainMenuInversed: Bool = false) {
+         isMainMenuInverted: Bool = false) {
 
         self.actions = actions
         self.closeButtonTitle = closeButtonTitle
@@ -57,7 +57,7 @@ class PhotonActionSheetViewModel {
         self.modalStyle = modalStyle
 
         self.isMainMenu = isMainMenu
-        self.isMainMenuInversed = isMainMenuInversed
+        self.isMainMenuInverted = isMainMenuInverted
         setMainMenuStyle()
     }
 
@@ -73,9 +73,9 @@ class PhotonActionSheetViewModel {
     /// This avoid us having to call Apple's API to scroll the tableview (with scrollToRow or
     /// with setContentOffset) which was causing an unwanted content size change (and
     /// menu apparation was wonky).
-    var isMainMenuInversed: Bool = false
+    var isMainMenuInverted: Bool = false
     private func setMainMenuStyle() {
-        guard isMainMenuInversed else { return }
+        guard isMainMenuInverted else { return }
 
         // Inverse database. The database is made up of multidimensional arrays, so multiple
         // reverse actions are required.
@@ -85,9 +85,9 @@ class PhotonActionSheetViewModel {
         actions.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
     }
 
-    // Main menu is inversed if hamburger icon is at the bottom
-    // It isn't inversed for edge case of iPhone in landscape mode with top search bar (when toolbar isn't shown)
-    static func hasInversedMainMenu(trait: UITraitCollection, isBottomSearchBar: Bool) -> Bool {
+    // Main menu is inverted if hamburger icon is at the bottom
+    // It isn't inverted for edge case of iPhone in landscape mode with top search bar (when toolbar isn't shown)
+    static func hasInvertedMainMenu(trait: UITraitCollection, isBottomSearchBar: Bool) -> Bool {
         let showingToolbar = trait.verticalSizeClass != .compact && trait.horizontalSizeClass != .regular
         let isIphoneEdgeCase = !isBottomSearchBar && !showingToolbar
         return PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) && !isIphoneEdgeCase
@@ -99,7 +99,7 @@ class PhotonActionSheetViewModel {
         switch sheetStyle {
         case .site:
             guard let site = site else { break }
-            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SiteHeaderName) as! PhotonActionSheetSiteHeaderView
+            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.SiteHeaderName) as! PhotonActionSheetSiteHeaderView
             header.tintColor = tintColor
             header.configure(with: site)
             return header
@@ -107,35 +107,35 @@ class PhotonActionSheetViewModel {
         case .title:
             guard let title = title else { break }
             if section > 0 {
-                return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.LineSeparatorSectionHeader)
+                return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.LineSeparatorSectionHeader)
             } else {
-                let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
+                let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
                 header.tintColor = tintColor
                 header.configure(with: title)
                 return header
             }
 
         case .other:
-            return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SeparatorSectionHeader)
+            return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.SeparatorSectionHeader)
         }
 
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SeparatorSectionHeader)
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.SeparatorSectionHeader)
     }
 
     func getHeaderHeightForSection(section: Int) -> CGFloat {
         if section == 0 {
             return getHeaderHeightForFirstSection()
         } else {
-            return PhotonActionSheetUX.SeparatorRowHeight
+            return PhotonActionSheet.UX.SeparatorRowHeight
         }
     }
 
     private func getHeaderHeightForFirstSection() -> CGFloat {
         switch sheetStyle {
         case .site:
-            return PhotonActionSheetUX.TitleHeaderSectionHeightWithSite
+            return PhotonActionSheet.UX.TitleHeaderSectionHeightWithSite
         case .title:
-            return PhotonActionSheetUX.TitleHeaderSectionHeight
+            return PhotonActionSheet.UX.TitleHeaderSectionHeight
         case .other:
             return 0
         }
@@ -161,31 +161,32 @@ class PhotonActionSheetViewModel {
     private func getIpadMargins(view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         // Save available space
         let viewControllerHeight = viewController.view.frame.size.height
-        availableMainMenuHeight = viewControllerHeight - PhotonActionSheetUX.BigSpacing * 2
+        availableMainMenuHeight = viewControllerHeight - PhotonActionSheet.UX.BigSpacing * 2
         isAtTopMainMenu = true
 
-        return UIEdgeInsets.init(equalInset: PhotonActionSheetUX.BigSpacing)
+        return UIEdgeInsets.init(equalInset: PhotonActionSheet.UX.BigSpacing)
     }
 
     // Small size is either iPhone or iPad in multitasking mode
     private func getSmallSizeMargins(view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         // Align menu icons with popover icons
         let extraLandscapeSpacing: CGFloat = UIWindow.isLandscape ? 10 : 0
-        let rightInset = view.frame.size.width / 2 - PhotonActionSheetUX.Spacing - PhotonActionSheetViewUX.StatusIconSize.width / 2 + extraLandscapeSpacing
+        let statusIconSize = PhotonActionSheetView.UX.StatusIconSize.width
+        let rightInset = view.frame.size.width / 2 - PhotonActionSheet.UX.Spacing - statusIconSize / 2 + extraLandscapeSpacing
 
         // Calculate top and bottom insets
         let convertedPoint = view.convert(view.frame.origin, to: viewController.view)
         let viewControllerHeight = viewController.view.frame.size.height
         isAtTopMainMenu = convertedPoint.y < viewControllerHeight / 2
-        let topInset = isAtTopMainMenu ? UIConstants.ToolbarHeight : PhotonActionSheetUX.Spacing
-        let bottomInset = isAtTopMainMenu ? PhotonActionSheetUX.Spacing : PhotonActionSheetUX.BigSpacing
+        let topInset = isAtTopMainMenu ? UIConstants.ToolbarHeight : PhotonActionSheet.UX.Spacing
+        let bottomInset = isAtTopMainMenu ? PhotonActionSheet.UX.Spacing : PhotonActionSheet.UX.BigSpacing
 
         // Save available space so we can calculate the needed menu height later on
         let buttonSpace = isAtTopMainMenu ? (convertedPoint.y + view.frame.height) : (viewControllerHeight - convertedPoint.y - view.frame.height)
         availableMainMenuHeight = viewControllerHeight - buttonSpace - bottomInset - topInset - viewController.view.safeAreaInsets.top
 
         return UIEdgeInsets(top: topInset,
-                            left: PhotonActionSheetUX.Spacing,
+                            left: PhotonActionSheet.UX.Spacing,
                             bottom: bottomInset,
                             right: rightInset)
     }

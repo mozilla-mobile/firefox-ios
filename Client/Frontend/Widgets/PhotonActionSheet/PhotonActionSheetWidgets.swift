@@ -9,32 +9,7 @@ import Shared
 import UIKit
 import MapKit
 
-// UX definitions and misc table components used for the PhotonActionSheet table view.
-
-struct PhotonActionSheetUX {
-    static let MaxWidth: CGFloat = 414
-    static let Padding: CGFloat = 6
-    static let HeaderFooterHeight: CGFloat = 20
-    static let RowHeight: CGFloat = 44
-    static let BorderWidth: CGFloat = 0.5
-    static let BorderColor = UIColor.Photon.Grey30
-    static let CornerRadius: CGFloat = 10
-    static let SiteImageViewSize = 52
-    static let IconSize = CGSize(width: 24, height: 24)
-    static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
-    static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
-    static let CellName = "PhotonActionSheetCell"
-    static let LineSeparatorSectionHeader = "LineSeparatorSectionHeader"
-    static let SeparatorSectionHeader = "SeparatorSectionHeader"
-    static let EmptyHeader = "EmptyHeader"
-    static let CloseButtonHeight: CGFloat  = 56
-    static let TablePadding: CGFloat = 6
-    static let SeparatorRowHeight: CGFloat = 8
-    static let TitleHeaderSectionHeight: CGFloat = 40
-    static let TitleHeaderSectionHeightWithSite: CGFloat = 70
-    static let BigSpacing: CGFloat = 32
-    static let Spacing: CGFloat = 16
-}
+// Misc table components used for the PhotonActionSheet table view.
 
 public enum PresentationStyle {
     case centered // used in the home panels
@@ -97,15 +72,15 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
             make.trailing.equalTo(contentView)
-            make.top.equalTo(contentView).offset(PhotonActionSheetUX.TablePadding)
+            make.top.equalTo(contentView).offset(PhotonActionSheet.UX.TablePadding)
         }
 
         contentView.addSubview(separatorView)
 
         separatorView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheetUX.TablePadding)
-            make.bottom.equalTo(contentView).inset(PhotonActionSheetUX.TablePadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheet.UX.TablePadding)
+            make.bottom.equalTo(contentView).inset(PhotonActionSheet.UX.TablePadding)
             make.height.equalTo(0.5)
         }
     }
@@ -149,9 +124,9 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         let siteImageView = UIImageView()
         siteImageView.contentMode = .center
         siteImageView.clipsToBounds = true
-        siteImageView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
-        siteImageView.layer.borderColor = PhotonActionSheetUX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = PhotonActionSheetUX.BorderWidth
+        siteImageView.layer.cornerRadius = PhotonActionSheet.UX.CornerRadius
+        siteImageView.layer.borderColor = PhotonActionSheet.UX.BorderColor.cgColor
+        siteImageView.layer.borderWidth = PhotonActionSheet.UX.BorderWidth
         return siteImageView
     }()
 
@@ -166,7 +141,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
             make.top.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
-            make.size.equalTo(PhotonActionSheetUX.SiteImageViewSize)
+            make.size.equalTo(PhotonActionSheet.UX.SiteImageViewSize)
         }
 
         let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
@@ -196,7 +171,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
     func configure(with site: Site) {
         if let _ = site.icon {
             self.siteImageView.setFavicon(forSite: site) { 
-                self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheetUX.IconSize)
+                self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheet.UX.IconSize)
             }
         } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
@@ -205,7 +180,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
                 }
 
                 self.siteImageView.backgroundColor = .clear
-                self.siteImageView.image = image.createScaled(PhotonActionSheetUX.IconSize)
+                self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.IconSize)
             }
         }
         self.titleLabel.text = site.title.isEmpty ? site.url : site.title
