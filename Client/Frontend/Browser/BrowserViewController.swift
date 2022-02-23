@@ -898,8 +898,7 @@ class BrowserViewController: UIViewController {
             
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideFirefoxHome()
-            let shouldHideReloadButton = shouldUseiPadSetup()
-            urlBar.shouldHideReloadButton(shouldHideReloadButton)
+            urlBar.shouldHideReloadButton(shouldUseiPadSetup())
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -1876,16 +1875,15 @@ extension BrowserViewController: TabManagerDelegate {
             self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
         }
 
-        let shouldHideReloadButton = shouldUseiPadSetup()
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            urlBar.updateReaderModeState(readerMode.state, hideReloadButton: shouldHideReloadButton)
+            urlBar.updateReaderModeState(readerMode.state, hideReloadButton: shouldUseiPadSetup())
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldHideReloadButton)
+            urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldUseiPadSetup())
         }
 
         if topTabsVisible {

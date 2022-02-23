@@ -9,8 +9,7 @@ extension BrowserViewController: ReaderModeDelegate {
         // If this reader mode availability state change is for the tab that we currently show, then update
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
         if tabManager.selectedTab === tab {
-            let shouldHideReloadButton = shouldUseiPadSetup()
-            urlBar.updateReaderModeState(state, hideReloadButton: shouldHideReloadButton)
+            urlBar.updateReaderModeState(state, hideReloadButton: shouldUseiPadSetup())
         }
     }
 
