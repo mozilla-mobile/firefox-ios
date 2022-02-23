@@ -121,7 +121,10 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
     private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
-        guard let url = tabUrl?.absoluteString else { dataLoadingCompletion?(); return }
+        guard let url = tabUrl?.absoluteString else { 
+            dataLoadingCompletion?()
+            return 
+        }
 
         let group = DispatchGroup()
         getIsBookmarked(url: url, group: group)
@@ -136,7 +139,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getIsInReadingList(url: String, group: DispatchGroup) {
         group.enter()
-        let _ = self.profile.readingList.getRecordWithURL(url).uponQueue(.main) { result in
+        profile.readingList.getRecordWithURL(url).uponQueue(.main) { result in
             self.isInReadingList = result.successValue != nil
             group.leave()
         }
@@ -223,6 +226,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         if isFileURL {
             let shareFileAction = getShareFileAction()
             append(to: &section, action: shareFileAction)
+
         } else {
             let shortAction = getShortcutAction()
             append(to: &section, action: shortAction)
@@ -303,6 +307,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             toggleActionTitle = tab.changedUserAgent ? .AppMenuViewDesktopSiteTitleString : .AppMenuViewMobileSiteTitleString
             toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestDesktopSite : ImageIdentifiers.requestMobileSite
             siteTypeTelemetryObject = .requestDesktopSite
+
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenuViewMobileSiteTitleString : .AppMenuViewDesktopSiteTitleString
             toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestMobileSite : ImageIdentifiers.requestDesktopSite
@@ -320,7 +325,6 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getCopyAction() -> PhotonRowActions? {
-
         return SingleActionViewModel(title: .AppMenuCopyLinkTitleString,
                                      iconString: ImageIdentifiers.copyLink) { _ in
 
@@ -502,7 +506,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         whatsNewAction = SingleActionViewModel(title: .WhatsNewString,
                                                iconString: ImageIdentifiers.whatsNew,
                                                isEnabled: showBadgeForWhatsNew) { _ in
-            if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
+            if let whatsNewTopic = AppInfo.whatsNewTopic, 
+               let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
             }
@@ -529,7 +534,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
             guard let tab = self.selectedTab,
                   let url = tab.canonicalURL?.displayURL,
-                  let presentableVC = self.menuActionDelegate as? PresentableVC else { return }
+                  let presentableVC = self.menuActionDelegate as? PresentableVC 
+            else { return }
 
             self.share(fileURL: url, buttonView: self.buttonView, presentableVC: presentableVC)
         }.items
@@ -546,7 +552,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                 temporaryDocument.getURL().uponQueue(.main, block: { tempDocURL in
                     // If we successfully got a temp file URL, share it like a downloaded file,
                     // otherwise present the ordinary share menu for the web URL.
-                    if tempDocURL.isFileURL, let presentableVC = self.menuActionDelegate as? PresentableVC {
+                    if tempDocURL.isFileURL, 
+                       let presentableVC = self.menuActionDelegate as? PresentableVC {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView, presentableVC: presentableVC)
                     } else {
                         self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
@@ -597,10 +604,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getReadingListAction() -> SingleActionViewModel {
-        let addReadingListAction = getAddReadingListAction()
-        let removeReadingListAction = getRemoveReadingListAction()
-
-        return isInReadingList ? removeReadingListAction : addReadingListAction
+        return isInReadingList ? getRemoveReadingListAction() : getAddReadingListAction()
     }
 
     private func getAddReadingListAction() -> SingleActionViewModel {
@@ -609,7 +613,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                                      iconString: ImageIdentifiers.addToReadingList) { _ in
 
             guard let tab = self.selectedTab,
-                  let url = self.tabUrl?.displayURL else { return }
+                  let url = self.tabUrl?.displayURL
+            else { return }
 
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
@@ -623,7 +628,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                                      iconString: ImageIdentifiers.removeFromReadingList) { _ in
 
             guard let url = self.tabUrl?.displayURL?.absoluteString,
-                  let record = self.profile.readingList.getRecordWithURL(url).value.successValue else { return }
+                  let record = self.profile.readingList.getRecordWithURL(url).value.successValue
+            else { return }
 
             self.profile.readingList.deleteRecord(record)
             self.delegate?.showToast(message: .ReaderModeBarRemoveFromReadingList, toastAction: .removeFromReadingList, url: nil)
@@ -636,12 +642,10 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     private func getBookmarkSection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
-        let libraryAction = getBookmarkLibraryAction()
         if !isHomePage {
-            let bookmarkAction = getBookmarkAction()
-            section.append(PhotonRowActions([libraryAction, bookmarkAction]))
+            section.append(PhotonRowActions([getBookmarkLibraryAction(), getBookmarkAction()]))
         } else {
-            section.append(PhotonRowActions(libraryAction))
+            section.append(PhotonRowActions(getBookmarkLibraryAction()))
         }
 
         return section
@@ -655,10 +659,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getBookmarkAction() -> SingleActionViewModel {
-        let addBookmarkAction = getAddBookmarkAction()
-        let removeBookmarkAction = getRemoveBookmarkAction()
-
-        return isBookmarked ? removeBookmarkAction : addBookmarkAction
+        return isBookmarked ? getRemoveBookmarkAction() : getAddBookmarkAction()
     }
 
     private func getAddBookmarkAction() -> SingleActionViewModel {
@@ -667,7 +668,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                                      iconString: ImageIdentifiers.addToBookmark) { _ in
 
             guard let tab = self.selectedTab,
-                  let url = tab.canonicalURL?.displayURL else { return }
+                  let url = tab.canonicalURL?.displayURL
+            else { return }
 
             self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
@@ -693,10 +695,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     // MARK: Shortcut
 
     private func getShortcutAction() -> PhotonRowActions {
-        let addShortcutAction = getAddShortcutAction()
-        let removeShortcutAction = getRemoveShortcutAction()
-
-        return isPinned ? removeShortcutAction.items : addShortcutAction.items
+        return isPinned ? getRemoveShortcutAction().items : getAddShortcutAction().items
     }
 
     private func getAddShortcutAction() -> SingleActionViewModel {
@@ -704,7 +703,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                                      iconString: ImageIdentifiers.addShortcut) { _ in
 
             guard let url = self.selectedTab?.url?.displayURL,
-                  let sql = self.profile.history as? SQLiteHistory else { return }
+                  let sql = self.profile.history as? SQLiteHistory
+            else { return }
 
             sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
                 guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {

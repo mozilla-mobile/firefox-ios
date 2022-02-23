@@ -325,8 +325,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             if !url.isReaderModeURL {
-                let shouldHideReloadButton = shouldUseiPadSetup()
-                urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldHideReloadButton)
+                urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldUseiPadSetup())
                 hideReaderModeBar(animated: false)
             }
         }

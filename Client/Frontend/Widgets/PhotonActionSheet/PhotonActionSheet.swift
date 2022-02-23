@@ -329,12 +329,7 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
     }
 
     private func getViewsHeightSum(views: [UIView]) -> CGFloat {
-        var heights = [CGFloat]()
-        for cell in views {
-            let height = cell.frame.height
-            heights.append(height)
-        }
-        return heights.reduce(0, +)
+        return views.map { $0.height }.reduce(0, +)
     }
 }
 
@@ -344,7 +339,8 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let section = viewModel.actions[safe: indexPath.section],
               let action = section[safe: indexPath.row],
-              let custom = action.items[0].customHeight else { return UITableView.automaticDimension }
+              let custom = action.items[0].customHeight
+        else { return UITableView.automaticDimension }
 
         // Nested tableview rows get additional height
         return custom(action.items[0])
@@ -363,7 +359,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetContainerCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as? PhotonActionSheetContainerCell else { return UITableViewCell() }
         let actions = viewModel.actions[indexPath.section][indexPath.row]
         cell.configure(actions: actions, viewModel: viewModel)
         cell.delegate = self
@@ -426,8 +422,8 @@ extension UITableView {
     private var indexesOfVisibleHeaderSections: [Int] {
         var visibleSectionIndexes = [Int]()
 
-        for i in 0..<numberOfSections {
-            let headerRect = rect(forSection: i)
+        numberOfSections.forEach { index in
+            let headerRect = rect(forSection: index)
 
             // The "visible part" of the tableView is based on the content offset and the tableView's size.
             let visiblePartOfTableView = CGRect(x: contentOffset.x,
@@ -436,7 +432,7 @@ extension UITableView {
                                                 height: bounds.size.height)
 
             if visiblePartOfTableView.intersects(headerRect) {
-                visibleSectionIndexes.append(i)
+                visibleSectionIndexes.append(index)
             }
         }
         return visibleSectionIndexes

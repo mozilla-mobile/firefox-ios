@@ -77,6 +77,8 @@ extension UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
 
+    /// A convenience function to dismiss modal presentation views if they are
+    /// currently presented.
     func present(viewController: UIViewController, animated: Bool) {
         if let presentedViewController = presentedViewController {
             presentedViewController.dismiss(animated: false, completion: {

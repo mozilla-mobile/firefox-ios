@@ -89,11 +89,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
 
-        menuHelper.getToolbarActions(navigationController: navigationController, completion: { actions in
+        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
             let shouldInverse = PhotonActionSheetViewModel.hasInversedToolbarMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
             let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, isToolbarMenu: true, toolbarMenuInversed: shouldInverse)
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
-        })
+        }
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -189,6 +189,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 }
 
+// MARK: - ToolbarActionMenuDelegate
 extension BrowserViewController: ToolBarActionMenuDelegate {
 
     func updateToolbarState() {
