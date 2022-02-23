@@ -78,7 +78,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         let isHomeTab = self.tab?.isFxHomeTab ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
             if !self.isBookmarked && !isHomeTab {
-                actions.append(UIAction(title: .TabPeekAddToBookmarks, image: UIImage.templateImageNamed("menu-Bookmark"), identifier: nil) { [weak self] _ in
+                actions.append(UIAction(title: .TabPeekAddToBookmarks, image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark), identifier: nil) { [weak self] _ in
                     guard let wself = self, let tab = wself.tab else { return }
                     wself.delegate?.tabPeekDidAddBookmark(tab)
                 })
@@ -89,7 +89,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                 })
             }
-            actions.append(UIAction(title: .TabPeekCopyUrl, image: UIImage.templateImageNamed("menu-Copy-Link"), identifier: nil) { [weak self] _ in
+            actions.append(UIAction(title: .TabPeekCopyUrl, image: UIImage.templateImageNamed(ImageIdentifiers.copyLink), identifier: nil) { [weak self] _ in
                 guard let wself = self, let url = wself.tab?.canonicalURL else { return }
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)

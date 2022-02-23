@@ -59,7 +59,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
 
         //Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.buttons["TabToolbar.homeButton"]
+        let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
         waitForExistence(homePageMenuItem, timeout: 5)
         homePageMenuItem.tap()
         waitUntilPageLoad()

@@ -7,11 +7,11 @@ class NightModeTests: BaseTestCase {
 
     private func checkNightModeOn() {
         print(app.debugDescription)
-        waitForExistence(app.tables.cells["menu-NightMode"])
+        waitForExistence(app.tables.cells[ImageIdentifiers.nightMode])
     }
 
     private func checkNightModeOff() {
-        waitForExistence(app.tables.cells["menu-NightMode"])
+        waitForExistence(app.tables.cells[ImageIdentifiers.nightMode])
     }
 
     func testNightModeUI() {

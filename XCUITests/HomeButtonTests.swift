@@ -18,24 +18,24 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton], timeout: 5)
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].exists)
-        app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 5)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
+        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
         if iPad() {
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].label, "Menu")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Menu")
         } else {
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].label, "Search")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Search")
         }
         if iPad() {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton], timeout: 5)
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.TabToolbar.homeButton].exists)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 5)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
 
         XCUIDevice.shared.orientation = .landscapeRight
         XCTAssertTrue(app.buttons["Home"].exists)

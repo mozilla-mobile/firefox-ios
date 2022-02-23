@@ -4,7 +4,7 @@
 
 import XCTest
 
-let NoImageButtonIdentifier = "menu-NoImageMode"
+let NoImageButtonIdentifier = ImageIdentifiers.noImageMode
 let ContextMenuIdentifier = "Context Menu"
 
 class NoImageTests: BaseTestCase {

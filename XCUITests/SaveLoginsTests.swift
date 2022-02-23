@@ -26,8 +26,9 @@ class SaveLoginTest: BaseTestCase {
             waitForTabsButton()
             navigator.goto(TabTray)
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
+//            navigator.performAction(Action.CloseURLBarOpen)
+//            navigator.nowAt(NewTabScreen)
+            navigator.nowAt(URLBarOpen)
         }
         navigator.openURL(givenUrl)
         waitUntilPageLoad()

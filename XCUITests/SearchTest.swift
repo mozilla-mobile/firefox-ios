@@ -42,7 +42,7 @@ class SearchTests: BaseTestCase {
         app.buttons["urlBar-cancel"].tap()
 
         waitForTabsButton()
-        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         navigator.nowAt(BrowserTabMenu)
         suggestionsOnOff()
 
@@ -65,7 +65,7 @@ class SearchTests: BaseTestCase {
 
         app.buttons["urlBar-cancel"].tap()
         waitForTabsButton()
-        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         navigator.nowAt(BrowserTabMenu)
 
         // Reset suggestion button, set it to on
@@ -223,16 +223,16 @@ class SearchTests: BaseTestCase {
         waitForTabsButton()
         
         // Search icon is displayed.
-        waitForExistence(app.buttons["TabToolbar.homeButton"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
 
         if iPad() {
-            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Menu")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Menu")
         } else {
-            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Search")
         }
 
-        XCTAssertTrue(app.buttons["TabToolbar.homeButton"].exists)
-        app.buttons["TabToolbar.homeButton"].tap()
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
+        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
         let addressBar = app.textFields["address"]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
@@ -242,16 +242,16 @@ class SearchTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Reload icon is displayed.
-        waitForExistence(app.buttons["TabToolbar.homeButton"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
 
         // Label is search but Home is shown
         if iPad() {
-            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Menu")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Menu")
         } else {
-            XCTAssertEqual(app.buttons["TabToolbar.homeButton"].label, "Search")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Search")
         }
         
-        app.buttons["TabToolbar.homeButton"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
         waitForExistence(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
@@ -262,10 +262,10 @@ class SearchTests: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
 
-        waitForExistence(app.buttons["TabToolbar.homeButton"])
-        XCTAssertTrue(app.buttons["TabToolbar.homeButton"].exists)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
         // Tap on the Search icon.
-        app.buttons["TabToolbar.homeButton"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")

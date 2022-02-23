@@ -26,11 +26,11 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
     ]
     let imageViews: [Int: [UIImageView]] = [ 1: [UIImageView(image: UIImage.templateImageNamed("library-readinglist")),
                                                  UIImageView(image: UIImage.templateImageNamed("bookmark")),
-                                                 UIImageView(image: UIImage.templateImageNamed("action_pin"))],
+                                                 UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.addShortcut))],
                                              2: [UIImageView(image: UIImage.templateImageNamed("menu-CloseTabs"))],
-                                             0: [UIImageView(image: UIImage.templateImageNamed("menu-Copy-Link")),
+                                             0: [UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.copyLink)),
                                                  UIImageView(image: UIImage.templateImageNamed("menu-Send")),
-                                                 UIImageView(image: UIImage.templateImageNamed("menu-Send-to-Device"))]
+                                                 UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.sendToDevice))]
     ]
     lazy var tableView: UITableView = {
         var tableView = UITableView(frame: CGRect(), style: .insetGrouped)

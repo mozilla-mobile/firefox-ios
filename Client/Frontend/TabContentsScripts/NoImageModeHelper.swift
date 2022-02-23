@@ -34,7 +34,13 @@ class NoImageModeHelper: TabContentScript {
     }
 
     static func toggle(isEnabled: Bool, profile: Profile, tabManager: TabManager) {
-        profile.prefs.setBool(isEnabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+        profile.prefs.setBool(isEnabled, forKey: NoImageModePrefsKey.NoImageModeStatus)
         tabManager.tabs.forEach { $0.noImageMode = isEnabled }
+
+        if isEnabled {
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesEnabled)
+        } else {
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesDisabled)
+        }
     }
 }

@@ -61,7 +61,7 @@ class ClipBoardTests: BaseTestCase {
         navigator.openURL(url)
         waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        navigator.goto(PageOptionsMenu)
+        navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.CopyAddressPAM)
 
         checkCopiedUrl()
@@ -70,7 +70,7 @@ class ClipBoardTests: BaseTestCase {
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         app.textFields["url"].press(forDuration: 3)
         waitForExistence(app.tables["Context Menu"])
-        app.cells["menu-PasteAndGo"].tap()
+        app.otherElements[ImageIdentifiers.pasteAndGo].tap()
         waitForExistence(app.textFields["url"])
         waitForValueContains(app.textFields["url"], value: "www.example.com")
     }

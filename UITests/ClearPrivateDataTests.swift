@@ -75,7 +75,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().wait(forTimeInterval: 10)
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.history)
         tester().waitForView(withAccessibilityLabel: url1)
         tester().waitForView(withAccessibilityLabel: url2)
 
@@ -86,7 +86,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.closeClearPrivateDataDialog(tester())
 
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.history)
 
         // Open History Panel
         tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
@@ -114,7 +114,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.history)
         tester().waitForAnimationsToFinish()
 
         tester().waitForView(withAccessibilityLabel: url1)

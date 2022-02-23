@@ -69,6 +69,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             SiriPageSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
                         titleText: .AppSettingsBlockPopups),
+            NoImageModeSetting(settings: self)
            ]
 
         if SearchBarSettingsViewModel.isEnabled {

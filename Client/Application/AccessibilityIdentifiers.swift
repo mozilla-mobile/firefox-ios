@@ -13,12 +13,12 @@ import Foundation
 /// should be move here and updated throughout the app.
 public struct AccessibilityIdentifiers {
     
-    struct BottomToolbar {
+    struct Toolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
-    }
-    
-    struct TabToolbar {
         static let homeButton = "TabToolbar.homeButton"
+        static let trackingProtection = "TabLocationView.trackingProtectionButton"
+        static let readerModeButton = "TabLocationView.readerModeButton"
+        static let reloadButton = "TabLocationView.reloadButton"
     }
 
     struct FirefoxHomepage {

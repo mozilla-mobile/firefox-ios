@@ -145,7 +145,7 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
         return site
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard let libraryPanelDelegate = libraryPanelDelegate else {
             return getRecentlyClosedTabContexMenuActions(for: site, recentlyClosedPanelDelegate: recentlyClosedTabsDelegate)
         }

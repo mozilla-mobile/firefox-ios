@@ -97,16 +97,16 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables["Context Menu"].cells["menu-RequestDesktopSite"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.requestDesktopSite])
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
         
         navigator.nowAt(BrowserTab)
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables["Context Menu"].cells["menu-ViewMobile"])
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.requestMobileSite])
         // Select Mobile site here, the identifier is the same but the Text is not
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
@@ -131,8 +131,8 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         // Workaround to be sure the snackbar dissapers
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TabLocationView.reloadButton"], timeout: 5)
-        app.buttons["TabLocationView.reloadButton"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton], timeout: 5)
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestMobileSite) // toggle off
         waitUntilPageLoad()
@@ -158,7 +158,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         // Workaround
-        app.buttons["TabLocationView.reloadButton"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()

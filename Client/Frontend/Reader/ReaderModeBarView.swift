@@ -27,8 +27,8 @@ enum ReaderModeBarButtonType {
         case .markAsRead: return "MarkAsRead"
         case .markAsUnread: return "MarkAsUnread"
         case .settings: return "SettingsSerif"
-        case .addToReadingList: return "addToReadingList"
-        case .removeFromReadingList: return "removeFromReadingList"
+        case .addToReadingList: return ImageIdentifiers.addToReadingList
+        case .removeFromReadingList: return ImageIdentifiers.removeFromReadingList
         }
     }
 

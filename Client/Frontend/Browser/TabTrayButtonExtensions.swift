@@ -38,7 +38,7 @@ class PrivateModeButton: ToggleButton, NotificationThemeable, PrivateModeUI {
 extension UIButton {
     static func newTabButton() -> UIButton {
         let newTab = UIButton()
-        newTab.setImage(UIImage.templateImageNamed("quick_action_new_tab"), for: .normal)
+        newTab.setImage(UIImage.templateImageNamed(ImageIdentifiers.newTab), for: .normal)
         newTab.accessibilityLabel = .TabTrayButtonNewTabAccessibilityLabel
         return newTab
     }

@@ -4,81 +4,95 @@
 
 import Foundation
 import Storage
-import SnapKit
 import Shared
+import UIKit
+
+extension PhotonActionSheet: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .ProfileDidFinishSyncing, .ProfileDidStartSyncing:
+            stopRotateSyncIcon()
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            reduceTransparencyChanged()
+        default: break
+        }
+    }
+}
 
 // This file is main table view used for the action sheet
+class PhotonActionSheet: UIViewController {
 
-class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, NotificationThemeable {
-    fileprivate(set) var actions: [[PhotonActionSheetItem]]
+    struct UX {
+        static let MaxWidth: CGFloat = 414
+        static let Padding: CGFloat = 6
+        static let RowHeight: CGFloat = 44
+        static let BorderWidth: CGFloat = 0.5
+        static let BorderColor = UIColor.Photon.Grey30
+        static let CornerRadius: CGFloat = 10
+        static let SiteImageViewSize = 52
+        static let IconSize = CGSize(width: 24, height: 24)
+        static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
+        static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
+        static let CellName = "PhotonActionSheetCell"
+        static let LineSeparatorSectionHeader = "LineSeparatorSectionHeader"
+        static let SeparatorSectionHeader = "SeparatorSectionHeader"
+        static let EmptyHeader = "EmptyHeader"
+        static let CloseButtonHeight: CGFloat  = 56
+        static let TablePadding: CGFloat = 6
+        static let SeparatorRowHeight: CGFloat = 8
+        static let TitleHeaderSectionHeight: CGFloat = 40
+        static let TitleHeaderSectionHeightWithSite: CGFloat = 70
+        static let BigSpacing: CGFloat = 32
+        static let Spacing: CGFloat = 16
+    }
 
-    private var site: Site?
-    private let style: PresentationStyle
-    private var tintColor = UIColor.theme.actionMenu.foreground
-    private var heightConstraint: Constraint?
-    var tableView = UITableView(frame: .zero, style: .grouped)
+    // MARK: - Variables
+    private var tableView = UITableView(frame: .zero, style: .grouped)
+    private var viewModel: PhotonActionSheetViewModel!
+    private var constraints = [NSLayoutConstraint]()
+    var notificationCenter: NotificationCenter = NotificationCenter.default
 
-    lazy var tapRecognizer: UITapGestureRecognizer = {
-        let tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer.addTarget(self, action: #selector(dismiss))
-        tapRecognizer.numberOfTapsRequired = 1
-        tapRecognizer.cancelsTouchesInView = false
-        tapRecognizer.delegate = self
-        return tapRecognizer
-    }()
-
-    lazy var closeButton: UIButton = {
-        let button = UIButton()
+    private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-        button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        button.layer.cornerRadius = UX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
-        button.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.close"
-        return button
-    }()
+    }
 
     var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
         didSet {
-            self.transitioningDelegate = photonTransitionDelegate
+            transitioningDelegate = photonTransitionDelegate
         }
     }
 
-    init(site: Site, actions: [PhotonActionSheetItem], closeButtonTitle: String = .CloseButtonTitle) {
-        self.site = site
-        self.actions = [actions]
-        self.style = .centered
-        super.init(nibName: nil, bundle: nil)
-        self.closeButton.setTitle(closeButtonTitle, for: .normal)
-    }
+    // MARK: - Init
 
-    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = .CloseButtonTitle, style presentationStyle: UIModalPresentationStyle? = nil) {
-        self.actions = actions
-        if let presentationStyle = presentationStyle {
-            self.style = presentationStyle == .popover ? .popover : .bottom
-        } else {
-            self.style = .centered
-        }
+    init(viewModel: PhotonActionSheetViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.title = title
-        self.closeButton.setTitle(closeButtonTitle, for: .normal)
 
-        self.tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
+        title = viewModel.title
+        modalPresentationStyle = viewModel.modalStyle
+        closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
+        tableView.estimatedRowHeight = UX.RowHeight
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        tableView.dataSource = nil
+        tableView.delegate = nil
+        notificationCenter.removeObserver(self)
+    }
+
+    // MARK: - View cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if style == .centered {
-            applyBackgroundBlur()
-            self.tintColor = UIConstants.SystemBlueColor
-        }
-
-        view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
 
@@ -91,50 +105,359 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
             tableView.backgroundView = blurEffectView
         }
-        
-        let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
 
-        if style == .bottom {
-            self.view.addSubview(closeButton)
-            closeButton.snp.makeConstraints { make in
-                make.centerX.equalTo(self.view.snp.centerX)
-                make.width.equalTo(width)
-                make.height.equalTo(PhotonActionSheetUX.CloseButtonHeight)
-                make.bottom.equalTo(self.view.safeArea.bottom).inset(PhotonActionSheetUX.Padding)
-            }
-        }
-
-        if style == .popover {
-            let width = UIDevice.current.userInterfaceIdiom == .pad ? 400 : 250
-            tableView.snp.makeConstraints { make in
-                make.top.bottom.equalTo(self.view)
-                make.width.equalTo(width)
-            }
+        if viewModel.presentationStyle == .bottom {
+            setupBottomStyle()
+        } else if viewModel.presentationStyle == .popover {
+            setupPopoverStyle()
         } else {
-            tableView.snp.makeConstraints { make in
-                make.centerX.equalTo(self.view.snp.centerX)
-                switch style {
-                case .bottom, .popover:
-                    make.bottom.equalTo(closeButton.snp.top).offset(-PhotonActionSheetUX.Padding)
-                case .centered:
-                    make.centerY.equalTo(self.view.snp.centerY)
-                }
-                make.width.equalTo(width)
-            }
+            setupCenteredStyle()
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reduceTransparencyChanged), name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
+        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+        tableViewHeightConstraint?.isActive = true
+        NSLayoutConstraint.activate(constraints)
+
+        setupNotifications(forObserver: self, observing: [.ProfileDidFinishSyncing,
+                                                          .ProfileDidStartSyncing,
+                                                          UIAccessibility.reduceTransparencyStatusDidChangeNotification])
     }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        tableView.removeObserver(self, forKeyPath: "contentSize")
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        applyTheme()
+
+        tableView.bounces = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.keyboardDismissMode = .onDrag
+        tableView.register(PhotonActionSheetContainerCell.self, forCellReuseIdentifier: UX.CellName)
+        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: UX.SiteHeaderName)
+        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: UX.TitleHeaderName)
+        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: UX.SeparatorSectionHeader)
+        tableView.register(PhotonActionSheetLineSeparator.self, forHeaderFooterViewReuseIdentifier: UX.LineSeparatorSectionHeader)
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: UX.EmptyHeader)
+
+        tableView.isScrollEnabled = true
+        tableView.showsVerticalScrollIndicator = false
+        tableView.layer.cornerRadius = UX.CornerRadius
+        // Don't show separators on ETP menu
+        if viewModel.title != nil {
+            tableView.separatorStyle = .none
+        }
+        tableView.separatorColor = UIColor.clear
+        tableView.separatorInset = .zero
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.accessibilityIdentifier = "Context Menu"
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
+        if viewModel.isMainMenuInverted {
+            tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        }
+        tableView.reloadData()
+
+        DispatchQueue.main.async {
+            // Pick up the correct/final tableview.contentsize in order to set the height.
+            // Without async dispatch, the contentsize is wrong.
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setTableViewHeight()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
+            || traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+            updateViewConstraints()
+        }
+    }
+
+    // MARK: - Setup
+
+    private func setupBottomStyle() {
+        self.view.addSubview(closeButton)
+
+        let bottomConstraints = [
+            closeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            closeButton.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.CloseButtonHeight),
+            closeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.Padding),
+
+            tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tableView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -UX.Padding),
+            tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
+        ]
+        constraints.append(contentsOf: bottomConstraints)
+    }
+
+    private func setupPopoverStyle() {
+        let width: CGFloat = viewModel.popOverWidthForTraitCollection(trait: view.traitCollection)
+
+        var tableViewConstraints = [
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.widthAnchor.constraint(greaterThanOrEqualToConstant: width),
+        ]
+
+        // Can't set this on iPad (not in multitasking) since it causes the menu to take all the width of the screen.
+        if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: view.traitCollection) {
+            tableViewConstraints.append(
+                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            )
+        }
+
+        constraints.append(contentsOf: tableViewConstraints)
+    }
+
+    private func setupCenteredStyle() {
+        let tableViewConstraints = [
+            tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
+        ]
+        constraints.append(contentsOf: tableViewConstraints)
+
+        applyBackgroundBlur()
+        viewModel.tintColor = UIConstants.SystemBlueColor
+    }
+
+    // The width used for the .centered and .bottom style
+    private var centeredAndBottomWidth: CGFloat {
+        let minimumWidth = min(view.frame.size.width, UX.MaxWidth)
+        return minimumWidth - (UX.Padding * 2)
+    }
+
+    // MARK: - Theme
 
     @objc func reduceTransparencyChanged() {
         // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
         applyTheme()
     }
 
+    private func applyBackgroundBlur() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        guard let screenshot = appDelegate.window?.screenshot() else { return }
+
+        let blurredImage = screenshot.applyBlur(withRadius: 5,
+                                                blurType: BOXFILTER,
+                                                tintColor: UIColor.black.withAlphaComponent(0.2),
+                                                saturationDeltaFactor: 1.8,
+                                                maskImage: nil)
+        let imageView = UIImageView(image: blurredImage)
+        view.insertSubview(imageView, belowSubview: tableView)
+    }
+
+    // MARK: - Actions
+
+    @objc private func stopRotateSyncIcon() {
+        ensureMainThread {
+            self.tableView.reloadData()
+        }
+    }
+
+    override func observeValue(forKeyPath keyPath: String?,
+                               of object: Any?,
+                               change: [NSKeyValueChangeKey : Any]?,
+                               context: UnsafeMutableRawPointer?) {
+        if viewModel.presentationStyle == .popover && !wasHeightOverriden {
+            preferredContentSize = tableView.contentSize
+        }
+    }
+
+    @objc private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
+        dismissVC()
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        // Need to handle click outside view for non-popover sheet styles
+        guard let touch = touches.first else { return }
+        if !tableView.frame.contains(touch.location(in: view)) {
+            dismissVC()
+        }
+    }
+
+    // MARK: - TableView height
+
+    private var tableViewHeightConstraint: NSLayoutConstraint?
+
+    private func setTableViewHeight() {
+        if viewModel.isMainMenu {
+            setMainMenuTableViewHeight()
+        } else {
+            setDefaultStyleTableViewHeight()
+        }
+    }
+
+    // Needed to override the preferredContentSize, so key value observer doesn't get called
+    private var wasHeightOverriden = false
+
+    /// Main menu table view height is calculated so if there's not enough space for the menu to be shown completely,
+    /// we make sure that the last cell shown is half shown. This indicates to the user that the menu can be scrolled.
+    private func setMainMenuTableViewHeight() {
+        let visibleCellsHeight = getViewsHeightSum(views: tableView.visibleCells)
+        let headerCellsHeight = getViewsHeightSum(views: tableView.visibleHeaders)
+
+        let totalCellsHeight = visibleCellsHeight + headerCellsHeight
+        let availableHeight = viewModel.availableMainMenuHeight
+        let needsHeightAdjustment = availableHeight - totalCellsHeight < 0
+
+        if needsHeightAdjustment && totalCellsHeight != 0 && !wasHeightOverriden {
+            let newHeight: CGFloat
+            if viewModel.isAtTopMainMenu {
+                let halfCellHeight = (tableView.visibleCells.last?.frame.height ?? 0) / 2
+                newHeight = totalCellsHeight - halfCellHeight
+            } else {
+                let halfCellHeight = (tableView.visibleCells.first?.frame.height ?? 0) / 2
+                newHeight = totalCellsHeight - halfCellHeight * 3
+            }
+
+            wasHeightOverriden = true
+            tableViewHeightConstraint?.constant = newHeight
+            tableView.contentSize.height = newHeight
+            preferredContentSize = tableView.contentSize
+        }
+    }
+
+    private func setDefaultStyleTableViewHeight() {
+        let frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
+        let buttonHeight = viewModel.presentationStyle == .bottom ? UX.CloseButtonHeight : 0
+        let maxHeight = frameHeight - buttonHeight
+
+        // The height of the menu should be no more than 90 percent of the screen
+        let height = min(tableView.contentSize.height, maxHeight * 0.90)
+        tableViewHeightConstraint?.constant = height
+    }
+
+    private func getViewsHeightSum(views: [UIView]) -> CGFloat {
+        return views.map { $0.frame.height }.reduce(0, +)
+    }
+}
+
+// MARK: - UITableViewDataSource, UITableViewDelegate
+extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let section = viewModel.actions[safe: indexPath.section],
+              let action = section[safe: indexPath.row],
+              let custom = action.items[0].customHeight
+        else { return UITableView.automaticDimension }
+
+        // Nested tableview rows get additional height
+        return custom(action.items[0])
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel.actions.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.actions[section].count
+    }
+
+    func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
+        return false
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UX.CellName, for: indexPath) as? PhotonActionSheetContainerCell else { return UITableViewCell() }
+        let actions = viewModel.actions[indexPath.section][indexPath.row]
+        cell.configure(actions: actions, viewModel: viewModel)
+        cell.delegate = self
+
+        if viewModel.isMainMenuInverted {
+            let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+            cell.hideBottomBorder(isHidden: rowIsLastInSection)
+
+        } else {
+            let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+            let isLastSection = indexPath.section == tableView.numberOfSections - 1
+            let rowIsLast = isLastRow && isLastSection
+            cell.hideBottomBorder(isHidden: rowIsLast)
+        }
+
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return viewModel.getHeaderHeightForSection(section: section)
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return viewModel.getViewHeader(tableView: tableView, section: section)
+    }
+}
+
+// MARK: - PhotonActionSheetViewDelegate
+extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
+    func didClick(item: SingleActionViewModel?) {
+        dismissVC()
+    }
+
+    func layoutChanged(item: SingleActionViewModel) {
+        tableView.reloadData()
+    }
+}
+
+// MARK: - Visible Headers
+extension UITableView {
+
+    var visibleHeaders: [UITableViewHeaderFooterView] {
+        var visibleHeaders = [UITableViewHeaderFooterView]()
+        for sectionIndex in indexesOfVisibleHeaderSections {
+            guard let sectionHeader = headerView(forSection: sectionIndex) else { continue }
+            visibleHeaders.append(sectionHeader)
+        }
+
+        return visibleHeaders
+    }
+
+    private var indexesOfVisibleHeaderSections: [Int] {
+        var visibleSectionIndexes = [Int]()
+
+        (0..<numberOfSections).forEach { index in
+            let headerRect = rect(forSection: index)
+
+            // The "visible part" of the tableView is based on the content offset and the tableView's size.
+            let visiblePartOfTableView = CGRect(x: contentOffset.x,
+                                                y: contentOffset.y,
+                                                width: bounds.size.width,
+                                                height: bounds.size.height)
+
+            if visiblePartOfTableView.intersects(headerRect) {
+                visibleSectionIndexes.append(index)
+            }
+        }
+        return visibleSectionIndexes
+    }
+}
+
+// MARK: - NotificationThemeable
+extension PhotonActionSheet: NotificationThemeable {
+
     func applyTheme() {
-        if style == .popover {
+        if viewModel.presentationStyle == .popover {
             view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
         } else {
             tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
@@ -151,221 +474,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
         }
 
-        tintColor = UIColor.theme.actionMenu.foreground
+        viewModel.tintColor = UIColor.theme.actionMenu.foreground
         closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
         tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
-        
-        tableView.reloadData()
-    }
-
-    @objc func stopRotateSyncIcon() {
-        ensureMainThread {
-            self.tableView.reloadData()
-        }
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        tableView.removeObserver(self, forKeyPath: "contentSize")
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        tableView.bounces = false
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.keyboardDismissMode = .onDrag
-        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
-        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
-        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
-        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
-        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
-
-        tableView.isScrollEnabled = true
-        tableView.showsVerticalScrollIndicator = false
-        tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
-        // Don't show separators on ETP menu
-        if title != nil {
-            tableView.separatorStyle = .none
-        }
-        tableView.separatorColor = UIColor.clear
-        tableView.separatorInset = .zero
-        tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.accessibilityIdentifier = "Context Menu"
-
-        tableView.tableFooterView = UIView()
-
-        applyTheme()
-
-        DispatchQueue.main.async {
-            // Pick up the correct/final tableview.contentsize in order to set the height.
-            // Without async dispatch, the contentsize is wrong.
-            self.view.setNeedsLayout()
-        }
-    }
-
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if style == .popover {
-            self.preferredContentSize = tableView.contentSize
-        }
-    }
-    
-    // Nested tableview rows get additional height
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let section = actions[safe: indexPath.section], let action = section[safe: indexPath.row] {
-            if let custom = action.customHeight {
-                return custom(action)
-            }
-        }
-
-        return UITableView.automaticDimension
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        var frameHeight: CGFloat
-        frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-        let maxHeight = frameHeight - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
-        tableView.snp.makeConstraints { make in
-            heightConstraint?.deactivate()
-            // The height of the menu should be no more than 85 percent of the screen
-            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.90)).constraint
-        }
-    }
-
-    private func applyBackgroundBlur() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        if let screenshot = appDelegate.window?.screenshot() {
-            let blurredImage = screenshot.applyBlur(withRadius: 5,
-                                                    blurType: BOXFILTER,
-                                                    tintColor: UIColor.black.withAlphaComponent(0.2),
-                                                    saturationDeltaFactor: 1.8,
-                                                    maskImage: nil)
-            let imageView = UIImageView(image: blurredImage)
-            view.addSubview(imageView)
-        }
-    }
-
-    @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
-        self.dismiss(animated: true, completion: nil)
-    }
-
-    deinit {
-        tableView.dataSource = nil
-        tableView.delegate = nil
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        if self.traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
-            || self.traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
-            updateViewConstraints()
-        }
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        if tableView.frame.contains(touch.location(in: self.view)) {
-            return false
-        }
-        return true
-    }
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return actions.count
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return actions[section].count
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var action = actions[indexPath.section][indexPath.row]
-        guard let handler = action.tapHandler else {
-            self.dismiss(nil)
-            return
-        }
-        
-        // Switches can be toggled on/off without dismissing the menu
-        if action.accessory == .Switch {
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
-            action.isEnabled = !action.isEnabled
-            actions[indexPath.section][indexPath.row] = action
-            self.tableView.deselectRow(at: indexPath, animated: true)
-            self.tableView.reloadData()
-        } else {
-            action.isEnabled = !action.isEnabled
-            self.dismiss(nil)
-        }
-
-        return handler(action, self.tableView(tableView, cellForRowAt: indexPath))
-    }
-
-    func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
-        let action = actions[indexPath.section][indexPath.row]
-        cell.tintColor = self.tintColor
-        cell.configure(with: action)
-        
-        // For menus other than ETP, don't show top and bottom separator lines
-        if (title == nil) {
-            cell.bottomBorder.isHidden = !(indexPath != [tableView.numberOfSections - 1, tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1])
-        }
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            if site != nil {
-                return PhotonActionSheetUX.TitleHeaderSectionHeightWithSite
-            } else if title != nil {
-                return PhotonActionSheetUX.TitleHeaderSectionHeight
-            } else {
-                return 0
-            }
-        } else {
-            if site != nil || title != nil {
-                return PhotonActionSheetUX.SeparatorRowHeight
-            }
-        }
-
-        return PhotonActionSheetUX.SeparatorRowHeight
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let site = site {
-            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SiteHeaderName) as! PhotonActionSheetSiteHeaderView
-            header.tintColor = self.tintColor
-            header.configure(with: site)
-            return header
-        } else if let title = title {
-            if section > 0 {
-                return tableView.dequeueReusableHeaderFooterView(withIdentifier: "SeparatorSectionHeader")
-            } else {
-                let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
-                header.tintColor = self.tintColor
-                header.configure(with: title)
-                return header
-            }
-        }
-        else {
-            let view = UIView()
-            view.backgroundColor = UIColor.theme.tableView.separator
-            return view
-        }
     }
 }

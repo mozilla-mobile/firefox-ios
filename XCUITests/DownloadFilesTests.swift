@@ -125,8 +125,9 @@ class DownloadFilesTests: BaseTestCase {
         for _ in 0..<numberOfDownlowds {
             waitForExistence(app.webViews.links[testFileName], timeout: 5)
             app.webViews.links[testFileName].firstMatch.tap()
-            waitForExistence(app.tables["Context Menu"].cells["download"], timeout: 5)
-            app.tables["Context Menu"].cells["download"].tap()
+
+            waitForExistence(app.tables["Context Menu"].otherElements["download"], timeout: 5)
+            app.tables["Context Menu"].otherElements["download"].tap()
         }
     }
 

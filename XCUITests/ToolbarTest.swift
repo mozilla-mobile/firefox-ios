@@ -43,7 +43,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
-        XCTAssertTrue(app.buttons["TabLocationView.reloadButton"].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].isEnabled)
 
         navigator.openURL(website2)
         waitUntilPageLoad()
@@ -104,8 +104,8 @@ class ToolbarTests: BaseTestCase {
             navigator.openURL(website1["url"]!, waitForLoading: true)
             // Adding the waiter right after navigating to the webpage in order to make the test more stable
             waitUntilPageLoad()
-            waitForExistence(app.buttons["TabLocationView.pageOptionsButton"],timeout: 10)
-            let pageActionMenuButton = app.buttons["TabLocationView.pageOptionsButton"]
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],timeout: 10)
+            let pageActionMenuButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
             let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.firstMatch
             app.swipeUp()
             XCTAssertFalse(pageActionMenuButton.exists)
