@@ -29,7 +29,7 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
+        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.sync])
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         verifyFxASigninScreen()

@@ -10,7 +10,7 @@ class NewTabSettingsTest: BaseTestCase {
     func testCheckNewTabSettingsByDefault() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
@@ -23,7 +23,7 @@ class NewTabSettingsTest: BaseTestCase {
     func testChangeNewTabSettingsShowBlankPage() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
