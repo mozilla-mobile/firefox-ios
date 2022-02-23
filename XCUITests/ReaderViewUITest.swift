@@ -7,7 +7,7 @@ import XCTest
 class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testLoadReaderContent() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.goto(BrowserTab)
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         waitForExistence(app.buttons["Reader View"], timeout: 5)

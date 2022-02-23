@@ -6,7 +6,6 @@ import XCTest
 
 class FindInPageTests: BaseTestCase {
     private func openFindInPageFromMenu() {
-        navigator.goto(BrowserTab)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
@@ -37,8 +36,7 @@ class FindInPageTests: BaseTestCase {
 
     // Smoketest
     func testFindFromMenu() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         openFindInPageFromMenu()
 
         // Enter some text to start finding

@@ -58,7 +58,6 @@ class DownloadFilesTests: BaseTestCase {
     
     // Smoketest
     func testDownloadFile() {
-        navigator.nowAt(URLBarOpen)
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)

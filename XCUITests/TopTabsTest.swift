@@ -377,17 +377,19 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
         navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.goto(URLBarOpen)
         navigator.back()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
         navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
         navigator.goto(URLBarOpen)
