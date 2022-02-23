@@ -31,6 +31,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         button.addTarget(self,
                          action: #selector(self?.dismissAnimated),
                          for: .touchUpInside)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0,
+                                                left: 7.5,
+                                                bottom: 15,
+                                                right: 7.5)
     }
 
     private lazy var descriptionLabel: UILabel = .build { [weak self] label in
@@ -52,6 +56,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     private lazy var stackView: UIStackView = .build { [weak self] stack in
         stack.backgroundColor = .clear
+        stack.distribution = .fillProportionally
         stack.alignment = .leading
         stack.axis = .vertical
     }
@@ -74,6 +79,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     private var onViewSummoned: (() -> Void)? = nil
     var onViewDismissed: (() -> Void)? = nil
     private var onActionTapped: (() -> Void)? = nil
+    private var topContainerConstraint: NSLayoutConstraint?
+    private var bottomContainerConstraint: NSLayoutConstraint?
     
     var isPresenting: Bool = false
     
@@ -88,9 +95,9 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         case true:
             guard let titleLabel = actionButton.titleLabel else { fallthrough }
             let buttonHeight = titleLabel.heightForLabel(
-                descriptionLabel,
+                titleLabel,
                 width: containerView.frame.width - spacingWidth,
-                text: viewModel.hintType.descriptionText())
+                text: viewModel.hintType.buttonActionText())
         
             return buttonHeight + labelHeight + UX.labelTop + UX.labelBottom
             
@@ -173,27 +180,38 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor,
-                                             constant: UX.closeButtonTop),
+            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor),
             closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                   constant: -UX.closeButtonTrailing),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
 
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor,
-                                           constant: UX.labelTop),
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                constant: UX.labelLeading),
             stackView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
                                                 constant: -UX.labelTrailing),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                              constant: -UX.labelBottom),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             
+           
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.topAnchor.constraint(equalTo: view.topAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        topContainerConstraint = containerView.topAnchor.constraint(equalTo: view.topAnchor)
+        topContainerConstraint?.isActive = true
+        bottomContainerConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        bottomContainerConstraint?.isActive = true
+    }
+    
+    private func toggleArrowBasedConstraints(arrowDirection: UIPopoverArrowDirection = .down) {
+        let topPadding = arrowDirection == .up ? UX.labelBottom : UX.labelTop
+        let bottomPadding = arrowDirection == .up ? UX.labelTop : UX.labelBottom
+        
+        topContainerConstraint?.constant = topPadding
+        bottomContainerConstraint?.constant = -bottomPadding
+        
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
     
     private func setupContent() {
@@ -255,6 +273,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         self.onActionTapped = buttonAction
         viewModel.presentFromTimer = presentation
         
+        toggleArrowBasedConstraints(arrowDirection: arrowDirection)
         if !viewModel.hasAlreadyBeenPresented { viewModel.startTimer() }
     }
     
