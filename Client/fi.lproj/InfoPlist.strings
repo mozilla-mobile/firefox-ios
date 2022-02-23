@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Näin voit ottaa ja ladata kuvia.";
+"NSCameraUsageDescription" = "Firefox käyttää kameraasi skannatakseen QR-koodeja ja ottaakseen valokuvia ja videoita.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox vaatii Face ID:n, jotta voit käyttää tallennettuja kirjautumistietoja.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Vierailemasi sivustot voivat kysyä lupaa sijaintiisi.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Näin voit ottaa ja ladata videoita.";
+"NSMicrophoneUsageDescription" = "Firefox käyttää mikrofoniasi tallentamaan ja lähettämään ääntä.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Näin voit tallentaa kuvia.";

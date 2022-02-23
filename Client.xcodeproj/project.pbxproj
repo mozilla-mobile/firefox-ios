@@ -2729,6 +2729,12 @@
 		8A8DDEC127628A7E00E7B97A /* CronTabsPerfTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CronTabsPerfTests.swift; sourceTree = "<group>"; };
 		8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetContainerCell.swift; sourceTree = "<group>"; };
 		8A93080A27C01AD60052167D /* SingleActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleActionViewModel.swift; sourceTree = "<group>"; };
+		8A99DB9727C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = "is.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		8A99DB9827C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Today.strings; sourceTree = "<group>"; };
+		8A99DB9927C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
+		8A99DB9A27C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/BookmarkPanelDeleteConfirm.strings; sourceTree = "<group>"; };
+		8A99DB9B27C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
+		8A99DB9C27C6DD3E007EA6BD /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A9AC464276CEC4E0047F5B0 /* FxHomeHorizontalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeHorizontalCell.swift; sourceTree = "<group>"; };
 		8A9AC468276D10FD0047F5B0 /* FxHomePocketCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomePocketCollectionCell.swift; sourceTree = "<group>"; };
 		8A9AC46A276D11280047F5B0 /* FxHomePocketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomePocketViewModel.swift; sourceTree = "<group>"; };
@@ -9596,6 +9602,7 @@
 				D5E343802697613600A57583 /* bg */,
 				DF46B9A32755297000657F75 /* ne-NP */,
 				967AF169275FF4C70099E161 /* tt */,
+				8A99DB9827C6DD3E007EA6BD /* is */,
 			);
 			name = Today.strings;
 			sourceTree = "<group>";
@@ -10676,6 +10683,7 @@
 				43D72DB226FCE3550069BDE9 /* mr */,
 				433E0DEC26FCE37C00B78CC5 /* ne-NP */,
 				967AF15D275FF4C70099E161 /* tt */,
+				8A99DB9727C6DD3E007EA6BD /* is */,
 			);
 			name = "Default Browser.strings";
 			sourceTree = "<group>";
@@ -11144,6 +11152,7 @@
 				D594AB18269761C500F9B437 /* gd */,
 				DF46B9A42755297000657F75 /* ne-NP */,
 				967AF16A275FF4C70099E161 /* tt */,
+				8A99DB9927C6DD3E007EA6BD /* is */,
 			);
 			name = BookmarkPanel.strings;
 			sourceTree = "<group>";
@@ -11214,6 +11223,7 @@
 				D594AB1B269761C500F9B437 /* gd */,
 				DF46B9A72755297000657F75 /* ne-NP */,
 				967AF16D275FF4C70099E161 /* tt */,
+				8A99DB9C27C6DD3E007EA6BD /* is */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -11287,6 +11297,7 @@
 				D594AB19269761C500F9B437 /* gd */,
 				DF46B9A52755297000657F75 /* ne-NP */,
 				967AF16B275FF4C70099E161 /* tt */,
+				8A99DB9A27C6DD3E007EA6BD /* is */,
 			);
 			name = BookmarkPanelDeleteConfirm.strings;
 			sourceTree = "<group>";
@@ -11359,6 +11370,7 @@
 				D594AB1A269761C500F9B437 /* gd */,
 				DF46B9A62755297000657F75 /* ne-NP */,
 				967AF16C275FF4C70099E161 /* tt */,
+				8A99DB9B27C6DD3E007EA6BD /* is */,
 			);
 			name = WidgetIntents.intentdefinition;
 			sourceTree = "<group>";

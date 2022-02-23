@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Tai leidžia jums daryti ir išsiųsti nuotraukas.";
+"NSCameraUsageDescription" = "„Firefox“ naudoja jūsų kamerą QR kodų nuskaitymui, nuotraukų darymui, ir vaizdo įrašams.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Norint pasiekti jūsų įrašytus prisijungimus, „Firefox“ reikalingas „Face ID“.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Svetainės gali teirautis jūsų buvimo vietos.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Tai leidžia jums daryti ir išsiųsti vaizdo įrašus.";
+"NSMicrophoneUsageDescription" = "„Firefox“ naudoja jūsų mikrofoną garso įrašymui ir įkėlimui.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Tai jums leis įrašyti nuotraukas.";
