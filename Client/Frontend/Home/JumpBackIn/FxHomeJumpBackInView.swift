@@ -25,6 +25,10 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell, ReusableCell {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(FxHomeHorizontalCell.self, forCellWithReuseIdentifier: FxHomeHorizontalCell.cellIdentifier)
+        collectionView.contentInset = UIEdgeInsets(top: HistoryHighlightsCollectionCellUX.verticalPadding,
+                                                   left: HistoryHighlightsCollectionCellUX.horizontalPadding,
+                                                   bottom: HistoryHighlightsCollectionCellUX.verticalPadding,
+                                                   right: HistoryHighlightsCollectionCellUX.horizontalPadding)
 
         return collectionView
     }()
@@ -55,9 +59,9 @@ class FxHomeJumpBackInCollectionCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }

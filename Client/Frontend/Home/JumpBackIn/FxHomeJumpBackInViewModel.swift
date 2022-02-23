@@ -49,9 +49,9 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         if UIDevice.current.userInterfaceIdiom == .pad {
             return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
         } else if UIWindow.isLandscape {
-            return .fractionalWidth(1/2) // iPhone in landscape
+            return .fractionalWidth(0.475) // iPhone in landscape
         } else {
-            return .fractionalWidth(1) // iPhone in portrait
+            return .fractionalWidth(57/60) // iPhone in portrait
         }
     }
 
