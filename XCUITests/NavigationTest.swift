@@ -388,16 +388,18 @@ class NavigationTest: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
 
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.bookmarks].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.history].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.downloads].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.readingList].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.key].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.sync].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.noImageMode].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.nightMode].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.whatsNew].exists)
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.settings].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.bookmarks].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.history].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.downloads].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.key].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
+//        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.noImageMode].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.settings].exists)
+        // TODO: Add new options added [Customize home page, new tab, help]
+        // Customize home page, help and whatsNew are only there when we are on the homepage menu
     }
 
     // Smoketest

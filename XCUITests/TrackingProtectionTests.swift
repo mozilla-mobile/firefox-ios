@@ -25,17 +25,19 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
-        navigator.goto(BrowserTab)
+//        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
         // The lock icon should still be there
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
-        navigator.goto(BrowserTab)
+//        navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(BrowserTab)
+//        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM

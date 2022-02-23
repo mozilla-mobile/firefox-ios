@@ -316,7 +316,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.cells[ImageIdentifiers.pasteAndGo].firstMatch.tap()
+            menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
@@ -832,7 +832,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(BrowserTab) { screenState in
         makeURLBarAvailable(screenState)
-        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: PageOptionsMenu)
+//        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: PageOptionsMenu)
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
 
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], to: TrackingProtectionContextMenuDetails)
@@ -906,16 +906,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     // make sure after the menu action, navigator.nowAt() is used to set the current state
-    map.addScreenState(PageOptionsMenu) {screenState in
-        screenState.tap(app.tables["Context Menu"].cells[ImageIdentifiers.requestDesktopSite], to: RequestDesktopSite)
-        screenState.tap(app.tables["Context Menu"].cells[ImageIdentifiers.requestMobileSite], to: RequestMobileSite)
-        screenState.tap(app.tables["Context Menu"].cells[ImageIdentifiers.findInPage], to: FindInPage)
-        screenState.tap(app.tables["Context Menu"].cells[ImageIdentifiers.addToBookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
-        screenState.tap(app.tables.cells[ImageIdentifiers.addShortcut], forAction: Action.PinToTopSitesPAM)
-        screenState.tap(app.tables.cells[ImageIdentifiers.copyLink], forAction: Action.CopyAddressPAM)
-        screenState.backAction = cancelBackAction
-        screenState.dismissOnUse = true
-    }
+//    map.addScreenState(PageOptionsMenu) {screenState in
+//        screenState.tap(app.tables["Context Menu"].cells[ImageIdentifiers.requestDesktopSite], to: RequestDesktopSite)
+//        screenState.tap(app.tables["Context Menu"].cells[ImageIdentifiers.requestMobileSite], to: RequestMobileSite)
+//        screenState.tap(app.tables["Context Menu"].cells[ImageIdentifiers.findInPage], to: FindInPage)
+//        screenState.tap(app.tables["Context Menu"].cells[ImageIdentifiers.addToBookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
+//        screenState.tap(app.tables.cells[ImageIdentifiers.addShortcut], forAction: Action.PinToTopSitesPAM)
+//        screenState.tap(app.tables.cells[ImageIdentifiers.copyLink], forAction: Action.CopyAddressPAM)
+//        screenState.backAction = cancelBackAction
+//        screenState.dismissOnUse = true
+//    }
 
     map.addScreenState(FxAccountManagementPage) { screenState in
         screenState.backAction = navigationControllerBackAction
@@ -944,25 +944,35 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
-        screenState.tap(app.tables.cells[ImageIdentifiers.settings], to: SettingsScreen)
-        screenState.tap(app.tables.cells[ImageIdentifiers.sync], to: Intro_FxASignin, if: "fxaUsername == nil")
-        screenState.tap(app.tables.cells[ImageIdentifiers.key], to: LoginsSettings)
-        screenState.tap(app.tables.cells[ImageIdentifiers.bookmarks], to: LibraryPanel_Bookmarks)
-        screenState.tap(app.tables.cells[ImageIdentifiers.history], to: LibraryPanel_History)
-        screenState.tap(app.tables.cells[ImageIdentifiers.downloads], to: LibraryPanel_Downloads)
-        screenState.tap(app.tables.cells[ImageIdentifiers.readingList], to: LibraryPanel_ReadingList)
-        screenState.tap(app.tables.cells[ImageIdentifiers.placeholderAvatar], to: FxAccountManagementPage)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.settings], to: SettingsScreen)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.sync], to: Intro_FxASignin, if: "fxaUsername == nil")
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.key], to: LoginsSettings)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.bookmarks], to: LibraryPanel_Bookmarks)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.history], to: LibraryPanel_History)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.downloads], to: LibraryPanel_Downloads)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.readingList], to: LibraryPanel_ReadingList)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.placeholderAvatar], to: FxAccountManagementPage)
 
-        screenState.tap(app.tables.cells[ImageIdentifiers.noImageMode], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
-            userState.noImageMode = !userState.noImageMode
-        }
+//        screenState.tap(app.tables.otherElements[ImageIdentifiers.noImageMode], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
+//            userState.noImageMode = !userState.noImageMode
+//        }
 
-        screenState.tap(app.tables.cells[ImageIdentifiers.nightMode], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.nightMode], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
         }
 
-        screenState.tap(app.tables.cells[ImageIdentifiers.whatsNew], forAction: Action.OpenWhatsNewPage) { userState in
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.whatsNew], forAction: Action.OpenWhatsNewPage) { userState in
         }
+
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.requestDesktopSite], to: RequestDesktopSite)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.requestMobileSite], to: RequestMobileSite)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.findInPage], to: FindInPage)
+//        screenState.tap(app.tables["Context Menu"].otherElements[ImageIdentifiers.reportSiteIssue], to: ReportSiteIssue)
+
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.addShortcut], forAction: Action.PinToTopSitesPAM)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.copyLink], forAction: Action.CopyAddressPAM)
+
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.addToBookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
 
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction

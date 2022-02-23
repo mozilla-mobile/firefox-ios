@@ -203,7 +203,7 @@ class ActivityStreamTest: BaseTestCase {
         // Long tap on apple top site, second cell
         waitForExistence(app.cells["TopSitesCell"].cells["apple"], timeout: 3)
         app.cells["TopSitesCell"].cells["apple"].press(forDuration:1)
-        app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
+        app.tables["Context Menu"].cells.otherElements["Open in New Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
         XCTAssertFalse(app.staticTexts["Apple"].exists)
@@ -269,8 +269,8 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     private func selectOptionFromContextMenu(option: String) {
-        XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)
-        app.tables["Context Menu"].cells[option].tap()
+        XCTAssertTrue(app.tables["Context Menu"].cells.otherElements[option].exists)
+        app.tables["Context Menu"].cells.otherElements[option].tap()
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {

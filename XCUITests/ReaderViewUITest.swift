@@ -26,7 +26,7 @@ class ReaderViewTest: BaseTestCase {
     private func addContentToReaderView() {
         updateScreenGraph()
         userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         waitForExistence(app.buttons["Reader View"], timeout: 5)
         app.buttons["Reader View"].tap()

@@ -8,7 +8,9 @@ class FindInPageTests: BaseTestCase {
     private func openFindInPageFromMenu() {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
-        navigator.goto(PageOptionsMenu)
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+
         navigator.goto(FindInPage)
 
         waitForExistence(app.buttons["FindInPage.find_next"], timeout: 5)
@@ -35,6 +37,7 @@ class FindInPageTests: BaseTestCase {
 
     // Smoketest
     func testFindFromMenu() {
+        navigator.performAction(Action.CloseURLBarOpen)
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 

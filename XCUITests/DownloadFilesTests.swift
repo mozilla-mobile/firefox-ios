@@ -58,6 +58,7 @@ class DownloadFilesTests: BaseTestCase {
     
     // Smoketest
     func testDownloadFile() {
+        navigator.nowAt(URLBarOpen)
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -125,8 +126,9 @@ class DownloadFilesTests: BaseTestCase {
         for _ in 0..<numberOfDownlowds {
             waitForExistence(app.webViews.links[testFileName], timeout: 5)
             app.webViews.links[testFileName].firstMatch.tap()
-            waitForExistence(app.tables["Context Menu"].cells["download"], timeout: 5)
-            app.tables["Context Menu"].cells["download"].tap()
+
+            waitForExistence(app.tables["Context Menu"].otherElements["download"], timeout: 5)
+            app.tables["Context Menu"].otherElements["download"].tap()
         }
     }
 
