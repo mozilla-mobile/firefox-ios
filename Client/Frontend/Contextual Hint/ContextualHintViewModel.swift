@@ -113,7 +113,16 @@ class ContextualHintViewModel {
     }
     
     func startTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1.25,
+        var timeInterval: TimeInterval = 0
+        
+        switch hintType {
+        case .toolbarLocation: timeInterval = 0.5
+        default: timeInterval = 1.25
+        }
+        
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(timeInterval: timeInterval,
                                      target: self,
                                      selector: #selector(presentHint),
                                      userInfo: nil,
