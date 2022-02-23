@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "To wam zmóžnja, fotografować a fota nahrać.";
+"NSCameraUsageDescription" = "Firefox wašu kameru wužiwa, zo by QR-kody skenował a fota činił a wideja natočił.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox Face ID trjeba, zo by přistup k wašim składowanym přizjewjenjam měł.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Websydła, kotrež wopytujeće, snano waše stejnišćo žadaja.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "To wam zmóžnja, wideja natočić a nahrać.";
+"NSMicrophoneUsageDescription" = "Firefox waš mikrofon wužiwa, zo by awdio natočił a nahrał.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Z tym móžeće fota składować.";

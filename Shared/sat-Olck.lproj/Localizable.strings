@@ -149,6 +149,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "ᱵᱩᱩᱠᱢᱟᱨᱠ ᱠᱚ";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "ᱥᱮᱞᱮᱫᱽ ᱢᱮ";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "ᱡᱷᱚᱛᱚ ᱴᱮᱵᱽ ᱵᱩᱠᱢᱟᱨᱠ ᱢᱮ…";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "ᱱᱤᱛᱚᱜᱟᱜ ᱴᱮᱵᱽ ᱪᱤᱱᱦᱟᱹ ᱠᱟᱜ ᱢᱮ";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "ᱥᱟᱯᱲᱟᱣ";
 
@@ -167,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "ᱯᱚᱴᱚᱢ ᱧᱩᱛᱩᱢ";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "ᱰᱮᱥᱠᱴᱚᱯ ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "ᱱᱤᱛᱚᱜᱼᱟᱜ ᱪᱤᱱᱦᱟᱹᱟᱜ ᱠᱚ";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "ᱱᱟᱶᱟ ᱵᱩᱠᱢᱟᱨᱠ";
 
@@ -176,6 +191,9 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "ᱱᱟᱶᱟ ᱵᱷᱮᱜᱟᱨᱟᱜ";
 
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
+
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "ᱧᱩᱛᱩᱢ";
 
@@ -183,7 +201,7 @@
 "Bookmarks.URL.Label" = "URL";
 
 /* Status label for the empty Bookmarks state. */
-"BookmarksPanel.EmptyState.Title" = "ᱟᱢ ᱡᱟ ᱵᱩᱠᱢᱟᱨᱠ ᱥᱟᱸᱪᱟᱣᱟᱢ ᱚᱱᱟ ᱫᱚ ᱱᱚᱸᱲᱮ ᱩᱫᱩᱜᱚᱣᱟ᱾";
+"BookmarksPanel.EmptyState.Title" = "ᱟᱢ ᱡᱟ ᱵᱩᱠᱢᱟᱨᱠ ᱥᱟᱧᱪᱟᱣᱟᱢ ᱚᱱᱟ ᱫᱚ ᱱᱚᱸᱲᱮ ᱩᱫᱩᱜᱚᱣᱟ᱾";
 
 /* Describes the date on which the breach occurred */
 "BreachAlerts.BreachDate" = "ᱱᱚᱶᱟ ᱨᱚᱯᱩᱫ ᱦᱚᱭ ᱠᱟᱱᱟ";
@@ -264,10 +282,28 @@
 "ContextMenu.OpenLinkInNewTabButtonTitle" = "ᱱᱟᱶᱟ ᱴᱮᱵ ᱨᱮ ᱡᱷᱤᱡᱽ ᱢᱮ";
 
 /* Context menu item for saving an image */
-"ContextMenu.SaveImageButtonTitle" = "ᱪᱤᱛᱟᱹᱨ ᱥᱟᱸᱪᱟᱣ ᱢᱮ";
+"ContextMenu.SaveImageButtonTitle" = "ᱪᱤᱛᱟᱹᱨ ᱥᱟᱧᱪᱟᱣ ᱢᱮ";
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ᱞᱤᱸᱠ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱢᱮ";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱟᱢ ᱦᱟᱹᱛᱤᱭᱟᱨ ᱵᱟᱨ ᱞᱟᱛᱟᱨ ᱥᱮᱫ ᱩᱪᱟᱹᱲ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ, ᱢᱮᱱᱠᱷᱟᱱ ᱡᱤᱱᱤᱥ ᱟᱫᱮᱨ ᱟᱞᱜᱟᱜᱼᱟ ᱾";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "ᱡᱤᱱᱤᱥ ᱟᱫᱮᱨ ᱟᱞᱜᱟ ᱛᱮᱭᱟᱨ ᱞᱟᱹᱜᱤᱫ, ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ ᱫᱚ ᱢᱩᱞ ᱦᱤᱥᱟᱹᱵᱽ ᱛᱮ ᱞᱟᱛᱟᱨ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "ᱟᱢᱟᱜ ᱢᱚᱱᱮᱛᱮᱭᱟᱜ Firefox ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱫᱚ ᱱᱤᱛᱚᱜ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱲᱟᱜ ᱠᱟᱜᱼᱟᱢ ᱚᱱᱰᱮ ᱜᱮ ᱤᱫᱤ ᱢᱮᱭᱟᱭ ᱾ ᱟᱢᱟᱜ ᱱᱤᱛᱚᱜᱟᱜ ᱴᱮᱵᱽ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ ᱟᱨ ᱥᱮᱸᱫᱽᱨᱟ ᱠᱚ ᱯᱟᱱᱛᱮ ᱛᱟᱢ ᱾";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ ᱨᱮᱭᱟᱜ ᱥᱟᱡᱟᱣ ᱠᱚ";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "ᱟᱢᱟᱜ ᱴᱮᱵ ᱚᱠᱟ ᱫᱚ ᱵᱟᱨ ᱦᱟᱴ ᱫᱷᱟᱹᱵᱤᱡ ᱵᱟᱝ ᱧᱮᱞ ᱠᱟᱱᱟ ᱚᱱᱟ ᱫᱚ ᱱᱚᱰᱮ ᱩᱪᱟᱹᱲᱚᱜᱼᱟ ᱾";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱟᱦᱴᱟ ᱵᱟᱞᱮ ᱥᱮᱞᱮᱫ ᱫᱟᱲᱤᱭᱟᱫᱟ";
@@ -406,6 +442,15 @@
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱠᱩᱥᱤᱛᱮ ᱫᱚᱦᱚᱭ ᱢᱮ";
 
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "ᱟᱨᱦᱚᱸ ᱯᱟᱱᱛᱮ ᱧᱟᱢ ᱢᱮ";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "ᱢᱚᱱᱮᱼᱜᱷᱟᱱᱴᱟ ᱠᱟᱹᱦᱱᱤ ᱠᱚ";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "ᱚᱪᱚᱜᱽ ᱢᱮ";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ᱢᱟᱲᱟᱝ";
 
@@ -452,7 +497,7 @@
 "fxa.signin.camera-signin" = "ᱟᱢᱟᱜ ᱠᱮᱢᱮᱨᱟ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
 
 /* FxA sign in create account label. */
-"fxa.signin.create-account-pt-1" = "ᱢᱤᱫᱽᱴᱟᱹᱝ ᱠᱷᱟᱛᱟ ᱛᱮ ᱥᱟᱫᱽᱷᱚᱱ ᱵᱷᱤᱛᱨᱭ ᱨᱮ Firefox ᱥᱭᱸᱠ ᱢᱮ ᱾ ";
+"fxa.signin.create-account-pt-1" = "ᱢᱤᱫᱽᱴᱟᱹᱝ ᱠᱷᱟᱛᱟ ᱛᱮ ᱥᱟᱫᱽᱷᱚᱱ ᱵᱷᱤᱛᱨᱭ ᱨᱮ Firefox ᱥᱭᱝᱠ ᱢᱮ ᱾ ";
 
 /* FxA sign in create account label. This will be linked to the site to create an account. */
 "fxa.signin.create-account-pt-2" = "Firefox ᱠᱷᱟᱛᱟ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾";
@@ -501,6 +546,9 @@
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ Firefox ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱷᱚᱱ";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel" = "Firefox ᱪᱤᱱᱦᱟᱹᱯ, ᱠᱟᱸᱛᱷᱥᱟᱦᱴᱟ, ᱵᱩᱛᱟᱹᱢ ᱵᱚᱫᱚᱞ ᱢᱮ";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "ᱟᱢᱟᱜ ᱡᱷᱤᱡ ᱟᱠᱟᱱ ᱴᱮᱵ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱟᱨ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱠᱚ ᱟᱢᱟᱜ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱧᱟᱢ ᱢᱮ ᱾";
@@ -634,11 +682,101 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ᱛᱟᱭᱚᱢ ᱴᱮᱵ ᱩᱫᱩᱜ";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "ᱟᱡ ᱛᱮ ᱵᱚᱸᱫ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱪᱟᱸᱫᱚ ᱨᱮ ᱵᱟᱝ ᱠᱷᱩᱞᱟᱹ ᱠᱟᱱ ᱴᱮᱵ ᱠᱚ Firefox ᱵᱚᱸᱫᱟᱭ ᱾";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "ᱢᱤᱫ ᱪᱟᱸᱫᱚ ᱛᱟᱭᱚᱢ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱽ ᱟᱢ ᱥᱮ?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "ᱵᱟᱝ ᱮᱠᱴᱤᱵᱷ ᱴᱮᱵᱽ ᱠᱚ ᱵᱚᱸᱫᱚᱭ ᱢᱮ";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "ᱚᱱᱚᱞ ᱢᱟᱨᱟᱲᱛᱮᱛ ᱵᱚᱲᱛᱤ ᱢᱮ";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "ᱱᱤᱛᱚᱠ ᱜᱮ";
+
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "ᱴᱷᱤᱠ ᱢᱟᱨᱟᱝ ᱛᱮᱫ";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "ᱵᱩᱠᱢᱟᱨᱠ ᱥᱟᱯᱲᱟᱣ";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "ᱱᱤᱛᱚᱜᱼᱟᱜ ᱱᱟᱜᱟᱢ ᱯᱷᱟᱨᱪᱟᱭ ᱢᱮ...";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "ᱰᱟᱩᱱᱞᱚᱰ ᱞᱤᱝᱠ";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "ᱫᱚᱦᱲᱟ ᱧᱟᱢ";
+
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "ᱱᱟᱶᱟ ᱥᱟᱫᱷᱟᱨᱚᱬ ᱴᱚᱵᱽ";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "ᱩᱯᱨᱩᱢ ᱨᱮ ᱞᱤᱝᱠ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "ᱱᱟᱶᱟ ᱴᱮᱵ ᱨᱮ ᱡᱷᱤᱡᱽ ᱢᱮ";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "ᱞᱮᱠᱟ ᱥᱟᱦᱴᱟ ᱥᱟᱺᱪᱟᱣ...";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "ᱥᱟᱯᱲᱟᱣ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "ᱨᱮᱫ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "ᱱᱟᱜᱟᱢ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱠᱚ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "ᱧᱮᱞ ᱢᱮ";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "ᱡᱷᱚᱨᱠᱟ";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "ᱥᱟᱡᱟᱣ ᱠᱚ";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "ᱰᱟᱩᱱᱞᱚᱰ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "ᱯᱩᱭᱞᱩ ᱴᱮᱵᱽ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "ᱱᱟᱜᱟᱢᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "ᱢᱩᱪᱟᱹᱫ ᱴᱮᱵᱽ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "ᱴᱮᱵᱽ ᱮᱞ 1-9 ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "ᱵᱚᱸᱫ ᱴᱮᱵᱽ ᱨᱩᱟᱹᱲ ᱟᱹᱜᱩᱭ ᱢᱮ";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "ᱢᱟᱨᱟᱝ ᱛᱮᱭᱟᱨ";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "ᱦᱤᱲᱤᱧ ᱛᱮᱭᱟᱨ";
 
 /* History tableview section header */
 "Last month" = "ᱛᱟᱭᱚᱢ ᱪᱟᱸᱫᱚ";
@@ -648,6 +786,15 @@
 
 /* History tableview section header */
 "Last week" = "ᱛᱟᱭᱚᱢ ᱦᱟᱴ";
+
+/* In the history panel, this placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder" = "ᱥᱮᱸᱫᱽᱨᱟ ᱱᱟᱜᱟᱢ ᱠᱚ";
+
+/* In the history panel, this label indicates that tapping on this item will navigate the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedHistory" = "ᱢᱮᱲᱟᱣ ᱠᱟᱱ ᱱᱟᱜᱟᱢ";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "ᱢᱟᱨᱮᱭᱟᱜ";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "ᱞᱟᱤᱥᱮᱸᱥ ᱠᱚ";
@@ -670,11 +817,26 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
 
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "ᱵᱚᱞᱚ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱠᱚ ᱥᱟᱺᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ, ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱥᱟᱺᱪᱟᱣ ᱢᱮ ᱾";
+
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "ᱞᱟᱦᱟᱜ ᱢᱮ";
 
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "ᱟᱢᱟᱜ ᱵᱚᱞᱚ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱠᱚ ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱛᱮ ᱱᱤᱛᱚᱜ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱮᱱᱟ ᱾";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Firefox ᱨᱮᱭᱟᱜ AutoFill ᱡᱤᱱᱤᱥ ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ, ᱟᱢ ᱫᱚ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱮᱢ ᱪᱷᱚ ᱞᱟᱹᱠᱛᱤ ᱜᱮ ᱠᱟᱱᱟ ᱾";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱡᱟᱦᱟᱸ ᱨᱮᱜᱮ ᱤᱫᱤ ᱛᱟᱢ";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Firefox  ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ AutoFill";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "AutoFill ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ";
@@ -686,16 +848,16 @@
 "LoginsDetailView.LoginTitle" = "ᱵᱚᱞᱚ ᱢᱮ";
 
 /* Button to not save the user's password */
-"LoginsHelper.DontSave.Button" = "ᱟᱞᱚᱢ ᱥᱟᱸᱪᱟᱣ-ᱟ";
+"LoginsHelper.DontSave.Button" = "ᱟᱞᱚᱢ ᱥᱟᱧᱪᱟᱣ-ᱟ";
 
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "ᱟᱞᱚᱢ ᱦᱟᱞᱤᱭᱟᱠ-ᱟ";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "%2$@ ᱞᱟᱹᱜᱤᱫ %1$@ ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱸᱪᱟᱣ ᱢᱮ?";
+"LoginsHelper.PromptSaveLogin.Title" = "%2$@ ᱞᱟᱹᱜᱤᱫ %1$@ ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱢᱮ?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "%@ ᱞᱟᱹᱜᱤᱛ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱥᱟᱸᱪᱟᱣ ᱢᱮ?";
+"LoginsHelper.PromptSavePassword.Title" = "%@ ᱞᱟᱹᱜᱤᱛ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱥᱟᱧᱪᱟᱣ ᱢᱮ?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ ᱞᱟᱹᱜᱤᱛ ᱵᱚᱞᱚ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱢᱮ?";
@@ -704,7 +866,7 @@
 "LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ ᱞᱟᱹᱜᱤᱫ %1$@ ᱵᱚᱞᱚ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ?";
 
 /* Button to save the user's password */
-"LoginsHelper.SaveLogin.Button" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱸᱪᱟᱣ";
+"LoginsHelper.SaveLogin.Button" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ";
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "ᱦᱟᱹᱞᱤᱭᱟᱹᱠ";
@@ -743,7 +905,7 @@
 "LoginsList.SelectPassword.Title" = "ᱯᱩᱨᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱵᱟᱪᱷᱟᱣ ᱢᱮ";
 
 /* Title for the list of logins */
-"LoginsList.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱸᱪᱟᱣ";
+"LoginsList.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ";
 
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ᱡᱟᱦᱟ ᱵᱩᱡᱷᱟᱣᱩᱜ ᱠᱟᱱᱟ Firefox ᱢᱟᱲᱟᱝ ᱨᱟᱹᱯᱩᱫ ᱞᱮᱱᱟ ᱾ ᱟᱢ ᱴᱮᱵᱥ ᱠᱚ ᱫᱩᱦᱲᱟᱹ ᱫᱚᱦᱚ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?";
@@ -979,6 +1141,28 @@
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "ᱯᱟᱱᱛᱮᱭᱟᱜ ᱮᱦᱚᱵ ᱢᱮ";
 
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱡᱟᱦᱟᱸ ᱨᱮ ᱢᱟᱲᱟᱝ ᱛᱟᱦᱮᱸ ᱠᱟᱱᱟᱢ ᱱᱚᱰᱮ ᱠᱷᱚᱱ ᱥᱟᱵ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "ᱠᱷᱩᱞᱟᱹ ᱠᱟᱱ ᱴᱮᱵᱽ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱟᱨ ᱦᱤᱛᱟᱹᱞ ᱵᱨᱟᱩᱡᱽ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ ᱾";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "ᱟᱢᱟᱜ ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ ᱱᱤᱛᱚᱜᱟᱜ ᱥᱮᱸᱫᱽᱨᱟ ᱛᱮ ᱫᱩᱦᱲᱟᱹ ᱪᱟᱞᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱾";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "ᱱᱤᱛᱚᱜᱟᱜ ᱥᱮᱸᱫᱽᱨᱟ ᱠᱚ";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "ᱚᱱᱟ ᱠᱚ ᱥᱟᱦᱴᱟ ᱠᱷᱚᱱ ᱜᱮ ᱥᱮᱸᱫᱽᱨᱟ ᱠᱚ ᱫᱳᱞᱚᱜᱼᱟ ᱾";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "ᱪᱚᱨᱚᱠ ᱴᱮᱵᱽ ᱫᱳᱞ ᱠᱚ";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "%s ᱨᱮ ᱪᱮᱫ ᱱᱟᱶᱟ ᱢᱮᱱᱟᱜ-ᱟ";
+
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "ᱚᱦᱟᱭ! Firefox ᱨᱚᱯᱩᱫᱮᱱᱟ";
 
@@ -1016,7 +1200,7 @@
 "PasswordAutoFill.SectionTitle" = "Firefox ᱧᱩᱛᱩᱢ ᱦᱟᱨ";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ᱱᱚᱶᱟ ᱟᱢᱟᱜ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱠᱮᱢᱨᱟ ᱨᱚᱞᱞ ᱨᱮ ᱥᱟᱸᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱛᱟᱣᱟ ᱾";
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ᱱᱚᱶᱟ ᱟᱢᱟᱜ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱠᱮᱢᱨᱟ ᱨᱚᱞᱞ ᱨᱮ ᱥᱟᱧᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱛᱟᱣᱟ ᱾";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ᱟᱢᱟᱠ ᱪᱤᱛᱚᱨ ᱠᱚ ᱟᱹᱛᱩᱨ ᱥᱟᱱᱟᱭ ᱤ ᱠᱟᱱᱟ";
@@ -1038,6 +1222,9 @@
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "ᱞᱚᱜᱚᱱ-ᱯᱟᱱᱛᱮ ᱤᱸᱡᱤᱱ ᱠᱚ";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "ᱮᱯ ᱜᱚᱫᱟᱢ ᱨᱮ ᱫᱚᱨ ᱮᱢᱚᱜ ᱢᱮ";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "ᱯᱟᱲᱦᱟᱣ ᱢᱮ";
@@ -1088,7 +1275,7 @@
 "Sans-serif" = "Sans-serif";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱟᱸᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱨᱮᱰᱟᱹᱨ ᱧᱮᱞ ᱠᱚᱱᱨᱚᱞ ᱨᱮ ᱯᱚᱛᱚᱵ ᱯᱞᱚᱥ ᱟᱭᱠᱚᱱ ᱚᱛᱟᱭ ᱢᱮ ᱾";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱟᱧᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱨᱮᱰᱟᱹᱨ ᱧᱮᱞ ᱠᱚᱱᱨᱚᱞ ᱨᱮ ᱯᱚᱛᱚᱵ ᱯᱞᱚᱥ ᱟᱭᱠᱚᱱ ᱚᱛᱟᱭ ᱢᱮ ᱾";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "ᱴᱷᱤᱠ";
@@ -1238,7 +1425,7 @@
 "Settings.AddCustomEngine" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱸᱡᱤᱱ ᱥᱮᱞᱮᱫ ᱢᱮ";
 
 /* The text on the Save button when saving a custom search engine */
-"Settings.AddCustomEngine.SaveButtonText" = "ᱥᱟᱸᱪᱟᱣ ᱢᱮ";
+"Settings.AddCustomEngine.SaveButtonText" = "ᱥᱟᱧᱪᱟᱣ ᱢᱮ";
 
 /* The title of the  Custom Search Engine view. */
 "Settings.AddCustomEngine.Title" = "ᱥᱮᱸᱫᱽᱨᱟ ᱤᱸᱡᱤᱱ ᱥᱮᱞᱮᱫ ᱢᱮ";
@@ -1361,6 +1548,78 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ᱥᱟᱫᱷᱟᱨᱚᱱ";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description" = "Firefox ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ ᱨᱮ ᱡᱟᱦᱟ ᱧᱮᱞ ᱥᱮᱱᱟᱮᱫ ᱢᱮᱭᱟ ᱚᱱᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "ᱦᱮᱡ ᱨᱩᱟᱹᱲᱚᱜ ᱢᱮ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "ᱯᱚᱠᱮᱴ ᱵᱟᱛᱟᱣ ᱟᱠᱟᱫ ᱡᱤᱱᱤᱥ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "ᱱᱤᱛ ᱥᱟᱺᱪᱟᱣᱟᱜ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "ᱦᱟᱹᱞᱤ ᱨᱮ ᱦᱤᱨᱤᱭᱟᱠᱟᱱᱟ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "ᱯᱩᱱ ᱴᱟᱲᱟᱝ ᱵᱤᱱᱟᱹ ᱠᱟᱹᱢᱤ ᱞᱟᱦᱟ ᱨᱮ ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Firefox ᱨᱮ ᱫᱩᱦᱲᱟᱹ ᱦᱟᱹᱡᱩᱜ ᱡᱷᱚᱜ ᱵᱟᱪᱷᱟᱣᱢᱮ ᱪᱮᱫ ᱧᱮᱞ ᱥᱮᱱᱟᱮᱫ ᱢᱮᱭᱟ ᱾";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "ᱢᱩᱪᱟᱹᱫ ᱴᱮᱵᱽ";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "ᱠᱷᱩᱞᱟᱹᱜ ᱠᱟᱱ ᱥᱠᱨᱤᱱ";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "Firefox ᱚᱲᱟᱜ ᱥᱟᱦᱟᱴᱟ";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱞᱤᱞ ᱱᱟᱹᱢᱩᱱᱟ, ᱵᱩᱛᱟᱹᱢ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱚᱱᱟᱡᱽ ᱱᱟᱹᱢᱩᱱᱟ, ᱵᱩᱛᱟᱹᱢ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper" = "ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱵᱩᱛᱟᱹᱢ ᱢᱩᱞ ᱯᱷᱟᱨᱪᱟ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱵᱮᱲᱟ ᱨᱟᱠᱟᱵ ᱢᱟᱲᱟᱝ ᱱᱟᱹᱢᱩᱱᱟ, ᱵᱩᱛᱟᱹᱢ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱞᱟᱴᱷᱟᱪᱤᱛᱟᱹᱨ ᱪᱚᱠᱨᱚ ᱩᱪᱟᱹᱲ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "ᱯᱚᱨᱫᱟ ᱠᱷᱩᱞᱟᱹᱜ ᱠᱟᱱᱟ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string describing the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchDescription" = "ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ ᱵᱤᱱᱟᱹ ᱟᱲᱟᱜ ᱠᱟᱛᱮ ᱫᱩᱦᱲᱟᱹ ᱪᱟᱞᱟᱜ ᱟᱨ ᱪᱤᱛᱟᱹᱨ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱢᱮ ᱾";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ ᱵᱚᱫᱚᱞ ᱞᱟᱹᱜᱤᱫ ᱞᱚᱜᱚ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱮᱱᱟ !";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "ᱧᱮᱞ";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "ᱯᱷᱟᱨᱪᱟ";
 
@@ -1467,7 +1726,7 @@
 "Settings.OpenWith.SectionName" = "ᱢᱮᱞ ᱮᱯ";
 
 /* Setting to enable the built-in password manager */
-"Settings.SaveLogins.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱸᱪᱟᱣ";
+"Settings.SaveLogins.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "ᱦᱩᱭᱮᱱᱟ";
@@ -1532,8 +1791,26 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "ᱯᱟᱲᱦᱟᱣ ᱠᱚ";
 
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "ᱵᱟᱝ ᱩᱥᱨᱟᱹᱣ ᱴᱮᱵᱽᱥ";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "ᱴᱮᱵᱽ ᱫᱳᱞ ᱠᱚ";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "ᱴᱮᱵᱽ ᱴᱨᱮᱭ ᱢᱚᱱᱮ ᱦᱤᱥᱟᱹᱵ ᱵᱚᱫᱚᱞ";
+
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "ᱴᱮᱵᱽ ᱠᱚ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "ᱞᱟᱛᱟᱨ";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "ᱪᱮᱛᱟᱱ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ᱴᱷᱤᱠ, ᱭᱟᱢᱮᱱᱟ";
@@ -1702,7 +1979,7 @@
 "Sync.FirstTimeMessage.Label" = "ᱟᱢᱟᱠ ᱯᱟᱦᱤᱞ ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱤᱪᱷᱩ ᱥᱚᱢᱚᱭ ᱦᱟᱛᱟᱣᱟᱭ";
 
 /* String displayed on Sign In to Sync page that allows the user to create a new account. */
-"Sync.NoAccount.Description" = "ᱚᱠᱟ ᱠᱷᱟᱛᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ? ᱥᱟᱫᱷᱚᱱ ᱵᱷᱤᱛᱨᱭ ᱨᱮ Firefox ᱥᱭᱸᱠ ᱞᱟᱹᱜᱤᱫᱽ ᱱᱟᱶᱟ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾";
+"Sync.NoAccount.Description" = "ᱚᱠᱟ ᱠᱷᱟᱛᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ? ᱥᱟᱫᱷᱚᱱ ᱵᱷᱤᱛᱨᱭ ᱨᱮ Firefox ᱥᱭᱝᱠ ᱞᱟᱹᱜᱤᱫᱽ ᱱᱟᱶᱟ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
 "Sync.Syncing.Label" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ";
@@ -1744,7 +2021,7 @@
 "Tab %@ of %@" = "%2$@ ᱠᱷᱚᱱ %1$@ ᱴᱮᱵ";
 
 /* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"Tab.ShowTabTray.KeyCodeTitle" = "ᱡᱚᱛᱚ ᱴᱮᱵ ᱠᱚ ᱩᱫᱩᱜ";
+"Tab.ShowTabTray.KeyCodeTitle" = "ᱡᱚᱛᱚ ᱴᱮᱵᱽ ᱠᱚ ᱩᱫᱩᱜᱽ ᱢᱮ";
 
 /* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "%3$@ ᱠᱷᱚᱱ ᱠᱚ %1$@ ᱠᱷᱚᱱ %2$@ ᱴᱮᱵ";

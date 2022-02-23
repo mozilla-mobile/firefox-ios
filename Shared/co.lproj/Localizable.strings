@@ -234,7 +234,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "Apre";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "Apre u liame cupiatu ?";
+"ClipboardToast.GoToCopiedLink.Title" = "Apre u liame cupiatu ?";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "Chjode";
@@ -300,7 +300,7 @@
 "Could not add page to Reading list" = "Ùn si pò micca aghjunghje a pagina à a lista di lettura";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Ùn si pò micca aghjunghje a pagina à a lista di lettura. Forse si ci trovà dighjà ?";
+"Could not add page to Reading List. Maybe it’s already there?" = "Ùn si pò micca aghjunghje a pagina à a lista di lettura. Forse si ci trovà dighjà ?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Ùn si pò micca caricà a pagina.";
@@ -353,7 +353,7 @@
 "Downloads.CancelDialog.Cancel" = "Abbandunà";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "Site sicuru di vulè abbandunà stu scaricamentu ?";
+"Downloads.CancelDialog.Message" = "Vulete veramente abbandunà stu scaricamentu ?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Ripiglià";
@@ -437,7 +437,7 @@
 "Forward" = "Pagina seguente";
 
 /* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Indirizzu elettronicu gattivu ? Disghjunghjiteci quì sottu per riprincipià.";
+"FxA.AccountVerificationDetails" = "Indirizzu elettronicu gattivu ? Disghjunghjiteci quì sottu per riprincipià.";
 
 /* Label stating your account is not verified */
 "FxA.AccountVerificationRequired" = "Verificazione di contu richiesta";
@@ -569,7 +569,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "U vostru contu deve esse verificatu.";
 
 /* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Vulete vede quì e vostre unghjette di l’altri apparechji ?";
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Vulete vede quì e vostre unghjette di l’altri apparechji ?";
 
 /* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Attivate a sincrunizazione di l’unghjette per affissà a lista di l’unghjette di i vostri altri apparechji.";
@@ -602,7 +602,7 @@
 "HomePage.Set.Dialog.OK" = "Definisce cum’è pagina d’accolta";
 
 /* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Vulete impiegà stu situ web cum’è pagina d’accolta ?";
+"HomePage.Set.Dialog.Title" = "Vulete impiegà stu situ web cum’è pagina d’accolta ?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Indittà sta pagina";
@@ -694,6 +694,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Circà torna";
 
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "Nova unghjetta nurmale";
+
 /* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.OpenLinkInBackground" = "Apre u liame in tacca di fondu";
 
@@ -745,6 +748,9 @@
 /* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowTabNumber" = "Affissa l’unghjetta nᵘ 1-9";
 
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Riapre l’unghjetta chjosa";
+
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Ingrandamentu";
 
@@ -759,6 +765,9 @@
 
 /* History tableview section header */
 "Last week" = "A settimana scorsa";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Più vechju";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Licenze";
@@ -818,16 +827,16 @@
 "LoginsHelper.DontUpdate.Button" = "Ùn mudificà micca";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Arregistrà l’identificazione di cunnessione %1$@ per %2$@ ?";
+"LoginsHelper.PromptSaveLogin.Title" = "Arregistrà l’identificazione di cunnessione %1$@ per %2$@ ?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Arregistrà a parolla d’intesa per %@ ?";
+"LoginsHelper.PromptSavePassword.Title" = "Arregistrà a parolla d’intesa per %@ ?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Mudificà l’identificazione di cunnessione per %@ ?";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Mudificà l’identificazione di cunnessione per %@ ?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Mudificà l’identificazione di cunnessione %1$@ per %2$@ ?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Mudificà l’identificazione di cunnessione %1$@ per %2$@ ?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Arregistrà l’identificazione di cunnessione";
@@ -872,7 +881,7 @@
 "LoginsList.Title" = "IDENTIFICAZIONI DI CUNNESSIONE ARREGISTRATE";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Pare chì Firefox s’hè lampatu. Vulete risturà e vostre unghjette ?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Pare chì Firefox s’hè lampatu. Vulete risturà e vostre unghjette ?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -970,7 +979,7 @@
 "Menu.RemoveBookmark.Confirm" = "Indetta cacciata";
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Caccià da i siti principale";
+"Menu.RemovePin.Confirm" = "Cacciatu da i siti principale";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2" = "Cacciatu da l’accurtatoghji";
@@ -1274,7 +1283,7 @@
 "Search.ThirdPartyEngines.AddSuccess" = "U mutore di ricerca hè statu aghjuntu.";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Aghjunghje u mutore di ricerca ?";
+"Search.ThirdPartyEngines.AddTitle" = "Aghjunghje u mutore di ricerca ?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Abbandunà";
@@ -1307,7 +1316,7 @@
 "Secure connection" = "Cunnessione assicurizata";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu di u penseru per chì Mozilla possa currege u penseru ?";
+"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu di u penseru per chì Mozilla possa currege u penseru ?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Dà u mo avisu";
@@ -1446,7 +1455,7 @@
 "Settings.Disconnect.DestructiveButton" = "Disghjunghje";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Disghjunghjessi di Sync ?";
+"Settings.Disconnect.Title" = "Disghjunghjessi di Sync ?";
 
 /* Section header for brightness slider. */
 "Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Sogliu";
@@ -1526,9 +1535,6 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "Visitati pocu fà";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "Ricerche recente";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Accurtatoghji";
@@ -2075,7 +2081,7 @@
 "TranslationToastHandler.PromptTranslate.OK" = "Iè";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "Sta pagina pare esse in %1$@. Traducella in %2$@ cù %3$@ ?";
+"TranslationToastHandler.PromptTranslate.Title" = "Sta pagina pare esse in %1$@. Traducella in %2$@ cù %3$@ ?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
