@@ -4,6 +4,13 @@
 
 import Foundation
 
+/** NOTE:
+ Strings with the following IDs may be removed after confirming with Product:
+ - `ActivityStream.Pocket.SectionTitle`      --> replaced by `FirefoxHome.Pocket.SectionTitle`
+ - `ActivityStream.Pocket.SectionTitle2`    --> replaced by `FirefoxHome.Pocket.SectionTitle`
+ - `AppMenuShowImageMode`
+ */
+
 // MARK: - Localization bundle setup
 class BundleClass {}
 
@@ -423,11 +430,6 @@ extension String {
 
 // MARK: - Activity Stream
 extension String {
-    /** NOTE:
-     Strings with the following IDs may be removed after confirming with Product:
-     - `ActivityStream.Pocket.SectionTitle`      --> replaced by `FirefoxHome.Pocket.SectionTitle`
-     - `ActivityStream.Pocket.SectionTitle2`    --> replaced by `FirefoxHome.Pocket.SectionTitle`
-     */
     public static let ASPocketTitle = MZLocalizedString("ActivityStream.Pocket.SectionTitle", value: "Trending on Pocket", comment: "Section title label for Recommended by Pocket section", lastUpdated: .unknown)
     public static let ASPocketTitle2 = MZLocalizedString("ActivityStream.Pocket.SectionTitle2", value: "Recommended by Pocket", comment: "Section title label for Recommended by Pocket section", lastUpdated: .unknown)
     public static let ASTopSitesTitle =  MZLocalizedString("ActivityStream.TopSites.SectionTitle", value: "Top Sites", comment: "Section title label for Top Sites", lastUpdated: .unknown)

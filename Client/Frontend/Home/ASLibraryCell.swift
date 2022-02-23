@@ -17,16 +17,16 @@ class ASLibraryCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
     var libraryButtons: [LibraryShortcutView] = []
 
     let bookmarks = LibraryPanel(title: .AppMenuBookmarksTitleString,
-                                 image: UIImage.templateImageNamed("menu-Bookmark"),
+                                 image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark),
                                  color: UIColor.Photon.Blue40)
     let history = LibraryPanel(title: .AppMenuHistoryTitleString,
-                               image: UIImage.templateImageNamed("menu-panel-History"),
+                               image: UIImage.templateImageNamed(ImageIdentifiers.history),
                                color: UIColor.Photon.Violet50)
     let readingList = LibraryPanel(title: .AppMenuReadingListTitleString,
-                                   image: UIImage.templateImageNamed("menu-panel-ReadingList"),
+                                   image: UIImage.templateImageNamed(ImageIdentifiers.readingList),
                                    color: UIColor.Photon.Pink40)
     let downloads = LibraryPanel(title: .AppMenuDownloadsTitleString,
-                                 image: UIImage.templateImageNamed("menu-panel-Downloads"),
+                                 image: UIImage.templateImageNamed(ImageIdentifiers.downloads),
                                  color: UIColor.Photon.Green60)
 
     override init(frame: CGRect) {

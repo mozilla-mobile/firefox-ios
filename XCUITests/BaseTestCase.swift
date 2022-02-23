@@ -104,7 +104,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields["url"].press(forDuration: 2.0)
-        app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
+        app.tables["Context Menu"].cells[ImageIdentifiers.pasteAndGo].firstMatch.tap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
