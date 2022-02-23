@@ -21,7 +21,7 @@ class RatingPromptManagerTests: XCTestCase {
         super.setUp()
 
         urlOpenerSpy = URLOpenerSpy()
-        mockProfile = MockProfile()
+        mockProfile = MockProfile(databasePrefix: "ratingPromptManager")
         mockProfile._reopen()
 
         // Make sure engine is set to Google
