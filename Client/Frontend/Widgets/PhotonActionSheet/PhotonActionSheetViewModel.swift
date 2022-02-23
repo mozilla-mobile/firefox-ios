@@ -7,6 +7,7 @@ import UIKit
 
 class PhotonActionSheetViewModel {
 
+    // MARK: - Properties
     var actions: [[PhotonRowActions]]
     var modalStyle: UIModalPresentationStyle
 
@@ -39,6 +40,7 @@ class PhotonActionSheetViewModel {
         }
     }
 
+    // MARK: - Initializers
     init(actions: [[PhotonRowActions]],
          site: Site? = nil,
          modalStyle: UIModalPresentationStyle) {
@@ -67,15 +69,16 @@ class PhotonActionSheetViewModel {
     /// The toolbar menu can be a very long menu and it has to scroll most of the times.
     /// One of the design requirements is that the long menu is opened to see the last item first.
     /// Since tableviews shows the first row by default, we inverse the menu to show last item first.
-    /// This avoid us having to call Apple's API to scroll the tableview (with scrollToRow or with setContentOffset)
-    /// which was causing an unwanted content size change (and menu apparation was wonky).
+    /// This avoid us having to call Apple's API to scroll the tableview (with scrollToRow or
+    /// with setContentOffset) which was causing an unwanted content size change (and 
+    /// menu apparation was wonky).
     var toolbarMenuInversed: Bool = false
     func setToolbarMenuStyle() {
         guard toolbarMenuInversed else { return }
 
-        // Inverse database
-        actions = actions.map { $0.reversed() }
-        actions.reverse()
+        // Inverse database. The database is made up of multidimensional arrays, so multiple
+        // reverse actions are required.
+        actions = actions.map { $0.reversed() }.reverse()
 
         // Flip cells
         actions.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
@@ -177,7 +180,7 @@ class PhotonActionSheetViewModel {
         let bottomInset = isTopToolbarMenu ? PhotonActionSheetUX.Spacing : PhotonActionSheetUX.BigSpacing
 
         // Save available space so we can calculate the needed menu height later on
-        let buttonSpace = isTopToolbarMenu ? convertedPoint.y + view.frame.height : viewControllerHeight - convertedPoint.y - view.frame.height
+        let buttonSpace = isTopToolbarMenu ? (convertedPoint.y + view.frame.height) : (viewControllerHeight - convertedPoint.y - view.frame.height)
         availableToolbarMenuHeight = viewControllerHeight - buttonSpace - bottomInset - topInset - viewController.view.safeAreaInsets.top
 
         return UIEdgeInsets(top: topInset,

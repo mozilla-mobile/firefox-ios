@@ -5,6 +5,8 @@
 import Foundation
 
 /// This struct defines all the image identifiers of icons and images used in the app.
+/// When adding new identifiers, please respect alphabetical order.
+/// Sing the song if you must.
 public struct ImageIdentifiers {
     public static let addToBookmark = "menu-Bookmark"
     public static let addToReadingList = "addToReadingList"
