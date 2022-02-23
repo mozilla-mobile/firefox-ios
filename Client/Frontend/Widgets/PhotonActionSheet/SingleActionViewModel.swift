@@ -23,6 +23,8 @@ struct PhotonRowActions {
 
 // MARK: - SingleActionViewModel
 class SingleActionViewModel {
+
+    // MARK: - Properties
     private(set) var text: String?
     private(set) var iconString: String?
     private(set) var iconURL: URL?

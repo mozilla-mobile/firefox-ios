@@ -39,6 +39,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     private var item: SingleActionViewModel?
     weak var delegate: PhotonActionSheetViewDelegate?
 
+    // MARK: - UI Elements
+    // TODO: Needs refactoring using the `.build` style. All PhotonActionSheetViews should be tested at that point.
     private func createLabel() -> UILabel {
         let label = UILabel()
         label.setContentHuggingPriority(.required, for: .vertical)
@@ -117,7 +119,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     lazy var bottomBorder: UIView = .build { _ in }
     lazy var verticalBorder: UIView = .build { _ in }
 
-    // MARK: - init
+    // MARK: - Initializers
 
     override init(frame: CGRect) {
         self.isSelected = false
@@ -175,7 +177,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
             return
         }
 
-        isSelected = gestureRecognizer?.state == .began || gestureRecognizer?.state == .changed
+        isSelected = (gestureRecognizer?.state == .began) || (gestureRecognizer?.state == .changed)
 
         item.isEnabled = !item.isEnabled
         handler(item)
@@ -288,21 +290,17 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         addSubview(bottomBorder)
 
-        var constraints = [NSLayoutConstraint]()
         // Determine if border should be at top or bottom when flipping
         let top = bottomBorder.topAnchor.constraint(equalTo: topAnchor)
         let bottom = bottomBorder.bottomAnchor.constraint(equalTo: bottomAnchor)
         let anchor = action.isFlipped ? top : bottom
 
-        let borderConstraints = [
+        NSLayoutConstraint.activate([
             anchor,
             bottomBorder.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomBorder.trailingAnchor.constraint(equalTo: trailingAnchor),
             bottomBorder.heightAnchor.constraint(equalToConstant: 1)
-        ]
-        constraints.append(contentsOf: borderConstraints)
-
-        NSLayoutConstraint.activate(constraints)
+        ])
     }
 
     private func setupActionName(action: SingleActionViewModel, name: String) {
