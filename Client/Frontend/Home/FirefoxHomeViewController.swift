@@ -148,7 +148,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     fileprivate let flowLayout = UICollectionViewFlowLayout()
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
-    fileprivate var contextualHintTimer: Timer?
     fileprivate var isZeroSearch: Bool
     fileprivate var wallpaperManager: WallpaperManager
     private var viewModel: FirefoxHomeViewModel
@@ -223,8 +222,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     deinit {
-        contextualHintTimer?.invalidate()
-        contextualHintTimer = nil
+        contextualHintViewController.stopTimer()
     }
 
     // MARK: - View lifecycle
@@ -283,7 +281,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        contextualHintTimer?.invalidate()
+        contextualHintViewController.stopTimer()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -357,42 +355,23 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
     
     // MARK: - Contextual hint
-    private func prepareJumpBackInContextualHint(_ indexPath: IndexPath, onView headerView: ASHeaderView) {
+    private func prepareJumpBackInContextualHint(onView headerView: ASHeaderView) {
         guard contextualHintViewController.shouldPresentHint() else { return }
 
         contextualHintViewController.configure(
             anchor: headerView.titleLabel,
             withArrowDirection: .down,
             andDelegate: self,
-            withActionBeforeAppearing: {
-                self.contextualHintPresented()
-            },
-            andActionForButton: {
-                self.openTabsSettings()
-            })
-        
-        // Using a timer for the first presentation of contextual hint due to many
-        // reloads that happen on the collection view. Invalidating the timer
-        // prevents from showing contextual hint at the wrong position.
-        contextualHintTimer?.invalidate()
-        if !contextualHintViewController.hasAlreadyBeenPresented {
-            contextualHintPresentTimer()
-        }
-    }
-
-    private func contextualHintPresentTimer() {
-        contextualHintTimer = Timer.scheduledTimer(timeInterval: 1.25,
-                                                   target: self,
-                                                   selector: #selector(presentContextualHint),
-                                                   userInfo: nil,
-                                                   repeats: false)
+            presentedUsing: { self.presentContextualHint() },
+            withActionBeforeAppearing: { self.contextualHintPresented() },
+            andActionForButton: { self.openTabsSettings() })
     }
 
     @objc private func presentContextualHint() {
         guard BrowserViewController.foregroundBVC().searchController == nil,
               presentedViewController == nil
         else {
-            contextualHintTimer?.invalidate()
+            contextualHintViewController.stopTimer()
             return
         }
         
@@ -479,7 +458,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
                 headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
                 headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
-                prepareJumpBackInContextualHint(indexPath, onView: headerView)
+                prepareJumpBackInContextualHint(onView: headerView)
 
                 return headerView
 

@@ -77,10 +77,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     var isPresenting: Bool = false
     
-    var hasAlreadyBeenPresented: Bool {
-        return viewModel.hasAlreadyBeenPresented
-    }
-    
     private var popupContentHeight: CGFloat {
         let spacingWidth = UX.labelLeading + UX.closeButtonSize.width + UX.closeButtonTrailing
         let labelHeight = descriptionLabel.heightForLabel(
@@ -249,6 +245,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         actionOnDismiss postAction: (() -> Void)? = nil,
         andActionForButton buttonAction: (() -> Void)? = nil
     ) {
+        stopTimer()
         self.modalPresentationStyle = .popover
         self.popoverPresentationController?.sourceView = anchor
         self.popoverPresentationController?.permittedArrowDirections = arrowDirection
@@ -256,12 +253,9 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         self.onViewSummoned = preAction
         self.onViewDismissed = postAction
         self.onActionTapped = buttonAction
-        
         viewModel.presentFromTimer = presentation
-    }
-    
-    public func startTimer() {
-        viewModel.startTimer()
+        
+        if !viewModel.hasAlreadyBeenPresented { viewModel.startTimer() }
     }
     
     public func stopTimer() {
