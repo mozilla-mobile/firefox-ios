@@ -13,8 +13,8 @@ final class RatingPromptManager {
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter
 
-    private var hasMinimumBookmarksCount = false
-    private let minimumBookmarksCount = 5
+    private var hasMinimumMobileBookmarksCount = false
+    private let minimumMobileBookmarksCount = 5
 
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
 
@@ -103,7 +103,7 @@ final class RatingPromptManager {
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
         let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) == .strict
         guard isBrowserDefault
-                || hasMinimumBookmarksCount
+                || hasMinimumMobileBookmarksCount
                 || hasTPStrict
         else { return false }
 
@@ -128,11 +128,19 @@ final class RatingPromptManager {
 
     private func updateBookmarksCount(group: DispatchGroup) {
         group.enter()
-        profile.places.getRecentBookmarks(limit: UInt(minimumBookmarksCount)).uponQueue(dataQueue, block: { [weak self] result in
-            guard let strongSelf = self, let bookmarks = result.successValue else { return }
-            strongSelf.hasMinimumBookmarksCount = bookmarks.count >= strongSelf.minimumBookmarksCount
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { [weak self] result in
+            guard let strongSelf = self,
+                  let mobileFolder = result.successValue as? BookmarkFolderData,
+                  let children = mobileFolder.children
+            else {
+                group.leave()
+                return
+            }
+
+            let bookmarksCounts = children.compactMap { $0.type == .bookmark }.count
+            strongSelf.hasMinimumMobileBookmarksCount = bookmarksCounts >= strongSelf.minimumMobileBookmarksCount
             group.leave()
-        })
+        }
     }
 
     private var hasRequestedInTheLastTwoWeeks: Bool {
