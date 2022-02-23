@@ -1,0 +1,486 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "ⴰⴱ";
+
+/* The link that shows more Pocket trending stories */
+"ActivityStream.Pocket.MoreLink" = "ⵓⴳⴳⴰⵔ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ⵔⵏⵓ ⴰⵙⴽⵙⵍ";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ⵡⴰⵅⵅⴰ";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ⴰⵏⵙⴰ ⴷ ⵓⵔⵣⵣⵓ";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ⵜⵜⴰⵣⵏ ⴱⴷⴷⴰ";
+
+/* Tile title for Amazon */
+"Amazon" = "ⴰⵎⴰⵥⵓⵏ";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "ⴰⵖⵓⵍ";
+
+/* The header title for the fields when editing a Folder */
+"Bookmark.BookmarkDetail.FieldsHeader.Folder.Title" = "ⴰⵙⴷⴰⵡ";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "ⴰⵣⵡⵍ";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "ⵙⵏⴼⵍ ⴰⵙⴷⴰⵡ";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "ⴰⵙⴷⴰⵡ";
+
+/* The label for the location of the new folder */
+"Bookmarks.FolderLocation.Label" = "ⴰⴷⵖⴰⵔ";
+
+/* The label for the title of the new folder */
+"Bookmarks.FolderName.Label" = "ⵉⵙⵎ ⵏ ⵓⵙⴷⴰⵡ";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "ⴰⵙⴷⴰⵡ ⴰⵎⴰⵢⵏⵓ";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "ⴰⵣⵡⵍ";
+
+/* The label for the URL of a bookmark */
+"Bookmarks.URL.Label" = "URL";
+
+/* Label for Cancel button */
+"Cancel" = "ⵙⵔ";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ⴰⵔ ⵉⵙⵏⴼⴰⵍ ⴰⵏⴰⵡ ⵏ ⵜⵙⵉⵙⴽⵍⵜ.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "ⴷⴷⵓ";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ⵔⴳⵍ";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ⴰⵔⴳⴳⵍ ⵏ ⵓⵙⴽⵙⵍ";
+
+/* The button text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "ⵎⵎⵓⵜⵜⵢ";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ⵎⵎⵓⵜⵜⵢ";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "ⵙⵙⵏⵖⵍ ⴰⵙⵖⵏ";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "ⴰⴳⵎ ⴰⵙⵖⵏ";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "ⵕⵥⵎ ⴳ ⵓⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "ⵃⴹⵓ ⴰⵡⵍⴰⴼ";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "ⴱⴹⵓ ⴰⵙⵖⵏ";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ⵙⵏⴼⵍⵓⵍ ⴰⵎⵉⴹⴰⵏ";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "ⴰⴷ ⵓⵔ ⵜⴰⵣⵏⴷ";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "ⵉⵜⵜⵓⵙⴽⵔ";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "ⴰⴳⵎ ⴷⵖⵉⴽⴽ";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "ⵙⵔ";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "ⵉⵙ ⵏⵉⵜ ⵜⵅⵙⵎ ⴰⴷ ⵜⵙⵔⵎ ⴰⴳⴰⵎ ⴰ?";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "ⵙⵔ ⴰⴳⴰⵎ";
+
+/* The button to retry a failed download from the Download Failed toast. */
+"Downloads.Toast.Failed.RetryButton" = "ⴰⵍⵙ ⴰⵔⵎ";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "ⵜⴰⴳⴰⵎⵉⵏ";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 ⵙⴳ %d ⵉⴼⵓⵢⵍⴰ";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "ⴽⴽⵙ";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "ⴱⴹⵓ";
+
+/* Tile title for Facebook */
+"Facebook" = "ⴼⵉⵙⴱⵓⴽ";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "ⵜⴰⵙⵏⴰ ⵏ ⵓⵙⵏⵓⴱⴳ ⵏ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "ⴰⵎⵉⴹⴰⵏ ⵏ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "ⵙⵡⵓⴷⴷⵓ ⴰⵎⵉⴹⴰⵏ ⴷ ⵡⴰⵍⵍⴰⵍⵏ";
+
+/* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
+"FxA.RemoveAccount" = "ⵙⵉⵜⵜⵢ";
+
+/* Description string for alert view that gets presented when user tries to remove an account. */
+"FxA.RemoveAccountAlertMessage" = "ⵙⵉⵜⵜⵢⴰⵜ ⴰⵎⵉⴹⴰⵏ ⵏ ⴼⴰⵢⵔⴼⵓⴽⵙ ⵉⵎⵓⵏⵏ ⴰⴽⴷ ⵡⴰⵍⵍⴰⵍ ⴰ ⴰⴼⴰⴷ ⴰⴷ ⵜⴽⵛⵎⵎ ⴰⵎ ⴽⵔⴰ ⵏ ⵓⵏⵙⵙⵎⵔⵙ ⵢⴰⴹⵏ.";
+
+/* Remove account alert is the final confirmation before user removes their firefox account */
+"FxA.RemoveAccountAlertTitle" = "ⵙⵉⵜⵜⵢ ⴰⵎⵉⴹⴰⵏ";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "ⴳ ⵓⵎⵙⵙⵓⴷⵙ ⵏⵏⵓⵏ, ⵕⵥⵎⴰⵜ ⴼⴰⵢⵔⴼⵓⴽⵙ, ⵜⴷⴷⵓⵎ ⵖⵔ firefox.com/pair";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ⵜⵉⵡⵉⵙⵉ";
+
+/* Toggle history syncing setting */
+"History" = "ⴰⵎⵣⵔⵓⵢ";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "ⵙⴼⴹ ⴰⵎⵣⵔⵓⵢ ⴰⵎⴳⴳⴰⵔⵓ…";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "ⵜⴰⵙⵔⴰⴳⵜ ⵉⵣⵔⵢⵏ";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "ⴰⵙⵙⴰ";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "ⴰⵙⵎⵢⴰⴽⵓⴷ ⵏ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "ⴰⵎⵣⵔⵓⵢ";
+
+/* Title for the Synced Tabs Cell in the History Panel */
+"HistoryPanel.SyncedTabsCell.Title" = "ⴰⵍⵍⴰⵍⵏ ⵎⵢⴰⴽⵓⴷⵏⵉⵏ";
+
+/* Button cancelling changes setting the home page for the first time. */
+"HomePage.Set.Dialog.Cancel" = "ⵙⵔ";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "ⴽⴽⵙ ⵙⴳ ⵓⵎⵣⵔⵓⵢ";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "ⵙⵉⵜⵜⵢ";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "ⴱⴹⵓ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ⵔⴳⵍ ⴰⵙⴽⵙⵍ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "ⴰⴼ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "ⴰⵙⴽⵙⵍ ⵓⵙⵍⵉⴳ ⴰⵎⴰⵢⵏⵓ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ⵖⴰⵙ ⴷⵖⵉⴽⴽ";
+
+/* History tableview section header */
+"Last month" = "ⴰⵢⵢⵓⵔ ⵉⵣⵔⵢⵏ";
+
+/* History tableview section header */
+"Last week" = "ⵉⵎⴰⵍⴰⵙⵙ ⵉⵣⵔⵢⵏ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "ⴰⵣⴷⴰⵎ ⵏ ⵜⵓⵎⴰⵢⵜ…";
+
+/* Authentication prompt log in button */
+"Log in" = "ⴽⵛⵎ";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ⴰⴷ ⵓⵔ ⵜⵃⴹⵓⴷ";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "ⴰⴷ ⵓⵔ ⵜⵙⴷⵖⵉⴷ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "ⵙⴷⵖⵉ";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "ⵕⵛⵎ ⴰⵎ ⵉⵜⵜⵓⵖⵔⴰ";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ⵕⵛⵎ ⴰⵎ ⵓⵔ ⵉⵜⵜⵓⵖⵔⴰ";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "ⵙⵙⵏⵖⵍ ⴰⵏⵙⴰ";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "ⵙⵍⵖ";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "ⵙⵍⵖ, ⵜⴷⴷⵓⴷ";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ";
+
+/* Restore Tabs Negative Action */
+"No" = "ⵓⵀⵓ";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ⵡⴰⵍⵓ ⵉⵙⴽⵙⴰⵍ";
+
+/* OK button */
+"OK" = "ⵡⴰⵅⵅⴰ";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ⵡⴰⵅⵅⴰ";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "ⵕⵥⵎ ⵜⵉⵙⵖⴰⵍ";
+
+/* Password textbox in Authentication prompt */
+"Password" = "ⵜⴰⴳⵓⵔⵉ ⵏ ⵓⵣⵔⴰⵢ";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "ⵔⴳⵍ";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "ⵜⴰⵙⵔⵜⵉⵜ ⵏ ⵜⵉⵏⵏⵓⵜⵍⴰ";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "ⵙⵉⵜⵜⵢ";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "ⵙⵔ";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "ⵡⴰⵅⵅⴰ";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "ⵙⵔ";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ⵡⴰⵅⵅⴰ";
+
+/* Button title for cancelling share screen
+   Close button in top navigation bar */
+"SendTo.Cancel.Button" = "ⵙⵔ";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "ⴰⵍⵍⴰⵍⵏ ⵙⴰⴳⴰⵏⵉⵏ:";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ⵡⴰⵅⵅⴰ";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "ⴰⵣⵏ ⴰⵙⴽⵙⵍ";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "ⴰⵣⵏ";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "ⵙⴽⵏ";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "ⵃⴹⵓ";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "ⴰⵣⵡⵍ";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "ⴰⵙⵡⵓⴷⴷⵓ ⵏ ⵉⵙⴼⴽⴰ";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "ⵙⵔ";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "ⴽⴽⵙ ⴰⵣⴷⴰⵢ";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "ⴰⵡⴼⵓⵙ";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "ⵙ ⵓⵡⴼⵓⵙ";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled.
+   Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "ⵙ ⵓⵡⵔⵎⴰⵏ";
+
+/* DNT Settings option for always on */
+"Settings.DNT.OptionAlwaysOn" = "ⴱⴷⴷⴰ";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "ⵜⵉⵙⵖⴰⵍ ⵏ ⵓⵙⵎⵢⴰⴽⵓⴷ";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "ⴰⵎⵉⴹⴰⵏ ⵏ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Button in settings to clear the home page. */
+"Settings.HomePage.Clear.Button" = "ⵙⴼⴹ";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "ⵜⴰⵙⵏⴰ ⵏ ⵓⵙⵏⵓⴱⴳ ⵏ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Option in settings to show history when you open a new tab */
+"Settings.NewTab.Option.History" = "ⴰⵎⵣⵔⵓⵢ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "ⵜⴰⵙⵏⴰ ⵏ ⵓⵙⵏⵓⴱⴳ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "ⵙⵎⴰⵍ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "ⵉⵜⵜⵓⵙⴽⵔ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "ⵙⵏⴼⵍ";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "ⵙⵙⵏ ⵓⴳⴳⴰⵔ.";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "ⵕⵥⵎ ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "ⵙⵙⵏ ⵓⴳⴳⴰⵔ";
+
+/* Button to delete website in search results */
+"Settings.WebsiteData.ButtonDelete" = "ⴽⴽⵙ";
+
+/* Button to exit edit website search results */
+"Settings.WebsiteData.ButtonDone" = "ⵉⵜⵜⵓⵙⴽⵔ";
+
+/* Button to edit website search results */
+"Settings.WebsiteData.ButtonEdit" = "ⵙⵏⴼⵍ";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "ⵙⵎⴰⵍ ⵓⴳⴳⴰⵔ";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "ⴰⵣⴷⴰⵎ ⴳ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "ⵕⵥⵎ ⴳ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "ⵔⵣⵓ ⴳ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "ⵙⵎⴰⵍ ⵉⵙⴽⵙⴰⵍ";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "ⵙⴱⴷⴷ";
+
+/* Message displayed when the user's account is syncing with no ellipsis */
+"Sync.Syncing.Label" = "ⴰⵎⵢⴰⴽⵓⴷ";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "ⴰⵎⵢⴰⴽⵓⴷ…";
+
+/* The History sync component, used in SyncState.Partial.Title */
+"SyncState.History.Title" = "ⴰⵎⵣⵔⵓⵢ";
+
+/* The Tabs sync component, used in SyncState.Partial.Title */
+"SyncState.Tabs.Title" = "ⵉⵙⴽⵙⴰⵍ";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "ⴰⵙⴽⵙⵍ %1$@ ⵙⴳ %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "ⵉⵙⴽⵙⴰⵍ %1$@ ⴰⵔ %2$@ ⵙⴳ %3$@";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "ⵜⵜⵓⵔⴳⵍⵏ %d ⵉⵙⴽⵙⴰⵍ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "ⵔⵏⵓ ⴰⵙⴽⵙⵍ";
+
+/* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "ⵔⴳⵍ ⵉⵙⴽⵙⴰⵍ ⴰⴽⴽⵯ";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "ⵓⵔ ⴷ ⴷⵖⵉⴽⴽ";
+
+/* History tableview section header */
+"Today" = "ⴰⵙⵙⴰ";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "ⵔⴳⵍ ⵉⵙⴽⵙⴰⵍ ⴰⴽⴽⵯ";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "ⵙⵉⵜⵜⵢ ⵜⴰⵙⵏⴰ — %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "ⵓⵀⵓ";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "ⵢⴰⵀ";
+
+/* Tile title for Twitter */
+"Twitter" = "ⵜⵡⵉⵜⵜⵔ";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "ⵙⵍⵖ, ⵜⴷⴷⵓⴷ";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "ⵔⵣⵓ ⵙ ⴼⴰⵢⵔⴼⵓⴽⵙ";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ⵓⵔ ⵉⵜⵜⵓⵖⵔⴰ";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "ⵜⴰⵍⵇⵇⵎⵜ %1$@ (%2$@)";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "ⵡⵉⴽⵉⴱⵉⴷⵢⴰ";
+
+/* Relative date for yesterday. */
+"yesterday" = "ⴰⵙⵙⵏⵏⴰⴹ";
+
+/* History tableview section header */
+"Yesterday" = "ⴰⵙⵙⵏⵏⴰⴹ";
+
+/* Tile title for YouTube */
+"YouTube" = "ⵢⵓⵜⵓⴱ";
+
