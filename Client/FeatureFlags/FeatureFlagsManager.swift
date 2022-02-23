@@ -193,7 +193,7 @@ class FeatureFlagsManager {
 
         let wallpapers = FlaggableFeature(withID: .wallpapers,
                                           and: profile,
-                                          enabledFor: [.beta, .developer])
+                                          enabledFor: [.release, .beta, .developer])
         features[.wallpapers] = wallpapers
     }
 }
