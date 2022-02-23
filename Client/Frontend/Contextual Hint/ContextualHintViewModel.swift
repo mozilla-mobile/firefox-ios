@@ -61,7 +61,7 @@ class ContextualHintViewModel {
     private var profile: Profile
     private var hasSentDismissEvent = false
     
-    private var hasAlreadyBeenPresented: Bool {
+    var hasAlreadyBeenPresented: Bool {
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
             return false
         }
