@@ -67,8 +67,8 @@ protocol HomePanelDelegate: AnyObject {
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
-    func homePanelDidRequestToCustomizeHomeSettings()
-    func homePanelDidPresentContextualHint(type: ContextualHintViewType)
+    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
+    func homePanelDidPresentContextualHintOf(type: ContextualHintViewType)
 }
 
 extension HomePanelDelegate {
@@ -188,7 +188,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate,
                                               experiments: experiments)
-        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn, with: viewModel.profile)
+        let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
+                                                          with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
 
         super.init(collectionViewLayout: flowLayout)
@@ -359,12 +360,15 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     private func prepareJumpBackInContextualHint(_ indexPath: IndexPath, onView headerView: ASHeaderView) {
         guard contextualHintViewController.shouldPresentHint() else { return }
 
-        contextualHintViewController.set(
+        contextualHintViewController.configure(
             anchor: headerView.titleLabel,
             withArrowDirection: .down,
             andDelegate: self,
             withActionBeforeAppearing: {
-                self.homePanelDelegate?.homePanelDidPresentContextualHint(type: .jumpBackIn)
+                self.contextualHintPresented()
+            },
+            andActionForButton: {
+                self.openTabsSettings()
             })
         
         // Using a timer for the first presentation of contextual hint due to many
@@ -722,7 +726,10 @@ extension FirefoxHomeViewController {
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
-        customizeHomeCell.goToSettingsButton.addTarget(self, action: #selector(openCustomizeHomeSettings), for: .touchUpInside)
+        customizeHomeCell.goToSettingsButton.addTarget(
+            self,
+            action: #selector(openCustomizeHomeSettings),
+            for: .touchUpInside)
         customizeHomeCell.setNeedsLayout()
 
         return customizeHomeCell
@@ -1001,11 +1008,19 @@ extension FirefoxHomeViewController {
     }
 
     @objc func openCustomizeHomeSettings() {
-        homePanelDelegate?.homePanelDidRequestToCustomizeHomeSettings()
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeHomepage)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
+    }
+    
+    @objc func contextualHintPresented() {
+        self.homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
+    }
+    
+    @objc func openTabsSettings() {
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
     }
 
     @objc func changeHomepageWallpaper() {
@@ -1183,3 +1198,4 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
         return true
     }
 }
+

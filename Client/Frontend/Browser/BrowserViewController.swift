@@ -1426,12 +1426,12 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func showCustomizeHomeSettings() {
+    func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
         let settingsTableViewController = AppSettingsTableViewController()
         settingsTableViewController.profile = self.profile
         settingsTableViewController.tabManager = self.tabManager
         settingsTableViewController.settingsDelegate = self
-        settingsTableViewController.deeplinkTo = .customizeHomepage
+        settingsTableViewController.deeplinkTo = destination
 
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
@@ -1732,12 +1732,15 @@ extension BrowserViewController: HomePanelDelegate {
         showTabTray(withFocusOnUnselectedTab: tabToFocus)
     }
 
-    func homePanelDidRequestToCustomizeHomeSettings() {
-        showCustomizeHomeSettings()
+    func homePanelDidPresentContextualHintOf(type: ContextualHintViewType) {
+        switch type {
+        case .jumpBackIn: self.urlBar.leaveOverlayMode()
+        default: break
+        }
     }
-
-    func homePanelDidPresentContextualHint(type: ContextualHintViewType) {
-        urlBar.leaveOverlayMode()
+    
+    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
+        showSettingsWithDeeplink(to: settingsPage)
     }
 }
 
@@ -2503,3 +2506,4 @@ extension BrowserViewController {
         return (UIApplication.shared.delegate as! AppDelegate).browserViewController
     }
 }
+

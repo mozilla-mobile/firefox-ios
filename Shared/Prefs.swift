@@ -45,6 +45,8 @@ public struct PrefsKeys {
     // Firefox contextual hint
     public struct ContextualHints {
         public static let JumpBackinKey = "ContextualHintJumpBackin"
+        public static let InactiveTabsKey = "ContextualHintInactiveTabs"
+        public static let ToolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
     }
 
     // Activity Stream

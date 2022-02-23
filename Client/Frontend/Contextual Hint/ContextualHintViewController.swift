@@ -11,6 +11,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
         static let closeButtonTrailing: CGFloat = 5
+        static let closeButtonTop: CGFloat = 5
         
         static let labelLeading: CGFloat = 16
         static let labelTop: CGFloat = 10
@@ -42,13 +43,17 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
     
     private lazy var actionButton: UIButton = .build { [weak self] button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 28)
         button.titleLabel?.textAlignment = .left
-        button.titleLabel?.textColor = .white
         button.titleLabel?.numberOfLines = 0
         button.addTarget(self,
                          action: #selector(self?.performAction),
                          for: .touchUpInside)
+    }
+    
+    private lazy var stackView: UIStackView = .build { [weak self] stack in
+        stack.backgroundColor = .clear
+        stack.alignment = .leading
+        stack.axis = .vertical
     }
     
     private lazy var gradient: CAGradientLayer = {
@@ -64,21 +69,38 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         return gradient
     }()
     
-    var heightForDescriptionLabel: CGFloat {
-        let spacingWidth = UX.labelLeading + UX.closeButtonSize.width + UX.closeButtonTrailing
-        let height = descriptionLabel.heightForLabel(descriptionLabel,
-                                                     width: containerView.frame.width - spacingWidth,
-                                                     text: viewModel.hintType.descriptionForHint())
-        return height + UX.labelTop + UX.labelBottom
-    }
-
     // MARK: - Properties
     private var viewModel: ContextualHintViewModel
-    internal var onViewSummoned: (() -> Void)? = nil
-    internal var onViewDismissed: (() -> Void)? = nil
+    private var onViewSummoned: (() -> Void)? = nil
+    var onViewDismissed: (() -> Void)? = nil
+    private var onActionTapped: (() -> Void)? = nil
+    
     var isPresenting: Bool = false
+    
     var hasAlreadyBeenPresented: Bool {
         return viewModel.hasAlreadyBeenPresented
+    }
+    
+    private var popupContentHeight: CGFloat {
+        let spacingWidth = UX.labelLeading + UX.closeButtonSize.width + UX.closeButtonTrailing
+        let labelHeight = descriptionLabel.heightForLabel(
+            descriptionLabel,
+            width: containerView.frame.width - spacingWidth,
+            text: viewModel.hintType.descriptionText())
+       
+        switch viewModel.hintType.isActionType() {
+        case true:
+            guard let titleLabel = actionButton.titleLabel else { fallthrough }
+            let buttonHeight = titleLabel.heightForLabel(
+                descriptionLabel,
+                width: containerView.frame.width - spacingWidth,
+                text: viewModel.hintType.descriptionText())
+        
+            return buttonHeight + labelHeight + UX.labelTop + UX.labelBottom
+            
+        case false:
+            return labelHeight + UX.labelTop + UX.labelBottom
+        }
     }
 
     // MARK: - Initializers
@@ -112,7 +134,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        preferredContentSize = CGSize(width: 350, height: heightForDescriptionLabel)
+        preferredContentSize = CGSize(width: 350, height: popupContentHeight)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -142,8 +164,12 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     private func setupView() {
         gradient.frame = view.bounds
         view.layer.addSublayer(gradient)
+        
+        stackView.addArrangedSubview(descriptionLabel)
+        if viewModel.hintType.isActionType() { stackView.addArrangedSubview(actionButton) }
+        
         containerView.addSubview(closeButton)
-        containerView.addSubview(descriptionLabel)
+        containerView.addSubview(stackView)
         view.addSubview(containerView)
         
         setupConstraints()
@@ -151,15 +177,21 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0),
-            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.closeButtonTrailing),
+            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor,
+                                             constant: UX.closeButtonTop),
+            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                  constant: -UX.closeButtonTrailing),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
 
-            descriptionLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.labelTop),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.labelLeading),
-            descriptionLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -UX.labelTrailing),
-            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.labelBottom),
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor,
+                                           constant: UX.labelTop),
+            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                               constant: UX.labelLeading),
+            stackView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
+                                                constant: -UX.labelTrailing),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
+                                              constant: -UX.labelBottom),
             
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -169,7 +201,24 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
     
     private func setupContent() {
-        descriptionLabel.text = viewModel.hintType.descriptionForHint()
+        descriptionLabel.text = viewModel.hintType.descriptionText()
+        
+        if viewModel.hintType.isActionType() {
+            
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                     maxSize: 28),
+                .foregroundColor: UIColor.white,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+            
+            let attributeString = NSMutableAttributedString(
+                string: viewModel.hintType.buttonActionText(),
+                attributes: textAttributes
+            )
+            
+            actionButton.setAttributedTitle(attributeString, for: .normal)
+        }
     }
     
     // MARK: - Button Actions
@@ -179,7 +228,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
     
     @objc private func performAction() {
-        viewModel.sendTelemetryEvent(for: .performAction)
+        self.dismiss(animated: true) {
+            self.viewModel.sendTelemetryEvent(for: .performAction)
+            self.onActionTapped?()
+            self.onActionTapped = nil
+        }
     }
     
     // MARK: - Interface
@@ -187,12 +240,14 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         return viewModel.shouldPresentContextualHint()
     }
     
-    public func set(
+    public func configure(
         anchor: UIView,
         withArrowDirection arrowDirection: UIPopoverArrowDirection,
         andDelegate delegate: UIPopoverPresentationControllerDelegate,
+        presentedUsing presentation: (() -> Void)? = nil,
         withActionBeforeAppearing preAction: (() -> Void)? = nil,
-        andOnDismiss postAction: (() -> Void)? = nil
+        actionOnDismiss postAction: (() -> Void)? = nil,
+        andActionForButton buttonAction: (() -> Void)? = nil
     ) {
         self.modalPresentationStyle = .popover
         self.popoverPresentationController?.sourceView = anchor
@@ -200,5 +255,16 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         self.popoverPresentationController?.delegate = delegate
         self.onViewSummoned = preAction
         self.onViewDismissed = postAction
+        self.onActionTapped = buttonAction
+        
+        viewModel.presentFromTimer = presentation
+    }
+    
+    public func startTimer() {
+        viewModel.startTimer()
+    }
+    
+    public func stopTimer() {
+        viewModel.stopTimer()
     }
 }
