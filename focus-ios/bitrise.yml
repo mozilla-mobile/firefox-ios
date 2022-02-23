@@ -182,6 +182,28 @@ workflows:
         stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
 
+  runParallelTestsM1Beta:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - cache-pull@2: {}
+    - cache-push@2:
+        inputs:
+        - cache_paths: "/Users/vagrant/git"
+    - build-router-start@0:
+        inputs:
+        - wait_for_builds: 'true'
+        - access_token: "$FOCUS_PARALLEL"
+        - workflows: |-
+            runFocus
+            runKlar
+    - build-router-wait@0:
+        inputs:
+        - access_token: "$FOCUS_PARALLEL"
+    - deploy-to-bitrise-io@1: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
 
   runFocus:
     steps:
