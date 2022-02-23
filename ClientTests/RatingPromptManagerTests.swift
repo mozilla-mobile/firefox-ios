@@ -88,22 +88,6 @@ class RatingPromptManagerTests: XCTestCase {
         XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
-    func testShouldShowPrompt_asSyncAccountTrue_returnsTrue() {
-        setupEnvironment(hasSyncAccount: true)
-        promptManager.showRatingPromptIfNeeded()
-        XCTAssertEqual(ratingPromptOpenCount, 1)
-    }
-
-    func testShouldShowPrompt_searchEngineIsNotGoogle_returnsTrue() {
-        let fakeEngine = OpenSearchEngine(engineID: "1", shortName: "NotGoogle", image: UIImage(),
-                                          searchTemplate: "", suggestTemplate: nil, isCustomEngine: true)
-        mockProfile.searchEngines.defaultEngine = fakeEngine
-        setupEnvironment()
-
-        promptManager.showRatingPromptIfNeeded()
-        XCTAssertEqual(ratingPromptOpenCount, 1)
-    }
-
     func testShouldShowPrompt_hasTPStrict_returnsTrue() {
         mockProfile.prefs.setString(BlockingStrength.strict.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
         setupEnvironment()
@@ -112,48 +96,16 @@ class RatingPromptManagerTests: XCTestCase {
         XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
-    func testShouldShowPrompt_hasMinimumBookmarksCount_returnsTrue() {
-        let expectation = self.expectation(description: "Rating prompt manager data is loaded")
-        for i in 0...4 {
-            let bookmark = ShareItem(url: "http://www.example.com/\(i)", title: "Example \(i)", favicon: nil)
-            _ = mockProfile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: bookmark.url, title: bookmark.title).value
-        }
-
+    func testShouldShowPrompt_hasNotMinimumBookmarksCount_returnsFalse() {
+        createBookmarks(bookmarkCount: 2)
         setupEnvironment()
-        promptManager.updateData(dataLoadingCompletion: { [weak self] in
-            guard let promptManager = self?.promptManager else {
-                XCTFail("Should have reference to promptManager")
-                return
-            }
-
-            promptManager.showRatingPromptIfNeeded()
-            XCTAssertEqual(self?.ratingPromptOpenCount, 1)
-            expectation.fulfill()
-        })
-
-        waitForExpectations(timeout: 5, handler: nil)
+        updateData(expectedRatingPromptOpenCount: 0)
     }
 
-    func testShouldShowPrompt_hasMinimumPinnedShortcutsCount_returnsTrue() {
-        let expectation = self.expectation(description: "Rating prompt manager data is loaded")
-        for i in 0...1 {
-            let site = createSite(number: i)
-            _ = mockProfile.history.addPinnedTopSite(site)
-        }
-
+    func testShouldShowPrompt_hasMinimumBookmarksCount_returnsTrue() {
+        createBookmarks(bookmarkCount: 5)
         setupEnvironment()
-        promptManager.updateData(dataLoadingCompletion: { [weak self] in
-            guard let promptManager = self?.promptManager else {
-                XCTFail("Should have reference to promptManager")
-                return 
-            }
-
-            promptManager.showRatingPromptIfNeeded()
-            XCTAssertEqual(self?.ratingPromptOpenCount, 1)
-            expectation.fulfill()
-        })
-
-        waitForExpectations(timeout: 5, handler: nil)
+        updateData(expectedRatingPromptOpenCount: 1)
     }
 
     func testShouldShowPrompt_hasRequestedTwoWeeksAgo_returnsTrue() {
@@ -187,6 +139,39 @@ class RatingPromptManagerTests: XCTestCase {
 // MARK: Helpers
 
 private extension RatingPromptManagerTests {
+
+    func createBookmarks(bookmarkCount: Int) {
+        (1...bookmarkCount).forEach { index in
+            let bookmark = ShareItem(url: "http://www.example.com/\(index)", title: "Example \(index)", favicon: nil)
+            _ = mockProfile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: bookmark.url, title: bookmark.title).value
+        }
+
+        // Make sure the bookmarks we create are deleted at the end of the test
+        addTeardownBlock { [weak self] in
+            self?.deleteBookmarks(bookmarkCount: bookmarkCount)
+        }
+    }
+
+    func deleteBookmarks(bookmarkCount: Int) {
+        (1...bookmarkCount).forEach { index in
+            _ = mockProfile.places.deleteBookmarksWithURL(url: "http://www.example.com/\(index)")
+        }
+    }
+
+    func updateData(expectedRatingPromptOpenCount: Int) {
+        let expectation = self.expectation(description: "Rating prompt manager data is loaded")
+        promptManager.updateData(dataLoadingCompletion: { [weak self] in
+            guard let promptManager = self?.promptManager else {
+                XCTFail("Should have reference to promptManager")
+                return
+            }
+
+            promptManager.showRatingPromptIfNeeded()
+            XCTAssertEqual(self?.ratingPromptOpenCount, expectedRatingPromptOpenCount)
+            expectation.fulfill()
+        })
+        waitForExpectations(timeout: 5, handler: nil)
+    }
 
     func setupEnvironment(numberOfSession: Int32 = 5,
                           hasCumulativeDaysOfUse: Bool = true,

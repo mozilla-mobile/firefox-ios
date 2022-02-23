@@ -16,9 +16,6 @@ final class RatingPromptManager {
     private var hasMinimumBookmarksCount = false
     private let minimumBookmarksCount = 5
 
-    private var hasMinimumPinnedShortcutsCount = false
-    private let minimumPinnedShortcutsCount = 2
-
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
 
     enum UserDefaultsKey: String {
@@ -53,7 +50,6 @@ final class RatingPromptManager {
 
         let group = DispatchGroup()
         updateBookmarksCount(group: group)
-        updateUserPinnedSitesCount(group: group)
 
         group.notify(queue: dataQueue) {
             dataLoadingCompletion?()
@@ -105,14 +101,9 @@ final class RatingPromptManager {
 
         // One of the following
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
-        let hasSyncAccount = profile.hasSyncableAccount()
-        let engineIsGoogle = profile.searchEngines.defaultEngine.shortName == "Google"
         let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) == .strict
         guard isBrowserDefault
-                || hasSyncAccount
                 || hasMinimumBookmarksCount
-                || hasMinimumPinnedShortcutsCount
-                || !engineIsGoogle
                 || hasTPStrict
         else { return false }
 
@@ -142,15 +133,6 @@ final class RatingPromptManager {
             strongSelf.hasMinimumBookmarksCount = bookmarks.count >= strongSelf.minimumBookmarksCount
             group.leave()
         })
-    }
-
-    private func updateUserPinnedSitesCount(group: DispatchGroup) {
-        group.enter()
-        profile.history.getPinnedTopSites().uponQueue(dataQueue) { [weak self] result in
-            guard let strongSelf = self, let userPinnedTopSites = result.successValue else { return }
-            strongSelf.hasMinimumPinnedShortcutsCount = userPinnedTopSites.count >= strongSelf.minimumPinnedShortcutsCount
-            group.leave()
-        }
     }
 
     private var hasRequestedInTheLastTwoWeeks: Bool {
