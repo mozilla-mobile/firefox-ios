@@ -36,8 +36,9 @@ class SingleActionViewModel {
     private(set) var tapHandler: ((SingleActionViewModel) -> Void)?
     private(set) var badgeIconName: String?
 
-    // Flip the cells for the toolbar menu since content needs to appear at the bottom
-    // Both cells and tableview are flipped so content already appears at bottom when the menu is opened
+    // Flip the cells for the main menu (hamburger menu) since content needs to appear at the bottom
+    // Both cells and tableview are flipped so content already appears at bottom when the menu is opened.
+    // This avoids having to scroll the table view.
     public var isFlipped: Bool = false
 
     public var tintColor: UIColor?

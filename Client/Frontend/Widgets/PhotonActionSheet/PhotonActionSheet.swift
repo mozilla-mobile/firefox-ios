@@ -7,13 +7,26 @@ import Storage
 import Shared
 import UIKit
 
+extension PhotonActionSheet: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .ProfileDidFinishSyncing, .ProfileDidStartSyncing:
+            stopRotateSyncIcon()
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            reduceTransparencyChanged()
+        default: break
+        }
+    }
+}
+
 // This file is main table view used for the action sheet
-class PhotonActionSheet: UIViewController, NotificationThemeable {
+class PhotonActionSheet: UIViewController {
 
     // MARK: - Variables
     private var tableView = UITableView(frame: .zero, style: .grouped)
     private var viewModel: PhotonActionSheetViewModel!
     private var constraints = [NSLayoutConstraint]()
+    var notificationCenter: NotificationCenter = NotificationCenter.default
 
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
@@ -49,7 +62,7 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
     deinit {
         tableView.dataSource = nil
         tableView.delegate = nil
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - View cycle
@@ -81,12 +94,9 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
         tableViewHeightConstraint?.isActive = true
         NSLayoutConstraint.activate(constraints)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon),
-                                               name: .ProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon),
-                                               name: .ProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reduceTransparencyChanged),
-                                               name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
+        setupNotifications(forObserver: self, observing: [.ProfileDidFinishSyncing,
+                                                          .ProfileDidStartSyncing,
+                                                          UIAccessibility.reduceTransparencyStatusDidChangeNotification])
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -123,7 +133,7 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
         tableView.accessibilityIdentifier = "Context Menu"
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
-        if viewModel.toolbarMenuInversed {
+        if viewModel.isMainMenuInversed {
             tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         }
         tableView.reloadData()
@@ -213,29 +223,6 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
         applyTheme()
     }
 
-    func applyTheme() {
-        if viewModel.presentationStyle == .popover {
-            view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
-        } else {
-            tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
-        }
-
-        // Apply or remove the background blur effect
-        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
-            if UIAccessibility.isReduceTransparencyEnabled {
-                // Remove the visual effect and the background alpha
-                visualEffectView.effect = nil
-                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
-            } else {
-                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
-            }
-        }
-
-        viewModel.tintColor = UIColor.theme.actionMenu.foreground
-        closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
-        tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
-    }
-
     private func applyBackgroundBlur() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         guard let screenshot = appDelegate.window?.screenshot() else { return }
@@ -257,7 +244,10 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
         }
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?,
+                               of object: Any?,
+                               change: [NSKeyValueChangeKey : Any]?,
+                               context: UnsafeMutableRawPointer?) {
         if viewModel.presentationStyle == .popover && !wasHeightOverriden {
             preferredContentSize = tableView.contentSize
         }
@@ -281,29 +271,29 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
     private var tableViewHeightConstraint: NSLayoutConstraint?
 
     private func setTableViewHeight() {
-        if viewModel.isToolbarMenu {
-            setToolbarMenuTableViewHeight()
+        if viewModel.isMainMenu {
+            setMainMenuTableViewHeight()
         } else {
-            setNormalStyleTableViewHeight()
+            setDefaultStyleTableViewHeight()
         }
     }
 
     // Needed to override the preferredContentSize, so key value observer doesn't get called
     private var wasHeightOverriden = false
 
-    /// Toolbar menu table view height is calculated so if there's not enough space for the menu to be shown completely,
+    /// Main menu table view height is calculated so if there's not enough space for the menu to be shown completely,
     /// we make sure that the last cell shown is half shown. This indicates to the user that the menu can be scrolled.
-    private func setToolbarMenuTableViewHeight() {
+    private func setMainMenuTableViewHeight() {
         let visibleCellsHeight = getViewsHeightSum(views: tableView.visibleCells)
         let headerCellsHeight = getViewsHeightSum(views: tableView.visibleHeaders)
 
         let totalCellsHeight = visibleCellsHeight + headerCellsHeight
-        let availableHeight = viewModel.availableToolbarMenuHeight
+        let availableHeight = viewModel.availableMainMenuHeight
         let needsHeightAdjustment = availableHeight - totalCellsHeight < 0
 
         if needsHeightAdjustment && totalCellsHeight != 0 && !wasHeightOverriden {
             let newHeight: CGFloat
-            if viewModel.isTopToolbarMenu {
+            if viewModel.isAtTopMainMenu {
                 let halfCellHeight = (tableView.visibleCells.last?.frame.height ?? 0) / 2
                 newHeight = totalCellsHeight - halfCellHeight
             } else {
@@ -318,7 +308,7 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
         }
     }
 
-    private func setNormalStyleTableViewHeight() {
+    private func setDefaultStyleTableViewHeight() {
         let frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
         let buttonHeight = viewModel.presentationStyle == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0
         let maxHeight = frameHeight - buttonHeight
@@ -329,7 +319,7 @@ class PhotonActionSheet: UIViewController, NotificationThemeable {
     }
 
     private func getViewsHeightSum(views: [UIView]) -> CGFloat {
-        return views.map { $0.height }.reduce(0, +)
+        return views.map { $0.frame.height }.reduce(0, +)
     }
 }
 
@@ -364,7 +354,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         cell.configure(actions: actions, viewModel: viewModel)
         cell.delegate = self
 
-        if viewModel.toolbarMenuInversed {
+        if viewModel.isMainMenuInversed {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: rowIsLastInSection)
 
@@ -422,7 +412,7 @@ extension UITableView {
     private var indexesOfVisibleHeaderSections: [Int] {
         var visibleSectionIndexes = [Int]()
 
-        numberOfSections.forEach { index in
+        (0..<numberOfSections).forEach { index in
             let headerRect = rect(forSection: index)
 
             // The "visible part" of the tableView is based on the content offset and the tableView's size.
@@ -436,5 +426,32 @@ extension UITableView {
             }
         }
         return visibleSectionIndexes
+    }
+}
+
+// MARK: - NotificationThemeable
+extension PhotonActionSheet: NotificationThemeable {
+
+    func applyTheme() {
+        if viewModel.presentationStyle == .popover {
+            view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
+        } else {
+            tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
+        }
+
+        // Apply or remove the background blur effect
+        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
+            if UIAccessibility.isReduceTransparencyEnabled {
+                // Remove the visual effect and the background alpha
+                visualEffectView.effect = nil
+                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
+            } else {
+                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
+            }
+        }
+
+        viewModel.tintColor = UIColor.theme.actionMenu.foreground
+        closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
+        tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
     }
 }

@@ -34,14 +34,14 @@ enum MenuButtonToastAction {
     case removePinPage
 }
 
-typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
-
-/// ToolbarMenuActionHelper handles the hamburger menu in the toolbar.
-/// There is three different types of hamburger menu:
+/// MainMenuActionHelper handles the main menu (hamburger menu) in the toolbar.
+/// There is three different types of main menu:
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
+class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
+
+    typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
 
     private let isHomePage: Bool
     private let buttonView: UIButton
@@ -56,7 +56,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
 
-    /// ToolbarMenuActionHelper init
+    /// MainMenuActionHelper init
     /// - Parameters:
     ///   - profile: the user's profile
     ///   - tabManager: the tab manager
@@ -113,7 +113,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     // MARK: - Update data
 
-    private let dataQueue = DispatchQueue(label: "com.moz.toolbarMenuAction.queue")
+    private let dataQueue = DispatchQueue(label: "com.moz.mainMenuAction.queue")
     private var isInReadingList = false
     private var isBookmarked = false
     private var isPinned = false
@@ -121,9 +121,9 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
     private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
-        guard let url = tabUrl?.absoluteString else { 
+        guard let url = tabUrl?.absoluteString else {
             dataLoadingCompletion?()
-            return 
+            return
         }
 
         let group = DispatchGroup()
@@ -139,7 +139,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getIsInReadingList(url: String, group: DispatchGroup) {
         group.enter()
-        profile.readingList.getRecordWithURL(url).uponQueue(.main) { result in
+        profile.readingList.getRecordWithURL(url).uponQueue(dataQueue) { result in
             self.isInReadingList = result.successValue != nil
             group.leave()
         }
@@ -147,7 +147,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getIsBookmarked(url: String, group: DispatchGroup) {
         group.enter()
-        profile.places.isBookmarked(url: url).uponQueue(.main) { result in
+        profile.places.isBookmarked(url: url).uponQueue(dataQueue) { result in
             self.isBookmarked = result.successValue ?? false
             group.leave()
         }
@@ -155,7 +155,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     private func getIsPinned(url: String, group: DispatchGroup) {
         group.enter()
-        profile.history.isPinnedTopSite(url).uponQueue(.main) { result in
+        profile.history.isPinnedTopSite(url).uponQueue(dataQueue) { result in
             self.isPinned = result.successValue ?? false
             group.leave()
         }
@@ -207,10 +207,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         let nightModeAction = getNightModeAction()
         append(to: &section, action: nightModeAction)
 
-        if let navigationController = navigationController {
-            let passwordsAction = getPasswordAction(navigationController: navigationController)
-            append(to: &section, action: passwordsAction)
-        }
+        let passwordsAction = getPasswordAction(navigationController: navigationController)
+        append(to: &section, action: passwordsAction)
 
         if !isHomePage && !isFileURL {
             let reportSiteIssueAction = getReportSiteIssueAction()
@@ -485,8 +483,12 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         }
         let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
         let iconTint: UIColor? = needsReAuth ? UIColor.Photon.Yellow60 : nil
-        let syncOption = SingleActionViewModel(title: title, iconString: iconString, iconURL: iconURL,
-                                               iconType: iconType, iconTint: iconTint, tapHandler: action).items
+        let syncOption = SingleActionViewModel(title: title,
+                                               iconString: iconString,
+                                               iconURL: iconURL,
+                                               iconType: iconType,
+                                               iconTint: iconTint,
+                                               tapHandler: action).items
         return syncOption
     }
 
@@ -506,8 +508,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
         whatsNewAction = SingleActionViewModel(title: .WhatsNewString,
                                                iconString: ImageIdentifiers.whatsNew,
                                                isEnabled: showBadgeForWhatsNew) { _ in
-            if let whatsNewTopic = AppInfo.whatsNewTopic, 
-               let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
+            if let whatsNewTopic = AppInfo.whatsNewTopic,
+                let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
             }
@@ -534,7 +536,7 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
             guard let tab = self.selectedTab,
                   let url = tab.canonicalURL?.displayURL,
-                  let presentableVC = self.menuActionDelegate as? PresentableVC 
+                  let presentableVC = self.menuActionDelegate as? PresentableVC
             else { return }
 
             self.share(fileURL: url, buttonView: self.buttonView, presentableVC: presentableVC)
@@ -552,8 +554,8 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
                 temporaryDocument.getURL().uponQueue(.main, block: { tempDocURL in
                     // If we successfully got a temp file URL, share it like a downloaded file,
                     // otherwise present the ordinary share menu for the web URL.
-                    if tempDocURL.isFileURL, 
-                       let presentableVC = self.menuActionDelegate as? PresentableVC {
+                    if tempDocURL.isFileURL,
+                        let presentableVC = self.menuActionDelegate as? PresentableVC {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView, presentableVC: presentableVC)
                     } else {
                         self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
@@ -741,15 +743,15 @@ class ToolbarMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
     typealias NavigationHandlerType = ((_ url: URL?) -> Void)
     private func getPasswordAction(navigationController: UINavigationController?) -> PhotonRowActions? {
-        let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
-        guard isLoginsButtonShowing else { return nil }
+        guard LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs),
+              let navigationController = navigationController
+        else { return nil }
 
         return SingleActionViewModel(title: .AppMenuPasswords,
                                      iconString: ImageIdentifiers.key,
                                      iconType: .Image,
                                      iconAlignment: .left) { _ in
 
-            guard let navigationController = navigationController else { return }
             let navigationHandler: NavigationHandlerType = { url in
                 UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
                 self.delegate?.openURLInNewTab(url, isPrivate: false)

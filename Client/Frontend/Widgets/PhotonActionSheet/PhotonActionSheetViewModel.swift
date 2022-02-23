@@ -15,11 +15,6 @@ class PhotonActionSheetViewModel {
     var title: String? = nil
     var tintColor = UIColor.theme.actionMenu.foreground
 
-    // Toolbar menu specific variables
-    var isToolbarMenu = false
-    var isTopToolbarMenu = false
-    var availableToolbarMenuHeight: CGFloat = 0
-
     var presentationStyle: PresentationStyle {
         return modalStyle.getPhotonPresentationStyle()
     }
@@ -51,27 +46,33 @@ class PhotonActionSheetViewModel {
          closeButtonTitle: String? = nil,
          title: String? = nil,
          modalStyle: UIModalPresentationStyle,
-         isToolbarMenu: Bool = false,
-         toolbarMenuInversed: Bool = false) {
+         isMainMenu: Bool = false,
+         isMainMenuInversed: Bool = false) {
 
         self.actions = actions
         self.closeButtonTitle = closeButtonTitle
         self.title = title
         self.modalStyle = modalStyle
 
-        self.isToolbarMenu = isToolbarMenu
-        self.toolbarMenuInversed = toolbarMenuInversed
-        setToolbarMenuStyle()
+        self.isMainMenu = isMainMenu
+        self.isMainMenuInversed = isMainMenuInversed
+        setMainMenuStyle()
     }
 
-    /// The toolbar menu can be a very long menu and it has to scroll most of the times.
+    // MARK: - Main menu (Hamburger menu)
+
+    var isMainMenu = false
+    var isAtTopMainMenu = false
+    var availableMainMenuHeight: CGFloat = 0
+
+    /// The main menu (or hamburger menu) can be a very long menu and it has to scroll most of the times.
     /// One of the design requirements is that the long menu is opened to see the last item first.
     /// Since tableviews shows the first row by default, we inverse the menu to show last item first.
     /// This avoid us having to call Apple's API to scroll the tableview (with scrollToRow or with setContentOffset)
     /// which was causing an unwanted content size change (and menu apparation was wonky).
-    var toolbarMenuInversed: Bool = false
-    func setToolbarMenuStyle() {
-        guard toolbarMenuInversed else { return }
+    var isMainMenuInversed: Bool = false
+    private func setMainMenuStyle() {
+        guard isMainMenuInversed else { return }
 
         // Inverse database
         actions = actions.map { $0.reversed() }
@@ -81,9 +82,9 @@ class PhotonActionSheetViewModel {
         actions.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
     }
 
-    // Toolbar menu is inversed if hamburger menu is at the bottom
+    // Main menu is inversed if hamburger icon is at the bottom
     // It isn't inversed for edge case of iPhone in landscape mode with top search bar (when toolbar isn't shown)
-    static func hasInversedToolbarMenu(trait: UITraitCollection, isBottomSearchBar: Bool) -> Bool {
+    static func hasInversedMainMenu(trait: UITraitCollection, isBottomSearchBar: Bool) -> Bool {
         let showingToolbar = trait.verticalSizeClass != .compact && trait.horizontalSizeClass != .regular
         let isIphoneEdgeCase = !isBottomSearchBar && !showingToolbar
         return PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) && !isIphoneEdgeCase
@@ -146,7 +147,7 @@ class PhotonActionSheetViewModel {
         return isSmallSize ? UIPopoverArrowDirection.init(rawValue: 0) : .any
     }
 
-    func getToolbarMenuPopOverMargins(trait: UITraitCollection, view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
+    func getMainMenuPopOverMargins(trait: UITraitCollection, view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         if PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait) {
             return getSmallSizeMargins(view: view, presentedOn: viewController)
         } else {
@@ -157,8 +158,8 @@ class PhotonActionSheetViewModel {
     private func getIpadMargins(view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         // Save available space
         let viewControllerHeight = viewController.view.frame.size.height
-        availableToolbarMenuHeight = viewControllerHeight - PhotonActionSheetUX.BigSpacing * 2
-        isTopToolbarMenu = true
+        availableMainMenuHeight = viewControllerHeight - PhotonActionSheetUX.BigSpacing * 2
+        isAtTopMainMenu = true
 
         return UIEdgeInsets.init(equalInset: PhotonActionSheetUX.BigSpacing)
     }
@@ -172,13 +173,13 @@ class PhotonActionSheetViewModel {
         // Calculate top and bottom insets
         let convertedPoint = view.convert(view.frame.origin, to: viewController.view)
         let viewControllerHeight = viewController.view.frame.size.height
-        isTopToolbarMenu = convertedPoint.y < viewControllerHeight / 2
-        let topInset = isTopToolbarMenu ? UIConstants.ToolbarHeight : PhotonActionSheetUX.Spacing
-        let bottomInset = isTopToolbarMenu ? PhotonActionSheetUX.Spacing : PhotonActionSheetUX.BigSpacing
+        isAtTopMainMenu = convertedPoint.y < viewControllerHeight / 2
+        let topInset = isAtTopMainMenu ? UIConstants.ToolbarHeight : PhotonActionSheetUX.Spacing
+        let bottomInset = isAtTopMainMenu ? PhotonActionSheetUX.Spacing : PhotonActionSheetUX.BigSpacing
 
         // Save available space so we can calculate the needed menu height later on
-        let buttonSpace = isTopToolbarMenu ? convertedPoint.y + view.frame.height : viewControllerHeight - convertedPoint.y - view.frame.height
-        availableToolbarMenuHeight = viewControllerHeight - buttonSpace - bottomInset - topInset - viewController.view.safeAreaInsets.top
+        let buttonSpace = isAtTopMainMenu ? convertedPoint.y + view.frame.height : viewControllerHeight - convertedPoint.y - view.frame.height
+        availableMainMenuHeight = viewControllerHeight - buttonSpace - bottomInset - topInset - viewController.view.safeAreaInsets.top
 
         return UIEdgeInsets(top: topInset,
                             left: PhotonActionSheetUX.Spacing,

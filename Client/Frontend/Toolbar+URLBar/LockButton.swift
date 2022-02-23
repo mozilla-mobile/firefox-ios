@@ -10,7 +10,7 @@ class LockButton: UIButton {
 
     var selectedTintColor: UIColor!
     var unselectedTintColor: UIColor!
-    var disabledTintColor = UIColor.Photon.Grey50
+    var disabledTintColor: UIColor!
 
     override open var isHighlighted: Bool {
         didSet {

@@ -82,16 +82,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         libraryDrawerViewController?.close(immediately: true)
 
-        let menuHelper = ToolbarMenuActionHelper(profile: profile,
-                                                 tabManager: tabManager,
-                                                 buttonView: button,
-                                                 showFXASyncAction: presentSignInViewController)
+        let menuHelper = MainMenuActionHelper(profile: profile,
+                                              tabManager: tabManager,
+                                              buttonView: button,
+                                              showFXASyncAction: presentSignInViewController)
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
 
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            let shouldInverse = PhotonActionSheetViewModel.hasInversedToolbarMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
-            let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, isToolbarMenu: true, toolbarMenuInversed: shouldInverse)
+            let shouldInverse = PhotonActionSheetViewModel.hasInversedMainMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
+            let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, isMainMenu: true, isMainMenuInversed: shouldInverse)
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         }
     }
