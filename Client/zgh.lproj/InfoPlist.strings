@@ -1,0 +1,21 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "This lets you take and upload photos.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Websites you visit may request your location.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewPrivateTab" = "ⴰⵙⴽⵙⵍ ⵓⵙⵍⵉⴳ ⴰⵎⴰⵢⵏⵓ";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Scan QR Code";
+

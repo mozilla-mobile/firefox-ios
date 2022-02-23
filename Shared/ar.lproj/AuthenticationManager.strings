@@ -29,16 +29,16 @@
 "Enter Passcode" = "أدخِل رمز السر";
 
 /* Label for the Face ID/Passcode item in Settings */
-"Face ID & Passcode" = "معرِّف الوجه ورمز المرور";
+"Face ID & Passcode" = "ميزة Face ID ورمز المرور";
 
 /* 'Immediately' interval item for selecting when to require passcode */
 "Immediately" = "مباشرة";
 
 /* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app with attempts remaining */
-"Incorrect passcode. Try again (Attempts remaining: %d)." = "رمز السر خاطئ. جرب ثانية (المحاولات المتبقية: %d).";
+"Incorrect passcode. Try again (Attempts remaining: %d)." = "رمز المرور خاطئ. جرب ثانية (المحاولات المتبقية: %d).";
 
 /* Error message displayed when user enters incorrect passcode when trying to enter a protected section of the app */
-"Incorrect passcode. Try again." = "رمز السر خاطئ. جرب ثانية.";
+"Incorrect passcode. Try again." = "رمز المرور خاطئ. جرب ثانية.";
 
 /* Error message displayed when user enters incorrect passcode and has reached the maximum number of attempts. */
 "Maximum attempts reached. Please try again in an hour." = "وصلت إلى أقصى حد للمحاولات. من فضلك جرب ثانية بعد ساعة.";

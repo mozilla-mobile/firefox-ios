@@ -16,17 +16,41 @@
 /* About settings section title */
 "About" = "Um";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Bæta við flýtileiðir";
+
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "Festa á lista yfir mest notuð vefsvæði";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Festa";
+
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "Fjarlægja úr flýtileiðum";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "Fjarlæga úr lista yfir mest notuð vefsvæði";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Losa";
 
 /* The description of a highlight if it is a site the user has bookmarked */
 "ActivityStream.Highlights.Bookmark" = "Búið að bókamerkja";
 
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "Skoðað";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Hoppa aftur inn";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Flipar: %d";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "Leitin þín að \"%@\"";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Nýlega vistað";
 
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "Nýleg bókamerki";
@@ -37,11 +61,26 @@
 /* Section title label for Recommended by Pocket section */
 "ActivityStream.Pocket.SectionTitle" = "Vinsælt í Pocket";
 
+/* Section title label for Recommended by Pocket section */
+"ActivityStream.Pocket.SectionTitle2" = "Mælt með af Pocket";
+
 /* The description of a Pocket Story */
 "ActivityStream.Pocket.Trending" = "Vinsælt";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Nýlega heimsótt";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "Nýlega vistað";
+
+/* This button will open the library showing all the users bookmarks */
+"ActivityStream.RecentlySaved.ShowAll" = "Birta allt";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "Fjarlægja";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Flýtileiðir";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "Raðir: %d";
@@ -57,7 +96,7 @@
 
 /* Accessibility label for action adding current page to reading list.
    Name for button adding current article to reading list in reader mode */
-"Add to Reading List" = "Bæta við lestrarlista";
+"Add to Reading List" = "Bæta við leslista";
 
 /* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
 "Added page to Reading List" = "Síðu bætt við í leslista";
@@ -83,6 +122,12 @@
 /* Authentication prompt title */
 "Authentication required" = "Vantar auðkenni";
 
+/* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Description" = "Leita að %@ beint úr veffangastikunni";
+
+/* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
+"Awesomebar.SearchWithEngine.Title" = "Leita með %@";
+
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Til baka";
 
@@ -104,6 +149,18 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Bókamerki";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "Bæta við";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "Setja alla flipa í bókamerki";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "Setja núverandi flipa í bókamerki";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Breyta";
+
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "Breyta bókamerki";
 
@@ -119,6 +176,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "Heiti möppu";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Bókarmerki skjáborðs";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "Nýlega sett í bókamerki";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Nýtt bókamerki";
 
@@ -128,6 +191,9 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Nýr aðgreinir";
 
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Leita í bókamerkjum";
+
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Titill";
 
@@ -136,6 +202,21 @@
 
 /* Status label for the empty Bookmarks state. */
 "BookmarksPanel.EmptyState.Title" = "Bókamerkin sem þú vistar verða sýnd hér.";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Þetta innbrot átti sér stað þann";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Lykilorðum var lekið eða þeim stolið síðan þú breyttir lykilorðinu þínu síðast. Til að vernda þennan reikning skaltu skrá þig inn á vefsvæðið og breyta lykilorðinu þínu.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Frekari upplýsingar";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Fara á";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Innbrot á vefsvæði";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Birtustilling";
@@ -171,7 +252,7 @@
 "ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Skipta";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nýr einkaflipi opnaður";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nýr huliðsflipi opnaður";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Skipta";
@@ -194,11 +275,35 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Opna í nýjum flipa";
 
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Opna tengil í nýjum huliðsflipa";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Opna tengil í nýjum flipa";
+
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "Vista mynd";
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Miðla tengli";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Nú geturðu fært verkfæraslána neðst, svo það sé auðveldara að setja inn upplýsingar";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "Til að auðvelda innslátt upplýsinga er verkfærasláin nú sjálfgefið neðst.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.Homepage.PersonalizedHome" = "Sérsniðin Firefox-upphafssíða þín gerir það nú auðveldara að halda áfram þar sem frá var horfið. Finndu nýlega flipa, bókamerki og leitarniðurstöður.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Stillingar verkfæraslár";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Flipar sem þú hefur ekki skoðað í tvær vikur verða færðir hingað.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Slökkva á í stillingum";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Ekki var hægt að bæta síðu við leslista";
@@ -209,14 +314,20 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Gat ekki hlaðið síðu.";
 
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "Fyrir notendur iOS 13 skiptir Firefox nú sjálfkrafa yfir í dökkt þema þegar síminn þinn er stilltur á dökkt þema. Til að breyta þessari hegðun skaltu fara í Stillingar > Þema.";
+
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Dökka þemað inniheldur nú dökkt lyklaborð og dökkan upphafsskjá.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Innbyggð aukin rakningarvörn hjálpar til við að koma í veg fyrir að auglýsingar fylgi þér út um hvippinn og hvappinn. Kveiktu á Stangt til að loka fyrir enn fleiri rekjara, auglýsingar og sprettglugga.";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Fara í stillingar";
 
 /* Title for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Title" = "Vörn gegn því að fylgst sé með þér";
+"CoverSheet.v24.ETP.Title" = "Vörn gegn auglýsingarakningu";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Stofna reikning";
@@ -320,13 +431,25 @@
 "ExternalLink.AppStore.ConfirmationTitle" = "Opna tengil í smáforrits verslun?";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "Opnaðu þennan tengil með ytra smáforriti?";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Opna þennan tengil með utanaðkomandi forriti?";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Heimasíða Firefox";
+"Firefox.HomePage.Title" = "Upphafssíða Firefox";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Sérsníða upphafssíðu";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Uppgötva meira";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Umhugsunarverðar sögur";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Fjarlægja";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Áfram";
@@ -355,6 +478,9 @@
 /* Button label to open Sync preferences */
 "FxA.OpenSyncPreferences" = "Opna samstillar stillingar";
 
+/* Instructions shown on qr code scanning view */
+"fxa.qr-scanning-view.instructions" = "Skannaðu QR-kóðann sem sýndur er á firefox.com/pair";
+
 /* Remove button is displayed on firefox account page under certain scenarios where user would like to remove their account. */
 "FxA.RemoveAccount" = "Fjarlægja";
 
@@ -367,11 +493,32 @@
 /* Button label to resend email */
 "FxA.ResendEmail" = "Endursenda tölvupóst";
 
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Skráðu þig inn með myndavélinni þinni";
+
+/* FxA sign in create account label. */
+"fxa.signin.create-account-pt-1" = "Samstilltu Firefox á milli tækja með reikningi.";
+
+/* FxA sign in create account label. This will be linked to the site to create an account. */
+"fxa.signin.create-account-pt-2" = "Stofna Firefox reikning.";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Opnaðu Firefox í tölvunni þinni og farðu á firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Tilbúið til skönnunar";
+
+/* FxA sign in view title */
+"fxa.signin.turn-on-sync" = "Kveikja á samstillingu";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Nota tölvupóst í staðinn";
+
 /* Button label to sign into Sync */
 "FxA.SignIntoSync" = "Skráðu þig inn til að samstilla";
 
 /* Label explaining what sync does */
-"FxA.SyncExplain" = "Nálgast flipa, bókamerki og lykilorð frá öðrum tækjum þínum.";
+"FxA.SyncExplain" = "Náðu í flipana þína, bókamerki og lykilorð frá hinum tækjunum þínum.";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Samstilla núna";
@@ -383,7 +530,7 @@
 "FxAPush_DeviceConnected_body" = "Firefox samstillingin er tengd %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
-"FxAPush_DeviceConnected_title" = "Samstilling tengist";
+"FxAPush_DeviceConnected_title" = "Samstilling tengd";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
 "FxAPush_DeviceDisconnected_body" = "%@ aftengt giftusamlega.";
@@ -395,10 +542,13 @@
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Samstilling ótengd";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Sync aftengt";
+"FxAPush_DeviceDisconnected_title" = "Samstilling ótengd";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Tæki hefur aftengt Firefox Sync";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel" = "Firefox merki - breyta bakgrunni, hnappur";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Náðu í opnu flipana, bókamerki og lykilorð frá hinum tækjunum þínum.";
@@ -425,7 +575,7 @@
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Í dag og í gær";
 
 /* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Ef þú hrenisar ferli, þá mun ferli, smáköku og önnu vafragögn eyðast.";
+"HistoryPanel.ClearHistoryMenuTitle" = "Ef nýlegur ferill er hreinsaður verða ferill, vefkökur og önnur vafragögn fjarlægð.";
 
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Vefsvæði sem þú heimsækir oft munu birtast hér.";
@@ -446,7 +596,7 @@
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Kveiktu á samstillingu flipa til að skoða lista af flipum frá öðrum tækjum.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox samstilling";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Ferill";
@@ -460,6 +610,9 @@
 /* Title for the Synced Tabs Cell in the History Panel */
 "HistoryPanel.SyncedTabsCell.Title" = "Samstillt tæki";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Upphafssíða";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "Hætta við";
 
@@ -467,10 +620,10 @@
 "HomePage.Set.Dialog.Message" = "Þú getur breytt þessari stillingu hvenær sem er í Stillingar";
 
 /* Button accepting changes setting the home page for the first time. */
-"HomePage.Set.Dialog.OK" = "Stilla heimasíðu";
+"HomePage.Set.Dialog.OK" = "Stilla upphafssíðu";
 
 /* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Viltu nota þetta vefsvæði sem heimasíðuna þína?";
+"HomePage.Set.Dialog.Title" = "Viltu nota þetta vefsvæði sem upphafssíðuna þína?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Bókamerki";
@@ -479,7 +632,7 @@
 "HomePanel.ContextMenu.DeleteFromHistory" = "Eyða úr ferli";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Opna í nýjum einkaflipa";
+"HomePanel.ContextMenu.OpenInNewPrivateTab" = "Opna í nýjum huliðsflipa";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Opna í nýjum flipa";
@@ -506,7 +659,7 @@
 "Hotkeys.Forward.DiscoveryTitle" = "Áfram";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nýr einkaflipi";
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nýr huliðsflipi";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.NewTab.DiscoveryTitle" = "Nýr flipi";
@@ -529,20 +682,119 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Sýna fyrri flipa";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "Kveikja á sjálfvirkri lokun";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
+"InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox getur lokað flipum sem þú hefur ekki skoðað síðastliðinn mánuð.";
+
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This is the title of that Auto Close prompt */
+"InactiveTabs.TabTray.AutoClosePrompt.Title" = "Loka sjálfvirkt eftir einn mánuð?";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Lokaðu öllum óvirkum flipum";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Stækka texta stærð";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "rétt í þessu";
 
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Raunstærð";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Bæta við bókamerki";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Hreinsa nýlegan feril";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "Niðurhalstengill";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Finna aftur";
+
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "Nýr venjulegur flipi";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "Opna tengil í bakgrunni";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "Opna tengil í nýjum flipa";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "Vista síðu sem…";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Bókamerki";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "Breyta";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "Skrá";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Ferill";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Verkfæri";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "Skoða";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Gluggi";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Stillingar";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Sýna bókamerki";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Sýna sóttar skrár";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Sýna fyrsta flipa";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Sýna feril";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Sýna síðasta flipa";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "Sýna flipa númer 1-9";
+
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Afturkalla loka flipa";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Auka aðdrátt";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Minnka aðdrátt";
+
 /* History tableview section header */
 "Last month" = "Í síðasta mánuði";
 
 /* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Síðasta sync: %@";
+"Last synced: %@" = "Síðasta samstilling: %@";
 
 /* History tableview section header */
 "Last week" = "Í síðustu viku";
+
+/* In the history panel, this placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder" = "Leitarferill";
+
+/* In the history panel, this label indicates that tapping on this item will navigate the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedHistory" = "Samstilltur ferill";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Eldra";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Notkunarskilmálar";
@@ -551,16 +803,43 @@
 "Light" = "Ljóst";
 
 /* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"Load original page" = "Hlaða upprunalegu síðu";
+"Load original page" = "Hlaða inn upprunalegri síðu";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "Hleð efni…";
+"Loading content…" = "Hleð inn efni…";
 
 /* Authentication prompt log in button */
 "Log in" = "Innskráning";
 
 /* Toggle logins syncing setting */
 "Logins" = "Innskráningar";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Fræðast meira";
+
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "Til að vista og fylla út innskráningar og lykilorð sjálfkrafa skaltu virkja Face ID andlitsauðkenni, Touch ID fingrafaraauðkenni eða aðgangskóða tækis.";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Halda áfram";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Fræðast meira";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Innskráningar þínar og lykilorð eru nú vernduð með Face ID andlitsauðkenni, Touch ID fingrafaraauðkenni eða aðgangskóða tækis.";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Til að nota sjálfvirka útfyllingareiginleikann fyrir Firefox verður þú að hafa aðgangskóða tækis virkan.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Taktu lykilorðin þín hvert sem er";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Sjálfvirk útfylling lykilorða í Firefox";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Kveikja á sjálfvirkri útfyllingu";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Breytt";
@@ -580,6 +859,12 @@
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "Vista lykilorð fyrir %@?";
 
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Uppfæra innskráningu fyrir %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Uppfæra innskráningu %1$@ á %2$@?";
+
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Vista innskráningu";
 
@@ -598,6 +883,27 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Sía";
 
+/* Label shown when there are no logins to list */
+"LoginsList.NoLoginsFound.Description" = "Vistaðar innskráningar munu birtast hér. Ef þú vistaðir innskráningar þínar í Firefox á öðru tæki skaltu skrá þig inn á Firefox reikninginn þinn.";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Engar innskráningar fundust";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Engar niðurstöður passa við leitina þína.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Engar samsvarandi innskráningar";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Hætta við";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Leita að innskráningum";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Veldu lykilorð til að fylla inn";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "SAVED LOGINS";
 
@@ -615,8 +921,20 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Bókamerki bætt við";
 
+/* Toast displayed to the user after adding the item to the Top Sites. */
+"Menu.AddPin.Confirm" = "Festa á lista yfir mest notuð vefsvæði";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Bætt við flýtileiðir";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Bætt við leslista";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.BackUpAndSync.Label" = "Afrita og samstilla gögn";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Bókamerki";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Afrita vistfang";
@@ -624,20 +942,50 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Afritað á klemmuspjald";
 
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Sóttar skrár";
+
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Slökkt er á aukinni rekjaravernd fyrir þetta vefsvæði.";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Slökkt er á auknum rakningarvörnum fyrir þetta vefsvæði.";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Kveikt er á aukinni rekjaravernd fyrir þetta vefsvæði.";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Kveikt er á auknum rakningarvörnum fyrir þetta vefsvæði.";
+
+/* Description for having standard ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStandardWithITP.Title" = "Firefox lokar á rekjara milli vefsvæða, samfélagsmiðlarekjara, rafmyntagrafara og fingrafarasöfnun.";
+
+/* Description for having strict ETP protection with ITP offered in iOS14+ */
+"Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox lokar á rekjara milli vefsvæða, samfélagsmiðlarekjara, rafmyntagrafara, fingrafarasöfnun og rakningu efnis.";
+
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Ferill";
+
+/* Label for the button displayed in the menu used to stop the reload of the webpage */
+"Menu.Library.StopReload" = "Stöðva";
+
+/* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
+"Menu.ManageAccount.Label" = "Sýsla með reikninginn %@";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Slökkva á næturham";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label" = "Vikja næturham";
 
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Kveikja á næturham";
+
 /* Label for the button, displayed in the menu, hides images on the webpage when pressed. */
 "Menu.NoImageModeBlockImages.Label" = "Loka á myndir";
 
+/* Label for the button, displayed in the menu, shows images on the webpage when pressed. */
+"Menu.NoImageModeShowImages.Label" = "Birta myndir";
+
 /* Label for title in page action menu. */
-"Menu.PageActions.Title" = "Síðu aðgerðir";
+"Menu.PageActions.Title" = "Síðuaðgerðir";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Lykilorð";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Líma";
@@ -645,20 +993,32 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Líma & áfram";
 
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Leslisti";
+
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
-"Menu.ReloadWithoutTrackingProtection.Title" = "Hlaða aftur án varnar gegn því að fylgst sé með þér";
+"Menu.ReloadWithoutTrackingProtection.Title" = "Hlaða aftur án varna gegn rekjurum";
 
 /* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
-"Menu.ReloadWithTrackingProtection.Title" = "Hlaða aftur með vörn gegn því að fylgst sé með þér";
+"Menu.ReloadWithTrackingProtection.Title" = "Hlaða aftur með vörnum gegn rekjurum";
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Bókamerki fjarlægt";
+
+/* Toast displayed to the user after removing the item from the Top Sites. */
+"Menu.RemovePin.Confirm" = "Fjarlægt af lista yfir vinsæl vefsvæði";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2" = "Fjarlægt úr flýtileiðum";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Flipi sendur";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Lokað á";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Sannvottað af %@";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Engir rekjarar sem Firefox þekkir til fundust á þessari síðu.";
@@ -667,13 +1027,13 @@
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Verndarstillingar";
 
 /* Title on tracking protection menu showing the domain. eg. Protections for mozilla.org */
-"Menu.TrackingProtection.TitlePrefix" = "Vörn gegn %@";
+"Menu.TrackingProtection.TitlePrefix" = "Varnir fyrir %@";
 
 /* The title that shows the number of content cookies blocked */
-"Menu.TrackingProtectionBlockedContent.Title" = "Rakið efnið";
+"Menu.TrackingProtectionBlockedContent.Title" = "Rakning efnis";
 
 /* The title that shows the number of social URLs blocked */
-"Menu.TrackingProtectionBlockedSocial.Title" = "Samfélagsrekjarar";
+"Menu.TrackingProtectionBlockedSocial.Title" = "Samfélagsmiðlarekjarar";
 
 /* Description of the Tracking protection menu when TP is blocking parts of the page */
 "Menu.TrackingProtectionBlocking.Description" = "Firefox hefur lokað á suma hluta af þessari síðu sem gætu verið að fylgjast með vafra.";
@@ -682,46 +1042,70 @@
 "Menu.TrackingProtectionBlockingDisabled.Description" = "Loka á rekjara";
 
 /* The title that shows the number of cross-site cookies blocked */
-"Menu.TrackingProtectionCrossSiteCookies.Title" = "Smákökur millivefsvæðarekjara";
+"Menu.TrackingProtectionCrossSiteCookies.Title" = "Rakningarkökur milli vefsvæða";
 
 /* The title that shows the number of cross-site URLs blocked */
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Millivefsvæðarekjarar";
 
 /* The title that shows the number of cryptomining scripts blocked */
-"Menu.TrackingProtectionCryptominersBlocked.Title" = "Rafmyntugrafarar";
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Rafmyntagröftur";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Vefsíður geta hlaðið ytri auglýsingum, myndböndum og öðru efni sem inniheldur falda rekjara. Vefsíður munu vera fljótari að hlaðast með því að loka á þetta efni en sumir takkar, eyðublöð og innskráningarreitir virka ef til vill ekki.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Vefsvæði kunna að hlaða inn utanaðkomandi auglýsingum, myndskeiðum og öðru efni með rakningarkóða. Að loka fyrir rakningarefni getur hjálpað vefsvæðum til að hlaðast hraðar inn, en sumir hnappar, innfyllingarreitir og innskráningarreitir virka kannski ekki.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Þessar vafrakökur fylgja þér frá vefsvæði til vefsvæðis til að safna gögnum um það sem þú gerir á netinu. Þær eru settar af utanaðkomandi aðilum á borð við auglýsendur og greiningarfyrirtæki.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Rafmyntagrafarar laumast til að nota afkastagetu kerfisins þíns til að vinna stafræna peninga. Rafmyntaskriftur tæma rafhlöðuna þína, hægja á tölvunni þinni og geta hækkað rafmagnseikninginn þinn.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Stillingarnar á vafranum þínum og tölvunni eru einstakar. Fingrafarasafnarar safna ýmsum slíkum einstökuum stillingum til að búa til persónusnið af þér, sem hægt er að nota til að fylgjast með þér á meðan þú vafrar.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Samfélagsmiðlar setja rekjara á aðrar vefsíður til að byggja upp fullkomnara og markvissara persónusnið um þig. Með því að loka fyrir þessa rekjara takmarkar það hversu vel samfélagsmiðlafyrirtæki geta fylgst hvað þú gerir á netinu.";
 
 /* The button that disabled TP for a site. */
 "Menu.TrackingProtectionDisable1.Title" = "Óvirkt fyrir þetta vefsvæði";
 
 /* The confirmation toast once tracking protection has been disabled */
-"Menu.TrackingProtectionDisabled.Title" = "Slökkt hefur verið á vörn gegn gagnasöfnun fyrir þetta svæði.";
+"Menu.TrackingProtectionDisabled.Title" = "Vörn gegn gagnasöfnun er ekki virk fyrir þetta vefsvæði.";
 
 /* A button to enable tracking protection inside the menu. */
-"Menu.TrackingProtectionEnable.Title" = "Gera vörn gegn gagnasöfnun virka";
+"Menu.TrackingProtectionEnable.Title" = "Kveikja á rakningarvörn";
 
 /* A button to enable tracking protection inside the menu. */
 "Menu.TrackingProtectionEnable1.Title" = "Virkt fyrir þetta vefsvæði";
 
 /* The confirmation toast once tracking protection has been enabled */
-"Menu.TrackingProtectionEnabled.Title" = "Vörn gegn gagnasöfnun virk fyrir þetta svæði.";
+"Menu.TrackingProtectionEnabled.Title" = "Vörn gegn gagnasöfnun er núna virk fyrir þetta vefsvæði.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingraför";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingrafarasöfnun";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.CrossSiteCookies" = "Útilokaðar rakningarkökur milli vefsvæða";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Cryptominers" = "Útilokaðir rafmyntagrafarar";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Fingerprinters" = "Útilokaðir fingrafarasafnarar";
+
+/* Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners` */
+"Menu.TrackingProtectionListTitle.Social" = "Útilokaðir samfélagmiðlasrekjararar";
 
 /* more info about what tracking protection is about */
 "Menu.TrackingProtectionMoreInfo.Description" = "Læra meira um vörn gegn gagnasöfnun og hvernig það lokar á njósnaraforrit á netinu sem safna vafragögnum á milli margra vefsvæða.";
 
 /* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Engnir rekjara sem fylgjast með þér fundust á þessari síðu.";
+"Menu.TrackingProtectionNoBlocking.Description" = "Engir rekjarar sem fylgjast með þér fundust á þessari síðu.";
 
 /* label for the menu item to show when the website is whitelisted from blocking trackers. */
-"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Þessi síða inniheldur tækni sem gæti fylgst með þér. Þú hefur tekið af vörnina að fylgst sé með þér.";
+"Menu.TrackingProtectionOption.WhiteListOnDescription" = "Þessi síða inniheldur tækni sem gæti fylgst með vafrinu þínu. Þú hefur tekið af varnir gegn slíku.";
 
 /* label for the menu item that lets you remove a website from the tracking protection whitelist */
-"Menu.TrackingProtectionWhitelistRemove.Title" = "Virkt fyrir þetta vefsvæði";
+"Menu.TrackingProtectionWhitelistRemove.Title" = "Virkja fyrir þetta vefsvæði";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Hvað er nýtt";
@@ -754,11 +1138,36 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "Allt í lagi";
 
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Fara að vafra";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is a general description that appears under the title for what the card is about. */
+"Onboarding.WhatsNew.Description" = "Nú er auðveldara að halda áfram þar sem frá var horfið.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the description for the Jump Back In bullet point */
+"Onboarding.WhatsNew.PersonalizedHome.Description" = "Hoppaðu í opna flipa, bókamerki og vafraferil.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the descripion of the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Description" = "Skoðaðu nýjustu leitirnar þínar af upphafssíðunni þinni.";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the Recent Searches bullet point on the card */
+"Onboarding.WhatsNew.RecentSearches.Title" = "Nýlegar leitir";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the description for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Description" = "Síður úr sömu leit flokkast saman.";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Tab Group bullet point on the card */
+"Onboarding.WhatsNew.TabGroups.Title" = "Snyrtilegri flipahópar";
+
+/* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
+   The title for the new onboarding card letting users know what is new in Firefox iOS */
+"Onboarding.WhatsNew.Title" = "Hvað er nýtt í Firefox";
+
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Æi! Firefox hrundi";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Opnaðu greinar í lesham með því að snerta bókar íkonið þegar það birtist í titilslá.";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Opnaðu greinar í lesham með því að ýta á bókartáknið þegar það birtist í titilslá.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Opna stillingar";
@@ -773,7 +1182,7 @@
 "OpenURL.Error.Title" = "Geta ekki opnað síðu";
 
 /* Accessibility label for the Page Options menu button */
-"Page Options Menu" = "Valmynd fyrir stillingarsíðu";
+"Page Options Menu" = "Valmynd fyrir valkosti síðu";
 
 /* Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list). */
 "Panel Chooser" = "Spjaldastillingar";
@@ -805,11 +1214,20 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Meðferð persónuupplýsinga";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Tenging er ekki örugg";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Tenging er örugg";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Hraðleitarvélar";
 
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Gefðu einkunn í App Store";
+
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
-"read" = "lesa";
+"read" = "lesið";
 
 /* Accessibility label for the Reader View button */
 "Reader View" = "Leshamur";
@@ -818,19 +1236,25 @@
 "ReaderMode.Available.VoiceOverAnnouncement" = "Leshamur í boði";
 
 /* Panel accessibility label */
-"Reading list" = "Lestrarlisti";
+"Reading list" = "Leslisti";
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Nýlega lokaðir";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Sýna allt";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Endurhlaða";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Endurlesa síðu";
 
 /* Title for the button that removes a reading list item */
 "Remove" = "Fjarlægja";
 
 /* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "Fjarlægja úr lestrarlista";
+"Remove from Reading List" = "Fjarlægja af leslista";
 
 /* Cancel button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Cancel" = "Hætta við";
@@ -851,22 +1275,22 @@
 "Sans-serif" = "Sans-serif";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Vistaðu síður á leslistann með því að snerta á bókar íkonið í lesham stillingunum.";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Vistaðu síður á leslistann með því að ýta á bókartáknið í leshamsstýringunum.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "Í lagi";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "Stilla QR kóða inn í ramma til að skanna";
+"ScanQRCode.Instructions.Label" = "Stilltu QR-kóða innan ramma til að skanna";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Gögnin eru ógild";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Leyfa Firefox að fá aðgang að myndavélinni í 'Settings' -> 'Privacy' -> 'Camera'.";
+"ScanQRCode.PermissionError.Message" = "Leyfðu Firefox að fá aðgang að myndavélinni í 'Settings' -> 'Privacy' -> 'Camera'.";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "Skanna QR kóða";
+"ScanQRCode.View.Title" = "Skanna QR-kóða";
 
 /* Accessibility Label for the tab toolbar Search button
    Navigation title for search settings.
@@ -875,6 +1299,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Leit eða skrifaðu vistfang";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Skipta yfir á flipa";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Nýja leitarvélin mun birtast í leitarsvæðinu";
@@ -955,6 +1382,9 @@
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Senda";
 
+/* The text for the button on the Send to Device page if you are not signed in to Firefox Accounts. */
+"SendTo.SignIn.Button" = "Skráðu þig inn í Firefox";
+
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Nýjum flipa bætt við frá öðrutæki.";
 
@@ -968,13 +1398,13 @@
 "SentTab_TabArrivingNotification_WithDevice_title" = "Nýr flipi móttekinn frá %@";
 
 /* Label for an action used to add one or more tabs recieved from a notification to the reading list. */
-"SentTab.AddToReadingListAction.Title" = "Bæta við lestrarlista";
+"SentTab.AddToReadingListAction.Title" = "Bæta við leslista";
 
 /* Label for an action used to bookmark one or more tabs from a notification. */
 "SentTab.BookmarkAction.title" = "Bókamerkja";
 
 /* Body of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.body" = "Snerta á til að byrja";
+"SentTab.NoTabArrivingNotification.body" = "Ýttu á til að byrja";
 
 /* Title of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.title" = "Firefox samstilling";
@@ -1024,6 +1454,9 @@
 /* Title displayed in header of the setting panel. */
 "Settings.ClearPrivateData.Title" = "Hreinsa persónuleg gögn";
 
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Hreinsa atriði: %1$@";
+
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Afritað texta á klemmuspjald";
 
@@ -1040,7 +1473,7 @@
 "Settings.Disconnect.Body" = "Firefox mun hætta að samstilla reikninginn þinn en mun ekki eyða neinum vafragögnum á þessu tæki.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
-"Settings.Disconnect.Button" = "Aftengja Sync";
+"Settings.Disconnect.Button" = "Aftengja samstillingu";
 
 /* Cancel action button in alert when user is prompted for disconnect */
 "Settings.Disconnect.CancelButton" = "Hætta við";
@@ -1049,7 +1482,19 @@
 "Settings.Disconnect.DestructiveButton" = "Aftengja";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Aftengja Sync?";
+"Settings.Disconnect.Title" = "Aftengja samstillingu?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Takmörk";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Handvirkt";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Veldu hvaða þema þú vilt";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Handvirkt";
 
 /* Option choice in display theme settings for dark theme */
 "Settings.DisplayTheme.OptionDark" = "Dökkt";
@@ -1059,6 +1504,9 @@
 
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Þemað skiptir yfir á sjálfvirkun hátt miðast við birtustig skjásins. Þú getur valið mörk til að skipta yfir þema. Hringurinn sýnir núverandi birtustig.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Skipta um ham";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "Skipta skjálfvirkt miðast við birtustig skjásins";
@@ -1083,16 +1531,16 @@
 "Settings.DNT.OptionAlwaysOn" = "Ávallt";
 
 /* DNT Settings option for only turning on when Tracking Protection is also on */
-"Settings.DNT.OptionOnWithTP" = "Einungis þegar vörn gegn því að fylgst sé með þér er í gangi";
+"Settings.DNT.OptionOnWithTP" = "Aðeins þegar notaðar er varnir gegn gagnasöfnun";
 
 /* DNT Settings title */
-"Settings.DNT.Title" = "Senda vefsíðum ábendingu að ekki fylgjast með notkun þinni á netinu";
+"Settings.DNT.Title" = "Senda vefsvæðum 'Do Not Track'-ábendingu að ekki megi fylgjast með notkun þinni á netinu";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Tækjanafn";
 
 /* Label used as a section title in the Firefox Accounts Settings screen. */
-"Settings.FxA.Sync.SectionName" = "Samstilla stillingar";
+"Settings.FxA.Sync.SectionName" = "Stillingar samstillingar";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title" = "Firefox reikningur";
@@ -1100,20 +1548,92 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Almennt";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description" = "Veldu það efni sem þú sérð á upphafssíðu Firefox.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Hoppa aftur inn";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Mælt með af Pocket";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Nýlega vistað";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Nýlega heimsótt";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Flýtileiðir";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Upphafssíða eftir fjórar klukkustundir án virkni";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Upphafssíða";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Veldu hvað þú sérð þegar þú ferð aftur í Firefox.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Síðasti flipi";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Upphafsskjár";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title" = "Upphafssíða Firefox";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Bakgrunnur";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper" = "Firefox bakgrunnur, ametist-mynstur, hnappur";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper" = "Firefox bakgrunnur, cerulean-mynstur, hnappur";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper" = "Sjálfgefinn glær bakgrunnur, hnappur";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper" = "Firefox bakgrunnur, sólarupprás-mynstur, hnappur";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Víxla af/á að fletta í gegnum bakgrunna";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "UPPHAFSSKJÁR";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string describing the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchDescription" = "Flettu í gegnum og uppfærðu mynd án þess að fara af upphafssíðunni.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle" = "Ýttu á merkið til að skipta um bakgrunn";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Bakgrunnur";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Bakgrunnur uppfærður!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Skoða";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Bjart";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
-"Settings.HomePage.SectionName" = "Heimasíða";
+"Settings.HomePage.SectionName" = "Upphafssíða";
 
 /* Title displayed in header of the setting panel. */
-"Settings.HomePage.Title" = "Heimasíðu stillingar";
+"Settings.HomePage.Title" = "Stillingar upphafssíðu";
 
 /* Placeholder text in the homepage setting when no homepage has been set. */
-"Settings.HomePage.URL.Placeholder" = "Slá inn vefsvæði";
+"Settings.HomePage.URL.Placeholder" = "Settu inn vefsíðu";
 
 /* Title of the setting section containing the URL of the current home page. */
-"Settings.HomePage.URL.Title" = "Núverandi heimasíða";
+"Settings.HomePage.URL.Title" = "Núverandi upphafssíða";
 
 /* Button in settings to use the current link on the clipboard as home page. */
 "Settings.HomePage.UseCopiedLink.Button" = "Nota afritaða tengilinn";
@@ -1143,7 +1663,10 @@
 "Settings.NewTab.Option.Bookmarks" = "Bókamerki";
 
 /* The footer for the section to customize top sites in the new tab settings page. */
-"Settings.NewTab.Option.CustomizeFooter" = "Síður sem þú heimsækir mest";
+"Settings.NewTab.Option.CustomizeFooter" = "Vefsvæðin sem þú heimsækir mest";
+
+/* The footer for the section to customize top sites in the new tab settings page. */
+"Settings.NewTab.Option.CustomizeFooter2" = "Vefsvæði sem þú vistar eða heimsækir";
 
 /* The title for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeTitle" = "Sérsníða upphafssíðu Firefox";
@@ -1161,7 +1684,7 @@
 "Settings.NewTab.Option.History" = "Ferill";
 
 /* Option in settings to show your homepage when you open a new tab */
-"Settings.NewTab.Option.HomePage" = "Heimasíða";
+"Settings.NewTab.Option.HomePage" = "Upphafssíða";
 
 /* Option in settings to turn on off pocket recommendations */
 "Settings.NewTab.Option.Pocket" = "Vinsælt í Pocket";
@@ -1170,7 +1693,13 @@
 "Settings.NewTab.Option.PocketFooter" = "Frábært efni hvaðanæva af vefnum.";
 
 /* Option in settings to show reading list when you open a new tab */
-"Settings.NewTab.Option.ReadingList" = "Sýna lestrarlistann þinn";
+"Settings.NewTab.Option.ReadingList" = "Sýna leslistann þinn";
+
+/* Option in settings to turn on off pocket recommendations First argument is the pocket brand name */
+"Settings.NewTab.Option.RecommendedByPocket" = "Mælt með af %@";
+
+/* Descriptoin for the option in settings to turn on off pocket recommendations. First argument is the pocket brand name, second argument is the pocket product name. */
+"Settings.NewTab.Option.RecommendedByPocketDescription" = "Úrvalsefni í umsjón %1$@, sem er hluti af %2$@ fjölskyldunni";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Nýr flipi";
@@ -1191,10 +1720,10 @@
 "Settings.OfferClipboardBar.Title" = "Bjóða uppá að opna afritaða hlekki";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "Opna tölvupóst hlekki í";
+"Settings.OpenWith.PageTitle" = "Opna pósttengla með";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
-"Settings.OpenWith.SectionName" = "Tölvupósts smáforrit";
+"Settings.OpenWith.SectionName" = "Póstforrit";
 
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "Vista innskráningar";
@@ -1214,6 +1743,12 @@
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Senda notkunarupplýsingar";
 
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Þegar ýtt er lengi á tengla";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Birta forskoðun tengla";
+
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "Sýna valmynd forrits";
 
@@ -1224,13 +1759,73 @@
 "Settings.Siri.SectionDescription" = "Nota Siri flýtivísanir til að opna Firefox með Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
-"Settings.Siri.SectionName" = "Siri flýtivísanir";
+"Settings.Siri.SectionName" = "Siri flýtileiðir";
+
+/* Section title for all studies that are currently active */
+"Settings.Studies.Active.SectionName" = "Virkt";
+
+/* Section title for all studies that are completed */
+"Settings.Studies.Completed.SectionName" = "Lokið";
+
+/* Button title displayed next to each study allowing the user to opt-out of the study */
+"Settings.Studies.Remove.Button" = "Fjarlægja";
+
+/* Title displayed in header of the Studies panel */
+"Settings.Studies.SectionName" = "Kannanir";
+
+/* Label used as an item in Settings. Tapping on this item takes you to the Studies panel */
+"Settings.Studies.Title" = "Kannanir";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Fræðast meira.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox kann að setja upp og keyra rannsóknir af og til.";
+
+/* Toggled OFF to opt-out of studies */
+"Settings.Studies.Toggle.Off" = "Af";
+
+/* Toggled ON to participate in studies */
+"Settings.Studies.Toggle.On" = "Ǻ";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Kannanir";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Óvirkir flipar";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Flipahópar";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Sérsníða flipabakka";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Flipar";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "Neðst";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Verkfæraslá";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Efst";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Í lagi, ég skil";
+
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Ef vefsvæði virkar ekki eins og búist var við, skaltu ýta á skjöldinn á veffangastikunni og slökkva á aukinni rakningarvernd fyrir þá síðu.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Gættu þín!";
 
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
 "Settings.TrackingProtection.BlockListsHeader" = "Þú getur valið hvaða lista Firefox notar til að loka á þá vefhluta sem gætu verið að fylgjast með þér.";
 
 /* Explanation of basic mode. */
-"Settings.TrackingProtection.Info.BasicTitle" = "Jöfn vernd og afköst.";
+"Settings.TrackingProtection.Info.BasicTitle" = "Jafnvægi milli verndar og afkasta.";
 
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "LOKAÐ Á";
@@ -1238,20 +1833,38 @@
 /* Explanation of strict mode. */
 "Settings.TrackingProtection.Info.StrictTitle" = "Bíður uppá sterkari vernd en getur valdið því að sumar síður virki ekki.";
 
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Frekari upplýsingar";
+
 /* 'More Info' link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.MoreInfo" = "Nánari upplýsingar…";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Dregur úr markvissum auglýsingum og hjálpar til við að koma í veg fyrir að auglýsendur fylgist með vafrinu þínu.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ef vefsvæði virkar ekki eins og búist var við, skaltu ýta á skjöldinn á veffangastikunni og slökkva á aukinni rakningarvernd fyrir þá síðu.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Leyfir suma auglýsingarakningu svo vefsíður virki eðlilega.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Lokar á fleiri rekjara, auglýsingar og sprettiglugga. Síður hlaðast hraðar en sum virkni gæti verið í ólagi.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Verndunarstig";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
-"Settings.TrackingProtection.SectionName" = "Vörn gegn gagnasöfnun";
+"Settings.TrackingProtection.SectionName" = "Vörn gegn gagnasöfnun rekjara";
+
+/* Additional information about the strict level setting */
+"Settings.TrackingProtection.StrictLevelInfoFooter" = "Lokun á rekjara gæti haft áhrif á virkni sumra vefsvæða.";
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Staðlað (sjálfgefið)";
 
 /* Tracking protection settings option description for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Leyfa suma gagnasafnara svo vefsíður virki eðlilega.";
+"Settings.TrackingProtectionOption.BlockListBasicDescription" = "Leyfa suma rekjara svo vefsíður virki eðlilega.";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Strangt";
@@ -1260,7 +1873,7 @@
 "Settings.TrackingProtectionOption.BlockListStrictDescription" = "Lokar á þekkta gagnasafnara. Sum vefsvæði gætu virkað illa.";
 
 /* Description label shown on tracking protection options screen. */
-"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Gagnasöfnun er söfnun á upplýsingum um hvernig þú vafrar á milli vefsvæða.";
+"Settings.TrackingProtectionOption.EnabledStateFooterLabel" = "Rakning er söfnun vafragagna þinna á mörgum vefsvæðum.";
 
 /* Settings option to specify that Tracking Protection is on */
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Aukin rakningarvörn";
@@ -1281,7 +1894,7 @@
 "Settings.TranslateSnackBar.Title" = "Þýðing";
 
 /* Title of link to help page to find out how to solve Sync issues */
-"Settings.TroubleShootSync.Title" = "Leita úrræða";
+"Settings.TroubleShootSync.Title" = "Úrræðaleit";
 
 /* Button to delete website in search results */
 "Settings.WebsiteData.ButtonDelete" = "Eyða";
@@ -1298,14 +1911,17 @@
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Þessi aðgerð eyðir öllum vefsvæðisgögum þínum. Ekki er hægt að afturkalla aðgerðina.";
 
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Þessi aðgerð eyðir völdum atriðum. Ekki er hægt að afturkalla aðgerðina.";
+
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Gögn vefsvæðis";
 
 /* Action label on share extension to add page to the Firefox reading list. */
-"ShareExtension.AddToReadingListAction.Title" = "Bæta við lestrarlista";
+"ShareExtension.AddToReadingListAction.Title" = "Bæta við leslista";
 
 /* Share extension label shown after user has performed 'Add to Reading List' action. */
-"ShareExtension.AddToReadingListActionDone.Title" = "Bætt var við lestrarlista";
+"ShareExtension.AddToReadingListActionDone.Title" = "Bætt á leslista";
 
 /* Action label on share extension to bookmark the page in Firefox. */
 "ShareExtension.BookmarkThisPageAction.Title" = "Setja síðu í bókamerki";
@@ -1348,25 +1964,28 @@
 "Swipe right or left with three fingers to close the tab." = "Dragðu þrjá fingur til hægri eða vinstri til að loka flipanum.";
 
 /* Hardware shortcut for non-private tab or tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToNonPBM.KeyCodeTitle" = "Venjulegur vafra hamur";
+"SwitchToNonPBM.KeyCodeTitle" = "Venjulegur vafrahamur";
 
 /* Hardware shortcut switch to the private browsing tab or tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
-"SwitchToPBM.KeyCodeTitle" = "Einkavafra hamur";
+"SwitchToPBM.KeyCodeTitle" = "Huliðsvafrahamur";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "Samstilla flipana þína, bókamerki, lykilorð og fleira.";
+"Sync your tabs, bookmarks, passwords and more." = "Samstilltu flipana þína, bókamerki, lykilorð og fleira.";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "Synca flipana þínar, lykilorð og meira.";
+"Sync your tabs, passwords and more." = "Samstilltu flipana þína, lykilorð og fleira.";
 
 /* Message displayed when the user syncs for the first time */
-"Sync.FirstTimeMessage.Label" = "Fyrsta samhæfingin gæti tekið smá tíma";
+"Sync.FirstTimeMessage.Label" = "Fyrsta samstillingin gæti tekið dálítinn tíma";
+
+/* String displayed on Sign In to Sync page that allows the user to create a new account. */
+"Sync.NoAccount.Description" = "Enginn reikningur? Búðu til einn slíkan til að samstilla Firefox á milli tækja.";
 
 /* Message displayed when the user's account is syncing with no ellipsis */
-"Sync.Syncing.Label" = "Samhæfing í gangi";
+"Sync.Syncing.Label" = "Samstilling í gangi";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "Samhæfing…";
+"Sync.SyncingEllipsis.Label" = "Er að samstilla…";
 
 /* Panel accessibility label */
 "Synced Tabs" = "Samstilltir flipar";
@@ -1375,10 +1994,10 @@
 "SyncState.Bookmark.Title" = "Bókamerki";
 
 /* The Remote Clients sync component, used in SyncState.Partial.Title */
-"SyncState.Clients.Title" = "Fjarlægir biðlarar";
+"SyncState.Clients.Title" = "Fjartengdir biðlarar";
 
 /* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Samhæfing mistókst";
+"SyncState.Failed.Title" = "Samstilling mistókst";
 
 /* The History sync component, used in SyncState.Partial.Title */
 "SyncState.History.Title" = "Ferill";
@@ -1387,13 +2006,13 @@
 "SyncState.Logins.Title" = "Innskráningar";
 
 /* Title for Sync status message when Sync failed to start. */
-"SyncState.NotStarted.Title" = "Samhæfing ekki tiltæk";
+"SyncState.NotStarted.Title" = "Samstilling er ekki tiltæk";
 
 /* Title for Sync status message when Sync failed due to being offline */
-"SyncState.Offline.Title" = "Samhæfing er aftengd";
+"SyncState.Offline.Title" = "Samstilling er ótengd";
 
 /* Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks */
-"SyncState.Partial.Title" = "Villa hefur komið upp í samhæfingu á %@";
+"SyncState.Partial.Title" = "Samstillingin á í vandræðum með að samstilla %@";
 
 /* The Tabs sync component, used in SyncState.Partial.Title */
 "SyncState.Tabs.Title" = "Flipar";
@@ -1419,17 +2038,71 @@
 /* The placeholder text for the tab search bar */
 "Tabs.Search.PlaceholderText" = "Leitarflipar";
 
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Bæta við flipa";
+
 /* Hardware shortcut to close all tabs from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Loka öllum flipum";
 
 /* Hardware shortcut to close the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.CloseTab.KeyCodeTitle" = "Loka völdum flipa";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Valinn flipi.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Annað";
+
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Óvirkir flipar";
+
+/* The section header for tabs opened last week */
+"TabTray.LastWeek.Header" = "Í síðustu viku";
+
+/* The title on the button to copy the tab address. */
+"TabTray.MoreMenu.Copy" = "Afrita";
+
+/* The section header for tabs opened before last week */
+"TabTray.Older.Header" = "Eldra";
+
 /* Hardware shortcut to open a new tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Opna nýjan flipa";
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Opna valinn flipa";
+
+/* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
+"TabTray.OtherTabs.Title" = "Aðrir flipar";
+
+/* The title for the tab tray in private mode */
+"TabTray.PrivateTitle" = "Huliðsflipar";
+
+/* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
+"TabTray.RecentlyClosed.Description" = "Flipar eru tiltækir hér í 30 daga. Eftir þann tíma verður flipum sjálfkrafa lokað.";
+
+/* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
+"TabTray.RecentlyClosed.SectionTitle" = "Nýlega lokað";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Einka";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Samstillt";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Flipar";
+
+/* The button title to see more options to perform on the tab. */
+"TabTray.SwipeMenu.More" = "Meira";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Opnir flipar";
+
+/* The section header for tabs opened today */
+"TabTray.Today.Header" = "Í dag";
+
+/* The section header for tabs opened yesterday */
+"TabTray.Yesterday.Header" = "Í gær";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Ekki er hægt að sýna þessa síðu í lesham.";
@@ -1448,6 +2121,9 @@
 
 /* Open App Store button */
 "Toasts.OpenAppStore" = "Opna smáforrits verslun";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Afturkalla";
 
 /* History tableview section header */
 "Today" = "Í dag";
@@ -1477,7 +2153,7 @@
 "TranslationToastHandler.PromptTranslate.OK" = "Já";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "Þessi síða virðist vera í %1$@. Þýða yfir á %2$@ með %@?";
+"TranslationToastHandler.PromptTranslate.Title" = "Þessi síða virðist vera á %1$@. Þýða yfir á %2$@ með %3$@?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
@@ -1489,10 +2165,13 @@
 "UIMenuItem.SearchWithFirefox" = "Leita með Firefox";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
-"unread" = "ólesin";
+"unread" = "ólesið";
 
 /* Text message in the settings table view */
 "Upgrade Firefox to connect" = "Uppfæra Firefox til að tengjast";
+
+/* Debug option */
+"Use stage servers" = "Nota forskoðunarnetþjóna";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Notandanafn";

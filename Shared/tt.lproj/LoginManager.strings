@@ -25,6 +25,12 @@
 /* Hide password text selection menu item */
 "Hide" = "Яшерү";
 
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Логиннар бөтенләй бетерәләчәк.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Логиннар барлык тоташкан җиһазлардан да бетереләчәк.";
+
 /* Label describing when the current login was last modified with the timestamp as the parameter. */
 "Modified %@" = "Үзгәртелгән %@";
 
@@ -42,6 +48,9 @@
 
 /* Title for the search field at the top of the Logins list screen */
 "Search" = "Эзләү";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Эзләнәсе сүзләрне кертү кыры";
 
 /* Label for the button used to select all logins. */
 "Select All" = "Барысын да сайлау";

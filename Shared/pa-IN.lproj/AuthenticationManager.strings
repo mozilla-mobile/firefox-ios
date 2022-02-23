@@ -1,17 +1,17 @@
 /* 'After 1 hour' interval item for selecting when to require passcode */
-"After 1 hour" = "੧ ਘੰਟੇ ਤੋਂਂ ਬਾਅਦ";
+"After 1 hour" = "੧ ਘੰਟੇ ਬਾਅਦ";
 
 /* 'After 1 minute' interval item for selecting when to require passcode */
-"After 1 minute" = "੧ ਮਿੰਟ ਤੋਂ ਬਾਅਦ";
+"After 1 minute" = "੧ ਮਿੰਟ ਬਾਅਦ";
 
 /* 'After 5 minutes' interval item for selecting when to require passcode */
-"After 5 minutes" = "੫ ਮਿੰਟਾਂ ਤੋਂ ਬਾਅਦ";
+"After 5 minutes" = "੫ ਮਿੰਟਾਂ ਬਾਅਦ";
 
 /* 'After 10 minutes' interval item for selecting when to require passcode */
-"After 10 minutes" = "੧੦ ਮਿੰਟਾਂ ਤੋਂ ਬਾਅਦ";
+"After 10 minutes" = "੧੦ ਮਿੰਟਾਂ ਬਾਅਦ";
 
 /* 'After 15 minutes' interval item for selecting when to require passcode */
-"After 15 minutes" = "੧੫ ਮਿੰਟਾਂ ਤੋਂ ਬਾਅਦ";
+"After 15 minutes" = "੧੫ ਮਿੰਟਾਂ ਬਾਅਦ";
 
 /* Label used as a setting item and title of the following screen to change the current passcode */
 "Change Passcode" = "ਪਛਾਣ-ਅੰਕ ਬਦਲੋ";

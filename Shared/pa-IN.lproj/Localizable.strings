@@ -287,8 +287,17 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "ਹੁਣ ਤੂੰ ਟੂਲਬਾਰ ਨੂੰ ਹੇਠਾਂ ਲਿਆ ਸਕਦੇ ਹੋ ਤਾਂ ਕਿ ਜਾਣਕਾਰੀ ਭਰਨੀ ਸੌਖੀ ਰਹੇ";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "ਜਾਣਕਾਰੀ ਭਰਨ ਨੂੰ ਸੌਖਾ ਕਰਨ ਲਈ ਟੂਲਬਾਰ ਹੁਣ ਮੂਲ ਰੂਪ ਵਿੱਚ ਹੇਠਾਂ ਹੁੰਦੀ ਹੈ।";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "ਤੁਹਾਡੇ ਆਪਣੇ ਬਣਾਏ Firefox ਮੁੱਖ-ਸਫ਼ੇ ਨੇ ਹੁਣ ਜਿੱਥੇ ਤੁਸੀਂ ਛੱਡ ਕੇ ਗਏ ਸੀ, ਉਥੋਂ ਹੀ ਸ਼ੁਰੂ ਕਰਨਾ ਸੌਖਾ ਬਣਾ ਦਿੱਤਾ ਹੈ। ਆਪਣੀਆਂ ਸੱਜਰੀਆਂ ਟੈਬਾਂ, ਬੁੱਕਮਾਰਕ ਅਤੇ ਖੋਜ ਨਤੀਜੇ ਲੱਭੋ।";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "ਟੂਲਬਾਰ ਸੈਟਿੰਗਾਂ";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "ਪਿਛਲੇ ਦੋ ਹਫ਼ਤਿਆਂ ਵਿੱਚ ਤੁਹਾਡੇ ਵਲੋਂ ਨਾ ਵੇਖੀਆਂ ਟੈਬਾਂ ਨੂੰ ਇੱਥੇ ਭੇਜਿਆ ਜਾਂਦਾ ਹੈ।";
@@ -433,6 +442,15 @@
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ਮੁੱਖ-ਸਫ਼ੇ ਨੂੰ ਕਸਟਮਾਈਜ਼ ਕਰੋ";
 
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "ਹੋਰ ਲੱਭੋ";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "ਸੋਚਣ ਲਈ ਮਜ਼ਬੂਰ ਕਰਨ ਵਾਲੇ ਲੇਖ";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "ਹਟਾਓ";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ਅੱਗੇ";
 
@@ -528,6 +546,9 @@
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ਫਾਇਰਫਾਕਸ ਸਿੰਕ ਤੋਂ ਡਿਵਾਈਸ ਡਿਸ-ਕਨੈਕਟ ਕੀਤਾ ਗਿਆ";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel" = "Firefox ਲੋਗੋ, ਵਾਲਪੇਪਰ ,ਬਟਨ ਬਦਲੋ";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਖੋਲ੍ਹੀਆਂ ਟੈਬਾਂ, ਬੁੱਕਮਾਰਕ ਅਤੇ ਪਾਸਵਰਡਾਂ ਨੂੰ ਲਵੋ।";
@@ -694,6 +715,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "ਮੁੜ ਖੋਜੋ";
 
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "ਨਵਾਂ ਸਧਾਰਨ ਟੈਬ";
+
 /* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.OpenLinkInBackground" = "ਲਿੰਕ ਬੈਕਗਰਾਊਂਡ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
@@ -745,6 +769,9 @@
 /* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowTabNumber" = "ਟੈਬ ਨੰਬਰ 1-9 ਵੇਖੋ";
 
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "ਬੰਦ ਟੈਬ ਨੂੰ ਵਾਪਸ ਖੋਲ੍ਹੋ";
+
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "ਜ਼ੂਮ ਇਨ";
 
@@ -759,6 +786,15 @@
 
 /* History tableview section header */
 "Last week" = "ਪਿਛਲਾ ਹਫ਼ਤਾ";
+
+/* In the history panel, this placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder" = "ਅਤੀਤ ਖੋਜੋ";
+
+/* In the history panel, this label indicates that tapping on this item will navigate the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedHistory" = "ਸਿੰਕ ਕੀਤਾ ਅਤੀਤ";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "ਹੋਰ ਪੁਰਾਣੇ";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "ਲਸੰਸ";
@@ -1527,9 +1563,6 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "ਸੱਜਰੇ ਖੋਲ੍ਹੇ";
 
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "ਸੱਜਰੀਆਂ ਖੋਜਾਂ";
-
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "ਸ਼ਾਰਟਕੱਟ";
 
@@ -1550,6 +1583,42 @@
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
 "Settings.Home.Option.Title" = "Firefox ਮੁੱਖ-ਸਫ਼ਾ";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "ਵਾਲਪੇਪਰ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper" = "Firefox ਵਾਲਪੇਪਰ, ਜਾਮਨੀ ਪੈਟਰਨ, ਬਟਨ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper" = "Firefox ਵਾਲਪੇਪਰ, ਅਸਮਾਨੀ ਨੀਲਾ ਪੈਟਰਨ, ਬਟਨ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper" = "ਮੂਲ ਸਾਫ਼ ਵਾਲਪੇਪਰ, ਬਟਨ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper" = "Firefox ਵਾਲਪੇਪਰ, ਚੜ੍ਹਦਾ ਸੂਰਜ ਪੈਟਰਨ, ਬਟਨ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "ਮੁੱਖ ਸਫ਼ਾ ਵਾਲਪੇਪਰ ਚੱਕਰ ਬਦਲੋ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "ਸ਼ੁਰੂਆਤੀ ਸਕਰੀਨ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string describing the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchDescription" = "ਬਿਨਾਂ ਮੁੱਖ ਸਫ਼ਾ ਬਦਲੇ ਚਿੱਤਰ ਬਦਲੋ ਅਤੇ ਅੱਪਡੇਟ ਕਰੋ।";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle" = "ਵਾਲਪੇਪਰ ਬਦਲਣ ਲਈ ਲੋਗੋ ਨੂੰ ਛੂਹੋ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "ਵਾਲਪੇਪਰ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "ਵਾਲਪੇਪਰ ਅੱਪਡੇਟ ਕੀਤਾ!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "ਵੇਖੋ";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "ਸਾਫ਼ ਕਰੋ";
@@ -1733,6 +1802,15 @@
 
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "ਟੈਬਾਂ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "ਹੇਠਾਂ";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "ਟੂਲਬਾਰ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "ਉੱਤੇ";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ਠੀਕ ਹੈ, ਸਮਝ ਗਏ";

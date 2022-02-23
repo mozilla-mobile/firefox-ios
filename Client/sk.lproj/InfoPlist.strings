@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Toto vám umožňuje tvoriť a nahrávať fotky.";
+"NSCameraUsageDescription" = "Firefox používa váš fotoaparát na skenovanie QR kódov a snímanie fotografií a videí.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Pre prístup k uloženým prihláseniam vyžaduje Firefox Face ID.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Stránky, ktoré navštevujete, môžu žiadať prezradiť vašu polohu.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Toto vám umožňuje tvoriť a nahrávať videá.";
+"NSMicrophoneUsageDescription" = "Firefox používa váš mikrofón na nahrávanie zvuku.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Toto vám umožňuje ukladať fotky.";

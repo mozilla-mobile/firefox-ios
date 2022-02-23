@@ -1,14 +1,14 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Ini dapat digunakan untuk mengambil dan mengunggah foto.";
+"NSCameraUsageDescription" = "Firefox menggunakan kamera Anda untuk memindai kode QR dan mengambil foto dan video.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox membutuhkan Face ID untuk mengakses login Anda yang tersimpan.";
+"NSFaceIDUsageDescription" = "Firefox membutuhkan Face ID untuk mengakses info masuk Anda yang tersimpan.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Situs web yang Anda kunjungi dapat meminta lokasi Anda.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Ini dapat digunakan untuk mengambil dan mengunggah video.";
+"NSMicrophoneUsageDescription" = "Firefox menggunakan mikrofon Anda untuk merekam dan mengunggah audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ini memungkinkan Anda menyimpan foto.";

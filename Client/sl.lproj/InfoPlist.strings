@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "To vam omogoča slikati in pošiljati fotografije.";
+"NSCameraUsageDescription" = "Firefox uporablja vašo kamero za skeniranje QR-kod, fotografiranje in snemanje.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox za dostop do shranjenih prijav zahteva Face ID.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Spletne strani lahko zahtevajo vašo lokacijo.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Omogoča snemanje in nalaganje videa.";
+"NSMicrophoneUsageDescription" = "Firefox uporablja vaš mikrofon za snemanje in nalaganje zvoka.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "To vam omogoča shranjevati fotografije.";

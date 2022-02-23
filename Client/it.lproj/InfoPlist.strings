@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Garantisci il permesso di scattare e caricare foto.";
+"NSCameraUsageDescription" = "Firefox utilizza la fotocamera per eseguire la scansione di codici QR, scattare foto e registrare video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox richiede Face ID per accedere alle credenziali di accesso salvate.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "I siti web visitati potrebbero richiedere la posizione corrente.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Garantisci il permesso di registrare e caricare video.";
+"NSMicrophoneUsageDescription" = "Firefox utilizza il microfono per registrare e caricare audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Garantisci il permesso di salvare foto.";

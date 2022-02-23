@@ -14,6 +14,30 @@
 "eV8mOT" = "Vrsta hitrega dejanja";
 
 /* (No Comment) */
+"fi3W24-2GqvPe" = "S \"Pojdi na kopirano povezavo\" se ujema ${count} možnosti.";
+
+/* (No Comment) */
+"fi3W24-eHmH1H" = "S \"Počisti zasebne zavihke\" se ujema ${count} možnosti.";
+
+/* (No Comment) */
+"fi3W24-scEmjs" = "Z \"Novo zasebno iskanje\" se ujema ${count} možnosti.";
+
+/* (No Comment) */
+"fi3W24-xRJbBP" = "Z \"Novo iskanje\" se ujema ${count} možnosti.";
+
+/* (No Comment) */
+"PzSrmZ-2GqvPe" = "Samo za potrditev – želeli ste \"Pojdi na kopirano povezavo\"?";
+
+/* (No Comment) */
+"PzSrmZ-eHmH1H" = "Samo za potrditev – želeli ste \"Počisti zasebne zavihke\"?";
+
+/* (No Comment) */
+"PzSrmZ-scEmjs" = "Samo za potrditev – želeli ste \"Novo zasebno iskanje\"?";
+
+/* (No Comment) */
+"PzSrmZ-xRJbBP" = "Samo za potrditev – želeli ste \"Novo iskanje\"?";
+
+/* (No Comment) */
 "scEmjs" = "Novo zasebno iskanje";
 
 /* (No Comment) */

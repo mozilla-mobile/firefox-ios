@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Dette gjer det mogleg å ta og laste opp bilde.";
+"NSCameraUsageDescription" = "Firefox brukar kameraet ditt til å skanne QR-kodar og ta bilde og video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox krev Face ID for å få tilgang til dei lagra innloggingane dine.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Nettsider du besøkjer kan be om plasseringa di.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Dette gjer det mogleg å ta og laste opp videoar.";
+"NSMicrophoneUsageDescription" = "Firefox brukar mikrofonen din til å ta opp og laste opp lyd.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Dette gjer det mogleg å lagre bilde.";

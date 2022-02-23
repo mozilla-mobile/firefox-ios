@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Սա հնարավորություն է տալիս ստանալ և վերբեռնել լուսանկարներ:";
+"NSCameraUsageDescription" = "Firefox-ն օգտագործում է ձեր խցիկը՝ սկանավորելու QR կոդերը և լուսանկարելու ու տեսանյութերի համար:";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Ձեր պահված մուտքերը մուտք գործելու համար Firefox- ը պահանջում է Face ID:";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Ձեր այցելած կայքերը կարող են հարցնել ձեր տեղադրությունը։";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Սա ձեզ թույլատրում է նկարել և վերբեռնել տեսանյութեր։";
+"NSMicrophoneUsageDescription" = "Firefox-ն օգտագործում է ձեր բարձրախոսը ձայնագրելու և վերբեռնելու ձայնանյութ:";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Սա ձեզ թույլ է տալիս պահպանել լուսանկարներ։";

@@ -14,28 +14,28 @@
 "eV8mOT" = "Jenis Tindakan Cepat";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "Ada ${count} opsi yang cocok dengan ‘Buka Tautan Tersalin’.";
+"fi3W24-2GqvPe" = "Ada ${count} opsi yang cocok dengan ‘Buka Tautan Tersalin‘.";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "Ada ${count} opsi yang cocok dengan ‘Hapus Tab Pribadi’.";
+"fi3W24-eHmH1H" = "Ada ${count} opsi yang cocok dengan ‘Bersihkan Tab Pribadi‘.";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "Ada ${count} opsi yang cocok dengan ‘Pencarian Pribadi Baru’.";
+"fi3W24-scEmjs" = "Ada ${count} opsi yang cocok dengan ‘Pencarian Pribadi Baru‘.";
 
 /* (No Comment) */
 "fi3W24-xRJbBP" = "Ada ${count} opsi yang cocok dengan ‘Pencarian Baru’.";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Hanya untuk mengonfirmasi, Anda ingin ‘Buka Tautan Tersalin’?";
+"PzSrmZ-2GqvPe" = "Hanya untuk mengonfirmasi, Anda ingin melakukan ‘Buka Tautan Tersalin‘?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Hanya untuk mengonfirmasi, Anda ingin ‘Hapus Tab Pribadi’?";
+"PzSrmZ-eHmH1H" = "Hanya untuk mengonfirmasi, Anda ingin melakukan ‘Bersihkan Tab Pribadi‘?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Hanya untuk mengonfirmasi, Anda ingin ‘Pencarian Pribadi Baru’?";
+"PzSrmZ-scEmjs" = "Hanya untuk mengonfirmasi, Anda ingin melakukan ‘Pencarian Pribadi Baru‘?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Hanya untuk mengonfirmasi, Anda ingin ‘Pencarian Baru’?";
+"PzSrmZ-xRJbBP" = "Hanya untuk mengonfirmasi, Anda ingin melakukan ‘Pencarian Baru‘?";
 
 /* (No Comment) */
 "scEmjs" = "Pencarian Pribadi Baru";
