@@ -675,6 +675,13 @@ workflows:
             echo "Setting Nimbus variables"
             /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
         title: Nimbus Variable Setup
+    - script@1:
+        title: Configure Sentry for Beta
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN}" Client/Info.plist
     - xcode-archive@4.0:
         inputs:
         - compile_bitcode: 'no'
@@ -692,6 +699,14 @@ workflows:
         - password: "$APPLE_ACCOUNT_PW"
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload FirefoxBeta Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     - script@1:
         inputs:
         - content: |-
@@ -882,6 +897,13 @@ workflows:
             echo "Setting Nimbus variables"
             /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "Client/Info.plist"
         title: Nimbus Variable Setup
+    - script@1:
+        title: Configure Sentry Nightly
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_NIGHTLY_DSN}" Client/Info.plist
     - xcode-archive@4.0:
         inputs:
         - compile_bitcode: 'no'
@@ -900,6 +922,14 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'Nightly FirefoxBeta: Xcode Archive & Export for iOS'
+    - script@1:
+        title: Upload Nightly Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:
         is_expand: false

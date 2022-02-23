@@ -20,7 +20,11 @@ public enum SentryTag: String {
     case tabDisplayManager = "TabDisplayManager"
 }
 
-public class Sentry {
+public protocol SentryProtocol {
+    var crashedLastLaunch: Bool { get }
+}
+
+public class Sentry: SentryProtocol {
     public static let shared = Sentry()
 
     private let SentryDSNKey = "SentryDSN"
@@ -32,6 +36,10 @@ public class Sentry {
     private var enabled = false
 
     private var attributes: [String: Any] = [:]
+    
+    public var crashedLastLaunch: Bool {
+        return SentrySDK.crashedLastRun
+    }
 
     public func setup(sendUsageData: Bool) {
         assert(!enabled, "Sentry.setup() should only be called once")
@@ -57,34 +65,32 @@ public class Sentry {
             Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }
-
         Logger.browserLogger.debug("Enabling Sentry crash handler")
 
-        do {
-            SentrySDK.start(options: [
-                "dsn": dsn
-            ])
-            enabled = true
-
-            // If we have not already for this install, generate a completely random identifier
-            // for this device. It is stored in the app group so that the same value will
-            // be used for both the main application and the app extensions.
-            if let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier), defaults.string(forKey: SentryDeviceAppHashKey) == nil {
-                defaults.set(Bytes.generateRandomBytes(DeviceAppHashLength).hexEncodedString, forKey: SentryDeviceAppHashKey)
+        SentrySDK.start { options in
+            options.dsn = dsn
+            options.beforeSend = { event in
+                let attributes = event.extra ?? [:]
+                self.attributes = attributes.merge(with: self.attributes)
+                event.extra = attributes
+                
+                return event
             }
+        }
+        
+        let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
+        SentrySDK.configureScope { scope in
+            scope.setContext(value: [
+                "device_app_hash": deviceAppHash ?? self.DefaultDeviceAppHash
+            ], key: "appContext")
+        }
+        enabled = true
 
-            // For all outgoing reports, override the default device identifier with our own random
-            // version. Default to a blank (zero) identifier in case of errors.
-//            client?.beforeSerializeEvent = { event in
-//                let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
-//                event.context?.appContext?["device_app_hash"] = deviceAppHash ?? self.DefaultDeviceAppHash
-//
-//                let attributes = event.extra ?? [:]
-//                self.attributes = attributes.merge(with: self.attributes)
-//                event.extra = attributes
-//            }
-        } catch let error {
-            Logger.browserLogger.error("Failed to initialize Sentry: \(error)")
+        // If we have not already for this install, generate a completely random identifier
+        // for this device. It is stored in the app group so that the same value will
+        // be used for both the main application and the app extensions.
+        if let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier), defaults.string(forKey: SentryDeviceAppHashKey) == nil {
+            defaults.set(Bytes.generateRandomBytes(DeviceAppHashLength).hexEncodedString, forKey: SentryDeviceAppHashKey)
         }
 
         // Ignore SIGPIPE exceptions globally.
@@ -93,28 +99,24 @@ public class Sentry {
     }
 
     public func crash() {
+        // Send crash if Sentry is enabled
+        guard enabled else { return }
+        
         SentrySDK.crash()
     }
-
-    /*
-         This is the behaviour we want for Sentry logging
-                   .info .error .severe
-         Debug      y      y       y
-         Beta       y      y       y
-         Relase     n      n       y
-     */
-    private func shouldNotSendEventFor(_ severity: SentryLevel) -> Bool {
-        return !enabled || (AppConstants.BuildChannel == .release && severity != .fatal)
-    }
-
-    private func makeEvent(message: String, tag: String, severity: SentryLevel, extra: [String: Any]?) -> Event {
-        let event = Event(level: severity)
-        event.message = SentryMessage(formatted: message)
-        event.tags = ["tag": tag]
-        if let extra = extra {
-            event.extra = extra
+    
+    public func captureEvent(event: Event) {
+        // Capture event if Sentry is enabled and a message is available
+        guard let message = event.message?.formatted, enabled else { return }
+        
+        SentrySDK.capture(message: message) { (scope) in
+            scope.setEnvironment(event.environment)
+            scope.setExtras(event.extra)
         }
-        return event
+    }
+    
+    public func captureError(error: NSError) {
+        SentrySDK.capture(error: error)
     }
 
     public func send(message: String, tag: SentryTag = .general, severity: SentryLevel = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
@@ -135,10 +137,7 @@ public class Sentry {
         }
 
         let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
-        SentrySDK.capture(message: message) { (scope) in
-            scope.setEnvironment(event.environment)
-            scope.setExtras(extra)
-        }
+        captureEvent(event: event)
     }
 
     public func sendWithStacktrace(message: String, tag: SentryTag = .general, severity: SentryLevel = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
@@ -156,20 +155,42 @@ public class Sentry {
             completion?(nil)
             return
         }
+        
+        let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
+        captureEvent(event: event)
     }
 
     public func addAttributes(_ attributes: [String: Any]) {
         self.attributes = self.attributes.merge(with: attributes)
     }
-
-    public func breadcrumb(category: String, message: String) {
+    
+    // Add manual breadcrumb
+    public func addBreadcrumb(category: String, message: String) {
         let breadcrumb = Breadcrumb(level: .info, category: category)
         breadcrumb.message = message
         SentrySDK.addBreadcrumb(crumb: breadcrumb)
     }
+    
+    // MARK: - Private
+    /*
+         This is the behaviour we want for Sentry logging
+                   .info .error .severe
+         Debug      y      y       y
+         Beta       y      y       y
+         Relase     n      n       y
+     */
+    private func shouldNotSendEventFor(_ severity: SentryLevel) -> Bool {
+        return !enabled || (AppConstants.BuildChannel == .release && severity != .fatal)
+    }
 
-    public func clearBreadcrumbs() {
-        client?.breadcrumbs.clear()
+    private func makeEvent(message: String, tag: String, severity: SentryLevel, extra: [String: Any]?) -> Event {
+        let event = Event(level: severity)
+        event.message = SentryMessage(formatted: message)
+        event.tags = ["tag": tag]
+        if let extra = extra {
+            event.extra = extra
+        }
+        return event
     }
 
     private func printMessage(message: String, extra: [String: Any]? = nil) {
