@@ -13,12 +13,12 @@ import Foundation
 /// should be move here and updated throughout the app.
 public struct AccessibilityIdentifiers {
     
-    struct BottomToolbar {
+    struct Toolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
-    }
-    
-    struct TabToolbar {
         static let homeButton = "TabToolbar.homeButton"
+        static let trackingProtection = "TabLocationView.trackingProtectionButton"
+        static let readerModeButton = "TabLocationView.readerModeButton"
+        static let reloadButton = "TabLocationView.reloadButton"
     }
 
     struct FirefoxHomepage {
@@ -72,7 +72,7 @@ public struct AccessibilityIdentifiers {
                 static let shortcuts = ""
                 static let jumpBackIn = "Jump Back In"
                 static let recentlySaved = "Recently Saved"
-                static let recentSearches = "Recent Searches"
+                static let recentVisited = "Recently Visited"
                 static let recommendedByPocket = "Recommended by Pocket"
             }
         }

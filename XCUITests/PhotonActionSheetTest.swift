@@ -28,14 +28,14 @@ class PhotonActionSheetTest: BaseTestCase {
 //
 //        // Check that it has been unpinned
 //        cell.press(forDuration: 2)
-//        waitForExistence(app.cells["action_pin"])
+//        waitForExistence(app.cells[ImageIdentifiers.addShortcut])
     }
 
     func testShareOptionIsShown() {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
         navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 3)
+        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.share], timeout: 3)
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
@@ -44,13 +44,11 @@ class PhotonActionSheetTest: BaseTestCase {
 
     // Smoketest
     func testShareOptionIsShownFromShortCut() {
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 3)
-        let pageObjectButton = app.buttons["TabLocationView.pageOptionsButton"]
-        // Fix to bug 1467393, url bar long press is shown sometimes instead of the share menu
-        let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
-        pageObjectButtonCenter.press(forDuration: 1)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 3)
+        navigator.performAction(Action.ShareBrowserTabMenuOption)
 
         // Wait to see the Share options sheet
         if iPad() {
@@ -96,9 +94,9 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 5)
-        app.tables["Context Menu"].staticTexts["Share"].tap()
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.share], timeout: 5)
+        navigator.performAction(Action.ShareBrowserTabMenuOption)
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2

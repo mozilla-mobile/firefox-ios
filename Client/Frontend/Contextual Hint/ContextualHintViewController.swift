@@ -95,6 +95,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
+        isPresenting = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,7 +104,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         onViewSummoned = nil
         view.setNeedsLayout()
         view.layoutIfNeeded()
-        isPresenting = true
         
         // Portrait orientation: lock enable
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait,

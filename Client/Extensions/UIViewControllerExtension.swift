@@ -38,15 +38,13 @@ extension UIViewController {
     /// for (width, height) for both fullscreen AND multi-tasking layouts. In some
     /// instances, we may wish to use iPhone layouts on the iPad when its size class
     /// is of type (.compact, .regular).
-    var shouldUseiPadSetup: Bool {
-        get {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                if traitCollection.horizontalSizeClass == .compact { return false }
-                return true
-            }
-
-            return false
+    func shouldUseiPadSetup(traitCollection: UITraitCollection? = nil) -> Bool {
+        let trait = traitCollection == nil ? self.traitCollection : traitCollection
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return trait!.horizontalSizeClass != .compact
         }
+
+        return false
     }
 
     /// This presents a View Controller with a bar button item that can be used to dismiss the VC
@@ -72,11 +70,23 @@ extension UIViewController {
         } else {
             themedNavigationController.modalPresentationStyle = .fullScreen
         }
-        self.present(themedNavigationController, animated: true, completion: nil)
+        present(viewController: themedNavigationController, animated: true)
     }
     
     @objc func dismissVC() {
         self.dismiss(animated: true, completion: nil)
+    }
+
+    /// A convenience function to dismiss modal presentation views if they are
+    /// currently presented.
+    func present(viewController: UIViewController, animated: Bool) {
+        if let presentedViewController = presentedViewController {
+            presentedViewController.dismiss(animated: false, completion: {
+                self.present(viewController, animated: animated, completion: nil)
+            })
+        } else {
+            present(viewController, animated: animated, completion: nil)
+        }
     }
 }
  

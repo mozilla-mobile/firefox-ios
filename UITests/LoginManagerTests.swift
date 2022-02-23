@@ -267,7 +267,7 @@ class LoginManagerTests: KIFTestCase {
         EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
         if BrowserUtils.iPad() {
             let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
-                                              grey_accessibilityID("menu-Settings")])
+                                              grey_accessibilityID(ImageIdentifiers.settings)])
             EarlGrey.selectElement(with: settings_button).perform(grey_tap())
         } else {
             EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())

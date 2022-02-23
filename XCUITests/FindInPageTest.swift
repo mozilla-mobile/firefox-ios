@@ -6,9 +6,10 @@ import XCTest
 
 class FindInPageTests: BaseTestCase {
     private func openFindInPageFromMenu() {
-        navigator.goto(BrowserTab)
         waitUntilPageLoad()
-        navigator.goto(PageOptionsMenu)
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+
         navigator.goto(FindInPage)
 
         waitForExistence(app.buttons["FindInPage.find_next"], timeout: 5)
@@ -22,10 +23,10 @@ class FindInPageTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 15)
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
-        waitForExistence(app.tables["Context Menu"].cells["menu-FindInPage"], timeout: 10)
-        app.tables["Context Menu"].cells["menu-FindInPage"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
+        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.findInPage], timeout: 10)
+        app.tables["Context Menu"].cells[ImageIdentifiers.findInPage].tap()
 
         // Enter some text to start finding
         app.textFields["FindInPage.searchField"].typeText("Book")
@@ -35,7 +36,7 @@ class FindInPageTests: BaseTestCase {
 
     // Smoketest
     func testFindFromMenu() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         openFindInPageFromMenu()
 
         // Enter some text to start finding
@@ -85,10 +86,10 @@ class FindInPageTests: BaseTestCase {
         // Workaround until FxSGraph is fixed to allow the previos way with goto
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        waitForExistence(app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/, timeout: 15)
-        app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         // Enter some text to start finding
-        app.tables["Context Menu"].cells["menu-FindInPage"].tap()
+        app.tables["Context Menu"].cells[ImageIdentifiers.findInPage].tap()
         app.textFields["FindInPage.searchField"].typeText("The Book of")
         waitForExistence(app.textFields["The Book of"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")

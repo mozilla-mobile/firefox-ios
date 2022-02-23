@@ -199,7 +199,7 @@ class NavigationTest: BaseTestCase {
         app.textFields["url"].press(forDuration: 2)
 
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["menu-Paste"].tap()
+        app.tables.cells[ImageIdentifiers.paste].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -213,7 +213,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.textFields["url"].press(forDuration: 2)
 
-        app.tables.cells["menu-Paste"].tap()
+        app.tables.cells[ImageIdentifiers.paste].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -249,7 +249,7 @@ class NavigationTest: BaseTestCase {
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
         app.textFields["url"].press(forDuration:3)
-        app.tables.cells["menu-Copy-Link"].tap()
+        app.tables.cells[ImageIdentifiers.copyLink].tap()
         
         sleep(2)
         app.textFields["url"].tap()
@@ -383,21 +383,23 @@ class NavigationTest: BaseTestCase {
     func testVerifyBrowserTabMenu() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
 
-        XCTAssertTrue(app.tables.cells["menu-panel-Bookmarks"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-History"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-Downloads"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-ReadingList"].exists)
-        XCTAssertTrue(app.tables.cells["key"].exists)
-        XCTAssertTrue(app.tables.cells["menu-sync"].exists)
-        XCTAssertTrue(app.tables.cells["menu-NoImageMode"].exists)
-        XCTAssertTrue(app.tables.cells["menu-NightMode"].exists)
-        XCTAssertTrue(app.tables.cells["whatsnew"].exists)
-        XCTAssertTrue(app.tables.cells["menu-Settings"].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.bookmarks].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.history].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.downloads].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.key].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
+//        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.noImageMode].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.settings].exists)
+        // TODO: Add new options added [Customize home page, new tab, help]
+        // Customize home page, help and whatsNew are only there when we are on the homepage menu
     }
 
     // Smoketest

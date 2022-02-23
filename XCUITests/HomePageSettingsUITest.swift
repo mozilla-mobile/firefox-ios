@@ -59,7 +59,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
 
         //Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.buttons["TabToolbar.homeButton"]
+        let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
         waitForExistence(homePageMenuItem, timeout: 5)
         homePageMenuItem.tap()
         waitUntilPageLoad()
@@ -224,7 +224,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Commented due to experimental features
         // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String, "1")
         // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String, "1")
-        XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentSearches].value as! String, "0")
+        XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String, "0")
         XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recommendedByPocket].value as! String, "1")
     }
 }
