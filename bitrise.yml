@@ -903,7 +903,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_NIGHTLY_DSN}" Client/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :SentryNightlyDSN string ${SENTRY_NIGHTLY_DSN}" Client/Info.plist
     - xcode-archive@4.0:
         inputs:
         - compile_bitcode: 'no'
