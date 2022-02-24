@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Isso permite tirar fotos e enviar.";
+"NSCameraUsageDescription" = "Isso permite tirar e enviar fotos.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Isso permite você desbloquear o aplicativo.";
