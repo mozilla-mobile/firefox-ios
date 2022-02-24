@@ -89,15 +89,15 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         let labelHeight = descriptionLabel.heightForLabel(
             descriptionLabel,
             width: containerView.frame.width - spacingWidth,
-            text: viewModel.descriptionText())
+            text: viewModel.hintType.descriptionText())
 
-        switch viewModel.isActionType() {
+        switch viewModel.hintType.isActionType() {
         case true:
             guard let titleLabel = actionButton.titleLabel else { fallthrough }
             let buttonHeight = titleLabel.heightForLabel(
                 titleLabel,
                 width: containerView.frame.width - spacingWidth,
-                text: viewModel.buttonActionText())
+                text: viewModel.hintType.buttonActionText())
 
             return buttonHeight + labelHeight + UX.labelTop + UX.labelBottom
 
@@ -169,7 +169,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         view.layer.addSublayer(gradient)
 
         stackView.addArrangedSubview(descriptionLabel)
-        if viewModel.isActionType() { stackView.addArrangedSubview(actionButton) }
+        if viewModel.hintType.isActionType() { stackView.addArrangedSubview(actionButton) }
 
         containerView.addSubview(closeButton)
         containerView.addSubview(stackView)
@@ -216,9 +216,9 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
 
     private func setupContent() {
-        descriptionLabel.text = viewModel.descriptionText()
+        descriptionLabel.text = viewModel.hintType.descriptionText()
 
-        if viewModel.isActionType() {
+        if viewModel.hintType.isActionType() {
 
             let textAttributes: [NSAttributedString.Key: Any] = [
                 .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
@@ -228,7 +228,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
             ]
 
             let attributeString = NSMutableAttributedString(
-                string: viewModel.buttonActionText(),
+                string: viewModel.hintType.buttonActionText(),
                 attributes: textAttributes
             )
 
@@ -276,7 +276,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         viewModel.arrowDirection = arrowDirection
 
         toggleArrowBasedConstraints()
-        if !viewModel.shouldPresentContextualHint() { viewModel.startTimer() }
+        if viewModel.shouldPresentContextualHint() { viewModel.startTimer() }
     }
 
     public func stopTimer() {

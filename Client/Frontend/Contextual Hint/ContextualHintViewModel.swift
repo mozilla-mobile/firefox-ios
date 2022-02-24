@@ -13,9 +13,42 @@ enum CFRTelemetryEvent {
 }
 
 enum ContextualHintViewType: String {
+    typealias CFRStrings = String.ContextualHints
+
     case jumpBackIn = "JumpBackIn"
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
+
+    func descriptionText() -> String {
+        switch self {
+        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Body
+        case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
+
+        case .toolbarLocation:
+            switch BrowserViewController.foregroundBVC().isBottomSearchBar {
+            case true: return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
+            case false: return CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
+            }
+        }
+    }
+
+    func buttonActionText() -> String {
+        switch self {
+        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Action
+        case .toolbarLocation: return CFRStrings.Toolbar.SearchBarPlacementButtonText
+        default: return ""
+        }
+    }
+
+    func isActionType() -> Bool {
+        switch self {
+        case .inactiveTabs,
+                .toolbarLocation:
+            return true
+
+        default: return false
+        }
+    }
 }
 
 class ContextualHintViewModel {
@@ -146,40 +179,5 @@ class ContextualHintViewModel {
         timer = nil
         presentFromTimer?()
         presentFromTimer = nil
-    }
-
-
-    // MARK: - Type Text
-    typealias CFRStrings = String.ContextualHints
-
-    func descriptionText() -> String {
-        switch hintType {
-        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Body
-        case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
-
-        case .toolbarLocation:
-            switch BrowserViewController.foregroundBVC().isBottomSearchBar {
-            case true: return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
-            case false: return CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
-            }
-        }
-    }
-
-    func buttonActionText() -> String {
-        switch hintType {
-        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Action
-        case .toolbarLocation: return CFRStrings.Toolbar.SearchBarPlacementButtonText
-        default: return ""
-        }
-    }
-
-    func isActionType() -> Bool {
-        switch hintType {
-        case .inactiveTabs,
-                .toolbarLocation:
-            return true
-
-        default: return false
-        }
     }
 }
