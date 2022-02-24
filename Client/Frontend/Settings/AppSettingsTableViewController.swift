@@ -8,6 +8,8 @@ import Shared
 enum AppSettingsDeeplinkOption {
     case contentBlocker
     case customizeHomepage
+    case customizeTabs
+    case customizeToolbar
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
@@ -48,6 +50,13 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         case .customizeHomepage:
             viewController = HomePageSettingViewController(prefs: profile.prefs)
+            
+        case .customizeTabs:
+            viewController = TabsSettingsViewController()
+            
+        case .customizeToolbar:
+            let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+            viewController = SearchBarSettingsViewController(viewModel: viewModel)
         }
 
         viewController.profile = profile
@@ -168,7 +177,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
-                ResetJumpBackInContextualHint(settings: self),
+                ResetContextualHints(settings: self),
                 OpenFiftyTabsDebugOption(settings: self),
                 ExperimentsSettings(settings: self)
             ])]

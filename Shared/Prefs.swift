@@ -43,8 +43,10 @@ public struct PrefsKeys {
     public static let KeySearchBarPosition = "SearchBarPosition"
 
     // Firefox contextual hint
-    public struct ContextualHints {
-        public static let JumpBackinKey = "ContextualHintJumpBackin"
+    public enum ContextualHints: String, CaseIterable {
+        case JumpBackinKey = "ContextualHintJumpBackin"
+        case InactiveTabsKey = "ContextualHintInactiveTabs"
+        case ToolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
     }
 
     // Activity Stream
