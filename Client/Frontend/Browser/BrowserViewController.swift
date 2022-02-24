@@ -512,7 +512,6 @@ class BrowserViewController: UIViewController {
         }
         showQueuedAlertIfAvailable()
 
-        profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHints.ToolbarOnboardingKey.rawValue)
         prepareURLOnboardingContextualHint()
     }
 

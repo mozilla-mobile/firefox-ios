@@ -211,6 +211,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         topContainerConstraint?.constant = topPadding
         bottomContainerConstraint?.constant = -bottomPadding
 
+        setupContent()
+
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
