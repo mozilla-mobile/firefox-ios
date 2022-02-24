@@ -13,25 +13,51 @@ enum CFRTelemetryEvent {
 }
 
 enum ContextualHintViewType: String {
-    typealias ContextualHints = String.ContextualHints.FirefoxHomepage
+    typealias CFRStrings = String.ContextualHints
     
     case jumpBackIn = "JumpBackIn"
-//    case inactiveTabs
+    case inactiveTabs = "InactiveTabs"
+    case toolbarLocation = "ToolbarLocation"
     
-    func descriptionForHint() -> String {
+    func descriptionText() -> String {
         switch self {
-        case .jumpBackIn:
-            return ContextualHints.JumpBackIn.PersonalizedHome
-//        case .inactiveTabs:
-//            return ContextualHints.TabsTray.InactiveTabs.Body
+        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Body
+        case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
+            
+        case .toolbarLocation:
+            switch BrowserViewController.foregroundBVC().isBottomSearchBar {
+            case true: return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
+            case false: return CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
+            }
+        }
+    }
+    
+    func buttonActionText() -> String {
+        switch self {
+        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Action
+        case .toolbarLocation: return CFRStrings.Toolbar.SearchBarPlacementButtonText
+        default: return ""
+        }
+    }
+    
+    func isActionType() -> Bool {
+        switch self {
+        case .inactiveTabs,
+                .toolbarLocation:
+            return true
+            
+        default: return false
         }
     }
 }
 
 class ContextualHintViewModel {
+    typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 
     // MARK: - Properties
     var hintType: ContextualHintViewType
+    var timer: Timer?
+    var presentFromTimer: (() -> Void)? = nil
     private var profile: Profile
     private var hasSentDismissEvent = false
     
@@ -43,6 +69,17 @@ class ContextualHintViewModel {
         return contextualHintData
     }
     
+    // Prevent JumpBackIn CFR from being presented if the onboarding
+    // CFR has not yet been presented.
+    private var canJumpBackInBePresented: Bool {
+        if let hasShownOboardingCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
+           hasShownOboardingCFR {
+            return true
+        }
+        
+        return false
+    }
+    
     // Do not present contextual hint in landscape on iPhone
     private var isDeviceHintReady: Bool {
         !UIWindow.isLandscape || UIDevice.current.userInterfaceIdiom == .pad
@@ -50,8 +87,9 @@ class ContextualHintViewModel {
     
     private var prefsKey: String {
         switch hintType {
-        case .jumpBackIn:
-            return PrefsKeys.ContextualHints.JumpBackinKey
+        case .inactiveTabs: return CFRPrefsKeys.InactiveTabsKey.rawValue
+        case .jumpBackIn: return CFRPrefsKeys.JumpBackinKey.rawValue
+        case .toolbarLocation: return CFRPrefsKeys.ToolbarOnboardingKey.rawValue
         }
     }
     
@@ -64,11 +102,35 @@ class ContextualHintViewModel {
     // MARK: - Interface
     func shouldPresentContextualHint() -> Bool {
         guard isDeviceHintReady else { return false }
-        return !hasAlreadyBeenPresented
+        switch hintType {
+        case .jumpBackIn: return canJumpBackInBePresented && !hasAlreadyBeenPresented
+        default: return !hasAlreadyBeenPresented
+        }
     }
     
     func markContextualHintPresented() {
         profile.prefs.setBool(true, forKey: prefsKey)
+    }
+    
+    func startTimer() {
+        var timeInterval: TimeInterval = 0
+        
+        switch hintType {
+        case .toolbarLocation: timeInterval = 0.5
+        default: timeInterval = 1.25
+        }
+        
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(timeInterval: timeInterval,
+                                     target: self,
+                                     selector: #selector(presentHint),
+                                     userInfo: nil,
+                                     repeats: false)
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
     }
     
     // MARK: - Telemetry
@@ -98,4 +160,13 @@ class ContextualHintViewModel {
                                          extras: extra)
         }
     }
+    
+    // MARK: - Present
+    @objc private func presentHint() {
+        timer?.invalidate()
+        timer = nil
+        presentFromTimer?()
+        presentFromTimer = nil
+    }
 }
+

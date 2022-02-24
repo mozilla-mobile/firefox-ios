@@ -221,6 +221,6 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showCustomizeHomePage() {
-        showCustomizeHomeSettings()
+        showSettingsWithDeeplink(to: .customizeHomepage)
     }
 }
