@@ -14,16 +14,16 @@ enum CFRTelemetryEvent {
 
 enum ContextualHintViewType: String {
     typealias CFRStrings = String.ContextualHints
-    
+
     case jumpBackIn = "JumpBackIn"
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
-    
+
     func descriptionText() -> String {
         switch self {
         case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Body
         case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
-            
+
         case .toolbarLocation:
             switch BrowserViewController.foregroundBVC().isBottomSearchBar {
             case true: return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
@@ -31,7 +31,7 @@ enum ContextualHintViewType: String {
             }
         }
     }
-    
+
     func buttonActionText() -> String {
         switch self {
         case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Action
@@ -39,7 +39,7 @@ enum ContextualHintViewType: String {
         default: return ""
         }
     }
-    
+
     func isActionType() -> Bool {
         switch self {
         case .inactiveTabs,
@@ -59,16 +59,18 @@ class ContextualHintViewModel {
     var timer: Timer?
     var presentFromTimer: (() -> Void)? = nil
     private var profile: Profile
-    private var hasSentDismissEvent = false
-    
+    private var hasSentTelemetryEvent = false
+
+    var arrowDirection: UIPopoverArrowDirection?
+
     private var hasAlreadyBeenPresented: Bool {
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
             return false
         }
-        
+
         return contextualHintData
     }
-    
+
     // Prevent JumpBackIn CFR from being presented if the onboarding
     // CFR has not yet been presented.
     private var canJumpBackInBePresented: Bool {
@@ -76,15 +78,15 @@ class ContextualHintViewModel {
            hasShownOboardingCFR {
             return true
         }
-        
+
         return false
     }
-    
+
     // Do not present contextual hint in landscape on iPhone
     private var isDeviceHintReady: Bool {
         !UIWindow.isLandscape || UIDevice.current.userInterfaceIdiom == .pad
     }
-    
+
     private var prefsKey: String {
         switch hintType {
         case .inactiveTabs: return CFRPrefsKeys.InactiveTabsKey.rawValue
@@ -92,13 +94,13 @@ class ContextualHintViewModel {
         case .toolbarLocation: return CFRPrefsKeys.ToolbarOnboardingKey.rawValue
         }
     }
-    
+
     // MARK: - Initializers
     init(forHintType hintType: ContextualHintViewType, with profile: Profile) {
         self.hintType = hintType
         self.profile = profile
     }
-    
+
     // MARK: - Interface
     func shouldPresentContextualHint() -> Bool {
         guard isDeviceHintReady else { return false }
@@ -114,36 +116,36 @@ class ContextualHintViewModel {
             return !hasAlreadyBeenPresented
         }
     }
-    
+
     func markContextualHintPresented() {
         profile.prefs.setBool(true, forKey: prefsKey)
     }
-    
+
     func startTimer() {
         var timeInterval: TimeInterval = 0
-        
+
         switch hintType {
         case .toolbarLocation: timeInterval = 0.5
         default: timeInterval = 1.25
         }
-        
+
         timer?.invalidate()
-        
+
         timer = Timer.scheduledTimer(timeInterval: timeInterval,
                                      target: self,
                                      selector: #selector(presentHint),
                                      userInfo: nil,
                                      repeats: false)
     }
-    
+
     func stopTimer() {
         timer?.invalidate()
     }
-    
+
     // MARK: - Telemetry
     func sendTelemetryEvent(for eventType: CFRTelemetryEvent) {
         let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: hintType.rawValue]
-        
+
         switch eventType {
         case .closeButton:
             TelemetryWrapper.recordEvent(category: .action,
@@ -151,10 +153,10 @@ class ContextualHintViewModel {
                                          object: .contextualHint,
                                          value: .dismissCFRFromButton,
                                          extras: extra)
-            hasSentDismissEvent = true
-            
+            hasSentTelemetryEvent = true
+
         case .tapToDismiss:
-            if hasSentDismissEvent { return }
+            if hasSentTelemetryEvent { return }
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .contextualHint,
@@ -167,10 +169,10 @@ class ContextualHintViewModel {
                                          object: .contextualHint,
                                          value: .pressCFRActionButton,
                                          extras: extra)
-            hasSentDismissEvent = true
+            hasSentTelemetryEvent = true
         }
     }
-    
+
     // MARK: - Present
     @objc private func presentHint() {
         timer?.invalidate()
@@ -179,4 +181,3 @@ class ContextualHintViewModel {
         presentFromTimer = nil
     }
 }
-
