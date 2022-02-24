@@ -24,9 +24,17 @@ class ActivityStreamTest: BaseTestCase {
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
             if iPad() {
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPad, LaunchArguments.SkipContextualHintJumpBackIn]
+                launchArguments = [LaunchArguments.SkipIntro,
+                                   LaunchArguments.SkipWhatsNew,
+                                   LaunchArguments.SkipETPCoverSheet,
+                                   LaunchArguments.LoadDatabasePrefix + pagesVisitediPad,
+                                   LaunchArguments.SkipContextualHints]
             } else {
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone, LaunchArguments.SkipContextualHintJumpBackIn]
+                launchArguments = [LaunchArguments.SkipIntro,
+                                   LaunchArguments.SkipWhatsNew,
+                                   LaunchArguments.SkipETPCoverSheet,
+                                   LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone,
+                                   LaunchArguments.SkipContextualHints]
             }
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
