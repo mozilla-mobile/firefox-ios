@@ -958,6 +958,6 @@ trigger_map:
 - push_branch: v98.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  workflow: RunAllXCUITests
 - pull_request_target_branch: epic-branch/*
   workflow: RunUnitTests

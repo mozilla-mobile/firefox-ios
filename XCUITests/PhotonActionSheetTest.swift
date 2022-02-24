@@ -32,11 +32,11 @@ class PhotonActionSheetTest: BaseTestCase {
     }
 
     func testShareOptionIsShown() {
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.share], timeout: 3)
-        navigator.browserPerformAction(.shareOption)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.share], timeout: 3)
+        navigator.performAction(Action.ShareBrowserTabMenuOption)
 
         // Wait to see the Share options sheet
         waitForExistence(app.buttons["Copy"], timeout: 10)
@@ -60,9 +60,10 @@ class PhotonActionSheetTest: BaseTestCase {
 
     func testSendToDeviceFromPageOptionsMenu() {
         // User not logged in
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        navigator.browserPerformAction(.sendToDeviceOption)
+        navigator.goto(BrowserTabMenu)
+        navigator.performAction(Action.SentToDevice)
         waitForExistence(app.navigationBars["Client.InstructionsView"])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }

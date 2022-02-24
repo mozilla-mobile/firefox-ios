@@ -49,7 +49,7 @@ class DownloadFilesTests: BaseTestCase {
 
         waitForExistence(app.tables["Context Menu"], timeout: 5)
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileNameDownloadPanel].exists)
-        XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
+        XCTAssertTrue(app.tables["Context Menu"].otherElements["download"].exists)
         app.buttons["Cancel"].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -100,9 +100,8 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
-
-        XCTAssertTrue(app.tables.cells.buttons["Share"].exists)
-        XCTAssertTrue(app.tables.cells.buttons["Delete"].exists)
+        XCTAssertTrue(app.tables.buttons.staticTexts["Share"].exists)
+        XCTAssertTrue(app.tables.buttons.staticTexts["Delete"].exists)
     }
 
     func testLongPressOnDownloadedFile() {
@@ -173,7 +172,10 @@ class DownloadFilesTests: BaseTestCase {
         app.cells.switches["Downloaded Files"].tap()
         navigator.performAction(Action.AcceptClearPrivateData)
 
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(HomePanelsScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         // Check there is still one item
         checkTheNumberOfDownloadedItems(items: 0)
