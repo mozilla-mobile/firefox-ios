@@ -242,8 +242,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
     
     @objc private func performAction() {
+        self.viewModel.sendTelemetryEvent(for: .performAction)
         self.dismiss(animated: true) {
-            self.viewModel.sendTelemetryEvent(for: .performAction)
             self.onActionTapped?()
             self.onActionTapped = nil
         }
@@ -274,7 +274,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         viewModel.presentFromTimer = presentation
         
         toggleArrowBasedConstraints(arrowDirection: arrowDirection)
-        if !viewModel.hasAlreadyBeenPresented { viewModel.startTimer() }
+        if !viewModel.shouldPresentContextualHint() { viewModel.startTimer() }
     }
     
     public func stopTimer() {
