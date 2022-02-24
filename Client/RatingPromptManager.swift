@@ -137,7 +137,7 @@ final class RatingPromptManager {
                 return
             }
 
-            let bookmarksCounts = children.compactMap { $0.type == .bookmark }.count
+            let bookmarksCounts = children.filter { $0.type == .bookmark }.count
             strongSelf.hasMinimumMobileBookmarksCount = bookmarksCounts >= strongSelf.minimumMobileBookmarksCount
             group.leave()
         }
