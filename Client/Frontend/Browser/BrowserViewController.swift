@@ -72,7 +72,7 @@ class BrowserViewController: UIViewController {
     fileprivate var customSearchBarButton: UIBarButtonItem?
     var updateState: TabUpdateState = .coldStart
     var openedUrlFromExternalSource = false
-    
+
     var contextHintVC: ContextualHintViewController
 
     // popover rotation handling
@@ -122,7 +122,7 @@ class BrowserViewController: UIViewController {
     var hasTriedToPresentDBCardAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
-    
+
     /// Set to true when the user taps the home button. Used to prevent entering overlay mode.
     /// Immediately set to false afterwards.
     var userHasPressedHomeButton = false
@@ -157,7 +157,7 @@ class BrowserViewController: UIViewController {
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.ratingPromptManager = RatingPromptManager(profile: profile)
-        
+
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
         self.contextHintVC = ContextualHintViewController(with: contextViewModel)
@@ -517,7 +517,7 @@ class BrowserViewController: UIViewController {
 
     private func prepareURLOnboardingContextualHint() {
         guard contextHintVC.shouldPresentHint() else { return }
-        
+
         contextHintVC.configure(
             anchor: urlBar,
             withArrowDirection: isBottomSearchBar ? .down : .up,
@@ -826,7 +826,7 @@ class BrowserViewController: UIViewController {
             wallpaperManager.runResourceVerification()
         }
     }
-    
+
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
@@ -913,14 +913,14 @@ class BrowserViewController: UIViewController {
 
         if isAboutHomeURL {
             showFirefoxHome(inline: true)
-            
+
             if userHasPressedHomeButton {
                 userHasPressedHomeButton = false
-                
+
             } else if focusUrlBar && !contextHintVC.shouldPresentHint() {
                 enterOverlayMode()
             }
-            
+
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideFirefoxHome()
             urlBar.shouldHideReloadButton(shouldUseiPadSetup())
@@ -930,7 +930,7 @@ class BrowserViewController: UIViewController {
             topTabsViewController?.refreshTabs()
         }
     }
-    
+
     private func enterOverlayMode() {
         if let viewcontroller = presentedViewController as? OnViewDismissable {
             viewcontroller.onViewDismissed = { [weak self] in
@@ -1765,7 +1765,7 @@ extension BrowserViewController: HomePanelDelegate {
         default: break
         }
     }
-    
+
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
         showSettingsWithDeeplink(to: settingsPage)
     }
@@ -2533,4 +2533,3 @@ extension BrowserViewController {
         return (UIApplication.shared.delegate as! AppDelegate).browserViewController
     }
 }
-
