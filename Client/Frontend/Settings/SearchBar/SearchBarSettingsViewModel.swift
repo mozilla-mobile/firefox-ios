@@ -25,11 +25,6 @@ protocol SearchBarPreferenceDelegate: AnyObject {
 
 final class SearchBarSettingsViewModel {
 
-    /// New user defaults to bottom search bar, existing users keep their existing search bar position
-    static func getDefaultSearchPosition() -> SearchBarPosition {
-        return InstallType.get() == .fresh ? .bottom : .top
-    }
-    
     static var isEnabled: Bool {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let isFeatureEnabled = FeatureFlagsManager.shared.isFeatureActiveForBuild(.bottomSearchBar)
@@ -49,8 +44,8 @@ final class SearchBarSettingsViewModel {
     }
 
     var searchBarPosition: SearchBarPosition {
-        let defaultPosition = SearchBarSettingsViewModel.getDefaultSearchPosition()
         guard let raw = prefs.stringForKey(PrefsKeys.KeySearchBarPosition) else {
+            let defaultPosition = getDefaultSearchPosition()
             // Do not notify if it's the default position being saved
             saveSearchBarPosition(defaultPosition, shouldNotify: false)
             return defaultPosition
@@ -81,6 +76,11 @@ final class SearchBarSettingsViewModel {
 
 // MARK: Private
 private extension SearchBarSettingsViewModel {
+
+    /// New user defaults to bottom search bar, existing users keep their existing search bar position
+    func getDefaultSearchPosition() -> SearchBarPosition {
+        return InstallType.get() == .fresh ? .bottom : .top
+    }
 
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition, shouldNotify: Bool = true) {
         prefs.setString(searchBarPosition.rawValue,
