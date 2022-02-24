@@ -452,7 +452,7 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
             return a.section < b.section || (a.section == b.section && a.row < b.row)
         }
 
-        guard !indexPaths.isEmpty else {
+        guard indexPaths.isNotEmpty else {
             return .TabTrayNoTabsAccessibilityHint
         }
 
@@ -645,7 +645,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs:
-            if let groups = tabDisplayManager.tabGroups, !groups.isEmpty {
+            if let groups = tabDisplayManager.tabGroups, groups.isNotEmpty {
                 return sectionHeaderSize
             }
         default: return .zero

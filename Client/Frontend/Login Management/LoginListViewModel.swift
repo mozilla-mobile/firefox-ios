@@ -140,7 +140,7 @@ final class LoginListViewModel {
 
             // Disable the search controller if there are no logins saved
             if !(self.searchController?.isActive ?? true) {
-                self.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
+                self.searchController?.searchBar.isUserInteractionEnabled = logins.isNotEmpty
                     self.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
             }
         }

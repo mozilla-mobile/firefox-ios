@@ -88,9 +88,9 @@ enum NavigationPath {
          */
         func sanitizedURL(for unsanitized: URL) -> URL {
             guard var components = URLComponents(url: unsanitized, resolvingAgainstBaseURL: true),
-                  let scheme = components.scheme, !scheme.isEmpty else {
-                return unsanitized
-            }
+                  let scheme = components.scheme,
+                  scheme.isNotEmpty
+            else { return unsanitized }
 
             components.scheme = scheme.lowercased()
             return components.url ?? unsanitized
@@ -112,7 +112,7 @@ enum NavigationPath {
         }
 
         let isOurScheme = [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
-        if isOurScheme, let host = components.host?.lowercased(), !host.isEmpty {
+        if isOurScheme, let host = components.host?.lowercased(), host.isNotEmpty {
             if host == "deep-link", let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
                 self = .deepLink(link)
             } else if host == "fxa-signin", components.valueForQuery("signin") != nil {
@@ -179,7 +179,7 @@ enum NavigationPath {
     }
 
     private static func handleWidgetKitQuery(components: URLComponents) -> NavigationPath? {
-        guard let host = components.host?.lowercased(), !host.isEmpty else {
+        guard let host = components.host?.lowercased(), host.isNotEmpty else {
             return nil
         }
         switch host {
@@ -237,7 +237,7 @@ enum NavigationPath {
 
     private static func openWidgetUrl(components: URLComponents) -> NavigationPath {
         let tabs = SimpleTab.getSimpleTabs()
-        guard let uuid = components.valueForQuery("uuid"), !tabs.isEmpty else {
+        guard let uuid = components.valueForQuery("uuid"), tabs.isNotEmpty else {
             return .url(webURL: nil, isPrivate: false)
         }
         let tab = tabs[uuid]

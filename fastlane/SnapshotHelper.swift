@@ -108,11 +108,11 @@ open class Snapshot: NSObject {
             NSLog("Couldn't detect/set locale...")
         }
 
-        if locale.isEmpty && !deviceLanguage.isEmpty {
+        if locale.isEmpty && deviceLanguage.isNotEmpty {
             locale = Locale(identifier: deviceLanguage).identifier
         }
 
-        if !locale.isEmpty {
+        if locale.isNotEmpty {
             app.launchArguments += ["-AppleLocale", "\"\(locale)\""]
         }
     }

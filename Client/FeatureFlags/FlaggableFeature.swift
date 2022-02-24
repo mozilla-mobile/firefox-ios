@@ -111,7 +111,7 @@ struct FlaggableFeature {
     /// Allows fine grain control over a feature, by allowing to directly set the state to ON
     /// or OFF, and also set the features option as an Int
     public func setUserPreferenceFor(_ option: String) {
-        guard !option.isEmpty,
+        guard option.isNotEmpty,
               let optionsKey = featureOptionsKey
         else { return }
 

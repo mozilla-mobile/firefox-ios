@@ -104,7 +104,7 @@ class AddCredentialViewController: UIViewController {
     /// - Parameter website: Website address provided by the user in a String format
     /// - Returns: Normalized website containing `https://` URL scheme if necessary
     private func normalize(website: String) -> String {
-        guard !website.isEmpty else { return website }
+        guard website.isNotEmpty else { return website }
         if website.hasPrefix("http://") || website.hasPrefix("https://") {
             return website
         } else {

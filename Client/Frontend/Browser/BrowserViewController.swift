@@ -748,7 +748,7 @@ class BrowserViewController: UIViewController {
 
                 // Filter out any tabs received by a push notification to prevent dupes.
                 let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
-                if !urls.isEmpty {
+                if urls.isNotEmpty {
                     DispatchQueue.main.async {
                         self.tabManager.addTabsForURLs(urls, zombie: false)
                     }
@@ -761,7 +761,7 @@ class BrowserViewController: UIViewController {
             }
 
             // Then, open any received URLs from push notifications.
-            if !receivedURLs.isEmpty {
+            if receivedURLs.isNotEmpty {
                 DispatchQueue.main.async {
                     self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
                 }
@@ -1173,7 +1173,7 @@ class BrowserViewController: UIViewController {
             // Ensure that the tab title *actually* changed to prevent repeated calls
             // to navigateInTab(tab:).
             guard let title = tab.title else { break }
-            if !title.isEmpty && title != tab.lastTitle {
+            if title.isNotEmpty && title != tab.lastTitle {
                 tab.lastTitle = title
                 navigateInTab(tab: tab, webViewStatus: .title)
             }
@@ -2391,14 +2391,14 @@ extension BrowserViewController: TabTrayDelegate {
     func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab) {}
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
-        guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
+        guard let url = tab.url?.absoluteString, url.isNotEmpty else { return }
         let tabState = tab.tabState
         addBookmark(url: url, title: tabState.title, favicon: tabState.favicon)
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .tabTray)
     }
 
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
-        guard let url = tab.url?.absoluteString, !url.isEmpty else { return nil }
+        guard let url = tab.url?.absoluteString, url.isNotEmpty else { return nil }
         return profile.readingList.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.current.name).value.successValue
     }
 }

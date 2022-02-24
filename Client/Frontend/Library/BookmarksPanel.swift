@@ -233,7 +233,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         // If this node is a folder and it is not empty, we need
         // to prompt the user before deleting.
         if let bookmarkFolder = bookmarkNode as? BookmarkFolderData,
-           !bookmarkFolder.childGUIDs.isEmpty {
+           bookmarkFolder.childGUIDs.isNotEmpty {
             let alertController = UIAlertController(title: .BookmarksDeleteFolderWarningTitle, message: .BookmarksDeleteFolderWarningDescription, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderCancelButtonLabel, style: .cancel))
             alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderDeleteButtonLabel, style: .destructive) { (action) in
@@ -404,7 +404,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty,
+        guard section == BookmarksSection.recent.rawValue, recentBookmarks.isNotEmpty,
               let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? SiteTableViewHeader else {
                   return nil
               }
@@ -425,7 +425,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == BookmarksSection.recent.rawValue && !recentBookmarks.isEmpty ? SiteTableViewControllerUX.HeaderHeight : 0
+        return section == BookmarksSection.recent.rawValue && recentBookmarks.isNotEmpty ? SiteTableViewControllerUX.HeaderHeight : 0
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

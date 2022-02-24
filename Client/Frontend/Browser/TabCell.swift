@@ -282,7 +282,7 @@ extension TabTrayCell {
     func getA11yTitleLabel(tab: Tab) -> String? {
         let baseName = getTabTrayTitle(tab: tab)
 
-        if isSelectedTab, let baseName = baseName, !baseName.isEmpty {
+        if isSelectedTab, let baseName = baseName, baseName.isNotEmpty {
             return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
             return String.TabTrayCurrentlySelectedTabAccessibilityLabel

@@ -218,7 +218,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         placeholderLabel.adjustsFontSizeToFitWidth = true
         placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder
         placeholderLabel.text = placeholder
-        placeholderLabel.isHidden = !textField.text.isEmpty
+        placeholderLabel.isHidden = textField.text.isNotEmpty
         placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
         textField.font = placeholderLabel.font
 

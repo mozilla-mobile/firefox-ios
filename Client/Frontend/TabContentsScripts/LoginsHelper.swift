@@ -35,8 +35,10 @@ class LoginsHelper: TabContentScript {
 
     fileprivate func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
         guard let uri = URL(string: uriString),
-            let scheme = uri.scheme, !scheme.isEmpty,
-            let host = uri.host else {
+              let scheme = uri.scheme,
+              scheme.isNotEmpty,
+              let host = uri.host
+        else {
             // bug 159484 - disallow url types that don't support a hostPort.
             // (although we handle "javascript:..." as a special case above.)
             log.debug("Couldn't parse origin for \(uriString)")
@@ -171,7 +173,7 @@ class LoginsHelper: TabContentScript {
         let https = "^https:\\/\\/"
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
         let userName = login.username
-        if !userName.isEmpty {
+        if userName.isNotEmpty {
             promptMessage = String(format: .SaveLoginUsernamePrompt, userName, url)
         } else {
             promptMessage = String(format: .SaveLoginPrompt, url)
@@ -204,7 +206,7 @@ class LoginsHelper: TabContentScript {
 
         let formatted: String
         let userName = new.username
-        if !userName.isEmpty {
+        if userName.isNotEmpty {
             formatted = String(format: .UpdateLoginUsernamePrompt, userName, new.hostname)
         } else {
             formatted = String(format: .UpdateLoginPrompt, new.hostname)

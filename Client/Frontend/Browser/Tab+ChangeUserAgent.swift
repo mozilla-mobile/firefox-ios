@@ -30,7 +30,7 @@ extension Tab {
         }
 
         static func updateDomainList(forUrl url: URL, isChangedUA: Bool, isPrivate: Bool) {
-            guard let baseDomain = url.baseDomain, !baseDomain.isEmpty else { return }
+            guard let baseDomain = url.baseDomain, baseDomain.isNotEmpty else { return }
 
             if isPrivate {
                 if isChangedUA {

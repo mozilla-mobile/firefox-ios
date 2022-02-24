@@ -168,7 +168,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             return
         }
 
-        guard let displayURL = tab.url?.absoluteString, !displayURL.isEmpty else {
+        guard let displayURL = tab.url?.absoluteString, displayURL.isNotEmpty else {
             return
         }
 
@@ -181,7 +181,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                 return
             }
 
-            self.hasRemoteClients = !clientGUIDs.isEmpty
+            self.hasRemoteClients = clientGUIDs.isNotEmpty
             let clientPickerController = DevicePickerViewController()
             clientPickerController.pickerDelegate = clientPickerDelegate
             clientPickerController.profile = browserProfile

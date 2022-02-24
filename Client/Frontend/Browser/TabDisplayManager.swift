@@ -1003,7 +1003,7 @@ extension TabDisplayOrder {
     }
 
     static func encode(tabDisplayOrder: TabDisplayOrder?) {
-        guard let tabDisplayOrder = tabDisplayOrder, !tabDisplayOrder.regularTabUUID.isEmpty else {
+        guard let tabDisplayOrder = tabDisplayOrder, tabDisplayOrder.regularTabUUID.isNotEmpty else {
             TabDisplayOrder.defaults.removeObject(forKey: PrefsKeys.KeyTabDisplayOrder)
             return
         }

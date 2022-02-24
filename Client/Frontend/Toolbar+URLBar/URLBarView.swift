@@ -483,7 +483,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
     }
 
     func setLocation(_ location: String?, search: Bool) {
-        guard let text = location, !text.isEmpty else {
+        guard let text = location, text.isNotEmpty else {
             locationTextField?.text = location
             return
         }
@@ -767,7 +767,7 @@ extension URLBarView: TabLocationViewDelegate {
 extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         guard let text = locationTextField?.text else { return true }
-        if !text.trimmingCharacters(in: .whitespaces).isEmpty {
+        if text.trimmingCharacters(in: .whitespaces).isNotEmpty {
             delegate?.urlBar(self, didSubmitText: text)
             return true
         } else {

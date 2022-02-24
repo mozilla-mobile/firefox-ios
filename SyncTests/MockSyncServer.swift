@@ -40,7 +40,7 @@ private struct SyncRequestSpec {
         // Input is "/1.5/user/storage/collection", possibly with "/id" at the end.
         // That means we get five or six path components here, the first being empty.
 
-        let parts = request.path.components(separatedBy: "/").filter { !$0.isEmpty }
+        let parts = request.path.components(separatedBy: "/").filter { $0.isNotEmpty }
         let id: String?
         let query = request.query!
         let ids = optStringArray(x: query["ids"] as AnyObject?)
@@ -103,7 +103,7 @@ struct SyncDeleteRequestSpec {
     }
 
     static func fromPath(path: String, withQuery query: [NSString: AnyObject]) -> SyncDeleteRequestSpec? {
-        let parts = path.components(separatedBy: "/").filter { !$0.isEmpty }
+        let parts = path.components(separatedBy: "/").filter { $0.isNotEmpty }
         let queryIDs: [GUID]? = (query["ids"] as? String)?.components(separatedBy: ",")
 
         guard [2, 4, 5].contains(parts.count) else {
@@ -135,7 +135,7 @@ private struct SyncPutRequestSpec {
         // Input is "/1.5/user/storage/collection/id}}}".
         // That means we get six path components here, the first being empty.
 
-        let parts = request.path.components(separatedBy: "/").filter { !$0.isEmpty }
+        let parts = request.path.components(separatedBy: "/").filter { $0.isNotEmpty }
 
         guard parts.count == 5 else {
             return nil

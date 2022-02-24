@@ -346,7 +346,7 @@ class WebPageSetting: StringPrefSetting {
     }
 
     static func isURLOrEmpty(_ string: String?) -> Bool {
-        guard let string = string, !string.isEmpty else {
+        guard let string = string, string.isNotEmpty else {
             return true
         }
         return URL(string: string)?.isWebPage() ?? false

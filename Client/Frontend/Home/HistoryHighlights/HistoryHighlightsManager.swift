@@ -44,7 +44,7 @@ class HistoryHighlightsManager {
 
         fetchHighlights(with: profile) { highlights in
 
-            guard let highlights = highlights, !highlights.isEmpty else {
+            guard let highlights = highlights, highlights.isNotEmpty else {
                 completion(nil)
                 return
             }
@@ -74,7 +74,7 @@ class HistoryHighlightsManager {
                                                                       frequency: self.defaultFrequencyWeight),
                                      limit: limit).uponQueue(.main) { result in
 
-            guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
+            guard let ASHighlights = result.successValue, ASHighlights.isNotEmpty else { return completion(nil) }
 
             completion(ASHighlights)
         }
@@ -106,7 +106,7 @@ class HistoryHighlightsManager {
     /// - Returns: A  `HighlightItem` arrray alternating `HistoryHighlight` and search `ASGroup<HistoryHighlight>`
     private static func collateForRecentlySaved(from groups: [ASGroup<HistoryHighlight>]?,
                                                 and highlights: [HistoryHighlight]) -> [HighlightItem] {
-        guard let groups = groups, !groups.isEmpty else { return highlights }
+        guard let groups = groups, groups.isNotEmpty else { return highlights }
 
         var highlightItems: [HighlightItem] = highlights
 

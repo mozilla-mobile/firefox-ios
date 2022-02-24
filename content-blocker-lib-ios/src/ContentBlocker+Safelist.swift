@@ -74,7 +74,7 @@ extension ContentBlocker {
     }
     // Ensure domains used for safelisting are standardized by using this function.
     func safelistableDomain(fromUrl url: URL) -> String? {
-        guard let domain = url.host, !domain.isEmpty else {
+        guard let domain = url.host, domain.isNotEmpty else {
             return nil
         }
         return domain
@@ -90,7 +90,7 @@ extension ContentBlocker {
     func readSafelistFile() -> [String]? {
         guard let fileURL = safelistFileURL() else { return nil }
         let text = try? String(contentsOf: fileURL, encoding: .utf8)
-        if let text = text, !text.isEmpty {
+        if let text = text, text.isNotEmpty {
             return text.components(separatedBy: .newlines)
         }
 

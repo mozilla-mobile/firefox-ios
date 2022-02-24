@@ -201,7 +201,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             return
         }
         let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else {
+        guard urlActions.isNotEmpty else {
             return
         }
         let generator = UIImpactFeedbackGenerator(style: .heavy)

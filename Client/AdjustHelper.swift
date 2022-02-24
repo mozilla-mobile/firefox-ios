@@ -42,7 +42,9 @@ final class AdjustHelper {
 
     private func getConfig() -> ADJConfig? {
         let bundle = AppInfo.applicationBundle
-        guard let appToken = bundle.object(forInfoDictionaryKey: AdjustHelper.adjustAppTokenKey) as? String, !appToken.isEmpty else {
+        guard let appToken = bundle.object(forInfoDictionaryKey: AdjustHelper.adjustAppTokenKey) as? String,
+              appToken.isNotEmpty
+        else {
             log.debug("Adjust - Not enabling Adjust; Not configured in Info.plist")
             return nil
         }

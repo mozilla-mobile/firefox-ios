@@ -52,7 +52,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         else { return false }
 
         let tabManager = BrowserViewController.foregroundBVC().tabManager
-        return !isPrivate && !tabManager.recentlyAccessedNormalTabs.isEmpty
+        return !isPrivate && tabManager.recentlyAccessedNormalTabs.isNotEmpty
     }
 
     var shouldShowJumpBackInSection: Bool {
@@ -127,7 +127,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
                     enabledSections.append(.logoHeader)
                 }
             case .topSites:
-                if isTopSitesSectionEnabled && !topSitesManager.content.isEmpty {
+                if isTopSitesSectionEnabled && topSitesManager.content.isNotEmpty {
                     enabledSections.append(.topSites)
                 }
             case .pocket:

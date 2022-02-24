@@ -30,7 +30,7 @@ class FxHomePocketViewModel {
 
     var pocketStories: [PocketStory] = []
     var hasData: Bool {
-        return !pocketStories.isEmpty
+        return pocketStories.isNotEmpty
     }
 
     // The dimension of a cell

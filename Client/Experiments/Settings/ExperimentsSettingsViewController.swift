@@ -37,7 +37,7 @@ class ExperimentsSettingsViewController: UIViewController {
     }
 
     @objc private func updateState() {
-        experimentsView.reloadButton.isEnabled = !(experimentsView.customRemoteSettingsTextField.text?.isEmpty ?? true)
+        experimentsView.reloadButton.isEnabled = (experimentsView.customRemoteSettingsTextField.text?.isNotEmpty ?? true)
         experimentsView.customExperimentDataTextView.text = localExperimentsData
         experimentsView.usePreviewToggle.setOn(Experiments.usePreviewCollection(), animated: false)
 

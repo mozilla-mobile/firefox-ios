@@ -63,7 +63,7 @@ class PhotonActionSheetContainerCell: UITableViewCell {
     func configure(with item: SingleActionViewModel) {
         let childView = PhotonActionSheetView()
         childView.configure(with: item)
-        childView.addVerticalBorder(ifShouldBeShown: !containerStackView.arrangedSubviews.isEmpty)
+        childView.addVerticalBorder(ifShouldBeShown: containerStackView.arrangedSubviews.isNotEmpty)
         childView.delegate = self
         containerStackView.addArrangedSubview(childView)
         containerStackView.axis = item.multipleItemsSetup.axis

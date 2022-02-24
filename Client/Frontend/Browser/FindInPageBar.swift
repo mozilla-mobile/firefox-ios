@@ -178,7 +178,7 @@ class FindInPageBar: UIView {
     }
 
     private func saveSearchText(_ searchText: String?) {
-        guard let text = searchText, !text.isEmpty else { return }
+        guard let text = searchText, text.isNotEmpty else { return }
         UserDefaults.standard.set(text, forKey: FindInPageBar.savedTextKey)
     }
 

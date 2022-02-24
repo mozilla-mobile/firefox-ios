@@ -330,7 +330,7 @@ class Tab: NSObject {
             tabGroupsTimerHelper.startOrResume()
             tabGroupData.tabHistoryCurrentState = state.rawValue
         case .tabNavigatedToDifferentUrl:
-            if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
+            if tabGroupData.tabAssociatedNextUrl.isNotEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
                 // reset tab group
                 tabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
                 shouldResetTabGroupData = true
@@ -388,7 +388,7 @@ class Tab: NSObject {
                 history: history,
                 lastUsed: Date.now(),
                 icon: nil)
-        } else if let sessionData = tab.sessionData, !sessionData.urls.isEmpty {
+        } else if let sessionData = tab.sessionData, sessionData.urls.isNotEmpty {
             let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reversed())
             if let displayURL = history.first {
                 return RemoteTab(clientGUID: nil,
@@ -558,7 +558,7 @@ class Tab: NSObject {
     }
 
     var displayTitle: String {
-        if let title = webView?.title, !title.isEmpty {
+        if let title = webView?.title, title.isNotEmpty {
             let key = tabGroupData.tabHistoryMetadatakey()
             if lastObservation.keyUrl == key.url &&
                 lastObservation.referrerUrl == key.referrerUrl &&
@@ -590,7 +590,7 @@ class Tab: NSObject {
             return shownUrl
         }
 
-        guard let lastTitle = lastTitle, !lastTitle.isEmpty else {
+        guard let lastTitle = lastTitle, lastTitle.isNotEmpty else {
             return self.url?.displayURL?.absoluteString ??  ""
         }
 
@@ -793,7 +793,7 @@ class Tab: NSObject {
     }
 
     func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
-        guard !alertQueue.isEmpty else {
+        guard alertQueue.isNotEmpty else {
             return nil
         }
         return alertQueue.removeFirst()

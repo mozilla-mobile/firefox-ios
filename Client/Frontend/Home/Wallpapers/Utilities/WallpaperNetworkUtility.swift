@@ -76,7 +76,7 @@ class WallpaperNetworkUtility: WallpaperFilePathProtocol, Loggable {
     private func urlScheme() -> String? {
         let bundle = AppInfo.applicationBundle
         guard let appToken = bundle.object(forInfoDictionaryKey: WallpaperNetworkUtility.wallpaperURLScheme) as? String,
-              !appToken.isEmpty
+              appToken.isNotEmpty
         else {
             browserLog.debug("Error fetching wallpapers: asset scheme not configured in Info.plist")
             return nil

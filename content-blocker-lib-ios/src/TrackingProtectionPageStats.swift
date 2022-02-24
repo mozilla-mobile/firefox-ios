@@ -38,7 +38,7 @@ class TPStatsBlocklistChecker {
     func isBlocked(url: URL, mainDocumentURL: URL) -> Deferred<BlocklistCategory?> {
         let deferred = Deferred<BlocklistCategory?>()
 
-        guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
+        guard let blockLists = blockLists, let host = url.host, host.isNotEmpty else {
             // TP Stats init isn't complete yet
             deferred.fill(nil)
             return deferred
@@ -162,7 +162,7 @@ class TPStatsBlocklists {
                     return
                 }
                 let baseDomain = String(filter[loc.upperBound...]).replacingOccurrences(of: "\\.", with: ".")
-                assert(!baseDomain.isEmpty)
+                assert(baseDomain.isNotEmpty)
 
                 // Sanity check for the lists.
                 ["*", "?", "+"].forEach { x in
@@ -207,7 +207,7 @@ class TPStatsBlocklists {
                 }
 
                 // Check the safelist.
-                if let baseDomain = url.baseDomain, !safelistedDomains.isEmpty {
+                if let baseDomain = url.baseDomain, safelistedDomains.isNotEmpty {
                     for ignoreDomain in safelistedDomains {
                         if baseDomain.range(of: ignoreDomain, options: .regularExpression) != nil {
                             return nil

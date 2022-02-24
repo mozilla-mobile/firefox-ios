@@ -28,7 +28,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard let tab = tabManager.selectedTab else { return }
         
         let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else { return }
+        guard urlActions.isNotEmpty else { return }
         
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()

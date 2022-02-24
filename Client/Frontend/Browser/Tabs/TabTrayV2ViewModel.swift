@@ -150,7 +150,7 @@ class TabTrayV2ViewModel: NSObject {
             date = ""
         }
         
-        return (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
+        return (sectionHeader + (date.isNotEmpty ? " — " : " ") + date).uppercased()
     }
     
     // The user has tapped the close button or has swiped away the cell

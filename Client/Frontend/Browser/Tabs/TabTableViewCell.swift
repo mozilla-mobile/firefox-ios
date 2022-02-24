@@ -35,7 +35,10 @@ class TabTableViewCell: UITableViewCell, NotificationThemeable {
     }
     
     private func viewSetup() {
-        guard let websiteTitle = websiteTitle, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
+        guard let websiteTitle = websiteTitle,
+              let screenshotView = screenshotView,
+              let urlLabel = urlLabel
+        else { return }
         
         screenshotView.contentMode = .scaleAspectFill
         screenshotView.clipsToBounds = true
@@ -68,7 +71,13 @@ class TabTableViewCell: UITableViewCell, NotificationThemeable {
     
     // Helper method to remake title constraint
     func remakeTitleConstraint() {
-        guard let websiteTitle = websiteTitle, let text = websiteTitle.text, !text.isEmpty, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
+        guard let websiteTitle = websiteTitle,
+              let text = websiteTitle.text,
+              text.isNotEmpty,
+              let screenshotView = screenshotView,
+              let urlLabel = urlLabel
+        else { return }
+
         websiteTitle.numberOfLines = 2
         websiteTitle.snp.remakeConstraints { make in
             make.leading.equalTo(screenshotView.snp.trailing).offset(ChronologicalTabsControllerUX.screenshotMarginLeftRight)

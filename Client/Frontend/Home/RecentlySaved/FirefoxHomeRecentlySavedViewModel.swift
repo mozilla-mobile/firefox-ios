@@ -40,7 +40,7 @@ class FirefoxHomeRecentlySavedViewModel {
 
     // Whether the section is has data to show or not
     var hasData: Bool {
-        return !recentBookmarks.isEmpty || !readingListItems.isEmpty
+        return recentBookmarks.isNotEmpty || readingListItems.isNotEmpty
     }
 
     /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
@@ -82,7 +82,7 @@ class FirefoxHomeRecentlySavedViewModel {
         recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()) as! [BookmarkItemData]
 
         // Send telemetry if bookmarks aren't empty
-        if !recentBookmarks.isEmpty {
+        if recentBookmarks.isNotEmpty {
 
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .view,

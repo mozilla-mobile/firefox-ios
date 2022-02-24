@@ -118,7 +118,7 @@ class AdsTelemetryHelper: TabContentScript {
             let body = message.body as? [String : Any],
             let urls = body["urls"] as? [String] else { return }
         let adUrls = provider.listAdUrls(urls: urls)
-        if !adUrls.isEmpty {
+        if adUrls.isNotEmpty {
             AdsTelemetryHelper.trackAdsFoundOnPage(providerName: provider.name)
             tab?.adsProviderName = provider.name
             tab?.adsTelemetryUrlList = adUrls

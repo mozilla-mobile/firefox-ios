@@ -80,7 +80,7 @@ enum ReaderModeFontType: String {
     }
     
     func isSameFamily(_ font: ReaderModeFontType) -> Bool {        
-        return !FontFamily.families.filter { $0.contains(font) && $0.contains(self) }.isEmpty        
+        return FontFamily.families.filter { $0.contains(font) && $0.contains(self) }.isNotEmpty        
     }
 }
 

@@ -520,7 +520,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         case .historyHighlights:
 
-            guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else {
+            guard let items = viewModel.historyHighlightsViewModel.historyItems, items.isNotEmpty else {
                 return CGSize(width: cellSize.width, height: .zero)
             }
 
@@ -686,7 +686,7 @@ extension FirefoxHomeViewController {
     private func configureHistoryHighlightsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let historyCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
 
-        guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else { return UICollectionViewCell() }
+        guard let items = viewModel.historyHighlightsViewModel.historyItems, items.isNotEmpty else { return UICollectionViewCell() }
 
         viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
             guard let url = highlight.siteUrl else {
@@ -849,7 +849,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
         let url = site.tileURL.absoluteString
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.
-        if !defaultTopSites().filter({ $0.url == url }).isEmpty {
+        if defaultTopSites().filter({ $0.url == url }).isNotEmpty {
             deleteTileForSuggestedSite(url)
         }
         viewModel.profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
