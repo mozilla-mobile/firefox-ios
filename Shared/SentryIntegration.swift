@@ -27,8 +27,7 @@ public protocol SentryProtocol {
 public class Sentry: SentryProtocol {
     public static let shared = Sentry()
 
-    private let SentryDSNKey = "SentryDSN"
-    private let SentryNightlyDSNKey = "SentryNightlyDSN"
+    private let SentryDSNKey = "SentryCloudDSN"
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
     private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
     private let DeviceAppHashLength = UInt(20)
@@ -54,10 +53,11 @@ public class Sentry: SentryProtocol {
             return
         }
 
-        var sentryDSNKey = SentryDSNKey
+        let sentryDSNKey = SentryDSNKey
+        var environment = "Production"
         if AppInfo.appVersion == AppConstants.NIGHTLY_APP_VERSION, AppConstants.BuildChannel == .beta {
             // Setup sentry for Nightly Firefox Beta
-            sentryDSNKey = SentryNightlyDSNKey
+            environment = "Nightly"
         }
 
         let bundle = AppInfo.applicationBundle
@@ -65,10 +65,12 @@ public class Sentry: SentryProtocol {
             Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }
+        
         Logger.browserLogger.debug("Enabling Sentry crash handler")
 
         SentrySDK.start { options in
-            options.dsn = dsn
+            options.dsn = sentryDSNKey
+            options.environment = environment
             options.beforeSend = { event in
                 let attributes = event.extra ?? [:]
                 self.attributes = attributes.merge(with: self.attributes)
