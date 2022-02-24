@@ -242,8 +242,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
     
     @objc private func performAction() {
+        self.viewModel.sendTelemetryEvent(for: .performAction)
         self.dismiss(animated: true) {
-            self.viewModel.sendTelemetryEvent(for: .performAction)
             self.onActionTapped?()
             self.onActionTapped = nil
         }
