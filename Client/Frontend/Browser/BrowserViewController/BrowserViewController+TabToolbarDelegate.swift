@@ -197,7 +197,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showViewController(viewController: UIViewController) {
-        presentDismissIfNeeded(viewController: viewController, animated: true)
+        presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?) {

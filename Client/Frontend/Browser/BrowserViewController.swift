@@ -1351,7 +1351,7 @@ class BrowserViewController: UIViewController {
             popoverPresentationController.delegate = self
         }
 
-        presentDismissIfNeeded(viewController: controller, animated: true)
+        presentWithModalDismissIfNeeded(controller, animated: true)
     }
 
     @objc func openSettings() {
@@ -1454,7 +1454,7 @@ class BrowserViewController: UIViewController {
 
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
-        presentDismissIfNeeded(viewController: controller, animated: true)
+        presentWithModalDismissIfNeeded(controller, animated: true)
     }
 }
 
