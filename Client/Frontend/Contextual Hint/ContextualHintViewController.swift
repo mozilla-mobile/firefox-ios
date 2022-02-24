@@ -274,7 +274,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         viewModel.presentFromTimer = presentation
         
         toggleArrowBasedConstraints(arrowDirection: arrowDirection)
-        if !viewModel.hasAlreadyBeenPresented { viewModel.startTimer() }
+        if !viewModel.shouldPresentContextualHint() { viewModel.startTimer() }
     }
     
     public func stopTimer() {

@@ -511,6 +511,12 @@ class BrowserViewController: UIViewController {
             show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
         }
         showQueuedAlertIfAvailable()
+
+        prepareURLOnboardingContextualHint()
+    }
+
+    private func prepareURLOnboardingContextualHint() {
+        guard contextHintVC.shouldPresentHint() else { return }
         
         contextHintVC.configure(
             anchor: urlBar,
@@ -520,7 +526,7 @@ class BrowserViewController: UIViewController {
             withActionBeforeAppearing: { self.homePanelDidPresentContextualHintOf(type: .toolbarLocation) },
             andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) })
     }
-    
+
     private func presentContextualHint() {
         if shouldShowIntroScreen { return }
         present(contextHintVC, animated: true)

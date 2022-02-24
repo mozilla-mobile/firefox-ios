@@ -45,7 +45,7 @@ enum ContextualHintViewType: String {
         case .inactiveTabs,
                 .toolbarLocation:
             return true
-            
+
         default: return false
         }
     }
@@ -61,7 +61,7 @@ class ContextualHintViewModel {
     private var profile: Profile
     private var hasSentDismissEvent = false
     
-    var hasAlreadyBeenPresented: Bool {
+    private var hasAlreadyBeenPresented: Bool {
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
             return false
         }
@@ -102,9 +102,16 @@ class ContextualHintViewModel {
     // MARK: - Interface
     func shouldPresentContextualHint() -> Bool {
         guard isDeviceHintReady else { return false }
+
         switch hintType {
-        case .jumpBackIn: return canJumpBackInBePresented && !hasAlreadyBeenPresented
-        default: return !hasAlreadyBeenPresented
+        case .jumpBackIn:
+            return canJumpBackInBePresented && !hasAlreadyBeenPresented
+
+        case .toolbarLocation:
+            return SearchBarSettingsViewModel.isEnabled && !hasAlreadyBeenPresented
+
+        default:
+            return !hasAlreadyBeenPresented
         }
     }
     
