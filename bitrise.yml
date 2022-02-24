@@ -150,7 +150,8 @@ workflows:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
-        - simulator_device: "$IOS_DEVICE"
+        #- simulator_device: "$IOS_DEVICE"
+        - simulator_device: iPhone 11
   Detect_warnings:
     steps:
     - script@1.1:
