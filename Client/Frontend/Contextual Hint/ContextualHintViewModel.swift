@@ -152,6 +152,7 @@ class ContextualHintViewModel {
                                          value: .dismissCFRFromButton,
                                          extras: extra)
             hasSentDismissEvent = true
+            
         case .tapToDismiss:
             if hasSentDismissEvent { return }
             TelemetryWrapper.recordEvent(category: .action,
@@ -159,12 +160,14 @@ class ContextualHintViewModel {
                                          object: .contextualHint,
                                          value: .dismissCFRFromOutsideTap,
                                          extras: extra)
+
         case .performAction:
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .contextualHint,
                                          value: .pressCFRActionButton,
                                          extras: extra)
+            hasSentDismissEvent = true
         }
     }
     
