@@ -356,7 +356,7 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.layer.cornerRadius = (imageView.frame.height) / 2
             imageView.layer.masksToBounds = true
 
-            imageView.image = UIImage(named: "placeholder-avatar")!.createScaled(CGSize(width: 30, height: 30))
+            imageView.image = UIImage(named: ImageIdentifiers.placeholderAvatar)?.createScaled(CGSize(width: 30, height: 30))
 
             RustFirefoxAccounts.shared.avatar?.image.uponQueue(.main) { image in
                 imageView.image = image.createScaled(CGSize(width: 30, height: 30))
@@ -609,13 +609,15 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
 }
 
 
-class ResetJumpBackInContextualHint: HiddenSetting {
+class ResetContextualHints: HiddenSetting {
     let profile: Profile
 
-    override var accessibilityIdentifier: String? { return "ResetJumpBackInContextualHint.Setting" }
+    override var accessibilityIdentifier: String? { return "ResetContextualHints.Setting" }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Reset: Jump back in contextual hint", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(
+            string: "Reset all contextual hints",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
 
@@ -625,7 +627,9 @@ class ResetJumpBackInContextualHint: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        self.profile.prefs.removeObjectForKey(PrefsKeys.ContextualHints.JumpBackinKey)
+        PrefsKeys.ContextualHints.allCases.forEach {
+            self.profile.prefs.removeObjectForKey($0.rawValue)
+        }
     }
 }
 
@@ -1167,6 +1171,31 @@ class SiriPageSetting: Setting {
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
+}
+
+class NoImageModeSetting: BoolSetting {
+
+    init(settings: SettingsTableViewController) {
+        let noImageEnabled = NoImageModeHelper.isActivated(settings.profile.prefs)
+        let didChange = { (isEnabled: Bool) in
+            NoImageModeHelper.toggle(isEnabled: isEnabled,
+                                     profile: settings.profile,
+                                     tabManager: settings.tabManager)
+        }
+
+        super.init(
+            prefs: settings.profile.prefs, 
+            prefKey: NoImageModePrefsKey.NoImageModeStatus, 
+            defaultValue: noImageEnabled,
+            attributedTitleText: NSAttributedString(string: .AppMenuNoImageMode),
+            attributedStatusText: nil,
+            settingDidChange: { isEnabled in
+                didChange(isEnabled)
+            }
+        )
+    }
+
+    override var accessibilityIdentifier: String? { return "NoImageMode" }
 }
 
 @available(iOS 14.0, *)

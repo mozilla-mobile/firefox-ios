@@ -13,11 +13,8 @@ final class RatingPromptManager {
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter
 
-    private var hasMinimumBookmarksCount = false
-    private let minimumBookmarksCount = 5
-
-    private var hasMinimumPinnedShortcutsCount = false
-    private let minimumPinnedShortcutsCount = 2
+    private var hasMinimumMobileBookmarksCount = false
+    private let minimumMobileBookmarksCount = 5
 
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
 
@@ -53,7 +50,6 @@ final class RatingPromptManager {
 
         let group = DispatchGroup()
         updateBookmarksCount(group: group)
-        updateUserPinnedSitesCount(group: group)
 
         group.notify(queue: dataQueue) {
             dataLoadingCompletion?()
@@ -105,14 +101,9 @@ final class RatingPromptManager {
 
         // One of the following
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
-        let hasSyncAccount = profile.hasSyncableAccount()
-        let engineIsGoogle = profile.searchEngines.defaultEngine.shortName == "Google"
         let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) == .strict
         guard isBrowserDefault
-                || hasSyncAccount
-                || hasMinimumBookmarksCount
-                || hasMinimumPinnedShortcutsCount
-                || !engineIsGoogle
+                || hasMinimumMobileBookmarksCount
                 || hasTPStrict
         else { return false }
 
@@ -137,18 +128,17 @@ final class RatingPromptManager {
 
     private func updateBookmarksCount(group: DispatchGroup) {
         group.enter()
-        profile.places.getRecentBookmarks(limit: UInt(minimumBookmarksCount)).uponQueue(dataQueue, block: { [weak self] result in
-            guard let strongSelf = self, let bookmarks = result.successValue else { return }
-            strongSelf.hasMinimumBookmarksCount = bookmarks.count >= strongSelf.minimumBookmarksCount
-            group.leave()
-        })
-    }
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { [weak self] result in
+            guard let strongSelf = self,
+                  let mobileFolder = result.successValue as? BookmarkFolderData,
+                  let children = mobileFolder.children
+            else {
+                group.leave()
+                return
+            }
 
-    private func updateUserPinnedSitesCount(group: DispatchGroup) {
-        group.enter()
-        profile.history.getPinnedTopSites().uponQueue(dataQueue) { [weak self] result in
-            guard let strongSelf = self, let userPinnedTopSites = result.successValue else { return }
-            strongSelf.hasMinimumPinnedShortcutsCount = userPinnedTopSites.count >= strongSelf.minimumPinnedShortcutsCount
+            let bookmarksCounts = children.compactMap { $0.type == .bookmark }.count
+            strongSelf.hasMinimumMobileBookmarksCount = bookmarksCounts >= strongSelf.minimumMobileBookmarksCount
             group.leave()
         }
     }

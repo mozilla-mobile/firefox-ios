@@ -49,6 +49,9 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel. */
 "Menu.OpenTopSitesAction.AccessibilityLabel" = "Төп сайтлар";
 
+/* Label for the button, displayed in the menu, used to show the html page source */
+"Menu.PageSourceAction.Title" = "Сәхифәнең чыганак кодын карау";
+
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "Кыстыргычны бетерү";
 
@@ -61,6 +64,9 @@
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "Барысын да карау";
 
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SharePageAction.Title" = "Битне уртаклашу…";
+
 /* Label for the button, displayed in the menu, used to open the tabs tray */
 "Menu.ShowTabs.Title" = "Табларны күрсәтү";
 
@@ -69,4 +75,10 @@
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "Сайтның тулы версиясен сорау";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "Сайтның мобиль версиясен сорау";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "Баш бит";
 

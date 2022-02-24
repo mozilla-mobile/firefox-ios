@@ -25,21 +25,21 @@ struct MIMEType {
     static let Calendar = "text/calendar"
     static let USDZ = "model/vnd.usdz+zip"
     static let Reality = "model/vnd.reality"
-
+    
     private static let webViewViewableTypes: [String] = [MIMEType.Bitmap, MIMEType.GIF, MIMEType.JPEG, MIMEType.HTML, MIMEType.PDF, MIMEType.PlainText, MIMEType.PNG, MIMEType.WebP]
-
+    
     static func canShowInWebView(_ mimeType: String) -> Bool {
         return webViewViewableTypes.contains(mimeType.lowercased())
     }
-
+    
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
         if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension as CFString, nil)?.takeRetainedValue(), let mimeType = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
             return mimeType as String
         }
-
+        
         return MIMEType.OctetStream
     }
-
+    
     static func fileExtensionFromMIMEType(_ mimeType: String) -> String? {
         if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, mimeType as CFString, nil)?.takeRetainedValue(), let fileExtension = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension)?.takeRetainedValue() {
             return fileExtension as String
@@ -53,7 +53,7 @@ class DownloadHelper: NSObject {
     fileprivate let preflightResponse: URLResponse
     fileprivate let cookieStore: WKHTTPCookieStore
     fileprivate let browserViewController: BrowserViewController
-
+    
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
         tab.webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
@@ -64,43 +64,43 @@ class DownloadHelper: NSObject {
         guard let request = request else {
             return nil
         }
-
+        
         let mimeType = response.mimeType ?? MIMEType.OctetStream
         let isAttachment = mimeType == MIMEType.OctetStream
-
+        
         // Bug 1474339 - Don't auto-download files served with 'Content-Disposition: attachment'
         // Leaving this here for now, but commented out. Checking this HTTP header is
         // what Desktop does should we ever decide to change our minds on this.
         // let contentDisposition = (response as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
         // let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
-
+        
         guard isAttachment || !canShowInWebView || forceDownload else {
             return nil
         }
-
+        
         self.cookieStore = cookieStore
         self.request = request
         self.preflightResponse = response
         self.browserViewController = browserViewController
     }
-
+    
     func open() {
         guard let host = request.url?.host else {
             return
         }
-
+        
         guard let download = HTTPDownload(cookieStore: cookieStore, preflightResponse: preflightResponse, request: request) else {
             return
         }
-
+        
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
-
-        var filenameItem: PhotonActionSheetItem
+        
+        var filenameItem: SingleActionViewModel
         if let expectedSize = expectedSize {
             let expectedSizeAndHost = "\(expectedSize) — \(host)"
-            filenameItem = PhotonActionSheetItem(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
+            filenameItem = SingleActionViewModel(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
         } else {
-            filenameItem = PhotonActionSheetItem(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
+            filenameItem = SingleActionViewModel(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
         }
         filenameItem.customHeight = { _ in
             return 80
@@ -110,34 +110,38 @@ class DownloadHelper: NSObject {
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
             label.lineBreakMode = .byCharWrapping
         }
-
-        let downloadFileItem = PhotonActionSheetItem(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
+        
+        let downloadFileItem = SingleActionViewModel(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
             self.browserViewController.downloadQueue.enqueue(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
-
-        let actions = [[filenameItem], [downloadFileItem]]
-
-        browserViewController.presentSheetWith(title: download.filename, actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: .CancelString, suppressPopover: true)
+        
+        let actions = [[filenameItem.items], [downloadFileItem.items]]
+        let viewModel = PhotonActionSheetViewModel(actions: actions,
+                                                   closeButtonTitle: .CancelString,
+                                                   title: download.filename,
+                                                   modalStyle: .overCurrentContext)
+        
+        browserViewController.presentSheetWith(viewModel: viewModel, on: browserViewController, from: browserViewController.urlBar)
     }
 }
 
 class OpenPassBookHelper: NSObject {
     fileprivate var url: URL
-
+    
     fileprivate let browserViewController: BrowserViewController
     fileprivate let cookieStore: WKHTTPCookieStore
     fileprivate lazy var session = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: .ephemeral)
-
+    
     required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let mimeType = response.mimeType, mimeType == MIMEType.Passbook, PKAddPassesViewController.canAddPasses(),
-            let responseURL = response.url, !forceDownload else { return nil }
+              let responseURL = response.url, !forceDownload else { return nil }
         self.url = responseURL
         self.browserViewController = browserViewController
         self.cookieStore = cookieStore
         super.init()
     }
-
+    
     func open() {
         // add webview cookies to download session
         self.cookieStore.getAllCookies { [weak self] cookies in
@@ -158,7 +162,7 @@ class OpenPassBookHelper: NSObject {
     private func open(passData: Data) {
         do {
             let pass = try PKPass(data: passData)
-
+            
             let passLibrary = PKPassLibrary()
             if passLibrary.containsPass(pass) {
                 UIApplication.shared.open(pass.passURL!, options: [:])
@@ -188,34 +192,34 @@ class OpenPassBookHelper: NSObject {
 
 class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource {
     var url: NSURL
-
+    
     fileprivate let browserViewController: BrowserViewController
-
+    
     fileprivate let previewController: QLPreviewController
-
+    
     required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let mimeType = response.mimeType,
-                 (mimeType == MIMEType.USDZ || mimeType == MIMEType.Reality),
-                 let responseURL = response.url as NSURL?,
-                 !forceDownload,
-                 !canShowInWebView else { return nil }
+              (mimeType == MIMEType.USDZ || mimeType == MIMEType.Reality),
+              let responseURL = response.url as NSURL?,
+              !forceDownload,
+              !canShowInWebView else { return nil }
         self.url = responseURL
         self.browserViewController = browserViewController
         self.previewController = QLPreviewController()
         super.init()
     }
-
+    
     func open() {
         self.previewController.dataSource = self
         ensureMainThread {
             self.browserViewController.present(self.previewController, animated: true, completion: nil)
         }
     }
-
+    
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         return 1
     }
-
+    
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
         return self.url
     }

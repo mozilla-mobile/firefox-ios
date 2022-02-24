@@ -23,7 +23,12 @@ class HistoryTests: BaseTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipDefaultBrowserOnboarding, LaunchArguments.LoadDatabasePrefix + historyDB, LaunchArguments.SkipContextualHintJumpBackIn]
+            launchArguments = [LaunchArguments.SkipIntro,
+                               LaunchArguments.SkipWhatsNew,
+                               LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.SkipDefaultBrowserOnboarding,
+                               LaunchArguments.LoadDatabasePrefix + historyDB,
+                               LaunchArguments.SkipContextualHints]
         }
         super.setUp()
     }
@@ -71,7 +76,7 @@ class HistoryTests: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         //Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
@@ -182,7 +187,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
         app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.cells["quick_action_new_tab"].exists)
+        XCTAssertTrue(app.tables.cells[ImageIdentifiers.newTab].exists)
         XCTAssertTrue(app.tables.cells["quick_action_new_private_tab"].exists)
     }
 
@@ -202,7 +207,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertEqual(numTabsOpen, 1)
         app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["quick_action_new_tab"].tap()
+        app.tables.cells[ImageIdentifiers.newTab].tap()
         navigator.goto(TabTray)
         let numTabsOpen2 = userState.numTabs
         XCTAssertEqual(numTabsOpen2, 2)
