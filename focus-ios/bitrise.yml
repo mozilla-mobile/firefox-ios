@@ -254,8 +254,14 @@ workflows:
     - xcode-test@2:
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
+        - scheme: Focus
+    - xcode-test@2:
+        inputs:
+        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan $TEST_PLAN_NAME
         - scheme: Focus
+        - simulator_device: iPhone 11
     - deploy-to-bitrise-io@1: {}
     - github-status@2:
         inputs:
@@ -318,9 +324,15 @@ workflows:
         - scheme: Klar
     - xcode-test@2:
         inputs:
+        - scheme: Klar
+        - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            CODE_SIGNING_ALLOWED=NO -testPlan UnitTests
+    - xcode-test@2:
+        inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan "$TEST_PLAN_NAME"
         - scheme: Klar
+        - simulator_device: iPhone 11
     - deploy-to-bitrise-io@1: {}
     - github-status@2:
         inputs:

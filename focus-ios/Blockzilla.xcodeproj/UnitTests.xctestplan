@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "3632BCFC-2A2F-4D7A-867C-5F63C824DA9E",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Blockzilla.xcodeproj",
+        "identifier" : "D8E0155B1FCF409F00CA3B9F",
+        "name" : "ClientTests"
+      }
+    }
+  ],
+  "version" : 1
+}

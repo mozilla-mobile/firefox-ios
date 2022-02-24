@@ -58,6 +58,9 @@
          <TestPlanReference
             reference = "container:SmokeTest.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Blockzilla.xcodeproj/UnitTests.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference

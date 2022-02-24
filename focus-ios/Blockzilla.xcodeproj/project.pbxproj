@@ -724,6 +724,7 @@
 		D3E54FD41DEFB25B003E1AFF /* SearchPlugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SearchPlugins; path = Search/SearchPlugins; sourceTree = SOURCE_ROOT; };
 		D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsViewController.swift; sourceTree = "<group>"; };
+		D411AE7B27BD12C000F4BE12 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = UnitTests.xctestplan; path = Blockzilla.xcodeproj/UnitTests.xctestplan; sourceTree = "<group>"; };
 		D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FullFunctionalTests.xctestplan; sourceTree = "<group>"; };
 		D43A61BD26B4627100814232 /* SmokeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmokeTest.xctestplan; sourceTree = "<group>"; };
 		D440BC17276B3535003FD9B1 /* ShortcutsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsTest.swift; sourceTree = "<group>"; };
@@ -1449,6 +1450,7 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
+				D411AE7B27BD12C000F4BE12 /* UnitTests.xctestplan */,
 				D43A61BD26B4627100814232 /* SmokeTest.xctestplan */,
 				D4341F802669342A00294A15 /* FullFunctionalTests.xctestplan */,
 				C817A35222CE73B4002529FF /* Deferred */,

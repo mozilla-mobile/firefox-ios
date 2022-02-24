@@ -79,6 +79,7 @@ class SettingAppearanceTest: BaseTestCase {
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockSocial"].value as! String, "1")
         let otherContentSwitch = app.tables.switches["BlockerToggle.BlockOther"]
+        waitForExistence(app.tables.switches["BlockerToggle.BlockOther"], timeout: 5)
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
 
         otherContentSwitch.tap()
@@ -232,19 +233,16 @@ class SettingAppearanceTest: BaseTestCase {
         let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
-        waitForExistence(app.tables.cells["settingsViewController.themeCell"])
+        waitForExistence(app.tables.cells["settingsViewController.themeCell"], timeout: 10)
         app.tables.cells["settingsViewController.themeCell"].swipeUp()
 
-        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
-        app.tables.cells["SettingsViewController.autocompleteCell"].swipeUp()
-
         // Check that Safari toggle is off, swipe to get to Safarin Integration menu
-        waitForExistence(app.otherElements["SIRI SHORTCUTS"])
+        waitForExistence(app.otherElements["SIRI SHORTCUTS"], timeout: 10)
         app.otherElements["SIRI SHORTCUTS"].swipeUp()
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "0")
 
         iOS_Settings.activate()
-        waitForExistence(iOS_Settings.cells["Safari"])
+        waitForExistence(iOS_Settings.cells["Safari"], timeout: 10)
         iOS_Settings.cells["Safari"].tap()
         iOS_Settings.cells["AutoFill"].swipeUp()
         if #available(iOS 15.0, *) {

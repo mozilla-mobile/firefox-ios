@@ -67,6 +67,7 @@ class PastenGoTest: BaseTestCase {
 
         // Select paste and go, and verify it goes to the correct place
         app.menuItems["Paste & Go"].tap()
+        waitForWebPageLoad()
 
         // Check the correct site is reached
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org")
