@@ -25,6 +25,17 @@ protocol SearchBarPreferenceDelegate: AnyObject {
 
 final class SearchBarSettingsViewModel {
 
+    /// New user defaults to bottom search bar, existing users keep their existing search bar position
+    static func getDefaultSearchPosition() -> SearchBarPosition {
+        return InstallType.get() == .fresh ? .bottom : .top
+    }
+    
+    static var isEnabled: Bool {
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isFeatureEnabled = FeatureFlagsManager.shared.isFeatureActiveForBuild(.bottomSearchBar)
+        return !isiPad && isFeatureEnabled && !AppConstants.IsRunningTest
+    }
+
     var title: String = .Settings.Toolbar.Toolbar
     weak var delegate: SearchBarPreferenceDelegate?
 
@@ -33,18 +44,12 @@ final class SearchBarSettingsViewModel {
         self.prefs = prefs
     }
 
-    static var isEnabled: Bool {
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isFeatureEnabled = FeatureFlagsManager.shared.isFeatureActiveForBuild(.bottomSearchBar)
-        return !isiPad && isFeatureEnabled && !AppConstants.IsRunningTest
-    }
-
     var searchBarTitle: String {
         searchBarPosition.getLocalizedTitle
     }
 
     var searchBarPosition: SearchBarPosition {
-        let defaultPosition = getDefaultSearchPosition()
+        let defaultPosition = SearchBarSettingsViewModel.getDefaultSearchPosition()
         guard let raw = prefs.stringForKey(PrefsKeys.KeySearchBarPosition) else {
             // Do not notify if it's the default position being saved
             saveSearchBarPosition(defaultPosition, shouldNotify: false)
@@ -86,11 +91,6 @@ private extension SearchBarSettingsViewModel {
         guard shouldNotify else { return }
         let notificationObject = [PrefsKeys.KeySearchBarPosition: searchBarPosition]
         NotificationCenter.default.post(name: .SearchBarPositionDidChange, object: notificationObject)
-    }
-
-    /// New user defaults to bottom search bar, existing users keep their existing search bar position
-    func getDefaultSearchPosition() -> SearchBarPosition {
-        return InstallType.get() == .fresh ? .bottom : .top
     }
 
     func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
