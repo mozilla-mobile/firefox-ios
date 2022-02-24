@@ -1123,7 +1123,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 popoverController.permittedArrowDirections = [.up, .down, .left]
                 popoverController.delegate = self
             }
-            self.present(viewController: controller, animated: true)
+            self.presentWithModalDismissIfNeeded(controller, animated: true)
         })
 
         let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle, iconString: "action_remove", tapHandler: { _ in
