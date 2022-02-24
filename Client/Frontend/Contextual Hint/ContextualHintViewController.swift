@@ -194,10 +194,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
                                                 constant: -UX.labelTrailing),
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
-
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+
         topContainerConstraint = containerView.topAnchor.constraint(equalTo: view.topAnchor)
         topContainerConstraint?.isActive = true
         bottomContainerConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -210,8 +210,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
         topContainerConstraint?.constant = topPadding
         bottomContainerConstraint?.constant = -bottomPadding
-
-        setupContent()
 
         view.setNeedsLayout()
         view.layoutIfNeeded()
