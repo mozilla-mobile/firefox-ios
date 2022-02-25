@@ -13,45 +13,13 @@ enum CFRTelemetryEvent {
 }
 
 enum ContextualHintViewType: String {
-    typealias CFRStrings = String.ContextualHints
-
     case jumpBackIn = "JumpBackIn"
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
-
-    func descriptionText() -> String {
-        switch self {
-        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Body
-        case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
-
-        case .toolbarLocation:
-            switch BrowserViewController.foregroundBVC().isBottomSearchBar {
-            case true: return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
-            case false: return CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
-            }
-        }
-    }
-
-    func buttonActionText() -> String {
-        switch self {
-        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Action
-        case .toolbarLocation: return CFRStrings.Toolbar.SearchBarPlacementButtonText
-        default: return ""
-        }
-    }
-
-    func isActionType() -> Bool {
-        switch self {
-        case .inactiveTabs,
-                .toolbarLocation:
-            return true
-
-        default: return false
-        }
-    }
 }
 
 class ContextualHintViewModel {
+    typealias CFRStrings = String.ContextualHints
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 
     // MARK: - Properties
@@ -61,7 +29,7 @@ class ContextualHintViewModel {
     private var profile: Profile
     private var hasSentTelemetryEvent = false
 
-    var arrowDirection: UIPopoverArrowDirection?
+    var arrowDirection = UIPopoverArrowDirection.down
 
     private var hasAlreadyBeenPresented: Bool {
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
@@ -72,10 +40,12 @@ class ContextualHintViewModel {
     }
 
     // Prevent JumpBackIn CFR from being presented if the onboarding
-    // CFR has not yet been presented.
+    // CFR has not yet been presented. On iPad we don't present the onboarding CFR
     private var canJumpBackInBePresented: Bool {
-        if let hasShownOboardingCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
-           hasShownOboardingCFR {
+        guard UIDevice.current.userInterfaceIdiom != .pad else { return true }
+        
+        if let hasShownOnboardingCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
+           hasShownOnboardingCFR {
             return true
         }
 
@@ -140,6 +110,41 @@ class ContextualHintViewModel {
 
     func stopTimer() {
         timer?.invalidate()
+    }
+
+    // MARK: Text
+
+    func descriptionText(arrowDirection: UIPopoverArrowDirection) -> String {
+        switch hintType {
+        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Body
+        case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
+
+        case .toolbarLocation:
+            switch arrowDirection {
+            case .up:
+                return CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
+            default:
+                return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
+            }
+        }
+    }
+
+    func buttonActionText() -> String {
+        switch hintType {
+        case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Action
+        case .toolbarLocation: return CFRStrings.Toolbar.SearchBarPlacementButtonText
+        default: return ""
+        }
+    }
+
+    func isActionType() -> Bool {
+        switch hintType {
+        case .inactiveTabs,
+                .toolbarLocation:
+            return true
+
+        default: return false
+        }
     }
 
     // MARK: - Telemetry
