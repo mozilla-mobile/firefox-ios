@@ -29,7 +29,7 @@ class ContextualHintViewModel {
     private var profile: Profile
     private var hasSentTelemetryEvent = false
 
-    var arrowDirection: UIPopoverArrowDirection?
+    var arrowDirection = UIPopoverArrowDirection.down
 
     private var hasAlreadyBeenPresented: Bool {
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
@@ -40,10 +40,12 @@ class ContextualHintViewModel {
     }
 
     // Prevent JumpBackIn CFR from being presented if the onboarding
-    // CFR has not yet been presented.
+    // CFR has not yet been presented. On iPad we don't present the onboarding CFR
     private var canJumpBackInBePresented: Bool {
-        if let hasShownOboardingCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
-           hasShownOboardingCFR {
+        guard UIDevice.current.userInterfaceIdiom != .pad else { return true }
+        
+        if let hasShownOnboardingCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
+           hasShownOnboardingCFR {
             return true
         }
 

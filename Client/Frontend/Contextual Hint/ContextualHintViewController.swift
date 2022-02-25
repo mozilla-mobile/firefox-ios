@@ -85,13 +85,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     var isPresenting: Bool = false
 
     private var popupContentHeight: CGFloat {
-        guard let arrowDirection = viewModel.arrowDirection else { return 0 }
-
-        let spacingWidth = UX.labelLeading + UX.closeButtonSize.width + UX.closeButtonTrailing
+        let spacingWidth = UX.labelLeading + UX.closeButtonSize.width + UX.closeButtonTrailing + UX.labelTrailing
         let labelHeight = descriptionLabel.heightForLabel(
             descriptionLabel,
             width: containerView.frame.width - spacingWidth,
-            text: viewModel.descriptionText(arrowDirection: arrowDirection))
+            text: viewModel.descriptionText(arrowDirection: viewModel.arrowDirection))
 
         switch viewModel.isActionType() {
         case true:
@@ -100,7 +98,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
                 titleLabel,
                 width: containerView.frame.width - spacingWidth,
                 text: viewModel.buttonActionText())
-
             return buttonHeight + labelHeight + UX.labelTop + UX.labelBottom
 
         case false:
@@ -203,6 +200,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         topContainerConstraint?.isActive = true
         bottomContainerConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         bottomContainerConstraint?.isActive = true
+        
+        descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
     }
 
     private func toggleArrowBasedConstraints() {
@@ -217,8 +216,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
 
     private func setupContent() {
-        guard let arrowDirection = viewModel.arrowDirection else { return }
-        descriptionLabel.text = viewModel.descriptionText(arrowDirection: arrowDirection)
+        descriptionLabel.text = viewModel.descriptionText(arrowDirection: viewModel.arrowDirection)
 
         if viewModel.isActionType() {
 
