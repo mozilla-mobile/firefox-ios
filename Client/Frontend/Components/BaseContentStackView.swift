@@ -61,8 +61,8 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 
     private func setKeyboardSpacerHeight(height: CGFloat) {
         guard let keyboardSpacer = self.keyboardSpacer else { return }
-        keyboardSpacer.snp.makeConstraints { make in
-            keyboardSpacerHeight = make.height.equalTo(height).constraint
+        keyboardSpacer.snp.remakeConstraints { remake in
+            keyboardSpacerHeight = remake.height.equalTo(height).constraint
         }
     }
 
