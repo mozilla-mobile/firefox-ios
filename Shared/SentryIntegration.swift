@@ -53,7 +53,6 @@ public class Sentry: SentryProtocol {
             return
         }
 
-        let sentryDSNKey = SentryDSNKey
         var environment = "Production"
         if AppInfo.appVersion == AppConstants.NIGHTLY_APP_VERSION, AppConstants.BuildChannel == .beta {
             // Setup sentry for Nightly Firefox Beta
@@ -61,15 +60,14 @@ public class Sentry: SentryProtocol {
         }
 
         let bundle = AppInfo.applicationBundle
-        guard let dsn = bundle.object(forInfoDictionaryKey: sentryDSNKey) as? String, !dsn.isEmpty else {
+        guard let dsn = bundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
             Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }
-        
         Logger.browserLogger.debug("Enabling Sentry crash handler")
 
         SentrySDK.start { options in
-            options.dsn = sentryDSNKey
+            options.dsn = dsn
             options.environment = environment
             options.beforeSend = { event in
                 let attributes = event.extra ?? [:]
@@ -79,6 +77,9 @@ public class Sentry: SentryProtocol {
                 return event
             }
         }
+        enabled = true
+        
+        send(message: "Test sentry integration on Nightly - Sentry was initialized")
         
         let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
         SentrySDK.configureScope { scope in
@@ -86,8 +87,7 @@ public class Sentry: SentryProtocol {
                 "device_app_hash": deviceAppHash ?? self.DefaultDeviceAppHash
             ], key: "appContext")
         }
-        enabled = true
-
+        
         // If we have not already for this install, generate a completely random identifier
         // for this device. It is stored in the app group so that the same value will
         // be used for both the main application and the app extensions.
@@ -118,6 +118,8 @@ public class Sentry: SentryProtocol {
     }
     
     public func captureError(error: NSError) {
+        guard enabled else { return }
+        
         SentrySDK.capture(error: error)
     }
 
@@ -133,10 +135,10 @@ public class Sentry: SentryProtocol {
         printMessage(message: message, extra: extraEvents)
 
         // Only report fatal errors on release
-        if shouldNotSendEventFor(severity) {
-            completion?(nil)
-            return
-        }
+//        if shouldNotSendEventFor(severity) {
+//            completion?(nil)
+//            return
+//        }
 
         let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
         captureEvent(event: event)
@@ -182,7 +184,9 @@ public class Sentry: SentryProtocol {
          Relase     n      n       y
      */
     private func shouldNotSendEventFor(_ severity: SentryLevel) -> Bool {
-        return !enabled || (AppConstants.BuildChannel == .release && severity != .fatal)
+        // TODO: Change to release once the integration is tested
+        return false
+//        return !enabled || (AppConstants.BuildChannel == .release && severity != .fatal)
     }
 
     private func makeEvent(message: String, tag: String, severity: SentryLevel, extra: [String: Any]?) -> Event {
