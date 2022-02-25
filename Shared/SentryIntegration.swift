@@ -25,6 +25,12 @@ public protocol SentryProtocol {
 }
 
 public class Sentry: SentryProtocol {
+    
+    enum Environment: String {
+        case nightly = "Nightly"
+        case production = "Production"
+    }
+    
     public static let shared = Sentry()
 
     private let SentryDSNKey = "SentryCloudDSN"
@@ -53,10 +59,10 @@ public class Sentry: SentryProtocol {
             return
         }
 
-        var environment = "Production"
+        var environment = Environment.production
         if AppInfo.appVersion == AppConstants.NIGHTLY_APP_VERSION, AppConstants.BuildChannel == .beta {
             // Setup sentry for Nightly Firefox Beta
-            environment = "Nightly"
+            environment = Environment.nightly
         }
 
         let bundle = AppInfo.applicationBundle
@@ -68,7 +74,7 @@ public class Sentry: SentryProtocol {
 
         SentrySDK.start { options in
             options.dsn = dsn
-            options.environment = environment
+            options.environment = environment.rawValue
             options.beforeSend = { event in
                 let attributes = event.extra ?? [:]
                 self.attributes = attributes.merge(with: self.attributes)
