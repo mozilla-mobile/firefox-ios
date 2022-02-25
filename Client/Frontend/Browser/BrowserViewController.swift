@@ -2355,10 +2355,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         })
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
-
-    }
-
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         updateViewConstraints()
@@ -2367,6 +2363,16 @@ extension BrowserViewController: KeyboardHelperDelegate {
                        options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
             self.bottomContentStackView.layoutIfNeeded()
         })
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
+        keyboardState = state
+        updateViewConstraints()
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {
+        keyboardState = state
+        updateViewConstraints()
     }
 }
 
