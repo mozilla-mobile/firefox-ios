@@ -102,14 +102,12 @@
 	</array>
 	<key>PocketEnvironmentAPIKey</key>
 	<string>$(POCKET_API_KEY)</string>
-	<key>SentryDSN</key>
-	<string>$(SENTRY_DSN)</string>
-	<key>SentryNightlyDSN</key>
-	<string>$(SENTRY_NIGHTLY_DSN)</string>
 	<key>AdjustAppToken</key>
 	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>NimbusURL</key>
 	<string>$(NIMBUS_URL)</string>
+	<key>SentryCloudDSN</key>
+	<string>$(SENTRY_CLOUD_DSN)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>NewYorkMedium-Bold.otf</string>

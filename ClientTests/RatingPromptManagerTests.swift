@@ -5,7 +5,6 @@
 import XCTest
 import StoreKit
 import Shared
-import Sentry
 import Storage
 
 @testable import Client
@@ -16,6 +15,7 @@ class RatingPromptManagerTests: XCTestCase {
     var promptManager: RatingPromptManager!
     var mockProfile: MockProfile!
     var createdGuids: [String] = []
+    var sentry: CrashingMockSentryClient!
 
     override func setUp() {
         super.setUp()
@@ -31,7 +31,7 @@ class RatingPromptManagerTests: XCTestCase {
         promptManager = nil
         mockProfile?._shutdown()
         mockProfile = nil
-        Sentry.shared.client = nil
+        sentry = nil
         urlOpenerSpy = nil
     }
 
@@ -72,7 +72,7 @@ class RatingPromptManagerTests: XCTestCase {
 
     func testShouldShowPrompt_sentryHasCrashedInLastSession_returnsFalse() {
         setupEnvironment(isBrowserDefault: true)
-        Sentry.shared.client = try! CrashingMockSentryClient()
+        sentry?.enableCrashOnLastLaunch = true
 
         promptManager.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 0)
@@ -250,8 +250,10 @@ private extension RatingPromptManagerTests {
 
     func setupPromptManager(hasCumulativeDaysOfUse: Bool) {
         let mockCounter = CumulativeDaysOfUseCounterMock(hasCumulativeDaysOfUse)
+        sentry = CrashingMockSentryClient()
         promptManager = RatingPromptManager(profile: mockProfile,
-                                            daysOfUseCounter: mockCounter)
+                                            daysOfUseCounter: mockCounter,
+                                            sentry: sentry)
     }
 
     func createSite(number: Int) -> Site {
@@ -281,14 +283,11 @@ class CumulativeDaysOfUseCounterMock: CumulativeDaysOfUseCounter {
 }
 
 // MARK: - CrashingMockSentryClient
-class CrashingMockSentryClient: Client {
-
-    convenience init() throws {
-        try self.init(dsn: "https://public@sentry.example.com/1")
-    }
-
-    override func crashedLastLaunch() -> Bool {
-        return true
+class CrashingMockSentryClient: SentryProtocol {
+    var enableCrashOnLastLaunch = false
+    
+    var crashedLastLaunch: Bool {
+        return enableCrashOnLastLaunch
     }
 }
 

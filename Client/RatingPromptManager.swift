@@ -15,6 +15,7 @@ final class RatingPromptManager {
 
     private var hasMinimumMobileBookmarksCount = false
     private let minimumMobileBookmarksCount = 5
+    private let sentry: SentryProtocol?
 
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
 
@@ -29,10 +30,13 @@ final class RatingPromptManager {
     /// - Parameters:
     ///   - profile: User's profile data
     ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
+    ///   - sentry: Sentry protocol to override in Unit test
     init(profile: Profile,
-         daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter()) {
+         daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
+         sentry: SentryProtocol = Sentry.shared) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
+        self.sentry = sentry
     }
 
     /// Show the in-app rating prompt if needed
@@ -97,7 +101,7 @@ final class RatingPromptManager {
         guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
 
         // Required: has not crashed in the last session
-        guard !Sentry.shared.crashedLastLaunch else { return false }
+        guard let sentry = sentry, !sentry.crashedLastLaunch else { return false }
 
         // One of the following
         let isBrowserDefault = RatingPromptManager.isBrowserDefault

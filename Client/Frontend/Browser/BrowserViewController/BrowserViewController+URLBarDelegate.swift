@@ -30,8 +30,6 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 
 extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
-        Sentry.shared.clearBreadcrumbs()
-
         updateFindInPageVisibility(visible: false)
 
         self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,

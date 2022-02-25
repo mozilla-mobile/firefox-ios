@@ -163,7 +163,7 @@ class SearchTests: BaseTestCase {
         // Workaroud needed after xcode 11.3 update Issue 5937
         // waitForExistence(app.webViews.firstMatch, timeout: 3)
         waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
-        }
+    }
 
     // Smoketest
     func testSearchEngine() {

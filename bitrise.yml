@@ -693,6 +693,14 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
     - script@1:
+        title: Upload Firefox Prod Beta Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
+    - script@1:
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -811,6 +819,14 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - script@1:
+        title: Upload Firefox Beta Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:
         is_expand: false
@@ -900,6 +916,14 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'Nightly FirefoxBeta: Xcode Archive & Export for iOS'
+    - script@1:
+        title: Upload NightlyBeta Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:
         is_expand: false
