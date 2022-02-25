@@ -79,8 +79,6 @@ public class Sentry: SentryProtocol {
         }
         enabled = true
         
-        send(message: "Test sentry integration on Nightly - Sentry was initialized")
-        
         let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
         SentrySDK.configureScope { scope in
             scope.setContext(value: [
@@ -134,11 +132,11 @@ public class Sentry: SentryProtocol {
         }
         printMessage(message: message, extra: extraEvents)
 
-        // Only report fatal errors on release
-//        if shouldNotSendEventFor(severity) {
-//            completion?(nil)
-//            return
-//        }
+        // Only report fatal - errors on release
+        guard shouldSendEventFor(severity) else {
+            completion?(nil)
+            return
+        }
 
         let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
         captureEvent(event: event)
@@ -155,7 +153,7 @@ public class Sentry: SentryProtocol {
         printMessage(message: message, extra: extraEvents)
 
         // Do not send messages to Sentry if disabled OR if we are not on beta and the severity isnt severe
-        if shouldNotSendEventFor(severity) {
+        guard shouldSendEventFor(severity) else {
             completion?(nil)
             return
         }
@@ -183,12 +181,10 @@ public class Sentry: SentryProtocol {
          Beta       y      y       y
          Relase     n      n       y
      */
-    private func shouldNotSendEventFor(_ severity: SentryLevel) -> Bool {
-        // TODO: Change to release once the integration is tested
-        return false
-//        return !enabled || (AppConstants.BuildChannel == .release && severity != .fatal)
+    private func shouldSendEventFor(_ severity: SentryLevel) -> Bool {
+        return AppConstants.BuildChannel == .release && (severity == .fatal || severity == .error)
     }
-
+    
     private func makeEvent(message: String, tag: String, severity: SentryLevel, extra: [String: Any]?) -> Event {
         let event = Event(level: severity)
         event.message = SentryMessage(formatted: message)
