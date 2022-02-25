@@ -9,6 +9,8 @@ struct JumpBackInCollectionCellUX {
     static let verticalCellSpacing: CGFloat = 8
     static let iPadHorizontalSpacing: CGFloat = 48
     static let iPadCellSpacing: CGFloat = 16
+    static let iPhoneLandscapeCellWidth: CGFloat = 0.475
+    static let iPhonePortraitCellWidth: CGFloat = 0.95
 }
 
 class FxHomeJumpBackInCollectionCell: UICollectionViewCell, ReusableCell {
