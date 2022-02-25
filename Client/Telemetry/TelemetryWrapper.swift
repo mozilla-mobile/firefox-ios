@@ -833,8 +833,8 @@ extension TelemetryWrapper {
         case (.action, .tap, .wallpaperSettings, .wallpaperSelected, let extras):
             if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
                let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
-                GleanMetrics.WallpaperAnalytics.cycleWallpaperButton.record(
-                    GleanMetrics.WallpaperAnalytics.CycleWallpaperButtonExtra(
+                GleanMetrics.WallpaperAnalytics.wallpaperSelected.record(
+                    GleanMetrics.WallpaperAnalytics.WallpaperSelectedExtra(
                         wallpaperName: name,
                         wallpaperType: type
                     )
