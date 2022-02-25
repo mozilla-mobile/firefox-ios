@@ -879,8 +879,8 @@ extension TelemetryWrapper {
         value: EventValue?,
         extras: [String: Any]?
     ) {
-            let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
-            Sentry.shared.send(message: msg, severity: .debug)
+        let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))"
+        Sentry.shared.send(message: msg, severity: .debug)
     }
 }
 
