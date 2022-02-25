@@ -48,14 +48,14 @@ struct UXSizeClasses {
 
     subscript(sizeClass: UIUserInterfaceSizeClass) -> CGFloat {
         switch sizeClass {
-            case .compact:
-                return self.compact
-            case .regular:
-                return self.regular
-            case .unspecified:
-                return self.unspecified
-            @unknown default:
-                fatalError()
+        case .compact:
+            return self.compact
+        case .regular:
+            return self.regular
+        case .unspecified:
+            return self.unspecified
+        @unknown default:
+            fatalError()
         }
     }
 }
@@ -67,8 +67,8 @@ protocol HomePanelDelegate: AnyObject {
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
-    func homePanelDidRequestToCustomizeHomeSettings()
-    func homePanelDidPresentContextualHint(type: ContextualHintViewType)
+    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
+    func homePanelDidPresentContextualHintOf(type: ContextualHintViewType)
 }
 
 extension HomePanelDelegate {
@@ -92,7 +92,7 @@ enum HomePanelType: Int {
 
 protocol HomePanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site?
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]?
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]?
     func presentContextMenu(for indexPath: IndexPath)
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
 }
@@ -107,10 +107,10 @@ extension HomePanelContextMenu {
     }
 
     func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
-        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
+        guard let actions = getContextMenuActions(for: site, with: indexPath) else { return nil }
 
-        let contextMenu = PhotonActionSheet(site: site, actions: actions)
-        contextMenu.modalPresentationStyle = .overFullScreen
+        let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
+        let contextMenu = PhotonActionSheet(viewModel: viewModel)
         contextMenu.modalTransitionStyle = .crossDissolve
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)
@@ -119,18 +119,18 @@ extension HomePanelContextMenu {
         return contextMenu
     }
 
-    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonActionSheetItem]? {
+    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = PhotonActionSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
+        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
-        return [openInNewTabAction, openInNewPrivateTabAction]
+        return [PhotonRowActions(openInNewTabAction), PhotonRowActions(openInNewPrivateTabAction)]
     }
 }
 
@@ -148,7 +148,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     fileprivate let flowLayout = UICollectionViewFlowLayout()
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
-    fileprivate var contextualHintTimer: Timer?
     fileprivate var isZeroSearch: Bool
     fileprivate var wallpaperManager: WallpaperManager
     private var viewModel: FirefoxHomeViewModel
@@ -188,7 +187,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate,
                                               experiments: experiments)
-        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn, with: viewModel.profile)
+        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
+                                                          with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
 
         super.init(collectionViewLayout: flowLayout)
@@ -222,8 +222,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     deinit {
-        contextualHintTimer?.invalidate()
-        contextualHintTimer = nil
+        contextualHintViewController.stopTimer()
     }
 
     // MARK: - View lifecycle
@@ -282,7 +281,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        contextualHintTimer?.invalidate()
+        contextualHintViewController.stopTimer()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -356,39 +355,25 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
     
     // MARK: - Contextual hint
-    private func prepareJumpBackInContextualHint(_ indexPath: IndexPath, onView headerView: ASHeaderView) {
-        guard contextualHintViewController.shouldPresentHint() else { return }
+    private func prepareJumpBackInContextualHint(onView headerView: ASHeaderView) {
+        guard contextualHintViewController.shouldPresentHint(),
+              !shouldShowDefaultBrowserCard
+        else { return }
 
-        contextualHintViewController.set(
+        contextualHintViewController.configure(
             anchor: headerView.titleLabel,
             withArrowDirection: .down,
             andDelegate: self,
-            withActionBeforeAppearing: {
-                self.homePanelDelegate?.homePanelDidPresentContextualHint(type: .jumpBackIn)
-            })
-        
-        // Using a timer for the first presentation of contextual hint due to many
-        // reloads that happen on the collection view. Invalidating the timer
-        // prevents from showing contextual hint at the wrong position.
-        contextualHintTimer?.invalidate()
-        if !contextualHintViewController.hasAlreadyBeenPresented {
-            contextualHintPresentTimer()
-        }
-    }
-
-    private func contextualHintPresentTimer() {
-        contextualHintTimer = Timer.scheduledTimer(timeInterval: 1.25,
-                                     target: self,
-                                     selector: #selector(presentContextualHint),
-                                     userInfo: nil,
-                                     repeats: false)
+            presentedUsing: { self.presentContextualHint() },
+            withActionBeforeAppearing: { self.contextualHintPresented() },
+            andActionForButton: { self.openTabsSettings() })
     }
 
     @objc private func presentContextualHint() {
         guard BrowserViewController.foregroundBVC().searchController == nil,
               presentedViewController == nil
         else {
-            contextualHintTimer?.invalidate()
+            contextualHintViewController.stopTimer()
             return
         }
         
@@ -475,7 +460,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
                 headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
                 headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
-                prepareJumpBackInContextualHint(indexPath, onView: headerView)
+                prepareJumpBackInContextualHint(onView: headerView)
 
                 return headerView
 
@@ -509,7 +494,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             case .logoHeader:
                 headerView.moreButton.isHidden = true
                 return headerView
-        }
+            }
         default:
             return UICollectionReusableView()
         }
@@ -527,6 +512,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         case .jumpBackIn:
             cellSize.height *= CGFloat(viewModel.jumpBackInViewModel.numberOfItemsInColumn)
+            cellSize.height += HistoryHighlightsCollectionCellUX.verticalPadding * 2
             return cellSize
 
         case .libraryShortcuts:
@@ -722,7 +708,10 @@ extension FirefoxHomeViewController {
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
-        customizeHomeCell.goToSettingsButton.addTarget(self, action: #selector(openCustomizeHomeSettings), for: .touchUpInside)
+        customizeHomeCell.goToSettingsButton.addTarget(
+            self,
+            action: #selector(openCustomizeHomeSettings),
+            for: .touchUpInside)
         customizeHomeCell.setNeedsLayout()
 
         return customizeHomeCell
@@ -1001,11 +990,19 @@ extension FirefoxHomeViewController {
     }
 
     @objc func openCustomizeHomeSettings() {
-        homePanelDelegate?.homePanelDidRequestToCustomizeHomeSettings()
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeHomepage)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
+    }
+    
+    @objc func contextualHintPresented() {
+        self.homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
+    }
+    
+    @objc func openTabsSettings() {
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
     }
 
     @objc func changeHomepageWallpaper() {
@@ -1055,7 +1052,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         }
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
         var sourceView: UIView?
 
@@ -1072,7 +1069,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             return nil
         }
 
-        let openInNewTabAction = PhotonActionSheetItem(title: .OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { [weak self] _, _ in
+        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { [weak self] _ in
             self?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             if FirefoxHomeSectionType(indexPath.section) == .pocket, let isZeroSearch = self?.isZeroSearch {
                 let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
@@ -1083,13 +1080,13 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             }
         }
 
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
-        let bookmarkAction: PhotonActionSheetItem
+        let bookmarkAction: SingleActionViewModel
         if site.bookmarked ?? false {
-            bookmarkAction = PhotonActionSheetItem(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
+            bookmarkAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", tapHandler: { _ in
                 self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                     self.viewModel.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
                     site.setBookmarked(false)
@@ -1098,7 +1095,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
             })
         } else {
-            bookmarkAction = PhotonActionSheetItem(title: .BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { _, _ in
+            bookmarkAction = SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: "action_bookmark", tapHandler: { _ in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
                 _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
 
@@ -1115,7 +1112,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             })
         }
 
-        let shareAction = PhotonActionSheetItem(title: .ShareContextMenuTitle, iconString: "action_share", handler: { _, _ in
+        let shareAction = SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { (_, _) in }
             if UIDevice.current.userInterfaceIdiom == .pad, let popoverController = controller.popoverPresentationController {
@@ -1127,35 +1124,38 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 popoverController.permittedArrowDirections = [.up, .down, .left]
                 popoverController.delegate = self
             }
-            self.present(controller, animated: true, completion: nil)
+            self.presentWithModalDismissIfNeeded(controller, animated: true)
         })
 
-        let removeTopSiteAction = PhotonActionSheetItem(title: .RemoveContextMenuTitle, iconString: "action_remove", handler: { _, _ in
+        let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle, iconString: "action_remove", tapHandler: { _ in
             self.hideURLFromTopSites(site)
         })
 
-        let pinTopSite = PhotonActionSheetItem(title: .AddToShortcutsActionTitle, iconString: "action_pin", handler: { _, _ in
+        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: ImageIdentifiers.addShortcut, tapHandler: { _ in
             self.pinTopSite(site)
         })
 
-        let removePinTopSite = PhotonActionSheetItem(title: .RemoveFromShortcutsActionTitle, iconString: "action_unpin", handler: { _, _ in
+        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle, iconString: "action_unpin", tapHandler: { _ in
             self.removePinTopSite(site)
         })
 
-        let topSiteActions: [PhotonActionSheetItem]
+        let topSiteActions: [PhotonRowActions]
         if let _ = site as? PinnedSite {
-            topSiteActions = [removePinTopSite]
+            topSiteActions = [PhotonRowActions(removePinTopSite)]
         } else {
-            topSiteActions = [pinTopSite, removeTopSiteAction]
+            topSiteActions = [PhotonRowActions(pinTopSite), PhotonRowActions(removeTopSiteAction)]
         }
 
-        var actions = [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
+        var actions = [PhotonRowActions(openInNewTabAction),
+                       PhotonRowActions(openInNewPrivateTabAction),
+                       PhotonRowActions(bookmarkAction),
+                       PhotonRowActions(shareAction)]
 
         switch FirefoxHomeSectionType(indexPath.section) {
         case .topSites: actions.append(contentsOf: topSiteActions)
         default: break
         }
-
+        
         return actions
     }
 }
@@ -1180,3 +1180,4 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
         return true
     }
 }
+

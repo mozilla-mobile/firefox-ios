@@ -286,9 +286,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()
 
-        let isAtEnd = selectedTextRange?.start == endOfDocument
         let isKeyboardReplacingText = lastReplacement != nil
-        if isKeyboardReplacingText, isAtEnd, markedTextRange == nil {
+        if isKeyboardReplacingText, markedTextRange == nil {
             notifyTextChanged?()
         } else {
             hideCursor = false

@@ -7,7 +7,7 @@ import XCTest
 class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testLoadReaderContent() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.goto(BrowserTab)
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         waitForExistence(app.buttons["Reader View"], timeout: 5)
@@ -26,7 +26,7 @@ class ReaderViewTest: BaseTestCase {
     private func addContentToReaderView() {
         updateScreenGraph()
         userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         waitForExistence(app.buttons["Reader View"], timeout: 5)
         app.buttons["Reader View"].tap()
@@ -197,7 +197,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Select to open in New Tab
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["quick_action_new_tab"].tap()
+        app.tables.cells[ImageIdentifiers.newTab].tap()
         app.buttons["Done"].tap()
         updateScreenGraph()
         // Now there should be two tabs open

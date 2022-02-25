@@ -78,6 +78,44 @@ class TelemetryWrapperTests: XCTestCase {
 
         testLabeledMetricSuccess(metric: GleanMetrics.FirefoxHomePage.firefoxHomepageOrigin)
     }
+
+    // MARK: CFR Analytics
+
+    func test_contextualHintDismissButton_GleanIsCalled() {
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintViewType.toolbarLocation.rawValue]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .dismissCFRFromButton, extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CfrAnalytics.dismissCfrFromButton)
+    }
+
+    func test_contextualHintDismissButtonWithoutExtras_GleanIsNotCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .dismissCFRFromButton)
+        XCTAssertFalse(GleanMetrics.CfrAnalytics.dismissCfrFromButton.testHasValue())
+    }
+
+    func test_contextualHintDismissOutsideTap_GleanIsCalled() {
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintViewType.toolbarLocation.rawValue]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .dismissCFRFromOutsideTap, extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CfrAnalytics.dismissCfrFromOutsideTap)
+    }
+
+    func test_contextualHintDismissOutsideTapWithoutExtras_GleanIsNotCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .dismissCFRFromOutsideTap)
+        XCTAssertFalse(GleanMetrics.CfrAnalytics.dismissCfrFromOutsideTap.testHasValue())
+    }
+
+    func test_contextualHintPressAction_GleanIsCalled() {
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintViewType.toolbarLocation.rawValue]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .pressCFRActionButton, extras: extra)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CfrAnalytics.pressCfrActionButton)
+    }
+
+    func test_contextualHintPressActionWithoutExtras_GleanIsNotCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .pressCFRActionButton)
+        XCTAssertFalse(GleanMetrics.CfrAnalytics.pressCfrActionButton.testHasValue())
+    }
 }
 
 // Helper functions

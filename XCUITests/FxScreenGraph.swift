@@ -177,6 +177,7 @@ class Action {
 
     static let PinToTopSitesPAM = "PinToTopSitesPAM"
     static let CopyAddressPAM = "CopyAddressPAM"
+    static let ShareBrowserTabMenuOption = "ShareBrowserTabMenuOption"
 
     static let SelectAutomatically = "SelectAutomatically"
     static let SelectManually = "SelectManually"
@@ -302,7 +303,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         makeURLBarAvailable(screenState)
-        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
 
         if isTablet {
             screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab) { userState in
@@ -316,12 +317,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.cells["menu-PasteAndGo"].firstMatch.tap()
+            menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.cells["menu-Paste"].firstMatch.tap()
+            menu.cells[ImageIdentifiers.paste].firstMatch.tap()
         }
 
         screenState.backAction = {
@@ -794,9 +795,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     if !isTablet {
         map.addScreenState(TabTrayLongPressMenu) { screenState in
             screenState.dismissOnUse = true
-            screenState.tap(app.cells["quick_action_new_tab"], forAction: Action.OpenNewTabLongPressTabsButton, transitionTo: NewTabScreen)
-            screenState.tap(app.cells["tab_close"], forAction: Action.CloseTabFromTabTrayLongPressMenu, Action.CloseTab, transitionTo: HomePanelsScreen)
-            screenState.tap(app.cells["nav-tabcounter"], forAction: Action.OpenPrivateTabLongPressTabsButton, transitionTo: NewTabScreen) { userState in
+            screenState.tap(app.otherElements[ImageIdentifiers.newTab], forAction: Action.OpenNewTabLongPressTabsButton, transitionTo: NewTabScreen)
+            screenState.tap(app.otherElements["tab_close"], forAction: Action.CloseTabFromTabTrayLongPressMenu, Action.CloseTab, transitionTo: HomePanelsScreen)
+            screenState.tap(app.otherElements["nav-tabcounter"], forAction: Action.OpenPrivateTabLongPressTabsButton, transitionTo: NewTabScreen) { userState in
                 userState.isPrivate = !userState.isPrivate
             }
         }
@@ -816,7 +817,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
-        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
         if isTablet {
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
@@ -832,12 +833,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(BrowserTab) { screenState in
         makeURLBarAvailable(screenState)
-        screenState.tap(app.buttons["TabLocationView.pageOptionsButton"], to: PageOptionsMenu)
-        screenState.tap(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
 
-        screenState.tap(app.buttons["TabLocationView.trackingProtectionButton"], to: TrackingProtectionContextMenuDetails)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], to: TrackingProtectionContextMenuDetails)
 
-        screenState.tap(app.buttons["TabToolbar.homeButton"], forAction: Action.GoToHomePage) { userState in
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], forAction: Action.GoToHomePage) { userState in
         }
 
         makeToolBarAvailable(screenState)
@@ -848,11 +848,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.press(image, to: WebImageContextMenu)
         
         if !isTablet {
-            let reloadButton = app.buttons["TabLocationView.reloadButton"]
+            let reloadButton = app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
         } else {
-            let reloadButton = app.buttons["TabLocationView.reloadButton"]
+            let reloadButton = app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
         }
@@ -905,18 +905,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    // make sure after the menu action, navigator.nowAt() is used to set the current state
-    map.addScreenState(PageOptionsMenu) {screenState in
-        screenState.tap(app.tables["Context Menu"].cells["menu-RequestDesktopSite"], to: RequestDesktopSite)
-        screenState.tap(app.tables["Context Menu"].cells["menu-ViewMobile"], to: RequestMobileSite)
-        screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
-        screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
-        screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
-        screenState.tap(app.tables.cells["menu-Copy-Link"], forAction: Action.CopyAddressPAM)
-        screenState.backAction = cancelBackAction
-        screenState.dismissOnUse = true
-    }
-
     map.addScreenState(FxAccountManagementPage) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
@@ -944,25 +932,36 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
-        screenState.tap(app.tables.cells["menu-Settings"], to: SettingsScreen)
-        screenState.tap(app.tables.cells["menu-sync"], to: Intro_FxASignin, if: "fxaUsername == nil")
-        screenState.tap(app.tables.cells["key"], to: LoginsSettings)
-        screenState.tap(app.tables.cells["menu-panel-Bookmarks"], to: LibraryPanel_Bookmarks)
-        screenState.tap(app.tables.cells["menu-panel-History"], to: LibraryPanel_History)
-        screenState.tap(app.tables.cells["menu-panel-Downloads"], to: LibraryPanel_Downloads)
-        screenState.tap(app.tables.cells["menu-panel-ReadingList"], to: LibraryPanel_ReadingList)
-        screenState.tap(app.tables.cells["placeholder-avatar"], to: FxAccountManagementPage)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.settings], to: SettingsScreen)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.sync], to: Intro_FxASignin, if: "fxaUsername == nil")
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.key], to: LoginsSettings)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.bookmarks], to: LibraryPanel_Bookmarks)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.history], to: LibraryPanel_History)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.downloads], to: LibraryPanel_Downloads)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.readingList], to: LibraryPanel_ReadingList)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.placeholderAvatar], to: FxAccountManagementPage)
 
-        screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
-            userState.noImageMode = !userState.noImageMode
-        }
-
-        screenState.tap(app.tables.cells["menu-NightMode"], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.nightMode], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
         }
 
-        screenState.tap(app.tables.cells["whatsnew"], forAction: Action.OpenWhatsNewPage) { userState in
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.whatsNew], forAction: Action.OpenWhatsNewPage) { userState in
         }
+
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.share], forAction: Action.ShareBrowserTabMenuOption) {
+            userState in
+        }
+
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.requestDesktopSite], to: RequestDesktopSite)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.requestMobileSite], to: RequestMobileSite)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.findInPage], to: FindInPage)
+        // TODO: Add new state
+        // screenState.tap(app.tables["Context Menu"].otherElements[ImageIdentifiers.reportSiteIssue], to: ReportSiteIssue)
+
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.addShortcut], forAction: Action.PinToTopSitesPAM)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.copyLink], forAction: Action.CopyAddressPAM)
+
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.addToBookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
 
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction
@@ -1016,24 +1015,20 @@ extension MMNavigator where T == FxUserState {
     }
 
     func browserPerformAction(_ view: BrowserPerformAction) {
-        let PageMenuOptions = [.shareOption, .toggleBookmarkOption, .addReadingListOption, .findInPageOption, .sendToDeviceOption, .toggleDesktopOption, BrowserPerformAction.copyURLOption]
         let BrowserMenuOptions = [.openTopSitesOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
 
         let app = XCUIApplication()
 
-        if PageMenuOptions.contains(view) {
-            self.goto(PageOptionsMenu)
-            app.tables["Context Menu"].cells[view.rawValue].tap()
-        } else if BrowserMenuOptions.contains(view) {
-            waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        if BrowserMenuOptions.contains(view) {
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
             self.goto(BrowserTabMenu)
-            app.tables["Context Menu"].cells[view.rawValue].tap()
+            app.tables["Context Menu"].otherElements[view.rawValue].tap()
         }
     }
 }
 enum BrowserPerformAction: String {
-    // Page Menu
-    case toggleBookmarkOption  = "menu-Bookmark"
+    // Tab menu (site actions)
+    case toggleBookmarkOption = "menu-Bookmark"
     case addReadingListOption = "addToReadingList"
     case copyURLOption = "menu-Copy-Link"
     case findInPageOption = "menu-FindInPage"
@@ -1042,7 +1037,7 @@ enum BrowserPerformAction: String {
     case sendToDeviceOption = "menu-Send-to-Device"
     case shareOption = "action_share"
 
-    // Tab Menu
+    // Tab Menu (home page and site actions)
     case openTopSitesOption = "menu-panel-TopSites"
     case openBookMarksOption = "menu-panel-Bookmarks"
     case openHistoryOption = "menu-panel-History"

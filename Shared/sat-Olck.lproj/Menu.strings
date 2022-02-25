@@ -77,7 +77,7 @@
 "Menu.SharePageAction.Title" = "ᱥᱟᱠᱟᱢ ᱦᱟᱹᱴᱤᱧ ᱢᱮ…";
 
 /* Label for the button, displayed in the menu, used to open the tabs tray */
-"Menu.ShowTabs.Title" = "ᱴᱮᱵ ᱠᱚ ᱩᱫᱩᱜ ᱢᱮ";
+"Menu.ShowTabs.Title" = "ᱴᱮᱵᱽ ᱠᱚ ᱩᱫᱩᱜᱽ ᱢᱮ";
 
 /* Label for the button, displayed in the menu, used to translate the current page. */
 "Menu.TranslatePageAction.Title" = "ᱥᱟᱦᱴᱟ ᱛᱚᱨᱡᱚᱢᱟᱭ ᱢᱮ";

@@ -73,6 +73,8 @@ class BrowserViewController: UIViewController {
     var updateState: TabUpdateState = .coldStart
     var openedUrlFromExternalSource = false
 
+    var contextHintVC: ContextualHintViewController
+
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
@@ -120,7 +122,7 @@ class BrowserViewController: UIViewController {
     var hasTriedToPresentDBCardAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
-    
+
     /// Set to true when the user taps the home button. Used to prevent entering overlay mode.
     /// Immediately set to false afterwards.
     var userHasPressedHomeButton = false
@@ -155,6 +157,10 @@ class BrowserViewController: UIViewController {
         self.tabManager = tabManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.ratingPromptManager = RatingPromptManager(profile: profile)
+
+        let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
+                                                       with: profile)
+        self.contextHintVC = ContextualHintViewController(with: contextViewModel)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -243,8 +249,9 @@ class BrowserViewController: UIViewController {
         let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
+        let hideReloadButton = shouldUseiPadSetup(traitCollection: newCollection)
         urlBar.topTabsIsShowing = showTopTabs
-        urlBar.setShowToolbar(!showToolbar)
+        urlBar.setShowToolbar(!showToolbar, hideReloadButton: hideReloadButton)
         toolbar.addNewTabButton.isHidden = showToolbar
 
         if showToolbar {
@@ -504,6 +511,25 @@ class BrowserViewController: UIViewController {
             show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
         }
         showQueuedAlertIfAvailable()
+
+        prepareURLOnboardingContextualHint()
+    }
+
+    private func prepareURLOnboardingContextualHint() {
+        guard contextHintVC.shouldPresentHint() else { return }
+
+        contextHintVC.configure(
+            anchor: urlBar,
+            withArrowDirection: isBottomSearchBar ? .down : .up,
+            andDelegate: self,
+            presentedUsing: { self.presentContextualHint() },
+            withActionBeforeAppearing: { self.homePanelDidPresentContextualHintOf(type: .toolbarLocation) },
+            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) })
+    }
+
+    private func presentContextualHint() {
+        if shouldShowIntroScreen { return }
+        present(contextHintVC, animated: true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -784,19 +810,6 @@ class BrowserViewController: UIViewController {
         isCrashAlertShowing = true
     }
 
-    // The logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in
-    // the profile, that means that this is a fresh install and we do not show the What's New. If we do have
-    // that value, we compare it to the major version of the running app. If it is different then this is an
-    // upgrade, downgrades are not possible, so we can show the What's New page.
-
-    func shouldShowWhatsNew() -> Bool {
-        guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
-            return false // Clean install, never show What's New
-        }
-
-        return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
-    }
-
     fileprivate func showQueuedAlertIfAvailable() {
         if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
@@ -813,7 +826,7 @@ class BrowserViewController: UIViewController {
             wallpaperManager.runResourceVerification()
         }
     }
-    
+
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
@@ -900,24 +913,24 @@ class BrowserViewController: UIViewController {
 
         if isAboutHomeURL {
             showFirefoxHome(inline: true)
-            
+
             if userHasPressedHomeButton {
                 userHasPressedHomeButton = false
-                
-            } else if focusUrlBar {
+
+            } else if focusUrlBar && !contextHintVC.shouldPresentHint() {
                 enterOverlayMode()
             }
-            
+
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideFirefoxHome()
-            urlBar.shouldHideReloadButton(false)
+            urlBar.shouldHideReloadButton(shouldUseiPadSetup())
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
         }
     }
-    
+
     private func enterOverlayMode() {
         if let viewcontroller = presentedViewController as? OnViewDismissable {
             viewcontroller.onViewDismissed = { [weak self] in
@@ -1344,7 +1357,7 @@ class BrowserViewController: UIViewController {
             popoverPresentationController.delegate = self
         }
 
-        present(controller, animated: true, completion: nil)
+        presentWithModalDismissIfNeeded(controller, animated: true)
     }
 
     @objc func openSettings() {
@@ -1436,6 +1449,18 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
+    }
+
+    func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
+        let settingsTableViewController = AppSettingsTableViewController()
+        settingsTableViewController.profile = self.profile
+        settingsTableViewController.tabManager = self.tabManager
+        settingsTableViewController.settingsDelegate = self
+        settingsTableViewController.deeplinkTo = destination
+
+        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+        controller.presentingModalViewControllerDelegate = self
+        presentWithModalDismissIfNeeded(controller, animated: true)
     }
 }
 
@@ -1671,6 +1696,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     }
 }
 
+// MARK: - RecentlyClosedPanelDelegate
 extension BrowserViewController: RecentlyClosedPanelDelegate {
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
         tabTrayOpenRecentlyClosedTab(url)
@@ -1682,6 +1708,7 @@ extension BrowserViewController: RecentlyClosedPanelDelegate {
     }
 }
 
+// MARK: HomePanelDelegate
 extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
         showLibrary(panel: panel)
@@ -1730,23 +1757,21 @@ extension BrowserViewController: HomePanelDelegate {
         showTabTray(withFocusOnUnselectedTab: tabToFocus)
     }
 
-    func homePanelDidRequestToCustomizeHomeSettings() {
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = self.profile
-        settingsTableViewController.tabManager = self.tabManager
-        settingsTableViewController.settingsDelegate = self
-        settingsTableViewController.deeplinkTo = .customizeHomepage
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.presentingModalViewControllerDelegate = self
-        self.present(controller, animated: true, completion: nil)
+    func homePanelDidPresentContextualHintOf(type: ContextualHintViewType) {
+        switch type {
+        case .jumpBackIn,
+                .toolbarLocation:
+            self.urlBar.leaveOverlayMode()
+        default: break
+        }
     }
 
-    func homePanelDidPresentContextualHint(type: ContextualHintViewType) {
-        self.urlBar.leaveOverlayMode()
+    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
+        showSettingsWithDeeplink(to: settingsPage)
     }
 }
 
+// MARK: - SearchViewController
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
@@ -1881,14 +1906,14 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            urlBar.updateReaderModeState(readerMode.state)
+            urlBar.updateReaderModeState(readerMode.state, hideReloadButton: shouldUseiPadSetup())
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            urlBar.updateReaderModeState(ReaderModeState.unavailable)
+            urlBar.updateReaderModeState(ReaderModeState.unavailable, hideReloadButton: shouldUseiPadSetup())
         }
 
         if topTabsVisible {

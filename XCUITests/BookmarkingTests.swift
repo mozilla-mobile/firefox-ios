@@ -13,23 +13,24 @@ let url_4 = "test-password-2.html"
 
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Add Bookmark"], timeout: 15)
-        app.tables.cells["Add Bookmark"].tap()
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: 15)
+        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func unbookmark() {
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Remove Bookmark"])
-        app.cells["Remove Bookmark"].tap()
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
+        app.otherElements["menu-Bookmark-Remove"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func checkBookmarked() {
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Remove Bookmark"])
+        navigator.goto(BrowserTabMenu)
+        print(app.debugDescription)
+        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -39,17 +40,17 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func undoBookmarkRemoval() {
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Remove Bookmark"])
-        app.cells["Remove Bookmark"].tap()
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
+        app.otherElements["menu-Bookmark-Remove"].tap()
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons["Undo"], timeout: 3)
         app.buttons["Undo"].tap()
     }
 
     private func checkUnbookmarked() {
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Add Bookmark"])
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements["menu-Bookmark"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -118,7 +119,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         bookmark()
 
         //There should be a bookmark
@@ -154,7 +155,7 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         // Now the site should be suggested
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)
@@ -271,6 +272,9 @@ class BookmarkingTests: BaseTestCase {
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
 
         //Add a bookmark
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.goto(NewTabScreen)
+
         navigator.openURL(url_3)
         waitForTabsButton()
         bookmark()

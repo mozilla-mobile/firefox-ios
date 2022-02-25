@@ -37,7 +37,6 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView)
     func urlBarDidLongPressLocation(_ urlBar: URLBarView)
     func urlBarDidPressQRButton(_ urlBar: URLBarView)
-    func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton)
     func urlBarDidTapShield(_ urlBar: URLBarView)
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView)
@@ -46,7 +45,6 @@ protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String)
     // Returns either (search query, true) or (url, false).
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
-    func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton)
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
 }
 
@@ -438,10 +436,10 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         locationTextField = nil
     }
 
-    // Ideally we'd split this implementation in two, one URLBarView with a toolbar and one without
-    // However, switching views dynamically at runtime is a difficult. For now, we just use one view
-    // that can show in either mode.
-    func setShowToolbar(_ shouldShow: Bool) {
+    /// Ideally we'd split this implementation in two, one URLBarView with a toolbar and one without
+    /// However, switching views dynamically at runtime is a difficult. For now, we just use one view
+    /// that can show in either mode. For the reload button, we hide it on iPad (apart from multitasking mode)
+    func setShowToolbar(_ shouldShow: Bool, hideReloadButton: Bool) {
         toolbarIsShowing = shouldShow
         setNeedsUpdateConstraints()
         // when we transition from portrait to landscape, calling this here causes
@@ -449,7 +447,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
         }
-        locationView.reloadButton.isHidden = false
+        locationView.reloadButton.isHidden = hideReloadButton
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -469,11 +467,13 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         progressBar.setProgress(0, animated: false)
     }
 
-    func updateReaderModeState(_ state: ReaderModeState) {
+    /// We hide reload button on iPad, but not in multitasking mode
+    func updateReaderModeState(_ state: ReaderModeState, hideReloadButton: Bool) {
         locationView.readerModeState = state
-        locationView.reloadButton.isHidden = false
+        locationView.reloadButton.isHidden = hideReloadButton
     }
-    
+
+    /// We hide reload button on iPad, but not in multitasking mode
     func shouldHideReloadButton(_ isHidden: Bool) {
         locationView.reloadButton.isHidden = isHidden
     }
@@ -749,14 +749,6 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
-    }
-
-    func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
-        delegate?.urlBarDidPressPageOptions(self, from: tabLocationView.pageOptionsButton)
-    }
-
-    func tabLocationViewDidLongPressPageOptions(_ tabLocationView: TabLocationView) {
-        delegate?.urlBarDidLongPressPageOptions(self, from: tabLocationView.pageOptionsButton)
     }
 
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {
