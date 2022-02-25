@@ -512,6 +512,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         case .jumpBackIn:
             cellSize.height *= CGFloat(viewModel.jumpBackInViewModel.numberOfItemsInColumn)
+            cellSize.height += HistoryHighlightsCollectionCellUX.verticalPadding * 2
             return cellSize
 
         case .libraryShortcuts:
