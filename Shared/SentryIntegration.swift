@@ -177,12 +177,15 @@ public class Sentry: SentryProtocol {
     /*
          This is the behaviour we want for Sentry logging
                    .info .error .severe
-         Debug      y      y       y
+         Debug      n      n       n
          Beta       y      y       y
-         Relase     n      y       y
+         Release    n      y       y
      */
     private func shouldSendEventFor(_ severity: SentryLevel) -> Bool {
-        return AppConstants.BuildChannel == .release && (severity == .fatal || severity == .error)
+        let shouldSendRelease = AppConstants.BuildChannel == .release && severity.rawValue >= SentryLevel.error.rawValue
+        let shouldSendBeta = AppConstants.BuildChannel == .beta && severity.rawValue >= SentryLevel.info.rawValue
+        
+        return shouldSendBeta || shouldSendRelease
     }
     
     private func makeEvent(message: String, tag: String, severity: SentryLevel, extra: [String: Any]?) -> Event {
