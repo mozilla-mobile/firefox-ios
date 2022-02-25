@@ -287,6 +287,9 @@ extension LoginDetailViewController: KeyboardHelperDelegate {
         tableView.contentInset.bottom = coveredHeight
     }
 
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+    }
+
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         tableView.contentInset.bottom = 0
     }
