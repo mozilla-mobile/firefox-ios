@@ -179,7 +179,7 @@ public class Sentry: SentryProtocol {
                    .info .error .severe
          Debug      y      y       y
          Beta       y      y       y
-         Relase     n      n       y
+         Relase     n      y       y
      */
     private func shouldSendEventFor(_ severity: SentryLevel) -> Bool {
         return AppConstants.BuildChannel == .release && (severity == .fatal || severity == .error)
