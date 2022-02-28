@@ -582,7 +582,7 @@ extension GridTabViewController {
         }
 
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .AppMenuCloseAllTabsTitleString,
+        controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
                                            handler: { _ in self.closeTabsForCurrentTray() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
