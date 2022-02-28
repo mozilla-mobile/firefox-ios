@@ -10,6 +10,7 @@ enum AppSettingsDeeplinkOption {
     case customizeHomepage
     case customizeTabs
     case customizeToolbar
+    case wallpaper
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
@@ -57,6 +58,13 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
         case .customizeToolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
             viewController = SearchBarSettingsViewController(viewModel: viewModel)
+
+        case .wallpaper:
+            let viewModel = WallpaperSettingsViewModel(with: tabManager, and: WallpaperManager())
+            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            // Push wallpaper settings view controller directly as its not of type settings viewcontroller
+            navigationController?.pushViewController(wallpaperVC, animated: true)
+            return
         }
 
         viewController.profile = profile

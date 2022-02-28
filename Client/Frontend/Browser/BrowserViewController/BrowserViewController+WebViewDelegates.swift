@@ -330,7 +330,20 @@ extension BrowserViewController: WKNavigationDelegate {
             }
         }
     }
-
+    
+    // Handle Universal link for Firefox wallpaper setting
+    private func isFirefoxUniversalWallpaperSetting(_ url: URL) -> Bool {
+        guard let scheme = url.scheme, [URL.mozPublicScheme,
+                                        URL.mozInternalScheme].contains(scheme) else {
+            return false
+        }
+        let deeplinkUrl = "\(scheme)://deep-link?url=/settings/wallpaper"
+        if url.absoluteString == deeplinkUrl {
+            return true
+        }
+        return false
+    }
+    
     // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
     // it could just be a visit to a regular page on maps.apple.com.
     fileprivate func isAppleMapsURL(_ url: URL) -> Bool {
@@ -461,6 +474,13 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
 
+            decisionHandler(.cancel)
+            return
+        }
+
+        // Handle Universal link for Firefox wallpaper setting
+        if isFirefoxUniversalWallpaperSetting(url) {
+            showWallpaperSettings()
             decisionHandler(.cancel)
             return
         }
