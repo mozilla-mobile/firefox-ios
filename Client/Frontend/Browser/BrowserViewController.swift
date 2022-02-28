@@ -1053,7 +1053,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func showBookmarksToast() {
-        let toast = ButtonToast(labelText: .AppMenu.AppMenuAddBookmarkConfirmMessage,
+        let toast = ButtonToast(labelText: .AppMenu.AddBookmarkConfirmMessage,
                                 buttonText: .BookmarksEdit,
                                 textAlignment: .left) { isButtonTapped in
             isButtonTapped ? self.openBookmarkEditPanel() : nil

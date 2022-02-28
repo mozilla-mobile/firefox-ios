@@ -1135,7 +1135,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.pinTopSite(site)
         })
 
-        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle, iconString: "action_unpin", tapHandler: { _ in
+        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle, iconString: ImageIdentifiers.removeFromShortcut, tapHandler: { _ in
             self.removePinTopSite(site)
         })
 

@@ -24,7 +24,7 @@ class PhotonActionSheetTest: BaseTestCase {
 //
 //        // Remove pin
 //        app.cells["example"].press(forDuration: 2)
-//        app.cells["action_unpin"].tap()
+//        app.cells[ImageIdentifiers.removeFromShortcut].tap()
 //
 //        // Check that it has been unpinned
 //        cell.press(forDuration: 2)

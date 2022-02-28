@@ -265,7 +265,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     // MARK: - Actions
 
     private func getNewTabAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
+        return SingleActionViewModel(title: .AppMenu.NewTab,
                                      iconString: ImageIdentifiers.newTab) { _ in
 
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
@@ -369,7 +369,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getHelpAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .AppSettingsHelp,
+        return SingleActionViewModel(title: .AppMenu.Help,
                                      iconString: ImageIdentifiers.help) { _ in
 
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
@@ -379,7 +379,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getCustomizeHomePageAction() -> PhotonRowActions? {
-        return SingleActionViewModel(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
+        return SingleActionViewModel(title: .AppMenu.CustomizeHomePage,
                                      iconString: ImageIdentifiers.edit) { _ in
             self.delegate?.showCustomizeHomePage()
         }.items
@@ -544,7 +544,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getShareAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .ShareContextMenuTitle,
+        return SingleActionViewModel(title: .AppMenu.Share,
                                      iconString: ImageIdentifiers.share) { _ in
 
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
@@ -599,7 +599,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getReadingListLibraryAction() -> SingleActionViewModel {
-        return SingleActionViewModel(title: .AppMenu.AppMenuReadingList,
+        return SingleActionViewModel(title: .AppMenu.ReadingList,
                                      iconString: ImageIdentifiers.readingList) { _ in
             self.delegate?.showLibrary(panel: .readingList)
         }
@@ -610,8 +610,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getAddReadingListAction() -> SingleActionViewModel {
-        return SingleActionViewModel(title: .Bookmarks.Actions.Add,
-                                     alternateTitle: .AppMenu.AppMenuAddToReadingListTitleString,
+        return SingleActionViewModel(title: .AppMenu.AddReadingList,
+                                     alternateTitle: .AppMenu.AddReadingListAlternateTitle,
                                      iconString: ImageIdentifiers.addToReadingList) { _ in
 
             guard let tab = self.selectedTab,
@@ -620,13 +620,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
-            self.delegate?.showToast(message: .AppMenu.AppMenuAddToReadingListConfirmMessage, toastAction: .addToReadingList, url: nil)
+            self.delegate?.showToast(message: .AppMenu.AddToReadingListConfirmMessage, toastAction: .addToReadingList, url: nil)
         }
     }
 
     private func getRemoveReadingListAction() -> SingleActionViewModel {
-        return SingleActionViewModel(title: .ReaderPanelRemove,
-                                     alternateTitle: .ReaderModeBarRemoveFromReadingList,
+        return SingleActionViewModel(title: .AppMenu.RemoveReadingList,
+                                     alternateTitle: .AppMenu.RemoveReadingListAlternateTitle,
                                      iconString: ImageIdentifiers.removeFromReadingList) { _ in
 
             guard let url = self.tabUrl?.displayURL?.absoluteString,
@@ -634,7 +634,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             else { return }
 
             self.profile.readingList.deleteRecord(record)
-            self.delegate?.showToast(message: .ReaderModeBarRemoveFromReadingList, toastAction: .removeFromReadingList, url: nil)
+            self.delegate?.showToast(message: .AppMenu.RemoveFromReadingListConfirmMessage, toastAction: .removeFromReadingList, url: nil)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .pageActionMenu)
         }
     }
@@ -654,7 +654,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getBookmarkLibraryAction() -> SingleActionViewModel {
-        return SingleActionViewModel(title: .AppMenu.AppMenuBookmarks,
+        return SingleActionViewModel(title: .AppMenu.Bookmarks,
                                      iconString: ImageIdentifiers.bookmarks) { _ in
             self.delegate?.showLibrary(panel: .bookmarks)
         }
@@ -665,29 +665,30 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getAddBookmarkAction() -> SingleActionViewModel {
-        return SingleActionViewModel(title: .Bookmarks.Actions.Add,
-                                     alternateTitle: .AppMenu.AppMenuAddBookmarkTitleString2,
+        return SingleActionViewModel(title: .AppMenu.AddBookmark,
+                                     alternateTitle: .AppMenu.AddBookmarkAlternateTitle,
                                      iconString: ImageIdentifiers.addToBookmark) { _ in
 
             guard let tab = self.selectedTab,
                   let url = tab.canonicalURL?.displayURL
             else { return }
 
+            // The method in BVC also handles the toast for this use case
             self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
         }
     }
 
     private func getRemoveBookmarkAction() -> SingleActionViewModel {
-        return SingleActionViewModel(title: .ReaderPanelRemove,
-                                     alternateTitle: .AppMenu.AppMenuRemoveBookmarkTitleString,
+        return SingleActionViewModel(title: .AppMenu.RemoveBookmark,
+                                     alternateTitle: .AppMenu.RemoveBookmarkAlternateTitle,
                                      iconString: ImageIdentifiers.removeFromBookmark) { _ in
 
             guard let url = self.tabUrl?.displayURL else { return }
 
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.delegate?.showToast(message: .AppMenu.AppMenuRemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url.absoluteString)
+                self.delegate?.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url.absoluteString)
             }
 
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
@@ -716,7 +717,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
             }.uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.delegate?.showToast(message: .AppMenu.AppMenuAddPinToShortcutsConfirmMessage, toastAction: .pinPage, url: nil)
+                self.delegate?.showToast(message: .AppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage, url: nil)
             }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
@@ -724,18 +725,23 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getRemoveShortcutAction() -> SingleActionViewModel {
-        return SingleActionViewModel(title: .AppMenu.AppMenuRemoveBookmarkTitleString,
-                                     iconString: ImageIdentifiers.removeFromBookmark) { _ in
+        return SingleActionViewModel(title: .AppMenu.RemoveFromShortcuts,
+                                     iconString: ImageIdentifiers.removeFromShortcut) { _ in
 
-            guard let url = self.selectedTab?.url?.absoluteString else { return }
+            guard let url = self.selectedTab?.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
-            self.profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
+            sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
+                guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
+                    return succeed()
+                }
+
+                return self.profile.history.removeFromPinnedTopSites(site)
+            }.uponQueue(.main) { result in
                 if result.isSuccess {
-                    self.delegate?.showToast(message: .AppMenu.AppMenuRemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url)
+                    self.delegate?.showToast(message: .AppMenu.RemovePinFromShortcutsConfirmMessage, toastAction: .removePinPage, url: nil)
                 }
             }
-
-            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
     }
 

@@ -23,7 +23,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98
+    case v39, v96, v97, v98, v99
 
     // Used for all cases before version 39.
     case unknown
@@ -342,7 +342,9 @@ extension String {
             public static let Bottom = MZLocalizedString("Settings.Toolbar.Bottom", value: "Bottom", comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.", lastUpdated: .v98)
         }
         
-        
+        public struct Toggle {
+            public static let NoImageMode = MZLocalizedString("Settings.NoImageModeBlockImages.Label", value: "Block Images", comment: "Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits.", lastUpdated: .v99)
+        }
     }
 }
 
@@ -929,12 +931,9 @@ extension String {
     public struct AppMenu {
         public static let AppMenuReportSiteIssueTitleString = MZLocalizedString("Menu.ReportSiteIssueAction.Title", tableName: "Menu", value: "Report Site Issue", comment: "Label for the button, displayed in the menu, used to report a compatibility issue with the current page.", lastUpdated: .unknown)
         public static let AppMenuLibraryTitleString = MZLocalizedString("Menu.Library.Title", tableName: "Menu", value: "Your Library", comment: "Label for the button, displayed in the menu, used to open the Library", lastUpdated: .unknown)
-        public static let AppMenuAddToReadingListTitleString = MZLocalizedString("Menu.AddToReadingList.Title", tableName: "Menu", value: "Add to Reading List", comment: "Label for the button, displayed in the menu, used to add a page to the reading list.", lastUpdated: .unknown)
         public static let AppMenuSharePageTitleString = MZLocalizedString("Menu.SharePageAction.Title", tableName: "Menu", value: "Share Page With…", comment: "Label for the button, displayed in the menu, used to open the share dialog.", lastUpdated: .unknown)
         public static let AppMenuCopyLinkTitleString = MZLocalizedString("Menu.CopyLink.Title", tableName: "Menu", value: "Copy Link", comment: "Label for the button, displayed in the menu, used to copy the current page link to the clipboard.", lastUpdated: .unknown)
         public static let AppMenuAddBookmarkTitleString = MZLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Bookmark This Page", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.", lastUpdated: .unknown)
-        public static let AppMenuAddBookmarkTitleString2 = MZLocalizedString("Menu.AddBookmarkAction2.Title", tableName: "Menu", value: "Add Bookmark", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.", lastUpdated: .unknown)
-        public static let AppMenuRemoveBookmarkTitleString = MZLocalizedString("Menu.RemoveBookmarkAction.Title", tableName: "Menu", value: "Remove Bookmark", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.", lastUpdated: .unknown)
         public static let AppMenuFindInPageTitleString = MZLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find in Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.", lastUpdated: .unknown)
         public static let AppMenuViewDesktopSiteTitleString = MZLocalizedString("Menu.ViewDekstopSiteAction.Title", tableName: "Menu", value: "Request Desktop Site", comment: "Label for the button, displayed in the menu, used to request the desktop version of the current website.", lastUpdated: .unknown)
         public static let AppMenuViewMobileSiteTitleString = MZLocalizedString("Menu.ViewMobileSiteAction.Title", tableName: "Menu", value: "Request Mobile Site", comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.", lastUpdated: .unknown)
@@ -949,36 +948,57 @@ extension String {
         public static let AppMenuSyncedTabsTitleString = MZLocalizedString("Menu.OpenSyncedTabsAction.AccessibilityLabel.v2", tableName: "Menu", value: "Synced Tabs", comment: "Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available.", lastUpdated: .unknown)
         public static let AppMenuTurnOnNightMode = MZLocalizedString("Menu.NightModeTurnOn.Label2", value: "Turn on Night Mode", comment: "Label for the button, displayed in the menu, turns on night mode.", lastUpdated: .unknown)
         public static let AppMenuTurnOffNightMode = MZLocalizedString("Menu.NightModeTurnOff.Label2", value: "Turn off Night Mode", comment: "Label for the button, displayed in the menu, turns off night mode.", lastUpdated: .unknown)
-        public static let AppMenuNoImageMode = MZLocalizedString("Menu.NoImageModeBlockImages.Label", value: "Block Images", comment: "Label for the button, displayed in the menu, hides images on the webpage when pressed.", lastUpdated: .unknown)
-        public static let AppMenuBookmarks = MZLocalizedString("Menu.Bookmarks.Label", value: "Bookmarks", comment: "Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed.", lastUpdated: .unknown)
         public static let AppMenuHistory = MZLocalizedString("Menu.History.Label", value: "History", comment: "Label for the button, displayed in the menu, takes you to to History screen when pressed.", lastUpdated: .unknown)
         public static let AppMenuDownloads = MZLocalizedString("Menu.Downloads.Label", value: "Downloads", comment: "Label for the button, displayed in the menu, takes you to to Downloads screen when pressed.", lastUpdated: .unknown)
-        public static let AppMenuReadingList = MZLocalizedString("Menu.ReadingList.Label", value: "Reading List", comment: "Label for the button, displayed in the menu, takes you to to Reading List screen when pressed.", lastUpdated: .unknown)
         public static let AppMenuPasswords = MZLocalizedString("Menu.Passwords.Label", value: "Passwords", comment: "Label for the button, displayed in the menu, takes you to to passwords screen when pressed.", lastUpdated: .unknown)
-        public static let AppMenuBackUpAndSyncData = MZLocalizedString("Menu.BackUpAndSync.Label", value: "Back up and Sync Data", comment: "Label for the button, displayed in the menu, takes you to sync sign in when pressed.", lastUpdated: .unknown)
+        public static let AppMenuBackUpAndSyncData = MZLocalizedString("Menu.SignInToSync.Label", value: "Sign in to Sync", comment: "Label for the button, displayed in the menu, takes you to sync sign in when pressed.", lastUpdated: .v99)
         public static let AppMenuCopyURLConfirmMessage = MZLocalizedString("Menu.CopyURL.Confirm", value: "URL Copied To Clipboard", comment: "Toast displayed to user after copy url pressed.", lastUpdated: .unknown)
-        public static let AppMenuAddBookmarkConfirmMessage = MZLocalizedString("Menu.AddBookmark.Confirm", value: "Bookmark Added", comment: "Toast displayed to the user after a bookmark has been added.", lastUpdated: .unknown)
         public static let AppMenuTabSentConfirmMessage = MZLocalizedString("Menu.TabSent.Confirm", value: "Tab Sent", comment: "Toast displayed to the user after a tab has been sent successfully.", lastUpdated: .unknown)
-        public static let AppMenuRemoveBookmarkConfirmMessage = MZLocalizedString("Menu.RemoveBookmark.Confirm", value: "Bookmark Removed", comment: "Toast displayed to the user after a bookmark has been removed.", lastUpdated: .unknown)
-        public static let AppMenuAddPinToShortcutsConfirmMessage = MZLocalizedString("Menu.AddPin.Confirm2", value: "Added to Shortcuts", comment: "Toast displayed to the user after adding the item to the Shortcuts.", lastUpdated: .unknown)
-        public static let AppMenuAddToReadingListConfirmMessage = MZLocalizedString("Menu.AddToReadingList.Confirm", value: "Added To Reading List", comment: "Toast displayed to the user after adding the item to their reading list.", lastUpdated: .unknown)
         public static let WhatsNewString = MZLocalizedString("Menu.WhatsNew.Title", value: "What's New", comment: "The title for the option to view the What's new page.", lastUpdated: .unknown)
+        public static let CustomizeHomePage = MZLocalizedString("Menu.CustomizeHomePage", value: "Customize Homepage", comment: "Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page", lastUpdated: .v99)
+        public static let NewTab = MZLocalizedString("Menu.NewTab", value: "New Tab", comment: "Label for the new tab button in the menu page. Pressing this button opens a new tab.", lastUpdated: .v99)
+        public static let Help = MZLocalizedString("Menu.Help", value: "Help", comment: "Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios", lastUpdated: .v99)
+        public static let Share = MZLocalizedString("Menu.Share", value: "Share", comment: "Label for the share button in the menu page. Pressing this button open the share menu to share the current website.", lastUpdated: .v99)
 
-        // MARK: Toolbar
+        // Shortcuts
+        public static let AddToShortcuts = MZLocalizedString("Menu.AddToShortcuts", value: "Add to Shortcuts", comment: "Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page.", lastUpdated: .v99)
+        public static let RemoveFromShortcuts = MZLocalizedString("Menu.RemovedFromShortcuts", value: "Remove from Shortcuts", comment: "Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page.", lastUpdated: .v99)
+        public static let AddPinToShortcutsConfirmMessage = MZLocalizedString("Menu.AddPin.Confirm2", value: "Added to Shortcuts", comment: "Toast displayed to the user after adding the item to the Shortcuts.", lastUpdated: .unknown)
+        public static let RemovePinFromShortcutsConfirmMessage = MZLocalizedString("Menu.RemovePin.Confirm2", value: "Removed from Shortcuts", comment: "Toast displayed to the user after removing the item to the Shortcuts.", lastUpdated: .v99)
+
+        // Bookmarks
+        public static let Bookmarks = MZLocalizedString("Menu.Bookmarks.Label", value: "Bookmarks", comment: "Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed.", lastUpdated: .unknown)
+        public static let AddBookmark = MZLocalizedString("Menu.AddBookmark.Label", value: "Add", comment: "Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label.", lastUpdated: .v99)
+        public static let AddBookmarkAlternateTitle = MZLocalizedString("Menu.AddBookmark.AlternateLabel", value: "Add Bookmark", comment: "Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page.", lastUpdated: .v99)
+        public static let AddBookmarkConfirmMessage = MZLocalizedString("Menu.AddBookmark.Confirm", value: "Bookmark Added", comment: "Toast displayed to the user after a bookmark has been added.", lastUpdated: .unknown)
+        public static let RemoveBookmark = MZLocalizedString("Menu.RemoveBookmark.Label", value: "Remove", comment: "Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label.", lastUpdated: .v99)
+        public static let RemoveBookmarkAlternateTitle = MZLocalizedString("Menu.RemoveBookmark.AlternateLabel", tableName: "Menu", value: "Remove Bookmark", comment: "Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks.", lastUpdated: .v99)
+        public static let RemoveBookmarkConfirmMessage = MZLocalizedString("Menu.RemoveBookmark.Confirm", value: "Bookmark Removed", comment: "Toast displayed to the user after a bookmark has been removed.", lastUpdated: .unknown)
+
+        // Reading list
+        public static let ReadingList = MZLocalizedString("Menu.ReadingList.Label", value: "Reading List", comment: "Label for the button, displayed in the menu, takes you to to Reading List screen when pressed.", lastUpdated: .unknown)
+        public static let AddReadingList = MZLocalizedString("Menu.AddReadingList.Label", value: "Add", comment: "Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label.", lastUpdated: .v99)
+        public static let AddReadingListAlternateTitle = MZLocalizedString("Menu.AddToReadingList.AlternateLabel", tableName: "Menu", value: "Add to Reading List", comment: "Long label for the button displayed in the menu, used to add a page to the reading list.", lastUpdated: .v99)
+        public static let AddToReadingListConfirmMessage = MZLocalizedString("Menu.AddToReadingList.Confirm", value: "Added To Reading List", comment: "Toast displayed to the user after adding the item to their reading list.", lastUpdated: .unknown)
+        public static let RemoveReadingList = MZLocalizedString("Menu.RemoveReadingList.Label", value: "Remove", comment: "Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label.", lastUpdated: .v99)
+        public static let RemoveReadingListAlternateTitle = MZLocalizedString("Menu.RemoveReadingList.AlternateLabel", comment: "Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list.", lastUpdated: .v99)
+        public static let RemoveFromReadingListConfirmMessage = MZLocalizedString("Menu.RemoveReadingList.Confirm", value: "Removed from Reading List", comment: "Toast displayed to confirm to the user that his reading list item was correctly removed.", lastUpdated: .v99)
+
+        // Toolbar
         public struct Toolbar {
-            public static let AppMenuButtonAccessibilityLabel = MZLocalizedString("Toolbar.Menu.AccessibilityLabel", value: "Menu", comment: "Accessibility label for the Menu button.", lastUpdated: .unknown)
-            public static let AppMenuHomeMenuButtonAccessibilityLabel = MZLocalizedString("Menu.Toolbar.Home.AccessibilityLabel", value: "Home", comment: "Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page.", lastUpdated: .unknown)
-            public static let AppMenuBookmarksButtonAccessibilityLabel = MZLocalizedString("Menu.Toolnar.Bookmarks.AccessibilityLabel", value: "Bookmarks", comment: "Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu", lastUpdated: .unknown)
+            public static let MenuButtonAccessibilityLabel = MZLocalizedString("Toolbar.Menu.AccessibilityLabel", value: "Menu", comment: "Accessibility label for the Menu button.", lastUpdated: .unknown)
+            public static let HomeMenuButtonAccessibilityLabel = MZLocalizedString("Menu.Toolbar.Home.AccessibilityLabel", value: "Home", comment: "Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page.", lastUpdated: .v99)
+            public static let BookmarksButtonAccessibilityLabel = MZLocalizedString("Menu.Toolbar.Bookmarks.AccessibilityLabel", value: "Bookmarks", comment: "Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu", lastUpdated: .v99)
             public static let TabTrayDeleteMenuButtonAccessibilityLabel = MZLocalizedString("Toolbar.Menu.CloseAllTabs", value: "Close All Tabs", comment: "Accessibility label for the Close All Tabs menu button.", lastUpdated: .unknown)
         }
 
-        // MARK: 3D TouchActions
+        // 3D TouchActions
         public struct TouchActions {
             public static let SendToDeviceTitle = MZLocalizedString("Send to Device", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device", lastUpdated: .unknown)
             public static let SendLinkToDeviceTitle = MZLocalizedString("Menu.SendLinkToDevice", tableName: "3DTouchActions", value: "Send Link to Device", comment: "Label for preview action on Tab Tray Tab to send the current link to another device", lastUpdated: .unknown)
         }
 
-        // MARK: Unused
+        // Unused
         public static let AppMenuLibraryReloadString = MZLocalizedString("Menu.Library.Reload", tableName: "Menu", value: "Reload", comment: "Label for the button, displayed in the menu, used to Reload the webpage", lastUpdated: .unknown)
         public static let AppMenuRecentlySavedTitle = MZLocalizedString("Menu.RecentlySaved.Title", tableName: "Menu", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.", lastUpdated: .unknown)
         public static let AppMenuShowTabsTitleString = MZLocalizedString("Menu.ShowTabs.Title", tableName: "Menu", value: "Show Tabs", comment: "Label for the button, displayed in the menu, used to open the tabs tray", lastUpdated: .unknown)
@@ -992,7 +1012,6 @@ extension String {
         public static let AppMenuManageAccount = MZLocalizedString("Menu.ManageAccount.Label", value: "Manage Account %@", comment: "Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account", lastUpdated: .unknown)
         public static let AppMenuAddPinToTopSitesConfirmMessage = MZLocalizedString("Menu.AddPin.Confirm", value: "Pinned To Top Sites", comment: "Toast displayed to the user after adding the item to the Top Sites.", lastUpdated: .unknown)
         public static let AppMenuRemovePinFromTopSitesConfirmMessage = MZLocalizedString("Menu.RemovePin.Confirm", value: "Removed From Top Sites", comment: "Toast displayed to the user after removing the item from the Top Sites.", lastUpdated: .unknown)
-        public static let AppMenuRemovePinFromShortcutsConfirmMessage = MZLocalizedString("Menu.RemovePin.Confirm2", value: "Removed from Shortcuts", comment: "Toast displayed to the user after removing the item to the Shortcuts.", lastUpdated: .unknown)
         public static let AppMenuShowPageSourceString = MZLocalizedString("Menu.PageSourceAction.Title", tableName: "Menu", value: "View Page Source", comment: "Label for the button, displayed in the menu, used to show the html page source", lastUpdated: .unknown)
         public static let AppMenuShowImageMode = MZLocalizedString("Menu.NoImageModeShowImages.Label", value: "Show Images", comment: "Label for the button, displayed in the menu, shows images on the webpage when pressed.", lastUpdated: .unknown)
         public static let PageActionMenuTitle = MZLocalizedString("Menu.PageActions.Title", value: "Page Actions", comment: "Label for title in page action menu.", lastUpdated: .unknown)

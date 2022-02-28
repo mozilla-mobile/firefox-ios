@@ -34,6 +34,7 @@ public struct ImageIdentifiers {
     public static let requestMobileSite = "menu-ViewMobile"
     public static let removeFromBookmark = "menu-Bookmark-Remove"
     public static let removeFromReadingList = "removeFromReadingList"
+    public static let removeFromShortcut = "action_unpin"
     public static let sendToDevice = "menu-Send-to-Device"
     public static let settings = "menu-Settings"
     public static let share = "action_share"
