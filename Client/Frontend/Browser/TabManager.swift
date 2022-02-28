@@ -842,19 +842,15 @@ extension TabManager {
                                         with profilePreferences: Prefs) -> Tab? {
 
         let page = NewTabAccessors.getHomePage(profilePreferences)
-        var existingHomeTab: Tab? = nil
 
-        for tab in tabs {
-            if page == .homePage {
-                existingHomeTab = tab.isCustomHomeTab ? tab : nil
-            } else if page == .topSites {
-                existingHomeTab = tab.isFxHomeTab ? tab : nil
-            }
-
-            if existingHomeTab != nil { return existingHomeTab }
+        switch page {
+        case .blankPage:
+            return nil
+        case .homePage:
+            return tabs.first { $0.isCustomHomeTab }
+        case .topSites:
+            return tabs.first { $0.isFxHomeTab }
         }
-
-        return nil
     }
 
     /// Provides a tab on which to open if the start at home feature is enabled. This tab
@@ -876,7 +872,6 @@ extension TabManager {
 
         if page == .homePage, let customUrl = customUrl {
             return existingTab ?? addTab(URLRequest(url: customUrl), isPrivate: privateMode)
-
         } else if page == .topSites, let homeUrl = homeUrl {
             let home = existingTab ?? addTab(isPrivate: privateMode)
             home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
