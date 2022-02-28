@@ -195,6 +195,9 @@ class Tab: NSObject {
 
     var isFxHomeTab: Bool {
         if let url = url, url.absoluteString.hasPrefix("internal://") { return true }
+        
+        if let url = lastKnownUrl, url.absoluteString.hasPrefix("internal://") { return true }
+        
         return false
     }
     
@@ -453,7 +456,6 @@ class Tab: NSObject {
             }
 
             let currentPage = sessionData.currentPage
-            self.sessionData = nil
             var jsonDict = [String: AnyObject]()
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
