@@ -223,4 +223,8 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     func showCustomizeHomePage() {
         showSettingsWithDeeplink(to: .customizeHomepage)
     }
+
+    func showWallpaperSettings() {
+        showSettingsWithDeeplink(to: .wallpaper)
+    }
 }
