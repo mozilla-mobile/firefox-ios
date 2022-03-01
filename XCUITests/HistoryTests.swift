@@ -252,7 +252,7 @@ class HistoryTests: BaseTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.nowAt(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.goto(BrowserTab)
+        navigator.openURL(userState.url!)
         // It is necessary to open two sites so that when one is closed private mode is not closed
         navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()

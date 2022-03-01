@@ -72,6 +72,7 @@ class NavigationTest: BaseTestCase {
             app.buttons["Forward"].tap()
         } else {
             // Go forward to next visited web site
+            waitForExistence(app.buttons["TabToolbar.forwardButton"])
             app.buttons["TabToolbar.forwardButton"].tap()
         }
         waitUntilPageLoad()
@@ -211,6 +212,7 @@ class NavigationTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Copy Link")
         navigator.goto(NewTabScreen)
+        waitForExistence(app.textFields["url"])
         app.textFields["url"].press(forDuration: 2)
 
         app.tables.otherElements[ImageIdentifiers.paste].tap()

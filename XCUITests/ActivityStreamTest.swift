@@ -161,8 +161,9 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.goto(TabTray)
+        waitForExistence(app.cells.staticTexts["Homepage"].firstMatch, timeout: 5)
         app.cells.staticTexts["Homepage"].firstMatch.tap()
-        waitForExistence(TopSiteCellgroup.cells["Apple"])
+        waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 10)
         navigator.nowAt(HomePanelsScreen)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)

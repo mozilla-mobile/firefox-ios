@@ -35,6 +35,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
+        waitForExistence(app.tables["DownloadsTable"], timeout: 5)
         XCTAssertTrue(app.tables["DownloadsTable"].exists)
         // Check that there is not any items and the default text shown is correct
         checkTheNumberOfDownloadedItems(items: 0)
