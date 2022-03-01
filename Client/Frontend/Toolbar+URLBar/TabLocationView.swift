@@ -75,7 +75,7 @@ class TabLocationView: UIView {
         urlTextField.accessibilityActionsSource = self
         urlTextField.font = UIConstants.DefaultChromeFont
         urlTextField.backgroundColor = .clear
-        urlTextField.accessibilityLabel = "Address Bar"
+        urlTextField.accessibilityLabel = .TabLocationAddressBarAccessibilityLabel
         urlTextField.font = UIFont.preferredFont(forTextStyle: .body)
         urlTextField.adjustsFontForContentSizeCategory = true
 
