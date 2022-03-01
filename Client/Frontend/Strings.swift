@@ -261,8 +261,10 @@ extension String {
         }
 
         public struct History {
-            public static let SearchHistory = MZLocalizedString("LibraryPanel.History.SearchHistoryPlaceholder", value: "Search History", comment: "In the history panel, this placeholder text inside the search component will indicate that a user can search through their browsing history.", lastUpdated: .v98)
-            public static let SyncedHistory = MZLocalizedString("LibraryPanel.History.SyncedHistory", value: "Synced History", comment: "In the history panel, this label indicates that tapping on this item will navigate the user to a screen showing only browser history from other devices that are synced with the user's Firefox account.", lastUpdated: .v98)
+            public static let SearchHistoryPlaceholder = MZLocalizedString("LibraryPanel.History.SearchHistoryPlaceholder", value: "Enter search terms", comment: "In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history.", lastUpdated: .v99)
+            public static let NoHistoryResult = MZLocalizedString("LibraryPanel.History.NoHistoryFound", value: "No history found", comment: "In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history.", lastUpdated: .v99)
+            public static let RecentlyClosedTabs = MZLocalizedString("LibraryPanel.History.RecentlyClosedTabs", value: "Recently Closed Tabs", comment: "In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs.", lastUpdated: .v99)
+            public static let SyncedFromOtherDevices = MZLocalizedString("LibraryPanel.History.SyncedFromOtherDevices", value: "Synced from Other Devices", comment: "In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account.", lastUpdated: .v99)
         }
 
         public struct ReadingList {
