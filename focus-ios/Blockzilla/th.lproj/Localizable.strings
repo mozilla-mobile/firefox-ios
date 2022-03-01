@@ -547,6 +547,12 @@
 /* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
 "Tip.Release.Description" = "อ่านเพิ่มเติมเกี่ยวกับสิ่งนี้และการอัปเดตอื่นๆ ของ %@";
 
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "ใช่ เรามีรูปลักษณ์ใหม่!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "การกระทำหน้า > ขอไซต์สำหรับเดสก์ท็อป";
+
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "ต้องการดูไซต์เวอร์ชันเดสก์ท็อปแบบเต็มหรือไม่?";
 
@@ -558,6 +564,9 @@
 
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "เพิ่มทางลัด Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri ลบวาระ %@ ของฉัน”";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "เพิ่มทางลัด Siri";
