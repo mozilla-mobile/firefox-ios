@@ -22,16 +22,33 @@ public struct Strings {
 
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
-fileprivate enum StringLastUpdatedAppVersion {
+fileprivate enum StringLastUpdatedAppVersion: String {
     case v39, v96, v97, v98, v99
 
-    // Used for all cases before version 39.
+    /// Used for all cases before version 39.
     case unknown
+
+    /// This check is to automatically update the string key if a string needs to be updated.
+    /// Versions before v99 don't have their versions appended to the key since we don't wanna
+    /// update the key for already existing strings that are already translated. In other words,
+    /// if you need to update an existing string for localization, you don't have to change the key,
+    /// you can just change the 'lastUpdated' parameter and the key will be update for you
+    /// (and translators will be notified).
+    var shouldUpdate: Bool {
+        switch self {
+        case .unknown, .v39, .v96, .v97, .v98:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
 // MARK: - Localization helper function
 fileprivate func MZLocalizedString(_ key: String, tableName: String? = nil, value: String = "", comment: String, lastUpdated: StringLastUpdatedAppVersion) -> String {
-    return NSLocalizedString(key, tableName: tableName, bundle: Strings.bundle, value: value, comment: comment)
+    // Computed key automatically update the key for the localisation when needed
+    let computedKey = lastUpdated.shouldUpdate ? "\(key).\(lastUpdated.rawValue)" : key
+    return NSLocalizedString(computedKey, tableName: tableName, bundle: Strings.bundle, value: value, comment: comment)
 }
 
 /// This file contains all strings for Firefox iOS.
@@ -313,18 +330,18 @@ extension String {
             public struct Wallpaper {
                 public static let PageTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.Title", value: "Wallpaper", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application.", lastUpdated: .v98)
                 public static let CollectionTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.CollectionTitle", value: "OPENING SCREEN", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application.", lastUpdated: .v98)
-                public static let SwitchTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.SwitchTitle.Updated", value: "Change wallpaper by tapping Firefox homepage logo", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off.", lastUpdated: .v99)
+                public static let SwitchTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.SwitchTitle", value: "Change wallpaper by tapping Firefox homepage logo", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off.", lastUpdated: .v99)
                 public static let WallpaperUpdatedToastLabel = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToast", value: "Wallpaper Updated!", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated.", lastUpdated: .v98)
                 public static let WallpaperUpdatedToastButton = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToastButton", value: "View", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper.", lastUpdated: .v98)
                 
                 // Accessibility
                 public struct AccessibilityLabels {
-                    public static let FxHomepageWallpaperButton = MZLocalizedString("FxHomepage.Wallpaper.A11y.ButtonLabel", value: "Firefox logo, change the wallpaper.", comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper", lastUpdated: .v99)
+                    public static let FxHomepageWallpaperButton = MZLocalizedString("FxHomepage.Wallpaper.ButtonLabel", value: "Firefox logo, change the wallpaper.", comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper", lastUpdated: .v99)
                     public static let ToggleButton = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.ToggleButton", value: "Homepage wallpaper cycle toggle", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.", lastUpdated: .v98)
-                    public static let DefaultWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.A11y.DefaultWallpaper", value: "Default clear wallpaper.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.", lastUpdated: .v99)
-                    public static let FxAmethystWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.A11y.AmethystWallpaper", value: "Firefox wallpaper, amethyst pattern.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.", lastUpdated: .v99)
-                    public static let FxSunriseWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.A11y.SunriseWallpaper", value: "Firefox wallpaper, sunrise pattern.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.", lastUpdated: .v99)
-                    public static let FxCeruleanWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.A11y.CeruleanWallpaper", value: "Firefox wallpaper, cerulean pattern.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.", lastUpdated: .v99)
+                    public static let DefaultWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper", value: "Default clear wallpaper.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.", lastUpdated: .v99)
+                    public static let FxAmethystWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper", value: "Firefox wallpaper, amethyst pattern.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.", lastUpdated: .v99)
+                    public static let FxSunriseWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper", value: "Firefox wallpaper, sunrise pattern.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.", lastUpdated: .v99)
+                    public static let FxCeruleanWallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper", value: "Firefox wallpaper, cerulean pattern.", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.", lastUpdated: .v99)
                 }
             }
         }
