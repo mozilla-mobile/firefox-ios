@@ -150,8 +150,7 @@ workflows:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan Fennec_Enterprise_XCUITests"
-        #- simulator_device: "$IOS_DEVICE"
-        - simulator_device: iPhone 11
+        - simulator_device: "$IOS_DEVICE"
   Detect_warnings:
     steps:
     - script@1.1:
@@ -959,6 +958,6 @@ trigger_map:
 - push_branch: v98.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  workflow: RunAllXCUITests
+  workflow: RunUnitTests
 - pull_request_target_branch: epic-branch/*
   workflow: RunUnitTests
