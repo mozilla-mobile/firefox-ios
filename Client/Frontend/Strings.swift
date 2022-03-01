@@ -1510,6 +1510,7 @@ extension String {
     public static let TabLocationURLPlaceholder = MZLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home", lastUpdated: .unknown)
     public static let TabLocationLockIconAccessibilityLabel = MZLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure", lastUpdated: .unknown)
     public static let TabLocationReaderModeAccessibilityLabel = MZLocalizedString("Reader View", comment: "Accessibility label for the Reader View button", lastUpdated: .unknown)
+    public static let TabLocationAddressBarAccessibilityLabel = MZLocalizedString("Address Bar", comment: "Accessibility label for the Address Bar, where a user can enter the search they wish to make", lastUpdated: .v99)
     public static let TabLocationReaderModeAddToReadingListAccessibilityLabel = MZLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list.", lastUpdated: .unknown)
     public static let TabLocationReloadAccessibilityLabel = MZLocalizedString("Reload page", comment: "Accessibility label for the reload button", lastUpdated: .unknown)
     public static let TabLocationPageOptionsAccessibilityLabel = MZLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button", lastUpdated: .unknown)
