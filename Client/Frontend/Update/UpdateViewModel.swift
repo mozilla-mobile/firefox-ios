@@ -22,7 +22,7 @@ class UpdateViewModel {
     }
 
     private func setupUpdateModel() {
-        updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"), titleText: .WhatsNewString, updates: updates)
+        updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"), titleText: .AppMenu.WhatsNewString, updates: updates)
     }
     
     static func isCleanInstall(userPrefs: Prefs) -> Bool {

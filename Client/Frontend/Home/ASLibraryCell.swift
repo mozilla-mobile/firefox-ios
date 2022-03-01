@@ -16,16 +16,16 @@ class ASLibraryCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
 
     var libraryButtons: [LibraryShortcutView] = []
 
-    let bookmarks = LibraryPanel(title: .AppMenuBookmarksTitleString,
+    let bookmarks = LibraryPanel(title: .AppMenu.AppMenuBookmarksTitleString,
                                  image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark),
                                  color: UIColor.Photon.Blue40)
-    let history = LibraryPanel(title: .AppMenuHistoryTitleString,
+    let history = LibraryPanel(title: .AppMenu.AppMenuHistoryTitleString,
                                image: UIImage.templateImageNamed(ImageIdentifiers.history),
                                color: UIColor.Photon.Violet50)
-    let readingList = LibraryPanel(title: .AppMenuReadingListTitleString,
+    let readingList = LibraryPanel(title: .AppMenu.AppMenuReadingListTitleString,
                                    image: UIImage.templateImageNamed(ImageIdentifiers.readingList),
                                    color: UIColor.Photon.Pink40)
-    let downloads = LibraryPanel(title: .AppMenuDownloadsTitleString,
+    let downloads = LibraryPanel(title: .AppMenu.AppMenuDownloadsTitleString,
                                  image: UIImage.templateImageNamed(ImageIdentifiers.downloads),
                                  color: UIColor.Photon.Green60)
 

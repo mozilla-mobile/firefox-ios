@@ -1187,7 +1187,7 @@ class NoImageModeSetting: BoolSetting {
             prefs: settings.profile.prefs, 
             prefKey: NoImageModePrefsKey.NoImageModeStatus, 
             defaultValue: noImageEnabled,
-            attributedTitleText: NSAttributedString(string: .AppMenuNoImageMode),
+            attributedTitleText: NSAttributedString(string: .Settings.Toggle.NoImageMode),
             attributedStatusText: nil,
             settingDidChange: { isEnabled in
                 didChange(isEnabled)

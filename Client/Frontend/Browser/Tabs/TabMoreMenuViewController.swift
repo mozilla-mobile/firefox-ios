@@ -22,7 +22,7 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
                                     2: [.KeyboardShortcuts.CloseCurrentTab],
                                     0: [.CopyAddressTitle,
                                         .ShareContextMenuTitle,
-                                        .SendToDeviceTitle]
+                                        .AppMenu.TouchActions.SendToDeviceTitle]
     ]
     let imageViews: [Int: [UIImageView]] = [ 1: [UIImageView(image: UIImage.templateImageNamed("library-readinglist")),
                                                  UIImageView(image: UIImage.templateImageNamed("bookmark")),
@@ -195,7 +195,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
                 dismissMenu()
             case 1:
                 dismissMenu()

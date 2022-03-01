@@ -147,7 +147,7 @@ extension ChronologicalTabsViewController {
 
     func didTapToolbarDelete(_ sender: UIBarButtonItem) {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .AppMenuCloseAllTabsTitleString,
+        controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
                                            handler: { _ in self.viewModel.closeTabsForCurrentTray() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)

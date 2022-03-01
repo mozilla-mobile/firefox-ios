@@ -106,8 +106,8 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForExistence(app.collectionViews.cells["TopSitesCell"].cells["pdf995"])
         pdfTopSite.press(forDuration: 1)
-        waitForExistence(app.tables["Context Menu"].cells["action_unpin"])
-        app.tables["Context Menu"].cells["action_unpin"].tap()
+        waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.removeFromShortcut])
+        app.tables["Context Menu"].cells[ImageIdentifiers.removeFromShortcut].tap()
         waitForExistence(app.collectionViews.cells["TopSitesCell"])
         XCTAssertTrue(app.collectionViews.cells["TopSitesCell"].cells["pdf995"].exists)
     }

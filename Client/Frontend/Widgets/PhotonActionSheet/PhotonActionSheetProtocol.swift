@@ -55,7 +55,7 @@ extension PhotonActionSheetProtocol {
         let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle, iconString: ImageIdentifiers.copyLink) { _ in
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage,
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: webViewContainer)
             }
         }.items
@@ -75,9 +75,9 @@ extension PhotonActionSheetProtocol {
         let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
         let toggleActionTitle: String
         if defaultUAisDesktop {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenuViewDesktopSiteTitleString : .AppMenuViewMobileSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
         } else {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenuViewMobileSiteTitleString : .AppMenuViewDesktopSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
         }
         let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle, iconString: ImageIdentifiers.requestDesktopSite) { _ in
 

@@ -272,7 +272,7 @@ extension TabTrayCell {
         let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
         var backUpName: String = "" // In case display title is empty
         if let baseDomain = baseDomain {
-            backUpName = baseDomain.contains("local") ? .AppMenuOpenHomePageTitleString : baseDomain
+            backUpName = baseDomain.contains("local") ? .AppMenu.AppMenuOpenHomePageTitleString : baseDomain
         } else if let url = tab.url, let about = InternalURL(url)?.aboutComponent {
             backUpName = about
         }
