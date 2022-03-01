@@ -938,7 +938,7 @@ extension String {
     public static let ScanQRCodeViewTitle = MZLocalizedString("ScanQRCode.View.Title", value: "Scan QR Code", comment: "Title for the QR code scanner view.", lastUpdated: .unknown)
     public static let ScanQRCodeInstructionsLabel = MZLocalizedString("ScanQRCode.Instructions.Label", value: "Align QR code within frame to scan", comment: "Text for the instructions label, displayed in the QR scanner view", lastUpdated: .unknown)
     public static let ScanQRCodeInvalidDataErrorMessage = MZLocalizedString("ScanQRCode.InvalidDataError.Message", value: "The data is invalid", comment: "Text of the prompt that is shown to the user when the data is invalid", lastUpdated: .unknown)
-    public static let ScanQRCodePermissionErrorMessage = MZLocalizedString("ScanQRCode.PermissionError.Message", value: "Please allow Firefox to access your device’s camera in ‘Settings’ -> ‘Privacy’ -> ‘Camera’.", comment: "Text of the prompt user to setup the camera authorization.", lastUpdated: .unknown)
+    public static let ScanQRCodePermissionErrorMessage = MZLocalizedString("ScanQRCode.PermissionError.Message", value: "Go to device ‘Settings’ > ‘Firefox.’ Allow Firefox to access camera.", comment: "Text of the prompt to setup the camera authorization for the Scan QR Code feature.", lastUpdated: .v99)
     public static let ScanQRCodeErrorOKButton = MZLocalizedString("ScanQRCode.Error.OK.Button", value: "OK", comment: "OK button to dismiss the error prompt.", lastUpdated: .unknown)
 }
 
