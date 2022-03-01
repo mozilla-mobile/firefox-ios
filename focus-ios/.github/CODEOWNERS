@@ -22,11 +22,10 @@
 * @mozilla-mobile/focus-ios-eng
 
 
-# Changes to the CI configuration must be reviewed by a Release Engineering
-# and a limited group of people. We narrowed this down to make sure that no
-# changes go unnoticed.
+# Changes to the CI configuration must be reviewed a limited group of people.
+# We narrowed this down to make sure that no changes go unnoticed.
 
-/bitrise.yml @mozilla-mobile/releng @isabelrios @jevans-mozilla
+/bitrise.yml @isabelrios @jevans-mozilla
 
 # Changes to string files can be reviewed and approved by mergify
 
