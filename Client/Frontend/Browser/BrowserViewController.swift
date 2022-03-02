@@ -1168,7 +1168,7 @@ class BrowserViewController: UIViewController {
 
                 tab.url = webView.url
 
-                if tab === tabManager.selectedTab && !tab.restoring {
+                if tab === tabManager.selectedTab && !tab.isRestoring {
                     updateUIForReaderHomeStateForTab(tab)
                 }
                 // Catch history pushState navigation, but ONLY for same origin navigation,
@@ -1923,7 +1923,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
 
         if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
-            if tab.url == nil, !tab.restoring {
+            if tab.url == nil, !tab.isRestoring {
                 urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
             } else {
                 urlBar.leaveOverlayMode()
@@ -2378,7 +2378,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 extension BrowserViewController: SessionRestoreHelperDelegate {
     func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
-        tab.restoring = false
+        tab.isRestoring = false
 
         if let tab = tabManager.selectedTab, tab.webView === tab.webView {
             updateUIForReaderHomeStateForTab(tab)

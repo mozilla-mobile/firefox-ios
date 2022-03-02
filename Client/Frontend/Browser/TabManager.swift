@@ -785,76 +785,19 @@ extension TabManager {
             BrowserViewController.foregroundBVC().openedUrlFromExternalSource = false
             return
         }
-        guard !AppConstants.IsRunningTest,
-              !DebugSettingsBundleOptions.skipSessionRestore,
-              !isRestoringTabs
-        else { return }
-
-        if shouldStartAtHome() {
+        
+        let startAtHomeManager = StartAtHomeHelper(isRestoringTabs: isRestoringTabs)
+        guard !startAtHomeManager.shouldSkipStartHome else { return }
+        
+        if startAtHomeManager.shouldStartAtHome() {
             let scannableTabs = lastSessionWasPrivate ? privateTabs : normalTabs
-            let existingHomeTab = scanForExistingHomeTab(in: scannableTabs,
-                                                         with: profile.prefs)
+            let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
+                                                                            with: profile.prefs)
             let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
                                                    inPrivateMode: lastSessionWasPrivate,
                                                    and: profile.prefs)
-
             selectTab(tabToSelect)
         }
-    }
-
-    /// Determines whether the Start at Home feature is enabled, how long it has been since
-    /// the user's last activity and whether, based on their settings, Start at Home feature
-    /// should perform its function.
-    private func shouldStartAtHome() -> Bool {
-        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
-              let setting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome),
-              setting != .disabled
-        else { return false }
-
-        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
-        let dateComponents = Calendar.current.dateComponents([.hour, .second],
-                                                             from: lastActiveTimestamp,
-                                                             to: Date())
-        var timeSinceLastActivity = 0
-        var timeToOpenNewHome = 0
-
-        if setting == .afterFourHours {
-            timeSinceLastActivity = dateComponents.hour ?? 0
-            timeToOpenNewHome = 4
-
-        } else if setting == .always {
-            timeSinceLastActivity = dateComponents.second ?? 0
-            timeToOpenNewHome = 5
-        }
-
-        return timeSinceLastActivity >= timeToOpenNewHome
-    }
-
-    /// Looks to see if the user already has a homepage tab open (as per their preferences)
-    /// and, if they do, returns that tab, in order to avoid opening multiple duplicate
-    /// homepage tabs.
-    ///
-    /// - Parameters:
-    ///   - tabs: The tabs to be scanned, either private, or normal, based on the last session
-    ///   - profilePreferences: Preferences stored in the user's `Profile`
-    /// - Returns: An optional tab, that matches the user's new tab preferences.
-    private func scanForExistingHomeTab(in tabs: [Tab],
-                                        with profilePreferences: Prefs) -> Tab? {
-
-        let page = NewTabAccessors.getHomePage(profilePreferences)
-        var existingHomeTab: Tab? = nil
-
-        for tab in tabs {
-            if page == .homePage {
-                existingHomeTab = tab.isCustomHomeTab ? tab : nil
-            } else if page == .topSites {
-                existingHomeTab = tab.isFxHomeTab ? tab : nil
-            }
-
-            if existingHomeTab != nil { return existingHomeTab }
-        }
-
-        return nil
     }
 
     /// Provides a tab on which to open if the start at home feature is enabled. This tab
@@ -876,7 +819,6 @@ extension TabManager {
 
         if page == .homePage, let customUrl = customUrl {
             return existingTab ?? addTab(URLRequest(url: customUrl), isPrivate: privateMode)
-
         } else if page == .topSites, let homeUrl = homeUrl {
             let home = existingTab ?? addTab(isPrivate: privateMode)
             home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
