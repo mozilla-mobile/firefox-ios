@@ -41,7 +41,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
     private var keyboardSpacerHeight: Constraint!
     private var keyboardSpacer: UIView?
 
-    func addKeyboardSpacer(at index: Int, spacerHeight: CGFloat) {
+    func addKeyboardSpacer(spacerHeight: CGFloat) {
         guard keyboardSpacer == nil else {
             setKeyboardSpacerHeight(height: spacerHeight)
             return
@@ -49,7 +49,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 
         keyboardSpacer = UIView()
         setKeyboardSpacerHeight(height: spacerHeight)
-        insertArrangedView(keyboardSpacer!, position: index)
+        addArrangedViewToBottom(keyboardSpacer!)
     }
 
     func removeKeyboardSpacer() {

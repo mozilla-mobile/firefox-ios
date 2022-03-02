@@ -704,8 +704,7 @@ class BrowserViewController: UIViewController {
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
-        let index = readerModeBar == nil ? 1 : 2
-        overKeyboardContainer.addKeyboardSpacer(at: index, spacerHeight: spacerHeight)
+        overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
     }
 
     /// Used for dynamic type height adjustment
