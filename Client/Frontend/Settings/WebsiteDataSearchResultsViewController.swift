@@ -98,7 +98,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.selectItem(item)
             break
         case .clearButton:
@@ -113,7 +113,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.deselectItem(item)
             break
         default: break;
