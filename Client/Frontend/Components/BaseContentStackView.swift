@@ -33,7 +33,8 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 
     private func setupStyle() {
         axis = .vertical
-        distribution = .fillProportionally
+        distribution = .fill
+        alignment = .fill
     }
 
     // MARK: - Spacer view
