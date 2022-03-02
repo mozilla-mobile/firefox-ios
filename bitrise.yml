@@ -15,10 +15,10 @@ workflows:
             set -x
             BRANCH=$BITRISE_GIT_BRANCH
 
-            if [[ $BRANCH == update-cartfile-new-as-tag-* ]]
+            if [[ $BRANCH == update-spm-new-rust-component-tag-* ]]
             then
-                echo "Building with new A-S version"
-                envman add --key NEW_AS_VERSION --value New_AS_Version
+                echo "Building with new Rust-Component version"
+                envman add --key NEW_RC_VERSION --value New_RC_Version
             fi
         title: Save Branch Name
     - script@1:
@@ -575,10 +575,10 @@ workflows:
             fi
         is_always_run: true
     - slack@3.1:
-        run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
+        run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version"}}'
         inputs:
         - channel: "#firefox-ios"
-        - text: Build status using latest A-S
+        - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     description: >-
       This Workflow is to run tests (currently SmokeTest) when there is a merge
