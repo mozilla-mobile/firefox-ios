@@ -243,8 +243,8 @@ class SyncNowSetting: WithAccountSetting {
         cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
 
         // Animation that loops continously until stopped
-        continuousRotateAnimation.fromValue = 0.0
-        continuousRotateAnimation.toValue = CGFloat(Double.pi)
+        continuousRotateAnimation.fromValue = CGFloat(Double.pi)
+        continuousRotateAnimation.toValue = 0.0
         continuousRotateAnimation.isRemovedOnCompletion = true
         continuousRotateAnimation.duration = 0.5
         continuousRotateAnimation.repeatCount = .infinity
