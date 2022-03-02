@@ -442,6 +442,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
             let title = FirefoxHomeSectionType(indexPath.section).title
             headerView.title = title
+            headerView.titleLabel.accessibilityTraits = .header
 
             switch FirefoxHomeSectionType(indexPath.section) {
             case .pocket:
