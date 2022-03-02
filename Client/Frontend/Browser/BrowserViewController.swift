@@ -597,7 +597,7 @@ class BrowserViewController: UIViewController {
         }
 
         webViewContainerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
+            make.edges.equalTo(view)
         }
     }
 
@@ -606,12 +606,12 @@ class BrowserViewController: UIViewController {
 
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
-                make.left.right.top.equalTo(self.view)
+                make.left.right.top.equalTo(view)
                 // Making sure we cover at least the status bar
-                make.bottom.equalTo(self.view.safeArea.top)
+                make.bottom.equalTo(view.safeArea.top)
             } else {
-                scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
-                make.left.right.equalTo(self.view)
+                scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                make.left.right.equalTo(view)
             }
         }
 
