@@ -860,10 +860,10 @@
 "LoginsHelper.PromptSavePassword.Title" = "Simpan sandi untuk %@?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Perbarui log masuk untuk %@?";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Perbarui info masuk untuk %@?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Perbarui log masuk %1$@ untuk %2$@?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Perbarui info masuk %1$@ untuk %2$@?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Simpan Info Masuk";
@@ -1051,7 +1051,7 @@
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Penambang Kripto";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Situs web dapat memuat iklan dari luar, video, dan konten lain yang berisi pelacak tersembunyi. Pemblokiran dapat membuat situs web dimuat lebih cepat, tetapi beberapa tombol, formulir, dan bidang log masuk, mungkin tidak berfungsi.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Situs web dapat memuat iklan dari luar, video, dan konten lain yang berisi pelacak tersembunyi. Pemblokiran dapat membuat situs web dimuat lebih cepat, tetapi beberapa tombol, formulir, dan bidang info masuk, mungkin tidak berfungsi.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Kuki ini mengikuti Anda dari situs ke situs untuk mengumpulkan data tentang apa yang Anda lakukan daring. Mereka ditetapkan oleh pihak ketiga seperti pengiklan dan perusahaan analitik.";
