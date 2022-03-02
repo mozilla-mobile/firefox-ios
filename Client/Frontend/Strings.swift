@@ -22,10 +22,10 @@ public struct Strings {
 
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
-fileprivate enum StringLastUpdatedAppVersion: String {
+fileprivate enum StringLastUpdatedAppVersion {
     case v39, v96, v97, v98, v99
 
-    /// Used for all cases before version 39.
+    // Used for all cases before version 39.
     case unknown
 }
 
