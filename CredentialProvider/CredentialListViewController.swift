@@ -131,10 +131,8 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
             tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
+            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+
             cancelButton.widthAnchor.constraint(equalToConstant: 60)
         ])
                 
