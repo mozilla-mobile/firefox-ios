@@ -190,7 +190,6 @@ class ReaderViewTest: BaseTestCase {
         navigator.goto(LibraryPanel_ReadingList)
 
         // Long tap on the item just saved
-        print(app.debugDescription)
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         waitForExistence(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
