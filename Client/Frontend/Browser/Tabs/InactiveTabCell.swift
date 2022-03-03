@@ -13,7 +13,7 @@ enum InactiveTabSection: Int, CaseIterable {
     case closeAllTabsButton
 }
 
-protocol InactiveTabsDelegate {
+protocol InactiveTabsDelegate: AnyObject {
     func toggleInactiveTabSection(hasExpanded: Bool)
     func didSelectInactiveTab(tab: Tab?)
     func didTapCloseAllTabs()
@@ -35,7 +35,7 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
     let InactiveTabsCloseAllButtonIdentifier = "InactiveTabsCloseAllButtonIdentifier"
     let InactiveTabsHeaderIdentifier = "InactiveTabsHeaderIdentifier"
     var hasExpanded = false
-    var delegate: InactiveTabsDelegate?
+    weak var delegate: InactiveTabsDelegate?
     
     // Views
     lazy var tableView: UITableView = {
