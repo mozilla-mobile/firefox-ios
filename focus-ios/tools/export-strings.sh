@@ -7,8 +7,13 @@ if [ ! -d Blockzilla.xcodeproj ]; then
   exit 1
 fi
 
+if [ -d "focusios-l10n" ]; then
+echo "Focus iOS L10 directory found. Removing to re-clone for fresh start."
+rm -Rf focusios-l10n;
+fi
+
 echo "[*] Cloning mozilla-l10n/focusios-l10n"
-git clone git@github.com:mozilla-l10n/focusios-l10n.git
+git clone https://github.com/mozilla-l10n/focusios-l10n.git
 
 echo "\n\n[*] Building tools/Localizations"
 (cd tools/Localizations && swift build)
