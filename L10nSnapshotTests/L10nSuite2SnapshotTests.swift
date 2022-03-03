@@ -105,7 +105,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        print(app.debugDescription)
         waitForExistence(app.cells["Search"], timeout: 5)
         app.cells["Search"].swipeUp()
         waitForExistence(app.cells["Logins"], timeout: 15)

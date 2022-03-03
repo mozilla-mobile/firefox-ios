@@ -149,7 +149,6 @@ class ReaderViewTest: BaseTestCase {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
-//        navigator.goto(LibraryPanel_ReadingList)
 
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         waitForExistence(savedToReadingList)
@@ -172,12 +171,9 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
         app.buttons["Done"].tap()
         // Add item to Reading List from Page Options Menu
-//        userState.url = path(forTestPage: "test-mozilla-book.html")
         updateScreenGraph()
-//        navigator.goto(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-//        navigator.browserPerformAction(.addReadingListOption)
         navigator.performAction(Action.AddToReadingListBrowserTabMenu)
         // Now there should be an item on the list
         navigator.nowAt(BrowserTab)

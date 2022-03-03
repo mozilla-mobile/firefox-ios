@@ -253,9 +253,6 @@ class SearchTests: BaseTestCase {
         
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
-//        waitForExistence(app.buttons["urlBar-cancel"])
-//        app.buttons["urlBar-cancel"].tap()
-//        print(app.debugDescription)
         if iPad() {
             app.buttons["URLBarView.backButton"].tap()
         }else {
