@@ -20,6 +20,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     private var tableView: UITableView!
 
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
+    private var currentSearchText = ""
     
     init(viewModel: WebsiteDataManagementViewModel) {
         self.viewModel = viewModel
@@ -55,8 +56,9 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
     
     func reloadData() {
-        guard let tableView = tableView else { return }
-        tableView.reloadData()
+        guard let _ = tableView else { return }
+        // to update filteredSiteRecords before reloading the tableView
+        filterContentForSearchText(currentSearchText)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -170,7 +172,8 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
 extension WebsiteDataSearchResultsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
+        currentSearchText = searchController.searchBar.text ?? ""
+        filterContentForSearchText(currentSearchText)
     }
 }
 
