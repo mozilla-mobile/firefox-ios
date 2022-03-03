@@ -1018,39 +1018,7 @@ extension MMNavigator where T == FxUserState {
             self.goto(HomePanelsScreen)
         }
     }
-
-//    func browserPerformAction(_ view: BrowserPerformAction) {
-//        let BrowserMenuOptions = [.openTopSitesOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
-//
-//        let app = XCUIApplication()
-//
-//        if BrowserMenuOptions.contains(view) {
-//            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
-//            self.goto(BrowserTabMenu)
-//            app.tables["Context Menu"].otherElements[view.rawValue].tap()
-//        }
-//    }
 }
-//enum BrowserPerformAction: String {
-//    // Tab menu (site actions)
-//    case toggleBookmarkOption = "menu-Bookmark"
-//    case addReadingListOption = "addToReadingList"
-//    case copyURLOption = "menu-Copy-Link"
-//    case findInPageOption = "menu-FindInPage"
-//    case toggleDesktopOption = "menu-RequestDesktopSite"
-//    case pinToTopSitesOption = "action_pin"
-//    case sendToDeviceOption = "menu-Send-to-Device"
-//    case shareOption = "action_share"
-//
-//    // Tab Menu (home page and site actions)
-//    case openTopSitesOption = "menu-panel-TopSites"
-//    case openBookMarksOption = "menu-panel-Bookmarks"
-//    case openHistoryOption = "menu-panel-History"
-//    case openReadingListOption = "menu-panel-ReadingList"
-//    case toggleHideImages = "menu-NoImageMode"
-//    case toggleNightMode = "menu-NightMode"
-//    case openSettingsOption = "menu-Settings"
-//}
 
 extension XCUIElement {
     /// For tables only: scroll the table downwards until
