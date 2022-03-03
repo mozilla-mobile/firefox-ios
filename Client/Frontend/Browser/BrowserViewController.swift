@@ -667,7 +667,8 @@ class BrowserViewController: UIViewController {
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
-        remake.left.right.equalTo(view)
+        remake.left.equalTo(view.safeArea.left)
+        remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
         remake.width.equalTo(view.safeArea.width)
 
