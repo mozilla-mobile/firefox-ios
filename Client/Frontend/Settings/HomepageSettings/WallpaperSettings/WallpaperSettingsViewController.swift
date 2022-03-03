@@ -72,15 +72,6 @@ class WallpaperSettingsViewController: UIViewController {
 
     private lazy var switchLine: UIView = .build { _ in }
 
-    private lazy var switchDescription: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .caption1,
-            maxSize: WallpaperSettingsUX.switchDescriptionFontMaxSize)
-        label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
-        label.text = .Settings.Homepage.Wallpaper.SwitchDescription
-    }
-
     // MARK: - Variables
     var notificationCenter: NotificationCenter
     private var viewModel: WallpaperSettingsViewModel
@@ -135,7 +126,6 @@ class WallpaperSettingsViewController: UIViewController {
         switchContainer.addSubview(switchTitle)
         switchContainer.addSubview(logoSwitch)
         switchContainer.addSubview(switchLine)
-        switchContainer.addSubview(switchDescription)
         view.addSubview(switchContainer)
 
         NSLayoutConstraint.activate([
@@ -171,11 +161,6 @@ class WallpaperSettingsViewController: UIViewController {
             switchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             switchContainer.topAnchor.constraint(equalTo: collectionContainer.bottomAnchor, constant: 8),
             switchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            switchDescription.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17),
-            switchDescription.topAnchor.constraint(equalTo: switchLine.bottomAnchor, constant: 8),
-            switchDescription.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -17),
-            switchDescription.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
     }
 
@@ -328,6 +313,5 @@ extension WallpaperSettingsViewController: NotificationThemeable {
         logoSwitch.tintColor = UIColor.theme.etpMenu.switchAndButtonTint
         logoSwitch.onTintColor = UIColor.theme.etpMenu.switchAndButtonTint
         switchLine.backgroundColor = UIColor.theme.etpMenu.horizontalLine
-        switchDescription.textColor = UIColor.theme.tableView.headerTextLight
     }
 }

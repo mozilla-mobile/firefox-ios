@@ -41,7 +41,7 @@
 "Open & Fill" = "ᱡᱷᱤᱜ ᱢᱮ ᱟᱨ ᱯᱮᱨᱮᱡ ᱢᱮ";
 
 /* Label displayed above the password row in Login Detail View. */
-"Password" = "ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ";
+"Password" = "ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ";
 
 /* Reveal password text selection menu item */
 "Reveal" = "ᱩᱫᱩᱜ";

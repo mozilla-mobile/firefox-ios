@@ -5,10 +5,10 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "ᱢᱤᱫᱴᱟᱹᱝ ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ %@ ᱮ ᱱᱮᱦᱚᱨ ᱟᱠᱟᱫᱟᱭ ᱾";
+"A username and password are being requested by %@." = "ᱢᱤᱫᱴᱟᱹᱝ ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ %@ ᱮ ᱱᱮᱦᱚᱨ ᱟᱠᱟᱫᱟᱭ ᱾";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "ᱢᱤᱫᱴᱟᱹᱝ ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱟᱨ ᱫᱟᱫᱟᱝ ᱥᱟᱵᱟᱫ %1$@ ᱮ ᱱᱮᱦᱚᱨ ᱟᱠᱟᱫᱟᱭ ᱾ ᱥᱟᱭᱤᱴ ᱮ ᱢᱮᱱᱮᱫᱟᱭᱺ%2$@";
+"A username and password are being requested by %@. The site says: %@" = "ᱢᱤᱫᱴᱟᱹᱝ ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱟᱨ ᱫᱟᱫᱟᱝ ᱥᱟᱵᱟᱫᱽ %1$@ ᱮ ᱱᱮᱦᱚᱨ ᱟᱠᱟᱫᱟᱭ ᱾ ᱥᱟᱭᱤᱴ ᱮ ᱢᱮᱱᱮᱫᱟᱭᱺ%2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Aa";
@@ -207,7 +207,7 @@
 "BreachAlerts.BreachDate" = "ᱱᱚᱶᱟ ᱨᱚᱯᱩᱫ ᱦᱚᱭ ᱠᱟᱱᱟ";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱠᱚ ᱞᱤᱠ ᱵᱟᱠᱷᱟᱭ ᱚᱛᱠᱤᱨ ᱦᱳᱭ ᱠᱟᱱᱟ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱵᱚᱫᱚᱞ ᱠᱷᱚᱱ. ᱱᱚᱶᱟ ᱠᱷᱟᱛᱟ ᱵᱟᱸᱪᱟᱣ ᱞᱚᱜᱤᱛ ᱛᱮ ᱥᱟᱭᱤᱴ ᱨᱮ ᱵᱚᱞᱚ ᱢᱮ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱵᱚᱫᱚᱞ ᱛᱟᱢ.";
+"BreachAlerts.Description" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱞᱤᱠ ᱵᱟᱠᱷᱟᱭ ᱚᱛᱠᱤᱨ ᱦᱳᱭ ᱠᱟᱱᱟ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱵᱚᱫᱚᱞ ᱠᱷᱚᱱ. ᱱᱚᱶᱟ ᱠᱷᱟᱛᱟ ᱵᱟᱸᱪᱟᱣ ᱞᱚᱜᱤᱛ ᱛᱮ ᱥᱟᱭᱤᱴ ᱨᱮ ᱵᱚᱞᱚ ᱢᱮ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱵᱚᱫᱚᱞ ᱛᱟᱢ.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "ᱰᱷᱮᱨ ᱥᱮᱲᱟᱭ ᱢᱮ";
@@ -404,7 +404,7 @@
 "DownloadsPanel.Share.Title" = "ᱦᱟᱹᱴᱤᱧᱟᱜ";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "ᱡᱚᱲᱟᱣ ᱞᱟᱹᱜᱤ ᱛᱮ ᱟᱢᱟᱜ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱟᱫᱮᱨ ᱢᱮ";
+"Enter your password to connect" = "ᱡᱚᱲᱟᱣ ᱞᱟᱹᱜᱤ ᱛᱮ ᱟᱢᱟᱜ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱟᱫᱮᱨ ᱢᱮ";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "ᱞᱟᱦᱟᱱᱛᱤ";
@@ -518,7 +518,7 @@
 "FxA.SignIntoSync" = "ᱛᱷᱟᱨ ᱞᱟᱹᱜᱤᱛ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ";
 
 /* Label explaining what sync does */
-"FxA.SyncExplain" = "ᱟᱢᱟᱜ ᱴᱮᱵ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱟᱨ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱠᱚ ᱟᱢᱟᱜ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱧᱟᱢ ᱢᱮ᱾";
+"FxA.SyncExplain" = "ᱟᱢᱟᱜ ᱴᱮᱵ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱟᱨ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱟᱢᱟᱜ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱧᱟᱢ ᱢᱮ᱾";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "ᱱᱤᱛᱚᱠ ᱛᱚᱞ ᱡᱚᱠᱷᱟᱭ ᱢᱮ";
@@ -551,7 +551,7 @@
 "FxHomepage.Wallpaper.ButtonLabel" = "Firefox ᱪᱤᱱᱦᱟᱹᱯ, ᱠᱟᱸᱛᱷᱥᱟᱦᱴᱟ, ᱵᱩᱛᱟᱹᱢ ᱵᱚᱫᱚᱞ ᱢᱮ";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "ᱟᱢᱟᱜ ᱡᱷᱤᱡ ᱟᱠᱟᱱ ᱴᱮᱵ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱟᱨ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱠᱚ ᱟᱢᱟᱜ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱧᱟᱢ ᱢᱮ ᱾";
+"Get your open tabs, bookmarks, and passwords from your other devices." = "ᱟᱢᱟᱜ ᱡᱷᱤᱡ ᱟᱠᱟᱱ ᱴᱮᱵ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱟᱨ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱟᱢᱟᱜ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱧᱟᱢ ᱢᱮ ᱾";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ᱜᱚᱲᱚ";
@@ -818,7 +818,7 @@
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
 
 /* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "ᱵᱚᱞᱚ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱠᱚ ᱥᱟᱺᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ, ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱥᱟᱺᱪᱟᱣ ᱢᱮ ᱾";
+"Logins.DevicePasscodeRequired.Message" = "ᱵᱚᱞᱚ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱥᱟᱺᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ, ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱥᱟᱺᱪᱟᱣ ᱢᱮ ᱾";
 
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "ᱞᱟᱦᱟᱜ ᱢᱮ";
@@ -827,16 +827,16 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
 
 /* Message shown when you enter Logins & Passwords for the first time. */
-"Logins.Onboarding.Message" = "ᱟᱢᱟᱜ ᱵᱚᱞᱚ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱠᱚ ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱛᱮ ᱱᱤᱛᱚᱜ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱮᱱᱟ ᱾";
+"Logins.Onboarding.Message" = "ᱟᱢᱟᱜ ᱵᱚᱞᱚ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱢᱚᱦᱲᱟ ID, ᱴᱤᱯᱟᱹᱶ ID ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱛᱮ ᱱᱤᱛᱚᱜ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱮᱱᱟ ᱾";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "Firefox ᱨᱮᱭᱟᱜ AutoFill ᱡᱤᱱᱤᱥ ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ, ᱟᱢ ᱫᱚ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱮᱢ ᱪᱷᱚ ᱞᱟᱹᱠᱛᱤ ᱜᱮ ᱠᱟᱱᱟ ᱾";
 
 /* Label displaying welcome view tagline under the title */
-"Logins.WelcomeView.Tagline" = "ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱡᱟᱦᱟᱸ ᱨᱮᱜᱮ ᱤᱫᱤ ᱛᱟᱢ";
+"Logins.WelcomeView.Tagline" = "ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱡᱟᱦᱟᱸ ᱨᱮᱜᱮ ᱤᱫᱤ ᱛᱟᱢ";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Firefox  ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ AutoFill";
+"Logins.WelcomeView.Title2" = "Firefox  ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ AutoFill";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "AutoFill ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ";
@@ -857,7 +857,7 @@
 "LoginsHelper.PromptSaveLogin.Title" = "%2$@ ᱞᱟᱹᱜᱤᱫ %1$@ ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱢᱮ?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "%@ ᱞᱟᱹᱜᱤᱛ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱥᱟᱧᱪᱟᱣ ᱢᱮ?";
+"LoginsHelper.PromptSavePassword.Title" = "%@ ᱞᱟᱹᱜᱤᱛ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱥᱟᱧᱪᱟᱣ ᱢᱮ?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ ᱞᱟᱹᱜᱤᱛ ᱵᱚᱞᱚ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱢᱮ?";
@@ -902,7 +902,7 @@
 "LoginsList.Search.Placeholder" = "ᱞᱚᱜᱤᱱ ᱠᱚ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
 
 /* Label displaying select a password to fill instruction */
-"LoginsList.SelectPassword.Title" = "ᱯᱩᱨᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱵᱟᱪᱷᱟᱣ ᱢᱮ";
+"LoginsList.SelectPassword.Title" = "ᱯᱩᱨᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱧᱪᱟᱣ";
@@ -1188,7 +1188,7 @@
 "Panel Chooser" = "ᱪᱳᱣᱠᱟᱴ ᱵᱟᱪᱷᱟᱣ";
 
 /* Password textbox in Authentication prompt */
-"Password" = "ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ";
+"Password" = "ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ";
 
 /* Error message shown in the remote tabs panel */
 "PasswordAutoFill.NoPasswordsFoundTitle" = "ᱟᱢ ᱴᱷᱮᱱ ᱧᱩᱛᱩᱢ ᱦᱟᱹᱨ ᱠᱚ Firefox ᱠᱷᱟᱛᱟ ᱠᱷᱚᱱ ᱵᱟᱭ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱟᱠᱟᱱᱟ ᱾";
@@ -1645,7 +1645,7 @@
 "Settings.HomePage.UseDefault.Button" = "ᱢᱩᱞ ᱯᱷᱮᱲᱟᱛ ᱵᱮᱵᱷᱟᱨ ᱢᱮ";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
-"Settings.LoginsAndPasswordsTitle" = "ᱵᱚᱞᱚᱱ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱠᱚ";
+"Settings.LoginsAndPasswordsTitle" = "ᱵᱚᱞᱚᱱ ᱠᱚ ᱟᱨ ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱠᱚ";
 
 /* Label used to set a custom url as the new tab option (homepage). */
 "Settings.NewTab.CustomURL" = "ᱠᱩᱥᱤᱭᱟᱠ URL";
@@ -1970,10 +1970,10 @@
 "SwitchToPBM.KeyCodeTitle" = "ᱱᱤᱡᱮᱨᱟᱠ ᱯᱟᱱᱛᱮ ᱚᱵᱚᱥᱛᱟ";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "ᱟᱢᱟᱜ ᱴᱮᱵ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱠᱚ ᱟᱨ ᱵᱚᱲᱛᱤ ᱠᱚ ᱛᱚᱞ ᱡᱚᱠᱷᱟᱭ ᱢᱮ ᱾";
+"Sync your tabs, bookmarks, passwords and more." = "ᱟᱢᱟᱜ ᱴᱮᱵ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ, ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱟᱨ ᱵᱚᱲᱛᱤ ᱠᱚ ᱛᱚᱞ ᱡᱚᱠᱷᱟᱭ ᱢᱮ ᱾";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, passwords and more." = "ᱟᱢᱟᱠ ᱴᱮᱵ ᱠᱚ, ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫ ᱠᱚ ᱟᱨ ᱵᱚᱲᱛᱤ ᱠᱚ ᱛᱚᱞ ᱡᱚᱠᱷᱟᱭ ᱢᱮ ᱾";
+"Sync your tabs, passwords and more." = "ᱟᱢᱟᱠ ᱴᱮᱵ ᱠᱚ, ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱟᱨ ᱵᱚᱲᱛᱤ ᱠᱚ ᱛᱚᱞ ᱡᱚᱠᱷᱟᱭ ᱢᱮ ᱾";
 
 /* Message displayed when the user syncs for the first time */
 "Sync.FirstTimeMessage.Label" = "ᱟᱢᱟᱠ ᱯᱟᱦᱤᱞ ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱤᱪᱷᱩ ᱥᱚᱢᱚᱭ ᱦᱟᱛᱟᱣᱟᱭ";
@@ -2141,7 +2141,7 @@
 "TopSites.EmptyState.Description" = "ᱡᱟᱹᱥᱛᱤ ᱦᱤᱨᱤᱟᱠᱟᱱ ᱥᱟᱭᱤᱴ ᱠᱚ ᱱᱚᱰᱮ ᱫᱮᱠᱷᱟᱣᱼᱜ ᱟ ᱾";
 
 /* The title for the empty Top Sites state */
-"TopSites.EmptyState.Title" = "ᱪᱮᱛᱟᱱ ᱥᱟᱭᱤᱴ ᱨᱮ ᱥᱚᱜᱩᱱ ᱫᱟᱨᱟᱢ";
+"TopSites.EmptyState.Title" = "ᱪᱮᱛᱟᱱ ᱥᱟᱭᱤᱴ ᱨᱮ ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ";
 
 /* Button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemovePage.Button" = "%@ — ᱥᱟᱠᱟᱢ ᱚᱰᱚᱠ ᱢᱮ";
@@ -2186,7 +2186,7 @@
 "Web content" = "ᱣᱮᱵ ᱵᱤᱥᱳᱭ";
 
 /* See http://mzl.la/1LXbDOL */
-"Welcome to your Reading List" = "ᱟᱢᱟᱜ ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱚᱜᱩᱱ ᱫᱟᱨᱟᱢ";
+"Welcome to your Reading List" = "ᱟᱢᱟᱜ ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ ᱨᱮ ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ";
 
 /* Restore Tabs Prompt Title */
 "Well, this is embarrassing." = "ᱣᱮᱞᱞ, ᱱᱚᱶᱟ ᱫᱚ ᱞᱟᱡᱟᱣ ᱜᱮ ᱾";
