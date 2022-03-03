@@ -66,6 +66,10 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
 
         // Back on History panel view check that there is not any item
+        navigator.goto(HomePanelsScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
         XCTAssertFalse(app.tables.cells.staticTexts[webpage["label"]!].exists)
@@ -101,11 +105,12 @@ class HistoryTests: BaseTestCase {
         // Go to the default web site  and check whether the option is enabled
         navigator.nowAt(LibraryPanel_History)
         navigator.goto(HomePanelsScreen)
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         // Workaround to bug 1508368
         navigator.goto(LibraryPanel_Bookmarks)
+        navigator.goto(HomePanelsScreen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -145,8 +150,8 @@ class HistoryTests: BaseTestCase {
 
     func testClearRecentlyClosedHistory() {
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -167,14 +172,17 @@ class HistoryTests: BaseTestCase {
         app.alerts.buttons["OK"].tap()
 
         // Back on History panel view check that there is not any item
+        navigator.goto(HomePanelsScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
     }
 
     func testLongTapOptionsRecentlyClosedItem() {
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -187,14 +195,13 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
         app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.cells[ImageIdentifiers.newTab].exists)
-        XCTAssertTrue(app.tables.cells["quick_action_new_private_tab"].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.newTab].exists)
+        XCTAssertTrue(app.tables.otherElements["quick_action_new_private_tab"].exists)
     }
 
     func testOpenInNewTabRecentlyClosedItem() {
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -207,7 +214,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertEqual(numTabsOpen, 1)
         app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells[ImageIdentifiers.newTab].tap()
+        app.tables.otherElements[ImageIdentifiers.newTab].tap()
         navigator.goto(TabTray)
         let numTabsOpen2 = userState.numTabs
         XCTAssertEqual(numTabsOpen2, 2)
@@ -215,8 +222,8 @@ class HistoryTests: BaseTestCase {
 
     func testOpenInNewPrivateTabRecentlyClosedItem() {
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -228,7 +235,7 @@ class HistoryTests: BaseTestCase {
 
         app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["quick_action_new_private_tab"].tap()
+        app.tables.otherElements["quick_action_new_private_tab"].tap()
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
@@ -245,7 +252,7 @@ class HistoryTests: BaseTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.nowAt(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.goto(BrowserTab)
+        navigator.openURL(userState.url!)
         // It is necessary to open two sites so that when one is closed private mode is not closed
         navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()

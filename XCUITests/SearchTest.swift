@@ -248,14 +248,11 @@ class SearchTests: BaseTestCase {
         if iPad() {
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Menu")
         } else {
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Search")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
         }
         
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
-        waitForExistence(app.buttons["urlBar-cancel"])
-        app.buttons["urlBar-cancel"].tap()
-        print(app.debugDescription)
         if iPad() {
             app.buttons["URLBarView.backButton"].tap()
         }else {
