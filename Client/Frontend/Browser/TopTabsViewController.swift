@@ -266,6 +266,7 @@ extension TopTabsViewController: TabDisplayer {
 
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
+        NotificationCenter.default.post(name: .TabClosed, object: nil)
         topTabDisplayManager.closeActionPerformed(forCell: cell)
     }
 }
