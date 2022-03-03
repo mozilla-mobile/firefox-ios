@@ -379,6 +379,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Søgestreng der skal anvendes";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Eksempel: søgetjeneste.eksempel.dk/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Indsæt eller indtast søgestreng. Om nødvendigt, erstat søgetermen med: %s.";
 
@@ -510,6 +513,18 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Fjern fra genveje";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Omdøb genvej";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Genvejsnavn";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Gem";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Annuller";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Tilføj";

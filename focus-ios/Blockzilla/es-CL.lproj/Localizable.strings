@@ -511,6 +511,18 @@
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Eliminar de los atajos";
 
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Renombrar atajo";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Nombre del atajo";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Guardar";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Cancelar";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Añadir";
 

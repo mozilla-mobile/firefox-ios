@@ -379,6 +379,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "搜索字符串";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "例如：searchengine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "粘贴或输入搜索字符串。如果必要，用 %s 表示搜索关键词。";
 
@@ -510,6 +513,18 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "移除快捷方式";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "重命名快捷方式";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "快捷方式名称";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "保存";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "取消";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "添加";

@@ -379,6 +379,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Zu verwendender Such-String";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Beispiel: suchmaschine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Such-String einfügen oder eingeben. Wenn nötig, ersetzen Sie den Suchbegriff mit: %s.";
 
@@ -510,6 +513,18 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Aus Verknüpfungen entfernen";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Verknüpfung umbenennen";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Name der Verknüpfung";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Speichern";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Abbrechen";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Hinzufügen";

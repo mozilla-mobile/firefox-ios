@@ -379,6 +379,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Te gebruiken zoekstring";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Voorbeeld: zoekmachine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Plak of voer de zoekstring in. Vervang zo nodig de zoekterm door %s.";
 
@@ -510,6 +513,18 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Verwijderen uit Snelkoppelingen";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Snelkoppeling hernoemen";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Naam snelkoppeling";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Opslaan";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Annuleren";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Toevoegen";

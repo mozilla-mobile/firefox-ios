@@ -379,6 +379,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Chuỗi tìm kiếm sử dụng";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Ví dụ: searchengineexample.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Dán hoặc nhập chuỗi tìm kiếm. Nếu cần, hãy thay thế cụm từ tìm kiếm bằng: %s.";
 
@@ -510,6 +513,18 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Xóa khỏi lối tắt";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Đổi tên lối tắt";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Tên lối tắt";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Lưu";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Hủy bỏ";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Thêm";
