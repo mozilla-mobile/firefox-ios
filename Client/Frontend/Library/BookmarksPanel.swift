@@ -25,14 +25,6 @@ let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile
 ]
 
-fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
-    override func applyTheme() {
-        super.applyTheme()
-
-        backgroundColor = UIColor.theme.tableView.headerBackground
-    }
-}
-
 class BookmarksPanel: SiteTableViewController, LibraryPanel {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
@@ -62,8 +54,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil)
         }
 
-        self.tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: BookmarkNodeCellIdentifier)
-        self.tableView.register(SeparatorTableViewCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
+        self.tableView.register(OneLineTableViewCellWithoutCustomFooter.self, forCellReuseIdentifier: BookmarkNodeCellIdentifier)
         self.tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BookmarkSectionHeaderIdentifier)
     }
 
@@ -358,7 +349,13 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath) as! OneLineTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath) as! OneLineTableViewCellWithoutCustomFooter
+        
+        // the last row should have a bottom separator if there is a following "Recents" section
+//        if indexPath.row >= bookmarkNodes.count - 1 && !recentBookmarks.isEmpty {
+//            cell.bottomSeparatorView.backgroundColor = .clear
+//        }
+        
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {

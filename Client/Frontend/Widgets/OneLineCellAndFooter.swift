@@ -15,6 +15,13 @@ enum OneLineTableViewCustomization {
     case inactiveCell
 }
 
+class OneLineTableViewCellWithoutCustomFooter: OneLineTableViewCell {
+    override func initialViewSetup() {
+        super.initialViewSetup()
+        bottomSeparatorView.backgroundColor = .clear
+    }
+}
+
 class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     
