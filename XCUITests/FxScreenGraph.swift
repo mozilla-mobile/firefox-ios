@@ -178,6 +178,8 @@ class Action {
     static let PinToTopSitesPAM = "PinToTopSitesPAM"
     static let CopyAddressPAM = "CopyAddressPAM"
     static let ShareBrowserTabMenuOption = "ShareBrowserTabMenuOption"
+    static let SentToDevice = "SentToDevice"
+    static let AddToReadingListBrowserTabMenu = "AddToReadingListBrowserTabMenu"
 
     static let SelectAutomatically = "SelectAutomatically"
     static let SelectManually = "SelectManually"
@@ -947,6 +949,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.whatsNew], forAction: Action.OpenWhatsNewPage) { userState in
         }
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.sendToDevice], forAction: Action.SentToDevice) { userState in
+        }
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.share], forAction: Action.ShareBrowserTabMenuOption) {
             userState in
@@ -962,6 +966,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.otherElements[ImageIdentifiers.copyLink], forAction: Action.CopyAddressPAM)
 
         screenState.tap(app.tables.otherElements[ImageIdentifiers.addToBookmark], forAction: Action.BookmarkThreeDots, Action.Bookmark)
+        screenState.tap(app.tables.otherElements[ImageIdentifiers.addToReadingList], forAction: Action.AddToReadingListBrowserTabMenu)
 
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction
@@ -1013,38 +1018,6 @@ extension MMNavigator where T == FxUserState {
             self.goto(HomePanelsScreen)
         }
     }
-
-    func browserPerformAction(_ view: BrowserPerformAction) {
-        let BrowserMenuOptions = [.openTopSitesOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
-
-        let app = XCUIApplication()
-
-        if BrowserMenuOptions.contains(view) {
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
-            self.goto(BrowserTabMenu)
-            app.tables["Context Menu"].otherElements[view.rawValue].tap()
-        }
-    }
-}
-enum BrowserPerformAction: String {
-    // Tab menu (site actions)
-    case toggleBookmarkOption = "menu-Bookmark"
-    case addReadingListOption = "addToReadingList"
-    case copyURLOption = "menu-Copy-Link"
-    case findInPageOption = "menu-FindInPage"
-    case toggleDesktopOption = "menu-RequestDesktopSite"
-    case pinToTopSitesOption = "action_pin"
-    case sendToDeviceOption = "menu-Send-to-Device"
-    case shareOption = "action_share"
-
-    // Tab Menu (home page and site actions)
-    case openTopSitesOption = "menu-panel-TopSites"
-    case openBookMarksOption = "menu-panel-Bookmarks"
-    case openHistoryOption = "menu-panel-History"
-    case openReadingListOption = "menu-panel-ReadingList"
-    case toggleHideImages = "menu-NoImageMode"
-    case toggleNightMode = "menu-NightMode"
-    case openSettingsOption = "menu-Settings"
 }
 
 extension XCUIElement {

@@ -6,17 +6,15 @@ import XCTest
 class NightModeTests: BaseTestCase {
 
     private func checkNightModeOn() {
-        print(app.debugDescription)
-        waitForExistence(app.tables.cells[ImageIdentifiers.nightMode])
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.nightMode])
     }
 
     private func checkNightModeOff() {
-        waitForExistence(app.tables.cells[ImageIdentifiers.nightMode])
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.nightMode])
     }
 
     func testNightModeUI() {
         let url1 = "test-example.html"
-
         // Go to a webpage, and select night mode on and off, check it's applied or not
         navigator.openURL(path(forTestPage: url1))
 

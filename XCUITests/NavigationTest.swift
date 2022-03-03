@@ -72,6 +72,7 @@ class NavigationTest: BaseTestCase {
             app.buttons["Forward"].tap()
         } else {
             // Go forward to next visited web site
+            waitForExistence(app.buttons["TabToolbar.forwardButton"])
             app.buttons["TabToolbar.forwardButton"].tap()
         }
         waitUntilPageLoad()
@@ -199,7 +200,7 @@ class NavigationTest: BaseTestCase {
         app.textFields["url"].press(forDuration: 2)
 
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells[ImageIdentifiers.paste].tap()
+        app.tables.otherElements[ImageIdentifiers.paste].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -211,9 +212,10 @@ class NavigationTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Copy Link")
         navigator.goto(NewTabScreen)
+        waitForExistence(app.textFields["url"])
         app.textFields["url"].press(forDuration: 2)
 
-        app.tables.cells[ImageIdentifiers.paste].tap()
+        app.tables.otherElements[ImageIdentifiers.paste].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -249,7 +251,7 @@ class NavigationTest: BaseTestCase {
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
         app.textFields["url"].press(forDuration:3)
-        app.tables.cells[ImageIdentifiers.copyLink].tap()
+        app.tables.otherElements[ImageIdentifiers.copyLink].tap()
         
         sleep(2)
         app.textFields["url"].tap()
@@ -282,8 +284,8 @@ class NavigationTest: BaseTestCase {
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
-        app.tables["Context Menu"].cells["download"].tap()
+        XCTAssertTrue(app.tables["Context Menu"].otherElements["download"].exists)
+        app.tables["Context Menu"].otherElements["download"].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
@@ -373,7 +375,8 @@ class NavigationTest: BaseTestCase {
         switchBlockPopUps.tap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
-        navigator.goto(BrowserTab)
+        navigator.goto(HomePanelsScreen)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         waitForExistence(app.links["link-created-by-parent"], timeout: 10)

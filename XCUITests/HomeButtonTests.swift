@@ -18,11 +18,10 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 10)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
         if iPad() {
