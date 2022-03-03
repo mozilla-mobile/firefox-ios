@@ -115,6 +115,7 @@ class BrowserViewController: UIViewController {
     }
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
+    var keyboardBackdrop: UIView?
 
     var scrollController = TabScrollingController()
     fileprivate var keyboardState: KeyboardState?
@@ -537,13 +538,17 @@ class BrowserViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        adjustURLBarHeightBasedOnLocationViewHeight()
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         statusBarOverlay.snp.remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
         }
-        adjustURLBarHeightBasedOnLocationViewHeight()
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -597,7 +602,7 @@ class BrowserViewController: UIViewController {
         }
 
         webViewContainerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
+            make.edges.equalTo(view)
         }
     }
 
@@ -606,12 +611,12 @@ class BrowserViewController: UIViewController {
 
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
-                make.left.right.top.equalTo(self.view)
+                make.left.right.top.equalTo(view)
                 // Making sure we cover at least the status bar
-                make.bottom.equalTo(self.view.safeArea.top)
+                make.bottom.equalTo(view.safeArea.top)
             } else {
-                scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
-                make.left.right.equalTo(self.view)
+                scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                make.left.right.equalTo(view)
             }
         }
 
@@ -663,7 +668,8 @@ class BrowserViewController: UIViewController {
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
-        remake.left.right.equalTo(view)
+        remake.left.equalTo(view.safeArea.left)
+        remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
         remake.width.equalTo(view.safeArea.width)
 
@@ -704,8 +710,7 @@ class BrowserViewController: UIViewController {
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
-        let index = readerModeBar == nil ? 1 : 2
-        overKeyboardContainer.addKeyboardSpacer(at: index, spacerHeight: spacerHeight)
+        overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
     }
 
     /// Used for dynamic type height adjustment
@@ -718,7 +723,7 @@ class BrowserViewController: UIViewController {
         // Adjustment for landscape on the urlbar
         // need to account for inset and remove it when keyboard is showing
         let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
-        let isKeyboardShowing = keyboardState != nil
+        let isKeyboardShowing = keyboardState != nil && keyboardState?.intersectionHeightForView(view) != 0
         if !showToolBar && isBottomSearchBar && !isKeyboardShowing {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
         } else {
@@ -995,6 +1000,18 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        // This needs to be added to ensure during animation of the keyboard,
+        // No content is showing in between the bottom search bar and the searchViewController
+        if isBottomSearchBar, keyboardBackdrop == nil {
+            keyboardBackdrop = UIView()
+            keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
+            view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
+            keyboardBackdrop?.snp.makeConstraints { make in
+                make.edges.equalTo(view)
+            }
+            view.bringSubviewToFront(bottomContainer)
+        }
+
         addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.snp.makeConstraints { make in
@@ -1016,6 +1033,9 @@ class BrowserViewController: UIViewController {
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
         firefoxHomeViewController?.view?.isHidden = false
+
+        keyboardBackdrop?.removeFromSuperview()
+        keyboardBackdrop = nil
     }
 
     func destroySearchController() {
@@ -2369,11 +2389,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         keyboardState = state
         updateViewConstraints()
     }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {
-        keyboardState = state
-        updateViewConstraints()
-    }
 }
 
 extension BrowserViewController: SessionRestoreHelperDelegate {
@@ -2423,6 +2438,7 @@ extension BrowserViewController: NotificationThemeable {
         ui.forEach { $0?.applyTheme() }
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
+        keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
         setNeedsStatusBarAppearanceUpdate()
 
         (presentedViewController as? NotificationThemeable)?.applyTheme()
