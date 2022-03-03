@@ -115,6 +115,7 @@ class BrowserViewController: UIViewController {
     }
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
+    var keyboardBackdrop: UIView?
 
     var scrollController = TabScrollingController()
     fileprivate var keyboardState: KeyboardState?
@@ -999,6 +1000,18 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        // This needs to be added to ensure during animation of the keyboard,
+        // No content is showing in between the bottom search bar and the searchViewController
+        if isBottomSearchBar, keyboardBackdrop == nil {
+            keyboardBackdrop = UIView()
+            keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
+            view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
+            keyboardBackdrop?.snp.makeConstraints { make in
+                make.edges.equalTo(view)
+            }
+            view.bringSubviewToFront(bottomContainer)
+        }
+
         addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.snp.makeConstraints { make in
@@ -1020,6 +1033,9 @@ class BrowserViewController: UIViewController {
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
         firefoxHomeViewController?.view?.isHidden = false
+
+        keyboardBackdrop?.removeFromSuperview()
+        keyboardBackdrop = nil
     }
 
     func destroySearchController() {
@@ -2422,6 +2438,7 @@ extension BrowserViewController: NotificationThemeable {
         ui.forEach { $0?.applyTheme() }
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
+        keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
         setNeedsStatusBarAppearanceUpdate()
 
         (presentedViewController as? NotificationThemeable)?.applyTheme()
