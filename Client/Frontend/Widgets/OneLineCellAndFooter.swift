@@ -15,13 +15,6 @@ enum OneLineTableViewCustomization {
     case inactiveCell
 }
 
-class OneLineTableViewCellWithoutCustomFooter: OneLineTableViewCell {
-    override func initialViewSetup() {
-        super.initialViewSetup()
-        bottomSeparatorView.backgroundColor = .clear
-    }
-}
-
 class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     
@@ -68,6 +61,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
 
     lazy var bottomSeparatorView: UIView = .build { separatorLine in
         //separator hidden by default
+        separatorLine.isHidden = true
         separatorLine.backgroundColor = UIColor.Photon.Grey40
     }
     
