@@ -590,10 +590,10 @@ open class BrowserProfile: Profile {
     func removeAccount() {
         RustFirefoxAccounts.shared.disconnect()
 
-        // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
-        if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
-            application.unregisterForRemoteNotifications()
-        }
+        // Not available in extensions
+        #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
+        unregisterRemoteNotifiation()
+        #endif
 
         // remove Account Metadata
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
@@ -626,6 +626,14 @@ open class BrowserProfile: Profile {
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
         self.syncManager.onRemovedAccount()
+    }
+
+    // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
+    @available(iOSApplicationExtension, unavailable, message: "UIApplication.shared is unavailable in application extensions")
+    private func unregisterRemoteNotifiation() {
+        if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
+            application.unregisterForRemoteNotifications()
+        }
     }
 
     class NoAccountError: MaybeErrorType {
