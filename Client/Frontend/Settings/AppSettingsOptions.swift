@@ -243,8 +243,8 @@ class SyncNowSetting: WithAccountSetting {
         cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
 
         // Animation that loops continously until stopped
-        continuousRotateAnimation.fromValue = CGFloat(Double.pi)
-        continuousRotateAnimation.toValue = 0.0
+        continuousRotateAnimation.fromValue = 0.0
+        continuousRotateAnimation.toValue = CGFloat(Double.pi)
         continuousRotateAnimation.isRemovedOnCompletion = true
         continuousRotateAnimation.duration = 0.5
         continuousRotateAnimation.repeatCount = .infinity
@@ -253,6 +253,7 @@ class SyncNowSetting: WithAccountSetting {
         // dimensions and color, then the scaled sync icon is added as a subview.
         imageView.contentMode = .center
         imageView.image = image
+        imageView.transform = CGAffineTransform(scaleX: -1, y: 1)
 
         cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
         cell.imageView?.image = syncIconWrapper
