@@ -443,6 +443,7 @@
 		7BF5A1EE1B429B3100EA9DD8 /* SyncCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */; };
+		8A05123927D17EC3009930CC /* WallpaperStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A05123827D17EC3009930CC /* WallpaperStorageUtility.swift */; };
 		8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07910E278F62F2005529CB /* AdjustHelper.swift */; };
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
@@ -807,7 +808,6 @@
 		DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
 		DFB2610B277CA7D300DDDD38 /* WallpaperSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB2610A277CA7D300DDDD38 /* WallpaperSettingsViewController.swift */; };
 		DFB2610D277CC5A200DDDD38 /* WallpaperSettingCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB2610C277CC5A200DDDD38 /* WallpaperSettingCollectionCell.swift */; };
-		DFC30BDB27A8724300FAA8B3 /* WallpaperStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC30BDA27A8724300FAA8B3 /* WallpaperStorageUtility.swift */; };
 		DFD64DB727A1A909003D4534 /* Wallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD64DB627A1A909003D4534 /* Wallpaper.swift */; };
 		DFEA639E279F468A00D489C3 /* DynamicHeightCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEA639D279F468A00D489C3 /* DynamicHeightCollectionView.swift */; };
 		DFF95955279B021700ECC572 /* WallpaperDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF95954279B021700ECC572 /* WallpaperDataManager.swift */; };
@@ -2702,6 +2702,7 @@
 		890045908C7B76449D0FEA78 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		89AE47D2B80AF49BFB9763BA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		8A01891B275E9C2A00923EFE /* ClearHistoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearHistoryHelper.swift; sourceTree = "<group>"; };
+		8A05123827D17EC3009930CC /* WallpaperStorageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperStorageUtility.swift; sourceTree = "<group>"; };
 		8A07910E278F62F2005529CB /* AdjustHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustHelper.swift; sourceTree = "<group>"; };
 		8A0F46E89E106C66C6C29F07 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultOnlyTestList.json; sourceTree = "<group>"; };
@@ -3960,7 +3961,6 @@
 		DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
 		DFB2610A277CA7D300DDDD38 /* WallpaperSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewController.swift; sourceTree = "<group>"; };
 		DFB2610C277CC5A200DDDD38 /* WallpaperSettingCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingCollectionCell.swift; sourceTree = "<group>"; };
-		DFC30BDA27A8724300FAA8B3 /* WallpaperStorageUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperStorageUtility.swift; sourceTree = "<group>"; };
 		DFD6456AA6B9F19B62C14026 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		DFD64DB627A1A909003D4534 /* Wallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallpaper.swift; sourceTree = "<group>"; };
 		DFE8447DBAB67C2A5B61E4D0 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -5617,7 +5617,7 @@
 		C87DC85427B2C867006EFCE2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				DFC30BDA27A8724300FAA8B3 /* WallpaperStorageUtility.swift */,
+				8A05123827D17EC3009930CC /* WallpaperStorageUtility.swift */,
 				C87DC85527B2C8B0006EFCE2 /* WallpaperNetworkUtility.swift */,
 			);
 			path = Utilities;
@@ -8700,6 +8700,7 @@
 				43C5A09B2555DF8100BA37AD /* BottomSheetViewController.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
 				431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */,
+				8A05123927D17EC3009930CC /* WallpaperStorageUtility.swift in Sources */,
 				DFACBF81277B916B003D5F41 /* ConfigurableGradientView.swift in Sources */,
 				7482205C1DBAB56300EEEA72 /* MailProviders.swift in Sources */,
 				C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */,
@@ -8786,8 +8787,6 @@
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
 				8AED23C527AC1F9500DE7E97 /* BaseContentStackView.swift in Sources */,
-				DFC30BDB27A8724300FAA8B3 /* WallpaperStorageUtility.swift in Sources */,
-				DFC30BDB27A8724300FAA8B3 /* WallpaperStorageUtility.swift in Sources */,
 				DA9FD88924E213E500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
 				43AB6FA425DC53D30016B015 /* ASHeaderView.swift in Sources */,
