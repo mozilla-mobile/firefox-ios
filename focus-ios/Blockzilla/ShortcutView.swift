@@ -106,11 +106,6 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: nil,
                                           actionProvider: { _ in
-            let renameAction = UIAction(
-                title: UIConstants.strings.renameShortcut,
-                image: .renameShortcut) { _ in
-                    self.delegate?.rename(shortcut: self.shortcut)
-                }
             
             let removeFromShortcutsAction = UIAction(
                 title: UIConstants.strings.removeFromShortcuts,
@@ -121,7 +116,9 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
                     CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
                     self.delegate?.removeFromShortcutsAction(shortcut: self.shortcut)
                 }
-            return UIMenu(children: [removeFromShortcutsAction, renameAction])
+            return UIMenu(children: [
+                removeFromShortcutsAction
+            ])
         })
     }
     
