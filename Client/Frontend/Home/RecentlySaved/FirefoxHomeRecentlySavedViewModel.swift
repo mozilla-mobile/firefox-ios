@@ -5,14 +5,6 @@
 import Foundation
 import Storage
 
-protocol RecentlySavedItem {
-    var title: String { get }
-    var url: String { get }
-}
-
-extension ReadingListItem: RecentlySavedItem { }
-extension BookmarkItemData: RecentlySavedItem { }
-
 class FirefoxHomeRecentlySavedViewModel {
     
     // MARK: - Properties
@@ -24,6 +16,7 @@ class FirefoxHomeRecentlySavedViewModel {
     private var readingListItems = [ReadingListItem]()
     private var recentBookmarks = [BookmarkItemData]()
     private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
+    private let recentItemsHelper = RecentItemsHelper()
 
     init(isZeroSearch: Bool, profile: Profile) {
         self.isZeroSearch = isZeroSearch
@@ -46,24 +39,8 @@ class FirefoxHomeRecentlySavedViewModel {
     /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
     func updateData(completion: @escaping () -> Void) {
         let group = DispatchGroup()
-        group.enter()
-        profile.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(dataQueue, block: { [weak self] result in
-            self?.updateRecentBookmarks(bookmarks: result.successValue ?? [])
-            group.leave()
-        })
-
-        group.enter()
-        let maxItems = RecentlySavedCollectionCellUX.readingListItemsLimit
-        if let readingList = profile.readingList.getAvailableRecords().value.successValue?.prefix(maxItems) {
-            readingListItems = RecentItemsHelper.filterStaleItems(recentItems: Array(readingList), since: Date()) as! [ReadingListItem]
-
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .firefoxHomepage,
-                                         value: .recentlySavedReadingListView,
-                                         extras: [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"])
-            group.leave()
-        }
+        getRecentBookmarks(group: group)
+        getReadingLists(group: group)
 
         group.notify(queue: .main) {
             completion()
@@ -76,14 +53,44 @@ class FirefoxHomeRecentlySavedViewModel {
         }
     }
 
-    // MARK: - Private
+    // MARK: - Reading list
+
+    private func getReadingLists(group: DispatchGroup) {
+        group.enter()
+        let maxItems = RecentlySavedCollectionCellUX.readingListItemsLimit
+        profile.readingList.getAvailableRecords().uponQueue(dataQueue, block: { [weak self] result in
+            let items = result.successValue?.prefix(maxItems) ?? []
+            self?.updateReadingList(readingList: Array(items))
+            group.leave()
+        })
+    }
+
+    private func updateReadingList(readingList: [ReadingListItem]) {
+        readingListItems = recentItemsHelper.filterStaleItems(recentItems: readingList) as? [ReadingListItem] ?? []
+
+        let extra = [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .firefoxHomepage,
+                                     value: .recentlySavedReadingListView,
+                                     extras: extra)
+    }
+
+    // MARK: - Bookmarks
+
+    private func getRecentBookmarks(group: DispatchGroup) {
+        group.enter()
+        profile.places.getRecentBookmarks(limit: RecentlySavedCollectionCellUX.bookmarkItemsLimit).uponQueue(dataQueue, block: { [weak self] result in
+            self?.updateRecentBookmarks(bookmarks: result.successValue ?? [])
+            group.leave()
+        })
+    }
 
     private func updateRecentBookmarks(bookmarks: [BookmarkItemData]) {
-        recentBookmarks = RecentItemsHelper.filterStaleItems(recentItems: bookmarks, since: Date()) as! [BookmarkItemData]
+        recentBookmarks = recentItemsHelper.filterStaleItems(recentItems: bookmarks) as? [BookmarkItemData] ?? []
 
         // Send telemetry if bookmarks aren't empty
         if !recentBookmarks.isEmpty {
-
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .view,
                                          object: .firefoxHomepage,
