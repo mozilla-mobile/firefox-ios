@@ -6,42 +6,50 @@ import Foundation
 import Storage
 import Shared
 
-class RecentItemsHelper {
-    
-    /// Filter `RecenlySavedItems` that are a older than some number of days.
-    /// Bookmarks and reading list items are stale after 10 days and 7 days, respectively.
-    /// - Parameters:
-    ///
-    ///   - recentItems: Items to filter.
-    ///   - since: The date to test against.
-    /// - Returns: A filtered list of items that are within the cutoff date.
-    static func filterStaleItems(recentItems: [RecentlySavedItem], since: Date = Date()) -> [RecentlySavedItem] {
-        var cutoff = since
-        let calendar = Calendar.current
-        
-        if let bookmarkItem = recentItems as? [BookmarkItemData] {
-            return bookmarkItem.filter { item in
-                let dateAdded = Date.fromTimestamp(Timestamp(item.dateAdded))
-                return calendar.numberOfDaysBetween(dateAdded, and: cutoff) <= 10
-            }
-        } else if let readingListitem = recentItems as? [ReadingListItem] {
-            return readingListitem.filter { item in
-                let lastModified = Date.fromTimestamp(item.lastModified)
-                
-                // lastModified gives the incorrect year, so we need to
-                // adjust our cutoff date's year to match that year.
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "YYYY"
-                let yearString = dateFormatter.string(from: lastModified)
-                var dateComponents = calendar.dateComponents([.year, .month, .day], from: cutoff)
-                dateComponents.year = Int(yearString)
-                cutoff = calendar.date(from: dateComponents)!
-                
-                return calendar.numberOfDaysBetween(lastModified, and: cutoff) <= 7
-            }
-        }
-        
-        return []
+protocol RecentlySavedItem {
+    var title: String { get }
+    var url: String { get }
+
+    var numberOfDaysBeforeStale: Int { get }
+    func getItemDate() -> Date
+    func getNumberOfDays(calendar: Calendar, date: Date) -> Int
+}
+
+extension RecentlySavedItem {
+    func getNumberOfDays(calendar: Calendar, date: Date) -> Int {
+        return calendar.numberOfDaysBetween(getItemDate(), and: date)
     }
+}
+
+extension ReadingListItem: RecentlySavedItem {
+    var numberOfDaysBeforeStale: Int { return 7 }
+
+    func getItemDate() -> Date {
+        // ReadingListItem is using timeIntervalSinceReferenceDate to save lastModified timestamp
+        return Date(timeIntervalSinceReferenceDate: Double(lastModified) / 1000)
+    }
+}
+
+extension BookmarkItemData: RecentlySavedItem {
+    var numberOfDaysBeforeStale: Int { return 10 }
+
+    func getItemDate() -> Date {
+        return Date.fromTimestamp(Timestamp(dateAdded))
+    }
+}
+
+class RecentItemsHelper {
+
+    private let calendar = Calendar.current
     
+    /// Filter `RecenlySavedItems` that are a older than a `numberOfDaysBeforeStale` count.
+    /// - Parameters:
+    ///   - recentItems: Items to filter.
+    ///   - date: The date to filter against.
+    /// - Returns: A filtered list of items that are within the cutoff date.
+    func filterStaleItems(recentItems: [RecentlySavedItem], since date: Date = Date()) -> [RecentlySavedItem] {
+        return recentItems.filter {
+            return $0.getNumberOfDays(calendar: calendar, date: date) <= $0.numberOfDaysBeforeStale
+        }
+    }
 }
