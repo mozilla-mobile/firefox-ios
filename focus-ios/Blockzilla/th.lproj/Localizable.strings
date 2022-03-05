@@ -379,6 +379,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "สตริงการค้นหาที่จะใช้";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ตัวอย่าง: searchengine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "วางหรือป้อนสตริงการค้นหา หากจำเป็นให้แทนที่คำค้นหาด้วย: %s";
 
@@ -510,6 +513,12 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "ลบออกจากคำสั่งลัด";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "บันทึก";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "ยกเลิก";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "เพิ่ม";
