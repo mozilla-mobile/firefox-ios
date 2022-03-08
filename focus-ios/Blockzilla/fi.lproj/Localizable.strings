@@ -226,6 +226,12 @@
 /* Title for button that takes the user to system settings */
 "photosPermission.openSettings" = "Avaa asetukset";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Yhteys ei ole suojattu";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Yhteys on suojattu";
+
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Pyydä työpöytäversio";
 
@@ -343,6 +349,9 @@
 /* Theme section in settings menu */
 "Settings.theme" = "Teema";
 
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Teemavalitsin";
+
 /* Label for the checkbox to toggle Advertising trackers */
 "Settings.toggleBlockAds2" = "Mainonta";
 
@@ -412,11 +421,17 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Avaa Chromessa";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Avaa oletusselaimessa";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Avaa Firefoxissa";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Jaa sivu...";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Tallenna";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Lisää";
