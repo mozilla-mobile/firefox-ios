@@ -546,6 +546,8 @@
 		966ECDAC27E4FA89006C93C8 /* HistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966ECDAB27E4FA89006C93C8 /* HistoryPanel.swift */; };
 		968BD7EB27DFF0F8003148B3 /* ASGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968BD7EA27DFF0F8003148B3 /* ASGroup.swift */; };
 		9699F77326F39E5100C5FA47 /* SiteImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */; };
+		96A562A027D6D0E80045144A /* ContileProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5629F27D6D0E80045144A /* ContileProvider.swift */; };
+		96A562A327D7B32A0045144A /* Contile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A562A227D7B32A0045144A /* Contile.swift */; };
 		96D95016270238500079D39D /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D95015270238500079D39D /* Throttler.swift */; };
 		96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */; };
 		96EB6C3C27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3B27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift */; };
@@ -2966,6 +2968,8 @@
 		968BD7EA27DFF0F8003148B3 /* ASGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASGroup.swift; sourceTree = "<group>"; };
 		9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteImageHelper.swift; sourceTree = "<group>"; };
 		96A542EFBF40CDFE9AA24E2D /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
+		96A5629F27D6D0E80045144A /* ContileProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContileProvider.swift; sourceTree = "<group>"; };
+		96A562A227D7B32A0045144A /* Contile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contile.swift; sourceTree = "<group>"; };
 		96A6ACD4276BDD8D00087A51 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		96B14F71BAAD012EA8852135 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		96D95015270238500079D39D /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
@@ -5219,6 +5223,7 @@
 		39A359BD1BFCCE7B006B9E87 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				96A562A127D7B31B0045144A /* Contile */,
 				8A07910E278F62F2005529CB /* AdjustHelper.swift */,
 				E65075531E37F6FC006961AC /* DynamicFontHelper.swift */,
 				E65075601E37F77D006961AC /* MenuHelper.swift */,
@@ -5634,6 +5639,15 @@
 				96EB6C4227DC205D00A9D159 /* GroupedHistoryItemsViewModel.swift */,
 			);
 			path = GeneralizedTableView;
+			sourceTree = "<group>";
+		};
+		96A562A127D7B31B0045144A /* Contile */ = {
+			isa = PBXGroup;
+			children = (
+				96A5629F27D6D0E80045144A /* ContileProvider.swift */,
+				96A562A227D7B32A0045144A /* Contile.swift */,
+			);
+			name = Contile;
 			sourceTree = "<group>";
 		};
 		C82A94E3269CB74500624AA7 /* FeatureFlags */ = {
@@ -8982,6 +8996,7 @@
 				DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */,
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
+				96A562A327D7B32A0045144A /* Contile.swift in Sources */,
 				962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */,
 				21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */,
 				8AB8573F27D961200075C173 /* DataObserver.swift in Sources */,
@@ -9205,6 +9220,7 @@
 				213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */,
 				8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
+				96A562A027D6D0E80045144A /* ContileProvider.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,
 				9699F77326F39E5100C5FA47 /* SiteImageHelper.swift in Sources */,
 				DF984600276B99660071CCAE /* WallpaperManager.swift in Sources */,
