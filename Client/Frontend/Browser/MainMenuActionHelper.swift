@@ -724,18 +724,24 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
     }
 
     private func getRemoveShortcutAction() -> SingleActionViewModel {
-        return SingleActionViewModel(title: .AppMenuRemoveBookmarkTitleString,
-                                     iconString: ImageIdentifiers.removeFromBookmark) { _ in
+        return SingleActionViewModel(title: .RemoveFromShortcutsActionTitle,
+                                     iconString: "action_unpin") { _ in
 
-            guard let url = self.selectedTab?.url?.absoluteString else { return }
+            guard let url = self.selectedTab?.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
-            self.profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
+            sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
+                guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
+                    return succeed()
+                }
+
+                return self.profile.history.removeFromPinnedTopSites(site)
+            }.uponQueue(.main) { result in
                 if result.isSuccess {
-                    self.delegate?.showToast(message: .AppMenuRemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url)
+                    self.delegate?.showToast(message: .AppMenuRemovePinFromShortcutsConfirmMessage, toastAction: .removePinPage, url: nil)
                 }
             }
 
-            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
     }
 
