@@ -253,6 +253,7 @@ class SyncNowSetting: WithAccountSetting {
         // dimensions and color, then the scaled sync icon is added as a subview.
         imageView.contentMode = .center
         imageView.image = image
+        imageView.transform = CGAffineTransform(scaleX: -1, y: 1)
 
         cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
         cell.imageView?.image = syncIconWrapper
