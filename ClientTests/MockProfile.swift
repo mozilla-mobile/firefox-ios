@@ -75,11 +75,11 @@ open class MockTabQueue: TabQueue {
 open class MockPanelDataObservers: PanelDataObservers {
     override init(profile: Client.Profile) {
         super.init(profile: profile)
-        self.activityStream = MockActivityStreamDataObserver(profile: profile)
+        self.activityStream = MockTopSiteHistoryManager(profile: profile)
     }
 }
 
-open class MockActivityStreamDataObserver: DataObserver {
+open class MockTopSiteHistoryManager: DataObserver {
     public func refreshIfNeeded(forceTopSites topSites: Bool) {
     }
 

@@ -765,7 +765,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     }
 
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
-    // See ActivityStreamDataObserver for invalidation logic.
+    // See TopSiteHistoryManager for invalidation logic.
     private func loadTopSitesData() {
         TopSitesHandler.getTopSites(profile: viewModel.profile).uponQueue(.main) { [weak self] result in
             guard let self = self else { return }
@@ -837,7 +837,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                                      extras: extras)
     }
 
-    // Invoked by the ActivityStreamDataObserver when highlights/top sites invalidation is complete.
+    // Invoked by the TopSiteHistoryManager when highlights/top sites invalidation is complete.
     func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {
         // Do not reload panel unless we're currently showing the highlight intro or if we
         // force-reloaded the highlights or top sites. This should prevent reloading the
