@@ -17,6 +17,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     var enabledSections = [FirefoxHomeSectionType]()
 
     // Child View models
+    var topSiteViewModel: FxHomeTopSitesViewModel
     var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
     var historyHighlightsViewModel: FxHomeHistoryHightlightsVM
@@ -106,7 +107,8 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
          experiments: NimbusApi) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
-        
+
+        self.topSiteViewModel = FxHomeTopSitesViewModel()
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM(with: profile)

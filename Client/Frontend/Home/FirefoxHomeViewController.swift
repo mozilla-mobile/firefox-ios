@@ -158,9 +158,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
+    // TODO: Laurie - remove this
     // Not used for displaying. Only used for calculating layout.
-    lazy var topSiteCell: ASHorizontalScrollCell = {
-        let customCell = ASHorizontalScrollCell(frame: CGRect(width: self.view.frame.size.width, height: 0))
+    lazy var topSiteCell: TopSiteCollectionCell = {
+        let customCell = TopSiteCollectionCell(frame: CGRect(width: self.view.frame.size.width, height: 0))
         customCell.delegate = self.viewModel.topSitesManager
         return customCell
     }()
@@ -507,7 +508,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         switch FirefoxHomeSectionType(indexPath.section) {
         case .topSites:
             // Create a temporary cell so we can calculate the height.
-            let layout = topSiteCell.collectionView.collectionViewLayout as! HorizontalFlowLayout
+            let layout = topSiteCell.collectionView.collectionViewLayout as! TopSiteFlowLayout
             let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
 
@@ -641,7 +642,7 @@ extension FirefoxHomeViewController {
     }
 
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let topSiteCell = cell as? ASHorizontalScrollCell else { return UICollectionViewCell() }
+        guard let topSiteCell = cell as? TopSiteCollectionCell else { return UICollectionViewCell() }
         topSiteCell.delegate = self.viewModel.topSitesManager
         topSiteCell.setNeedsLayout()
         topSiteCell.collectionView.reloadData()
@@ -903,7 +904,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         // `IndexPath` object to be created and passed around.
         switch FirefoxHomeSectionType(fxHomeIndexPath.section) {
         case .topSites:
-            let topSiteCell = self.collectionView?.cellForItem(at: fxHomeIndexPath) as! ASHorizontalScrollCell
+            let topSiteCell = self.collectionView?.cellForItem(at: fxHomeIndexPath) as! TopSiteCollectionCell
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteItemIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
             let topSiteIndexPath = IndexPath(row: topSiteItemIndexPath.row,
@@ -1059,7 +1060,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
 
         switch FirefoxHomeSectionType(indexPath.section) {
         case .topSites:
-            if let topSiteCell = collectionView?.cellForItem(at: IndexPath(row: 0, section: indexPath.section)) as? ASHorizontalScrollCell {
+            if let topSiteCell = collectionView?.cellForItem(at: IndexPath(row: 0, section: indexPath.section)) as? TopSiteCollectionCell {
                 sourceView = topSiteCell.collectionView.cellForItem(at: IndexPath(row: indexPath.row, section: 0))
             }
         case .pocket:

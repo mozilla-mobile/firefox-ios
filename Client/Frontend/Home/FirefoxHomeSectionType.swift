@@ -99,7 +99,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     var cellIdentifier: String {
         switch self {
         case .logoHeader: return FxHomeLogoHeaderCell.cellIdentifier
-        case .topSites: return ASHorizontalScrollCell.cellIdentifier
+        case .topSites: return TopSiteCollectionCell.cellIdentifier
         case .pocket: return FxHomePocketCollectionCell.cellIdentifier
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
         case .recentlySaved: return FxHomeRecentlySavedCollectionCell.cellIdentifier
@@ -112,7 +112,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     var cellType: UICollectionViewCell.Type {
         switch self {
         case .logoHeader: return FxHomeLogoHeaderCell.self
-        case .topSites: return ASHorizontalScrollCell.self
+        case .topSites: return TopSiteCollectionCell.self
         case .pocket: return FxHomePocketCollectionCell.self
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
         case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self

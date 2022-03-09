@@ -254,7 +254,7 @@
 		3B61CD631F2A769D00D38DE1 /* pocketglobalfeed.json in Resources */ = {isa = PBXBuildFile; fileRef = 3B61CD621F2A769D00D38DE1 /* pocketglobalfeed.json */; };
 		3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6889C41D66950E002AC85E /* UIImageColors.swift */; };
 		3B6F40181DC7849C00656CC6 /* FirefoxHomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6F40171DC7849C00656CC6 /* FirefoxHomeTests.swift */; };
-		3BB50E111D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB50E101D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift */; };
+		3BB50E111D6274CD004B33DF /* TopSiteItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */; };
 		3BB50E201D627539004B33DF /* FirefoxHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB50E1F1D627539004B33DF /* FirefoxHomeViewController.swift */; };
 		3BC659491E5BA4AE006D560F /* TopSites in Resources */ = {isa = PBXBuildFile; fileRef = 3BC659481E5BA4AE006D560F /* TopSites */; };
 		3BC659591E5BA505006D560F /* top_sites.json in Resources */ = {isa = PBXBuildFile; fileRef = 3BC659581E5BA505006D560F /* top_sites.json */; };
@@ -469,6 +469,12 @@
 		8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5927C5A2AB00FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */; };
+		8AB8571D27D929350075C173 /* FxHomeTopSitesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571C27D929350075C173 /* FxHomeTopSitesViewModel.swift */; };
+		8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */; };
+		8AB8572127D935920075C173 /* TopSiteScrollCellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8572027D935920075C173 /* TopSiteScrollCellManager.swift */; };
+		8AB8572327D935ED0075C173 /* TopSiteCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */; };
+		8AB8572527D937BF0075C173 /* TopSiteFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8572427D937BF0075C173 /* TopSiteFlowLayout.swift */; };
+		8AB8572727D93AEC0075C173 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
 		8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */; };
 		8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC627BADC3400672675 /* ToolbarTextField.swift */; };
@@ -2045,7 +2051,7 @@
 		3B6F40171DC7849C00656CC6 /* FirefoxHomeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeTests.swift; sourceTree = "<group>"; };
 		3B704751960D3C7E442AFBAE /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Search.strings; sourceTree = "<group>"; };
 		3B9A4BDF8865C6533212FC6C /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Menu.strings; sourceTree = "<group>"; };
-		3BB50E101D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeTopSitesCell.swift; sourceTree = "<group>"; };
+		3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSiteItemCell.swift; sourceTree = "<group>"; };
 		3BB50E1F1D627539004B33DF /* FirefoxHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeViewController.swift; sourceTree = "<group>"; };
 		3BC659481E5BA4AE006D560F /* TopSites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TopSites; sourceTree = "<group>"; };
 		3BC659581E5BA505006D560F /* top_sites.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = top_sites.json; sourceTree = "<group>"; };
@@ -2735,6 +2741,11 @@
 		8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapperTests.swift; sourceTree = "<group>"; };
 		8AAD4900BB6F4DF6056B581F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8AB04613B101195AADCC1F1B /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = "cs.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		8AB8571C27D929350075C173 /* FxHomeTopSitesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeTopSitesViewModel.swift; sourceTree = "<group>"; };
+		8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTopSiteCell.swift; sourceTree = "<group>"; };
+		8AB8572027D935920075C173 /* TopSiteScrollCellManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteScrollCellManager.swift; sourceTree = "<group>"; };
+		8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCollectionCell.swift; sourceTree = "<group>"; };
+		8AB8572427D937BF0075C173 /* TopSiteFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteFlowLayout.swift; sourceTree = "<group>"; };
 		8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetViewModel.swift; sourceTree = "<group>"; };
 		8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarHelper.swift; sourceTree = "<group>"; };
 		8AD40FC627BADC3400672675 /* ToolbarTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTextField.swift; sourceTree = "<group>"; };
@@ -5380,6 +5391,30 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		8AB8571B27D929240075C173 /* TopSites */ = {
+			isa = PBXGroup;
+			children = (
+				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
+				8AB8572427D937BF0075C173 /* TopSiteFlowLayout.swift */,
+				8AB8571C27D929350075C173 /* FxHomeTopSitesViewModel.swift */,
+				8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */,
+				43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */,
+				43AB6F9C25DC53D20016B015 /* GoogleTopSiteHelper.swift */,
+				8AB8572027D935920075C173 /* TopSiteScrollCellManager.swift */,
+				8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */,
+			);
+			path = TopSites;
+			sourceTree = "<group>";
+		};
+		8AB8572627D93A350075C173 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				43AB6F9F25DC53D30016B015 /* ASLibraryCell.swift */,
+				43AB6FA025DC53D30016B015 /* LibraryShortcutView.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 		8AD40FB727BAD1D600672675 /* Toolbar+URLBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -6755,22 +6790,19 @@
 			isa = PBXGroup;
 			children = (
 				43AB6F9E25DC53D20016B015 /* ASHeaderView.swift */,
-				43AB6F9F25DC53D30016B015 /* ASLibraryCell.swift */,
 				2386E4E524F8358E0072EF17 /* DefaultBrowserCard.swift */,
-				3BB50E101D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift */,
 				1DFE57FE27BAE3150025DE58 /* FirefoxHomeSectionType.swift */,
 				3BB50E1F1D627539004B33DF /* FirefoxHomeViewController.swift */,
 				1DFE57FC27BADD7C0025DE58 /* FirefoxHomeViewModel.swift */,
 				C8656D78270F866700E199EA /* FxHomeCustomizeView.swift */,
 				8A9AC464276CEC4E0047F5B0 /* FxHomeHorizontalCell.swift */,
 				1D69FF8C27B17285001F660E /* FxHomeLogoHeaderCell.swift */,
-				43AB6F9C25DC53D20016B015 /* GoogleTopSiteHelper.swift */,
 				DF036E41274FD3FC002E834E /* HistoryHighlights */,
 				C87DC85F27B2CC1A006EFCE2 /* JumpBackIn */,
-				43AB6FA025DC53D30016B015 /* LibraryShortcutView.swift */,
-				43AB6FA125DC53D30016B015 /* PanelDataObservers.swift */,
+				8AB8572627D93A350075C173 /* Library */,
 				C87DC86127B2CC27006EFCE2 /* Pocket */,
 				C87DC86027B2CC21006EFCE2 /* RecentlySaved */,
+				8AB8571B27D929240075C173 /* TopSites */,
 				DFACBF82277B9278003D5F41 /* Wallpapers */,
 			);
 			path = Home;
@@ -8691,7 +8723,7 @@
 				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
 				23D57E6E25ED6F2700883FAD /* SearchViewController.swift in Sources */,
 				C82A94F2269F68ED00624AA7 /* FeatureFlagsManager.swift in Sources */,
-				3BB50E111D6274CD004B33DF /* FirefoxHomeTopSitesCell.swift in Sources */,
+				3BB50E111D6274CD004B33DF /* TopSiteItemCell.swift in Sources */,
 				C87DC85E27B2CA49006EFCE2 /* Loggable.swift in Sources */,
 				048B4C8624A53F3E001B56E8 /* TodayUX.swift in Sources */,
 				8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */,
@@ -8787,6 +8819,7 @@
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
 				8AED23C527AC1F9500DE7E97 /* BaseContentStackView.swift in Sources */,
+				8AB8572127D935920075C173 /* TopSiteScrollCellManager.swift in Sources */,
 				DA9FD88924E213E500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
 				43AB6FA425DC53D30016B015 /* ASHeaderView.swift in Sources */,
@@ -8795,6 +8828,7 @@
 				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,
 				8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */,
+				8AB8572327D935ED0075C173 /* TopSiteCollectionCell.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */,
 				D30B101E1AA7F9C600C01CA3 /* LibraryPanels.swift in Sources */,
@@ -8826,6 +8860,7 @@
 				D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */,
 				1DFE57FB27B2CB870025DE58 /* HighlightItem.swift in Sources */,
 				CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */,
+				8AB8572727D93AEC0075C173 /* PanelDataObservers.swift in Sources */,
 				C81A8F2526D3ED1900EBA539 /* UIWindowExtensions.swift in Sources */,
 				EBC4869E2195F58300CDA48D /* AboutHomeHandler.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
@@ -8859,6 +8894,7 @@
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
+				8AB8572527D937BF0075C173 /* TopSiteFlowLayout.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */,
 				39EF434E260A73950011E22E /* Experiments.swift in Sources */,
@@ -8917,8 +8953,10 @@
 				C8445A14264428DC00B83F53 /* LibraryPanelViewState.swift in Sources */,
 				D5D052D92645ABF400759F85 /* ExperimentsSettingsView.swift in Sources */,
 				8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */,
+				8AB8571D27D929350075C173 /* FxHomeTopSitesViewModel.swift in Sources */,
 				D59431ED25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */,
 				F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */,
+				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
 				CAC458F1249429C20042561A /* LoginListSelectionHelper.swift in Sources */,
 				EB9A178E20E525DF00B12184 /* ThemeSettingsController.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
