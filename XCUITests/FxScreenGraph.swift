@@ -497,7 +497,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(HomePanel_TopSites) { screenState in
-        let topSites = app.cells["TopSitesCell"]
+        let topSites = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section]
         screenState.press(topSites.cells.matching(identifier: "TopSite").element(boundBy: 0), to: TopSitesPanelContextMenu)
 
     }

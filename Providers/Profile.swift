@@ -105,7 +105,6 @@ protocol Profile: AnyObject {
     var logins: RustLogins { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
-    var panelDataObservers: PanelDataObservers { get }
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE
         var readingList: ReadingList { get }
@@ -453,10 +452,6 @@ open class BrowserProfile: Profile {
     var history: BrowserHistory & SyncableHistory & ResettableSyncStorage {
         return self.legacyPlaces
     }
-
-    lazy var panelDataObservers: PanelDataObservers = {
-        return PanelDataObservers(profile: self)
-    }()
 
     lazy var metadata: Metadata = {
         return SQLiteMetadata(db: self.db)

@@ -21,11 +21,3 @@ extension DataObserverDelegate {
     func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {}
     func willInvalidateDataSources(forceTopSites: Bool) {}
 }
-
-open class PanelDataObservers {
-    var activityStream: DataObserver
-
-    init(profile: Profile) {
-        self.activityStream = TopSiteHistoryManager(profile: profile)
-    }
-}

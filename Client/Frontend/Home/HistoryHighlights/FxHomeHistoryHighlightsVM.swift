@@ -6,7 +6,7 @@ import Foundation
 import Storage
 import UIKit
 
-class FxHomeHistoryHightlightsVM {
+class FxHomeHistoryHightlightsVM: FXHomeViewModelProtocol {
 
     // MARK: - Properties & Variables
     var historyItems: [HighlightItem]?

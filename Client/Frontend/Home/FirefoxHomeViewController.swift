@@ -19,7 +19,6 @@ struct FirefoxHomeUX {
     static let recentlySavedCellHeight: CGFloat = 136
     static let historyHighlightsCellHeight: CGFloat = 68
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
-    static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     static let spacingBetweenSections: CGFloat = 24
     static let sectionInsetsForIpad: CGFloat = 101
     static let minimumInsets: CGFloat = 15
@@ -27,37 +26,6 @@ struct FirefoxHomeUX {
     static let libraryShortcutsMaxWidth: CGFloat = 375
     static let customizeHomeHeight: CGFloat = 100
     static let logoHeaderHeight: CGFloat = 85
-}
-
-/*
- Size classes are the way Apple requires us to specify our UI.
- Split view on iPad can make a landscape app appear with the demensions of an iPhone app
- Use UXSizeClasses to specify things like offsets/itemsizes with respect to size classes
- For a primer on size classes https://useyourloaf.com/blog/size-classes/
- */
-struct UXSizeClasses {
-    var compact: CGFloat
-    var regular: CGFloat
-    var unspecified: CGFloat
-
-    init(compact: CGFloat, regular: CGFloat, other: CGFloat) {
-        self.compact = compact
-        self.regular = regular
-        self.unspecified = other
-    }
-
-    subscript(sizeClass: UIUserInterfaceSizeClass) -> CGFloat {
-        switch sizeClass {
-        case .compact:
-            return self.compact
-        case .regular:
-            return self.regular
-        case .unspecified:
-            return self.unspecified
-        @unknown default:
-            fatalError()
-        }
-    }
 }
 
 // MARK: - Home Panel
@@ -154,15 +122,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     var contextualHintViewController: ContextualHintViewController
 
-    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
-    }()
-
     // TODO: Laurie - remove this
     // Not used for displaying. Only used for calculating layout.
     lazy var topSiteCell: TopSiteCollectionCell = {
         let customCell = TopSiteCollectionCell(frame: CGRect(width: self.view.frame.size.width, height: 0))
-        customCell.delegate = self.viewModel.topSitesManager
         return customCell
     }()
 
@@ -205,8 +168,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-
-        collectionView?.addGestureRecognizer(longPressRecognizer)
 
         // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
         let refreshEvents: [Notification.Name] = [.DynamicFontChanged,
@@ -252,8 +213,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         ])
 
         view.sendSubviewToBack(wallpaperView)
-
-        viewModel.profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
 
@@ -304,9 +263,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     // MARK: - Helpers
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        self.viewModel.topSitesManager.currentTraits = self.traitCollection
         applyTheme()
     }
 
@@ -643,7 +602,7 @@ extension FirefoxHomeViewController {
 
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let topSiteCell = cell as? TopSiteCollectionCell else { return UICollectionViewCell() }
-        topSiteCell.delegate = self.viewModel.topSitesManager
+        topSiteCell.viewModel = viewModel.topSiteViewModel
         topSiteCell.setNeedsLayout()
         topSiteCell.collectionView.reloadData()
         return cell
@@ -722,12 +681,11 @@ extension FirefoxHomeViewController {
 
 // MARK: - Data Management
 
-extension FirefoxHomeViewController: DataObserverDelegate {
+extension FirefoxHomeViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
     /// - Parameter shouldUpdateData: True means backend data should be refetched
     func reloadAll(shouldUpdateData: Bool = true) {
-        loadTopSitesData()
         guard shouldUpdateData else { return }
         DispatchQueue.global(qos: .userInteractive).async {
             self.reloadSectionsData()
@@ -737,6 +695,12 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     private func reloadSectionsData() {
         // TODO: Reload with a protocol comformance once all sections are standardized
         // Idea is that each section will load it's data from it's own view model
+        // update: Only missing library section to standardize!
+
+        if viewModel.isTopSitesSectionEnabled {
+            viewModel.topSiteViewModel.updateData {}
+        }
+
         if viewModel.isRecentlySavedSectionEnabled {
             viewModel.recentlySavedViewModel.updateData {}
         }
@@ -755,171 +719,11 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             }
         }
         
-        
         if viewModel.isHistoryHightlightsSectionEnabled {
             // TODO: Once section are standardized, reload only the historyHighligthst section when data is updated
             viewModel.historyHighlightsViewModel.updateData {
                 self.collectionView.reloadData()
             }
-        }
-    }
-
-    // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
-    // See TopSiteHistoryManager for invalidation logic.
-    private func loadTopSitesData() {
-        TopSitesHandler.getTopSites(profile: viewModel.profile).uponQueue(.main) { [weak self] result in
-            guard let self = self else { return }
-
-            // If there is no pending cache update and highlights are empty. Show the onboarding screen
-            self.collectionView?.reloadData()
-
-            self.viewModel.topSitesManager.currentTraits = self.view.traitCollection
-
-            let numRows = max(self.viewModel.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows, 1)
-
-            let maxItems = Int(numRows) * self.viewModel.topSitesManager.numberOfHorizontalItems()
-
-            var sites = Array(result.prefix(maxItems))
-
-            // Check if all result items are pinned site
-            var pinnedSites = 0
-            result.forEach {
-                if let _ = $0 as? PinnedSite {
-                    pinnedSites += 1
-                }
-            }
-            // Special case: Adding Google topsite
-            let googleTopSite = GoogleTopSiteHelper(prefs: self.viewModel.profile.prefs)
-            if !googleTopSite.isHidden, let gSite = googleTopSite.suggestedSiteData() {
-                // Once Google top site is added, we don't remove unless it's explicitly unpinned
-                // Add it when pinned websites are less than max pinned sites
-                if googleTopSite.hasAdded || pinnedSites < maxItems {
-                    sites.insert(gSite, at: 0)
-                    // Purge unwated websites from the end of list
-                    if sites.count > maxItems {
-                        sites.removeLast(sites.count - maxItems)
-                    }
-                    googleTopSite.hasAdded = true
-                }
-            }
-            self.viewModel.topSitesManager.content = sites
-            self.viewModel.topSitesManager.urlPressedHandler = { [unowned self] site, indexPath in
-                self.longPressRecognizer.isEnabled = false
-                guard let url = site.url.asURL else { return }
-                let isGoogleTopSiteUrl = url.absoluteString == GoogleTopSiteConstants.usUrl || url.absoluteString == GoogleTopSiteConstants.rowUrl
-                self.topSiteTracking(site: site, position: indexPath.item)
-                self.showSiteWithURLHandler(url as URL, isGoogleTopSite: isGoogleTopSiteUrl)
-            }
-
-            // Refresh the AS data in the background so we'll have fresh data next time we show.
-            self.viewModel.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
-        }
-    }
-
-    func topSiteTracking(site: Site, position: Int) {
-        // Top site extra
-        let topSitePositionKey = TelemetryWrapper.EventExtraKey.topSitePosition.rawValue
-        let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
-        let isPinnedAndGoogle = site is PinnedSite && site.guid == GoogleTopSiteConstants.googleGUID
-        let isPinnedOnly = site is PinnedSite
-        let isSuggestedSite = site is SuggestedSite
-        let type = isPinnedAndGoogle ? "google" : isPinnedOnly ? "user-added" : isSuggestedSite ? "suggested" : "history-based"
-        let topSiteExtra = [topSitePositionKey : "\(position)", topSiteTileTypeKey: type]
-
-        // Origin extra
-        let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-        let extras = originExtra.merge(with: topSiteExtra)
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .topSiteTile,
-                                     value: nil,
-                                     extras: extras)
-    }
-
-    // Invoked by the TopSiteHistoryManager when highlights/top sites invalidation is complete.
-    func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {
-        // Do not reload panel unless we're currently showing the highlight intro or if we
-        // force-reloaded the highlights or top sites. This should prevent reloading the
-        // panel after we've invalidated in the background on the first load.
-        if forced {
-            reloadAll()
-        }
-    }
-
-    func hideURLFromTopSites(_ site: Site) {
-        guard let host = site.tileURL.normalizedHost else { return }
-
-        let url = site.tileURL.absoluteString
-        // if the default top sites contains the siteurl. also wipe it from default suggested sites.
-        if !defaultTopSites().filter({ $0.url == url }).isEmpty {
-            deleteTileForSuggestedSite(url)
-        }
-        viewModel.profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            self.viewModel.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: true)
-        }
-    }
-
-    func pinTopSite(_ site: Site) {
-        viewModel.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            self.viewModel.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: true)
-        }
-    }
-
-    func removePinTopSite(_ site: Site) {
-        // Special Case: Hide google top site
-        if site.guid == GoogleTopSiteConstants.googleGUID {
-            let gTopSite = GoogleTopSiteHelper(prefs: self.viewModel.profile.prefs)
-            gTopSite.isHidden = true
-        }
-
-        viewModel.profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            self.viewModel.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: true)
-        }
-    }
-
-    fileprivate func deleteTileForSuggestedSite(_ siteURL: String) {
-        var deletedSuggestedSites = viewModel.profile.prefs.arrayForKey(TopSitesHandler.DefaultSuggestedSitesKey) as? [String] ?? []
-        deletedSuggestedSites.append(siteURL)
-        viewModel.profile.prefs.setObject(deletedSuggestedSites, forKey: TopSitesHandler.DefaultSuggestedSitesKey)
-    }
-
-    func defaultTopSites() -> [Site] {
-        let suggested = SuggestedSites.asArray()
-        let deleted = viewModel.profile.prefs.arrayForKey(TopSitesHandler.DefaultSuggestedSitesKey) as? [String] ?? []
-        return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
-    }
-
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == .began else { return }
-
-        let point = longPressGestureRecognizer.location(in: self.collectionView)
-        guard let fxHomeIndexPath = self.collectionView?.indexPathForItem(at: point) else { return }
-
-        // Here, we must be careful which `section` we're passing in, as it can be the
-        // homescreen's section, or a sub-view's section, thereby requiring a custom
-        // `IndexPath` object to be created and passed around.
-        switch FirefoxHomeSectionType(fxHomeIndexPath.section) {
-        case .topSites:
-            let topSiteCell = self.collectionView?.cellForItem(at: fxHomeIndexPath) as! TopSiteCollectionCell
-            let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
-            guard let topSiteItemIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
-            let topSiteIndexPath = IndexPath(row: topSiteItemIndexPath.row,
-                                             section: fxHomeIndexPath.section)
-            presentContextMenu(for: topSiteIndexPath)
-        default:
-            return
-        }
-    }
-
-    fileprivate func fetchBookmarkStatus(for site: Site, completionHandler: @escaping () -> Void) {
-        viewModel.profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
-            let isBookmarked = result.successValue ?? false
-            site.setBookmarked(isBookmarked)
-            completionHandler()
         }
     }
 }
@@ -1012,23 +816,13 @@ extension FirefoxHomeViewController {
     }
 
     func animateFirefoxLogo() {
-        guard shouldRunLogoAnimation(),
+        guard viewModel.headerViewModel.shouldRunLogoAnimation(),
               let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell
         else { return }
         
         _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
             cell.runLogoAnimation()
         })
-    }
-    
-    private func shouldRunLogoAnimation() -> Bool {
-        let localesAnimationIsAvailableFor = ["en_US", "es_US"]
-        guard viewModel.profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil,
-              !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
-              localesAnimationIsAvailableFor.contains(Locale.current.identifier)
-        else { return false }
-
-        return true
     }
 }
 
@@ -1048,12 +842,13 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         case .pocket:
             return viewModel.pocketViewModel.getSitesDetail(for: indexPath.row)
         case .topSites:
-            return viewModel.topSitesManager.content[indexPath.item]
+            return viewModel.topSiteViewModel.tileManager.content[indexPath.item]
         default:
             return nil
         }
     }
 
+    // TODO: Laurie - put this in helper class?
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
         var sourceView: UIView?
@@ -1090,7 +885,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         if site.bookmarked ?? false {
             bookmarkAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", tapHandler: { _ in
                 self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
-                    self.viewModel.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
+                    self.viewModel.topSiteViewModel.tileManager.refreshIfNeeded(forceTopSites: false)
                     site.setBookmarked(false)
                 }
 
@@ -1109,7 +904,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                                                                                     withUserData: userData,
                                                                                     toApplication: .shared)
                 site.setBookmarked(true)
-                self.viewModel.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: true)
+                self.viewModel.topSiteViewModel.tileManager.refreshIfNeeded(forceTopSites: true)
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
             })
         }
@@ -1129,36 +924,25 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.presentWithModalDismissIfNeeded(controller, animated: true)
         })
 
-        let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle, iconString: "action_remove", tapHandler: { _ in
-            self.hideURLFromTopSites(site)
-        })
-
-        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: ImageIdentifiers.addShortcut, tapHandler: { _ in
-            self.pinTopSite(site)
-        })
-
-        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle, iconString: ImageIdentifiers.removeFromShortcut, tapHandler: { _ in
-            self.removePinTopSite(site)
-        })
-
-        let topSiteActions: [PhotonRowActions]
-        if let _ = site as? PinnedSite {
-            topSiteActions = [PhotonRowActions(removePinTopSite)]
-        } else {
-            topSiteActions = [PhotonRowActions(pinTopSite), PhotonRowActions(removeTopSiteAction)]
-        }
-
         var actions = [PhotonRowActions(openInNewTabAction),
                        PhotonRowActions(openInNewPrivateTabAction),
                        PhotonRowActions(bookmarkAction),
                        PhotonRowActions(shareAction)]
 
         switch FirefoxHomeSectionType(indexPath.section) {
-        case .topSites: actions.append(contentsOf: topSiteActions)
+        case .topSites: actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
         default: break
         }
         
         return actions
+    }
+
+    private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping () -> Void) {
+        viewModel.profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
+            let isBookmarked = result.successValue ?? false
+            site.setBookmarked(isBookmarked)
+            completionHandler()
+        }
     }
 }
 

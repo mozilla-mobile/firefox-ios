@@ -6,7 +6,7 @@ import Foundation
 import Storage
 import Shared
 
-class FxHomePocketViewModel {
+class FxHomePocketViewModel: FXHomeViewModelProtocol {
 
     // MARK: - Properties
 

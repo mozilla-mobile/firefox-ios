@@ -17,6 +17,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     var enabledSections = [FirefoxHomeSectionType]()
 
     // Child View models
+    var headerViewModel: FxHomeLogoHeaderViewModel
     var topSiteViewModel: FxHomeTopSitesViewModel
     var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
@@ -26,11 +27,6 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
         Homescreen(variables: $0)
     }
-
-    lazy var topSitesManager: ASHorizontalScrollCellManager = {
-        let manager = ASHorizontalScrollCellManager()
-        return manager
-    }()
 
     // MARK: - Section availability variables
     var shouldShowFxLogoHeader: Bool {
@@ -108,11 +104,13 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
-        self.topSiteViewModel = FxHomeTopSitesViewModel()
+        self.headerViewModel = FxHomeLogoHeaderViewModel(profile: profile)
+        self.topSiteViewModel = FxHomeTopSitesViewModel(profile: profile, isZeroSearch: isZeroSearch)
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM(with: profile)
         self.pocketViewModel = FxHomePocketViewModel(profile: profile, isZeroSearch: isZeroSearch)
+
         self.experiments = experiments
         self.isPrivate = isPrivate
     }
@@ -129,7 +127,8 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
                     enabledSections.append(.logoHeader)
                 }
             case .topSites:
-                if isTopSitesSectionEnabled && !topSitesManager.content.isEmpty {
+                // Laurie - hasData() instead
+                if isTopSitesSectionEnabled && !topSiteViewModel.tileManager.content.isEmpty {
                     enabledSections.append(.topSites)
                 }
             case .pocket:

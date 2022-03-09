@@ -43,6 +43,10 @@ public struct AccessibilityIdentifiers {
             static let library = "libraryTitle"
             static let topSites = "topSitesTitle"
         }
+
+        struct TopSites {
+            static let section = "TopSitesCell"
+        }
     }
     
     struct GeneralizedIdentifiers {

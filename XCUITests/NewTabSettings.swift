@@ -31,8 +31,8 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForNoExistence(app.collectionViews.cells["TopSitesCell"])
-        waitForNoExistence(app.collectionViews.cells["TopSitesCell"].collectionViews.cells["youtube"])
+        waitForNoExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
+        waitForNoExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].collectionViews.cells["youtube"])
         waitForNoExistence(app.staticTexts["Highlights"])
     }
     
@@ -43,7 +43,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForNoExistence(app.collectionViews.cells["TopSitesCell"])
+        waitForNoExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
         
         // Now check if it switches to FF Home
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
@@ -52,7 +52,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.collectionViews.cells["TopSitesCell"])
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
     }
 
     func testChangeNewTabSettingsShowCustomURL() {

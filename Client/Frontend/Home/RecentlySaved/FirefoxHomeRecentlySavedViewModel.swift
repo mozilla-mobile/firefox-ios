@@ -5,7 +5,7 @@
 import Foundation
 import Storage
 
-class FirefoxHomeRecentlySavedViewModel {
+class FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol {
     
     // MARK: - Properties
 

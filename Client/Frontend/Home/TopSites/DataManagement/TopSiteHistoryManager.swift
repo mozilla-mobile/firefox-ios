@@ -4,7 +4,9 @@
 
 import Foundation
 import Shared
+import Storage
 
+// Manages the top site
 class TopSiteHistoryManager: DataObserver, Loggable {
 
     let profile: Profile
@@ -13,6 +15,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
 
     private let ActivityStreamTopSiteCacheSize: Int32 = 32
     private let events: [Notification.Name] = [.FirefoxAccountChanged, .ProfileDidFinishSyncing, .PrivateDataClearedHistory]
+    private let dataQueue = DispatchQueue(label: "com.moz.topSiteHistory.queue")
 
     init(profile: Profile) {
         self.profile = profile
@@ -29,9 +32,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
     /// By default this will only refresh topSites if KeyTopSitesCacheIsValid is false
     /// - Parameter forceTopSites: Refresh can be forced by setting this to true
     func refreshIfNeeded(forceTopSites: Bool) {
-        guard !profile.isShutdown else {
-            return
-        }
+        guard !profile.isShutdown else { return }
 
         // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
         let shouldInvalidateTopSites = forceTopSites || !(profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false)
@@ -45,6 +46,13 @@ class TopSiteHistoryManager: DataObserver, Loggable {
         // TODO: Laurie - .main necessary?
         self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites).uponQueue(.main) { _ in
             self.delegate?.didInvalidateDataSources(refresh: forceTopSites, topSitesRefreshed: shouldInvalidateTopSites)
+        }
+    }
+
+    func getTopSites(completion: @escaping ([Site]) -> Void) {
+        TopSitesHelper.getTopSites(profile: profile).uponQueue(dataQueue) { [weak self] result in
+            guard let _ = self else { return }
+            completion(result)
         }
     }
 }
