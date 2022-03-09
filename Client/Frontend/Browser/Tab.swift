@@ -80,7 +80,7 @@ class Tab: NSObject {
     var timerPerWebsite: [String: StopWatchTimer] = [:]
     
     // Tab Groups
-    var tabGroupData: TabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
+    var tabGroupData = TabGroupData()
     
     struct TabGroupLastUpdatedObservation {
         var keyUrl: String?
@@ -88,9 +88,9 @@ class Tab: NSObject {
         var searchTerm: String?
     }
     
-    var lastObservation: TabGroupLastUpdatedObservation = TabGroupLastUpdatedObservation()
+    var lastObservation = TabGroupLastUpdatedObservation()
     var tabGroupsTimerHelper = StopWatchTimer()
-    var shouldResetTabGroupData: Bool = false
+    var shouldResetTabGroupData = false
     
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
@@ -331,9 +331,14 @@ class Tab: NSObject {
             tabGroupData.tabHistoryCurrentState = state.rawValue
 
         case .tabNavigatedToDifferentUrl:
+            guard !isHistory else {
+                updateHistoryHighlightsObservation(url: nextUrl, title: title)
+                return
+            }
+            
             if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
                 // reset tab group
-                tabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
+                tabGroupData = TabGroupData()
                 shouldResetTabGroupData = true
             // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
             } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
@@ -377,6 +382,25 @@ class Tab: NSObject {
         case .none:
             tabGroupData.tabHistoryCurrentState = state.rawValue
         }
+    }
+    
+    private func updateHistoryHighlightsObservation(url: String, title: String?) {
+        // if title is not available or empty log url as title
+        guard let title = title, !title.isEmpty else {
+            print("**** title is not available for \(url)")
+            tabGroupData.tabAssociatedSearchUrl = url
+            return
+        }
+        
+        let key = HistoryMetadataKey(url: url, searchTerm: "", referrerUrl: "")
+        let observation = HistoryMetadataObservation(url: url,
+                                                     referrerUrl: nil,
+                                                     searchTerm: nil,
+                                                     viewTime: nil,
+                                                     documentType: nil,
+                                                     title: title)
+        tabGroupData.tabAssociatedSearchUrl = url
+        updateObservationForKey(key: key, observation: observation)
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -439,6 +463,7 @@ class Tab: NSObject {
             self.webView = webView
             configureEdgeSwipeGestureRecognizers()
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
+            self.webView?.addObserver(self, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
             UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
             tabDelegate?.tab?(self, didCreateWebView: webView)
         }
@@ -811,15 +836,27 @@ class Tab: NSObject {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        guard let webView = object as? WKWebView, webView == self.webView,
-            let path = keyPath, path == KVOConstants.URL.rawValue else {
+        guard let webView = object as? WKWebView,
+              webView == self.webView,
+              let path = keyPath else {
             return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
-        guard let url = self.webView?.url else {
-            return
+        
+        if let url = self.webView?.url, path == KVOConstants.URL.rawValue {
+            self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
         }
+        
+        if let title = self.webView?.title, !title.isEmpty, path == KVOConstants.title.rawValue {
+            let key = tabGroupData.tabHistoryMetadatakey()
+            let observation = HistoryMetadataObservation(url: key.url,
+                                                         referrerUrl: nil,
+                                                         searchTerm: nil,
+                                                         viewTime: nil,
+                                                         documentType: nil,
+                                                         title: title)
+            updateObservationForKey(key: key, observation: observation)
 
-        self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
+        }
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {

@@ -755,6 +755,8 @@ extension BrowserViewController: WKNavigationDelegate {
             let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
             if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
                 tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
+            } else if !tab.isFxHomeTab {
+                tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: nil, searchProviderUrl: nil, nextUrl: webView.url?.absoluteString ?? "", isHistory: true)
             }
 
             // If this tab had previously crashed, wait 5 seconds before resetting
