@@ -49,16 +49,6 @@ struct TabState {
     var favicon: Favicon?
 }
 
-public enum TabGroupTimerState: String, Codable {
-    case navSearchLoaded
-    case tabNavigatedToDifferentUrl
-    case tabSwitched
-    case tabSelected
-    case newTab
-    case openInNewTab
-    case none
-}
-
 enum TabUrlType: String {
     case regular
     case search
