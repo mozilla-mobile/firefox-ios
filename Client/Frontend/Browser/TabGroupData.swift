@@ -12,6 +12,7 @@ public enum TabGroupTimerState: String, Codable {
     case tabSelected
     case newTab
     case openInNewTab
+    case openURLOnly
     case none
 }
 
@@ -21,15 +22,20 @@ public class TabGroupData: NSObject, NSCoding {
     var tabAssociatedNextUrl: String = ""
     var tabHistoryCurrentState = ""
     var tabGroupTimerState = ""
-    
-    // Checks if there is any search term data
-    func isEmpty() -> Bool {
-        return tabAssociatedSearchTerm.isEmpty && tabAssociatedSearchUrl.isEmpty && tabAssociatedNextUrl.isEmpty
-    }
 
     func tabHistoryMetadatakey() -> HistoryMetadataKey {
         return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
     }
+    
+    var jsonDictionary: [String: Any] {
+            return [
+                "tabAssociatedSearchTerm": String(self.tabAssociatedSearchTerm),
+                "tabAssociatedSearchUrl": String(self.tabAssociatedSearchUrl),
+                "tabAssociatedNextUrl": String(self.tabAssociatedNextUrl),
+                "tabHistoryCurrentState": String(self.tabHistoryCurrentState),
+                "tabGroupTimerState": String(self.tabGroupTimerState),
+            ]
+        }
     
     convenience override init() {
         self.init(searchTerm: "",
