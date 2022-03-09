@@ -460,6 +460,12 @@
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "شارٹ کٹ سے ہٹائیں";
 
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "محفوظ کریں";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "منسوخ کریں";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "اضافہ کریں";
 
