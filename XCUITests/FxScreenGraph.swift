@@ -1029,6 +1029,11 @@ extension MMNavigator where T == FxUserState {
     }
 }
 
+// Temporary code to detect the MacOS where tests are running
+// and so load websites one way or the other as per the condition above
+// in the openURLBar method. This is due to issue:
+// https://github.com/mozilla-mobile/firefox-ios/issues/9910#issue-1120710818
+
 let NATIVE_EXECUTION    = Int32(0)
 let EMULATED_EXECUTION   = Int32(1)
 
