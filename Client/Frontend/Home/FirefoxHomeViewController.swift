@@ -26,13 +26,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
 
-    // TODO: Laurie - remove this
-    // Not used for displaying. Only used for calculating layout.
-    lazy var topSiteCell: TopSiteCollectionCell = {
-        let customCell = TopSiteCollectionCell(frame: CGRect(width: self.view.frame.size.width, height: 0))
-        return customCell
-    }()
-
     lazy var defaultBrowserCard: DefaultBrowserCard = .build { card in
         card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
@@ -118,7 +111,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
         applyTheme()
 
-        topSiteCell.collectionView.reloadData()
         if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
             collectionView.reloadData()
         }
@@ -148,7 +140,19 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        
+
+        reloadOnRotation(with: coordinator)
+        wallpaperView.updateImageForOrientationChange()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        applyTheme()
+    }
+
+    // MARK: - Helpers
+
+    private func reloadOnRotation(with coordinator: UIViewControllerTransitionCoordinator) {
         coordinator.animate(alongsideTransition: { context in
             // The AS context menu does not behave correctly. Dismiss it when rotating.
             if let _ = self.presentedViewController as? PhotonActionSheet {
@@ -160,15 +164,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
         })
-
-        wallpaperView.updateImageForOrientationChange()
-    }
-
-    // MARK: - Helpers
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        applyTheme()
     }
 
     @objc func reload(notification: Notification) {
@@ -379,10 +374,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         switch FirefoxHomeSectionType(indexPath.section) {
         case .topSites:
-            // Create a temporary cell so we can calculate the height.
-            let layout = topSiteCell.collectionView.collectionViewLayout as! TopSiteFlowLayout
-            let estimatedLayout = layout.calculateLayout(for: CGSize(width: cellSize.width, height: 0))
-            return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
+            cellSize.height *= CGFloat(viewModel.topSiteViewModel.numberOfRows)
+            return cellSize
 
         case .jumpBackIn:
             cellSize.height *= CGFloat(viewModel.jumpBackInViewModel.numberOfItemsInColumn)
@@ -832,9 +825,9 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-
+// MARK: FirefoxHomeViewModelDelegate
 extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
-    func reloadSection(index: Int) {
+    func reloadSection(index: Int?) {
         if let index = index {
             let indexSet = IndexSet([index])
             collectionView.reloadSections(indexSet)

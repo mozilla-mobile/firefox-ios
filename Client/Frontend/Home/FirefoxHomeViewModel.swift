@@ -14,6 +14,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         static let homeHorizontalCellHeight: CGFloat = 120
         static let recentlySavedCellHeight: CGFloat = 136
         static let historyHighlightsCellHeight: CGFloat = 68
+        static let topSitesCellHeight: CGFloat = 100
         static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
         static let spacingBetweenSections: CGFloat = 24
         static let sectionInsetsForIpad: CGFloat = 101
@@ -89,6 +90,8 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
             if $0.isEnabled { $0.updateData {} }
         }
 
+        // Following code is for sections not isComformanceUpdateDataReady
+
         // Jump back in access tabManager and this needs to be done on the main thread at the moment
         DispatchQueue.main.async {
             if self.jumpBackInViewModel.isEnabled {
@@ -98,14 +101,14 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
 
         if pocketViewModel.isEnabled {
             pocketViewModel.updateData {
-                let index = enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn)
+                let index = self.enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn)
                 self.delegate?.reloadSection(index: index)
             }
         }
 
         if historyHighlightsViewModel.isEnabled {
             historyHighlightsViewModel.updateData {
-                let index = enabledSections.firstIndex(of: FirefoxHomeSectionType.historyHighlights)
+                let index = self.enabledSections.firstIndex(of: FirefoxHomeSectionType.historyHighlights)
                 self.delegate?.reloadSection(index: index)
             }
         }
@@ -115,10 +118,11 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         enabledSections.removeAll()
 
         childViewModels.forEach {
-            if $0.isEnabled { enabledSections.append($0.sectionType) }
+            if $0.shouldShow { enabledSections.append($0.sectionType) }
         }
 
         // Sections that have no view model yet
+        // please remove when they have a view model and comform to FXHomeViewModelProtocol
         for section in FirefoxHomeSectionType.allCases {
             switch section {
             case .libraryShortcuts:

@@ -48,17 +48,18 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .jumpBackIn: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight
         case .recentlySaved: return FirefoxHomeViewModel.UX.recentlySavedCellHeight
         case .historyHighlights: return FirefoxHomeViewModel.UX.historyHighlightsCellHeight
-        case .topSites: return 0 //calculated dynamically
+        case .topSites: return FirefoxHomeViewModel.UX.topSitesCellHeight
         case .libraryShortcuts: return FirefoxHomeViewModel.UX.libraryShortcutsHeight
         case .customizeHome: return FirefoxHomeViewModel.UX.customizeHomeHeight
         case .logoHeader: return FirefoxHomeViewModel.UX.logoHeaderHeight
         }
     }
 
-    // Pocket and historyHighlight should have full width and add inset in their respective sections
-    // TODO: Fix pocket cell layout to be able to see next column to enable set full width here and set inset in section
-    var parentMinimunInset: CGFloat {
+    // Pocket, historyHighlight, recently saved and jump back in should have full width and add inset in their respective sections
+    // TODO: Fix pocket & recently saved cell layout to be able to see next column to enable set full width here and set inset in section
+    var parentMinimumInset: CGFloat {
         switch self {
+//        case .recentlySaved: return 0
 //        case .pocket: return 0
         case .historyHighlights: return 0
         case .jumpBackIn: return 0
@@ -79,7 +80,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         var insets = FirefoxHomeViewModel.UX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
         let window = UIWindow.keyWindow
         let safeAreaInsets = window?.safeAreaInsets.left ?? 0
-        insets += parentMinimunInset + safeAreaInsets
+        insets += parentMinimumInset + safeAreaInsets
         return insets
     }
 

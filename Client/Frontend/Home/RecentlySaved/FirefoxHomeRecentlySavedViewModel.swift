@@ -107,7 +107,6 @@ extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFla
         && featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
     }
 
-    // Whether the section is has data to show or not
     var hasData: Bool {
         return !recentBookmarks.isEmpty || !readingListItems.isEmpty
     }

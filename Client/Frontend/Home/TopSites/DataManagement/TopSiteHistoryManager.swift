@@ -55,6 +55,14 @@ class TopSiteHistoryManager: DataObserver, Loggable {
             completion(result)
         }
     }
+
+    func removeTopSite(site: Site) {
+        // TODO: Laurie - .main needed?
+        profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { [weak self] result in
+            guard result.isSuccess, let self = self else { return }
+            self.refreshIfNeeded(forceTopSites: true)
+        }
+    }
 }
 
 // MARK: - Notifiable protocol

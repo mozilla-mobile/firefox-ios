@@ -7,7 +7,6 @@ import Foundation
 /// The View that describes the topSite cell that appears in the tableView.
 class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
 
-    // TODO: Laurie - need to set this
     var viewModel: FxHomeTopSitesViewModel?
 
     struct UX {
@@ -69,6 +68,30 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
 
         // TODO: Laurie
 //        presentContextMenu(for: topSiteIndexPath)
+    }
+
+    private var layoutSection: NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: FxHomePocketViewModel.widthDimension,
+            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+        )
+
+        let subItems = Array(repeating: item, count: FxHomePocketCollectionCellUX.numberOfItemsInColumn)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
+        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
+                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        section.orthogonalScrollingBehavior = .continuous
+        return section
     }
 }
 

@@ -80,7 +80,7 @@ class FxHomeTopSitesViewModel {
                                      extras: extras)
     }
 
-    private var numberOfRows: Int32 {
+    var numberOfRows: Int32 {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         return max(preferredNumberOfRows ?? TopSitesRowCountSettingsController.defaultNumberOfRows, 1)
     }

@@ -18,6 +18,7 @@ class EmptyTopSiteCell: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(emptyBG)
+        // TODO: Laurie - remove snapkit
         emptyBG.snp.makeConstraints { make in
             make.top.centerX.equalToSuperview()
             make.size.equalTo(TopSiteItemCell.UX.backgroundSize)

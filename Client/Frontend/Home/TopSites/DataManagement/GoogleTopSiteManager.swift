@@ -6,6 +6,7 @@ import Shared
 import UIKit
 import Storage
 
+// Manage the specific Google top site case
 class GoogleTopSiteManager {
 
     struct Constants {
@@ -66,5 +67,28 @@ class GoogleTopSiteManager {
         let pinnedSite = PinnedSite(site: Site(url: url, title: "Google"))
         pinnedSite.guid = Constants.googleGUID
         return pinnedSite
+    }
+
+    func shouldAddGoogleTopSite(pinnedSiteCount: Int, maxItems: Int) -> Bool {
+        let shouldShow = !isHidden && suggestedSiteData() != nil
+        return shouldShow && (hasAdded || pinnedSiteCount < maxItems)
+    }
+
+    func removeGoogleTopSite(site: Site) {
+        if site.guid == GoogleTopSiteManager.Constants.googleGUID {
+            isHidden = true
+        }
+    }
+
+    // Once Google top site is added, we don't remove unless it's explicitly unpinned
+    // Add it when pinned websites are less than max pinned sites
+    func addGoogleTopSite(maxItems: Int, sites: inout [Site]) {
+        guard let googleSite = suggestedSiteData() else { return }
+        sites.insert(googleSite, at: 0)
+        // Purge unwanted websites from the end of list
+        if sites.count > maxItems {
+            sites.removeLast(sites.count - maxItems)
+        }
+        hasAdded = true
     }
 }
