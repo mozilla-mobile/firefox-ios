@@ -327,8 +327,14 @@ class PhotonActionSheet: UIViewController {
 
             wasHeightOverriden = true
             tableViewHeightConstraint?.constant = newHeight
-            tableView.contentSize.height = newHeight
-            preferredContentSize = tableView.contentSize
+            tableViewHeightConstraint?.priority = .required
+
+            preferredContentSize = view.systemLayoutSizeFitting(
+                UIView.layoutFittingCompressedSize
+            )
+
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
         }
     }
 
