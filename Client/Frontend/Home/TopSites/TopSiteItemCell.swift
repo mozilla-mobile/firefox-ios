@@ -22,6 +22,7 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         static let borderColor = UIColor(white: 0, alpha: 0.1)
         static let borderWidth: CGFloat = 0.5
         static let pinIconSize: CGFloat = 12
+        static let cellSize: CGSize = CGSize(width: 65, height: 80)
     }
 
     var url: URL?

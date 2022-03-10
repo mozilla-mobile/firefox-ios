@@ -11,6 +11,7 @@ public struct ImageIdentifiers {
     public static let addToBookmark = "menu-Bookmark"
     public static let addToReadingList = "addToReadingList"
     public static let addShortcut = "action_pin"
+    public static let actionRemove = "action_remove"
     public static let bookmarks = "menu-panel-Bookmarks"
     public static let copyLink = "menu-Copy-Link"
     public static let customSwitchBackground = "menu-customswitch-background"

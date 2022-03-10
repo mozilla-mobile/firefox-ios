@@ -72,13 +72,14 @@ class TopSiteFlowLayout: UICollectionViewLayout {
     }
 
     func maxHorizontalItemsCount(width: CGFloat) -> Int {
-        let horizontalItemsCount = Int(floor(width / (TopSiteCollectionCell.UX.ItemSize.width + insets.left)))
+//        let horizontalItemsCount = Int(floor(width / (TopSiteCollectionCell.UX.ItemSize.width + insets.left)))
         // TODO: Laurie
 //        if let delegate = self.collectionView?.delegate as? ASHorizontalScrollCellManager {
 //            return delegate.numberOfHorizontalItems()
 //        } else {
-            return horizontalItemsCount
+//            return horizontalItemsCount
 //        }
+        return 4
     }
 
     override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {

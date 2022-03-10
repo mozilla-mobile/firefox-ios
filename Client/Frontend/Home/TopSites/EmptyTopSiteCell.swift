@@ -5,7 +5,7 @@
 import Foundation
 
 // An empty cell to show when a row is incomplete
-class EmptyTopSiteCell: UICollectionReusableView {
+class EmptyTopSiteCell: UICollectionViewCell {
 
     lazy private var emptyBG: UIView = {
         let view = UIView()

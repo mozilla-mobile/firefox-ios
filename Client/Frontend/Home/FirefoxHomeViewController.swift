@@ -54,14 +54,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
         super.init(collectionViewLayout: flowLayout)
 
-        viewModel.pocketViewModel.onTapTileAction = { [weak self] url in
-            self?.showSiteWithURLHandler(url)
-        }
-
-        viewModel.pocketViewModel.onLongPressTileAction = { [weak self] indexPath in
-            self?.presentContextMenu(for: indexPath)
-        }
-
         viewModel.delegate = self
         collectionView?.delegate = self
         collectionView?.dataSource = self
@@ -504,19 +496,27 @@ extension FirefoxHomeViewController {
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let topSiteCell = cell as? TopSiteCollectionCell else { return UICollectionViewCell() }
         topSiteCell.viewModel = viewModel.topSiteViewModel
+        topSiteCell.reloadLayout()
         topSiteCell.setNeedsLayout()
-        topSiteCell.collectionView.reloadData()
         return cell
     }
 
     private func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let pocketCell = cell as? FxHomePocketCollectionCell else { return UICollectionViewCell() }
+
+        viewModel.pocketViewModel.onTapTileAction = { [weak self] url in
+            self?.showSiteWithURLHandler(url)
+        }
+
+        viewModel.pocketViewModel.onLongPressTileAction = { [weak self] indexPath in
+            self?.presentContextMenu(for: indexPath)
+        }
+
+        viewModel.pocketViewModel.recordSectionHasShown()
         pocketCell.viewModel = viewModel.pocketViewModel
         pocketCell.viewModel?.pocketShownInSection = indexPath.section
         pocketCell.reloadLayout()
         pocketCell.setNeedsLayout()
-
-        viewModel.pocketViewModel.recordSectionHasShown()
 
         return pocketCell
     }
@@ -550,7 +550,6 @@ extension FirefoxHomeViewController {
         guard let historyCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
 
         guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else { return UICollectionViewCell() }
-
         viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
             guard let url = highlight.siteUrl else {
                 self?.openHistory(UIButton())

@@ -9,19 +9,24 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
 
     var viewModel: FxHomeTopSitesViewModel?
 
-    struct UX {
-        static let CellIdentifier = "TopSiteItemCell"
-        static let ItemSize = CGSize(width: 65, height: 90)
-    }
+    let EmptyCellIdentifier = "TopSiteItemEmptyCell"
+    let CellIdentifier = "TopSiteItemCell"
 
     lazy var collectionView: UICollectionView = {
-        let layout  = TopSiteFlowLayout()
-        layout.itemSize = UX.ItemSize
+        let layout = UICollectionViewCompositionalLayout(section: layoutSection)
+//        let layout = TopSiteFlowLayout()
+//        layout.itemSize = UX.ItemSize
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: UX.CellIdentifier)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: CellIdentifier)
+        collectionView.register(EmptyTopSiteCell.self, forCellWithReuseIdentifier: EmptyCellIdentifier)
         collectionView.backgroundColor = UIColor.clear
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isScrollEnabled = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.layer.masksToBounds = false
+        
         return collectionView
     }()
 
@@ -32,8 +37,19 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
         backgroundColor = UIColor.clear
 
         setupLayout()
-
         collectionView.addGestureRecognizer(longPressRecognizer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Helpers
+
+    func reloadLayout() {
+        collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: layoutSection)
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.reloadData()
     }
 
     private func setupLayout() {
@@ -47,13 +63,34 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
         ])
     }
 
+    private var layoutSection: NSCollectionLayoutSection {
+        let numberOfHorizontalItems = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: traitCollection)
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1/4), //.estimated(TopSiteItemCell.UX.cellSize.width), //.fractionalWidth(CGFloat(1/numberOfHorizontalItems)),
+            heightDimension: .fractionalHeight(1) // .estimated(TopSiteItemCell.UX.cellSize.height)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let numberOfRows = CGFloat(viewModel?.numberOfRows ?? 2)
+        let fractionHeight = 1/numberOfRows
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(fractionHeight) //.estimated(TopSiteItemCell.UX.cellSize.height)
+        )
+
+        let subItems = Array(repeating: item, count: 4)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: subItems)
+//        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
+//        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
+//                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
+
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     @objc private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
@@ -66,50 +103,35 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
 //        let parentIndexPath = IndexPath(row: indexPath.row, section: viewModel.pocketShownInSection)
 //        onLongPressTileAction(parentIndexPath)
 
-        // TODO: Laurie
+        // TODO: Laurie - also make sure filler cells doesnt long press
 //        presentContextMenu(for: topSiteIndexPath)
-    }
-
-    private var layoutSection: NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: FxHomePocketViewModel.widthDimension,
-            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
-        )
-
-        let subItems = Array(repeating: item, count: FxHomePocketCollectionCellUX.numberOfItemsInColumn)
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
-
-        let section = NSCollectionLayoutSection(group: group)
-
-        section.orthogonalScrollingBehavior = .continuous
-        return section
     }
 }
 
 extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel?.tileManager.content.count ?? 0
+        guard let viewModel = viewModel else { return 0 }
+        let items = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: traitCollection) * viewModel.numberOfRows
+        print("Laurie - itemsCount: \(items)")
+        return items
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UX.CellIdentifier, for: indexPath) as? TopSiteItemCell,
-              let contentItem = viewModel?.tileManager.content[indexPath.row]
-        else {
-            return UICollectionViewCell()
+        // Laurie - TODO: let contentItem = viewModel?.tileManager.content[indexPath.row]
+        // index out of range
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier, for: indexPath) as? TopSiteItemCell,
+           let contentItem = viewModel?.tileManager.content[indexPath.row] {
+            cell.configureWithTopSiteItem(contentItem)
+            print("Laurie - configuring cell \(indexPath)")
+            return cell
+
+        } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier, for: indexPath) as? EmptyTopSiteCell {
+            print("Laurie - configuring empty cell \(indexPath)")
+            return cell
         }
 
-        cell.configureWithTopSiteItem(contentItem)
-        return cell
+        return UICollectionViewCell()
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

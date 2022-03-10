@@ -11,10 +11,10 @@ protocol FirefoxHomeViewModelDelegate: AnyObject {
 class FirefoxHomeViewModel: FeatureFlagsProtocol {
 
     struct UX {
+        static let topSitesHeight: CGFloat = 90
         static let homeHorizontalCellHeight: CGFloat = 120
         static let recentlySavedCellHeight: CGFloat = 136
         static let historyHighlightsCellHeight: CGFloat = 68
-        static let topSitesCellHeight: CGFloat = 100
         static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
         static let spacingBetweenSections: CGFloat = 24
         static let sectionInsetsForIpad: CGFloat = 101

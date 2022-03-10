@@ -5410,9 +5410,9 @@
 				8AB8572A27D944B70075C173 /* DataManagement */,
 				8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */,
 				8AB8571C27D929350075C173 /* FxHomeTopSitesViewModel.swift */,
-				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
-				8AB8572427D937BF0075C173 /* TopSiteFlowLayout.swift */,
 				8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */,
+				8AB8572427D937BF0075C173 /* TopSiteFlowLayout.swift */,
+				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
 			);
 			path = TopSites;
 			sourceTree = "<group>";

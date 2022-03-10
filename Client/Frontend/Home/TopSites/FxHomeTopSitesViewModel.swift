@@ -30,7 +30,7 @@ class FxHomeTopSitesViewModel {
         self.tileManager = FxHomeTopSitesManager(profile: profile)
     }
 
-    func numberOfHorizontalItems(for trait: UITraitCollection) -> Int {
+    static func numberOfHorizontalItems(for trait: UITraitCollection) -> Int {
         let isLandscape = UIWindow.isLandscape
         if UIDevice.current.userInterfaceIdiom == .phone {
             if isLandscape {
@@ -39,13 +39,25 @@ class FxHomeTopSitesViewModel {
                 return 4
             }
         } else {
-            // The number of items in a row is equal to the number of highlights in a row * 2
+            // The number of items in a row is equal to the number of top sites in a row * 2
             var numItems = Int(UX.numberOfItemsPerRowForSizeClassIpad[trait.horizontalSizeClass])
             if UIWindow.isPortrait || (trait.horizontalSizeClass == .compact && isLandscape) {
                 numItems = numItems - 1
             }
+            print("Laurie - numItems:\(numItems)")
             return numItems * 2
         }
+    }
+
+    var numberOfRows: Int {
+        return tileManager.numberOfRows
+    }
+
+    // The dimension of a cell
+    static func widthDimension(for trait: UITraitCollection) -> NSCollectionLayoutDimension {
+        let numberOfHorizontalItems = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: trait)
+        print("Laurie - number: \(numberOfHorizontalItems)")
+        return .fractionalWidth(CGFloat(1/numberOfHorizontalItems))
     }
 
     // Laurie - position is indexPath
@@ -80,23 +92,24 @@ class FxHomeTopSitesViewModel {
                                      extras: extras)
     }
 
-    var numberOfRows: Int32 {
-        let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
-        return max(preferredNumberOfRows ?? TopSitesRowCountSettingsController.defaultNumberOfRows, 1)
-    }
-
     // MARK: Context actions
 
     func getTopSitesAction(site: Site) -> [PhotonRowActions]{
-        let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle, iconString: "action_remove", tapHandler: { _ in
+        let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle,
+                                                        iconString: ImageIdentifiers.actionRemove,
+                                                        tapHandler: { _ in
             self.hideURLFromTopSites(site)
         }).items
 
-        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: ImageIdentifiers.addShortcut, tapHandler: { _ in
+        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle,
+                                               iconString: ImageIdentifiers.addShortcut,
+                                               tapHandler: { _ in
             self.pinTopSite(site)
         }).items
 
-        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle, iconString: ImageIdentifiers.removeFromShortcut, tapHandler: { _ in
+        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle,
+                                                     iconString: ImageIdentifiers.removeFromShortcut,
+                                                     tapHandler: { _ in
             self.removePinTopSite(site)
         }).items
 
@@ -132,17 +145,7 @@ class FxHomeTopSitesViewModel {
     }
 
     func removePinTopSite(_ site: Site) {
-        // TODO: Laurie - Handle google case in own manager
-        // Special Case: Hide google top site
-        if site.guid == GoogleTopSiteManager.Constants.googleGUID {
-            let gTopSite = GoogleTopSiteManager(prefs: profile.prefs)
-            gTopSite.isHidden = true
-        }
-
-        profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            self.tileManager.refreshIfNeeded(forceTopSites: true)
-        }
+        tileManager.removePinTopSite(site: site)
     }
 
     private func deleteTileForSuggestedSite(_ siteURL: String) {

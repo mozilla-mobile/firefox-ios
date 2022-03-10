@@ -48,7 +48,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .jumpBackIn: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight
         case .recentlySaved: return FirefoxHomeViewModel.UX.recentlySavedCellHeight
         case .historyHighlights: return FirefoxHomeViewModel.UX.historyHighlightsCellHeight
-        case .topSites: return FirefoxHomeViewModel.UX.topSitesCellHeight
+        case .topSites: return FirefoxHomeViewModel.UX.topSitesHeight
         case .libraryShortcuts: return FirefoxHomeViewModel.UX.libraryShortcutsHeight
         case .customizeHome: return FirefoxHomeViewModel.UX.customizeHomeHeight
         case .logoHeader: return FirefoxHomeViewModel.UX.logoHeaderHeight
