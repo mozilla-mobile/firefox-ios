@@ -255,8 +255,8 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
 
-        previous?.updateTimerAndObserving(state: .tabSwitched)
-        tab?.updateTimerAndObserving(state: .tabSelected)
+        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched)
+        tab?.metadataManager?.updateTimerAndObserving(state: .tabSelected)
 
         // Make sure to wipe the private tabs if the user has the pref turned on
         if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {

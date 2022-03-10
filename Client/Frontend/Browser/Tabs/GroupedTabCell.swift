@@ -134,7 +134,7 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
     }
 
     func scrollToSelectedGroup() {
-        if let searchTerm = selectedTab?.tabGroupData.tabAssociatedSearchTerm {
+        if let searchTerm = selectedTab?.metadataManager?.tabGroupData.tabAssociatedSearchTerm {
             if let index = tabGroups?.firstIndex(where: { $0.searchTerm == searchTerm}) {
                 tableView.scrollToRow(at: IndexPath(row: index , section: 0) , at: .bottom , animated: true)
             }
