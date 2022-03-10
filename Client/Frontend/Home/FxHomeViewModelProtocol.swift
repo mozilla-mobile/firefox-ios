@@ -4,6 +4,7 @@
 
 import Foundation
 
+// Protocol for each section view model in Firefox Home page view controller
 protocol FXHomeViewModelProtocol {
 
     // In an ideal world all section would comform perfectly to this protocol,

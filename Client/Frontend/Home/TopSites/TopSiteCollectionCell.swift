@@ -26,7 +26,6 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
         return collectionView
     }()
 
-    // TODO: Laurie - accessibilityIdentifier
     override init(frame: CGRect) {
         super.init(frame: frame)
         isAccessibilityElement = false

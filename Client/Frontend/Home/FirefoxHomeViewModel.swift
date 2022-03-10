@@ -5,10 +5,24 @@
 import MozillaAppServices
 
 protocol FirefoxHomeViewModelDelegate: AnyObject {
-    func reloadView()
+    func reloadSection(index: Int?)
 }
 
 class FirefoxHomeViewModel: FeatureFlagsProtocol {
+
+    struct UX {
+        static let homeHorizontalCellHeight: CGFloat = 120
+        static let recentlySavedCellHeight: CGFloat = 136
+        static let historyHighlightsCellHeight: CGFloat = 68
+        static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
+        static let spacingBetweenSections: CGFloat = 24
+        static let sectionInsetsForIpad: CGFloat = 101
+        static let minimumInsets: CGFloat = 15
+        static let libraryShortcutsHeight: CGFloat = 90
+        static let libraryShortcutsMaxWidth: CGFloat = 375
+        static let customizeHomeHeight: CGFloat = 100
+        static let logoHeaderHeight: CGFloat = 85
+    }
 
     // MARK: - Properties
     
@@ -83,16 +97,16 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         }
 
         if pocketViewModel.isEnabled {
-            // TODO: Reload only the pocket section when parent collection view is removed
             pocketViewModel.updateData {
-                self.delegate?.reloadView()
+                let index = enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn)
+                self.delegate?.reloadSection(index: index)
             }
         }
 
         if historyHighlightsViewModel.isEnabled {
-            // TODO: Reload only the history section when parent collection view is removed
             historyHighlightsViewModel.updateData {
-                self.delegate?.reloadView()
+                let index = enabledSections.firstIndex(of: FirefoxHomeSectionType.historyHighlights)
+                self.delegate?.reloadSection(index: index)
             }
         }
     }

@@ -484,6 +484,9 @@
 		8AB8574227D963290075C173 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
 		8AB8574327D963920075C173 /* Loggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DC85D27B2CA49006EFCE2 /* Loggable.swift */; };
 		8AB8574427D963960075C173 /* Notifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8044BD527B96A4E00CEE7AD /* Notifiable.swift */; };
+		8AB8574627D97CB00075C173 /* HomePanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8574527D97CB00075C173 /* HomePanelContextMenu.swift */; };
+		8AB8574827D97CD40075C173 /* HomePanelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8574727D97CD40075C173 /* HomePanelType.swift */; };
+		8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
 		8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */; };
 		8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC627BADC3400672675 /* ToolbarTextField.swift */; };
@@ -2753,6 +2756,9 @@
 		8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UXSizeClass.swift; sourceTree = "<group>"; };
 		8AB8572F27D94CAD0075C173 /* FxHomeViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeViewModelProtocol.swift; sourceTree = "<group>"; };
 		8AB8573627D951640075C173 /* FxHomeLogoHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeLogoHeaderViewModel.swift; sourceTree = "<group>"; };
+		8AB8574527D97CB00075C173 /* HomePanelContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePanelContextMenu.swift; sourceTree = "<group>"; };
+		8AB8574727D97CD40075C173 /* HomePanelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePanelType.swift; sourceTree = "<group>"; };
+		8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePanelDelegate.swift; sourceTree = "<group>"; };
 		8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetViewModel.swift; sourceTree = "<group>"; };
 		8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarHelper.swift; sourceTree = "<group>"; };
 		8AD40FC627BADC3400672675 /* ToolbarTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTextField.swift; sourceTree = "<group>"; };
@@ -6823,6 +6829,9 @@
 				1DFE57FC27BADD7C0025DE58 /* FirefoxHomeViewModel.swift */,
 				C8656D78270F866700E199EA /* FxHomeCustomizeView.swift */,
 				8A9AC464276CEC4E0047F5B0 /* FxHomeHorizontalCell.swift */,
+				8AB8574527D97CB00075C173 /* HomePanelContextMenu.swift */,
+				8AB8574727D97CD40075C173 /* HomePanelType.swift */,
+				8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */,
 				DF036E41274FD3FC002E834E /* HistoryHighlights */,
 				C87DC85F27B2CC1A006EFCE2 /* JumpBackIn */,
 				8AB8572627D93A350075C173 /* Library */,
@@ -8895,10 +8904,12 @@
 				23BD0E4E25533AE50038586B /* TabMoreMenuViewModel.swift in Sources */,
 				DFD64DB727A1A909003D4534 /* Wallpaper.swift in Sources */,
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
+				8AB8574827D97CD40075C173 /* HomePanelType.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginDetailTableViewCell.swift in Sources */,
 				66CE54A820FCF6CF00CC310B /* WebsiteDataManagementViewController.swift in Sources */,
 				C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */,
 				8AB8574427D963960075C173 /* Notifiable.swift in Sources */,
+				8AB8574627D97CB00075C173 /* HomePanelContextMenu.swift in Sources */,
 				3BB50E201D627539004B33DF /* FirefoxHomeViewController.swift in Sources */,
 				C82A94F3269F68F300624AA7 /* FlaggableFeature.swift in Sources */,
 				F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */,
@@ -8969,6 +8980,7 @@
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				8A35497227BD672700534A65 /* ToggleSwitch.swift in Sources */,
 				213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */,
+				8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */,
 				396B97232704DB7C006C12BC /* NimbusFeatures.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,

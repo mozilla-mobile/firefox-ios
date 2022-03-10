@@ -303,7 +303,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable {
 
     var titleInsets: CGFloat {
         get {
-            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeUX.minimumInsets
+            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeViewModel.UX.minimumInsets
         }
     }
 

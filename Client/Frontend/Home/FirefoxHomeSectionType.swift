@@ -44,14 +44,14 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
 
     func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
         switch self {
-        case .pocket: return FirefoxHomeUX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
-        case .jumpBackIn: return FirefoxHomeUX.homeHorizontalCellHeight
-        case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
-        case .historyHighlights: return FirefoxHomeUX.historyHighlightsCellHeight
+        case .pocket: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
+        case .jumpBackIn: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight
+        case .recentlySaved: return FirefoxHomeViewModel.UX.recentlySavedCellHeight
+        case .historyHighlights: return FirefoxHomeViewModel.UX.historyHighlightsCellHeight
         case .topSites: return 0 //calculated dynamically
-        case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight
-        case .customizeHome: return FirefoxHomeUX.customizeHomeHeight
-        case .logoHeader: return FirefoxHomeUX.logoHeaderHeight
+        case .libraryShortcuts: return FirefoxHomeViewModel.UX.libraryShortcutsHeight
+        case .customizeHome: return FirefoxHomeViewModel.UX.customizeHomeHeight
+        case .logoHeader: return FirefoxHomeViewModel.UX.logoHeaderHeight
         }
     }
 
@@ -62,7 +62,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
 //        case .pocket: return 0
         case .historyHighlights: return 0
         case .jumpBackIn: return 0
-        default: return FirefoxHomeUX.minimumInsets
+        default: return FirefoxHomeViewModel.UX.minimumInsets
         }
     }
 
@@ -76,7 +76,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         if (traits.horizontalSizeClass == .regular && UIScreen.main.bounds.size.width != frameWidth) || UIDevice.current.userInterfaceIdiom == .phone {
             currentTraits = UITraitCollection(horizontalSizeClass: .compact)
         }
-        var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
+        var insets = FirefoxHomeViewModel.UX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
         let window = UIWindow.keyWindow
         let safeAreaInsets = window?.safeAreaInsets.left ?? 0
         insets += parentMinimunInset + safeAreaInsets

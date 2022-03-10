@@ -132,7 +132,17 @@ class FxHomeTopSitesViewModel {
     }
 
     func removePinTopSite(_ site: Site) {
-        // TODO: Laurie -
+        // TODO: Laurie - Handle google case in own manager
+        // Special Case: Hide google top site
+        if site.guid == GoogleTopSiteManager.Constants.googleGUID {
+            let gTopSite = GoogleTopSiteManager(prefs: profile.prefs)
+            gTopSite.isHidden = true
+        }
+
+        profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+            self.tileManager.refreshIfNeeded(forceTopSites: true)
+        }
     }
 
     private func deleteTileForSuggestedSite(_ siteURL: String) {

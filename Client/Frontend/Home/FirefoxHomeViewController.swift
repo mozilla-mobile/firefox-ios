@@ -5,122 +5,26 @@
 import Shared
 import UIKit
 import Storage
-import SDWebImage
-import XCGLogger
 import SyncTelemetry
 import MozillaAppServices
 
-private let log = Logger.browserLogger
-
-// MARK: -  UX
-
-struct FirefoxHomeUX {
-    static let homeHorizontalCellHeight: CGFloat = 120
-    static let recentlySavedCellHeight: CGFloat = 136
-    static let historyHighlightsCellHeight: CGFloat = 68
-    static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
-    static let spacingBetweenSections: CGFloat = 24
-    static let sectionInsetsForIpad: CGFloat = 101
-    static let minimumInsets: CGFloat = 15
-    static let libraryShortcutsHeight: CGFloat = 90
-    static let libraryShortcutsMaxWidth: CGFloat = 375
-    static let customizeHomeHeight: CGFloat = 100
-    static let logoHeaderHeight: CGFloat = 85
-}
-
-// MARK: - Home Panel
-
-protocol HomePanelDelegate: AnyObject {
-    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
-    func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
-    func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
-    func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
-    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
-    func homePanelDidPresentContextualHintOf(type: ContextualHintViewType)
-}
-
-extension HomePanelDelegate {
-    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
-        homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
-    }
-}
-
-protocol HomePanel: NotificationThemeable {
-    var homePanelDelegate: HomePanelDelegate? { get set }
-}
-
-enum HomePanelType: Int {
-    case topSites = 0
-
-    var internalUrl: URL {
-        let aboutUrl: URL! = URL(string: "\(InternalURL.baseUrl)/\(AboutHomeHandler.path)")
-        return URL(string: "#panel=\(self.rawValue)", relativeTo: aboutUrl)!
-    }
-}
-
-protocol HomePanelContextMenu {
-    func getSiteDetails(for indexPath: IndexPath) -> Site?
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]?
-    func presentContextMenu(for indexPath: IndexPath)
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
-}
-
-extension HomePanelContextMenu {
-    func presentContextMenu(for indexPath: IndexPath) {
-        guard let site = getSiteDetails(for: indexPath) else { return }
-
-        presentContextMenu(for: site, with: indexPath, completionHandler: {
-            return self.contextMenu(for: site, with: indexPath)
-        })
-    }
-
-    func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
-        guard let actions = getContextMenuActions(for: site, with: indexPath) else { return nil }
-
-        let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
-        let contextMenu = PhotonActionSheet(viewModel: viewModel)
-        contextMenu.modalTransitionStyle = .crossDissolve
-
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        return contextMenu
-    }
-
-    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonRowActions]? {
-        guard let siteURL = URL(string: site.url) else { return nil }
-
-        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
-            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-        }
-
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
-            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }
-
-        return [PhotonRowActions(openInNewTabAction), PhotonRowActions(openInNewPrivateTabAction)]
-    }
-}
-
-// MARK: - HomeVC
-
 class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     // MARK: - Typealiases
-    typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
-
-    lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+    private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    fileprivate let flowLayout = UICollectionViewFlowLayout()
-    fileprivate var hasSentJumpBackInSectionEvent = false
-    fileprivate var hasSentHistoryHighlightsSectionEvent = false
-    fileprivate var isZeroSearch: Bool
-    fileprivate var wallpaperManager: WallpaperManager
+
+    private let flowLayout = UICollectionViewFlowLayout()
+    private var hasSentJumpBackInSectionEvent = false
+    private var hasSentHistoryHighlightsSectionEvent = false
+    private var isZeroSearch: Bool
     private var viewModel: FirefoxHomeViewModel
 
-    var contextualHintViewController: ContextualHintViewController
+    private var wallpaperManager: WallpaperManager
+    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+    private var contextualHintViewController: ContextualHintViewController
 
     // TODO: Laurie - remove this
     // Not used for displaying. Only used for calculating layout.
@@ -171,11 +75,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
-        let refreshEvents: [Notification.Name] = [.DynamicFontChanged,
-                                                  .HomePanelPrefsChanged,
-                                                  .DisplayThemeChanged,
+        let refreshEvents: [Notification.Name] = [.HomePanelPrefsChanged,
                                                   .TabClosed,
-                                                  .WallpaperDidChange,
                                                   .TabsPrivacyModeChanged]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
     }
@@ -272,10 +173,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     @objc func reload(notification: Notification) {
         switch notification.name {
-        case .DisplayThemeChanged,
-                .DynamicFontChanged,
-                .WallpaperDidChange:
-            reloadAll(shouldUpdateData: false)
         case .TabsPrivacyModeChanged:
             adjustPrivacySensitiveSections(notification: notification)
         default:
@@ -313,6 +210,21 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
+    }
+
+    private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
+        let visitType = VisitType.bookmark
+        homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
+    }
+
+    private func animateFirefoxLogo() {
+        guard viewModel.headerViewModel.shouldRunLogoAnimation(),
+              let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell
+        else { return }
+
+        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
+            cell.runLogoAnimation()
+        })
     }
     
     // MARK: - Contextual hint
@@ -478,7 +390,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             return cellSize
 
         case .libraryShortcuts:
-            let width = min(FirefoxHomeUX.libraryShortcutsMaxWidth, cellSize.width)
+            let width = min(FirefoxHomeViewModel.UX.libraryShortcutsMaxWidth, cellSize.width)
             return CGSize(width: width, height: cellSize.height)
 
         case .historyHighlights:
@@ -534,12 +446,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let insets = FirefoxHomeSectionType(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
-        return UIEdgeInsets(top: 0, left: insets, bottom: FirefoxHomeUX.spacingBetweenSections, right: insets)
-    }
-
-    fileprivate func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
-        let visitType = VisitType.bookmark
-        homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
+        return UIEdgeInsets(top: 0, left: insets, bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, right: insets)
     }
 }
 
@@ -685,9 +592,7 @@ extension FirefoxHomeViewController {
 extension FirefoxHomeViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
-    /// - Parameter shouldUpdateData: True means backend data should be refetched
-    func reloadAll(shouldUpdateData: Bool = true) {
-        guard shouldUpdateData else { return }
+    func reloadAll() {
         DispatchQueue.global(qos: .userInteractive).async {
             self.reloadSectionsData()
         }
@@ -783,16 +688,6 @@ extension FirefoxHomeViewController {
 
     @objc func changeHomepageWallpaper() {
         wallpaperView.cycleWallpaper()
-    }
-
-    func animateFirefoxLogo() {
-        guard viewModel.headerViewModel.shouldRunLogoAnimation(),
-              let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell
-        else { return }
-        
-        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
-            cell.runLogoAnimation()
-        })
     }
 }
 
@@ -939,7 +834,12 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
 
 
 extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
-    func reloadView() {
-        self.collectionView.reloadData()
+    func reloadSection(index: Int) {
+        if let index = index {
+            let indexSet = IndexSet([index])
+            collectionView.reloadSections(indexSet)
+        } else {
+            self.collectionView.reloadData()
+        }
     }
 }
