@@ -6,7 +6,7 @@ import Foundation
 import Storage
 import Shared
 
-class FxHomePocketViewModel: FXHomeViewModelProtocol {
+class FxHomePocketViewModel {
 
     // MARK: - Properties
 
@@ -29,9 +29,6 @@ class FxHomePocketViewModel: FXHomeViewModelProtocol {
     }
 
     var pocketStories: [PocketStory] = []
-    var hasData: Bool {
-        return !pocketStories.isEmpty
-    }
 
     // The dimension of a cell
     // Fractions for iPhone to only show a slight portion of the next column
@@ -55,12 +52,6 @@ class FxHomePocketViewModel: FXHomeViewModelProtocol {
 
     func isStoryCell(index: Int) -> Bool {
         return index < pocketStories.count
-    }
-
-    func updateData(completion: @escaping () -> Void) {
-        getPocketSites().uponQueue(.main) { _ in
-            completion()
-        }
     }
 
     func getSitesDetail(for index: Int) -> Site {
@@ -98,6 +89,39 @@ class FxHomePocketViewModel: FXHomeViewModelProtocol {
         return pocketAPI.globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
             self.pocketStories = pocketStory
             return succeed()
+        }
+    }
+}
+
+// MARK: FXHomeViewModelProtocol
+extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+
+    var isComformanceUpdateDataReady: Bool {
+        return false
+    }
+
+    var sectionType: FirefoxHomeSectionType {
+        return .pocket
+    }
+
+    var isEnabled: Bool {
+        // For Pocket, the user preference check returns a user preference if it exists in
+        // UserDefaults, and, if it does not, it will return a default preference based on
+        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
+        guard featureFlags.isFeatureActiveForBuild(.pocket),
+              featureFlags.userPreferenceFor(.pocket) == UserFeaturePreference.enabled
+        else { return false }
+
+        return true
+    }
+
+    var hasData: Bool {
+        return !pocketStories.isEmpty
+    }
+
+    func updateData(completion: @escaping () -> Void) {
+        getPocketSites().uponQueue(.main) { _ in
+            completion()
         }
     }
 }

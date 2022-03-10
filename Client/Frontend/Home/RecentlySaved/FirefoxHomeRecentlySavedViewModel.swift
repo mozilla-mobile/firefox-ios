@@ -5,22 +5,28 @@
 import Foundation
 import Storage
 
-class FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol {
+class FirefoxHomeRecentlySavedViewModel {
     
     // MARK: - Properties
 
     var isZeroSearch: Bool
-
     private let profile: Profile
+    private let experiments: NimbusApi
+
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var readingListItems = [ReadingListItem]()
     private var recentBookmarks = [BookmarkItemData]()
-    private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
     private let recentItemsHelper = RecentItemsHelper()
+    private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
 
-    init(isZeroSearch: Bool, profile: Profile) {
+    init(isZeroSearch: Bool, profile: Profile, experiments: NimbusApi) {
         self.isZeroSearch = isZeroSearch
         self.profile = profile
+        self.experiments = experiments
+    }
+
+    private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
+        Homescreen(variables: $0)
     }
 
     var recentItems: [RecentlySavedItem] {
@@ -29,22 +35,6 @@ class FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol {
         items.append(contentsOf: readingListItems)
 
         return items
-    }
-
-    // Whether the section is has data to show or not
-    var hasData: Bool {
-        return !recentBookmarks.isEmpty || !readingListItems.isEmpty
-    }
-
-    /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
-    func updateData(completion: @escaping () -> Void) {
-        let group = DispatchGroup()
-        getRecentBookmarks(group: group)
-        getReadingLists(group: group)
-
-        group.notify(queue: .main) {
-            completion()
-        }
     }
 
     func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
@@ -96,6 +86,40 @@ class FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol {
                                          object: .firefoxHomepage,
                                          value: .recentlySavedBookmarkItemView,
                                          extras: [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"])
+        }
+    }
+}
+
+// MARK: FXHomeViewModelProtocol
+extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+
+    var isComformanceUpdateDataReady: Bool {
+        return true
+    }
+
+    var sectionType: FirefoxHomeSectionType {
+        return .recentlySaved
+    }
+
+    var isEnabled: Bool {
+        return featureFlags.isFeatureActiveForBuild(.recentlySaved)
+        && homescreen.sectionsEnabled[.recentlySaved] == true
+        && featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
+    }
+
+    // Whether the section is has data to show or not
+    var hasData: Bool {
+        return !recentBookmarks.isEmpty || !readingListItems.isEmpty
+    }
+
+    /// Using dispatch group to know when data has completely loaded for both sources (recent bookmarks and reading list items)
+    func updateData(completion: @escaping () -> Void) {
+        let group = DispatchGroup()
+        getRecentBookmarks(group: group)
+        getReadingLists(group: group)
+
+        group.notify(queue: .main) {
+            completion()
         }
     }
 }

@@ -6,20 +6,26 @@ import Foundation
 import Shared
 import Storage
 
-struct FxHomeTopSitesViewModel: FXHomeViewModelProtocol {
+class FxHomeTopSitesViewModel {
 
     private struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
     }
 
     private let profile: Profile
+    private let experiments: NimbusApi
     private let isZeroSearch: Bool
 
     var urlPressedHandler: ((Site, IndexPath) -> Void)?
     var tileManager: FxHomeTopSitesManager
 
-    init(profile: Profile, isZeroSearch: Bool) {
+    private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
+        Homescreen(variables: $0)
+    }
+
+    init(profile: Profile, experiments: NimbusApi, isZeroSearch: Bool) {
         self.profile = profile
+        self.experiments = experiments
         self.isZeroSearch = isZeroSearch
         self.tileManager = FxHomeTopSitesManager(profile: profile)
     }
@@ -40,10 +46,6 @@ struct FxHomeTopSitesViewModel: FXHomeViewModelProtocol {
             }
             return numItems * 2
         }
-    }
-
-    func updateData(completion: @escaping () -> Void) {
-        tileManager.loadTopSitesData()
     }
 
     // Laurie - position is indexPath
@@ -146,4 +148,26 @@ struct FxHomeTopSitesViewModel: FXHomeViewModelProtocol {
     }
 }
 
+// MARK: FXHomeViewModelProtocol
+extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
 
+    var isComformanceUpdateDataReady: Bool {
+        return true
+    }
+
+    var sectionType: FirefoxHomeSectionType {
+        return .topSites
+    }
+
+    var isEnabled: Bool {
+        homescreen.sectionsEnabled[.topSites] == true
+    }
+
+    var hasData: Bool {
+        return !tileManager.content.isEmpty
+    }
+
+    func updateData(completion: @escaping () -> Void) {
+        tileManager.loadTopSitesData()
+    }
+}

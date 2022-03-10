@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-struct FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol {
+class FxHomeLogoHeaderViewModel {
 
     private let profile: Profile
     init(profile: Profile) {
@@ -21,6 +21,20 @@ struct FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol {
 
         return true
     }
+}
 
-    func updateData(completion: @escaping () -> Void) {}
+// MARK: FXHomeViewModelProtocol
+extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+    
+    var isComformanceUpdateDataReady: Bool {
+        return true
+    }
+
+    var sectionType: FirefoxHomeSectionType {
+        return .logoHeader
+    }
+
+    var isEnabled: Bool {
+        return featureFlags.isFeatureActiveForBuild(.wallpapers)
+    }
 }

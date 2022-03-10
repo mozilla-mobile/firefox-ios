@@ -165,6 +165,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             self?.presentContextMenu(for: indexPath)
         }
 
+        viewModel.delegate = self
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -412,7 +413,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
             case .jumpBackIn:
                 if !hasSentJumpBackInSectionEvent
-                    && viewModel.shouldShowJumpBackInSection {
+                    && viewModel.jumpBackInViewModel.isEnabled {
                     TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
                     hasSentJumpBackInSectionEvent = true
                 }
@@ -502,22 +503,22 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         switch FirefoxHomeSectionType(section) {
         case .pocket:
-            return viewModel.shouldShowPocketSection ? getHeaderSize(forSection: section) : .zero
+            return viewModel.pocketViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
         case .topSites:
             // Only show a header for top sites if the Firefox Browser logo is not showing
-            if viewModel.isTopSitesSectionEnabled {
-                return viewModel.shouldShowFxLogoHeader ? .zero : getHeaderSize(forSection: section)
+            if viewModel.topSiteViewModel.shouldShow {
+                return viewModel.headerViewModel.shouldShow ? .zero : getHeaderSize(forSection: section)
             }
 
             return .zero
         case .libraryShortcuts:
             return viewModel.isYourLibrarySectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .jumpBackIn:
-            return viewModel.shouldShowJumpBackInSection ? getHeaderSize(forSection: section) : .zero
+            return viewModel.jumpBackInViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
         case .historyHighlights:
-            return viewModel.shouldShowHistoryHightlightsSection ? getHeaderSize(forSection: section) : .zero
+            return viewModel.historyHighlightsViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
         case .recentlySaved:
-            return viewModel.shouldShowRecentlySavedSection ? getHeaderSize(forSection: section) : .zero
+            return viewModel.recentlySavedViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
         default:
             return .zero
         }
@@ -693,38 +694,7 @@ extension FirefoxHomeViewController {
     }
 
     private func reloadSectionsData() {
-        // TODO: Reload with a protocol comformance once all sections are standardized
-        // Idea is that each section will load it's data from it's own view model
-        // update: Only missing library section to standardize!
-
-        if viewModel.isTopSitesSectionEnabled {
-            viewModel.topSiteViewModel.updateData {}
-        }
-
-        if viewModel.isRecentlySavedSectionEnabled {
-            viewModel.recentlySavedViewModel.updateData {}
-        }
-
-        // Jump back in access tabManager and this needs to be done on the main thread at the moment
-        DispatchQueue.main.async {
-            if self.viewModel.isJumpBackInSectionEnabled {
-                self.viewModel.jumpBackInViewModel.updateData {}
-            }
-        }
-
-        if viewModel.isPocketSectionEnabled {
-            viewModel.pocketViewModel.updateData {
-                // TODO: Once section are standardized, reload only the pocket section when data is updated
-                self.collectionView.reloadData()
-            }
-        }
-        
-        if viewModel.isHistoryHightlightsSectionEnabled {
-            // TODO: Once section are standardized, reload only the historyHighligthst section when data is updated
-            viewModel.historyHighlightsViewModel.updateData {
-                self.collectionView.reloadData()
-            }
-        }
+        viewModel.updateData()
     }
 }
 
@@ -967,3 +937,9 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
     }
 }
 
+
+extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
+    func reloadView() {
+        self.collectionView.reloadData()
+    }
+}
