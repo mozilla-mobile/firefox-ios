@@ -96,10 +96,6 @@ class FxHomePocketViewModel {
 // MARK: FXHomeViewModelProtocol
 extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
 
-    var isComformanceUpdateDataReady: Bool {
-        return true
-    }
-
     var sectionType: FirefoxHomeSectionType {
         return .pocket
     }

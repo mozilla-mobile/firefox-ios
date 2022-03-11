@@ -152,34 +152,8 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
         return recentTabs
     }
-}
 
-// MARK: FXHomeViewModelProtocol
-extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
-    
-    var isComformanceUpdateDataReady: Bool {
-        return false
-    }
-
-    var sectionType: FirefoxHomeSectionType {
-        return .jumpBackIn
-    }
-
-    var isEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
-              homescreen.sectionsEnabled[.jumpBackIn] == true,
-              featureFlags.userPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
-        else { return false }
-
-        return !isPrivate && !tabManager.recentlyAccessedNormalTabs.isEmpty
-    }
-
-    var hasData: Bool {
-        return jumpBackInList.itemsToDisplay != 0
-    }
-
-    /// Update data with tab and search term group managers
-    func updateData(completion: @escaping () -> Void) {
+    private func updateJumpBackInData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs
 
         if featureFlags.isFeatureActiveForBuild(.groupedTabs),
@@ -195,6 +169,36 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
         } else {
             jumpBackInList = createJumpBackInList(from: recentTabs)
             completion()
+        }
+    }
+}
+
+// MARK: FXHomeViewModelProtocol
+extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
+
+    var sectionType: FirefoxHomeSectionType {
+        return .jumpBackIn
+    }
+
+    var isEnabled: Bool {
+        guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
+              homescreen.sectionsEnabled[.jumpBackIn] == true,
+              featureFlags.userPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
+        else { return false }
+
+        return !isPrivate
+    }
+
+    var hasData: Bool {
+        return jumpBackInList.itemsToDisplay != 0
+    }
+
+    /// Update data with tab and search term group managers
+    func updateData(completion: @escaping () -> Void) {
+        // Has to be on main due to tab manager needing main tread
+        // This can be fixed when tab manager has been revisited
+        DispatchQueue.main.async {
+            self.updateJumpBackInData(completion: completion)
         }
     }
 

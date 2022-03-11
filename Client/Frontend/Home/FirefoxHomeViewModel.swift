@@ -86,25 +86,8 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
 
     func updateData() {
         childViewModels.forEach { section in
-            guard section.isComformanceUpdateDataReady, section.isEnabled else { return }
-
-            section.updateData {
-                guard section.shouldReloadSection else { return }
-                let index = self.enabledSections.firstIndex(of: section.sectionType)
-                self.delegate?.reloadSection(index: index)
-            }
-        }
-
-        // Following code is for sections not isComformanceUpdateDataReady
-        // Jump back in access tabManager and this needs to be done on the main thread at the moment
-        DispatchQueue.main.async {
-            if self.jumpBackInViewModel.isEnabled {
-                self.jumpBackInViewModel.updateData {
-                    guard self.jumpBackInViewModel.shouldReloadSection else { return }
-                    let index = self.enabledSections.firstIndex(of: self.jumpBackInViewModel.sectionType)
-                    self.delegate?.reloadSection(index: index)
-                }
-            }
+            guard section.isEnabled else { return }
+            self.update(section: section)
         }
     }
     
@@ -128,6 +111,14 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
             default:
                 break
             }
+        }
+    }
+
+    private func update(section: FXHomeViewModelProtocol) {
+        section.updateData {
+            guard section.shouldReloadSection else { return }
+            let index = self.enabledSections.firstIndex(of: section.sectionType)
+            self.delegate?.reloadSection(index: index)
         }
     }
 }

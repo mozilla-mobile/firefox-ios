@@ -25,10 +25,6 @@ class FxHomeLogoHeaderViewModel {
 
 // MARK: FXHomeViewModelProtocol
 extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
-    
-    var isComformanceUpdateDataReady: Bool {
-        return true
-    }
 
     var sectionType: FirefoxHomeSectionType {
         return .logoHeader

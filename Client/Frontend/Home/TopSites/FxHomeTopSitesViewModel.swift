@@ -164,10 +164,6 @@ class FxHomeTopSitesViewModel {
 // MARK: FXHomeViewModelProtocol
 extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
 
-    var isComformanceUpdateDataReady: Bool {
-        return true
-    }
-
     var sectionType: FirefoxHomeSectionType {
         return .topSites
     }

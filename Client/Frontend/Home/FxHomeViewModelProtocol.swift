@@ -7,11 +7,6 @@ import Foundation
 // Protocol for each section view model in Firefox Home page view controller
 protocol FXHomeViewModelProtocol {
 
-    // In an ideal world all section would comform perfectly to this protocol,
-    // But we're still in between. This check is to ensure we update data with
-    // protocol only for sections that are ready to conform.
-    var isComformanceUpdateDataReady: Bool { get }
-
     var sectionType: FirefoxHomeSectionType { get }
 
     // Returns true when section needs to load data and show itself

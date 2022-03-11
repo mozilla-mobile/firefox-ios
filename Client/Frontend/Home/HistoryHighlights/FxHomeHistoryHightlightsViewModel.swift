@@ -99,10 +99,6 @@ class FxHomeHistoryHightlightsViewModel {
 
 // MARK: FXHomeViewModelProtocol
 extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
-    
-    var isComformanceUpdateDataReady: Bool {
-        return true
-    }
 
     var sectionType: FirefoxHomeSectionType {
         return .historyHighlights

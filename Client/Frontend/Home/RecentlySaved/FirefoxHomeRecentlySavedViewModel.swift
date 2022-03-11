@@ -93,10 +93,6 @@ class FirefoxHomeRecentlySavedViewModel {
 // MARK: FXHomeViewModelProtocol
 extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
 
-    var isComformanceUpdateDataReady: Bool {
-        return true
-    }
-
     var sectionType: FirefoxHomeSectionType {
         return .recentlySaved
     }
