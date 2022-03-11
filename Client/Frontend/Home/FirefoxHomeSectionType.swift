@@ -26,7 +26,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         }
     }
 
-    func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
+    func cellHeight() -> CGFloat {
         switch self {
         case .pocket: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
         case .jumpBackIn: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight
@@ -68,7 +68,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     }
 
     func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
-        let height = cellHeight(traits, width: frameWidth)
+        let height = cellHeight()
         let inset = sectionInsets(traits, frameWidth: frameWidth) * 2
 
         return CGSize(width: frameWidth - inset, height: height)

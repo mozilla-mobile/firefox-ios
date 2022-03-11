@@ -99,7 +99,11 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         // Jump back in access tabManager and this needs to be done on the main thread at the moment
         DispatchQueue.main.async {
             if self.jumpBackInViewModel.isEnabled {
-                self.jumpBackInViewModel.updateData {}
+                self.jumpBackInViewModel.updateData {
+                    guard self.jumpBackInViewModel.shouldReloadSection else { return }
+                    let index = self.enabledSections.firstIndex(of: self.jumpBackInViewModel.sectionType)
+                    self.delegate?.reloadSection(index: index)
+                }
             }
         }
     }

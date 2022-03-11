@@ -430,8 +430,29 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let insets = FirefoxHomeSectionType(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
-        return UIEdgeInsets(top: 0, left: insets, bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, right: insets)
+        // This removes extra space since insetForSectionAt is called for all sections even if they are not showing
+        // Root cause is that numberOfSections is always returned as FirefoxHomeSectionType.allCases
+        let sideInsets = FirefoxHomeSectionType(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
+        let edgeInsets = UIEdgeInsets(top: 0, left: sideInsets, bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, right: sideInsets)
+
+        switch FirefoxHomeSectionType(section) {
+        case .logoHeader:
+            return viewModel.headerViewModel.shouldShow ? edgeInsets : .zero
+        case .pocket:
+            return viewModel.pocketViewModel.shouldShow ? edgeInsets : .zero
+        case .topSites:
+            return viewModel.topSiteViewModel.shouldShow ? edgeInsets : .zero
+        case .libraryShortcuts:
+            return viewModel.isYourLibrarySectionEnabled ? edgeInsets : .zero
+        case .jumpBackIn:
+            return viewModel.jumpBackInViewModel.shouldShow ? edgeInsets : .zero
+        case .historyHighlights:
+            return viewModel.historyHighlightsViewModel.shouldShow ? edgeInsets : .zero
+        case .recentlySaved:
+            return viewModel.recentlySavedViewModel.shouldShow ? edgeInsets : .zero
+        default:
+            return .zero
+        }
     }
 }
 
