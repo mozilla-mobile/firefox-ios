@@ -699,7 +699,8 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         case .pocket:
             return viewModel.pocketViewModel.getSitesDetail(for: indexPath.row)
         case .topSites:
-            return viewModel.topSiteViewModel.tileManager.content[indexPath.item]
+            // TODO: Laurie - getSitesDetail ?
+            return viewModel.topSiteViewModel.tileManager.getSite(index: indexPath.item)
         default:
             return nil
         }

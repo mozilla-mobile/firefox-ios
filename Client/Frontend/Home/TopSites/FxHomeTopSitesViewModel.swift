@@ -177,7 +177,7 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol
     }
 
     var hasData: Bool {
-        return !tileManager.content.isEmpty
+        return tileManager.getSiteCount() != 0
     }
 
     func updateData(completion: @escaping () -> Void) {

@@ -118,15 +118,13 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // Laurie - TODO: let contentItem = viewModel?.tileManager.content[indexPath.row]
-        // index out of range
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier, for: indexPath) as? TopSiteItemCell,
-           let contentItem = viewModel?.tileManager.content[indexPath.row] {
+           let contentItem = viewModel?.tileManager.getSite(index: indexPath.row) {
             cell.configureWithTopSiteItem(contentItem)
             print("Laurie - configuring cell \(indexPath)")
             return cell
 
-        } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier, for: indexPath) as? EmptyTopSiteCell {
+        } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCellIdentifier, for: indexPath) as? EmptyTopSiteCell {
             print("Laurie - configuring empty cell \(indexPath)")
             return cell
         }
@@ -135,7 +133,7 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let contentItem = viewModel?.tileManager.content[indexPath.row] else { return }
+        guard let contentItem = viewModel?.tileManager.getSite(index: indexPath.row) else { return }
         viewModel?.urlPressedHandler?(contentItem, indexPath)
     }
 }

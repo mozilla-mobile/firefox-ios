@@ -61,8 +61,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         switch self {
 //        case .recentlySaved: return 0
 //        case .pocket: return 0
-        case .historyHighlights: return 0
-        case .jumpBackIn: return 0
+        case .jumpBackIn, .historyHighlights, .topSites: return 0
         default: return FirefoxHomeViewModel.UX.minimumInsets
         }
     }

@@ -11,12 +11,21 @@ class FxHomeTopSitesManager {
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private let profile: Profile
-    var content: [Site] = []
+    private var content: [Site] = []
     
     init(profile: Profile) {
         self.profile = profile
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
+    }
+
+    func getSite(index: Int) -> Site? {
+        guard !content.isEmpty, index < content.count else { return nil }
+        return content[index]
+    }
+
+    func getSiteCount() -> Int {
+        return content.count
     }
 
     func removePinTopSite(site: Site) {
