@@ -43,6 +43,7 @@ public struct PrefsKeys {
         public static let ChronologicalTabs = "chronTabsPrefKey"
         public static let CustomWallpaper = "customWallpaperPrefKey"
         public static let HistoryHighlightsSection = "historyHighlightsSectionEnabled"
+        public static let HistoryGroups = "historyGroupsEnabled"
         public static let InactiveTabs = "KeyInactiveTabs"
         public static let JumpBackInSection = "jumpBackInSectionEnabled"
         public static let PullToRefresh = "pullToRefresh"

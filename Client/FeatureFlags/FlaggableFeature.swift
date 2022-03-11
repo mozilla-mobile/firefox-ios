@@ -20,6 +20,8 @@ struct FlaggableFeature {
             return FlagKeys.ChronologicalTabs
         case .historyHighlights:
             return FlagKeys.HistoryHighlightsSection
+        case .historyGroups:
+            return FlagKeys.HistoryGroups
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
@@ -48,7 +50,10 @@ struct FlaggableFeature {
 
     // MARK: - Initializers
 
-    init(withID featureID: FeatureFlagName, and profile: Profile, enabledFor channels: [AppBuildChannel]) {
+    init(withID featureID: FeatureFlagName,
+         and profile: Profile,
+         enabledFor channels: [AppBuildChannel]
+    ) {
         self.featureID = featureID
         self.profile = profile
         self.buildChannels = channels
