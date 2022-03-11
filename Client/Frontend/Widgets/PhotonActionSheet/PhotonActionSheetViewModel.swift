@@ -179,7 +179,7 @@ class PhotonActionSheetViewModel {
         let viewControllerHeight = viewController.view.frame.size.height
         isAtTopMainMenu = convertedPoint.y < viewControllerHeight / 2
         let topInset = isAtTopMainMenu ? UIConstants.ToolbarHeight : PhotonActionSheet.UX.Spacing
-        let bottomInset = isAtTopMainMenu ? PhotonActionSheet.UX.Spacing : PhotonActionSheet.UX.BigSpacing
+        let bottomInset = isAtTopMainMenu ? PhotonActionSheet.UX.SmallSpacing : PhotonActionSheet.UX.BigSpacing
 
         // Save available space so we can calculate the needed menu height later on
         let buttonSpace = isAtTopMainMenu ? (convertedPoint.y + view.frame.height) : (viewControllerHeight - convertedPoint.y - view.frame.height)

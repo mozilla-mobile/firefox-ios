@@ -44,6 +44,7 @@ class PhotonActionSheet: UIViewController {
         static let TitleHeaderSectionHeightWithSite: CGFloat = 70
         static let BigSpacing: CGFloat = 32
         static let Spacing: CGFloat = 16
+        static let SmallSpacing: CGFloat = 8
     }
 
     // MARK: - Variables
@@ -322,13 +323,20 @@ class PhotonActionSheet: UIViewController {
                 newHeight = totalCellsHeight - halfCellHeight
             } else {
                 let halfCellHeight = (tableView.visibleCells.first?.frame.height ?? 0) / 2
-                newHeight = totalCellsHeight - halfCellHeight * 3
+                let aCellAndAHalfHeight = halfCellHeight * 3
+                newHeight = totalCellsHeight - aCellAndAHalfHeight
             }
 
             wasHeightOverriden = true
             tableViewHeightConstraint?.constant = newHeight
-            tableView.contentSize.height = newHeight
-            preferredContentSize = tableView.contentSize
+            tableViewHeightConstraint?.priority = .required
+
+            preferredContentSize = view.systemLayoutSizeFitting(
+                UIView.layoutFittingCompressedSize
+            )
+
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
         }
     }
 
