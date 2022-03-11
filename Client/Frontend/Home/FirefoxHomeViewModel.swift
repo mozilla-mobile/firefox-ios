@@ -85,31 +85,21 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     // MARK: - Interfaces
 
     func updateData() {
-        childViewModels.forEach {
-            guard $0.isComformanceUpdateDataReady else { return }
-            if $0.isEnabled { $0.updateData {} }
+        childViewModels.forEach { section in
+            guard section.isComformanceUpdateDataReady, section.isEnabled else { return }
+
+            section.updateData {
+                guard section.shouldReloadSection else { return }
+                let index = self.enabledSections.firstIndex(of: section.sectionType)
+                self.delegate?.reloadSection(index: index)
+            }
         }
 
         // Following code is for sections not isComformanceUpdateDataReady
-
         // Jump back in access tabManager and this needs to be done on the main thread at the moment
         DispatchQueue.main.async {
             if self.jumpBackInViewModel.isEnabled {
                 self.jumpBackInViewModel.updateData {}
-            }
-        }
-
-        if pocketViewModel.isEnabled {
-            pocketViewModel.updateData {
-                let index = self.enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn)
-                self.delegate?.reloadSection(index: index)
-            }
-        }
-
-        if historyHighlightsViewModel.isEnabled {
-            historyHighlightsViewModel.updateData {
-                let index = self.enabledSections.firstIndex(of: FirefoxHomeSectionType.historyHighlights)
-                self.delegate?.reloadSection(index: index)
             }
         }
     }

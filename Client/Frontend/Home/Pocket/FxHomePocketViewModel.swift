@@ -97,7 +97,7 @@ class FxHomePocketViewModel {
 extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
 
     var isComformanceUpdateDataReady: Bool {
-        return false
+        return true
     }
 
     var sectionType: FirefoxHomeSectionType {
@@ -124,4 +124,6 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
             completion()
         }
     }
+
+    var shouldReloadSection: Bool { return true }
 }

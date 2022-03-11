@@ -26,6 +26,9 @@ protocol FXHomeViewModelProtocol {
     // Update section data, completes when data has finished loading
     func updateData(completion: @escaping () -> Void)
 
+    // If we need to reload the section after data was loaded
+    var shouldReloadSection: Bool { get }
+
     // Update section that are privacy sensitive, only implement when needed
     func updatePrivacyConcernedSection(isPrivate: Bool)
 }
@@ -38,6 +41,8 @@ extension FXHomeViewModelProtocol {
     }
 
     func updateData(completion: @escaping () -> Void) {}
+
+    var shouldReloadSection: Bool { return false }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {}
 }

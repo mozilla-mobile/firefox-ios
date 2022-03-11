@@ -101,7 +101,7 @@ class FxHomeHistoryHightlightsViewModel {
 extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
     
     var isComformanceUpdateDataReady: Bool {
-        return false
+        return true
     }
 
     var sectionType: FirefoxHomeSectionType {
@@ -120,6 +120,8 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
     func updateData(completion: @escaping () -> Void) {
         loadItems(completion: completion)
     }
+
+    var shouldReloadSection: Bool { return true }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
         self.isPrivate = isPrivate
