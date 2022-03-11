@@ -359,6 +359,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath) as! OneLineTableViewCell
+        
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
