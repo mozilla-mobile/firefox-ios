@@ -22,7 +22,7 @@ private var disclosureIndicator: UIImageView {
 }
 
 // MARK: - ConnectSetting
-// Sync setting for connecting a Firefox Account.  Shown when we don't have an account.
+// Sync setting for connecting a Firefox Account. Shown when we don't have an account.
 class ConnectSetting: WithoutAccountSetting {
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
@@ -1182,8 +1182,8 @@ class NoImageModeSetting: BoolSetting {
         }
 
         super.init(
-            prefs: settings.profile.prefs, 
-            prefKey: NoImageModePrefsKey.NoImageModeStatus, 
+            prefs: settings.profile.prefs,
+            prefKey: NoImageModePrefsKey.NoImageModeStatus,
             defaultValue: noImageEnabled,
             attributedTitleText: NSAttributedString(string: .Settings.Toggle.NoImageMode),
             attributedStatusText: nil,

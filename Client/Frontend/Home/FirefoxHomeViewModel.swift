@@ -88,11 +88,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         // For Pocket, the user preference check returns a user preference if it exists in
         // UserDefaults, and, if it does not, it will return a default preference based on
         // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
-        guard featureFlags.isFeatureActiveForBuild(.pocket),
-              featureFlags.userPreferenceFor(.pocket) == UserFeaturePreference.enabled
-        else { return false }
-
-        return true
+        return featureFlags.isFeatureBuildAndUserEnabled(.pocket)
     }
 
     var shouldShowPocketSection: Bool {

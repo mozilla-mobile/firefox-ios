@@ -50,7 +50,7 @@ class TestAppDelegate: AppDelegate {
 
                 try! FileManager.default.copyItem(at: input, to: output)
             }
-            
+
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
                  if launchArguments.contains(LaunchArguments.ClearProfile) {
                      fatalError("Clearing profile and loading a TabsState.Archive is not a supported combination.")
@@ -70,7 +70,7 @@ class TestAppDelegate: AppDelegate {
 
                  try! FileManager.default.copyItem(at: input, to: output)
              }
-            
+
         }
 
         if launchArguments.contains(LaunchArguments.ClearProfile) {
@@ -80,7 +80,7 @@ class TestAppDelegate: AppDelegate {
         } else {
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
         }
-        
+
         if launchArguments.contains(LaunchArguments.SkipAddingGoogleTopSite) {
             profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
         }
@@ -91,12 +91,12 @@ class TestAppDelegate: AppDelegate {
                 profile.prefs.setBool(true, forKey: $0.rawValue)
             }
         }
-        
+
         // Don't show the ETP Coversheet New page.
         if launchArguments.contains(LaunchArguments.SkipETPCoverSheet) {
             profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
         }
-        
+
         // Don't show the What's New page.
         if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
             profile.prefs.setInt(1, forKey: PrefsKeys.KeyLastVersionNumber)
