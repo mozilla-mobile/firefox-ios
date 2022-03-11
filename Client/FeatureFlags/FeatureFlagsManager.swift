@@ -20,17 +20,17 @@ enum FeatureFlagName: String, CaseIterable {
     case adjustEnvironmentProd
     case bottomSearchBar
     case chronologicalTabs
-    case inactiveTabs
-    case groupedTabs
     case historyHighlights
+    case inactiveTabs
     case jumpBackIn
     case nimbus
     case pocket
     case pullToRefresh
     case recentlySaved
+    case reportSiteIssue
     case shakeToRestore
     case startAtHome
-    case reportSiteIssue
+    case tabTrayGroups
     case wallpapers
 }
 
@@ -137,10 +137,10 @@ class FeatureFlagsManager {
                                             enabledFor: [.developer, .beta])
         features[.inactiveTabs] = inactiveTabs
 
-        let groupedTabs = FlaggableFeature(withID: .groupedTabs,
+        let groupedTabs = FlaggableFeature(withID: .tabTrayGroups,
                                            and: profile,
                                            enabledFor: [.developer])
-        features[.groupedTabs] = groupedTabs
+        features[.tabTrayGroups] = groupedTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
                                           and: profile,

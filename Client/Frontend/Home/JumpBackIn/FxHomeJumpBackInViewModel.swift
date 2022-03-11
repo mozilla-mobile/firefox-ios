@@ -76,8 +76,8 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     func updateData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs
 
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs),
-           featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled {
+        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups),
+           featureFlags.userPreferenceFor(.tabTrayGroups) == UserFeaturePreference.enabled {
             SearchTermGroupsManager.getTabGroups(with: profile,
                                                  from: recentTabs,
                                                  using: .orderedDescending) { [weak self] groups, _ in

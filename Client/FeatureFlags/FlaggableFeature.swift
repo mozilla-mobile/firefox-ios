@@ -14,27 +14,28 @@ struct FlaggableFeature {
     private var featureID: FeatureFlagName
 
     private var featureKey: String? {
+        typealias FlagKeys = PrefsKeys.FeatureFlags
         switch featureID {
         case .chronologicalTabs:
-            return PrefsKeys.ChronTabsPrefKey
-        case .wallpapers:
-            return PrefsKeys.CustomWallpaperPrefKey
-        case .inactiveTabs:
-            return PrefsKeys.KeyEnableInactiveTabs
-        case .groupedTabs:
-            return PrefsKeys.KeyEnableGroupedTabs
+            return FlagKeys.ChronologicalTabs
         case .historyHighlights:
-            return PrefsKeys.HistoryHighlightsSectionEnabled
+            return FlagKeys.HistoryHighlightsSection
+        case .inactiveTabs:
+            return FlagKeys.InactiveTabs
         case .jumpBackIn:
-            return PrefsKeys.JumpBackInSectionEnabled
+            return FlagKeys.JumpBackInSection
         case .pocket:
-            return PrefsKeys.ASPocketStoriesVisible
+            return FlagKeys.ASPocketStories
         case .pullToRefresh:
-            return PrefsKeys.PullToRefresh
+            return FlagKeys.PullToRefresh
         case .recentlySaved:
-            return PrefsKeys.RecentlySavedSectionEnabled
+            return FlagKeys.RecentlySavedSection
         case .startAtHome:
-            return PrefsKeys.StartAtHome
+            return FlagKeys.StartAtHome
+        case .tabTrayGroups:
+            return FlagKeys.TabTrayGroups
+        case .wallpapers:
+            return FlagKeys.CustomWallpaper
         default: return nil
         }
     }

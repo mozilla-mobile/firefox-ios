@@ -76,7 +76,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     private func shouldShowChronTabs() -> Bool {
         var shouldShowChronTabs = false // default don't show
-        let chronDebugValue = profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey)
+        let chronDebugValue = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ChronologicalTabs)
         let chronLPValue = chronTabsUserResearch?.chronTabsState ?? false
 
         // Only allow chron tabs on iPhone
@@ -92,7 +92,8 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                     // Respect LP value
                     shouldShowChronTabs = chronLPValue
                 }
-                profile.prefs.setBool(shouldShowChronTabs, forKey: PrefsKeys.ChronTabsPrefKey)
+                profile.prefs.setBool(shouldShowChronTabs,
+                                      forKey: PrefsKeys.FeatureFlags.ChronologicalTabs)
             }
         }
 

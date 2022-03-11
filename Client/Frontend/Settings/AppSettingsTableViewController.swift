@@ -93,7 +93,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             generalSettings.insert(SearchBarSetting(settings: self), at: 5)
         }
 
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 
