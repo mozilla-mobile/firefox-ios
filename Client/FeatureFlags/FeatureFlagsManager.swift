@@ -68,6 +68,15 @@ class FeatureFlagsManager {
         return feature.isActiveForBuild()
     }
 
+    /// A convenient way to check both `isFeatureActiveForBuild` and `userPreferenceFor`
+    /// at the same time without always writing the same check twice.
+    public func isFeatureBuildAndUserEnabled(_ featureID: FeatureFlagName) -> Bool {
+        let buildConfiguration = isFeatureActiveForBuild(featureID)
+        let userPreference = userPreferenceFor(featureID) == UserFeaturePreference.enabled
+
+        return buildConfiguration && userPreference
+    }
+
     public func toggleBuildFeature(_ featureID: FeatureFlagName) {
         features[featureID]?.toggleBuildFeature()
     }
