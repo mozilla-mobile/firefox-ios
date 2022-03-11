@@ -1240,6 +1240,7 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
+            
             tab.metadataManager?.updateTimerAndObserving(state: TabGroupTimerState.tabNavigatedToDifferentUrl,
                                                                 nextUrl: displayUrl.absoluteString)
         }

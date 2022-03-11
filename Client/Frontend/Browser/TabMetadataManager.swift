@@ -7,12 +7,12 @@ import MozillaAppServices
 
 class TabMetadataManager {
     
+    let profile: Profile?
+    
     // Tab Groups
     var tabGroupData = TabGroupData()
     var tabGroupsTimerHelper = StopWatchTimer()
     var shouldResetTabGroupData = false
-    
-    let profile: Profile?
     
     private var shouldUpdateObservationForState: Bool {
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
@@ -35,7 +35,7 @@ class TabMetadataManager {
         nextUrl != tabGroupData.tabAssociatedNextUrl
     }
 
-    func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: String? = nil, nextUrl: String = "") {
+    func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: String? = nil, nextUrl: String = "", tabTitle: String? = "") {
         switch state {
         case .navSearchLoaded:
             shouldResetTabGroupData = false
@@ -91,15 +91,19 @@ class TabMetadataManager {
             tabGroupData.tabHistoryCurrentState = state.rawValue
         case .openURLOnly:
             tabGroupData.tabAssociatedSearchUrl = searchProviderUrl ?? ""
-            tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
+            tabGroupData.tabAssociatedSearchTerm = tabTitle ?? ""
             tabGroupData.tabHistoryCurrentState = state.rawValue
-            updateRegularSiteObservation(url: searchProviderUrl, title: searchTerm)
+            tabGroupsTimerHelper.startOrResume()
+            updateRegularSiteObservation(url: searchProviderUrl, title: tabTitle)
         case .none:
             tabGroupData.tabHistoryCurrentState = state.rawValue
         }
     }
     
-    func updateObservationWith(title: String) {
+    
+    /// Update existing or new observation with title once it changes for certain tab states title becomes available
+    /// - Parameter title: Tab title
+    func updateObservationTitle(_ title: String) {
         guard shouldUpdateObservationForState else { return }
         
         let key = tabGroupData.tabHistoryMetadatakey()
@@ -120,12 +124,15 @@ class TabMetadataManager {
         }
     }
     
+    
+    /// Called update observation for Regular sites
+    /// if the title isEmpty we abort recording because it can't be overriden
+    /// - Parameters:
+    ///   - url: Site URL from webview
+    ///   - title: Site title from webview can be empty for slow loading pages
     private func updateRegularSiteObservation(url: String?, title: String?) {
-        // If title is not available abort
-        guard let url = url,
-              let title = title, !title.isEmpty else {
-            return
-        }
+        guard let url = url, let title = title,
+              !title.isEmpty else { return }
         
         let key = HistoryMetadataKey(url: url, searchTerm: "", referrerUrl: "")
         let observation = HistoryMetadataObservation(url: url,
@@ -135,6 +142,5 @@ class TabMetadataManager {
                                                      documentType: nil,
                                                      title: title)
         updateObservationForKey(key: key, observation: observation)
-        tabGroupsTimerHelper.startOrResume()
     }
 }

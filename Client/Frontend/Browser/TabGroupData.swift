@@ -21,6 +21,7 @@ public class TabGroupData: NSObject, NSCoding {
     var tabAssociatedSearchUrl: String = ""
     var tabAssociatedNextUrl: String = ""
     var tabHistoryCurrentState = ""
+    // Is not used currently can be removed? Name is confusing with enum
     var tabGroupTimerState = ""
 
     func tabHistoryMetadatakey() -> HistoryMetadataKey {

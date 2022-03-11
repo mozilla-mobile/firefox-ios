@@ -720,7 +720,7 @@ class Tab: NSObject {
         
         if let title = self.webView?.title, !title.isEmpty,
            path == KVOConstants.title.rawValue {
-            metadataManager?.updateObservationWith(title: title)
+            metadataManager?.updateObservationTitle(title)
         }
     }
 

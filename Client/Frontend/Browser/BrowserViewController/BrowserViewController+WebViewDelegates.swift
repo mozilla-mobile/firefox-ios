@@ -761,8 +761,8 @@ extension BrowserViewController: WKNavigationDelegate {
                                             nextUrl: webView.url?.absoluteString ?? "")
             } else if !tab.isFxHomeTab {
                 metadataManager.updateTimerAndObserving(state: TabGroupTimerState.openURLOnly,
-                                            searchTerm: webView.title,
-                                            searchProviderUrl: webView.url?.absoluteString)
+                                                        searchProviderUrl: webView.url?.absoluteString,
+                                                        tabTitle: webView.title)
             }
 
             // If this tab had previously crashed, wait 5 seconds before resetting

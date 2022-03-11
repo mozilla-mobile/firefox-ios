@@ -13,6 +13,7 @@ class TabMetadataManagerTests: XCTestCase {
     private var profile: MockProfile!
     private var tabManager: TabManager!
     private var manager: TabMetadataManager!
+    private let weigths = HistoryHighlightWeights(viewTime: 10.0, frequency: 4.0)
 
     override func setUpWithError() throws {
         super.setUp()
@@ -60,10 +61,10 @@ class TabMetadataManagerTests: XCTestCase {
     }
     
     func testNotShouldUpdateSearchTermData_SameNextURL() throws {
-        let stringUrl = "www.mozilla.org"
+        let stringUrl = "https://www.mozilla.org/"
         
         manager.tabGroupData.tabAssociatedSearchTerm = "test search"
-        manager.tabGroupData.tabAssociatedSearchUrl = "www.apple.com"
+        manager.tabGroupData.tabAssociatedSearchUrl = "https://www.apple.com/"
         manager.tabGroupData.tabAssociatedNextUrl = stringUrl
         
         let shouldUpdate = manager.shouldUpdateSearchTermData(webViewUrl: stringUrl)
@@ -71,32 +72,47 @@ class TabMetadataManagerTests: XCTestCase {
     }
     
     func testUpdateTimerAndObserving_ForOpenURLOnly() throws {
-        let stringUrl = "www.mozilla.org"
-        let title = "Mozilla title"
+        let stringUrl = "https://www.mozilla.org/"
+        let title = "mozilla title"
+//        let expectation = expectation(description: "wait for database recording")
+        manager.updateTimerAndObserving(state: .openURLOnly, tabTitle: title)
         
-        emptyDB()
-        manager.updateTimerAndObserving(state: .openURLOnly, searchTerm: title, searchProviderUrl: stringUrl, nextUrl: "")
-        
-        let hhWeigths = HistoryHighlightWeights(viewTime: 10.0,
-                                                frequency: 4.0)
-        let singleItemRead = profile.places.getHistoryMetadataSince(since: 0).value
-        profile.places.getHighlights(weights:hhWeigths, limit: 1000).uponQueue(.main) { result in
+        // Waiting 5 seconds for results to be available
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+            let hhWeigths = HistoryHighlightWeights(viewTime: 10.0, frequency: 4.0)
+            let result = self.profile.places.getHighlights(weights: hhWeigths, limit: 1000).value
             
-            guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
-
-            XCTAssertTrue(singleItemRead.isSuccess)
-            XCTAssertNotNil(singleItemRead.successValue)
-            XCTAssertEqual(singleItemRead.successValue!.count, 1)
-            XCTAssertEqual(singleItemRead.successValue![0].url, stringUrl)
-            XCTAssertEqual(singleItemRead.successValue![0].title?.lowercased(), title)
-            completion(ASHighlights)
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNotNil(result.successValue)
+            XCTAssertEqual(result.successValue!.count, 1)
+            XCTAssertEqual(result.successValue![0].url, stringUrl)
+            XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
+//            expectation.fulfill()
         }
+//        waitForExpectations(timeout: 10, handler: nil)
     }
     
-    // MARK: - Helper functions
-    private func emptyDB() {
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess)
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess)
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess)
+    func testUpdateObservationTitle_ForOpenURLOnly() throws {
+        let stringUrl = "https://www.developer.org/"
+        let title = "Updated Title"
+        
+//        let expectation = expectation(description: "wait for database recording")
+        manager.tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openURLOnly.rawValue
+        manager.tabGroupData.tabAssociatedSearchUrl = stringUrl
+        manager.updateObservationTitle(title)
+        
+        // Waiting 5 seconds for results to be available
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            
+            let result = self.profile.places.getHighlights(weights: self.weigths, limit: 1000).value
+            
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNotNil(result.successValue)
+            XCTAssertEqual(result.successValue!.count, 1)
+            XCTAssertEqual(result.successValue![0].url, stringUrl)
+            XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
+//            expectation.fulfill()
+        }
+//        waitForExpectations(timeout: 5, handler: nil)
     }
 }
