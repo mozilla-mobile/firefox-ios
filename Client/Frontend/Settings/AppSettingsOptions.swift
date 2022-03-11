@@ -22,7 +22,7 @@ private var disclosureIndicator: UIImageView {
 }
 
 // MARK: - ConnectSetting
-// Sync setting for connecting a Firefox Account.  Shown when we don't have an account.
+// Sync setting for connecting a Firefox Account. Shown when we don't have an account.
 class ConnectSetting: WithoutAccountSetting {
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
