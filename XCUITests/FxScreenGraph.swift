@@ -54,6 +54,9 @@ let EnterNewBookmarkTitleAndUrl = "EnterNewBookmarkTitleAndUrl"
 let RequestDesktopSite = "RequestDesktopSite"
 let RequestMobileSite = "RequestMobileSite"
 
+let m1Rosetta = "rosetta"
+let intel = "intel"
+
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
 // This list should only be for settings screens that can be navigated to
@@ -317,9 +320,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(URLBarLongPressMenu) { screenState in
         let menu = app.tables["Context Menu"].firstMatch
 
-        screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
-            UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
+        if !(processIsTranslatedStr() == m1Rosetta) {
+            screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
+                UIPasteboard.general.string = userState.url ?? defaultURL
+                menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
+            }
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
@@ -981,7 +986,11 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
-        performAction(Action.LoadURL)
+        if processIsTranslatedStr() == m1Rosetta {
+            performAction(Action.LoadURLByTyping)
+        } else {
+            performAction(Action.LoadURL)
+        }
     }
 
     // Opens a URL in a new tab.
@@ -1017,6 +1026,38 @@ extension MMNavigator where T == FxUserState {
             self.goto(TabTray)
             self.goto(HomePanelsScreen)
         }
+    }
+}
+
+// Temporary code to detect the MacOS where tests are running
+// and so load websites one way or the other as per the condition above
+// in the openURLBar method. This is due to issue:
+// https://github.com/mozilla-mobile/firefox-ios/issues/9910#issue-1120710818
+
+let NATIVE_EXECUTION    = Int32(0)
+let EMULATED_EXECUTION   = Int32(1)
+
+func processIsTranslated() ->Int32 {
+    var ret = Int32(0)
+    var size = ret.bitWidth
+    let result = sysctlbyname("sysctl.proc_translated", &ret, &size, nil, 0)
+    if result == -1 {
+        if (errno == ENOENT){
+          return 0
+        }
+        return -1
+      }
+    return ret
+}
+
+func processIsTranslatedStr() -> String {
+    switch processIsTranslated() {
+    case NATIVE_EXECUTION:
+        return "native"
+    case EMULATED_EXECUTION:
+        return "rosetta"
+    default:
+        return "unkown"
     }
 }
 
