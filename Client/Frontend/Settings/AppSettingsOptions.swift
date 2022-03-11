@@ -356,7 +356,8 @@ class AccountStatusSetting: WithAccountSetting {
 }
 
 // MARK: - Hidden Settings
-// For great debugging!
+/// Used for only for debugging purposes. These settings are hidden behind a
+/// 5-tap gesture on the Firefox version cell in the Settings Menu
 class HiddenSetting: Setting {
     unowned let settings: SettingsTableViewController
 

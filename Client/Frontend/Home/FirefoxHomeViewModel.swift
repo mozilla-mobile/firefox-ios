@@ -34,6 +34,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     // MARK: - Section availability variables
     var shouldShowFxLogoHeader: Bool {
         return featureFlags.isFeatureActiveForBuild(.wallpapers)
+        
     }
 
     var isTopSitesSectionEnabled: Bool {
@@ -87,7 +88,11 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         // For Pocket, the user preference check returns a user preference if it exists in
         // UserDefaults, and, if it does not, it will return a default preference based on
         // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
-        return featureFlags.isFeatureBuildAndUserEnabled(.pocket)
+        guard featureFlags.isFeatureActiveForBuild(.pocket),
+              featureFlags.userPreferenceFor(.pocket) == UserFeaturePreference.enabled
+        else { return false }
+
+        return true
     }
 
     var shouldShowPocketSection: Bool {

@@ -113,7 +113,7 @@ class TestAppDelegate: AppDelegate {
 
         // Change to 0 to deactivate chron tabs
         if launchArguments.contains(LaunchArguments.ChronTabs) {
-            profile.prefs.setInt(0, forKey: PrefsKeys.FeatureFlags.ChronologicalTabs)
+            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.ChronologicalTabs)
         }
 
         if launchArguments.contains(LaunchArguments.StageServer) {
