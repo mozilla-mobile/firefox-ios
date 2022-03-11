@@ -26,22 +26,6 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         }
     }
 
-    var headerImage: UIImage? {
-        switch self {
-        case .pocket: return UIImage.templateImageNamed("menu-pocket")
-        case .topSites: return UIImage.templateImageNamed("menu-panel-TopSites")
-        case .libraryShortcuts: return UIImage.templateImageNamed("menu-library")
-        default : return nil
-        }
-    }
-
-    var footerHeight: CGSize {
-        switch self {
-        case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
-        default: return .zero
-        }
-    }
-
     func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
         switch self {
         case .pocket: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
