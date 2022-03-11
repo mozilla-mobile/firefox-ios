@@ -99,8 +99,8 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
 
     var shouldEnableGroupedTabs: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.groupedTabs),
-              featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled
+        guard featureFlags.isFeatureActiveForBuild(.tabTrayGroups),
+              featureFlags.userPreferenceFor(.tabTrayGroups) == UserFeaturePreference.enabled
         else { return false }
         return true
     }
@@ -108,7 +108,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     var shouldEnableInactiveTabs: Bool {
         guard featureFlags.isFeatureActiveForBuild(.inactiveTabs) else { return false }
         // TODO: Nimbus Setup and update the following return statement
-        // return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
+        // return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.InactiveTabs) ?? false
         return true
     }
 
