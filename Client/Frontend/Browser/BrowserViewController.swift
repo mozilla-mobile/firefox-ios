@@ -269,7 +269,7 @@ class BrowserViewController: UIViewController {
 
         appMenuBadgeUpdate()
 
-        if showTopTabs, topTabsViewController == nil {
+        if showTopTabs, self.topTabsViewController == nil {
             let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
             topTabsViewController.delegate = self
             addChild(topTabsViewController)
@@ -277,12 +277,15 @@ class BrowserViewController: UIViewController {
             self.topTabsViewController = topTabsViewController
             topTabsViewController.applyTheme()
 
+        } else if showTopTabs, self.topTabsViewController != nil {
+            self.topTabsViewController?.applyTheme()
+            
         } else {
-            if let topTabsView = topTabsViewController?.view {
+            if let topTabsView = self.topTabsViewController?.view {
                 header.removeArrangedView(topTabsView)
             }
-            topTabsViewController?.removeFromParent()
-            topTabsViewController = nil
+            self.topTabsViewController?.removeFromParent()
+            self.topTabsViewController = nil
         }
 
         header.setNeedsLayout()
