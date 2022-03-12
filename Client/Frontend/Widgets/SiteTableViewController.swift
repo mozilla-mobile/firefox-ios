@@ -105,6 +105,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         table.cellLayoutMarginsFollowReadableWidth = false
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
+        table.translatesAutoresizingMaskIntoConstraints = false
         
         if let _ = self as? HomePanelContextMenu {
             table.dragDelegate = self
@@ -134,12 +135,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
+        
+        addTableView()
     }
 
     deinit {
@@ -164,6 +161,17 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
 
+    private func addTableView() {
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
     func reloadData() {
         if data.status != .success {
             print("Err: \(data.statusMessage)", terminator: "\n")
