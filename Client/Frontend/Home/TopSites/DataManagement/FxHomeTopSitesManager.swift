@@ -8,10 +8,13 @@ import Storage
 
 class FxHomeTopSitesManager {
 
+    private let maximumTileNumberPerRow = 12
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private let profile: Profile
-    private var content: [Site] = []
+
+    private var topSites: [HomeTopSite] = []
+    private var historySites: [Site] = []
     
     init(profile: Profile) {
         self.profile = profile
@@ -19,13 +22,18 @@ class FxHomeTopSitesManager {
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
     }
 
-    func getSite(index: Int) -> Site? {
-        guard !content.isEmpty, index < content.count else { return nil }
-        return content[index]
+    func getSite(index: Int) -> HomeTopSite? {
+        guard !topSites.isEmpty, index < topSites.count else { return nil }
+        return topSites[index]
     }
 
-    func getSiteCount() -> Int {
-        return content.count
+    func getSiteDetail(index: Int) -> Site? {
+        guard !topSites.isEmpty, index < topSites.count else { return nil }
+        return topSites[index].site
+    }
+
+    var hasData: Bool {
+        return !historySites.isEmpty
     }
 
     func removePinTopSite(site: Site) {
@@ -37,26 +45,25 @@ class FxHomeTopSitesManager {
         topSiteHistoryManager.refreshIfNeeded(forceTopSites: forceTopSites)
     }
 
-    // Loads the different. Does not invalidate the cache.
-    // See TopSiteHistoryManager for invalidation logic.
+    // Loads the data source of top sites
     func loadTopSitesData() {
         topSiteHistoryManager.getTopSites { sites in
-            self.prepareTopSiteData(sites: sites)
+            self.historySites = sites
         }
     }
 
-    // Top sites are composed of history, pinned and Google top site
-    private func prepareTopSiteData(sites: [Site]) {
-        var sites = sites
+    // Top sites are composed of pinned sites, history and Google top site
+    func calculateTopSiteData(numberOfItemsPerRow: Int) {
+        var sites = historySites
         let pinnedSiteCount = countPinnedSites(sites: sites)
-        let maxItems = 8 * numberOfRows // TODO: Laurie
+        let maxItems = numberOfItemsPerRow * numberOfRows
 
         if googleTopSiteManager.shouldAddGoogleTopSite(pinnedSiteCount: pinnedSiteCount,
                                                        maxItems: maxItems) {
             googleTopSiteManager.addGoogleTopSite(maxItems: maxItems, sites: &sites)
         }
 
-        content = sites
+        topSites = sites.map { HomeTopSite(site: $0, profile: profile) }
 
         // Refresh data in the background so we'll have fresh data next time we show
         refreshIfNeeded(forceTopSites: false)

@@ -85,10 +85,6 @@ class GoogleTopSiteManager {
     func addGoogleTopSite(maxItems: Int, sites: inout [Site]) {
         guard let googleSite = suggestedSiteData() else { return }
         sites.insert(googleSite, at: 0)
-        // Purge unwanted websites from the end of list
-        if sites.count > maxItems {
-            sites.removeLast(sites.count - maxItems)
-        }
         hasAdded = true
     }
 }

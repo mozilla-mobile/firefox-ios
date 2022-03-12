@@ -43,8 +43,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
         self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
         self.delegate?.willInvalidateDataSources(forceTopSites: forceTopSites)
-        // TODO: Laurie - .main necessary?
-        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites).uponQueue(.main) { _ in
+        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites).uponQueue(dataQueue) { _ in
             self.delegate?.didInvalidateDataSources(refresh: forceTopSites, topSitesRefreshed: shouldInvalidateTopSites)
         }
     }
@@ -57,8 +56,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
     }
 
     func removeTopSite(site: Site) {
-        // TODO: Laurie - .main needed?
-        profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { [weak self] result in
+        profile.history.removeFromPinnedTopSites(site).uponQueue(dataQueue) { [weak self] result in
             guard result.isSuccess, let self = self else { return }
             self.refreshIfNeeded(forceTopSites: true)
         }

@@ -28,6 +28,7 @@ public struct ImageIdentifiers {
     public static let noImageMode = "menu-NoImageMode"
     public static let paste = "menu-Paste"
     public static let pasteAndGo = "menu-PasteAndGo"
+    public static let pinSmall = "pin_small"
     public static let placeholderAvatar = "placeholder-avatar"
     public static let readingList = "menu-panel-ReadingList"
     public static let reportSiteIssue = "menu-reportSiteIssue"

@@ -367,6 +367,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         switch FirefoxHomeSectionType(indexPath.section) {
         case .topSites:
             cellSize.height *= CGFloat(viewModel.topSiteViewModel.numberOfRows)
+            cellSize.height += (FxHomeTopSitesViewModel.UX.interItemSpacing + 24) * CGFloat(viewModel.topSiteViewModel.numberOfRows - 1)
             return cellSize
 
         case .jumpBackIn:
@@ -720,8 +721,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         case .pocket:
             return viewModel.pocketViewModel.getSitesDetail(for: indexPath.row)
         case .topSites:
-            // TODO: Laurie - getSitesDetail ?
-            return viewModel.topSiteViewModel.tileManager.getSite(index: indexPath.item)
+            return viewModel.topSiteViewModel.tileManager.getSiteDetail(index: indexPath.row)
         default:
             return nil
         }

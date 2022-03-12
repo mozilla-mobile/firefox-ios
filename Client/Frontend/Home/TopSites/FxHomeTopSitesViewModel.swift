@@ -6,10 +6,12 @@ import Foundation
 import Shared
 import Storage
 
+// TODO: Laurie - remove rows that has nothing (no tiles)
 class FxHomeTopSitesViewModel {
 
-    private struct UX {
+    struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
+        static let interItemSpacing: CGFloat = 24
     }
 
     private let profile: Profile
@@ -34,8 +36,10 @@ class FxHomeTopSitesViewModel {
         let isLandscape = UIWindow.isLandscape
         if UIDevice.current.userInterfaceIdiom == .phone {
             if isLandscape {
+                print("Laurie - numItems: 8")
                 return 8
             } else {
+                print("Laurie - numItems: 4")
                 return 4
             }
         } else {
@@ -51,6 +55,11 @@ class FxHomeTopSitesViewModel {
 
     var numberOfRows: Int {
         return tileManager.numberOfRows
+    }
+
+    func reloadData(for trait: UITraitCollection) {
+        let numberOfHorizontalItem = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: trait)
+        tileManager.calculateTopSiteData(numberOfItemsPerRow: numberOfHorizontalItem)
     }
 
     // The dimension of a cell
@@ -173,7 +182,7 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol
     }
 
     var hasData: Bool {
-        return tileManager.getSiteCount() != 0
+        return tileManager.hasData
     }
 
     func updateData(completion: @escaping () -> Void) {

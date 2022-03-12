@@ -21,49 +21,45 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         static let shadowRadius: CGFloat = 6
         static let borderColor = UIColor(white: 0, alpha: 0.1)
         static let borderWidth: CGFloat = 0.5
-        static let pinIconSize: CGFloat = 12
+        static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let cellSize: CGSize = CGSize(width: 65, height: 80)
     }
 
-    var url: URL?
-
-    lazy var imageView: UIImageView = {
-        let imageView = UIImageView()
+    lazy var imageView: UIImageView = .build { imageView in
         imageView.layer.cornerRadius = UX.iconCornerRadius
         imageView.layer.masksToBounds = true
-        return imageView
-    }()
+    }
 
-    lazy var titleWrapper = UIView()
+    lazy var titleWrapper: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.axis = .horizontal
+        stackView.spacing = UX.titleOffset
+    }
 
-    lazy var pinImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.templateImageNamed("pin_small")
-        return imageView
-    }()
+    lazy var pinViewHolder: UIView = .build { _ in }
 
-    lazy fileprivate var titleLabel: UILabel = {
-        let titleLabel = UILabel()
+    lazy var pinImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.pinSmall)
+    }
+
+    lazy fileprivate var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         titleLabel.preferredMaxLayoutWidth = UX.backgroundSize.width + TopSiteItemCell.UX.shadowRadius
-        return titleLabel
-    }()
+    }
 
-    lazy private var faviconBG: UIView = {
-        let view = UIView()
+    lazy private var faviconBG: UIView = .build { view in
         view.layer.cornerRadius = UX.cellCornerRadius
         view.layer.borderWidth = UX.borderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = UX.shadowRadius
-        return view
-    }()
+    }
 
-    lazy var selectedOverlay: UIView = {
-        let selectedOverlay = UIView()
+    lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
-        return selectedOverlay
-    }()
+    }
 
     override var isSelected: Bool {
         didSet {
@@ -74,41 +70,44 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         isAccessibilityElement = true
+        // TODO: Laurie - identifier
         accessibilityIdentifier = "TopSite"
         contentView.addSubview(titleWrapper)
-        titleWrapper.addSubview(titleLabel)
+        titleWrapper.addArrangedSubview(titleLabel)
+        pinViewHolder.addSubview(pinImageView)
         contentView.addSubview(faviconBG)
         faviconBG.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
-        titleWrapper.snp.makeConstraints { make in
-            make.top.equalTo(faviconBG.snp.bottom).offset(8)
-            make.bottom.centerX.equalTo(contentView)
-            make.width.lessThanOrEqualTo(UX.backgroundSize.width + 20)
-        }
+        NSLayoutConstraint.activate([
+            titleWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: 8),
+            titleWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            titleWrapper.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            titleWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: UX.backgroundSize.width + 20),
 
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleWrapper)
-            make.leading.trailing.equalTo(titleWrapper)
-        }
+            faviconBG.topAnchor.constraint(equalTo: contentView.topAnchor),
+            faviconBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            faviconBG.widthAnchor.constraint(equalToConstant: UX.backgroundSize.width),
+            faviconBG.heightAnchor.constraint(equalToConstant: UX.backgroundSize.height),
 
-        imageView.snp.makeConstraints { make in
-            make.size.equalTo(UX.iconSize)
-            make.center.equalTo(faviconBG)
-        }
+            imageView.widthAnchor.constraint(equalToConstant: UX.iconSize.width),
+            imageView.heightAnchor.constraint(equalToConstant: UX.iconSize.height),
+            imageView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
 
-        selectedOverlay.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
-        }
+            // TODO: Laurie - Fix selected overlay
+            selectedOverlay.topAnchor.constraint(equalTo: contentView.topAnchor),
+            selectedOverlay.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            selectedOverlay.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            selectedOverlay.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-        faviconBG.snp.makeConstraints { make in
-            make.top.centerX.equalTo(contentView)
-            make.size.equalTo(UX.backgroundSize)
-        }
+            pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
+            pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor),
+            pinViewHolder.centerYAnchor.constraint(equalTo: pinImageView.centerYAnchor),
 
-        pinImageView.snp.makeConstraints { make in
-            make.size.equalTo(UX.pinIconSize)
-        }
+            pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
+            pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -121,41 +120,30 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         imageView.image = nil
         imageView.backgroundColor = UIColor.clear
         faviconBG.backgroundColor = UIColor.clear
+
+        // TODO: Laurie - fix pins not working
         pinImageView.removeFromSuperview()
         imageView.sd_cancelCurrentImageLoad()
         titleLabel.text = ""
     }
 
-    func configureWithTopSiteItem(_ site: Site) {
-        url = site.tileURL
-
-        if let provider = site.metadata?.providerName {
-            titleLabel.text = provider.lowercased()
-        } else {
-            titleLabel.text = site.tileURL.shortDisplayString
-        }
+    // TODO: Laurie - fix layout when changing from home settings (2 to 4 fours for example)
+    func configure(_ topSite: HomeTopSite) {
+        titleLabel.text = topSite.title
+        accessibilityLabel = titleLabel.text
 
         let words = titleLabel.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
         titleLabel.numberOfLines = words == 1 ? 1 : 2
 
         // If its a pinned site add a bullet point to the front
-        if let _ = site as? PinnedSite {
-            titleWrapper.addSubview(pinImageView)
-            pinImageView.snp.makeConstraints { make in
-                make.trailing.equalTo(self.titleLabel.snp.leading).offset(-UX.titleOffset)
-                make.centerY.equalTo(self.titleLabel.snp.centerY)
-            }
-            titleLabel.snp.updateConstraints { make in
-                make.leading.equalTo(titleWrapper).offset(UX.pinIconSize + UX.titleOffset)
-            }
-        } else {
-            titleLabel.snp.updateConstraints { make in
-                make.leading.equalTo(titleWrapper)
-            }
+        if topSite.pinned {
+            titleWrapper.addArrangedViewToTop(pinViewHolder)
         }
 
-        accessibilityLabel = titleLabel.text
-        self.imageView.setFaviconOrDefaultIcon(forSite: site) {}
+        imageView.image = topSite.image
+        topSite.imageLoaded = { image in
+            self.imageView.image = image
+        }
 
         applyTheme()
     }

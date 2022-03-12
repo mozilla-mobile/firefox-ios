@@ -14,8 +14,6 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewCompositionalLayout(section: layoutSection)
-//        let layout = TopSiteFlowLayout()
-//        layout.itemSize = UX.ItemSize
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -47,6 +45,7 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
     // MARK: - Helpers
 
     func reloadLayout() {
+        viewModel?.reloadData(for: traitCollection)
         collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: layoutSection)
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
@@ -66,8 +65,8 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
     private var layoutSection: NSCollectionLayoutSection {
         let numberOfHorizontalItems = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: traitCollection)
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1/4), //.estimated(TopSiteItemCell.UX.cellSize.width), //.fractionalWidth(CGFloat(1/numberOfHorizontalItems)),
-            heightDimension: .fractionalHeight(1) // .estimated(TopSiteItemCell.UX.cellSize.height)
+            widthDimension: .fractionalWidth(1/CGFloat(numberOfHorizontalItems)),
+            heightDimension: .fractionalHeight(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
@@ -75,14 +74,13 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
         let fractionHeight = 1/numberOfRows
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(fractionHeight) //.estimated(TopSiteItemCell.UX.cellSize.height)
+            heightDimension: .fractionalHeight(fractionHeight)
         )
 
-        let subItems = Array(repeating: item, count: 4)
+        let subItems = Array(repeating: item, count: numberOfHorizontalItems)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: subItems)
-//        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
-//        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-//                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
+                                                      bottom: FxHomeTopSitesViewModel.UX.interItemSpacing, trailing: 0)
 
         let section = NSCollectionLayoutSection(group: group)
         return section
@@ -120,7 +118,7 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier, for: indexPath) as? TopSiteItemCell,
            let contentItem = viewModel?.tileManager.getSite(index: indexPath.row) {
-            cell.configureWithTopSiteItem(contentItem)
+            cell.configure(contentItem)
             print("Laurie - configuring cell \(indexPath)")
             return cell
 
@@ -133,7 +131,7 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let contentItem = viewModel?.tileManager.getSite(index: indexPath.row) else { return }
+        guard let contentItem = viewModel?.tileManager.getSiteDetail(index: indexPath.row) else { return }
         viewModel?.urlPressedHandler?(contentItem, indexPath)
     }
 }
