@@ -102,6 +102,8 @@ class TopTabsViewController: UIViewController {
                                                  reuseID: TopTabCell.cellIdentifier,
                                                  tabDisplayType: .TopTabTray,
                                                  profile: profile)
+        topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TopTabCell.Identifier, tabDisplayType: .TopTabTray, profile: profile)
+        tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }

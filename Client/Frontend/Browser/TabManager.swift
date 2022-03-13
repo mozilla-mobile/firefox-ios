@@ -65,6 +65,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     fileprivate let store: TabManagerStore
     fileprivate let profile: Profile
     fileprivate var isRestoringTabs = false
+    var tabDisplayType: TabDisplayType = .TabGrid
 
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -389,12 +390,16 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         var placeNextToParentTab = false
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
+            
         } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
             placeNextToParentTab = true
             insertIndex += 1
-            while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) {
+            
+            // If we are on iPad (.TopTabTray), the new tab should be inserted immediately after the parent tab.
+            while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) && tabDisplayType == .TabGrid {
                 insertIndex += 1
             }
+            
             tab.parent = parent
             tabs.insert(tab, at: insertIndex)
         }
