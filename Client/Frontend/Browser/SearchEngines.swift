@@ -198,9 +198,13 @@ class SearchEngines {
         assert(engineNames.count > 0, "No search engines")
 
         return engineNames.map({ (name: $0, path: pluginDirectory.appendingPathComponent("\($0).xml").path) })
-            .filter({ FileManager.default.fileExists(atPath: $0.path) })
-            .compactMap({ parser.parse($0.path, engineID: $0.name) })
-            .sorted { e, _ in e.shortName == defaultEngineName }
+            .filter({
+                FileManager.default.fileExists(atPath: $0.path)
+            }).compactMap({
+                parser.parse($0.path, engineID: $0.name)
+            }).sorted { e, _ in
+                e.shortName == defaultEngineName
+            }
     }
 
     /// Get all known search engines, possibly as ordered by the user.

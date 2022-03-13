@@ -20,7 +20,6 @@ class MailAppSettingsTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts["Mail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Outlook"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
-        XCTAssertFalse(app.tables.cells.staticTexts["Mail.Ru"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["myMail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Spark"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["YMail!"].isSelected)
