@@ -28,12 +28,31 @@
     <string>be.wikipedia.org</string>
     <string>duckduckgo</string>
     <string>tut.by</string>
-    <string>yandex.by</string>
   </array>
   <key>be-BY</key>
   <array>
-    <string>yandex.by</string>
-    <string>google-nocodes</string>
+    <string>google-com-nocodes</string>
+    <string>be.wikipedia.org</string>
+    <string>duckduckgo</string>
+    <string>tut.by</string>
+  </array>
+  <key>be-KZ</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>be.wikipedia.org</string>
+    <string>duckduckgo</string>
+    <string>tut.by</string>
+  </array>
+  <key>be-RU</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>be.wikipedia.org</string>
+    <string>duckduckgo</string>
+    <string>tut.by</string>
+  </array>
+  <key>be-TR</key>
+  <array>
+    <string>google-com-nocodes</string>
     <string>be.wikipedia.org</string>
     <string>duckduckgo</string>
     <string>tut.by</string>
@@ -135,6 +154,30 @@
     <string>qwant</string>
     <string>twitter</string>
     <string>wikipedia</string>
+  </array>
+  <key>en-BY</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
+  <key>en-RU</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
+  <key>en-KZ</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
+  <key>en-TR</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
   </array>
   <key>en-US</key>
   <array>
@@ -362,16 +405,35 @@
   </array>
   <key>kk</key>
   <array>
-    <string>yandex</string>
     <string>google</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-kk</string>
+  </array>
+  <key>kk-BY</key>
+  <array>
+    <string>google-com-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-kk</string>
   </array>
   <key>kk-KZ</key>
   <array>
-    <string>yandex</string>
-    <string>google-nocodes</string>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-kk</string>
+  </array>
+  <key>kk-RU</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-kk</string>
+  </array>
+  <key>kk-TR</key>
+  <array>
+    <string>google-com-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-kk</string>
@@ -517,39 +579,41 @@
   <key>ru</key>
   <array>
     <string>google</string>
-    <string>yandex-ru</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-ru</string>
   </array>
   <key>ru-BY</key>
   <array>
-    <string>yandex-ru</string>
-    <string>google-nocodes</string>
+    <string>google-com-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-ru</string>
   </array>
   <key>ru-KZ</key>
   <array>
-    <string>yandex-ru</string>
-    <string>google-nocodes</string>
+    <string>google-com-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-ru</string>
   </array>
   <key>ru-RU</key>
   <array>
-    <string>yandex-ru</string>
-    <string>google-nocodes</string>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-ru</string>
+  </array>
+  <key>ru-TR</key>
+  <array>
+    <string>google-com-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-ru</string>
   </array>
   <key>ru-UA</key>
   <array>
-    <string>google</string>
-    <string>yandex-ru</string>
+    <string>google-com-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-ru</string>
@@ -621,15 +685,34 @@
   <key>tr</key>
   <array>
     <string>google</string>
-    <string>yandex-tr</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-tr</string>
+  </array>
+  <key>tr-BY</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-tr</string>
+  </array>
+  <key>tr-KZ</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-tr</string>
+  </array>
+  <key>tr-RU</key>
+  <array>
+    <string>google-com-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-tr</string>
   </array>
   <key>tr-TR</key>
   <array>
-    <string>yandex-tr</string>
-    <string>google-nocodes</string>
+    <string>google-com-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-tr</string>
@@ -640,7 +723,6 @@
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-uk</string>
-    <string>yandex-market</string>
   </array>
   <key>uk-UA</key>
   <array>
@@ -648,7 +730,34 @@
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-uk</string>
-    <string>yandex-market</string>
+  </array>
+  <key>uk-BY</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-uk</string>
+  </array>
+  <key>uk-KZ</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-uk</string>
+  </array>
+  <key>uk-RU</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-uk</string>
+  </array>
+  <key>uk-TR</key>
+  <array>
+    <string>google-com-nocodes</string>
+    <string>duckduckgo</string>
+    <string>twitter</string>
+    <string>wikipedia-uk</string>
   </array>
   <key>ur</key>
   <array>
