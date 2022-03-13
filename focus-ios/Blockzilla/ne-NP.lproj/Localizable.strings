@@ -379,6 +379,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "प्रयोग गर्न स्ट्रिङ खोजी गर्नुहोस्";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "उदाहरण: searchengine.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "पेष्ट गर्नुहोस् वा खोजी गरिएको अक्षर प्रविष्ट गर्नुहोस्। आवश्यक भएमा, खोज शब्दलाई %s सँग प्रतिस्थापन गर्नुहोस् ।";
 
@@ -510,6 +513,18 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "सर्टकटहरु बाट हटाउनुहोस्";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "सर्टकट पुन: नामाकरण गर्नुहोस्";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "सर्टकटको नाम";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "सङ्ग्रह गर्नुहोस्";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "रद्द गर्नुहोस्";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "थप्नुहोस्";

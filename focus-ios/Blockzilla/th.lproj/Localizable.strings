@@ -476,7 +476,7 @@
 "share" = "แบ่งปัน";
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
-"ShareMenu.AddToShortcuts" = "เพิ่มทางลัด";
+"ShareMenu.AddToShortcuts" = "เพิ่มไปยังคำสั่งลัด";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "คัดลอกที่อยู่";
@@ -513,6 +513,12 @@
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "ลบออกจากคำสั่งลัด";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "เปลี่ยนชื่อคำสั่งลัด";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "ชื่อคำสั่งลัด";
 
 /* Text for the rename shortcut alert primary action. */
 "ShortcutView.RenameShortcutAlertPrimaryAction" = "บันทึก";
@@ -568,17 +574,23 @@
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "%@ ตัวติดตามที่ถูกปิดกั้นจนถึงตอนนี้";
 
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "คุณเรียกดู %@ การปิดกั้น";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "เลือก เพิ่มไปยังคำสั่งลัด จากเมนู %@";
+
 /* Text for a label that indicates the title for shortcuts tip. */
 "Tip.Shortcuts.Title" = "สร้างทางลัดไปยังเว็ปไซต์ที่คุณเข้าชมบ่อยที่สุด:";
 
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
-"Tip.SiriErase.Description" = "เพิ่มทางลัด Siri";
+"Tip.SiriErase.Description" = "เพิ่มคำสั่งลัด Siri";
 
 /* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.SiriErase.Title" = "“Siri ลบวาระ %@ ของฉัน”";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
-"Tip.SiriFavorite.Description" = "เพิ่มทางลัด Siri";
+"Tip.SiriFavorite.Description" = "เพิ่มคำสั่งลัด Siri";
 
 /* Text for a label that indicates the title for siri favorite tip. */
 "Tip.SiriFavorite.Title" = "“Siri เปิดโปรดของฉัน”";
