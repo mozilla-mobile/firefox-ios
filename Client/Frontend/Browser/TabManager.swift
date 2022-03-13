@@ -396,6 +396,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             insertIndex += 1
             
             // If we are on iPad (.TopTabTray), the new tab should be inserted immediately after the parent tab.
+            // In this scenario the while loop shouldn't be executed.
             while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) && tabDisplayType == .TabGrid {
                 insertIndex += 1
             }

@@ -653,10 +653,10 @@ private extension TabManagerTests {
         // parentTab, childTab3, childTab2, childTab1
         
         XCTAssertEqual(manager.tabs.count, 4)
-        XCTAssertEqual(manager.tabs[0].tabUUID, parentTab.tabUUID, "")
-        XCTAssertEqual(manager.tabs[1].tabUUID, childTab3.tabUUID, "")
-        XCTAssertEqual(manager.tabs[2].tabUUID, childTab2.tabUUID, "")
-        XCTAssertEqual(manager.tabs[3].tabUUID, childTab1.tabUUID, "")
+        XCTAssertEqual(manager.tabs[0].tabUUID, parentTab.tabUUID)
+        XCTAssertEqual(manager.tabs[1].tabUUID, childTab3.tabUUID)
+        XCTAssertEqual(manager.tabs[2].tabUUID, childTab2.tabUUID)
+        XCTAssertEqual(manager.tabs[3].tabUUID, childTab1.tabUUID)
     }
     
     func testInsertMultipleTabsNextToParentTab_TabGrid() {
@@ -674,9 +674,9 @@ private extension TabManagerTests {
         // parentTab, childTab1, childTab2, childTab3
         
         XCTAssertEqual(manager.tabs.count, 4)
-        XCTAssertEqual(manager.tabs[0].tabUUID, parentTab.tabUUID, "")
-        XCTAssertEqual(manager.tabs[1].tabUUID, childTab1.tabUUID, "")
-        XCTAssertEqual(manager.tabs[2].tabUUID, childTab2.tabUUID, "")
-        XCTAssertEqual(manager.tabs[3].tabUUID, childTab3.tabUUID, "")
+        XCTAssertEqual(manager.tabs[0].tabUUID, parentTab.tabUUID)
+        XCTAssertEqual(manager.tabs[1].tabUUID, childTab1.tabUUID)
+        XCTAssertEqual(manager.tabs[2].tabUUID, childTab2.tabUUID)
+        XCTAssertEqual(manager.tabs[3].tabUUID, childTab3.tabUUID)
     }
 }
