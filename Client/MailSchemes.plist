@@ -22,12 +22,6 @@
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Mail.Ru</string>
-		<key>scheme</key>
-		<string>mailru-mailto://</string>
-	</dict>
-	<dict>
-		<key>name</key>
 		<string>myMail</string>
 		<key>scheme</key>
 		<string>mymail-mailto://</string>
