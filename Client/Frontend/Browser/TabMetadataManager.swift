@@ -73,9 +73,21 @@ class TabMetadataManager {
         updateObservationForKey(key: key, observation: observation)
     }
     
+    func updateObservationViewTime() {
+        let key = tabGroupData.tabHistoryMetadatakey()
+        let observation = HistoryMetadataObservation(url: key.url,
+                                                     referrerUrl: key.referrerUrl,
+                                                     searchTerm: key.searchTerm,
+                                                     viewTime: tabGroupsTimerHelper.elapsedTime,
+                                                     documentType: nil,
+                                                     title: nil)
+        updateObservationForKey(key: key, observation: observation)
+    }
+    
     // MARK: - Private
     
-    private func updateObservationForKey(key: HistoryMetadataKey, observation: HistoryMetadataObservation) {
+    private func updateObservationForKey(key: HistoryMetadataKey,
+                                         observation: HistoryMetadataObservation) {
         if let profile = profile {
             _ = profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
         }
@@ -104,8 +116,7 @@ class TabMetadataManager {
         } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
             let key = tabGroupData.tabHistoryMetadatakey()
             if key.referrerUrl != searchData.tabAssociatedNextUrl {
-                let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
-                updateObservationForKey(key: key, observation: observation)
+                updateObservationViewTime()
                 tabGroupData.tabAssociatedNextUrl = searchData.tabAssociatedNextUrl
             }
             tabGroupsTimerHelper.resetTimer()
@@ -125,14 +136,7 @@ class TabMetadataManager {
     
     private func updateTabSwitched(searchData: TabGroupData) {
         if !shouldResetTabGroupData {
-            let key = tabGroupData.tabHistoryMetadatakey()
-            let observation = HistoryMetadataObservation(url: key.url,
-                                                         referrerUrl: key.referrerUrl,
-                                                         searchTerm: key.searchTerm,
-                                                         viewTime: tabGroupsTimerHelper.elapsedTime,
-                                                         documentType: nil,
-                                                         title: nil)
-            updateObservationForKey(key: key, observation: observation)
+            updateObservationViewTime()
             tabGroupsTimerHelper.pauseOrStop()
             tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabSwitched.rawValue
         }
@@ -158,14 +162,6 @@ class TabMetadataManager {
         
         guard let title = title, !title.isEmpty else { return }
 
-        let url = tabGroupData.tabAssociatedSearchUrl
-        let key = HistoryMetadataKey(url: url, searchTerm: "", referrerUrl: "")
-        let observation = HistoryMetadataObservation(url: url,
-                                                     referrerUrl: nil,
-                                                     searchTerm: nil,
-                                                     viewTime: nil,
-                                                     documentType: nil,
-                                                     title: title)
-        updateObservationForKey(key: key, observation: observation)
+        updateObservationTitle(title)
     }
 }
