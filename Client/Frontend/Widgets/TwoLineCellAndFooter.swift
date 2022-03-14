@@ -13,6 +13,11 @@ struct TwoLineCellUX {
 // TODO: Add support for accessibility for when text size changes
 
 class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
+    static let reuseIdentifier = "two-line-image-overlay-cell"
+    
+    // Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
+    static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
+    
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -34,6 +39,13 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
         imgView.clipsToBounds = true
         return imgView
     }()
+    
+    lazy var chevronAccessoryView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: "goBack")?.withHorizontallyFlippedOrientation()
+        imageView.image?.imageFlippedForRightToLeftLayoutDirection()
+        imageView.image?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
+        imageView.isHidden = true
+    }
 
     var titleLabel: UILabel = {
         let label = UILabel()
@@ -72,6 +84,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
         midView.addSubview(descriptionLabel)
 
         containerView.addSubview(leftImageView)
+        containerView.addSubview(chevronAccessoryView)
         containerView.addSubview(midView)
 
         containerView.addSubview(leftOverlayImageView)
@@ -90,6 +103,13 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
             make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
+        }
+        
+        // Only shown when we need a chevron, and is made visible at call site
+        chevronAccessoryView.snp.makeConstraints { make in
+            make.height.width.equalTo(28)
+            make.centerY.equalTo(containerView.snp.centerY)
+            make.trailing.equalTo(containerView.snp.trailing).offset(-8)
         }
 
         leftOverlayImageView.snp.makeConstraints { make in

@@ -382,6 +382,8 @@ extension TelemetryWrapper {
         case syncSignIn = "sync-sign-in"
         case syncCreateAccount = "sync-create-account"
         case libraryPanel = "library-panel"
+        case navigateToGroupHistory = "navigate-to-group-history"
+        case selectedHistoryItem = "selected-history-item"
         case sharePageWith = "share-page-with"
         case sendToDevice = "send-to-device"
         case copyAddress = "copy-address"
@@ -430,6 +432,8 @@ extension TelemetryWrapper {
         case tabView = "tab-view"
         case bookmarksPanel = "bookmarks-panel"
         case historyPanel = "history-panel"
+        case historyPanelNonGroupItem = "history-panel-non-grouped-item"
+        case historyPanelGroupedItem = "history-panel-grouped-item"
         case readingPanel = "reading-panel"
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
@@ -657,9 +661,14 @@ extension TelemetryWrapper {
         case (.action, .view, .pocketSectionImpression, _, _):
             GleanMetrics.Pocket.sectionImpressions.add()
 
-        // MARK: Library
+        // MARK: Library Panel
         case (.action, .tap, .libraryPanel, let type?, _):
             GleanMetrics.Library.panelPressed[type.rawValue].add()
+        // History Panel related
+        case (.action, .navigate, .navigateToGroupHistory, _, _):
+            GleanMetrics.History.groupList.add()
+        case (.action, .tap, .selectedHistoryItem, let type?, _):
+            GleanMetrics.History.selectedItem[type.rawValue].add()
         // MARK: Sync
         case (.action, .open, .syncTab, _, _):
             GleanMetrics.Sync.openTab.add()

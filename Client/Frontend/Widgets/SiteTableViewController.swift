@@ -13,9 +13,21 @@ struct SiteTableViewControllerUX {
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
+    static let reuseIdentifier = "site-table-view-header"
+    
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         label.textColor = UIColor.theme.tableView.headerTextDark
+    }
+    
+    // Currently, historyPanel uses this WHEN STG is available in that section.
+    let headerActionButton: UIButton = .build { button in
+        button.setTitle("Show all", for: .normal)
+        button.backgroundColor = .clear
+        button.titleLabel?.font = .systemFont(ofSize: 12)
+//        button.addTarget(self, action: #selector(handleTapForPanel), for: .touchUpInside)
+        button.setTitleColor(ThemeManager.shared.currentTheme.colours.iconAccentBlue, for: .normal)
+        button.isHidden = true
     }
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
@@ -27,7 +39,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
         super.init(reuseIdentifier: reuseIdentifier)
         
         translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
+        contentView.addSubviews(titleLabel, headerActionButton)
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
@@ -36,7 +48,10 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            
+            headerActionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            headerActionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
         ])
 
         applyTheme()

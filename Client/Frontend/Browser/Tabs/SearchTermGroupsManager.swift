@@ -7,10 +7,38 @@ import Shared
 import Storage
 import MozillaAppServices
 
-struct ASGroup<T> {
+struct ASGroup<T> : Hashable {
     var searchTerm: String
     var groupedItems: [T]
     var timestamp: Timestamp
+    let identifier = UUID()
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
+    
+    static func == (lhs: ASGroup<T>, rhs: ASGroup<T>) -> Bool {
+        lhs.identifier == rhs.identifier
+    }
+    
+}
+
+extension ASGroup: HighlightItem {
+    var type: HighlightItemType {
+        return .group
+    }
+
+    var displayTitle: String {
+        return searchTerm
+    }
+
+    var description: String? {
+        return "\(groupedItems.count)"
+    }
+
+    var siteUrl: URL? {
+        return nil
+    }
 }
 
 class SearchTermGroupsManager {
@@ -67,7 +95,7 @@ class SearchTermGroupsManager {
         guard (items is [Tab] || items is [Site] || items is [HistoryHighlight]) else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
-        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
+        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.global(qos: .userInteractive)) { result in
             guard let historyMetadata = result.successValue else { return completion(nil, [T]()) }
 
             let searchTermMetaDataGroup = buildMetadataGroups(from: historyMetadata)

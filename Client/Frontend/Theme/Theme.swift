@@ -32,6 +32,7 @@ protocol ThemeColourPalette {
     var layer2: UIColor { get }
     var layer2Blur: UIColor { get }
     var layer3: UIColor { get }
+    var layer4: UIColor { get }
     var layerEmphasis: UIColor { get }
     var scrim: UIColor { get }
     var textDisabled: UIColor { get }

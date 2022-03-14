@@ -18,6 +18,8 @@ enum OneLineTableViewCustomization {
 class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     
+    static let reuseIdentifier = "one-line-table-view-cell"
+    
     override var indentationLevel: Int {
         didSet {
             containerView.snp.remakeConstraints { make in
