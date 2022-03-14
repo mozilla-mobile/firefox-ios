@@ -319,7 +319,12 @@ class Tab: NSObject {
         }
     }
 
-    func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: String? = nil, nextUrl: String = "") {
+    func updateTimerAndObserving(
+        state: TabGroupTimerState,
+        searchTerm: String? = nil,
+        searchProviderUrl: String? = nil,
+        nextUrl: String = ""
+    ) {
         switch state {
         case .navSearchLoaded:
             shouldResetTabGroupData = false
@@ -328,11 +333,13 @@ class Tab: NSObject {
             tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
             tabGroupData.tabAssociatedNextUrl = nextUrl
             tabGroupData.tabHistoryCurrentState = state.rawValue
+
         case .newTab:
             shouldResetTabGroupData = false
             tabGroupsTimerHelper.resetTimer()
             tabGroupsTimerHelper.startOrResume()
             tabGroupData.tabHistoryCurrentState = state.rawValue
+
         case .tabNavigatedToDifferentUrl:
             if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
                 // reset tab group
@@ -350,6 +357,7 @@ class Tab: NSObject {
                 tabGroupsTimerHelper.startOrResume()
                 tabGroupData.tabHistoryCurrentState = state.rawValue
             }
+
         case .tabSelected:
             if !shouldResetTabGroupData {
                 if tabGroupsTimerHelper.isPaused {
@@ -357,6 +365,7 @@ class Tab: NSObject {
                 }
                 tabGroupData.tabHistoryCurrentState = state.rawValue
             }
+
         case .tabSwitched:
             if !shouldResetTabGroupData {
                 let key = tabGroupData.tabHistoryMetadatakey()
@@ -365,6 +374,7 @@ class Tab: NSObject {
                 tabGroupsTimerHelper.pauseOrStop()
                 tabGroupData.tabHistoryCurrentState = state.rawValue
             }
+
         case .openInNewTab:
             shouldResetTabGroupData = false
             if let searchUrl = searchProviderUrl {
@@ -373,6 +383,7 @@ class Tab: NSObject {
                 tabGroupData.tabAssociatedNextUrl = nextUrl
             }
             tabGroupData.tabHistoryCurrentState = state.rawValue
+
         case .none:
             tabGroupData.tabHistoryCurrentState = state.rawValue
         }

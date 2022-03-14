@@ -20,17 +20,18 @@ enum FeatureFlagName: String, CaseIterable {
     case adjustEnvironmentProd
     case bottomSearchBar
     case chronologicalTabs
-    case inactiveTabs
-    case groupedTabs
     case historyHighlights
+    case historyGroups
+    case inactiveTabs
     case jumpBackIn
     case nimbus
     case pocket
     case pullToRefresh
     case recentlySaved
+    case reportSiteIssue
     case shakeToRestore
     case startAtHome
-    case reportSiteIssue
+    case tabTrayGroups
     case wallpapers
 }
 
@@ -42,10 +43,10 @@ enum FeatureFlagName: String, CaseIterable {
 /// 2. Add a new `FlaggableFeature` in the ``FeatureFlagManager.initializeFeatures`` and add it
 /// to the `features` dictionary using its key.
 /// 3. Optional: If the feature is meant to be togglable, add a key for the feature
-/// in the `PrefsKeys` struct, and then also add it to the `FlaggableFeature.featureKey`
-/// function to allow the flag status to be changed.
+/// in the `PrefsKeys.FeatureFlags` struct, and then also add it to the
+/// `FlaggableFeature.featureKey` function to allow the flag status to be changed.
 /// 4. Add the `FeatureFlagsProtocol` protocol to the class you wish to use the feature
-/// flag in, and access the required flag using `featureFlags.isFeatureActiveForBuild`.
+/// flag in, and access the required flag using `featureFlags.`.
 class FeatureFlagsManager {
 
     /// This Singleton should only be accessed directly in places where the
@@ -66,6 +67,15 @@ class FeatureFlagsManager {
     public func isFeatureActiveForBuild(_ featureID: FeatureFlagName) -> Bool {
         guard let feature = features[featureID] else { return false }
         return feature.isActiveForBuild()
+    }
+
+    /// A convenient way to check both `isFeatureActiveForBuild` and `userPreferenceFor`
+    /// at the same time without always writing the same check twice.
+    public func isFeatureBuildAndUserEnabled(_ featureID: FeatureFlagName) -> Bool {
+        let buildConfiguration = isFeatureActiveForBuild(featureID)
+        let userPreference = userPreferenceFor(featureID) == UserFeaturePreference.enabled
+
+        return buildConfiguration && userPreference
     }
 
     public func toggleBuildFeature(_ featureID: FeatureFlagName) {
@@ -132,15 +142,20 @@ class FeatureFlagsManager {
                                          enabledFor: [])
         features[.chronologicalTabs] = chronTabs
 
+        let historyHighlights = FlaggableFeature(withID: .historyHighlights,
+                                                 and: profile,
+                                                 enabledFor: [.developer])
+        features[.historyHighlights] = historyHighlights
+
+        let historyGroups = FlaggableFeature(withID: .historyGroups,
+                                                 and: profile,
+                                                 enabledFor: [])
+        features[.historyGroups] = historyGroups
+
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
                                             and: profile,
                                             enabledFor: [.developer, .beta])
         features[.inactiveTabs] = inactiveTabs
-
-        let groupedTabs = FlaggableFeature(withID: .groupedTabs,
-                                           and: profile,
-                                           enabledFor: [.developer])
-        features[.groupedTabs] = groupedTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
                                           and: profile,
@@ -170,10 +185,11 @@ class FeatureFlagsManager {
                                              enabledFor: [.release, .beta, .developer])
         features[.recentlySaved] = recentlySaved
 
-        let historyHighlights = FlaggableFeature(withID: .historyHighlights,
-                                                 and: profile,
-                                                 enabledFor: [.developer])
-        features[.historyHighlights] = historyHighlights
+        let reportSiteIssue = FlaggableFeature(withID: .reportSiteIssue,
+                                               and: profile,
+                                               enabledFor: [.beta, .developer])
+
+        features[.reportSiteIssue] = reportSiteIssue
 
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
                                               and: profile,
@@ -185,11 +201,10 @@ class FeatureFlagsManager {
                                            enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
         
-        let reportSiteIssue = FlaggableFeature(withID: .reportSiteIssue,
-                                               and: profile,
-                                               enabledFor: [.beta, .developer])
-        
-        features[.reportSiteIssue] = reportSiteIssue
+        let tabTrayGroups = FlaggableFeature(withID: .tabTrayGroups,
+                                           and: profile,
+                                           enabledFor: [.developer])
+        features[.tabTrayGroups] = tabTrayGroups
 
         let wallpapers = FlaggableFeature(withID: .wallpapers,
                                           and: profile,

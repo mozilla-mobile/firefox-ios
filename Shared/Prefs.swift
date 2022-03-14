@@ -30,17 +30,27 @@ public struct PrefsKeys {
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
-    public static let ChronTabsPrefKey = "chronTabsPrefKey"
-    public static let CustomWallpaperPrefKey = "customWallpaperPrefKey"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
     public static let SessionCount = "sessionCount"
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
-    public static let StartAtHome = "startAtHome"
-    public static let PullToRefresh = "pullToRefresh"
     public static let KeySearchBarPosition = "SearchBarPosition"
+
+    public struct FeatureFlags {
+        public static let ASPocketStories = "ASPocketStoriesVisible"
+        public static let ChronologicalTabs = "chronTabsPrefKey"
+        public static let CustomWallpaper = "customWallpaperPrefKey"
+        public static let HistoryHighlightsSection = "historyHighlightsSectionEnabled"
+        public static let HistoryGroups = "historyGroupsEnabled"
+        public static let InactiveTabs = "KeyInactiveTabs"
+        public static let JumpBackInSection = "jumpBackInSectionEnabled"
+        public static let PullToRefresh = "pullToRefresh"
+        public static let RecentlySavedSection = "recentlySavedSectionEnabled"
+        public static let StartAtHome = "startAtHome"
+        public static let TabTrayGroups = "KeyEnableGroupedTabsKey"
+    }
 
     // Firefox contextual hint
     public enum ContextualHints: String, CaseIterable {
@@ -53,7 +63,6 @@ public struct PrefsKeys {
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyNewTab = "NewTabPrefKey"
-    public static let ASPocketStoriesVisible = "ASPocketStoriesVisible"
     public static let ASLastInvalidation = "ASLastInvalidation"
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
@@ -65,15 +74,10 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
-    public static let RecentlySavedSectionEnabled = "recentlySavedSectionEnabled"
-    public static let JumpBackInSectionEnabled = "jumpBackInSectionEnabled"
-    public static let HistoryHighlightsSectionEnabled = "historyHighlightsSectionEnabled"
 
     // Tabs Tray
-    public static let KeyEnableInactiveTabs = "KeyInactiveTabs"
     public static let KeyInactiveTabsModel = "KeyInactiveTabsModelKey"
     public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRunKey"
-    public static let KeyEnableGroupedTabs = "KeyEnableGroupedTabsKey"
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
 
     // Widgetkit Key

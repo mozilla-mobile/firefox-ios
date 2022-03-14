@@ -34,6 +34,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     // MARK: - Section availability variables
     var shouldShowFxLogoHeader: Bool {
         return featureFlags.isFeatureActiveForBuild(.wallpapers)
+        
     }
 
     var isTopSitesSectionEnabled: Bool {

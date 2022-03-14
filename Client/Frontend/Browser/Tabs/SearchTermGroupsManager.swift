@@ -24,11 +24,21 @@ class SearchTermGroupsManager {
         getGroups(with: profile, from: highlights, using: ordering, completion: completion)
     }
     
-    public static func getSiteGroups(with profile: Profile, from sites: [Site], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void) {
+    public static func getSiteGroups(
+        with profile: Profile,
+        from sites: [Site],
+        using ordering: ComparisonResult,
+        completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void
+    ) {
         getGroups(with: profile, from: sites, using: ordering, completion: completion)
     }
 
-    public static func getTabGroups(with profile: Profile, from tabs: [Tab], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Tab>]?, _ filteredItems: [Tab]) -> Void) {
+    public static func getTabGroups(
+        with profile: Profile,
+        from tabs: [Tab],
+        using ordering: ComparisonResult,
+        completion: @escaping ([ASGroup<Tab>]?, _ filteredItems: [Tab]) -> Void
+    ) {
         getGroups(with: profile, from: tabs, using: ordering, completion: completion)
     }
 
@@ -48,7 +58,12 @@ class SearchTermGroupsManager {
     ///   - completion: completion handler that contains `[ASGroup<T>]`  dictionary and a
     ///   filteredItems list, `[T]`, which is comprised of items from the original input
     ///   that are not part of a group.
-    private static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
+    private static func getGroups<T: Equatable>(
+        with profile: Profile,
+        from items: [T],
+        using ordering: ComparisonResult,
+        completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void
+    ) {
         guard (items is [Tab] || items is [Site] || items is [HistoryHighlight]) else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
