@@ -6,6 +6,10 @@ import Foundation
 import Shared
 import Storage
 
+protocol FxHomeTopSitesManagerDelegate: AnyObject {
+    func reloadTopSites()
+}
+
 class FxHomeTopSitesManager {
 
     private let maximumTileNumberPerRow = 12
@@ -15,11 +19,14 @@ class FxHomeTopSitesManager {
 
     private var topSites: [HomeTopSite] = []
     private var historySites: [Site] = []
+
+    weak var delegate: FxHomeTopSitesManagerDelegate?
     
     init(profile: Profile) {
         self.profile = profile
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
+        topSiteHistoryManager.delegate = self
     }
 
     func getSite(index: Int) -> HomeTopSite? {
@@ -34,6 +41,10 @@ class FxHomeTopSitesManager {
 
     var hasData: Bool {
         return !historySites.isEmpty
+    }
+
+    var siteCount: Int {
+        return historySites.count
     }
 
     func removePinTopSite(site: Site) {
@@ -53,10 +64,10 @@ class FxHomeTopSitesManager {
     }
 
     // Top sites are composed of pinned sites, history and Google top site
-    func calculateTopSiteData(numberOfItemsPerRow: Int) {
+    func calculateTopSiteData(numberOfTilesPerRow: Int) {
         var sites = historySites
         let pinnedSiteCount = countPinnedSites(sites: sites)
-        let maxItems = numberOfItemsPerRow * numberOfRows
+        let maxItems = numberOfTilesPerRow * numberOfRows
 
         if googleTopSiteManager.shouldAddGoogleTopSite(pinnedSiteCount: pinnedSiteCount,
                                                        maxItems: maxItems) {
@@ -69,6 +80,8 @@ class FxHomeTopSitesManager {
         refreshIfNeeded(forceTopSites: false)
     }
 
+    // The number of rows the user wants.
+    // If there is no preference, the default is used.
     var numberOfRows: Int {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
@@ -94,8 +107,7 @@ extension FxHomeTopSitesManager: DataObserverDelegate {
         // force-reloaded the highlights or top sites. This should prevent reloading the
         // panel after we've invalidated in the background on the first load.
         if forced {
-            // TODO: Laurie - delegate call
-//            reloadAll()
+            delegate?.reloadTopSites()
         }
     }
 }

@@ -6,20 +6,36 @@ import Foundation
 import Shared
 import Storage
 
-// TODO: Laurie - remove rows that has nothing (no tiles)
+protocol FxHomeTopSitesViewModelDelegate: AnyObject {
+    func reloadTopSites()
+}
+
+// TODO: Laurie - fix pins images not working
+// TODO: Laurie - fix layout when changing from home settings (2 to 4 fours for example)
 class FxHomeTopSitesViewModel {
 
     struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
-        static let interItemSpacing: CGFloat = 24
+        static let interItemSpacing: CGFloat = 25
     }
 
     private let profile: Profile
     private let experiments: NimbusApi
     private let isZeroSearch: Bool
 
-    var urlPressedHandler: ((Site, IndexPath) -> Void)?
+    typealias SectionDimension = (numberOfRows: Int, numberOfTilesPerRow: Int)
+    var sectionDimension: FxHomeTopSitesViewModel.SectionDimension = FxHomeTopSitesViewModel.defaultDimension
+    static var defaultDimension: FxHomeTopSitesViewModel.SectionDimension = (6, 2)
+
+    var tilePressedHandler: ((Site, Bool) -> Void)?
+    var tileLongPressedHandler: ((IndexPath) -> Void)?
     var tileManager: FxHomeTopSitesManager
+    weak var delegate: FxHomeTopSitesViewModelDelegate?
+
+    // Need to save the parent's section for the long press action
+    // since it's currently handled in FirefoxHomeViewController
+    // TODO: Each section should handle the long press details - not the parent
+    var topSitesShownInSection: Int = 0
 
     private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
         Homescreen(variables: $0)
@@ -30,9 +46,32 @@ class FxHomeTopSitesViewModel {
         self.experiments = experiments
         self.isZeroSearch = isZeroSearch
         self.tileManager = FxHomeTopSitesManager(profile: profile)
+        tileManager.delegate = self
     }
 
-    static func numberOfHorizontalItems(for trait: UITraitCollection) -> Int {
+    func getSectionDimension(for trait: UITraitCollection) -> SectionDimension {
+        let numberOfTilesPerRow = getNumberOfTilesPerRow(for: trait)
+        let numberOfRows = getNumberOfRows(numberOfTilesPerRow: numberOfTilesPerRow)
+        return SectionDimension(numberOfRows, numberOfTilesPerRow)
+    }
+
+    // The dimension of a cell
+    static func widthDimension(for numberOfHorizontalItems: Int) -> NSCollectionLayoutDimension {
+        return .fractionalWidth(CGFloat(1/numberOfHorizontalItems))
+    }
+
+    // TODO: Laurie - write tests for this
+    // Adjust number of rows depending on the what the users want, and how many sites we actually have.
+    // We hide rows that are only composed of empty cells
+    private func getNumberOfRows(numberOfTilesPerRow: Int) -> Int {
+        if tileManager.siteCount % numberOfTilesPerRow == 0 {
+            return tileManager.numberOfRows
+        } else {
+            return Int((Double(tileManager.siteCount) / Double(tileManager.numberOfRows)).rounded(.down))
+        }
+    }
+
+    private func getNumberOfTilesPerRow(for trait: UITraitCollection) -> Int {
         let isLandscape = UIWindow.isLandscape
         if UIDevice.current.userInterfaceIdiom == .phone {
             if isLandscape {
@@ -53,41 +92,22 @@ class FxHomeTopSitesViewModel {
         }
     }
 
-    var numberOfRows: Int {
-        return tileManager.numberOfRows
-    }
-
     func reloadData(for trait: UITraitCollection) {
-        let numberOfHorizontalItem = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: trait)
-        tileManager.calculateTopSiteData(numberOfItemsPerRow: numberOfHorizontalItem)
+        sectionDimension = getSectionDimension(for: trait)
+        tileManager.calculateTopSiteData(numberOfTilesPerRow: sectionDimension.numberOfTilesPerRow)
     }
 
-    // The dimension of a cell
-    static func widthDimension(for trait: UITraitCollection) -> NSCollectionLayoutDimension {
-        let numberOfHorizontalItems = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: trait)
-        print("Laurie - number: \(numberOfHorizontalItems)")
-        return .fractionalWidth(CGFloat(1/numberOfHorizontalItems))
+    func tilePressed(site: HomeTopSite, position: Int) {
+        topSiteTracking(site: site, position: position)
+        tilePressedHandler?(site.site, site.isGoogleURL)
     }
 
-    // Laurie - position is indexPath
-    func longPressedHandler(site: Site, position: Int) {
-//        self.longPressRecognizer.isEnabled = false
-        guard let url = site.url.asURL else { return }
-        let isGoogleTopSiteUrl = url.absoluteString == GoogleTopSiteManager.Constants.usUrl || url.absoluteString == GoogleTopSiteManager.Constants.rowUrl
-        self.topSiteTracking(site: site, position: position)
-
-        // Laurie - delegate call
-//        self.showSiteWithURLHandler(url as URL, isGoogleTopSite: isGoogleTopSiteUrl)
-    }
-
-    func topSiteTracking(site: Site, position: Int) {
+    func topSiteTracking(site: HomeTopSite, position: Int) {
         // Top site extra
         let topSitePositionKey = TelemetryWrapper.EventExtraKey.topSitePosition.rawValue
         let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
-        let isPinnedAndGoogle = site is PinnedSite && site.guid == GoogleTopSiteManager.Constants.googleGUID
-        let isPinnedOnly = site is PinnedSite
-        let isSuggestedSite = site is SuggestedSite
-        let type = isPinnedAndGoogle ? "google" : isPinnedOnly ? "user-added" : isSuggestedSite ? "suggested" : "history-based"
+        let isPinnedAndGoogle = site.isPinned && site.isGoogleGUID
+        let type = isPinnedAndGoogle ? "google" : site.isPinned ? "user-added" : site.isSuggested ? "suggested" : "history-based"
         let topSiteExtra = [topSitePositionKey : "\(position)", topSiteTileTypeKey: type]
 
         // Origin extra
@@ -187,5 +207,12 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol
 
     func updateData(completion: @escaping () -> Void) {
         tileManager.loadTopSitesData()
+    }
+}
+
+// MARK: FxHomeTopSitesManagerDelegate
+extension FxHomeTopSitesViewModel: FxHomeTopSitesManagerDelegate {
+    func reloadTopSites() {
+        delegate?.reloadTopSites()
     }
 }

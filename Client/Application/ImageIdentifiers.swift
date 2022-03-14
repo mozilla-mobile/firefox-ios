@@ -4,6 +4,10 @@
 
 import Foundation
 
+// Notes: Following images are duplicates and need to be cleaned up
+// - `action_bookmark_remove` and `menu-Bookmark-Remove`
+// - `action_bookmark` and `menu-Bookmark`
+
 /// This struct defines all the image identifiers of icons and images used in the app.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
@@ -11,6 +15,8 @@ public struct ImageIdentifiers {
     public static let addToBookmark = "menu-Bookmark"
     public static let addToReadingList = "addToReadingList"
     public static let addShortcut = "action_pin"
+    public static let actionAddBookmark = "action_bookmark"
+    public static let actionRemoveBookmark = "action_bookmark_remove"
     public static let actionRemove = "action_remove"
     public static let bookmarks = "menu-panel-Bookmarks"
     public static let copyLink = "menu-Copy-Link"

@@ -7,22 +7,22 @@ import Foundation
 // An empty cell to show when a row is incomplete
 class EmptyTopSiteCell: UICollectionViewCell {
 
-    lazy private var emptyBG: UIView = {
-        let view = UIView()
+    lazy private var emptyBG: UIView = .build { view in
         view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
         view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
-        return view
-    }()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(emptyBG)
-        // TODO: Laurie - remove snapkit
-        emptyBG.snp.makeConstraints { make in
-            make.top.centerX.equalToSuperview()
-            make.size.equalTo(TopSiteItemCell.UX.backgroundSize)
-        }
+        contentView.addSubview(emptyBG)
+
+        NSLayoutConstraint.activate([
+            emptyBG.topAnchor.constraint(equalTo: contentView.topAnchor),
+            emptyBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            emptyBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.backgroundSize.width),
+            emptyBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.backgroundSize.height),
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

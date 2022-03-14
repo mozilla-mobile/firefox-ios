@@ -284,7 +284,7 @@ class ActivityStreamTest: BaseTestCase {
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
         XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].exists)
-        let numberOfTopSites = TopSiteCellgroup.cells.matching(identifier: "TopSite").count
+        let numberOfTopSites = TopSiteCellgroup.cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
 

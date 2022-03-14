@@ -7,22 +7,30 @@ import Storage
 
 // Top site UI class, used in the home top site section
 class HomeTopSite {
+
     var site: Site
     var title: String
     var image: UIImage?
-    var pinned: Bool
+
+    var isPinned: Bool
+    var isSuggested: Bool
+    var isGoogleGUID: Bool
+    var isGoogleURL: Bool
+
     var imageLoaded: ((UIImage?) -> Void)?
 
     init(site: Site, profile: Profile) {
         self.site = site
         if let provider = site.metadata?.providerName {
-            // TODO: laurie - lowercased?
             title = provider.lowercased()
         } else {
             title = site.tileURL.shortDisplayString
         }
 
-        pinned = ((site as? PinnedSite) != nil)
+        isPinned = ((site as? PinnedSite) != nil)
+        isSuggested = ((site as? SuggestedSite) != nil)
+        isGoogleGUID = site.guid == GoogleTopSiteManager.Constants.googleGUID
+        isGoogleURL = site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
 
         let imageHelper = SiteImageHelper(profile: profile)
         imageHelper.fetchImageFor(site: site,

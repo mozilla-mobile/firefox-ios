@@ -366,8 +366,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         switch FirefoxHomeSectionType(indexPath.section) {
         case .topSites:
-            cellSize.height *= CGFloat(viewModel.topSiteViewModel.numberOfRows)
-            cellSize.height += (FxHomeTopSitesViewModel.UX.interItemSpacing + 24) * CGFloat(viewModel.topSiteViewModel.numberOfRows - 1)
+            let sectionDimension = viewModel.topSiteViewModel.getSectionDimension(for: traitCollection)
+            cellSize.height *= CGFloat(sectionDimension.numberOfRows)
+            cellSize.height += (FxHomeTopSitesViewModel.UX.interItemSpacing * 2) * CGFloat(sectionDimension.numberOfRows - 1)
             return cellSize
 
         case .jumpBackIn:
@@ -518,8 +519,19 @@ extension FirefoxHomeViewController {
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let topSiteCell = cell as? TopSiteCollectionCell else { return UICollectionViewCell() }
         topSiteCell.viewModel = viewModel.topSiteViewModel
+        topSiteCell.viewModel?.topSitesShownInSection = indexPath.section
         topSiteCell.reloadLayout()
         topSiteCell.setNeedsLayout()
+
+        viewModel.topSiteViewModel.tilePressedHandler = { [weak self] site, isGoogle in
+            guard let url = site.url.asURL else { return }
+            self?.showSiteWithURLHandler(url, isGoogleTopSite: isGoogle)
+        }
+
+        viewModel.topSiteViewModel.tileLongPressedHandler = { [weak self] indexPath in
+            self?.presentContextMenu(for: indexPath)
+        }
+
         return cell
     }
 
@@ -727,7 +739,6 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         }
     }
 
-    // TODO: Laurie - put this in helper class?
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
         var sourceView: UIView?
@@ -745,50 +756,69 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             return nil
         }
 
-        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { [weak self] _ in
-            self?.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-            if FirefoxHomeSectionType(indexPath.section) == .pocket, let isZeroSearch = self?.isZeroSearch {
-                let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .pocketStory,
-                                             extras: originExtras)
-            }
+        let isPocket = FirefoxHomeSectionType(indexPath.section) == .pocket
+        guard var actions = getDefaultContextMenuActions(for: site,
+                                                         homePanelDelegate: homePanelDelegate,
+                                                         isPocket: isPocket,
+                                                         isZeroSearch: isZeroSearch)
+        else {
+            return nil
         }
 
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
-            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }
+        let bookmarkAction = getBookmarkAction(site: site)
+        let shareAction = getShareAction(siteURL: siteURL, sourceView: sourceView)
+        actions.append(contentsOf: [bookmarkAction,
+                                    shareAction])
 
+        switch FirefoxHomeSectionType(indexPath.section) {
+        case .topSites: actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
+        default: break
+        }
+        
+        return actions
+    }
+
+    private func getBookmarkAction(site: Site) -> PhotonRowActions {
         let bookmarkAction: SingleActionViewModel
         if site.bookmarked ?? false {
-            bookmarkAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", tapHandler: { _ in
-                self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
-                    self.viewModel.topSiteViewModel.tileManager.refreshIfNeeded(forceTopSites: false)
-                    site.setBookmarked(false)
-                }
-
-                TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
-            })
+            bookmarkAction = getRemoveBookmarkAction(site: site)
         } else {
-            bookmarkAction = SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: "action_bookmark", tapHandler: { _ in
-                let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-                _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
-
-                var userData = [QuickActions.TabURLKey: shareItem.url]
-                if let title = shareItem.title {
-                    userData[QuickActions.TabTitleKey] = title
-                }
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                                    withUserData: userData,
-                                                                                    toApplication: .shared)
-                site.setBookmarked(true)
-                self.viewModel.topSiteViewModel.tileManager.refreshIfNeeded(forceTopSites: true)
-                TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
-            })
+            bookmarkAction = getAddBookmarkAction(site: site)
         }
+        return bookmarkAction.items
+    }
 
-        let shareAction = SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
+    private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
+        return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: ImageIdentifiers.actionRemoveBookmark, tapHandler: { _ in
+            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
+                self.viewModel.topSiteViewModel.tileManager.refreshIfNeeded(forceTopSites: false)
+                site.setBookmarked(false)
+            }
+
+            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
+        })
+    }
+
+    private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
+        return SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
+            let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+            _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
+
+            var userData = [QuickActions.TabURLKey: shareItem.url]
+            if let title = shareItem.title {
+                userData[QuickActions.TabTitleKey] = title
+            }
+            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                                withUserData: userData,
+                                                                                toApplication: .shared)
+            site.setBookmarked(true)
+            self.viewModel.topSiteViewModel.tileManager.refreshIfNeeded(forceTopSites: true)
+            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
+        })
+    }
+
+    private func getShareAction(siteURL: URL, sourceView: UIView?) -> PhotonRowActions {
+        return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { (_, _) in }
             if UIDevice.current.userInterfaceIdiom == .pad, let popoverController = controller.popoverPresentationController {
@@ -801,19 +831,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 popoverController.delegate = self
             }
             self.presentWithModalDismissIfNeeded(controller, animated: true)
-        })
-
-        var actions = [PhotonRowActions(openInNewTabAction),
-                       PhotonRowActions(openInNewPrivateTabAction),
-                       PhotonRowActions(bookmarkAction),
-                       PhotonRowActions(shareAction)]
-
-        switch FirefoxHomeSectionType(indexPath.section) {
-        case .topSites: actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
-        default: break
-        }
-        
-        return actions
+        }).items
     }
 
     private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping () -> Void) {

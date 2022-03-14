@@ -45,7 +45,8 @@ public struct AccessibilityIdentifiers {
         }
 
         struct TopSites {
-            static let section = "TopSitesCell"
+            static let section = "TopSitesSection"
+            static let itemCell = "TopSitesCell"
         }
     }
     

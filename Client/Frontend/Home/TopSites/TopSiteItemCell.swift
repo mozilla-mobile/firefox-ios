@@ -8,7 +8,7 @@ import SDWebImage
 import Storage
 
 /// The TopSite cell that appears in the ASHorizontalScrollView.
-class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
+class TopSiteItemCell: UICollectionViewCell {
 
     struct UX {
         static let titleHeight: CGFloat = 20
@@ -25,29 +25,28 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         static let cellSize: CGSize = CGSize(width: 65, height: 80)
     }
 
-    lazy var imageView: UIImageView = .build { imageView in
+    private lazy var imageView: UIImageView = .build { imageView in
         imageView.layer.cornerRadius = UX.iconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
-    lazy var titleWrapper: UIStackView = .build { stackView in
-        stackView.backgroundColor = .clear
-        stackView.distribution = .fill
-        stackView.alignment = .fill
-        stackView.axis = .horizontal
-        stackView.spacing = UX.titleOffset
+    private lazy var titleWrapper: UIView = .build { view in
+        view.backgroundColor = .clear
     }
 
-    lazy var pinViewHolder: UIView = .build { _ in }
+    private lazy var pinViewHolder: UIView = .build { view in
+        view.isHidden = true
+    }
 
-    lazy var pinImageView: UIImageView = .build { imageView in
+    private lazy var pinImageView: UIImageView = .build { imageView in
         imageView.image = UIImage.templateImageNamed(ImageIdentifiers.pinSmall)
     }
 
-    lazy fileprivate var titleLabel: UILabel = .build { titleLabel in
+    lazy private var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         titleLabel.preferredMaxLayoutWidth = UX.backgroundSize.width + TopSiteItemCell.UX.shadowRadius
+        titleLabel.numberOfLines = 0
     }
 
     lazy private var faviconBG: UIView = .build { view in
@@ -57,8 +56,9 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         view.layer.shadowRadius = UX.shadowRadius
     }
 
-    lazy var selectedOverlay: UIView = .build { selectedOverlay in
+    private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
+        selectedOverlay.layer.cornerRadius = UX.cellCornerRadius
     }
 
     override var isSelected: Bool {
@@ -70,11 +70,10 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         isAccessibilityElement = true
-        // TODO: Laurie - identifier
-        accessibilityIdentifier = "TopSite"
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
         contentView.addSubview(titleWrapper)
-        titleWrapper.addArrangedSubview(titleLabel)
-        pinViewHolder.addSubview(pinImageView)
+        titleWrapper.addSubview(titleLabel)
+        titleWrapper.addSubview(pinViewHolder)
         contentView.addSubview(faviconBG)
         faviconBG.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
@@ -95,18 +94,18 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
             imageView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
 
-            // TODO: Laurie - Fix selected overlay
-            selectedOverlay.topAnchor.constraint(equalTo: contentView.topAnchor),
-            selectedOverlay.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            selectedOverlay.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            selectedOverlay.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            selectedOverlay.topAnchor.constraint(equalTo: faviconBG.topAnchor),
+            selectedOverlay.leadingAnchor.constraint(equalTo: faviconBG.leadingAnchor),
+            selectedOverlay.trailingAnchor.constraint(equalTo: faviconBG.trailingAnchor),
+            selectedOverlay.bottomAnchor.constraint(equalTo: faviconBG.bottomAnchor),
 
-            pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
-            pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor),
-            pinViewHolder.centerYAnchor.constraint(equalTo: pinImageView.centerYAnchor),
+            pinViewHolder.leadingAnchor.constraint(equalTo: titleWrapper.leadingAnchor),
+            pinViewHolder.topAnchor.constraint(equalTo: titleWrapper.topAnchor),
 
-            pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
-            pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
+            titleLabel.topAnchor.constraint(equalTo: titleWrapper.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: pinViewHolder.trailingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: titleWrapper.trailingAnchor),
+            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: titleWrapper.bottomAnchor)
         ])
     }
 
@@ -121,33 +120,43 @@ class TopSiteItemCell: UICollectionViewCell, NotificationThemeable {
         imageView.backgroundColor = UIColor.clear
         faviconBG.backgroundColor = UIColor.clear
 
-        // TODO: Laurie - fix pins not working
+        pinViewHolder.isHidden = true
         pinImageView.removeFromSuperview()
         imageView.sd_cancelCurrentImageLoad()
         titleLabel.text = ""
     }
 
-    // TODO: Laurie - fix layout when changing from home settings (2 to 4 fours for example)
     func configure(_ topSite: HomeTopSite) {
         titleLabel.text = topSite.title
         accessibilityLabel = titleLabel.text
-
-        let words = titleLabel.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
-        titleLabel.numberOfLines = words == 1 ? 1 : 2
-
-        // If its a pinned site add a bullet point to the front
-        if topSite.pinned {
-            titleWrapper.addArrangedViewToTop(pinViewHolder)
-        }
 
         imageView.image = topSite.image
         topSite.imageLoaded = { image in
             self.imageView.image = image
         }
 
+        configurePinnedSite(topSite)
         applyTheme()
     }
 
+    private func configurePinnedSite(_ topSite: HomeTopSite) {
+        guard topSite.isPinned else { return }
+        pinViewHolder.addSubview(pinImageView)
+        pinViewHolder.isHidden = false
+
+        NSLayoutConstraint.activate([
+            pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
+            pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor, constant: UX.titleOffset),
+            pinViewHolder.topAnchor.constraint(equalTo: pinImageView.topAnchor),
+
+            pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
+            pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
+        ])
+    }
+}
+
+// MARK: NotificationThemeable
+extension TopSiteItemCell: NotificationThemeable {
     func applyTheme() {
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain

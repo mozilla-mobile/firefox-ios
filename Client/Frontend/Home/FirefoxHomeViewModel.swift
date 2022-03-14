@@ -81,6 +81,8 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
 
         self.experiments = experiments
         self.isPrivate = isPrivate
+
+        topSiteViewModel.delegate = self
     }
     
     // MARK: - Interfaces
@@ -121,5 +123,12 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
             let index = self.enabledSections.firstIndex(of: section.sectionType)
             self.delegate?.reloadSection(index: index)
         }
+    }
+}
+
+extension FirefoxHomeViewModel: FxHomeTopSitesViewModelDelegate {
+    func reloadTopSites() {
+        let index = enabledSections.firstIndex(of: FirefoxHomeSectionType.topSites)
+        delegate?.reloadSection(index: index)
     }
 }

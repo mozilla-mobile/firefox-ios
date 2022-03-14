@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 /// The View that describes the topSite cell that appears in the tableView.
 class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
@@ -63,21 +64,21 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
     }
 
     private var layoutSection: NSCollectionLayoutSection {
-        let numberOfHorizontalItems = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: traitCollection)
+        let sectionDimension = viewModel?.getSectionDimension(for: traitCollection) ?? FxHomeTopSitesViewModel.defaultDimension
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1/CGFloat(numberOfHorizontalItems)),
+            widthDimension: .fractionalWidth(1/CGFloat(sectionDimension.numberOfTilesPerRow)),
             heightDimension: .fractionalHeight(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let numberOfRows = CGFloat(viewModel?.numberOfRows ?? 2)
+        let numberOfRows = CGFloat(sectionDimension.numberOfRows)
         let fractionHeight = 1/numberOfRows
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(fractionHeight)
         )
 
-        let subItems = Array(repeating: item, count: numberOfHorizontalItems)
+        let subItems = Array(repeating: item, count: sectionDimension.numberOfTilesPerRow)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: subItems)
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
                                                       bottom: FxHomeTopSitesViewModel.UX.interItemSpacing, trailing: 0)
@@ -95,14 +96,12 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
 
         let point = longPressGestureRecognizer.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: point),
-              let viewModel = viewModel // , let onLongPressTileAction = viewModel.onLongPressTileAction
+              let viewModel = viewModel,
+              let tileLongPressedHandler = viewModel.tileLongPressedHandler
         else { return }
 
-//        let parentIndexPath = IndexPath(row: indexPath.row, section: viewModel.pocketShownInSection)
-//        onLongPressTileAction(parentIndexPath)
-
-        // TODO: Laurie - also make sure filler cells doesnt long press
-//        presentContextMenu(for: topSiteIndexPath)
+        let parentIndexPath = IndexPath(row: indexPath.row, section: viewModel.topSitesShownInSection)
+        tileLongPressedHandler(parentIndexPath)
     }
 }
 
@@ -110,7 +109,8 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let viewModel = viewModel else { return 0 }
-        let items = FxHomeTopSitesViewModel.numberOfHorizontalItems(for: traitCollection) * viewModel.numberOfRows
+        let sectionDimension = viewModel.getSectionDimension(for: traitCollection)
+        let items = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
         print("Laurie - itemsCount: \(items)")
         return items
     }
@@ -131,7 +131,10 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let contentItem = viewModel?.tileManager.getSiteDetail(index: indexPath.row) else { return }
-        viewModel?.urlPressedHandler?(contentItem, indexPath)
+        guard let site = viewModel?.tileManager.getSite(index: indexPath.row),
+              let viewModel = viewModel
+        else { return }
+
+        viewModel.tilePressed(site: site, position: indexPath.row)
     }
 }
