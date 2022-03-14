@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵ ᱨᱮ ᱡᱷᱤᱜ ᱢᱮ";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ᱫᱚ ᱟᱢᱟᱜ ᱦᱤᱛᱟᱹᱞ ᱟᱨ ᱠᱩᱠᱤ ᱠᱚ ᱵᱟᱭ ᱩᱭᱦᱟᱹᱨ ᱟᱭ, ᱦᱮᱞᱮ ᱱᱟᱶᱟ ᱵᱩᱠᱢᱟᱨᱠ ᱫᱚ ᱥᱟᱸᱪᱟᱣ ᱜᱮᱭᱟ ᱾";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ᱫᱚ ᱟᱢᱟᱜ ᱦᱤᱛᱟᱹᱞ ᱟᱨ ᱠᱩᱠᱤ ᱠᱚ ᱵᱟᱭ ᱩᱭᱦᱟᱹᱨ ᱟᱭ, ᱦᱮᱞᱮ ᱱᱟᱶᱟ ᱵᱩᱠᱢᱟᱨᱠ ᱫᱚ ᱥᱟᱧᱪᱟᱣ ᱜᱮᱭᱟ ᱾";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "ᱰᱷᱮᱨ ᱥᱮᱲᱟᱭ ᱢᱮ";

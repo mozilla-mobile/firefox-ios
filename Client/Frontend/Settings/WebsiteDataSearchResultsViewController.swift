@@ -20,6 +20,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     private var tableView: UITableView!
 
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
+    private var currentSearchText = ""
     
     init(viewModel: WebsiteDataManagementViewModel) {
         self.viewModel = viewModel
@@ -55,8 +56,9 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
     
     func reloadData() {
-        guard let tableView = tableView else { return }
-        tableView.reloadData()
+        guard let _ = tableView else { return }
+        // to update filteredSiteRecords before reloading the tableView
+        filterContentForSearchText(currentSearchText)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -98,7 +100,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.selectItem(item)
             break
         case .clearButton:
@@ -113,7 +115,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.deselectItem(item)
             break
         default: break;
@@ -170,7 +172,8 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
 extension WebsiteDataSearchResultsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
+        currentSearchText = searchController.searchBar.text ?? ""
+        filterContentForSearchText(currentSearchText)
     }
 }
 
@@ -179,9 +182,6 @@ extension WebsiteDataSearchResultsViewController: KeyboardHelperDelegate {
         let coveredHeight = state.intersectionHeightForView(view)
         tableView.contentInset.bottom = coveredHeight
         tableView.verticalScrollIndicatorInsets.bottom = coveredHeight
-    }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {

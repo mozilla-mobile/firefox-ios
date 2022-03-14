@@ -8,6 +8,9 @@ import Shared
 enum AppSettingsDeeplinkOption {
     case contentBlocker
     case customizeHomepage
+    case customizeTabs
+    case customizeToolbar
+    case wallpaper
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
@@ -48,6 +51,20 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         case .customizeHomepage:
             viewController = HomePageSettingViewController(prefs: profile.prefs)
+            
+        case .customizeTabs:
+            viewController = TabsSettingsViewController()
+            
+        case .customizeToolbar:
+            let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+            viewController = SearchBarSettingsViewController(viewModel: viewModel)
+
+        case .wallpaper:
+            let viewModel = WallpaperSettingsViewModel(with: tabManager, and: WallpaperManager())
+            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            // Push wallpaper settings view controller directly as its not of type settings viewcontroller
+            navigationController?.pushViewController(wallpaperVC, animated: true)
+            return
         }
 
         viewController.profile = profile
@@ -168,7 +185,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
-                ResetJumpBackInContextualHint(settings: self),
+                ResetContextualHints(settings: self),
                 OpenFiftyTabsDebugOption(settings: self),
                 ExperimentsSettings(settings: self)
             ])]

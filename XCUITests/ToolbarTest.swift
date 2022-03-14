@@ -93,28 +93,29 @@ class ToolbarTests: BaseTestCase {
 
     // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
     // Skipping for iPad for now, not sure how to implent it there
-    func testRevealToolbarWhenTappingOnStatusbar() {
-        if !iPad() {
-            // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
-            navigator.performAction(Action.CloseURLBarOpen)
-
-            XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-            waitForExistence(app.otherElements["Navigation Toolbar"])
-
-            navigator.openURL(website1["url"]!, waitForLoading: true)
-            // Adding the waiter right after navigating to the webpage in order to make the test more stable
-            waitUntilPageLoad()
-            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],timeout: 10)
-            let pageActionMenuButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.firstMatch
-            app.swipeUp()
-            XCTAssertFalse(pageActionMenuButton.exists)
-            statusbarElement.tap(force: true)
-            XCTAssertTrue(pageActionMenuButton.isHittable)
-            statusbarElement.tap(force: true)
-            let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
-            waitForExistence(topElement, timeout: 10)
-            XCTAssertTrue(topElement.isHittable)
-        }
-    }
+    func testRevealToolbarWhenTappingOnStatusbar() throws {
+        throw XCTSkip("Disabling as PageOptionMenu has been removed")
+//        if !iPad() {
+//            // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
+//            navigator.performAction(Action.CloseURLBarOpen)
+//
+//            XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+//            waitForExistence(app.otherElements["Navigation Toolbar"])
+//
+//            navigator.openURL(website1["url"]!, waitForLoading: true)
+//            // Adding the waiter right after navigating to the webpage in order to make the test more stable
+//            waitUntilPageLoad()
+//            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],timeout: 10)
+//            let PageOptionsMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+//            let statusbarElement: XCUIElement = XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.firstMatch
+//            app.swipeUp()
+//            XCTAssertFalse(PageOptionsMenu.exists)
+//            statusbarElement.tap(force: true)
+//            XCTAssertTrue(settingsMenuButton.isHittable)
+//            statusbarElement.tap(force: true)
+//            let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
+//            waitForExistence(topElement, timeout: 10)
+//            XCTAssertTrue(topElement.isHittable)
+//        }
+   }
 }

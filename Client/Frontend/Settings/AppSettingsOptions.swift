@@ -253,6 +253,7 @@ class SyncNowSetting: WithAccountSetting {
         // dimensions and color, then the scaled sync icon is added as a subview.
         imageView.contentMode = .center
         imageView.image = image
+        imageView.transform = CGAffineTransform(scaleX: -1, y: 1)
 
         cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
         cell.imageView?.image = syncIconWrapper
@@ -609,13 +610,15 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
 }
 
 
-class ResetJumpBackInContextualHint: HiddenSetting {
+class ResetContextualHints: HiddenSetting {
     let profile: Profile
 
-    override var accessibilityIdentifier: String? { return "ResetJumpBackInContextualHint.Setting" }
+    override var accessibilityIdentifier: String? { return "ResetContextualHints.Setting" }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Reset: Jump back in contextual hint", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(
+            string: "Reset all contextual hints",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
 
@@ -625,7 +628,9 @@ class ResetJumpBackInContextualHint: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        self.profile.prefs.removeObjectForKey(PrefsKeys.ContextualHints.JumpBackinKey)
+        PrefsKeys.ContextualHints.allCases.forEach {
+            self.profile.prefs.removeObjectForKey($0.rawValue)
+        }
     }
 }
 
@@ -1097,20 +1102,10 @@ class NewTabPageSetting: Setting {
     }
 }
 
-fileprivate func getDisclosureIndicator() -> UIImageView {
-    let disclosureIndicator = UIImageView()
-    disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
-    disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
-    disclosureIndicator.sizeToFit()
-    return disclosureIndicator
-}
-
 class HomeSetting: Setting {
     let profile: Profile
 
-    override var accessoryView: UIImageView {
-        getDisclosureIndicator()
-    }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "Home" }
 
@@ -1183,7 +1178,7 @@ class NoImageModeSetting: BoolSetting {
             prefs: settings.profile.prefs, 
             prefKey: NoImageModePrefsKey.NoImageModeStatus, 
             defaultValue: noImageEnabled,
-            attributedTitleText: NSAttributedString(string: .AppMenuNoImageMode),
+            attributedTitleText: NSAttributedString(string: .Settings.Toggle.NoImageMode),
             attributedStatusText: nil,
             settingDidChange: { isEnabled in
                 didChange(isEnabled)

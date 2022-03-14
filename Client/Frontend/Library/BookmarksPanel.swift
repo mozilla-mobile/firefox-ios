@@ -359,6 +359,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath) as! OneLineTableViewCell
+        
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {
@@ -499,7 +500,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle, iconString: ImageIdentifiers.addShortcut, tapHandler: { _ in
             self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
-                    SimpleToast().showAlertWithText(.AppMenuAddPinToShortcutsConfirmMessage, bottomContainer: self.view)
+                    SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage, bottomContainer: self.view)
                 }
             }
         }).items

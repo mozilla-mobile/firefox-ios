@@ -70,7 +70,7 @@ extension UIViewController {
         } else {
             themedNavigationController.modalPresentationStyle = .fullScreen
         }
-        present(viewController: themedNavigationController, animated: true)
+        presentWithModalDismissIfNeeded(themedNavigationController, animated: true)
     }
     
     @objc func dismissVC() {
@@ -79,7 +79,7 @@ extension UIViewController {
 
     /// A convenience function to dismiss modal presentation views if they are
     /// currently presented.
-    func present(viewController: UIViewController, animated: Bool) {
+    func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool) {
         if let presentedViewController = presentedViewController {
             presentedViewController.dismiss(animated: false, completion: {
                 self.present(viewController, animated: animated, completion: nil)

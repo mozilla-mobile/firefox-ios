@@ -360,7 +360,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
                 make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
-                make.top.bottom.right.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+                make.top.bottom.trailing.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
                 make.leading.equalTo(self.searchIconImageView.snp.trailing)
             }
             self.locationTextField?.snp.remakeConstraints { make in

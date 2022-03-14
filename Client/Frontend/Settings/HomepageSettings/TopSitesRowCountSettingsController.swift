@@ -14,7 +14,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         self.prefs = prefs
         numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
         super.init(style: .grouped)
-        self.title = .AppMenuTopSitesTitleString
+        self.title = .AppMenu.AppMenuTopSitesTitleString
     }
 
     required init?(coder aDecoder: NSCoder) {

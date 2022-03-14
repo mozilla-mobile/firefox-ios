@@ -33,7 +33,7 @@ class TabTrayViewController: UIViewController {
                                      target: self,
                                      action: #selector(didTapDeleteTabs(_:)))
         button.accessibilityIdentifier = "closeAllTabsButtonTabTray"
-        button.accessibilityLabel = .TabTrayDeleteMenuButtonAccessibilityLabel
+        button.accessibilityLabel = .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel
         return button
     }()
 

@@ -67,8 +67,8 @@ protocol HomePanelDelegate: AnyObject {
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?)
-    func homePanelDidRequestToCustomizeHomeSettings()
-    func homePanelDidPresentContextualHint(type: ContextualHintViewType)
+    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
+    func homePanelDidPresentContextualHintOf(type: ContextualHintViewType)
 }
 
 extension HomePanelDelegate {
@@ -148,7 +148,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     fileprivate let flowLayout = UICollectionViewFlowLayout()
     fileprivate var hasSentJumpBackInSectionEvent = false
     fileprivate var hasSentHistoryHighlightsSectionEvent = false
-    fileprivate var contextualHintTimer: Timer?
     fileprivate var isZeroSearch: Bool
     fileprivate var wallpaperManager: WallpaperManager
     private var viewModel: FirefoxHomeViewModel
@@ -188,7 +187,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate,
                                               experiments: experiments)
-        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn, with: viewModel.profile)
+        let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
+                                                          with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
 
         super.init(collectionViewLayout: flowLayout)
@@ -222,8 +222,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     deinit {
-        contextualHintTimer?.invalidate()
-        contextualHintTimer = nil
+        contextualHintViewController.stopTimer()
     }
 
     // MARK: - View lifecycle
@@ -282,7 +281,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        contextualHintTimer?.invalidate()
+        contextualHintViewController.stopTimer()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -356,39 +355,25 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
     
     // MARK: - Contextual hint
-    private func prepareJumpBackInContextualHint(_ indexPath: IndexPath, onView headerView: ASHeaderView) {
-        guard contextualHintViewController.shouldPresentHint() else { return }
+    private func prepareJumpBackInContextualHint(onView headerView: ASHeaderView) {
+        guard contextualHintViewController.shouldPresentHint(),
+              !shouldShowDefaultBrowserCard
+        else { return }
 
-        contextualHintViewController.set(
+        contextualHintViewController.configure(
             anchor: headerView.titleLabel,
             withArrowDirection: .down,
             andDelegate: self,
-            withActionBeforeAppearing: {
-                self.homePanelDelegate?.homePanelDidPresentContextualHint(type: .jumpBackIn)
-            })
-        
-        // Using a timer for the first presentation of contextual hint due to many
-        // reloads that happen on the collection view. Invalidating the timer
-        // prevents from showing contextual hint at the wrong position.
-        contextualHintTimer?.invalidate()
-        if !contextualHintViewController.hasAlreadyBeenPresented {
-            contextualHintPresentTimer()
-        }
-    }
-
-    private func contextualHintPresentTimer() {
-        contextualHintTimer = Timer.scheduledTimer(timeInterval: 1.25,
-                                                   target: self,
-                                                   selector: #selector(presentContextualHint),
-                                                   userInfo: nil,
-                                                   repeats: false)
+            presentedUsing: { self.presentContextualHint() },
+            withActionBeforeAppearing: { self.contextualHintPresented() },
+            andActionForButton: { self.openTabsSettings() })
     }
 
     @objc private func presentContextualHint() {
         guard BrowserViewController.foregroundBVC().searchController == nil,
               presentedViewController == nil
         else {
-            contextualHintTimer?.invalidate()
+            contextualHintViewController.stopTimer()
             return
         }
         
@@ -457,6 +442,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
             let title = FirefoxHomeSectionType(indexPath.section).title
             headerView.title = title
+            headerView.titleLabel.accessibilityTraits = .header
 
             switch FirefoxHomeSectionType(indexPath.section) {
             case .pocket:
@@ -475,7 +461,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
                 headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
                 headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
-                prepareJumpBackInContextualHint(indexPath, onView: headerView)
+                prepareJumpBackInContextualHint(onView: headerView)
 
                 return headerView
 
@@ -527,6 +513,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
         case .jumpBackIn:
             cellSize.height *= CGFloat(viewModel.jumpBackInViewModel.numberOfItemsInColumn)
+            cellSize.height += HistoryHighlightsCollectionCellUX.verticalPadding * 2
             return cellSize
 
         case .libraryShortcuts:
@@ -722,7 +709,10 @@ extension FirefoxHomeViewController {
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
-        customizeHomeCell.goToSettingsButton.addTarget(self, action: #selector(openCustomizeHomeSettings), for: .touchUpInside)
+        customizeHomeCell.goToSettingsButton.addTarget(
+            self,
+            action: #selector(openCustomizeHomeSettings),
+            for: .touchUpInside)
         customizeHomeCell.setNeedsLayout()
 
         return customizeHomeCell
@@ -1001,11 +991,19 @@ extension FirefoxHomeViewController {
     }
 
     @objc func openCustomizeHomeSettings() {
-        homePanelDelegate?.homePanelDidRequestToCustomizeHomeSettings()
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeHomepage)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
+    }
+    
+    @objc func contextualHintPresented() {
+        self.homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
+    }
+    
+    @objc func openTabsSettings() {
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
     }
 
     @objc func changeHomepageWallpaper() {
@@ -1127,7 +1125,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 popoverController.permittedArrowDirections = [.up, .down, .left]
                 popoverController.delegate = self
             }
-            self.present(viewController: controller, animated: true)
+            self.presentWithModalDismissIfNeeded(controller, animated: true)
         })
 
         let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle, iconString: "action_remove", tapHandler: { _ in
@@ -1138,7 +1136,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.pinTopSite(site)
         })
 
-        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle, iconString: "action_unpin", tapHandler: { _ in
+        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle, iconString: ImageIdentifiers.removeFromShortcut, tapHandler: { _ in
             self.removePinTopSite(site)
         })
 
@@ -1183,3 +1181,4 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
         return true
     }
 }
+

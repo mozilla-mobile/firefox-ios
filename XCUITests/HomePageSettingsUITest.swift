@@ -25,7 +25,11 @@ class HomePageSettingsUITests: BaseTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + prefilledTopSites, LaunchArguments.SkipContextualHintJumpBackIn]
+            launchArguments = [LaunchArguments.SkipIntro,
+                               LaunchArguments.SkipWhatsNew,
+                               LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.LoadDatabasePrefix + prefilledTopSites,
+                               LaunchArguments.SkipContextualHints]
         }
         super.setUp()
     }
@@ -91,7 +95,7 @@ class HomePageSettingsUITests: BaseTestCase {
         enterWebPageAsHomepage(text: websiteUrl1)
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabScreen)
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.performAction(Action.GoToHomePage)
         waitForExistence(app.textFields["url"], timeout: 3)
@@ -115,7 +119,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Open a new tab and tap on Home option
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
         navigator.performAction(Action.GoToHomePage)
 
@@ -155,8 +159,7 @@ class HomePageSettingsUITests: BaseTestCase {
                 userState.numTopSitesRows = n
                 navigator.performAction(Action.SelectTopSitesRows)
                 XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Shortcuts, Rows: " + String(n))
-                navigator.performAction(Action.GoToHomePage)
-                navigator.performAction(Action.CloseURLBarOpen)
+                navigator.goto(HomePanelsScreen)
                 navigator.nowAt(NewTabScreen)
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }

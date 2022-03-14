@@ -258,7 +258,7 @@
 "ContextMenu.OpenInNewTabButtonTitle" = "Fosgail ann an taba ùr";
 
 /* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Fosgail an ceangal ann an taba prìobhaideach ùr";
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Fosgail an ceangal le taba prìobhaideach ùr";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenLinkInNewTabButtonTitle" = "Fosgail an ceangal ann an taba ùr";
@@ -1430,9 +1430,6 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "Air tadhal orra o chionn goirid";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "Luirg o chionn goirid";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Ath-ghoiridean";

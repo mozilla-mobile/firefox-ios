@@ -197,7 +197,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showViewController(viewController: UIViewController) {
-        present(viewController: viewController, animated: true)
+        presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?) {
@@ -221,6 +221,10 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showCustomizeHomePage() {
-        showCustomizeHomeSettings()
+        showSettingsWithDeeplink(to: .customizeHomepage)
+    }
+
+    func showWallpaperSettings() {
+        showSettingsWithDeeplink(to: .wallpaper)
     }
 }

@@ -20,7 +20,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
         case .recentlySaved: return .RecentlySavedSectionTitle
         case .topSites: return .ASShortcutsTitle
-        case .libraryShortcuts: return .AppMenuLibraryTitleString
+        case .libraryShortcuts: return .AppMenu.AppMenuLibraryTitleString
         case .historyHighlights: return .FirefoxHomepage.HistoryHighlights.Title
         default: return nil
         }
@@ -61,6 +61,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         switch self {
 //        case .pocket: return 0
         case .historyHighlights: return 0
+        case .jumpBackIn: return 0
         default: return FirefoxHomeUX.minimumInsets
         }
     }

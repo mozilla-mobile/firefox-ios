@@ -164,8 +164,8 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(numPrivTabsFirstTime, 0, "The number of tabs is not correct, there should not be any private tab yet")
 
         // If a private tab is open Private Browsing screen is not shown anymore
-        navigator.goto(BrowserTab)
 
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         //Wait until the page loads and go to regular browser
         waitUntilPageLoad()
         waitForTabsButton()
@@ -174,8 +174,6 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go back to private browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitForNoExistence(app.staticTexts["Private Browsing"])
-        XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
         navigator.nowAt(TabTray)
         let numPrivTabsOpen = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")

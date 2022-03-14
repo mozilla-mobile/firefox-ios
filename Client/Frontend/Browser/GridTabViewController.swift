@@ -582,7 +582,7 @@ extension GridTabViewController {
         }
 
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .AppMenuCloseAllTabsTitleString,
+        controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
                                            handler: { _ in self.closeTabsForCurrentTray() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
@@ -704,10 +704,13 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         }
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs, .none:
             return UIEdgeInsets(top: GridTabTrayControllerUX.Margin, left: GridTabTrayControllerUX.Margin + collectionView.safeAreaInsets.left, bottom: GridTabTrayControllerUX.Margin, right: GridTabTrayControllerUX.Margin + collectionView.safeAreaInsets.right)
+        case .inactiveTabs:
+            guard !tabDisplayManager.isPrivate, tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0 else { return .zero }
+            return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
         default:
             return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
         }

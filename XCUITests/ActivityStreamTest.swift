@@ -24,9 +24,17 @@ class ActivityStreamTest: BaseTestCase {
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
             if iPad() {
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPad, LaunchArguments.SkipContextualHintJumpBackIn]
+                launchArguments = [LaunchArguments.SkipIntro,
+                                   LaunchArguments.SkipWhatsNew,
+                                   LaunchArguments.SkipETPCoverSheet,
+                                   LaunchArguments.LoadDatabasePrefix + pagesVisitediPad,
+                                   LaunchArguments.SkipContextualHints]
             } else {
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone, LaunchArguments.SkipContextualHintJumpBackIn]
+                launchArguments = [LaunchArguments.SkipIntro,
+                                   LaunchArguments.SkipWhatsNew,
+                                   LaunchArguments.SkipETPCoverSheet,
+                                   LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone,
+                                   LaunchArguments.SkipContextualHints]
             }
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
@@ -101,9 +109,8 @@ class ActivityStreamTest: BaseTestCase {
         }
         waitUntilPageLoad()
         
-//        navigator.performAction(Action.PinToTopSitesPAM)
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
-        app.cells[ImageIdentifiers.addShortcut].tap()
+        app.otherElements[ImageIdentifiers.addShortcut].tap()
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.performAction(Action.CloseURLBarOpen)
@@ -148,14 +155,15 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 5)
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
-        app.tables["Context Menu"].cells["Open in New Tab"].tap()
+        app.tables["Context Menu"].otherElements["Open in New Tab"].tap()
         // The new tab is open but curren screen is still Homescreen
         XCTAssert(TopSiteCellgroup.exists)
 
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.goto(TabTray)
+        waitForExistence(app.cells.staticTexts["Homepage"].firstMatch, timeout: 5)
         app.cells.staticTexts["Homepage"].firstMatch.tap()
-        waitForExistence(TopSiteCellgroup.cells["apple"])
+        waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 10)
         navigator.nowAt(HomePanelsScreen)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)

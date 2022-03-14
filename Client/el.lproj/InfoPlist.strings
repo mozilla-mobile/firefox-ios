@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Επιτρέπει τη λήψη και μεταφόρτωση φωτογραφιών.";
+"NSCameraUsageDescription" = "Το Firefox χρησιμοποιεί την κάμερα για τη σάρωση κωδικών QR και τη λήψη φωτογραφιών και βίντεο.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Το Firefox απαιτεί το Face ID για πρόσβαση στις αποθηκευμένες συνδέσεις σας.";
@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Οι ιστοσελίδες που επισκέπτεστε ίσως απαιτήσουν την τοποθεσία σας.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Επιτρέπει τη λήψη και μεταφόρτωση βίντεο.";
+"NSMicrophoneUsageDescription" = "Το Firefox χρησιμοποιεί το μικρόφωνο για την καταγραφή και τη μεταφόρτωση ήχου.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Αυτό σας επιτρέπει να αποθηκεύετε φωτογραφίες.";

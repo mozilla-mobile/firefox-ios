@@ -175,7 +175,7 @@ class Tab: NSObject {
     var firstCreatedTime: Timestamp?
     var sessionData: SessionData?
     fileprivate var lastRequest: URLRequest?
-    var restoring: Bool = false
+    var isRestoring: Bool = false
     var pendingScreenshot = false
     var url: URL? {
         didSet {
@@ -195,6 +195,10 @@ class Tab: NSObject {
 
     var isFxHomeTab: Bool {
         if let url = url, url.absoluteString.hasPrefix("internal://") { return true }
+        
+        // Check lastKnownUrl in case url is nil
+        if let url = lastKnownUrl, url.absoluteString.hasPrefix("internal://") { return true }
+        
         return false
     }
     
@@ -336,9 +340,8 @@ class Tab: NSObject {
                 shouldResetTabGroupData = true
             // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
             } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
-                if tabGroupData.tabHistoryMetadatakey().referrerUrl != nextUrl {
-                    tabGroupData.tabAssociatedSearchUrl = nextUrl
-                    let key = tabGroupData.tabHistoryMetadatakey()
+                let key = tabGroupData.tabHistoryMetadatakey()
+                if key.referrerUrl != nextUrl {
                     let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
                     updateObservationForKey(key: key, observation: observation)
                     tabGroupData.tabAssociatedNextUrl = nextUrl
@@ -446,7 +449,7 @@ class Tab: NSObject {
         // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
         // to trigger the session restore via custom handlers
         if let sessionData = self.sessionData {
-            restoring = true
+            isRestoring = true
 
             var urls = [String]()
             for url in sessionData.urls {
@@ -467,6 +470,7 @@ class Tab: NSObject {
                 let request = PrivilegedRequest(url: restoreURL) as URLRequest
                 webView.load(request)
                 lastRequest = request
+                isRestoring = false
             }
         } else if let request = lastRequest {
             webView.load(request)
@@ -577,13 +581,13 @@ class Tab: NSObject {
         
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
-        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !restoring {
-            return .AppMenuOpenHomePageTitleString
+        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !isRestoring {
+            return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
         //lets double check the sessionData in case this is a non-restored new tab
         if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
-            return .AppMenuOpenHomePageTitleString
+            return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
         if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {
