@@ -93,7 +93,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             generalSettings.insert(SearchBarSetting(settings: self), at: 5)
         }
 
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 
@@ -185,6 +185,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
+                ToggleHistoryGroups(settings: self),
                 ResetContextualHints(settings: self),
                 OpenFiftyTabsDebugOption(settings: self),
                 ExperimentsSettings(settings: self)

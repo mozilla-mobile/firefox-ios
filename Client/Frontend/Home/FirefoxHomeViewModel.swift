@@ -36,6 +36,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
             }
         }
     }
+
     let experiments: NimbusApi
     let profile: Profile
     var isZeroSearch: Bool

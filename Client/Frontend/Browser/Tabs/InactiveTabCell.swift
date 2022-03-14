@@ -132,6 +132,8 @@ class InactiveTabCell: UICollectionViewCell, NotificationThemeable, UITableViewD
             cell.customization = .inactiveCell
             cell.backgroundColor = .clear
             cell.accessoryView = nil
+            cell.bottomSeparatorView.isHidden = false
+            
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
             cell.titleLabel.text = tab.displayTitle
             cell.leftImageView.setImageAndBackground(forIcon: tab.displayFavicon, website: getTabDomainUrl(tab: tab)) {}

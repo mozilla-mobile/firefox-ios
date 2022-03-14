@@ -21,21 +21,8 @@ private var disclosureIndicator: UIImageView {
     return disclosureIndicator
 }
 
-// For great debugging!
-class HiddenSetting: Setting {
-    unowned let settings: SettingsTableViewController
-
-    init(settings: SettingsTableViewController) {
-        self.settings = settings
-        super.init(title: nil)
-    }
-
-    override var hidden: Bool {
-        return !ShowDebugSettings
-    }
-}
-
-// Sync setting for connecting a Firefox Account.  Shown when we don't have an account.
+// MARK: - ConnectSetting
+// Sync setting for connecting a Firefox Account. Shown when we don't have an account.
 class ConnectSetting: WithoutAccountSetting {
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
@@ -60,6 +47,7 @@ class ConnectSetting: WithoutAccountSetting {
     }
 }
 
+// MARK: - SyncNowSetting
 class SyncNowSetting: WithAccountSetting {
     let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
@@ -294,6 +282,7 @@ class SyncNowSetting: WithAccountSetting {
     }
 }
 
+// MARK: - AccountStatusSetting
 // Sync setting that shows the current Firefox Account status.
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
@@ -365,6 +354,29 @@ class AccountStatusSetting: WithAccountSetting {
         }
     }
 }
+
+// MARK: - Hidden Settings
+/// Used for only for debugging purposes. These settings are hidden behind a
+/// 5-tap gesture on the Firefox version cell in the Settings Menu
+class HiddenSetting: Setting {
+    unowned let settings: SettingsTableViewController
+
+    init(settings: SettingsTableViewController) {
+        self.settings = settings
+        super.init(title: nil)
+    }
+
+    override var hidden: Bool {
+        return !ShowDebugSettings
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
+    }
+}
+
 
 class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
@@ -449,7 +461,7 @@ class FeatureSwitchSetting: BoolSetting {
 
 class ForceCrashSetting: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Force Crash", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "💥 Debug: Force Crash", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -562,12 +574,6 @@ class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
         featureFlags.toggleBuildFeature(.chronologicalTabs)
         updateCell(navigationController)
     }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
 }
 
 class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
@@ -580,12 +586,6 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     override func onClick(_ navigationController: UINavigationController?) {
         featureFlags.toggleBuildFeature(.pullToRefresh)
         updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
     }
 }
 
@@ -601,14 +601,21 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
     }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
 }
 
+class ToggleHistoryGroups: HiddenSetting, FeatureFlagsProtocol {
+    override var title: NSAttributedString? {
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.historyGroups) ? "OFF" : "ON"
+        return NSAttributedString(
+            string: "Toggle history groups \(toNewStatus)",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        featureFlags.toggleBuildFeature(.historyGroups)
+        updateCell(navigationController)
+    }
+}
 
 class ResetContextualHints: HiddenSetting {
     let profile: Profile
@@ -1175,8 +1182,8 @@ class NoImageModeSetting: BoolSetting {
         }
 
         super.init(
-            prefs: settings.profile.prefs, 
-            prefKey: NoImageModePrefsKey.NoImageModeStatus, 
+            prefs: settings.profile.prefs,
+            prefKey: NoImageModePrefsKey.NoImageModeStatus,
             defaultValue: noImageEnabled,
             attributedTitleText: NSAttributedString(string: .Settings.Toggle.NoImageMode),
             attributedStatusText: nil,
