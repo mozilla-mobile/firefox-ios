@@ -25,7 +25,7 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                               titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
 
-        let tabGroupsSetting = BoolSetting(with: .groupedTabs,
+        let tabGroupsSetting = BoolSetting(with: .tabTrayGroups,
                                            titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
 
 
@@ -33,7 +33,7 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
             sectionItems.append(inactiveTabsSetting)
         }
 
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs) {
+        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) {
             sectionItems.append(tabGroupsSetting)
         }
 

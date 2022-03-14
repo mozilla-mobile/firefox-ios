@@ -6,7 +6,7 @@ import Foundation
 import Storage
 import UIKit
 
-class FxHomeHistoryHightlightsVM {
+class FxHomeHistoryHightlightsVM: FeatureFlagsProtocol {
 
     // MARK: - Properties & Variables
     var historyItems: [HighlightItem]?
@@ -94,7 +94,12 @@ class FxHomeHistoryHightlightsVM {
     // MARK: - Private Methods
 
     private func loadItems(completion: @escaping () -> Void) {
-        HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
+        HistoryHighlightsManager.getHighlightsData(
+            with: profile,
+            and: tabManager.tabs,
+            shouldGroupHighlights: featureFlags.isFeatureActiveForBuild(.historyGroups)
+        ) { [weak self] highlights in
+
             self?.historyItems = highlights
             completion()
         }

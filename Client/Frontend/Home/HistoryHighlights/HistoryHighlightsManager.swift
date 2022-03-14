@@ -82,9 +82,12 @@ class HistoryHighlightsManager {
 
     // MARK: - Helper functions
 
-    private static func buildSearchGroups(with profile: Profile,
-                                          and highlights: [HistoryHighlight],
-                                          completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void) {
+    private static func buildSearchGroups(
+        with profile: Profile,
+        and highlights: [HistoryHighlight],
+        completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void
+    ) {
+
         SearchTermGroupsManager.getHighlightGroups(with: profile,
                                                    from: highlights,
                                                    using: .orderedAscending) { groups, filteredItems in
