@@ -16,7 +16,8 @@ protocol BrowserToolsetDelegate: AnyObject {
 
 class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
-
+    
+    var whatsNewEventsHandler = WhatsNewEventsHandler()
     let backButton = InsetButton()
     let forwardButton = InsetButton()
     let stopReloadButton = InsetButton()
@@ -132,12 +133,10 @@ class BrowserToolset {
 
 extension BrowserToolset: WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool {
-        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-        return counter != 0
+        whatsNewEventsHandler.shouldShowWhatsNewButton
     }
 
     func didShowWhatsNew() {
-        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
+        whatsNewEventsHandler.didShowWhatsNewButton()
     }
 }

@@ -94,4 +94,5 @@ extension NimbusWrapper {
 
 extension NimbusWrapper {
     var shouldHaveBoldTitle: Bool { nimbus?.getVariables(featureId: .nimbusValidation).getBool("bold-tip-title") == true }
+    var shouldShowNewOnboarding: Bool { nimbus?.getVariables(featureId: .nimbusValidation).getBool("show-new-onboarding") ?? true }
 }

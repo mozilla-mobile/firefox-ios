@@ -5,8 +5,16 @@
 import SwiftUI
 
 struct InternalSettingsView: View {
+    
     var body: some View {
         Form {
+        #if DEBUG
+            SwiftUI.Section {
+                NavigationLink(destination: InternalOnboardingSettingsView()) {
+                    Text(verbatim: "Onboarding")
+                }
+            }
+        #endif
             SwiftUI.Section {
                 NavigationLink(destination: InternalExperimentsSettingsView(availableExperiments: NimbusWrapper.shared.getAvailableExperiments())) {
                     Text(verbatim: "Experiments")

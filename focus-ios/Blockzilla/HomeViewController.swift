@@ -32,7 +32,8 @@ class HomeViewController: UIViewController {
     )
      
     public var tipViewTop: ConstraintItem { tipView.snp.top }
-
+    
+    var onboardingEventsHandler: OnboardingEventsHandler!
     let toolbar = HomeViewToolbar()
 
     deinit {
@@ -81,7 +82,7 @@ class HomeViewController: UIViewController {
     }
     
     func refreshTipsDisplay() {
-        if let tip = tipManager.fetchFirstTip() {
+        if let tip = tipManager.fetchFirstTip(), !onboardingEventsHandler.shouldShowNewOnboarding() {
             logTelemetry(for: tip)
             tipsViewController.setupPageController(with: .showTips)
         } else {

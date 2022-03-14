@@ -46,4 +46,25 @@ final class InternalSettings: ObservableObject {
             objectWillChange.send()
         }
     }
+    
+    @UserDefault(key: OnboardingConstants.alwaysShowOnboarding, defaultValue: false)
+    var alwaysShowOnboarding: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
+    @UserDefault(key: OnboardingConstants.showOldOnboarding, defaultValue: false)
+    var showOldOnboarding: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    @UserDefault(key: OnboardingConstants.ignoreOnboardingExperiment, defaultValue: false)
+    var ignoreOnboardingExperiment: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
 }

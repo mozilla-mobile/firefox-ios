@@ -13,6 +13,7 @@ class BrowserToolbar: UIView {
     private let stackView = UIStackView()
     
     public var contextMenuButton: InsetButton { toolset.contextMenuButton }
+    public var deleteButton: InsetButton { toolset.deleteButton }
 
     init() {
         super.init(frame: CGRect.zero)

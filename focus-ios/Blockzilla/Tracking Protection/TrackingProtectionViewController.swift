@@ -9,27 +9,41 @@ import Telemetry
 import Glean
 import Combine
 
+enum SectionType: Int, Hashable {
+    case tip
+    case secure
+    case enableTrackers
+    case trackers
+    case stats
+}
+
 class TrackingProtectionViewController: UIViewController {
+    var tooltipHeight: Constraint?
     
     //MARK: - Data source
-    private var tableViewSections: [Section?] {
-        let secureSection: Section?
-        if case let .browsing(browsingStatus) = state {
-            let title = browsingStatus.isSecureConnection ? UIConstants.strings.connectionSecure : UIConstants.strings.connectionNotSecure
-            let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
-            secureSection = secureConnectionSection(title: title, image: image)
-        } else {
-            secureSection = nil
-        }
-        return [
-            secureSection,
-            enableTrackersSection,
-            trackingProtectionItem.settingsValue ? trackersSection : nil,
-            statsSection
-        ]
-    }
     
-    private lazy var profileDataSource = DataSource(tableViewSections: tableViewSections.compactMap { $0 })
+    lazy var dataSource = DataSource(
+        tableView: self.tableView,
+        cellProvider: { tableView, indexPath, itemIdentifier in
+            return itemIdentifier.configureCell(tableView, indexPath)
+        },
+        headerForSection: { section in
+            switch section {
+            case .trackers:
+                return UIConstants.strings.trackersHeader.uppercased()
+            case .tip, .secure, .enableTrackers, .stats:
+                return nil
+            }
+        },
+        footerForSection: { [trackingProtectionItem] section in
+            switch section {
+            case .enableTrackers:
+                return trackingProtectionItem.settingsValue ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff
+            case .tip, .secure, .trackers, .stats:
+                return nil
+            }
+        })
+
     
     //MARK: - Toggles items
     private lazy var trackingProtectionItem = ToggleItem(
@@ -44,133 +58,138 @@ class TrackingProtectionViewController: UIViewController {
     private let blockOtherItem = ToggleItem(label: UIConstants.strings.labelBlockOther, settingsKey: .blockOther)
     
     //MARK: - Sections
-    func secureConnectionSection(title: String, image: UIImage) -> Section {
-        Section(
-            items: [ SectionItem(configureCell: { _, _ in
+    func secureConnectionSectionItems(title: String, image: UIImage) -> [SectionItem] {
+        [
+            SectionItem(configureCell: { _, _ in
                 ImageCell(image: image, title: title)
-            })]
-        )
+            })
+        ]
     }
     
-    lazy var enableTrackersSection = Section(
-        footerTitle: trackingProtectionItem.settingsValue ? UIConstants.strings.trackingProtectionOn : UIConstants.strings.trackingProtectionOff,
-        items: [
-            SectionItem(
-                configureCell: { [unowned self] tableView, indexPath in
-                    let cell = SwitchTableViewCell(
-                        item: self.trackingProtectionItem,
-                        reuseIdentifier: "SwitchTableViewCell"
-                    )
-                    cell.valueChanged.sink { isOn in
-                        self.trackingProtectionItem.settingsValue = isOn
-                        self.toggleProtection(isOn: isOn)
-                        if isOn {
-                            self.profileDataSource.tableViewSections.insert(self.trackersSection, at: trackersSectionIndex)
-                            self.tableView.insertSections([trackersSectionIndex], with: .middle)
-                        } else {
-                            self.profileDataSource.tableViewSections.remove(at: trackersSectionIndex)
-                            self.tableView.deleteSections([trackersSectionIndex], with: .middle)
-                        }
-                        self.calculatePreferredSize()
-                    }
-                    .store(in: &self.subscriptions)
-                    return cell
-                }
-            )
-        ]
-    )
+    lazy var tooltipSectionItems = [
+        SectionItem(configureCell: { [unowned self] tableView, indexPath in
+            let cell = TooltipTableViewCell(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy)
+            cell.delegate = self
+            return cell
+        })
+    ]
     
-    lazy var trackersSection = Section(
-        headerTitle: UIConstants.strings.trackersHeader.uppercased(),
-        items: toggleItems.map { toggleItem in
-            SectionItem(
-                configureCell: { [unowned self] _, _ in
-                    let cell = SwitchTableViewCell(item: toggleItem, reuseIdentifier: "SwitchTableViewCell")
-                    cell.valueChanged.sink { isOn in
-                        toggleItem.settingsValue = isOn
-                        self.updateTelemetry(toggleItem.settingsKey, isOn)
-                        
+    lazy var enableTrackersSectionItems = [
+        SectionItem(
+            configureCell: { [unowned self] tableView, indexPath in
+                let cell = SwitchTableViewCell(
+                    item: self.trackingProtectionItem,
+                    reuseIdentifier: "SwitchTableViewCell"
+                )
+                cell.valueChanged.sink { isOn in
+                    self.trackingProtectionItem.settingsValue = isOn
+                    self.toggleProtection(isOn: isOn)
+                    if isOn {
+                        var snapshot = dataSource.snapshot()
+                        snapshot.insertSections([.trackers], afterSection: .enableTrackers)
+                        snapshot.appendItems(trackersSectionItems, toSection: .trackers)
+                        snapshot.reloadSections([.enableTrackers])
+                        dataSource.apply(snapshot, animatingDifferences: true)
+                    } else {
+                        var snapshot = dataSource.snapshot()
+                        snapshot.deleteSections([.trackers])
+                        snapshot.reloadSections([.enableTrackers])
+                        dataSource.apply(snapshot, animatingDifferences: true)
+                    }
+                    self.calculatePreferredSize()
+                }
+                .store(in: &self.subscriptions)
+                return cell
+            }
+        )
+    ]
+    
+    lazy var trackersSectionItems = toggleItems.map { toggleItem in
+        SectionItem(
+            configureCell: { [unowned self] _, _ in
+                let cell = SwitchTableViewCell(item: toggleItem, reuseIdentifier: "SwitchTableViewCell")
+                cell.valueChanged.sink { isOn in
+                    toggleItem.settingsValue = isOn
+                    self.updateTelemetry(toggleItem.settingsKey, isOn)
+                    
+                    GleanMetrics
+                        .TrackingProtection
+                        .trackerSettingChanged
+                        .record(.init(
+                            isEnabled: isOn,
+                            sourceOfChange: self.sourceOfChange,
+                            trackerChanged: toggleItem.settingsKey.trackerChanged)
+                        )
+                }
+                .store(in: &self.subscriptions)
+                return cell
+            }
+        )
+    }
+    +
+    [
+        SectionItem(
+            configureCell: { [unowned self] _, _ in
+                let cell = SwitchTableViewCell(item: blockOtherItem, reuseIdentifier: "SwitchTableViewCell")
+                cell.valueChanged.sink { isOn in
+                    if isOn {
+                        let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
+                            //TODO: Make sure to reset the toggle
+                            cell.isOn = false
+                            blockOtherItem.settingsValue = false
+                            self.updateTelemetry(blockOtherItem.settingsKey, false)
+                            GleanMetrics
+                                .TrackingProtection
+                                .trackerSettingChanged
+                                .record(.init(
+                                    isEnabled: false,
+                                    sourceOfChange: self.sourceOfChange,
+                                    trackerChanged: blockOtherItem.settingsKey.trackerChanged
+                                ))
+                        })
+                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { _ in
+                            blockOtherItem.settingsValue = true
+                            self.updateTelemetry(blockOtherItem.settingsKey, true)
+                            GleanMetrics
+                                .TrackingProtection
+                                .trackerSettingChanged
+                                .record(.init(
+                                    isEnabled: true,
+                                    sourceOfChange: self.sourceOfChange,
+                                    trackerChanged: blockOtherItem.settingsKey.trackerChanged
+                                ))
+                        })
+                        self.present(alertController, animated: true, completion: nil)
+                    } else {
+                        blockOtherItem.settingsValue = isOn
+                        updateTelemetry(blockOtherItem.settingsKey, isOn)
                         GleanMetrics
                             .TrackingProtection
                             .trackerSettingChanged
                             .record(.init(
                                 isEnabled: isOn,
                                 sourceOfChange: self.sourceOfChange,
-                                trackerChanged: toggleItem.settingsKey.trackerChanged)
-                            )
+                                trackerChanged: blockOtherItem.settingsKey.trackerChanged
+                            ))
                     }
-                    .store(in: &self.subscriptions)
-                    return cell
                 }
-            )
-        }
-        +
-        [
-            SectionItem(
-                configureCell: { [unowned self] _, _ in
-                    let cell = SwitchTableViewCell(item: blockOtherItem, reuseIdentifier: "SwitchTableViewCell")
-                    cell.valueChanged.sink { isOn in
-                        if isOn {
-                            let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
-                            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
-                                //TODO: Make sure to reset the toggle
-                                cell.isOn = false
-                                blockOtherItem.settingsValue = false
-                                self.updateTelemetry(blockOtherItem.settingsKey, false)
-                                GleanMetrics
-                                    .TrackingProtection
-                                    .trackerSettingChanged
-                                    .record(.init(
-                                        isEnabled: false,
-                                        sourceOfChange: self.sourceOfChange,
-                                        trackerChanged: blockOtherItem.settingsKey.trackerChanged
-                                    ))
-                            })
-                            alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { _ in
-                                blockOtherItem.settingsValue = true
-                                self.updateTelemetry(blockOtherItem.settingsKey, true)
-                                GleanMetrics
-                                    .TrackingProtection
-                                    .trackerSettingChanged
-                                    .record(.init(
-                                        isEnabled: true,
-                                        sourceOfChange: self.sourceOfChange,
-                                        trackerChanged: blockOtherItem.settingsKey.trackerChanged
-                                    ))
-                            })
-                            self.present(alertController, animated: true, completion: nil)
-                        } else {
-                            blockOtherItem.settingsValue = isOn
-                            updateTelemetry(blockOtherItem.settingsKey, isOn)
-                            GleanMetrics
-                                .TrackingProtection
-                                .trackerSettingChanged
-                                .record(.init(
-                                    isEnabled: isOn,
-                                    sourceOfChange: self.sourceOfChange,
-                                    trackerChanged: blockOtherItem.settingsKey.trackerChanged
-                                ))
-                        }
-                    }
-                    .store(in: &self.subscriptions)
-                    return cell
-                }
-            )
-        ]
-    )
+                .store(in: &self.subscriptions)
+                return cell
+            }
+        )
+    ]
     
-    lazy var statsSection = Section(
-        items: [
-            SectionItem(
-                configureCell: { [unowned self] _, _ in
-                    SubtitleCell(
-                        title: String(format: UIConstants.strings.trackersBlockedSince, self.getAppInstallDate()),
-                        subtitle: self.getNumberOfTrackersBlocked()
-                    )
-                }
-            )
-        ]
-    )
+    lazy var statsSectionItems = [
+        SectionItem(
+            configureCell: { [unowned self] _, _ in
+                SubtitleCell(
+                    title: String(format: UIConstants.strings.trackersBlockedSince, self.getAppInstallDate()),
+                    subtitle: self.getNumberOfTrackersBlocked()
+                )
+            }
+        )
+    ]
     
     //MARK: - Views
     private var headerHeight: Constraint?
@@ -179,8 +198,6 @@ class TrackingProtectionViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.delegate = profileDataSource
-        tableView.dataSource = profileDataSource
         tableView.separatorStyle = .singleLine
         tableView.tableFooterView = UIView()
         tableView.register(SwitchTableViewCell.self)
@@ -202,12 +219,39 @@ class TrackingProtectionViewController: UIViewController {
     }
     var state: TrackingProtectionState
     let favIconPublisher: AnyPublisher<UIImage, Never>?
+    var onboardingEventsHandler: OnboardingEventsHandler!
+    private var cancellable: AnyCancellable?
     
     //MARK: - VC Lifecycle
     init(state: TrackingProtectionState, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
         self.favIconPublisher = favIconPublisher
         self.state = state
         super.init(nibName: nil, bundle: nil)
+        
+        dataSource.defaultRowAnimation = .middle
+        
+        var snapshot = NSDiffableDataSourceSnapshot<SectionType, SectionItem>()
+        
+        if case let .browsing(browsingStatus) = state {
+            let title = browsingStatus.isSecureConnection ? UIConstants.strings.connectionSecure : UIConstants.strings.connectionNotSecure
+            let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
+            let secureSectionItems = self.secureConnectionSectionItems(title: title, image: image)
+            snapshot.appendSections([.secure])
+            snapshot.appendItems(secureSectionItems, toSection: .secure)
+        }
+        
+        snapshot.appendSections([.enableTrackers])
+        snapshot.appendItems(enableTrackersSectionItems, toSection: .enableTrackers)
+        
+        if self.trackingProtectionItem.settingsValue {
+            snapshot.appendSections([.trackers])
+            snapshot.appendItems(trackersSectionItems, toSection: .trackers)
+        }
+        
+        snapshot.appendSections([.stats])
+        snapshot.appendItems(statsSectionItems, toSection: .stats)
+    
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     required init?(coder: NSCoder) {
@@ -229,6 +273,28 @@ class TrackingProtectionViewController: UIViewController {
             self.navigationController?.navigationBar.shadowImage = UIImage()
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.navigationController?.navigationBar.isTranslucent = false
+            
+            onboardingEventsHandler = delegate?.onboardingEventsHandler
+            onboardingEventsHandler.send(.showTrackingProtection)
+            cancellable = onboardingEventsHandler
+                .$route
+                .sink { [unowned self] route in
+                    switch route {
+                    case .none:
+                        var snapshot = dataSource.snapshot()
+                        snapshot.deleteSections([.tip])
+                        dataSource.apply(snapshot, animatingDifferences: true)
+                        
+                    case .trackingProtection:
+                        var snapshot = dataSource.snapshot()
+                        snapshot.insertSections([.tip], beforeSection: .enableTrackers)
+                        snapshot.appendItems(tooltipSectionItems, toSection: .tip)
+                        dataSource.apply(snapshot)
+                        
+                    default:
+                        break
+                    }
+                }
         }
         
         if case let .browsing(browsingStatus) = state,
@@ -236,7 +302,7 @@ class TrackingProtectionViewController: UIViewController {
             view.addSubview(header)
             header.snp.makeConstraints { make in
                 self.headerHeight = make.height.equalTo(72).constraint
-                make.leading.top.trailing.equalToSuperview()
+                make.top.leading.trailing.equalToSuperview()
             }
             if let publisher = favIconPublisher {
                 header.configure(domain: baseDomain, publisher: publisher)
@@ -276,6 +342,7 @@ class TrackingProtectionViewController: UIViewController {
     }
     
     @objc private func doneTapped() {
+        onboardingEventsHandler.route = nil
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -320,5 +387,11 @@ class TrackingProtectionViewController: UIViewController {
         GleanMetrics.TrackingProtection.hasEverChangedEtp.set(true)
         
         delegate?.trackingProtectionDidToggleProtection(enabled: isOn)
+    }
+}
+
+extension TrackingProtectionViewController: TooltipViewDelegate {
+    func didTapTooltipDismissButton() {
+        onboardingEventsHandler.route = nil
     }
 }

@@ -38,7 +38,8 @@ class OnboardingTest: XCTestCase {
        }
 
     // Smoketest
-    func testPressingDots() {
+    func testPressingDots() throws {
+        throw XCTSkip("This test is temporarily disabled, it should be refactored when the new onboarding functionality is done")
         let stackElement = app.otherElements["Intro.stackView"]
         let pageIndicatorButton1 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 0)
         let pageIndicatorButton2 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 1)

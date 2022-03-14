@@ -139,7 +139,18 @@ struct UIConstants {
         static let actionSheetTitleHeaderHeight: CGFloat = 36
         static let actionSheetSeparatorHeaderHeight: CGFloat = 12
         static let settingsCellLeftInset: CGFloat = 20
-     
+        static let onboardingButtonHeight: CGFloat = 44
+        static let onboardingIconsWidthHeight: CGFloat = 20
+        static let onboardingTextStackViewSpacing: CGFloat = 6
+        static let onboardingMiddleStackViewSpacing: CGFloat = 24
+        static let onboardingSpacingDividerPhone: CGFloat = 15
+        static let onboardingSpacingDividerPad: CGFloat = 28
+        static let onboardingLayoutMarginTopDivider: CGFloat = 10
+        static let onboardingLayoutMarginTop: CGFloat = 50
+        static let onboardingLayoutMarginLeadingTrailingDivider: CGFloat = 10
+        static let onboardingLayoutMarginBottom: CGFloat = 0
+        static let onboardingButtonButtomInsetDivider: CGFloat = 20
+        static let onboardingButtonLeadingTrailingInsetDivider: CGFloat = 5
     }
 
     struct strings {
@@ -376,6 +387,11 @@ struct UIConstants {
         static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
         static let protectionStatusSecure = NSLocalizedString("ProtectionStatus.Secure", value: "Connection is secure", comment: "This is the value for a label that indicates if a user is on a secure https connection.")
         static let protectionStatusNotSecure = NSLocalizedString("ProtectionStatus.NotSecure", value: "Connection is not secure", comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
+        static let tooltipBodyTextForShieldIcon = NSLocalizedString("TooltipBodyText.ShieldIcon", value: "Focus stopped this site from spying on you. Tap the shield for info on what we blocked.", comment: "This is the body text that is displayed for the Shield icon tooltip")
+        static let tooltipTitleTextForPrivacy = NSLocalizedString("TooltipTitleText.Privacy", value: "You’re protected! ", comment: "This is the title text that is displayed for the Privacy tooltip")
+        static let tooltipBodyTextForPrivacy = NSLocalizedString("TooltipBodyText.Privacy", value: "These default settings offer strong protection. But it’s easy to tweak the settings to meet your specific needs.", comment: "This is the body text that is displayed for the Privacy tooltip")
+        static let tootipBodyTextForContextMenuIcon = NSLocalizedString("TooltipBodyText.ContextMenu", value: "Go to Settings to manage specific privacy & security options.", comment: "This is the body text that is displayed for the Context Menu icon tooltip")
+        static let tooltipBodyTextForTrashIcon = NSLocalizedString("TooltipBodyText.TrashIcon", value: "Tap the trash anytime to remove all traces of your current session.", comment: "This is the body text that is displayed for the Trash icon tooltip")
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"

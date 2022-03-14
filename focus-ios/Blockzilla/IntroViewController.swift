@@ -13,6 +13,7 @@ class IntroViewController: UIViewController {
     let skipButton = UIButton()
     private let backgroundDark = GradientBackgroundView()
     private let backgroundBright = GradientBackgroundView(alpha: 0.8)
+    var dismissOnboardingScreen: (() -> Void)!
 
     var isBright: Bool = false {
         didSet {
@@ -77,10 +78,9 @@ class IntroViewController: UIViewController {
     }
 
     @objc func didTapSkipButton() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "skip")
         backgroundDark.removeFromSuperview()
         backgroundBright.removeFromSuperview()
-        dismiss(animated: true, completion: nil)
+        dismissOnboardingScreen()
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -94,10 +94,9 @@ class IntroViewController: UIViewController {
 
 extension IntroViewController: ScrollViewControllerDelegate {
     func scrollViewController(scrollViewController: ScrollViewController, didDismissSlideDeck bool: Bool) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
         backgroundDark.removeFromSuperview()
         backgroundBright.removeFromSuperview()
-        dismiss(animated: true, completion: nil)
+        dismissOnboardingScreen()
     }
 
     func scrollViewController(scrollViewController: ScrollViewController, didUpdatePageCount count: Int) {

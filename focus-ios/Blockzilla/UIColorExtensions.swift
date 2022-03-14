@@ -43,6 +43,7 @@ extension UIColor {
     static let searchGradientFourth = UIColor(named: "SearchGradientFourth")!
     static let secondaryText = UIColor(named: "SecondaryText")!
     static let secondaryButton = UIColor(named: "SecondaryButton")!
+    static let primaryButton = UIColor(named: "PrimaryButton")!
     
     /**
      * Initializes and returns a color object for the given RGB hex integer.

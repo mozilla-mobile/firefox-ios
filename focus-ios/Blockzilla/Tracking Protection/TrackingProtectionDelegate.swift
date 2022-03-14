@@ -6,5 +6,6 @@
 import Foundation
 
 protocol TrackingProtectionDelegate: AnyObject {
+    var onboardingEventsHandler: OnboardingEventsHandler! { get }
     func trackingProtectionDidToggleProtection(enabled: Bool)
 }

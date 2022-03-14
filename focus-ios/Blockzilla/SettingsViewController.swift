@@ -105,7 +105,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
     }()
-
+    
+    var onboardingEventsHandler: OnboardingEventsHandler!
+    
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector()
@@ -365,9 +367,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .integration:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .mozilla:
-            if indexPath.row == 0 {
+            
+            if !onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 0 {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
-            } else if indexPath.row == 1 {
+            } else if (!onboardingEventsHandler.shouldShowNewOnboarding() && indexPath.row == 1) || indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.about"
@@ -389,7 +392,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].numberOfRows
+        (sections[section] == .mozilla && onboardingEventsHandler.shouldShowNewOnboarding()) ? 2 : sections[section].numberOfRows
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -511,6 +514,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc private func dismissSettings() {
+        #if DEBUG
+        if let browserViewController = presentingViewController as? BrowserViewController {
+            browserViewController.refreshTipsDisplay()
+        }
+        #endif
         self.dismiss(animated: true, completion: nil)
     }
 
