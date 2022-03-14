@@ -1240,9 +1240,10 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
-            
-            tab.metadataManager?.updateTimerAndObserving(state: TabGroupTimerState.tabNavigatedToDifferentUrl,
-                                                                nextUrl: displayUrl.absoluteString)
+            let searchData = tab.metadataManager?.tabGroupData ?? TabGroupData()
+            searchData.tabAssociatedNextUrl = displayUrl.absoluteString
+            tab.metadataManager?.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
+                                                         searchData: searchData)
         }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.tabDidChangeContentBlocking(tab)
@@ -1317,7 +1318,7 @@ class BrowserViewController: UIViewController {
 
         openURLInNewTab(nil, isPrivate: isPrivate)
         let freshTab = tabManager.selectedTab
-        freshTab?.metadataManager?.updateTimerAndObserving(state: TabGroupTimerState.newTab)
+        freshTab?.metadataManager?.updateTimerAndObserving(state: .newTab)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
@@ -1329,7 +1330,12 @@ class BrowserViewController: UIViewController {
         if let searchURL = engine.searchURLForQuery(text) {
             openURLInNewTab(searchURL, isPrivate: isPrivate)
             if let tab = tabManager.selectedTab {
-                tab.metadataManager?.updateTimerAndObserving(state: TabGroupTimerState.navSearchLoaded, searchTerm: text, searchProviderUrl: searchURL.absoluteString, nextUrl: "")
+                let searchData = TabGroupData(searchTerm: text,
+                                              searchUrl: searchURL.absoluteString,
+                                              nextReferralUrl: "",
+                                              tabHistoryCurrentState: "",
+                                              tabGroupTimerState: "")
+                tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
             }
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -1798,7 +1804,12 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
         
-        tab.metadataManager?.updateTimerAndObserving(state: TabGroupTimerState.navSearchLoaded, searchTerm: searchTerm, searchProviderUrl: url.absoluteString, nextUrl: "")
+        let searchData = TabGroupData(searchTerm: searchTerm ?? "",
+                                      searchUrl: url.absoluteString,
+                                      nextReferralUrl: "",
+                                      tabHistoryCurrentState: "",
+                                      tabGroupTimerState: "")
+        tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }

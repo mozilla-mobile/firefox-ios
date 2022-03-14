@@ -154,7 +154,12 @@ extension BrowserViewController: WKUIDelegate {
                 let searchTerm = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchTerm ?? ""
                 let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
                 if !searchTerm.isEmpty, !searchUrl.isEmpty {
-                    tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: tab.url?.absoluteString ?? "")
+                    let searchData = TabGroupData(searchTerm: searchTerm,
+                                                  searchUrl: searchUrl,
+                                                  nextReferralUrl: tab.url?.absoluteString ?? "",
+                                                  tabHistoryCurrentState: "",
+                                                  tabGroupTimerState: "")
+                    tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData)
                 }
                 
                 guard !self.topTabsVisible else {
@@ -730,11 +735,6 @@ extension BrowserViewController: WKNavigationDelegate {
                 tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""
             }
-
-            metadataManager.updateTimerAndObserving(state: TabGroupTimerState.tabNavigatedToDifferentUrl,
-                                        searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                        searchProviderUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
-                                        nextUrl: webView.url?.absoluteString ?? "")
         }
 
         // When tab url changes after web content starts loading on the page
@@ -754,14 +754,21 @@ extension BrowserViewController: WKNavigationDelegate {
 
             // Only update search term data with valid search term data
             if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
-                
-                metadataManager.updateTimerAndObserving(state: TabGroupTimerState.tabNavigatedToDifferentUrl,
-                                            searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                            searchProviderUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
-                                            nextUrl: webView.url?.absoluteString ?? "")
+                let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+                                              searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
+                                              nextReferralUrl: webView.url?.absoluteString ?? "",
+                                              tabHistoryCurrentState: "",
+                                              tabGroupTimerState: "")
+                tab.metadataManager?.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
+                                                             searchData: searchData)
             } else if !tab.isFxHomeTab {
-                metadataManager.updateTimerAndObserving(state: TabGroupTimerState.openURLOnly,
-                                                        searchProviderUrl: webView.url?.absoluteString,
+                let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+                                              searchUrl: webView.url?.absoluteString ?? "",
+                                              nextReferralUrl: "",
+                                              tabHistoryCurrentState: "",
+                                              tabGroupTimerState: "")
+                metadataManager.updateTimerAndObserving(state: .openURLOnly,
+                                                        searchData: searchData,
                                                         tabTitle: webView.title)
             }
 

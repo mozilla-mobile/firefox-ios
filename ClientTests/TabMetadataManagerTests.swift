@@ -15,7 +15,7 @@ class TabMetadataManagerTests: XCTestCase {
     private var manager: TabMetadataManager!
     private let weigths = HistoryHighlightWeights(viewTime: 10.0, frequency: 4.0)
 
-    override func setUpWithError() throws {
+    override func setUp() {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "metadata_recording_tests")
@@ -24,7 +24,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager = TabMetadataManager(profile: profile)
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() {
         super.tearDown()
         
         profile._shutdown()

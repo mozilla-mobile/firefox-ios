@@ -35,71 +35,28 @@ class TabMetadataManager {
         nextUrl != tabGroupData.tabAssociatedNextUrl
     }
 
-    func updateTimerAndObserving(state: TabGroupTimerState, searchTerm: String? = nil, searchProviderUrl: String? = nil, nextUrl: String = "", tabTitle: String? = "") {
+    func updateTimerAndObserving(state: TabGroupTimerState,
+                                 searchData: TabGroupData = TabGroupData(),
+                                 tabTitle: String? = nil) {
         switch state {
         case .navSearchLoaded:
-            shouldResetTabGroupData = false
-            tabGroupsTimerHelper.startOrResume()
-            tabGroupData.tabAssociatedSearchUrl = searchProviderUrl ?? ""
-            tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
-            tabGroupData.tabAssociatedNextUrl = nextUrl
-            tabGroupData.tabHistoryCurrentState = state.rawValue
+            updateNavSearchLoadedState(searchData: searchData)
         case .newTab:
-            shouldResetTabGroupData = false
-            tabGroupsTimerHelper.resetTimer()
-            tabGroupsTimerHelper.startOrResume()
-            tabGroupData.tabHistoryCurrentState = state.rawValue
+            updateNewTabState(searchData: searchData)
         case .tabNavigatedToDifferentUrl:
-            if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
-                // reset tab group
-                tabGroupData = TabGroupData()
-                shouldResetTabGroupData = true
-            // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
-            } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
-                let key = tabGroupData.tabHistoryMetadatakey()
-                if key.referrerUrl != nextUrl {
-                    let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
-                    updateObservationForKey(key: key, observation: observation)
-                    tabGroupData.tabAssociatedNextUrl = nextUrl
-                }
-                tabGroupsTimerHelper.resetTimer()
-                tabGroupsTimerHelper.startOrResume()
-                tabGroupData.tabHistoryCurrentState = state.rawValue
-            }
+            updateNavigatedToDifferentUrl(searchData: searchData)
         case .tabSelected:
-            if !shouldResetTabGroupData {
-                if tabGroupsTimerHelper.isPaused {
-                    tabGroupsTimerHelper.startOrResume()
-                }
-                tabGroupData.tabHistoryCurrentState = state.rawValue
-            }
+            updateTabSelected(searchData: searchData)
         case .tabSwitched:
-            if !shouldResetTabGroupData {
-                let key = tabGroupData.tabHistoryMetadatakey()
-                let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
-                updateObservationForKey(key: key, observation: observation)
-                tabGroupsTimerHelper.pauseOrStop()
-                tabGroupData.tabHistoryCurrentState = state.rawValue
-            }
+            updateTabSwitched(searchData: searchData)
         case .openInNewTab:
-            shouldResetTabGroupData = false
-            if let searchUrl = searchProviderUrl {
-                tabGroupData.tabAssociatedSearchUrl = searchUrl
-                tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
-                tabGroupData.tabAssociatedNextUrl = nextUrl
-            }
-            tabGroupData.tabHistoryCurrentState = state.rawValue
+            updateOpenInNewTab(searchData: searchData)
         case .openURLOnly:
-            tabGroupData.tabAssociatedSearchUrl = searchProviderUrl ?? ""
-            tabGroupData.tabAssociatedSearchTerm = tabTitle ?? ""
-            tabGroupData.tabHistoryCurrentState = state.rawValue
-            tabGroupsTimerHelper.startOrResume()
-            updateRegularSiteObservation(url: searchProviderUrl, title: tabTitle)
+            updateOpenURLOnlyState(searchData: searchData, title: tabTitle)
         case .none:
             tabGroupData.tabHistoryCurrentState = state.rawValue
         }
     }
-    
     
     /// Update existing or new observation with title once it changes for certain tab states title becomes available
     /// - Parameter title: Tab title
@@ -124,16 +81,84 @@ class TabMetadataManager {
         }
     }
     
+    private func updateNavSearchLoadedState(searchData: TabGroupData) {
+        shouldResetTabGroupData = false
+        tabGroupsTimerHelper.startOrResume()
+        tabGroupData = searchData
+        tabGroupData.tabHistoryCurrentState = TabGroupTimerState.navSearchLoaded.rawValue
+    }
+    
+    private func updateNewTabState(searchData: TabGroupData) {
+        shouldResetTabGroupData = false
+        tabGroupsTimerHelper.resetTimer()
+        tabGroupsTimerHelper.startOrResume()
+        tabGroupData.tabHistoryCurrentState = TabGroupTimerState.newTab.rawValue
+    }
+    
+    private func updateNavigatedToDifferentUrl(searchData: TabGroupData) {
+        if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
+            // reset tab group
+            tabGroupData = TabGroupData()
+            shouldResetTabGroupData = true
+        // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
+        } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
+            let key = tabGroupData.tabHistoryMetadatakey()
+            if key.referrerUrl != searchData.tabAssociatedNextUrl {
+                let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
+                updateObservationForKey(key: key, observation: observation)
+                tabGroupData.tabAssociatedNextUrl = searchData.tabAssociatedNextUrl
+            }
+            tabGroupsTimerHelper.resetTimer()
+            tabGroupsTimerHelper.startOrResume()
+            tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue
+        }
+    }
+    
+    private func updateTabSelected(searchData: TabGroupData) {
+        if !shouldResetTabGroupData {
+            if tabGroupsTimerHelper.isPaused {
+                tabGroupsTimerHelper.startOrResume()
+            }
+            tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabSelected.rawValue
+        }
+    }
+    
+    private func updateTabSwitched(searchData: TabGroupData) {
+        if !shouldResetTabGroupData {
+            let key = tabGroupData.tabHistoryMetadatakey()
+            let observation = HistoryMetadataObservation(url: key.url,
+                                                         referrerUrl: key.referrerUrl,
+                                                         searchTerm: key.searchTerm,
+                                                         viewTime: tabGroupsTimerHelper.elapsedTime,
+                                                         documentType: nil,
+                                                         title: nil)
+            updateObservationForKey(key: key, observation: observation)
+            tabGroupsTimerHelper.pauseOrStop()
+            tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabSwitched.rawValue
+        }
+    }
+    
+    private func updateOpenInNewTab(searchData: TabGroupData) {
+        shouldResetTabGroupData = false
+        if !searchData.tabAssociatedSearchUrl.isEmpty {
+            tabGroupData = searchData
+        }
+        tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openInNewTab.rawValue
+    }
     
     /// Called update observation for Regular sites
     /// if the title isEmpty we abort recording because it can't be overriden
     /// - Parameters:
     ///   - url: Site URL from webview
     ///   - title: Site title from webview can be empty for slow loading pages
-    private func updateRegularSiteObservation(url: String?, title: String?) {
-        guard let url = url, let title = title,
-              !title.isEmpty else { return }
+    private func updateOpenURLOnlyState(searchData: TabGroupData, title: String?) {
+        tabGroupData = searchData
+        tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openURLOnly.rawValue
+        tabGroupsTimerHelper.startOrResume()
         
+        guard let title = title, !title.isEmpty else { return }
+
+        let url = tabGroupData.tabAssociatedSearchUrl
         let key = HistoryMetadataKey(url: url, searchTerm: "", referrerUrl: "")
         let observation = HistoryMetadataObservation(url: url,
                                                      referrerUrl: nil,
