@@ -17,12 +17,15 @@ class TabMetadataManagerTests: XCTestCase {
         super.setUp()
         
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
+        profile._reopen()
         manager = TabMetadataManager(profile: profile)
     }
 
     override func tearDown() {
         super.tearDown()
-
+        
+        profile._shutdown()
+        profile = nil
         manager = nil
     }
 
@@ -62,5 +65,50 @@ class TabMetadataManagerTests: XCTestCase {
         
         let shouldUpdate = manager.shouldUpdateSearchTermData(webViewUrl: stringUrl)
         XCTAssertFalse(shouldUpdate)
+    }
+    
+    // Improvement remove sleep and replace with completion in updateObservationForKey
+    func testUpdateTimerAndObserving_ForOpenURLOnly() throws {
+        emptyDB()
+        let stringUrl = "https://www.mozilla.org/"
+        let title = "mozilla title"
+           
+        let tabGroupData = TabGroupData()
+        tabGroupData.tabAssociatedSearchUrl = stringUrl
+        manager.updateTimerAndObserving(state: .openURLOnly, searchData: tabGroupData, tabTitle: title)
+           
+        sleep(5)
+        let result = self.profile.places.getHistoryMetadataSince(since: 0).value
+               
+        XCTAssertTrue(result.isSuccess)
+        XCTAssertNotNil(result.successValue)
+        XCTAssertEqual(result.successValue!.count, 1)
+        XCTAssertEqual(result.successValue![0].url, stringUrl)
+        XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
+    }
+    
+    func testUpdateObservationTitle_ForOpenURLOnly() throws {
+        emptyDB()
+        let stringUrl = "https://www.developer.org/"
+        let title = "updated title"
+        
+        manager.tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openURLOnly.rawValue
+        manager.tabGroupData.tabAssociatedSearchUrl = stringUrl
+        manager.updateObservationTitle(title)
+
+        sleep(5)
+        let result = profile.places.getHistoryMetadataSince(since: 0).value
+
+        XCTAssertTrue(result.isSuccess)
+        XCTAssertNotNil(result.successValue)
+        XCTAssertEqual(result.successValue!.count, 1)
+        XCTAssertEqual(result.successValue![0].url, stringUrl)
+        XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
+    }
+    
+    private func emptyDB() {
+        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess)
+        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess)
+        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess)
     }
 }
