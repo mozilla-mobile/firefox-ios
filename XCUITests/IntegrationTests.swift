@@ -13,7 +13,7 @@ private let tabOpenInDesktop = "http://example.com/"
 
 class IntegrationTests: BaseTestCase {
 
-    let testWithDB = ["testFxASyncHistory", "testFxASyncBookmark"]
+    let testWithDB = ["testFxASyncHistory"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
     // This DB contains 1 entry example.com
@@ -101,6 +101,12 @@ class IntegrationTests: BaseTestCase {
         // Bookmark is added by the DB
         // Sign into Firefox Accounts
         app.buttons["urlBar-cancel"].tap()
+        navigator.openURL("example.com")
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: 15)
+        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
+        navigator.nowAt(BrowserTab)
         signInFxAccounts()
 
         // Wait for initial sync to complete
