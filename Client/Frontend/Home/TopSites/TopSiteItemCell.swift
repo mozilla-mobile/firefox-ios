@@ -6,9 +6,12 @@ import Foundation
 import Shared
 import SDWebImage
 import Storage
+import UIKit
 
 /// The TopSite cell that appears in the ASHorizontalScrollView.
-class TopSiteItemCell: UICollectionViewCell {
+class TopSiteItemCell: UICollectionViewCell, ReusableCell {
+
+    static var cellIdentifier: String = "TopSiteItemCell"
 
     struct UX {
         static let titleHeight: CGFloat = 20
@@ -63,7 +66,13 @@ class TopSiteItemCell: UICollectionViewCell {
 
     override var isSelected: Bool {
         didSet {
-            self.selectedOverlay.isHidden = !isSelected
+            selectedOverlay.isHidden = !isSelected
+        }
+    }
+
+    override var isHighlighted: Bool {
+        didSet {
+            selectedOverlay.isHidden = !isHighlighted
         }
     }
 
@@ -107,7 +116,12 @@ class TopSiteItemCell: UICollectionViewCell {
             titleLabel.trailingAnchor.constraint(equalTo: titleWrapper.trailingAnchor),
             titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: titleWrapper.bottomAnchor)
         ])
+
+        titleLabelLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: titleWrapper.leadingAnchor)
+        titleLabelLeadingConstraint?.isActive = true
     }
+
+    private var titleLabelLeadingConstraint: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -120,38 +134,33 @@ class TopSiteItemCell: UICollectionViewCell {
         imageView.backgroundColor = UIColor.clear
         faviconBG.backgroundColor = UIColor.clear
 
+        titleLabelLeadingConstraint?.isActive = true
         pinViewHolder.isHidden = true
         pinImageView.removeFromSuperview()
         imageView.sd_cancelCurrentImageLoad()
         titleLabel.text = ""
     }
 
-    func configure(_ topSite: HomeTopSite) {
-        titleLabel.text = topSite.title
-        accessibilityLabel = titleLabel.text
-
-        imageView.image = topSite.image
-        topSite.imageLoaded = { image in
-            self.imageView.image = image
-        }
-
-        configurePinnedSite(topSite)
-        applyTheme()
-    }
-
     private func configurePinnedSite(_ topSite: HomeTopSite) {
         guard topSite.isPinned else { return }
         pinViewHolder.addSubview(pinImageView)
         pinViewHolder.isHidden = false
+        titleLabelLeadingConstraint?.isActive = false
 
         NSLayoutConstraint.activate([
             pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
             pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor, constant: UX.titleOffset),
             pinViewHolder.topAnchor.constraint(equalTo: pinImageView.topAnchor),
+            pinViewHolder.bottomAnchor.constraint(equalTo: pinImageView.bottomAnchor),
 
             pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
             pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
         ])
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        selectedOverlay.isHidden = true
     }
 }
 
@@ -166,5 +175,22 @@ extension TopSiteItemCell: NotificationThemeable {
         faviconBG.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         selectedOverlay.backgroundColor = UX.overlayColor
         titleLabel.backgroundColor = UIColor.clear
+    }
+}
+
+// MARK: TopSiteCellProtocol
+extension TopSiteItemCell: TopSiteCellProtocol {
+
+    func configure(_ topSite: HomeTopSite) {
+        titleLabel.text = topSite.title
+        accessibilityLabel = titleLabel.text
+
+        imageView.image = topSite.image
+        topSite.imageLoaded = { image in
+            self.imageView.image = image
+        }
+
+        configurePinnedSite(topSite)
+        applyTheme()
     }
 }

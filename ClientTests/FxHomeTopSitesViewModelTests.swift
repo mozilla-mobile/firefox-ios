@@ -1,0 +1,149 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
+
+import UIKit
+import XCTest
+@testable import Client
+import Shared
+import Storage
+import SyncTelemetry
+
+class FxHomeTopSitesViewModelTests: XCTestCase {
+    var profile: MockProfile!
+    var viewModel: FxHomeTopSitesViewModel!
+    var nimbusMock: NimbusMock!
+
+    override func setUp() {
+        super.setUp()
+        self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
+        self.nimbusMock = NimbusMock()
+        self.viewModel = FxHomeTopSitesViewModel(profile: self.profile, experiments: nimbusMock, isZeroSearch: false)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        self.profile._shutdown()
+        self.nimbusMock = nil
+        self.viewModel = nil
+        self.profile = nil
+    }
+
+    func testDeletionOfSingleSuggestedSite() {
+        let siteToDelete = viewModel.defaultTopSites()[0]
+
+        viewModel.hideURLFromTopSites(siteToDelete)
+        let newSites = viewModel.defaultTopSites()
+
+        XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
+            return a.url == b.url
+        }))
+    }
+
+    func testDeletionOfAllDefaultSites() {
+        let defaultSites = viewModel.defaultTopSites()
+        defaultSites.forEach({
+            viewModel.hideURLFromTopSites($0)
+        })
+
+        let newSites = viewModel.defaultTopSites()
+        XCTAssertTrue(newSites.isEmpty)
+    }
+
+    // MARK: Section dimension with Default row number
+
+    func testSectionDimension_portraitIphone_defaultRowNumber() {
+        let trait = FakeTraitCollection()
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+    }
+
+    func testSectionDimension_landscapeIphone_defaultRowNumber() {
+        let trait = FakeTraitCollection()
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: true)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
+    }
+
+    func testSectionDimension_portraitiPadRegular_defaultRowNumber() {
+        let trait = FakeTraitCollection()
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: false)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
+    }
+
+    func testSectionDimension_landscapeiPadRegular_defaultRowNumber() {
+        let trait = FakeTraitCollection()
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: false)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
+    }
+
+    func testSectionDimension_portraitiPadCompact_defaultRowNumber() {
+        let trait = FakeTraitCollection()
+        trait.overridenHorizontalSizeClass = .compact
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: false)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+    }
+
+    func testSectionDimension_landscapeiPadCompact_defaultRowNumber() {
+        let trait = FakeTraitCollection()
+        trait.overridenHorizontalSizeClass = .compact
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: false)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+    }
+
+    func testSectionDimension_portraitiPadUnspecified_defaultRowNumber() {
+        let trait = FakeTraitCollection()
+        trait.overridenHorizontalSizeClass = .unspecified
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: false)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 2)
+    }
+
+    func testSectionDimension_landscapeiPadUnspecified_defaultRowNumber() {
+        let trait = FakeTraitCollection()
+        trait.overridenHorizontalSizeClass = .unspecified
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: false)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+    }
+
+    // MARK: Section dimension with stubbed data
+
+    func test() {
+        // TODO: Laurie continue this - test private func getNumberOfRows(numberOfTilesPerRow: Int) -> Int {
+        let managerStub = FxHomeTopSitesManagerStub(profile: profile)
+        viewModel.tileManager = managerStub
+
+        let trait = FakeTraitCollection()
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+    }
+}
+
+// MARK: Helper classes
+private class FakeTraitCollection: UITraitCollection {
+
+    var overridenHorizontalSizeClass: UIUserInterfaceSizeClass = .regular
+    override var horizontalSizeClass: UIUserInterfaceSizeClass {
+        return overridenHorizontalSizeClass
+    }
+}
+
+private class FxHomeTopSitesManagerStub: FxHomeTopSitesManager {
+
+    var overridenSiteCount = 16
+    override var siteCount: Int {
+        return overridenSiteCount
+    }
+
+    var overridenNumberOfRows = 2
+    override var numberOfRows: Int {
+        return overridenNumberOfRows
+    }
+}

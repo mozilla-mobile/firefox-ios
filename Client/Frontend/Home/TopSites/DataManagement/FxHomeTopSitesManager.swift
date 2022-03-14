@@ -12,30 +12,27 @@ protocol FxHomeTopSitesManagerDelegate: AnyObject {
 
 class FxHomeTopSitesManager {
 
-    private let maximumTileNumberPerRow = 12
-    private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private let profile: Profile
-
     private var topSites: [HomeTopSite] = []
     private var historySites: [Site] = []
 
     weak var delegate: FxHomeTopSitesManagerDelegate?
+    lazy var topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
     
     init(profile: Profile) {
         self.profile = profile
-        self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
         topSiteHistoryManager.delegate = self
     }
 
     func getSite(index: Int) -> HomeTopSite? {
-        guard !topSites.isEmpty, index < topSites.count else { return nil }
+        guard !topSites.isEmpty, index < topSites.count, index >= 0 else { return nil }
         return topSites[index]
     }
 
     func getSiteDetail(index: Int) -> Site? {
-        guard !topSites.isEmpty, index < topSites.count else { return nil }
+        guard !topSites.isEmpty, index < topSites.count, index >= 0 else { return nil }
         return topSites[index].site
     }
 
@@ -57,9 +54,10 @@ class FxHomeTopSitesManager {
     }
 
     // Loads the data source of top sites
-    func loadTopSitesData() {
+    func loadTopSitesData(completion: (() -> Void)? = nil) {
         topSiteHistoryManager.getTopSites { sites in
             self.historySites = sites
+            completion?()
         }
     }
 
@@ -101,13 +99,8 @@ class FxHomeTopSitesManager {
 
 extension FxHomeTopSitesManager: DataObserverDelegate {
 
-    // Invoked by the TopSiteHistoryManager when highlights/top sites invalidation is complete.
     func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {
-        // Do not reload panel unless we're currently showing the highlight intro or if we
-        // force-reloaded the highlights or top sites. This should prevent reloading the
-        // panel after we've invalidated in the background on the first load.
-        if forced {
-            delegate?.reloadTopSites()
-        }
+        guard forced else { return }
+        delegate?.reloadTopSites()
     }
 }

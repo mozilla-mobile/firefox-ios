@@ -10,16 +10,13 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
 
     var viewModel: FxHomeTopSitesViewModel?
 
-    let EmptyCellIdentifier = "TopSiteItemEmptyCell"
-    let CellIdentifier = "TopSiteItemCell"
-
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewCompositionalLayout(section: layoutSection)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: CellIdentifier)
-        collectionView.register(EmptyTopSiteCell.self, forCellWithReuseIdentifier: EmptyCellIdentifier)
+        collectionView.register(cellType: TopSiteItemCell.self)
+        collectionView.register(cellType: EmptyTopSiteCell.self)
         collectionView.backgroundColor = UIColor.clear
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isScrollEnabled = false
@@ -116,14 +113,12 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier, for: indexPath) as? TopSiteItemCell,
+        if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = viewModel?.tileManager.getSite(index: indexPath.row) {
             cell.configure(contentItem)
-            print("Laurie - configuring cell \(indexPath)")
             return cell
 
-        } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCellIdentifier, for: indexPath) as? EmptyTopSiteCell {
-            print("Laurie - configuring empty cell \(indexPath)")
+        } else if let cell = collectionView.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) {
             return cell
         }
 

@@ -10,6 +10,12 @@ protocol FxHomeTopSitesViewModelDelegate: AnyObject {
     func reloadTopSites()
 }
 
+struct UITopSitesInterface {
+    var isLandscape: Bool
+    var isIphone: Bool
+    var horizontalSizeClass: UIUserInterfaceSizeClass
+}
+
 // TODO: Laurie - fix pins images not working
 // TODO: Laurie - fix layout when changing from home settings (2 to 4 fours for example)
 class FxHomeTopSitesViewModel {
@@ -29,8 +35,11 @@ class FxHomeTopSitesViewModel {
 
     var tilePressedHandler: ((Site, Bool) -> Void)?
     var tileLongPressedHandler: ((IndexPath) -> Void)?
-    var tileManager: FxHomeTopSitesManager
     weak var delegate: FxHomeTopSitesViewModelDelegate?
+
+    lazy var tileManager: FxHomeTopSitesManager = {
+        return FxHomeTopSitesManager(profile: profile)
+    }()
 
     // Need to save the parent's section for the long press action
     // since it's currently handled in FirefoxHomeViewController
@@ -45,22 +54,26 @@ class FxHomeTopSitesViewModel {
         self.profile = profile
         self.experiments = experiments
         self.isZeroSearch = isZeroSearch
-        self.tileManager = FxHomeTopSitesManager(profile: profile)
         tileManager.delegate = self
     }
 
-    func getSectionDimension(for trait: UITraitCollection) -> SectionDimension {
-        let numberOfTilesPerRow = getNumberOfTilesPerRow(for: trait)
+    func getSectionDimension(for trait: UITraitCollection,
+                             isLandscape: Bool = UIWindow.isLandscape,
+                             isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) -> SectionDimension {
+        let topSitesInterface = UITopSitesInterface(isLandscape: isLandscape,
+                                                    isIphone: isIphone,
+                                                    horizontalSizeClass: trait.horizontalSizeClass)
+
+        let numberOfTilesPerRow = getNumberOfTilesPerRow(for: topSitesInterface)
         let numberOfRows = getNumberOfRows(numberOfTilesPerRow: numberOfTilesPerRow)
         return SectionDimension(numberOfRows, numberOfTilesPerRow)
     }
 
-    // The dimension of a cell
+    // The width dimension of a cell
     static func widthDimension(for numberOfHorizontalItems: Int) -> NSCollectionLayoutDimension {
         return .fractionalWidth(CGFloat(1/numberOfHorizontalItems))
     }
 
-    // TODO: Laurie - write tests for this
     // Adjust number of rows depending on the what the users want, and how many sites we actually have.
     // We hide rows that are only composed of empty cells
     private func getNumberOfRows(numberOfTilesPerRow: Int) -> Int {
@@ -71,23 +84,15 @@ class FxHomeTopSitesViewModel {
         }
     }
 
-    private func getNumberOfTilesPerRow(for trait: UITraitCollection) -> Int {
-        let isLandscape = UIWindow.isLandscape
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            if isLandscape {
-                print("Laurie - numItems: 8")
-                return 8
-            } else {
-                print("Laurie - numItems: 4")
-                return 4
-            }
+    private func getNumberOfTilesPerRow(for interface: UITopSitesInterface) -> Int {
+        if interface.isIphone {
+            return interface.isLandscape ? 8 : 4
         } else {
             // The number of items in a row is equal to the number of top sites in a row * 2
-            var numItems = Int(UX.numberOfItemsPerRowForSizeClassIpad[trait.horizontalSizeClass])
-            if UIWindow.isPortrait || (trait.horizontalSizeClass == .compact && isLandscape) {
+            var numItems = Int(UX.numberOfItemsPerRowForSizeClassIpad[interface.horizontalSizeClass])
+            if !interface.isLandscape || (interface.horizontalSizeClass == .compact && interface.isLandscape) {
                 numItems = numItems - 1
             }
-            print("Laurie - numItems:\(numItems)")
             return numItems * 2
         }
     }
@@ -151,7 +156,7 @@ class FxHomeTopSitesViewModel {
         return topSiteActions
     }
 
-    private func hideURLFromTopSites(_ site: Site) {
+    func hideURLFromTopSites(_ site: Site) {
         guard let host = site.tileURL.normalizedHost else { return }
 
         let url = site.tileURL.absoluteString
@@ -166,6 +171,16 @@ class FxHomeTopSitesViewModel {
         }
     }
 
+    func defaultTopSites() -> [Site] {
+        let suggested = SuggestedSites.asArray()
+        let deleted = profile.prefs.arrayForKey(TopSitesHelper.DefaultSuggestedSitesKey) as? [String] ?? []
+        return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
+    }
+
+    private func removePinTopSite(_ site: Site) {
+        tileManager.removePinTopSite(site: site)
+    }
+
     private func pinTopSite(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
@@ -173,20 +188,10 @@ class FxHomeTopSitesViewModel {
         }
     }
 
-    func removePinTopSite(_ site: Site) {
-        tileManager.removePinTopSite(site: site)
-    }
-
     private func deleteTileForSuggestedSite(_ siteURL: String) {
         var deletedSuggestedSites = profile.prefs.arrayForKey(TopSitesHelper.DefaultSuggestedSitesKey) as? [String] ?? []
         deletedSuggestedSites.append(siteURL)
         profile.prefs.setObject(deletedSuggestedSites, forKey: TopSitesHelper.DefaultSuggestedSitesKey)
-    }
-
-    private func defaultTopSites() -> [Site] {
-        let suggested = SuggestedSites.asArray()
-        let deleted = profile.prefs.arrayForKey(TopSitesHelper.DefaultSuggestedSitesKey) as? [String] ?? []
-        return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
     }
 }
 
