@@ -16,8 +16,6 @@ struct UITopSitesInterface {
     var horizontalSizeClass: UIUserInterfaceSizeClass
 }
 
-// TODO: Laurie - fix layout when changing from home settings (2 to 4 fours for example)
-// TODO: Laurie - test on real devices (iphone and ipad)
 class FxHomeTopSitesViewModel {
 
     struct UX {

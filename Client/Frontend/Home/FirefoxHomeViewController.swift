@@ -60,7 +60,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
-        let refreshEvents: [Notification.Name] = [.HomePanelPrefsChanged,
+        let refreshEvents: [Notification.Name] = [.DynamicFontChanged,
+                                                  .DisplayThemeChanged,
+                                                  .HomePanelPrefsChanged,
                                                   .TabClosed,
                                                   .TabsPrivacyModeChanged]
         refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
@@ -619,6 +621,8 @@ extension FirefoxHomeViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
     func reloadAll() {
+        self.collectionView.reloadData()
+
         DispatchQueue.global(qos: .userInteractive).async {
             self.reloadSectionsData()
         }
