@@ -77,9 +77,6 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
 
         let subItems = Array(repeating: item, count: sectionDimension.numberOfTilesPerRow)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: subItems)
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: FxHomeTopSitesViewModel.UX.interItemSpacing, trailing: 0)
-
         let section = NSCollectionLayoutSection(group: group)
         return section
     }
@@ -108,7 +105,6 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
         guard let viewModel = viewModel else { return 0 }
         let sectionDimension = viewModel.getSectionDimension(for: traitCollection)
         let items = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
-        print("Laurie - itemsCount: \(items)")
         return items
     }
 

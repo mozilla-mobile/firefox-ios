@@ -17,11 +17,13 @@ struct UITopSitesInterface {
 }
 
 // TODO: Laurie - fix layout when changing from home settings (2 to 4 fours for example)
+// TODO: Laurie - test on real devices (iphone and ipad)
 class FxHomeTopSitesViewModel {
 
     struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
-        static let interItemSpacing: CGFloat = 25
+        // This needs to be removed once we have self sizing sections
+        static let parentInterItemSpacing: CGFloat = 16
     }
 
     private let profile: Profile
@@ -94,6 +96,7 @@ class FxHomeTopSitesViewModel {
     private func getNumberOfTilesPerRow(for interface: UITopSitesInterface) -> Int {
         if interface.isIphone {
             return interface.isLandscape ? 8 : 4
+
         } else {
             // The number of items in a row is equal to the number of top sites in a row * 2
             var numItems = Int(UX.numberOfItemsPerRowForSizeClassIpad[interface.horizontalSizeClass])

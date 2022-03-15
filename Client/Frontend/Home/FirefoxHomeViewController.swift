@@ -368,7 +368,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
         case .topSites:
             let sectionDimension = viewModel.topSiteViewModel.getSectionDimension(for: traitCollection)
             cellSize.height *= CGFloat(sectionDimension.numberOfRows)
-            cellSize.height += (FxHomeTopSitesViewModel.UX.interItemSpacing * 2) * CGFloat(sectionDimension.numberOfRows - 1)
+            cellSize.height += (FxHomeTopSitesViewModel.UX.parentInterItemSpacing * 2) * CGFloat(sectionDimension.numberOfRows)
             return cellSize
 
         case .jumpBackIn:
@@ -705,7 +705,7 @@ extension FirefoxHomeViewController {
     }
     
     @objc func contextualHintPresented() {
-        self.homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
+        homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
     }
     
     @objc func openTabsSettings() {
