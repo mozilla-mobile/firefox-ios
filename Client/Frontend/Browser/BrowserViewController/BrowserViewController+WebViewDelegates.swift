@@ -714,7 +714,7 @@ extension BrowserViewController: WKNavigationDelegate {
         
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = tabManager[webView],
-        let metadataManager = tab.metadataManager else { return }
+              let metadataManager = tab.metadataManager else { return }
         
         searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
         tab.url = webView.url
@@ -749,7 +749,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let tab = tabManager[webView],
-           let metadataManager = tab.metadataManager{
+           let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
             // Only update search term data with valid search term data

@@ -264,12 +264,6 @@
                   Identifier = "ETPCoverSheetTests">
                </Test>
                <Test
-                  Identifier = "TabMetadataManagerTests/testUpdateObservationTitle_ForOpenURLOnly()">
-               </Test>
-               <Test
-                  Identifier = "TabMetadataManagerTests/testUpdateTimerAndObserving_ForOpenURLOnly()">
-               </Test>
-               <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">
                </Test>
             </SkippedTests>

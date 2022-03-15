@@ -95,7 +95,6 @@ class TabMetadataManager {
                                          observation: HistoryMetadataObservation,
                                          completion: (() -> ())?) {
         if let profile = profile {
-//            _ = profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
             profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in
                 completion?()
             }
@@ -159,8 +158,8 @@ class TabMetadataManager {
         tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openInNewTab.rawValue
     }
     
-    /// Called update observation for Regular sites
-    /// if the title isEmpty we abort recording because it can't be overriden
+    /// Update observation for Regular sites (not search term)
+    /// if the title isEmpty we don't record because title can be overriden
     /// - Parameters:
     ///   - url: Site URL from webview
     ///   - title: Site title from webview can be empty for slow loading pages
