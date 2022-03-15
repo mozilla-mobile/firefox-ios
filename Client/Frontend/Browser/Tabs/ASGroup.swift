@@ -18,7 +18,6 @@ struct ASGroup<T>: Hashable {
     static func == (lhs: ASGroup<T>, rhs: ASGroup<T>) -> Bool {
         lhs.identifier == rhs.identifier
     }
-    
 }
 
 extension ASGroup: HighlightItem {

@@ -32,10 +32,10 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
     
     let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
-                                      Notification.Name.PrivateDataClearedHistory,
-                                      Notification.Name.DynamicFontChanged,
-                                      Notification.Name.DatabaseWasReopened,
-                                      Notification.Name.OpenClearRecentHistory]
+                                     Notification.Name.PrivateDataClearedHistory,
+                                     Notification.Name.DynamicFontChanged,
+                                     Notification.Name.DatabaseWasReopened,
+                                     Notification.Name.OpenClearRecentHistory]
     
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
@@ -166,7 +166,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     
     // MARK: - Public facing helpers
     
-    /// This helps us place an ASGroup<T> in the correct section.
+    /// This helps us place an ASGroup<Site> in the correct section.
     func groupBelongsToSection(asGroup: ASGroup<Site>) -> HistoryPanelViewModel.Sections? {
         guard let individualItem = asGroup.groupedItems.last, let lastVisit = individualItem.latestVisit else { return nil }
         
@@ -199,19 +199,26 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             sectionToRemove = Sections.allCases
         }
         
-        // Note: I don't like this...
         sectionToRemove.forEach { section in
             visibleSections = visibleSections.filter { $0 != section }
         }
     }
     
-    /// Removes the Site item, and updates visible sections if needed.
-    func removeSiteItem(site: Site, at section: Int) {
+    /// This handles removing either a Site or an ASGroup<Site> from the view.
+    func removeHistoryItems(item historyItem: AnyHashable, at section: Int) {
         guard let timeSection = Sections(rawValue: section) else { return }
         
-        groupedSites.remove(site)
-        
-        profile.history.removeHistoryForURL(site.url)
+        if let site = historyItem as? Site {
+            groupedSites.remove(site)
+            profile.history.removeHistoryForURL(site.url)
+        } else if let group = historyItem as? ASGroup<Site> {
+            group.groupedItems.forEach { site in
+                groupedSites.remove(site)
+                profile.history.removeHistoryForURL(site.url)
+            }
+            
+            searchTermGroups = searchTermGroups.filter { $0 != group }
+        }
         
         if (groupedSites.numberOfItemsForSection(section - 1)) == 0 {
             visibleSections = visibleSections.filter { $0 != timeSection }

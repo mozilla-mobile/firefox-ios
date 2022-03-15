@@ -162,33 +162,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         }
         
     }
-
-    func reloadData() {
-        
-        self.tableView.reloadData()
-        self.updateEmptyPanelState()
-        
-        if let cell = self.clearHistoryCell {
-//            setTappableStateAndStyle(enabled: !self.viewModel.groupedSites.isEmpty, forCell: cell)
-        }
-        
-    }
     
     // MARK: - Datasource helpers
-    
-    func removeHistoryItem(at indexPath: IndexPath) {
-        guard let siteItem = diffableDatasource?.itemIdentifier(for: indexPath) as? Site else { return }
-        
-        viewModel.removeSiteItem(site: siteItem, at: indexPath.section)
-        
-        updateEmptyPanelState()
-        
-        if let historyActionableCell = clearHistoryCell {
-            setTappableStateAndStyle(with: HistoryActionablesModel.activeActionables.first, on: historyActionableCell)
-        }
-        
-        applySnapshot(animatingDifferences: true)
-    }
     
     func siteAt(indexPath: IndexPath) -> Site? {
         guard let siteItem = diffableDatasource?.itemIdentifier(for: indexPath) as? Site else { return nil }
@@ -216,14 +191,6 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         })
         
     }
-    
-    func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
-        // First section is reserved for fixed history actionables.
-        guard indexPath.section > HistoryPanelSections.additionalHistoryActions.rawValue else { return nil }
-
-        let sitesInSection = viewModel.groupedSites.itemsForSection(indexPath.section - 1)
-        return sitesInSection[safe: indexPath.row]
-    }
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
@@ -238,8 +205,6 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             }
             break
         case .DynamicFontChanged:
-            reloadData()
-
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
@@ -248,7 +213,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             break
         case .DatabaseWasReopened:
             if let dbName = notification.object as? String, dbName == "browser.db" {
-                reloadData()
+                viewModel.reloadData()
+                applySnapshot(animatingDifferences: true)
             }
         case .OpenClearRecentHistory:
             showClearRecentHistory()
@@ -391,25 +357,34 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     
     // MARK: - Swipe Action helpers
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let cell = diffableDatasource?.itemIdentifier(for: indexPath)
+    func removeHistoryItem(at indexPath: IndexPath) {
+        guard let historyItem = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
         
-        if let _ = cell as? Site {
-            let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
-                guard let self = self else {
-                    os_log(.error, log: .default, "History Panel - self became nil in SwipeActionConfiguration!")
-                    completion(false)
-                    return
-                }
-
-                self.removeHistoryItem(at: indexPath)
-                completion(true)
-            }
-
-            return UISwipeActionsConfiguration(actions: [deleteAction])
+        viewModel.removeHistoryItems(item: historyItem, at: indexPath.section)
+        
+        updateEmptyPanelState()
+        
+        if let historyActionableCell = clearHistoryCell {
+            setTappableStateAndStyle(with: HistoryActionablesModel.activeActionables.first, on: historyActionableCell)
         }
         
-        return nil
+        applySnapshot(animatingDifferences: true)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        // For UX consistency, every cell in history panel SHOULD have a trailing action.
+        let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
+            guard let self = self else {
+                Logger.browserLogger.error("History Panel - self became nil inside SwipeActionConfiguration!")
+                completion(false)
+                return
+            }
+            
+            self.removeHistoryItem(at: indexPath)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 
     // MARK: - Empty State helpers
@@ -557,8 +532,10 @@ extension HistoryPanel {
             self.endRefreshing()
 
             if syncResult.isSuccess {
-                self.reloadData()
+                self.viewModel.reloadData()
+                self.applySnapshot(animatingDifferences: true)
             }
+            
         }
         
     }

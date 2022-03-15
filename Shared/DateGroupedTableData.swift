@@ -84,23 +84,6 @@ public struct DateGroupedTableData<T: Equatable> {
         }
     }
     
-    /// Fetch the section the item lives inside.
-    public func itemLivesIn(_ item: T) -> Int? {
-        if let _ = today.firstIndex(where: { item == $0.item }) {
-            return 0
-        } else if let _ = yesterday.firstIndex( where: { item == $0.item }) {
-            return 1
-        } else if let _ = lastWeek.firstIndex(where: { item == $0.item }) {
-            return 2
-        } else if let _ = lastMonth.firstIndex(where: { item == $0.item }) {
-            return 3
-        } else if let _ = older.firstIndex(where: { item == $0.item }) {
-            return 4
-        }
-        
-        return nil
-    }
-    
     /// Returns all currently fetched items in a single array: `[T.item]`.
     public func allItems() -> [T] {
         let allItems = (today + yesterday + lastWeek + lastMonth + older)

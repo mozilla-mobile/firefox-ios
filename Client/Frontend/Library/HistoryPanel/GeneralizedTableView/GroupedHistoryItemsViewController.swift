@@ -11,7 +11,7 @@ This ViewController is meant to show a tableView of history items with NO sectio
 import UIKit
 import Storage
 
-class GroupedHistoryItemsViewController: UIViewController, Loggable, NotificationThemeable {
+class GroupedHistoryItemsViewController: UIViewController, Loggable {
     
     // MARK: - Properties
     
@@ -66,7 +66,6 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable, Notificatio
         configureDatasource()
         setupNotifications()
         applyTheme()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,7 +82,6 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable, Notificatio
     
     private func setupLayout() {
         view.addSubviews(tableView)
-//        view.backgroundColor = .systemBackground
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -153,20 +151,6 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable, Notificatio
         }
     }
     
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        } else {
-            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        }
-        
-        view.backgroundColor = .systemBackground
-        tableView.separatorColor = ThemeManager.shared.currentTheme.colours.borderDivider
-        
-        tableView.reloadData()
-    }
-    
 }
 
 extension GroupedHistoryItemsViewController: UITableViewDelegate {
@@ -192,5 +176,21 @@ extension GroupedHistoryItemsViewController: UITableViewDelegate {
                                      object: .selectedHistoryItem,
                                      value: .historyPanelGroupedItem,
                                      extras: nil)
+    }
+}
+
+extension GroupedHistoryItemsViewController: NotificationThemeable {
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        } else {
+            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        }
+        
+        view.backgroundColor = .systemBackground
+        tableView.separatorColor = ThemeManager.shared.currentTheme.colours.borderDivider
+        
+        tableView.reloadData()
     }
 }

@@ -6,6 +6,9 @@ import Foundation
 import WebKit
 
 class HistoryTests: KIFTestCase {
+    
+    typealias a11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
+    
     fileprivate var webRoot: String!
 
     override func setUp() {
@@ -108,7 +111,7 @@ class HistoryTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "Page 102")
 
         let firstIndexPath = IndexPath(row: 4, section: 1)
-        let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "History List")
+        let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: a11y.tableView)
         tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.left)
      
         if !BrowserUtils.iPad() {
@@ -116,7 +119,7 @@ class HistoryTests: KIFTestCase {
         }
 
         // The history list still exists
-        tester().waitForView(withAccessibilityIdentifier: "History List")
+        tester().waitForView(withAccessibilityIdentifier: a11y.tableView)
         tester().waitForView(withAccessibilityLabel: oldestUrl)
 
         // check page 1 does not exist

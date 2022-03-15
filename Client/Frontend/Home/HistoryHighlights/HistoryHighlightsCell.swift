@@ -54,7 +54,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = RecentlyVisitedCellUX.generalCornerRadius
-        imageView.image = UIImage.templateImageNamed("recently_closed")
+        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
     }
 
     let itemTitle: UILabel = .build { label in

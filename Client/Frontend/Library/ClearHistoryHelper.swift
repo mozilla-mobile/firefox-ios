@@ -19,7 +19,7 @@ class ClearHistoryHelper {
     /// - Parameters:
     ///   - viewController: The view controller the clear history prompt is shown on
     ///   - didComplete: Did complete a recent history clear up action
-    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: ((Date?) -> Void)?) {
+    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: ((Date?) -> Void)? = nil) {
         func remove(hoursAgo: Int) {
             if let date = Calendar.current.date(byAdding: .hour, value: -hoursAgo, to: Date()) {
                 let types = WKWebsiteDataStore.allWebsiteDataTypes()

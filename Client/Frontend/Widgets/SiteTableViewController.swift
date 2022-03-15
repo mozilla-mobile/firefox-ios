@@ -13,7 +13,6 @@ struct SiteTableViewControllerUX {
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
-//    static let reuseIdentifier = "site-table-view-header"
     
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold

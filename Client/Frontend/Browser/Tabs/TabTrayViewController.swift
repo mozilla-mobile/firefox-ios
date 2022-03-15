@@ -127,7 +127,7 @@ class TabTrayViewController: UIViewController {
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
         return UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel),
                                           UIImage(named: "smallPrivateMask")!,
-                                          UIImage(named: "synced_devices")!])
+                                          UIImage(named: ImageIdentifiers.syncedDevicesIcon)!])
     }()
 
     // Toolbars

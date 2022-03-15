@@ -37,16 +37,32 @@ struct HistoryActionablesModel: Hashable {
         }
     }
     
-    // As this section evolves (or we experiment with it), we may need to replace items within. Let's keep separate stashes of ALL and ACTIVE items.
+    // As this section evolves (or we experiment with it), we may need to replace items within.
+    // Let's keep separate stashes of ALL and ACTIVE items.
     static let allActionables = [
-        HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon, title: History.HistoryPanelClearHistoryButtonTitle, a11yId: a11y.clearHistoryCell, itemIdentity: .clearHistory),
-        HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon, title: History.RecentlyClosedTabsButtonTitle, a11yId: a11y.recentlyClosedCell, itemIdentity: .recentlyClosed),
-        HistoryActionablesModel(imageName: ImageIdentifiers.syncedDevicesIcon, title: History.SyncedHistory, a11yId: a11y.syncedHistoryCell, itemIdentity: .syncHistory)
+        HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon,
+                                title: History.HistoryPanelClearHistoryButtonTitle,
+                                a11yId: a11y.clearHistoryCell,
+                                itemIdentity: .clearHistory),
+        HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon,
+                                title: History.RecentlyClosedTabsButtonTitle,
+                                a11yId: a11y.recentlyClosedCell,
+                                itemIdentity: .recentlyClosed),
+        HistoryActionablesModel(imageName: ImageIdentifiers.syncedDevicesIcon,
+                                title: History.SyncedHistory,
+                                a11yId: a11y.syncedHistoryCell,
+                                itemIdentity: .syncHistory)
     ]
     
     static let activeActionables = [
-        HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon, title: History.HistoryPanelClearHistoryButtonTitle, a11yId: a11y.clearHistoryCell, itemIdentity: .clearHistory),
-        HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon, title: History.RecentlyClosedTabsButtonTitle, a11yId: a11y.recentlyClosedCell, itemIdentity: .recentlyClosed)
+        HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon,
+                                title: History.HistoryPanelClearHistoryButtonTitle,
+                                a11yId: a11y.clearHistoryCell,
+                                itemIdentity: .clearHistory),
+        HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon,
+                                title: History.RecentlyClosedTabsButtonTitle,
+                                a11yId: a11y.recentlyClosedCell,
+                                itemIdentity: .recentlyClosed)
     ]
     
 }

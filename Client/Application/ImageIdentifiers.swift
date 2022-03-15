@@ -41,7 +41,7 @@ public struct ImageIdentifiers {
     public static let stackedTabsIcon = "recently_closed"
     public static let sync = "menu-sync"
     public static let syncedDevicesIcon = "synced_devices"
-    public static let trashIcon = "forget" // Trash icon
+    public static let trashIcon = "forget"
     public static let warning = "menu-warning"
     public static let whatsNew = "whatsnew"
 }
