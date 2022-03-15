@@ -53,60 +53,76 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     // MARK: Section dimension with Default row number
 
     func testSectionDimension_portraitIphone_defaultRowNumber() {
+        createManager()
         let trait = FakeTraitCollection()
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_landscapeIphone_defaultRowNumber() {
+        createManager()
         let trait = FakeTraitCollection()
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: true)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
     }
 
     func testSectionDimension_portraitiPadRegular_defaultRowNumber() {
+        createManager()
         let trait = FakeTraitCollection()
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: false)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_landscapeiPadRegular_defaultRowNumber() {
+        createManager()
         let trait = FakeTraitCollection()
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: false)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
     }
 
     func testSectionDimension_portraitiPadCompact_defaultRowNumber() {
+        createManager()
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: false)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_landscapeiPadCompact_defaultRowNumber() {
+        createManager()
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: false)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_portraitiPadUnspecified_defaultRowNumber() {
+        createManager()
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: false)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 2)
     }
 
     func testSectionDimension_landscapeiPadUnspecified_defaultRowNumber() {
+        createManager()
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: false)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
@@ -114,19 +130,55 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
 
     // MARK: Section dimension with stubbed data
 
-    func test() {
-        // TODO: Laurie continue this - test private func getNumberOfRows(numberOfTilesPerRow: Int) -> Int {
-        let managerStub = FxHomeTopSitesManagerStub(profile: profile)
-        viewModel.tileManager = managerStub
-
+    func testSectionDimension_oneEmptyRow_shouldBeRemoved() {
+        createManager(overridenSiteCount: 4, overridenNumberOfRows: 2)
         let trait = FakeTraitCollection()
+
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
+        XCTAssertEqual(dimension.numberOfRows, 1)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+    }
+
+    func testSectionDimension_twoEmptyRow_shouldBeRemoved() {
+        createManager(overridenSiteCount: 4, overridenNumberOfRows: 3)
+        let trait = FakeTraitCollection()
+
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
+        XCTAssertEqual(dimension.numberOfRows, 1)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+    }
+
+    func testSectionDimension_noEmptyRow_shouldNotBeRemoved() {
+        createManager(overridenSiteCount: 8, overridenNumberOfRows: 2)
+        let trait = FakeTraitCollection()
+
+        let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
+        XCTAssertEqual(dimension.numberOfRows, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+    }
+
+    func testSectionDimension_halfFilledRow_shouldNotBeRemoved() {
+        createManager(overridenSiteCount: 6, overridenNumberOfRows: 2)
+        let trait = FakeTraitCollection()
+
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
         XCTAssertEqual(dimension.numberOfRows, 2)
         XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 }
 
-// MARK: Helper classes
+// MARK: Helper methods
+extension FxHomeTopSitesViewModelTests {
+
+    func createManager(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) {
+        let managerStub = FxHomeTopSitesManagerStub(profile: profile)
+        managerStub.overridenSiteCount = overridenSiteCount
+        managerStub.overridenNumberOfRows = overridenNumberOfRows
+        viewModel.tileManager = managerStub
+    }
+}
+
+// MARK: FakeTraitCollection
 private class FakeTraitCollection: UITraitCollection {
 
     var overridenHorizontalSizeClass: UIUserInterfaceSizeClass = .regular
@@ -135,9 +187,10 @@ private class FakeTraitCollection: UITraitCollection {
     }
 }
 
+// MARK: FxHomeTopSitesManagerStub
 private class FxHomeTopSitesManagerStub: FxHomeTopSitesManager {
 
-    var overridenSiteCount = 16
+    var overridenSiteCount = 40
     override var siteCount: Int {
         return overridenSiteCount
     }

@@ -157,7 +157,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
         ])
     }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         selectedOverlay.isHidden = true

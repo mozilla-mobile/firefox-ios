@@ -16,7 +16,6 @@ struct UITopSitesInterface {
     var horizontalSizeClass: UIUserInterfaceSizeClass
 }
 
-// TODO: Laurie - fix pins images not working
 // TODO: Laurie - fix layout when changing from home settings (2 to 4 fours for example)
 class FxHomeTopSitesViewModel {
 
@@ -76,14 +75,22 @@ class FxHomeTopSitesViewModel {
 
     // Adjust number of rows depending on the what the users want, and how many sites we actually have.
     // We hide rows that are only composed of empty cells
+    /// - Parameter numberOfTilesPerRow: The number of tiles per row the user will see
+    /// - Returns: The number of rows the user will see on screen
     private func getNumberOfRows(numberOfTilesPerRow: Int) -> Int {
-        if tileManager.siteCount % numberOfTilesPerRow == 0 {
-            return tileManager.numberOfRows
-        } else {
-            return Int((Double(tileManager.siteCount) / Double(tileManager.numberOfRows)).rounded(.down))
-        }
+        let totalCellCount = numberOfTilesPerRow * tileManager.numberOfRows
+        let emptyCellCount = totalCellCount - tileManager.siteCount
+
+        // If there's no empty cell, no clean up is necessary
+        guard emptyCellCount > 0 else { return tileManager.numberOfRows }
+
+        let numberOfEmptyCellRows = Double(emptyCellCount / numberOfTilesPerRow)
+        return tileManager.numberOfRows - Int(numberOfEmptyCellRows.rounded(.down))
     }
 
+    /// Get the number of tiles per row the user will see. This depends on the UI interface the user has.
+    /// - Parameter interface: Tile number is based on layout, this param contains the parameters needed to computer the tile number
+    /// - Returns: The number of tiles per row the user will see
     private func getNumberOfTilesPerRow(for interface: UITopSitesInterface) -> Int {
         if interface.isIphone {
             return interface.isLandscape ? 8 : 4
