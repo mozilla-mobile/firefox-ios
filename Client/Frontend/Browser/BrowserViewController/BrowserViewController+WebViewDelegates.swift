@@ -156,9 +156,7 @@ extension BrowserViewController: WKUIDelegate {
                 if !searchTerm.isEmpty, !searchUrl.isEmpty {
                     let searchData = TabGroupData(searchTerm: searchTerm,
                                                   searchUrl: searchUrl,
-                                                  nextReferralUrl: tab.url?.absoluteString ?? "",
-                                                  tabHistoryCurrentState: "",
-                                                  tabGroupTimerState: "")
+                                                  nextReferralUrl: tab.url?.absoluteString ?? "")
                     tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData)
                 }
                 
@@ -756,17 +754,13 @@ extension BrowserViewController: WKNavigationDelegate {
             if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
                 let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
                                               searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
-                                              nextReferralUrl: webView.url?.absoluteString ?? "",
-                                              tabHistoryCurrentState: "",
-                                              tabGroupTimerState: "")
+                                              nextReferralUrl: webView.url?.absoluteString ?? "")
                 tab.metadataManager?.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
                                                              searchData: searchData)
             } else if !tab.isFxHomeTab {
                 let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
                                               searchUrl: webView.url?.absoluteString ?? "",
-                                              nextReferralUrl: "",
-                                              tabHistoryCurrentState: "",
-                                              tabGroupTimerState: "")
+                                              nextReferralUrl: "")
                 metadataManager.updateTimerAndObserving(state: .openURLOnly,
                                                         searchData: searchData,
                                                         tabTitle: webView.title)

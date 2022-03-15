@@ -13,6 +13,7 @@ class TabMetadataManager {
     var tabGroupData = TabGroupData()
     var tabGroupsTimerHelper = StopWatchTimer()
     var shouldResetTabGroupData = false
+    let minViewTimeInSeconds = 7
     
     private var shouldUpdateObservationForState: Bool {
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
@@ -94,10 +95,10 @@ class TabMetadataManager {
     private func updateObservationForKey(key: HistoryMetadataKey,
                                          observation: HistoryMetadataObservation,
                                          completion: (() -> ())?) {
-        if let profile = profile {
-            profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in
-                completion?()
-            }
+        guard let profile = profile else { return }
+        
+        profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in
+            completion?()
         }
     }
     
@@ -121,7 +122,7 @@ class TabMetadataManager {
             tabGroupData = TabGroupData()
             shouldResetTabGroupData = true
         // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
-        } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
+        } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < minViewTimeInSeconds {
             let key = tabGroupData.tabHistoryMetadatakey()
             if key.referrerUrl != searchData.tabAssociatedNextUrl {
                 updateObservationViewTime()

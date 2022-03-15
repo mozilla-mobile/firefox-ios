@@ -21,37 +21,32 @@ public class TabGroupData: NSObject, NSCoding {
     var tabAssociatedSearchUrl: String = ""
     var tabAssociatedNextUrl: String = ""
     var tabHistoryCurrentState = ""
-    // Is not used currently can be removed? Name is confusing with enum
-    var tabGroupTimerState = ""
 
     func tabHistoryMetadatakey() -> HistoryMetadataKey {
         return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
     }
     
     var jsonDictionary: [String: Any] {
-            return [
-                "tabAssociatedSearchTerm": String(self.tabAssociatedSearchTerm),
-                "tabAssociatedSearchUrl": String(self.tabAssociatedSearchUrl),
-                "tabAssociatedNextUrl": String(self.tabAssociatedNextUrl),
-                "tabHistoryCurrentState": String(self.tabHistoryCurrentState),
-                "tabGroupTimerState": String(self.tabGroupTimerState),
-            ]
-        }
+        return [
+            "tabAssociatedSearchTerm": String(self.tabAssociatedSearchTerm),
+            "tabAssociatedSearchUrl": String(self.tabAssociatedSearchUrl),
+            "tabAssociatedNextUrl": String(self.tabAssociatedNextUrl),
+            "tabHistoryCurrentState": String(self.tabHistoryCurrentState),
+        ]
+    }
     
     convenience override init() {
         self.init(searchTerm: "",
                   searchUrl: "",
                   nextReferralUrl: "",
-                  tabHistoryCurrentState: TabGroupTimerState.none.rawValue,
-                  tabGroupTimerState: TabGroupTimerState.none.rawValue)
+                  tabHistoryCurrentState: TabGroupTimerState.none.rawValue)
     }
 
-    init(searchTerm: String, searchUrl: String, nextReferralUrl: String, tabHistoryCurrentState: String, tabGroupTimerState: String) {
+    init(searchTerm: String, searchUrl: String, nextReferralUrl: String, tabHistoryCurrentState: String = "") {
         self.tabAssociatedSearchTerm = searchTerm
         self.tabAssociatedSearchUrl = searchUrl
         self.tabAssociatedNextUrl = nextReferralUrl
         self.tabHistoryCurrentState = tabHistoryCurrentState
-        self.tabGroupTimerState = tabGroupTimerState
     }
 
     required public init?(coder: NSCoder) {
@@ -59,7 +54,6 @@ public class TabGroupData: NSObject, NSCoding {
         self.tabAssociatedSearchUrl = coder.decodeObject(forKey: "tabAssociatedSearchUrl") as? String ?? ""
         self.tabAssociatedNextUrl = coder.decodeObject(forKey: "tabAssociatedNextUrl") as? String ?? ""
         self.tabHistoryCurrentState = coder.decodeObject(forKey: "tabHistoryCurrentState") as? String ?? ""
-        self.tabGroupTimerState = coder.decodeObject(forKey: "tabGroupTimerState") as? String ?? ""
     }
 
     public func encode(with coder: NSCoder) {
@@ -67,6 +61,5 @@ public class TabGroupData: NSObject, NSCoding {
         coder.encode(tabAssociatedSearchUrl, forKey: "tabAssociatedSearchUrl")
         coder.encode(tabAssociatedNextUrl, forKey: "tabAssociatedNextUrl")
         coder.encode(tabHistoryCurrentState, forKey: "tabHistoryCurrentState")
-        coder.encode(tabGroupTimerState, forKey: "tabGroupTimerState")
     }
 }

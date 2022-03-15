@@ -76,8 +76,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = TabGroupData(searchTerm: "",
                                             searchUrl: stringUrl,
                                             nextReferralUrl: "",
-                                            tabHistoryCurrentState: TabGroupTimerState.openURLOnly.rawValue,
-                                            tabGroupTimerState: "")
+                                            tabHistoryCurrentState: TabGroupTimerState.openURLOnly.rawValue)
         
         manager.updateObservationTitle(title) {
             let result = self.profile.places.getHistoryMetadataSince(since: 0).value
@@ -103,8 +102,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = TabGroupData(searchTerm: "",
                                             searchUrl: stringUrl,
                                             nextReferralUrl: referralURL,
-                                            tabHistoryCurrentState: TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue,
-                                            tabGroupTimerState: "")
+                                            tabHistoryCurrentState: TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue)
         
         manager.updateObservationTitle(title) {
             let result = self.profile.places.getHistoryMetadataSince(since: 0).value
@@ -130,8 +128,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = TabGroupData(searchTerm: "",
                                             searchUrl: stringUrl,
                                             nextReferralUrl: referralURL,
-                                            tabHistoryCurrentState: TabGroupTimerState.openInNewTab.rawValue,
-                                            tabGroupTimerState: "")
+                                            tabHistoryCurrentState: TabGroupTimerState.openInNewTab.rawValue)
         
         manager.updateObservationTitle(title) {
             let result = self.profile.places.getHistoryMetadataSince(since: 0).value
@@ -157,8 +154,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = TabGroupData(searchTerm: "",
                                             searchUrl: stringUrl,
                                             nextReferralUrl: referralURL,
-                                            tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue,
-                                            tabGroupTimerState: "")
+                                            tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue)
         // Title should not be updated for this state
         manager.updateObservationTitle(title) {
             let result = self.profile.places.getHistoryMetadataSince(since: 0).value

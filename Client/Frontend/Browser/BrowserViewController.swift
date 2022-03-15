@@ -1332,9 +1332,7 @@ class BrowserViewController: UIViewController {
             if let tab = tabManager.selectedTab {
                 let searchData = TabGroupData(searchTerm: text,
                                               searchUrl: searchURL.absoluteString,
-                                              nextReferralUrl: "",
-                                              tabHistoryCurrentState: "",
-                                              tabGroupTimerState: "")
+                                              nextReferralUrl: "")
                 tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
             }
         } else {
@@ -1806,9 +1804,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         
         let searchData = TabGroupData(searchTerm: searchTerm ?? "",
                                       searchUrl: url.absoluteString,
-                                      nextReferralUrl: "",
-                                      tabHistoryCurrentState: "",
-                                      tabGroupTimerState: "")
+                                      nextReferralUrl: "")
         tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)

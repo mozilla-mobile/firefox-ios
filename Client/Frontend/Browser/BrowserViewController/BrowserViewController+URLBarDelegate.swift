@@ -325,9 +325,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             
             let searchData = TabGroupData(searchTerm: text,
                                           searchUrl: searchURL.absoluteString,
-                                          nextReferralUrl: "",
-                                          tabHistoryCurrentState: "",
-                                          tabGroupTimerState: "")
+                                          nextReferralUrl: "")
             tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
