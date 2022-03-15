@@ -67,43 +67,108 @@ class TabMetadataManagerTests: XCTestCase {
         XCTAssertFalse(shouldUpdate)
     }
     
-    // Improvement remove sleep and replace with completion in updateObservationForKey
-    func testUpdateTimerAndObserving_ForOpenURLOnly() throws {
-        emptyDB()
-        let stringUrl = "https://www.mozilla.org/"
-        let title = "mozilla title"
-           
-        let tabGroupData = TabGroupData()
-        tabGroupData.tabAssociatedSearchUrl = stringUrl
-        manager.updateTimerAndObserving(state: .openURLOnly, searchData: tabGroupData, tabTitle: title)
-           
-        sleep(5)
-        let result = self.profile.places.getHistoryMetadataSince(since: 0).value
-               
-        XCTAssertTrue(result.isSuccess)
-        XCTAssertNotNil(result.successValue)
-        XCTAssertEqual(result.successValue!.count, 1)
-        XCTAssertEqual(result.successValue![0].url, stringUrl)
-        XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
-    }
-    
     func testUpdateObservationTitle_ForOpenURLOnly() throws {
         emptyDB()
         let stringUrl = "https://www.developer.org/"
         let title = "updated title"
         
-        manager.tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openURLOnly.rawValue
-        manager.tabGroupData.tabAssociatedSearchUrl = stringUrl
-        manager.updateObservationTitle(title)
+        let expectation = expectation(description: "historyRecording")
+        manager.tabGroupData = TabGroupData(searchTerm: "",
+                                            searchUrl: stringUrl,
+                                            nextReferralUrl: "",
+                                            tabHistoryCurrentState: TabGroupTimerState.openURLOnly.rawValue,
+                                            tabGroupTimerState: "")
+        
+        manager.updateObservationTitle(title) {
+            let result = self.profile.places.getHistoryMetadataSince(since: 0).value
 
-        sleep(5)
-        let result = profile.places.getHistoryMetadataSince(since: 0).value
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNotNil(result.successValue)
+            XCTAssertEqual(result.successValue!.count, 1)
+            XCTAssertEqual(result.successValue![0].url, stringUrl)
+            XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
+            XCTAssertNil(result.successValue![0].referrerUrl)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    func testUpdateObservationTitle_ForNavigatedToDifferentURL() throws {
+        emptyDB()
+        let stringUrl = "https://www.developer.org/"
+        let referralURL = "https://www.developer.org/ref"
+        let title = "updated title"
+        
+        let expectation = expectation(description: "historyRecording")
+        manager.tabGroupData = TabGroupData(searchTerm: "",
+                                            searchUrl: stringUrl,
+                                            nextReferralUrl: referralURL,
+                                            tabHistoryCurrentState: TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue,
+                                            tabGroupTimerState: "")
+        
+        manager.updateObservationTitle(title) {
+            let result = self.profile.places.getHistoryMetadataSince(since: 0).value
 
-        XCTAssertTrue(result.isSuccess)
-        XCTAssertNotNil(result.successValue)
-        XCTAssertEqual(result.successValue!.count, 1)
-        XCTAssertEqual(result.successValue![0].url, stringUrl)
-        XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNotNil(result.successValue)
+            XCTAssertEqual(result.successValue!.count, 1)
+            XCTAssertEqual(result.successValue![0].url, stringUrl)
+            XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
+            XCTAssertEqual(result.successValue![0].referrerUrl?.lowercased(), referralURL)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    func testUpdateObservationTitle_ForOpenInNewTab() throws {
+        emptyDB()
+        let stringUrl = "https://www.developer.org/"
+        let referralURL = "https://www.developer.org/ref"
+        let title = "updated title"
+        
+        let expectation = expectation(description: "historyRecording")
+        manager.tabGroupData = TabGroupData(searchTerm: "",
+                                            searchUrl: stringUrl,
+                                            nextReferralUrl: referralURL,
+                                            tabHistoryCurrentState: TabGroupTimerState.openInNewTab.rawValue,
+                                            tabGroupTimerState: "")
+        
+        manager.updateObservationTitle(title) {
+            let result = self.profile.places.getHistoryMetadataSince(since: 0).value
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNotNil(result.successValue)
+            XCTAssertEqual(result.successValue!.count, 1)
+            XCTAssertEqual(result.successValue![0].url, stringUrl)
+            XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
+            XCTAssertEqual(result.successValue![0].referrerUrl?.lowercased(), referralURL)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    func testNotUpdateObservationTitle_ForTabSwitched() throws {
+        emptyDB()
+        let stringUrl = "https://www.developer.org/"
+        let referralURL = "https://www.developer.org/ref"
+        let title = "updated title"
+        
+        let expectation = expectation(description: "historyRecording")
+        manager.tabGroupData = TabGroupData(searchTerm: "",
+                                            searchUrl: stringUrl,
+                                            nextReferralUrl: referralURL,
+                                            tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue,
+                                            tabGroupTimerState: "")
+        // Title should not be updated for this state
+        manager.updateObservationTitle(title) {
+            let result = self.profile.places.getHistoryMetadataSince(since: 0).value
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNotNil(result.successValue)
+            XCTAssertEqual(result.successValue!.count, 0)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     private func emptyDB() {

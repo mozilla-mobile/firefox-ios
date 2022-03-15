@@ -59,9 +59,14 @@ class TabMetadataManager {
     }
     
     /// Update existing or new observation with title once it changes for certain tab states title becomes available
-    /// - Parameter title: Tab title
-    func updateObservationTitle(_ title: String) {
-        guard shouldUpdateObservationForState else { return }
+    /// - Parameters:
+    ///   - title: Title to be saved
+    ///   - completion: Completion handler that gets called once the recording is done. Initially used only for Unit test
+    func updateObservationTitle(_ title: String, completion: (() -> ())? = nil) {
+        guard shouldUpdateObservationForState else {
+            completion?()
+            return
+        }
         
         let key = tabGroupData.tabHistoryMetadatakey()
         let observation = HistoryMetadataObservation(url: key.url,
@@ -70,10 +75,10 @@ class TabMetadataManager {
                                                      viewTime: nil,
                                                      documentType: nil,
                                                      title: title)
-        updateObservationForKey(key: key, observation: observation)
+        updateObservationForKey(key: key, observation: observation, completion: completion)
     }
     
-    func updateObservationViewTime() {
+    func updateObservationViewTime(completion: (() -> ())? = nil) {
         let key = tabGroupData.tabHistoryMetadatakey()
         let observation = HistoryMetadataObservation(url: key.url,
                                                      referrerUrl: key.referrerUrl,
@@ -81,15 +86,19 @@ class TabMetadataManager {
                                                      viewTime: tabGroupsTimerHelper.elapsedTime,
                                                      documentType: nil,
                                                      title: nil)
-        updateObservationForKey(key: key, observation: observation)
+        updateObservationForKey(key: key, observation: observation, completion: completion)
     }
     
     // MARK: - Private
     
     private func updateObservationForKey(key: HistoryMetadataKey,
-                                         observation: HistoryMetadataObservation) {
+                                         observation: HistoryMetadataObservation,
+                                         completion: (() -> ())?) {
         if let profile = profile {
-            _ = profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
+//            _ = profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
+            profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in
+                completion?()
+            }
         }
     }
     
