@@ -624,12 +624,8 @@ extension FirefoxHomeViewController {
         self.collectionView.reloadData()
 
         DispatchQueue.global(qos: .userInteractive).async {
-            self.reloadSectionsData()
+            self.viewModel.updateData()
         }
-    }
-
-    private func reloadSectionsData() {
-        viewModel.updateData()
     }
 }
 

@@ -30,10 +30,10 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testDeletionOfSingleSuggestedSite() {
-        let siteToDelete = viewModel.defaultTopSites()[0]
+        let siteToDelete = TopSitesHelper.defaultTopSites(profile)[0]
 
         viewModel.hideURLFromTopSites(siteToDelete)
-        let newSites = viewModel.defaultTopSites()
+        let newSites = TopSitesHelper.defaultTopSites(profile)
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
             return a.url == b.url
@@ -41,12 +41,12 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testDeletionOfAllDefaultSites() {
-        let defaultSites = viewModel.defaultTopSites()
+        let defaultSites = TopSitesHelper.defaultTopSites(profile)
         defaultSites.forEach({
             viewModel.hideURLFromTopSites($0)
         })
 
-        let newSites = viewModel.defaultTopSites()
+        let newSites = TopSitesHelper.defaultTopSites(profile)
         XCTAssertTrue(newSites.isEmpty)
     }
 

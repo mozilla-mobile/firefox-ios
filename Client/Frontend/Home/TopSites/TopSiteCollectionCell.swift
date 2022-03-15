@@ -63,13 +63,13 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
     private var layoutSection: NSCollectionLayoutSection {
         let sectionDimension = viewModel?.getSectionDimension(for: traitCollection) ?? FxHomeTopSitesViewModel.defaultDimension
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1/CGFloat(sectionDimension.numberOfTilesPerRow)),
+            widthDimension: .fractionalWidth(1 / CGFloat(sectionDimension.numberOfTilesPerRow)),
             heightDimension: .fractionalHeight(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let numberOfRows = CGFloat(sectionDimension.numberOfRows)
-        let fractionHeight = 1/numberOfRows
+        let fractionHeight = 1 / numberOfRows
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(fractionHeight)

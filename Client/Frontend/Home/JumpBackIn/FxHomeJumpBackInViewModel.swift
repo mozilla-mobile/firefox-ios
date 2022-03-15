@@ -153,6 +153,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         return recentTabs
     }
 
+    /// Update data with tab and search term group managers
     private func updateJumpBackInData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs
 
@@ -193,7 +194,6 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
         return jumpBackInList.itemsToDisplay != 0
     }
 
-    /// Update data with tab and search term group managers
     func updateData(completion: @escaping () -> Void) {
         // Has to be on main due to tab manager needing main tread
         // This can be fixed when tab manager has been revisited

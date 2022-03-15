@@ -70,7 +70,7 @@ class FxHomeTopSitesViewModel {
 
     // The width dimension of a cell
     static func widthDimension(for numberOfHorizontalItems: Int) -> NSCollectionLayoutDimension {
-        return .fractionalWidth(CGFloat(1/numberOfHorizontalItems))
+        return .fractionalWidth(CGFloat(1 / numberOfHorizontalItems))
     }
 
     // Adjust number of rows depending on the what the users want, and how many sites we actually have.
@@ -169,7 +169,7 @@ class FxHomeTopSitesViewModel {
 
         let url = site.tileURL.absoluteString
         // if the default top sites contains the siteurl. also wipe it from default suggested sites.
-        if !defaultTopSites().filter({ $0.url == url }).isEmpty {
+        if !TopSitesHelper.defaultTopSites(profile).filter({ $0.url == url }).isEmpty {
             deleteTileForSuggestedSite(url)
         }
 
@@ -177,12 +177,6 @@ class FxHomeTopSitesViewModel {
             guard result.isSuccess else { return }
             self.tileManager.refreshIfNeeded(forceTopSites: true)
         }
-    }
-
-    func defaultTopSites() -> [Site] {
-        let suggested = SuggestedSites.asArray()
-        let deleted = profile.prefs.arrayForKey(TopSitesHelper.DefaultSuggestedSitesKey) as? [String] ?? []
-        return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
     }
 
     private func removePinTopSite(_ site: Site) {

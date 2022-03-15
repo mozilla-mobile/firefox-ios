@@ -68,7 +68,7 @@ extension TopSiteHistoryManager: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .ProfileDidFinishSyncing, .FirefoxAccountChanged, .PrivateDataClearedHistory:
-             refreshIfNeeded(forceTopSites: true)
+            refreshIfNeeded(forceTopSites: true)
         default:
             browserLog.warning("Received unexpected notification \(notification.name)")
         }

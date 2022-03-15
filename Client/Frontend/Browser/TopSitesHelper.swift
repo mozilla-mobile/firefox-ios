@@ -74,7 +74,7 @@ struct TopSitesHelper {
         }
     }
     
-    private static func defaultTopSites(_ profile: Profile) -> [Site] {
+    static func defaultTopSites(_ profile: Profile) -> [Site] {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
