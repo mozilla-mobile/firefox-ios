@@ -218,8 +218,12 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol
         return tileManager.hasData
     }
 
+    var shouldReloadSection: Bool {
+        return true
+    }
+
     func updateData(completion: @escaping () -> Void) {
-        tileManager.loadTopSitesData()
+        tileManager.loadTopSitesData(completion: completion)
     }
 }
 
