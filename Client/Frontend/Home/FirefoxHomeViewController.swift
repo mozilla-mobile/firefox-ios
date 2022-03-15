@@ -871,11 +871,13 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
 // MARK: FirefoxHomeViewModelDelegate
 extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
     func reloadSection(index: Int?) {
-        if let index = index {
-            let indexSet = IndexSet([index])
-            collectionView.reloadSections(indexSet)
-        } else {
-            self.collectionView.reloadData()
+        DispatchQueue.main.async {
+            if let index = index {
+                let indexSet = IndexSet([index])
+                self.collectionView.reloadSections(indexSet)
+            } else {
+                self.collectionView.reloadData()
+            }
         }
     }
 }
