@@ -62,6 +62,10 @@ public struct AccessibilityIdentifiers {
             static let recentlyClosedCell = "HistoryPanel.recentlyClosedCell"
             static let syncedHistoryCell = "HistoryPanel.syncedHistoryCell"
         }
+        
+        struct GroupedList {
+            static let tableView = "grouped-items-table-view"
+        }
     }
 
     struct Settings {

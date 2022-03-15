@@ -15,10 +15,8 @@ enum OneLineTableViewCustomization {
     case inactiveCell
 }
 
-class OneLineTableViewCell: UITableViewCell, NotificationThemeable {
+class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell {
     // Tableview cell items
-    
-    static let reuseIdentifier = "one-line-table-view-cell"
     
     override var indentationLevel: Int {
         didSet {

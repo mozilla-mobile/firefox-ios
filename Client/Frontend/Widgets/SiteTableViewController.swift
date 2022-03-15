@@ -12,8 +12,8 @@ struct SiteTableViewControllerUX {
     static let HeaderTextMargin = CGFloat(16)
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
-    static let reuseIdentifier = "site-table-view-header"
+class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
+//    static let reuseIdentifier = "site-table-view-header"
     
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
@@ -25,7 +25,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
         button.setTitle("Show all", for: .normal)
         button.backgroundColor = .clear
         button.titleLabel?.font = .systemFont(ofSize: 12)
-//        button.addTarget(self, action: #selector(handleTapForPanel), for: .touchUpInside)
         button.setTitleColor(ThemeManager.shared.currentTheme.colours.iconAccentBlue, for: .normal)
         button.isHidden = true
     }

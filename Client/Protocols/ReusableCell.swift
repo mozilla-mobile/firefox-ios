@@ -23,3 +23,7 @@ extension ReusableCell where Self: UICollectionViewCell {
 extension ReusableCell where Self: UITableViewCell {
     static var cellIdentifier: String { return String(describing: self) }
 }
+
+extension ReusableCell where Self: UITableViewHeaderFooterView {
+    static var cellIdentifier: String { return String(describing: self) }
+}

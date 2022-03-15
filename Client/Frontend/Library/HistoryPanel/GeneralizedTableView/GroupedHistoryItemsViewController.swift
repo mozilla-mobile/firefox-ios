@@ -4,14 +4,18 @@
 
 /**
 This ViewController is meant to show a tableView of history items with NO section headers.
+ When we have coordinators, where the coordinator provides the VM to the VC, we can
+ generalize this.
  */
 
 import UIKit
 import Storage
 
-class GroupedHistoryItemsViewController: UIViewController, Loggable {
+class GroupedHistoryItemsViewController: UIViewController, Loggable, NotificationThemeable {
     
     // MARK: - Properties
+    
+    typealias a11y = AccessibilityIdentifiers.LibraryPanels.GroupedList
     
     enum Sections: CaseIterable {
         case main
@@ -24,19 +28,17 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
     lazy private var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.dataSource = self.diffableDatasource
-        tableView.accessibilityIdentifier = "generalized-history-items-table-view"
+        tableView.accessibilityIdentifier = a11y.tableView
         tableView.delegate = self
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.reuseIdentifier)
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.reuseIdentifier)
-        tableView.backgroundColor = ThemeManager.shared.currentTheme.colours.layer4
-        tableView.separatorColor = ThemeManager.shared.currentTheme.colours.borderDivider
+        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
         
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
     }
     
-    lazy private var diffableDatasource: UITableViewDiffableDataSource<Sections, AnyHashable>! = nil
+    private var diffableDatasource: UITableViewDiffableDataSource<Sections, AnyHashable>?
     
     // MARK: - Inits
     
@@ -52,7 +54,7 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
     }
     
     deinit {
-        browserLog.debug("GeneralizedHistoryItemsViewController DEinited.")
+        browserLog.debug("GeneralizedHistoryItemsViewController Deinitialized.")
     }
     
     // MARK: - Lifecycles
@@ -62,6 +64,9 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         
         setupLayout()
         configureDatasource()
+        setupNotifications()
+        applyTheme()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,7 +83,7 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
     
     private func setupLayout() {
         view.addSubviews(tableView)
-        view.backgroundColor = .systemBackground
+//        view.backgroundColor = .systemBackground
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -95,12 +100,11 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
             guard let self = self else { return nil }
             
             if let site = item as? Site {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.reuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
                     self.browserLog.error("GeneralizedHistoryItems - Could not dequeue a TwoLineImageOverlayCell!")
                     return nil
                 }
                 
-                cell.backgroundColor = ThemeManager.shared.currentTheme.colours.layer2 // need help confirming the color
                 cell.titleLabel.text = site.title
                 cell.titleLabel.textColor = .label
                 cell.titleLabel.isHidden = site.title.isEmpty
@@ -129,14 +133,45 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         
         snapshot.appendItems(viewModel.asGroup.groupedItems, toSection: .main)
         
-        diffableDatasource.apply(snapshot, animatingDifferences: true)
+        diffableDatasource?.apply(snapshot, animatingDifferences: true)
+    }
+    
+    // MARK: - Misc. helpers
+    
+    private func setupNotifications() {
+        viewModel.notifications.forEach {
+            NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: $0, object: nil)
+        }
+    }
+    
+    @objc private func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default:
+            self.browserLog.error("Recieved unhandled notification! \(notification)")
+        }
+    }
+    
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        } else {
+            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        }
+        
+        view.backgroundColor = .systemBackground
+        tableView.separatorColor = ThemeManager.shared.currentTheme.colours.borderDivider
+        
+        tableView.reloadData()
     }
     
 }
 
 extension GroupedHistoryItemsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let item = diffableDatasource.itemIdentifier(for: indexPath) else { return }
+        guard let item = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
         
         if let site = item as? Site {
             handleSiteItemTapped(site: site)

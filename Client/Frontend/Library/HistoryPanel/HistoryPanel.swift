@@ -38,6 +38,9 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     let profile: Profile
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistoryHelper
+    
+    // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
+    private let historyPanelPrefetchOffset = 8
 
     private var diffableDatasource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
     private var hasRecentlyClosed: Bool { profile.recentlyClosedTabs.tabs.count > 0 }
@@ -50,10 +53,10 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         tableView.accessibilityIdentifier = a11yIds.tableView
         tableView.prefetchDataSource = self
         tableView.delegate = self
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.reuseIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
         tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier)
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.reuseIdentifier)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.reuseIdentifier)
+        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
@@ -83,7 +86,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }
     
     deinit {
-        browserLog.debug("HistoryPanel DEinited.")
+        browserLog.debug("HistoryPanel Deinitialized.")
     }
 
     // MARK: - Lifecycle
@@ -93,7 +96,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         
         viewModel.viewDidLoad()
         viewModel.historyPanelNotifications.forEach {
-            NotificationCenter.default.addObserver(self, selector: #selector(handleNotification), name: $0, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: $0, object: nil)
         }
         
         setupLayout()
@@ -198,7 +201,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             if let date = date {
                 self?.viewModel.removeVisibleSectionFor(date: date)
             } else {
-                // The only time there's no date, is when we are deleting everything.
+                // The only time there's no date is when we are deleting everything.
                 self?.viewModel.visibleSections = []
             }
             
@@ -206,26 +209,29 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             self?.applySnapshot(animatingDifferences: true)
             
             if let cell = self?.clearHistoryCell {
-                self?.setTappableStateAndStyle(with: HistoryActionablesModel.activeActionables.first(where: { $0.itemIdentity == .clearHistory }), on: cell)
+                self?.setTappableStateAndStyle(
+                    with: HistoryActionablesModel.activeActionables.first(where: { $0.itemIdentity == .clearHistory }),
+                    on: cell)
             }
         })
+        
     }
     
     func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         // First section is reserved for fixed history actionables.
-        guard indexPath.section > HistoryPanelSections.additionalHistoryActions.rawValue else {
-            return nil
-        }
+        guard indexPath.section > HistoryPanelSections.additionalHistoryActions.rawValue else { return nil }
 
         let sitesInSection = viewModel.groupedSites.itemsForSection(indexPath.section - 1)
         return sitesInSection[safe: indexPath.row]
     }
 
-    func handleNotification(_ notification: Notification) {
+    func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             viewModel.groupedSites = DateGroupedTableData<Site>()
-            reloadData()
+            
+            viewModel.reloadData()
+            applySnapshot(animatingDifferences: true)
 
             if profile.hasSyncableAccount() {
                 resyncHistory()
@@ -255,6 +261,49 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     // MARK: - UITableViewDataSource
     
+    private func configureHistoryActionableCell(_ historyActionable: HistoryActionablesModel, _ cell: OneLineTableViewCell) -> OneLineTableViewCell {
+        cell.titleLabel.text = historyActionable.itemTitle
+        cell.leftImageView.image = historyActionable.itemImage
+        cell.leftImageView.tintColor = .theme.browser.tint
+        cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
+        cell.accessibilityIdentifier = historyActionable.itemA11yId
+        self.setTappableStateAndStyle(with: historyActionable, on: cell)
+        
+        return cell
+    }
+    
+    private func configureSiteCell(_ site: Site, _ cell: TwoLineImageOverlayCell) -> TwoLineImageOverlayCell {
+        cell.titleLabel.text = site.title
+        cell.titleLabel.isHidden = site.title.isEmpty
+        cell.descriptionLabel.text = site.url
+        cell.descriptionLabel.isHidden = false
+        cell.leftImageView.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = HistoryPanelUX.IconBorderWidth
+        cell.leftImageView.contentMode = .center
+        cell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
+            cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+        }
+        
+        return cell
+    }
+    
+    private func configureASGroupCell(_ asGroup: ASGroup<Site>, _ cell: TwoLineImageOverlayCell) -> TwoLineImageOverlayCell {
+        if let groupCount = asGroup.description {
+            cell.descriptionLabel.text = "\(groupCount) sites"
+        }
+        
+        cell.titleLabel.text = asGroup.displayTitle
+        cell.leftImageView.layer.borderWidth = 0
+        cell.leftImageView.contentMode = .center
+        cell.chevronAccessoryView.isHidden = false
+        cell.leftImageView.setImageAndBackground(forIcon: nil, website: nil) { [weak cell] in
+            cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+            cell?.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)
+        }
+        
+        return cell
+    }
+    
     /// Handles dequeuing the appropriate type of cell when needed.
     private func configureDatasource() {
         diffableDatasource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
@@ -264,39 +313,23 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             }
             
             if let historyActionable = item as? HistoryActionablesModel {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.reuseIdentifier, for: indexPath) as? OneLineTableViewCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as? OneLineTableViewCell else {
                     self.browserLog.error("History Panel - cannot create OneLineTableViewCell for historyActionable!")
                     return nil
                 }
                 
-                cell.titleLabel.text = historyActionable.itemTitle
-                cell.leftImageView.image = historyActionable.itemImage
-                cell.leftImageView.tintColor = .theme.browser.tint
-                cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
-                cell.accessibilityIdentifier = historyActionable.itemA11yId
-                self.setTappableStateAndStyle(with: historyActionable, on: cell)
-                
-                return cell
+                let actionableCell = self.configureHistoryActionableCell(historyActionable, cell)
+                return actionableCell
             }
             
             if let site = item as? Site {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.reuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
                     self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for site!")
                     return nil
                 }
                 
-                cell.titleLabel.text = site.title
-                cell.titleLabel.isHidden = site.title.isEmpty
-                cell.descriptionLabel.text = site.url
-                cell.descriptionLabel.isHidden = false
-                cell.leftImageView.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
-                cell.leftImageView.layer.borderWidth = HistoryPanelUX.IconBorderWidth
-                cell.leftImageView.contentMode = .center
-                cell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-                    cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
-                }
-                
-                return cell
+                let siteCell = self.configureSiteCell(site, cell)
+                return siteCell
             }
             
             if let searchTermGroup = item as? ASGroup<Site> {
@@ -305,20 +338,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
                     return nil
                 }
                 
-                if let groupCount = searchTermGroup.description {
-                    cell.descriptionLabel.text = "\(groupCount) sites"
-                }
-                
-                cell.titleLabel.text = searchTermGroup.displayTitle
-                cell.leftImageView.layer.borderWidth = 0
-                cell.leftImageView.contentMode = .center
-                cell.chevronAccessoryView.isHidden = false
-                cell.leftImageView.setImageAndBackground(forIcon: nil, website: nil) { [weak cell] in
-                    cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
-                    cell?.leftImageView.image = UIImage(named: "recently_closed")
-                }
-                
-                return cell
+                let asGroupCell = self.configureASGroupCell(searchTermGroup, cell)
+                return asGroupCell
             }
             
             // This should never happen! You will have an empty row!
@@ -327,7 +348,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         
     }
     
-    /// Your data source gets populated here for your choice of section.
+    /// The data source gets populated here for your choice of section.
     fileprivate func applySnapshot(animatingDifferences: Bool = false) {
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
         
@@ -348,7 +369,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
                     guard let lastVisit = site.latestVisit else { return false }
                     return groupTimeInterval > TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
                 }) {
-                    // In this case, we have Site items AND a group in the seciton.
+                    // In this case, we have Site items AND a group in the section.
                     snapshot.insertItems([grouping], beforeItem: groupPlacedAfterItem)
                 } else {
                     // Looks like this group's the only item in the section
@@ -376,7 +397,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         if let _ = cell as? Site {
             let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
                 guard let self = self else {
-                    // OSLOG - couldn't weakify self!
+                    os_log(.error, log: .default, "History Panel - self became nil in SwipeActionConfiguration!")
                     completion(false)
                     return
                 }
@@ -394,10 +415,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     // MARK: - Empty State helpers
     
     private func updateEmptyPanelState() {
-        if viewModel.groupedSites.isEmpty {
-            if emptyStateOverlayView.superview == nil {
-                tableView.tableFooterView = emptyStateOverlayView
-            }
+        if viewModel.groupedSites.isEmpty, emptyStateOverlayView.superview == nil {
+            tableView.tableFooterView = emptyStateOverlayView
         } else {
             tableView.alwaysBounceVertical = true
             tableView.tableFooterView = nil
@@ -445,8 +464,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         emptyStateOverlayView = createEmptyStateOverlayView()
         updateEmptyPanelState()
         
-        tableView.separatorColor = ThemeManager.shared.currentTheme.colours.borderDivider
-        tableView.backgroundColor = ThemeManager.shared.currentTheme.colours.layer4
+        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        tableView.separatorColor = UIColor.theme.tableView.separator
         
         tableView.reloadData()
     }
@@ -506,7 +525,6 @@ extension HistoryPanel: UITableViewDelegate {
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
         asGroupListVC.title = asGroupItem.displayTitle
         
-        
         navigationController?.pushViewController(asGroupListVC, animated: true)
     }
     
@@ -561,9 +579,7 @@ extension HistoryPanel {
     }
 
     private func navigateToRecentlyClosed() {
-        guard hasRecentlyClosed else {
-            return
-        }
+        guard hasRecentlyClosed else { return }
 
         let nextController = RecentlyClosedTabsPanel(profile: profile)
         nextController.title = .RecentlyClosedTabsPanelTitle
@@ -604,9 +620,9 @@ extension HistoryPanel {
                 viewModel.groupBelongsToSection(asGroup: group)
             }
             
-            let visibleSectionsWithGroups = viewModel.visibleSections.filter { historySectionsWithGroups.contains($0) }
-            
-            header.headerActionButton.isHidden = !visibleSectionsWithGroups.contains(actualSection)
+            // NOTE: Uncomment this when we support showing the Show all button and its functionality in a later time.
+            // let visibleSectionsWithGroups = viewModel.visibleSections.filter { historySectionsWithGroups.contains($0) }
+            // header.headerActionButton.isHidden = !visibleSectionsWithGroups.contains(actualSection)
         }
         
     }
@@ -618,7 +634,7 @@ extension HistoryPanel {
             return nil
         }
 
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.reuseIdentifier)
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -645,7 +661,7 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {
         guard HistoryPanelSections(rawValue: indexPath.section) != .additionalHistoryActions else { return false }
 
-        return indexPath.row >= viewModel.groupedSites.numberOfItemsForSection(indexPath.section - 1) - 5
+        return indexPath.row >= viewModel.groupedSites.numberOfItemsForSection(indexPath.section - 1) - historyPanelPrefetchOffset
     }
     
 }

@@ -12,10 +12,9 @@ struct TwoLineCellUX {
 
 // TODO: Add support for accessibility for when text size changes
 
-class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
-    static let reuseIdentifier = "two-line-image-overlay-cell"
+class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableCell {
     
-    // Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
+    /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
     static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
     
     // Tableview cell items
@@ -149,10 +148,12 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
+            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
             self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
+            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         }
     }
     

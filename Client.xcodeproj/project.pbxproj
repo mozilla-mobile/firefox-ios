@@ -501,6 +501,7 @@
 		9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* CalendarExtensions.swift */; };
 		962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962F39492672D57A006BDA2A /* RecentItemsHelper.swift */; };
 		966206CD2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */; };
+		968BD7EB27DFF0F8003148B3 /* ASGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968BD7EA27DFF0F8003148B3 /* ASGroup.swift */; };
 		9699F77326F39E5100C5FA47 /* SiteImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */; };
 		96D95016270238500079D39D /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D95015270238500079D39D /* Throttler.swift */; };
 		96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */; };
@@ -2883,6 +2884,7 @@
 		967AF16D275FF4C70099E161 /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		967E47FAA3AD30920D37AF79 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		968545D0846EC3C9425305FC /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = "he.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		968BD7EA27DFF0F8003148B3 /* ASGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASGroup.swift; sourceTree = "<group>"; };
 		9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteImageHelper.swift; sourceTree = "<group>"; };
 		96A542EFBF40CDFE9AA24E2D /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		96A6ACD4276BDD8D00087A51 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -4749,6 +4751,7 @@
 				439B008A26E6CE2100DFAF14 /* GroupedTabCell.swift */,
 				437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */,
 				4345441C26D2E52600D5EEAA /* SearchTermGroupsManager.swift */,
+				968BD7EA27DFF0F8003148B3 /* ASGroup.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -8932,6 +8935,7 @@
 				437A9B6A2681257F00FB41C1 /* InactiveTabViewModel.swift in Sources */,
 				D0B9483422A03468002F4AA1 /* BookmarkDetailPanel.swift in Sources */,
 				3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */,
+				968BD7EB27DFF0F8003148B3 /* ASGroup.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				8A9AC465276CEC4E0047F5B0 /* FxHomeHorizontalCell.swift in Sources */,
 				1DFE57FD27BADD7D0025DE58 /* FirefoxHomeViewModel.swift in Sources */,

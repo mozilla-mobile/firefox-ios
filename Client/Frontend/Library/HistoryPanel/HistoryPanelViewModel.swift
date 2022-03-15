@@ -31,11 +31,11 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         return profile.recentlyClosedTabs.tabs.count > 0
     }
     
-    let historyPanelNotifications = [ Notification.Name.FirefoxAccountChanged,
+    let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
                                       Notification.Name.PrivateDataClearedHistory,
                                       Notification.Name.DynamicFontChanged,
                                       Notification.Name.DatabaseWasReopened,
-                                      Notification.Name.OpenClearRecentHistory ]
+                                      Notification.Name.OpenClearRecentHistory]
     
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
@@ -70,7 +70,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
     
     deinit {
-        browserLog.debug("HistoryPanelViewModel DEinited.s")
+        browserLog.debug("HistoryPanelViewModel Deinitialized.")
     }
     
     // MARK: - Lifecycles

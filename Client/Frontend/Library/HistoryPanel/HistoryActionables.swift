@@ -4,15 +4,14 @@
 
 import Foundation
 
-/**
- The history panel has a fixed first section and cells. In this case, we'll only need some properties of that to serve as our model.
- */
+/// The history panel has a fixed first section and cells. In this case, we'll only need some properties of that to serve as our model.
 
 struct HistoryActionablesModel: Hashable {
     
     // MARK: - Properties
     
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
+    typealias History = String.LibraryPanel.History
     
     let itemImage: UIImage?
     let itemTitle: String
@@ -23,6 +22,8 @@ struct HistoryActionablesModel: Hashable {
     enum ActionableItem {
         case clearHistory, recentlyClosed, syncHistory
     }
+    
+    // MARK: - Init
     
     init(imageName: String?, title: String, a11yId: String, itemIdentity: ActionableItem) {
         self.itemTitle = title
@@ -38,14 +39,14 @@ struct HistoryActionablesModel: Hashable {
     
     // As this section evolves (or we experiment with it), we may need to replace items within. Let's keep separate stashes of ALL and ACTIVE items.
     static let allActionables = [
-        HistoryActionablesModel(imageName: "forget", title: "Clear Recent History", a11yId: a11y.clearHistoryCell, itemIdentity: .clearHistory),
-        HistoryActionablesModel(imageName: "recently_closed", title: "Recently Closed", a11yId: a11y.recentlyClosedCell, itemIdentity: .recentlyClosed),
-        HistoryActionablesModel(imageName: "synced_devices", title: "Synced History", a11yId: a11y.syncedHistoryCell, itemIdentity: .syncHistory)
+        HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon, title: History.HistoryPanelClearHistoryButtonTitle, a11yId: a11y.clearHistoryCell, itemIdentity: .clearHistory),
+        HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon, title: History.RecentlyClosedTabsButtonTitle, a11yId: a11y.recentlyClosedCell, itemIdentity: .recentlyClosed),
+        HistoryActionablesModel(imageName: ImageIdentifiers.syncedDevicesIcon, title: History.SyncedHistory, a11yId: a11y.syncedHistoryCell, itemIdentity: .syncHistory)
     ]
     
     static let activeActionables = [
-        HistoryActionablesModel(imageName: "forget", title: "Clear Recent History", a11yId: a11y.clearHistoryCell, itemIdentity: .clearHistory),
-        HistoryActionablesModel(imageName: "recently_closed", title: "Recently Closed Tabs", a11yId: a11y.recentlyClosedCell, itemIdentity: .recentlyClosed)
+        HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon, title: History.HistoryPanelClearHistoryButtonTitle, a11yId: a11y.clearHistoryCell, itemIdentity: .clearHistory),
+        HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon, title: History.RecentlyClosedTabsButtonTitle, a11yId: a11y.recentlyClosedCell, itemIdentity: .recentlyClosed)
     ]
     
 }
