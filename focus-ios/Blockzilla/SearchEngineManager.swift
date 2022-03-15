@@ -8,6 +8,7 @@ class SearchEngineManager {
     public static let prefKeyEngine = "prefKeyEngine"
     public static let prefKeyDisabledEngines = "prefKeyDisabledEngines"
     public static let prefKeyCustomEngines = "prefKeyCustomEngines"
+    public static let prefKeyV98AndAboveResetSearchEngine = "prefKeyAboveV98ResetSearchEngine" //Ref Bug: #1653822
 
     private let prefs: UserDefaults
     var engines = [SearchEngine]()
@@ -130,9 +131,16 @@ class SearchEngineManager {
         let customEngines = readCustomEngines()
         self.engines.append(contentsOf: customEngines)
 
+        let searchEnginePrefV98 = prefs.string(forKey: SearchEngineManager.prefKeyV98AndAboveResetSearchEngine)
+        let hasDefaultSearchEngine = prefs.string(forKey: SearchEngineManager.prefKeyEngine)
+        let versionNumberList = AppInfo.shortVersion.components(separatedBy: ".")
+        let versionNum = Int(versionNumberList[0]) ?? 0
+        
+        // Ref Bug: #1653822
         // Set default search engine pref
-        if prefs.string(forKey: SearchEngineManager.prefKeyEngine) == nil {
+        if hasDefaultSearchEngine == nil || (searchEnginePrefV98 == nil && versionNum >= 98) {
             prefs.set(self.engines.first?.name, forKey: SearchEngineManager.prefKeyEngine)
+            prefs.set(true, forKey: SearchEngineManager.prefKeyV98AndAboveResetSearchEngine)
         }
 
         sortEnginesAlphabetically()
