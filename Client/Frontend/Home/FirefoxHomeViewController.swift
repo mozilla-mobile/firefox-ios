@@ -488,13 +488,24 @@ extension FirefoxHomeViewController {
 
     func configureLibraryShortcutsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let libraryCell = cell as? ASLibraryCell else { return UICollectionViewCell() }
-        let targets = [#selector(openBookmarks), #selector(openHistory), #selector(openDownloads), #selector(openReadingList)]
-        libraryCell.libraryButtons.map({ $0.button }).zip(targets).forEach { (button, selector) in
-            button.removeTarget(nil, action: nil, for: .allEvents)
-            button.addTarget(self, action: selector, for: .touchUpInside)
+        let openBookmarks = { button in
+            self.openBookmarks(button)
         }
-        libraryCell.applyTheme()
 
+        let openHistory = { button in
+            self.openHistory(button)
+        }
+
+        let openDownloads = { button in
+            self.openDownloads(button)
+        }
+
+        let openReadingList = { button in
+            self.openReadingList(button)
+        }
+
+        libraryCell.buttonActions = [openBookmarks, openHistory, openDownloads, openReadingList]
+        libraryCell.loadLayout()
         return cell
     }
 
@@ -667,7 +678,7 @@ extension FirefoxHomeViewController {
         }
     }
 
-    @objc func openReadingList() {
+    @objc func openReadingList(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
@@ -676,7 +687,7 @@ extension FirefoxHomeViewController {
                                      extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.readingListPanel.rawValue])
     }
 
-    @objc func openDownloads() {
+    @objc func openDownloads(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,

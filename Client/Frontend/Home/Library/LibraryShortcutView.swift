@@ -11,18 +11,30 @@ import SyncTelemetry
 import SnapKit
 
 class LibraryShortcutView: UIView {
-    lazy var button: UIButton = {
-        let button = UIButton()
+
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+
+    struct UX {
+        static let viewHeight = 90
+        static let buttonSize = CGSize(width: 60, height: 60)
+        static let imageSize = CGSize(width: 22, height: 22)
+    }
+
+    private lazy var button: ActionButton = {
+        let button = ActionButton()
         button.imageView?.layer.masksToBounds = true
         button.layer.cornerRadius = 8
         button.layer.borderColor = UIColor(white: 0.0, alpha: 0.1).cgColor
         button.layer.borderWidth = 0.5
+
         button.layer.shadowOffset = CGSize(width: 0, height: 2)
         button.layer.shadowRadius = 6
+        let shadowRect = CGRect(width: UX.buttonSize.width, height: UX.buttonSize.height)
+        button.layer.shadowPath = UIBezierPath(rect: shadowRect).cgPath
         return button
     }()
 
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
         titleLabel.lineBreakMode = .byWordWrapping
@@ -38,12 +50,12 @@ class LibraryShortcutView: UIView {
         addSubview(titleLabel)
 
         self.snp.makeConstraints { make in
-            make.width.greaterThanOrEqualTo(60)
-            make.height.equalTo(90)
+            make.width.greaterThanOrEqualTo(UX.buttonSize)
+            make.height.equalTo(UX.viewHeight)
         }
 
         button.snp.makeConstraints { make in
-            make.size.equalTo(60)
+            make.size.equalTo(UX.buttonSize)
             make.centerX.equalToSuperview()
             make.top.equalToSuperview()
         }
@@ -52,18 +64,58 @@ class LibraryShortcutView: UIView {
             make.top.equalTo(button.snp.bottom).offset(8)
             make.leading.trailing.centerX.equalToSuperview()
         }
+
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
     }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     override func layoutSubviews() {
         button.imageView?.snp.remakeConstraints { make in
-            make.size.equalTo(22)
+            make.size.equalTo(UX.imageSize)
             make.center.equalToSuperview()
         }
 
         super.layoutSubviews()
+    }
+
+    func configure(_ panel: ASLibraryCell.LibraryPanel, action: @escaping (UIButton) -> Void) {
+        button.setImage(panel.image, for: .normal)
+        button.touchUpAction = action
+        button.tintColor = panel.color
+
+        titleLabel.text = panel.title
+        let words = titleLabel.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
+        titleLabel.numberOfLines = words == 1 ? 1 : 2
+
+        applyTheme()
+    }
+}
+
+// MARK: NotificationThemeable
+extension LibraryShortcutView: NotificationThemeable {
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamCellTitle
+        button.backgroundColor = UIColor.theme.homePanel.shortcutBackground
+        button.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        button.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+    }
+}
+
+// MARK: - Notifiable
+extension LibraryShortcutView: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 }

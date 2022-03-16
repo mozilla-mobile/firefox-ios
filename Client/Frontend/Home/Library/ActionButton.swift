@@ -3,3 +3,22 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+
+// A conveniance button class to add a closure as an action on a button instead of a selector
+class ActionButton: UIButton {
+    var touchUpAction: ((UIButton) -> Void)?
+
+    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:)") }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupButton()
+    }
+
+    func setupButton() {
+        addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
+    }
+
+    @objc func touchUpInside(sender: UIButton) {
+        touchUpAction?(sender)
+    }
+}
