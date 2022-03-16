@@ -30,7 +30,7 @@ workflows:
         title: ContentBlockerGen
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
 
 
   set-project-version:
@@ -57,7 +57,7 @@ workflows:
         title: Set OpenInFocus version numbers
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
 
 
   configure-nimbus:
@@ -74,7 +74,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :NimbusAppChannel string ${NIMBUS_APP_CHANNEL}" Blockzilla/Info.plist
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
 
 
   configure-sentry:
@@ -88,7 +88,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :SentryDSN string ${SENTRY_DSN}" Blockzilla/Info.plist
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
 
 
   set-default-browser-entitlement:
@@ -103,7 +103,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
 
 
   release:
@@ -148,7 +148,7 @@ workflows:
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.8core
     before_run:
       - clone-and-build-dependencies
@@ -179,7 +179,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.4core
 
   runParallelTestsM1Beta:
@@ -203,7 +203,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
 
   runFocus:
     steps:
@@ -274,7 +274,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.8core
 
   runKlar:
@@ -345,7 +345,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.8core
   runFocus-iPad:
     steps:
@@ -388,7 +388,7 @@ workflows:
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.8core
   L10nScreenshotsTests:
     steps:
@@ -452,7 +452,7 @@ workflows:
         - deploy_path: artifacts/
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.4core
   L10nBuild:
     steps:
@@ -494,7 +494,7 @@ workflows:
         - is_compress: 'true'
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.3.x
         machine_type_id: g2.4core
 
 app:
