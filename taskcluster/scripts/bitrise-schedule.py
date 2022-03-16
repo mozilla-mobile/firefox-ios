@@ -9,6 +9,7 @@ import asyncio
 import logging
 import os
 import sys
+import json
 
 from aiohttp_retry import RetryClient
 
@@ -124,7 +125,9 @@ async def schedule_build(client, branch, commit, workflow, locales, derived_data
         },
     }
 
-    response = await do_http_request_json(client, url, method="post", json=data)
+    parsed_data = json.dumps(data)
+
+    response = await do_http_request_json(client, url, method="post", json=parsed_data)
     if response.get("status", "") != "ok":
         raise Exception(f"Bitrise status is not ok. Got: {response}")
 
