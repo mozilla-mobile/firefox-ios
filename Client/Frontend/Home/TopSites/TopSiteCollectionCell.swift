@@ -75,8 +75,7 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
             heightDimension: .fractionalHeight(fractionHeight)
         )
 
-        let subItems = Array(repeating: item, count: sectionDimension.numberOfTilesPerRow)
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: subItems)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         return section
     }

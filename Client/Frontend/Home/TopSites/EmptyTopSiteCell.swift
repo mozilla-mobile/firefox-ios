@@ -7,8 +7,6 @@ import Foundation
 // An empty cell to show when a row is incomplete
 class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
 
-    static var cellIdentifier: String = "EmptyTopSiteCell"
-
     lazy private var emptyBG: UIView = .build { view in
         view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth

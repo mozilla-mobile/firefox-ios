@@ -12,8 +12,8 @@ import UIKit
 class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
-    static var cellIdentifier: String = "TopSiteItemCell"
 
+    private var homeTopSite: HomeTopSite?
     private var titleLabelLeadingConstraint: NSLayoutConstraint?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
@@ -30,6 +30,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let shadowRadius: CGFloat = 6
         static let widthSafeSpace: CGFloat = 16
+        static let Spacing: CGFloat = 8
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
@@ -100,8 +101,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         applyTheme()
         setupLayout()
 
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -132,11 +132,14 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     // MARK: - Public methods
 
     func configure(_ topSite: HomeTopSite) {
+        homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = titleLabel.text
 
         imageView.image = topSite.image
         topSite.imageLoaded = { image in
+            // Checks to assign image to correct cell when reusing a cell
+            guard topSite.identifier == self.homeTopSite?.identifier else { return }
             self.imageView.image = image
         }
 
@@ -147,15 +150,15 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
-        contentView.addSubview(titleWrapper)
         titleWrapper.addSubview(titleLabel)
         titleWrapper.addSubview(pinViewHolder)
-        contentView.addSubview(faviconBG)
+        contentView.addSubview(titleWrapper)
         faviconBG.addSubview(imageView)
+        contentView.addSubview(faviconBG)
         contentView.addSubview(selectedOverlay)
 
         NSLayoutConstraint.activate([
-            titleWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: 8),
+            titleWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.Spacing),
             titleWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             titleWrapper.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             titleWrapper.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.width),

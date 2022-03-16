@@ -40,7 +40,8 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     }
 
     // Pocket, historyHighlight, recently saved and jump back in should have full width and add inset in their respective sections
-    // TODO: Fix pocket & recently saved cell layout to be able to see next column to enable set full width here and set inset in section
+    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3928
+    // Fix pocket & recently saved cell layout to be able to see next column to enable set full width here and set inset in section
     var parentMinimumInset: CGFloat {
         switch self {
 //        case .recentlySaved: return 0

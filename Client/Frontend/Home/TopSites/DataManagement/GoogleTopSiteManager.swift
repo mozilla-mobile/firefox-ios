@@ -61,9 +61,8 @@ class GoogleTopSiteManager {
     }
     
     func suggestedSiteData() -> PinnedSite? {
-        guard let url = self.url else {
-            return nil
-        }
+        guard let url = self.url else { return nil }
+
         let pinnedSite = PinnedSite(site: Site(url: url, title: "Google"))
         pinnedSite.guid = Constants.googleGUID
         return pinnedSite
@@ -75,9 +74,8 @@ class GoogleTopSiteManager {
     }
 
     func removeGoogleTopSite(site: Site) {
-        if site.guid == GoogleTopSiteManager.Constants.googleGUID {
-            isHidden = true
-        }
+        guard site.guid == GoogleTopSiteManager.Constants.googleGUID else { return }
+        isHidden = true
     }
 
     // Once Google top site is added, we don't remove unless it's explicitly unpinned

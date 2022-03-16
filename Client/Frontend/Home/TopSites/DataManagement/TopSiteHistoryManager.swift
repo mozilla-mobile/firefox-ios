@@ -40,10 +40,10 @@ class TopSiteHistoryManager: DataObserver, Loggable {
 
         // Flip the `KeyTopSitesCacheIsValid` flag now to prevent subsequent calls to refresh
         // from re-invalidating the cache.
-        self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+        profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
-        self.delegate?.willInvalidateDataSources(forceTopSites: forceTopSites)
-        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites).uponQueue(dataQueue) { _ in
+        delegate?.willInvalidateDataSources(forceTopSites: forceTopSites)
+        profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites).uponQueue(dataQueue) { _ in
             self.delegate?.didInvalidateDataSources(refresh: forceTopSites, topSitesRefreshed: shouldInvalidateTopSites)
         }
     }

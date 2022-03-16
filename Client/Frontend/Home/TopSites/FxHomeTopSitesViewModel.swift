@@ -24,13 +24,17 @@ class FxHomeTopSitesViewModel {
         static let parentInterItemSpacing: CGFloat = 12
     }
 
+    struct SectionDimension {
+        var numberOfRows: Int
+        var numberOfTilesPerRow: Int
+    }
+
     private let profile: Profile
     private let experiments: NimbusApi
     private let isZeroSearch: Bool
 
-    typealias SectionDimension = (numberOfRows: Int, numberOfTilesPerRow: Int)
-    var sectionDimension: FxHomeTopSitesViewModel.SectionDimension = FxHomeTopSitesViewModel.defaultDimension
-    static var defaultDimension: FxHomeTopSitesViewModel.SectionDimension = (6, 2)
+    var sectionDimension: SectionDimension = FxHomeTopSitesViewModel.defaultDimension
+    static var defaultDimension = SectionDimension(numberOfRows: 2, numberOfTilesPerRow: 6)
 
     var tilePressedHandler: ((Site, Bool) -> Void)?
     var tileLongPressedHandler: ((IndexPath) -> Void)?
@@ -58,14 +62,15 @@ class FxHomeTopSitesViewModel {
 
     func getSectionDimension(for trait: UITraitCollection,
                              isLandscape: Bool = UIWindow.isLandscape,
-                             isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) -> SectionDimension {
+                             isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone
+    ) -> SectionDimension {
         let topSitesInterface = UITopSitesInterface(isLandscape: isLandscape,
                                                     isIphone: isIphone,
                                                     horizontalSizeClass: trait.horizontalSizeClass)
 
         let numberOfTilesPerRow = getNumberOfTilesPerRow(for: topSitesInterface)
         let numberOfRows = getNumberOfRows(numberOfTilesPerRow: numberOfTilesPerRow)
-        return SectionDimension(numberOfRows, numberOfTilesPerRow)
+        return SectionDimension(numberOfRows: numberOfRows, numberOfTilesPerRow: numberOfTilesPerRow)
     }
 
     // The width dimension of a cell

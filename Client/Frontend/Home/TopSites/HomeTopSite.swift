@@ -18,6 +18,7 @@ class HomeTopSite {
     var isGoogleURL: Bool
 
     var imageLoaded: ((UIImage?) -> Void)?
+    var identifier = UUID().uuidString
 
     init(site: Site, profile: Profile) {
         self.site = site

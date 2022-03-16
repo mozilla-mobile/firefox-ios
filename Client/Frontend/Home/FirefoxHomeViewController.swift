@@ -770,9 +770,8 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         actions.append(contentsOf: [bookmarkAction,
                                     shareAction])
 
-        switch FirefoxHomeSectionType(indexPath.section) {
-        case .topSites: actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
-        default: break
+        if FirefoxHomeSectionType(indexPath.section) == .topSites {
+            actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
         }
         
         return actions

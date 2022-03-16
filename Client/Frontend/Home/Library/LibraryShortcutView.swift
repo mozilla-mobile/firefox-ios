@@ -5,23 +5,19 @@
 import Shared
 import UIKit
 import Storage
-import SDWebImage
-import XCGLogger
-import SyncTelemetry
-import SnapKit
 
 class LibraryShortcutView: UIView {
 
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     struct UX {
-        static let viewHeight = 90
+        static let viewHeight: CGFloat = 90
         static let buttonSize = CGSize(width: 60, height: 60)
         static let imageSize = CGSize(width: 22, height: 22)
+        static let spacing: CGFloat = 8
     }
 
-    private lazy var button: ActionButton = {
-        let button = ActionButton()
+    private lazy var button: ActionButton = .build { button in
         button.imageView?.layer.masksToBounds = true
         button.layer.cornerRadius = 8
         button.layer.borderColor = UIColor(white: 0.0, alpha: 0.1).cgColor
@@ -31,17 +27,14 @@ class LibraryShortcutView: UIView {
         button.layer.shadowRadius = 6
         let shadowRect = CGRect(width: UX.buttonSize.width, height: UX.buttonSize.height)
         button.layer.shadowPath = UIBezierPath(rect: shadowRect).cgPath
-        return button
-    }()
+    }
 
-    private lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
+    private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         titleLabel.preferredMaxLayoutWidth = 70
-        return titleLabel
-    }()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,24 +42,23 @@ class LibraryShortcutView: UIView {
         addSubview(button)
         addSubview(titleLabel)
 
-        self.snp.makeConstraints { make in
-            make.width.greaterThanOrEqualTo(UX.buttonSize)
-            make.height.equalTo(UX.viewHeight)
-        }
 
-        button.snp.makeConstraints { make in
-            make.size.equalTo(UX.buttonSize)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
+            heightAnchor.constraint(equalToConstant: UX.viewHeight),
 
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(8)
-            make.leading.trailing.centerX.equalToSuperview()
-        }
+            button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+            button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+            button.centerXAnchor.constraint(equalTo: centerXAnchor),
+            button.topAnchor.constraint(equalTo: topAnchor),
 
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+            titleLabel.topAnchor.constraint(equalTo: button.bottomAnchor, constant: UX.spacing),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+        ])
+
+        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
 
     required init(coder: NSCoder) {
@@ -78,10 +70,10 @@ class LibraryShortcutView: UIView {
     }
 
     override func layoutSubviews() {
-        button.imageView?.snp.remakeConstraints { make in
-            make.size.equalTo(UX.imageSize)
-            make.center.equalToSuperview()
-        }
+//        button.imageView?.snp.remakeConstraints { make in
+//            make.size.equalTo(UX.imageSize)
+//            make.center.equalToSuperview()
+//        }
 
         super.layoutSubviews()
     }
