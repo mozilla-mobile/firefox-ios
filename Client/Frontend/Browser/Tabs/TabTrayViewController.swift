@@ -227,6 +227,8 @@ class TabTrayViewController: UIViewController {
     }
 
     fileprivate func iPhoneViewSetup() {
+        navigationItem.rightBarButtonItem = doneButton
+        
         view.addSubview(navigationToolbar)
 
         navigationToolbar.snp.makeConstraints { make in
@@ -243,7 +245,7 @@ class TabTrayViewController: UIViewController {
     fileprivate func updateTitle() {
         if let newTitle = viewModel.navTitle(for: navigationMenu.selectedSegmentIndex,
                                              foriPhone: !shouldUseiPadSetup()) {
-            navigationItem.title  = newTitle
+            navigationItem.title = newTitle
         }
     }
 
