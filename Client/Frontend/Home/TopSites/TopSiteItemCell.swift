@@ -52,8 +52,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
         // Limiting max size to accomodate for non-self-sizing parent cell.
-        titleLabel.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                                            maxSize: 18)
+        titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                                        maxSize: 18)
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
         titleLabel.numberOfLines = 2
     }
@@ -61,13 +61,21 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private lazy var faviconBG: UIView = .build { view in
         view.layer.cornerRadius = UX.cellCornerRadius
         view.layer.borderWidth = UX.borderWidth
+        view.layer.borderColor = UX.borderColor.cgColor
+
+        view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.cornerRadius = UX.cellCornerRadius
+        let shadowRect = CGRect(width: UX.imageBackgroundSize.width, height: UX.imageBackgroundSize.height)
+        view.layer.shadowPath = UIBezierPath(rect: shadowRect).cgPath
         view.layer.shadowRadius = UX.shadowRadius
     }
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
         selectedOverlay.layer.cornerRadius = UX.cellCornerRadius
+        selectedOverlay.backgroundColor = UX.overlayColor
     }
 
     override var isSelected: Bool {
@@ -106,15 +114,14 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        contentView.backgroundColor = UIColor.clear
         imageView.image = nil
         imageView.backgroundColor = UIColor.clear
-        faviconBG.backgroundColor = UIColor.clear
 
+        titleLabel.text = nil
         titleLabelLeadingConstraint?.isActive = true
+
         pinViewHolder.isHidden = true
         pinImageView.removeFromSuperview()
-        titleLabel.text = ""
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -207,10 +214,7 @@ extension TopSiteItemCell: NotificationThemeable {
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
         faviconBG.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        faviconBG.layer.borderColor = UX.borderColor.cgColor
         faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        faviconBG.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        selectedOverlay.backgroundColor = UX.overlayColor
         titleLabel.backgroundColor = UIColor.clear
     }
 }
