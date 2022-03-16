@@ -115,15 +115,26 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
                                           totalItems: viewModel?.historyItems?.count)
         let cornersToRound = determineCornerToRound(indexPath: indexPath,
                                                     totalItems: viewModel?.historyItems?.count)
+        let shouldAddShadow = isBottomOfColumn(with: indexPath.row,
+                                               totalItems: viewModel?.historyItems?.count ?? 0)
 
         guard let item = viewModel?.historyItems?[safe: indexPath.row] else {
-            return configureFillerCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound)
+            return configureFillerCell(cell,
+                                       hideBottomLine: hideBottomLine,
+                                       cornersToRound: cornersToRound,
+                                       shouldAddShadow: shouldAddShadow)
         }
 
         if item.type == .item {
-            return configureIndividualHighlightCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound, item: item)
+            return configureIndividualHighlightCell(cell,
+                                                    hideBottomLine: hideBottomLine,
+                                                    cornersToRound: cornersToRound,
+                                                    shouldAddShadow: shouldAddShadow, item: item)
         } else {
-            return configureGroupHighlightCell(cell, hideBottomLine: hideBottomLine, cornersToRound: cornersToRound, item: item)
+            return configureGroupHighlightCell(cell,
+                                               hideBottomLine: hideBottomLine,
+                                               cornersToRound: cornersToRound,
+                                               shouldAddShadow: shouldAddShadow, item: item)
         }
     }
 
@@ -216,6 +227,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     private func configureIndividualHighlightCell(_ cell: UICollectionViewCell,
                                                   hideBottomLine: Bool,
                                                   cornersToRound: UIRectCorner,
+                                                  shouldAddShadow: Bool,
                                                   item: HighlightItem) -> UICollectionViewCell {
 
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
@@ -223,15 +235,11 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
         let itemURL = item.siteUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
 
-        // TODO: YRD option for title because title is nil we only have the url
-        // site.tileURL.absoluteString
-        // site.tileURL.shortDisplayString
-        let cellOptions = RecentlyVisitedCellOptions(title: site.title,
+        let cellOptions = HistoryHighlightsViewModel(title: item.displayTitle,
                                                      description: nil,
                                                      shouldHideBottomLine: hideBottomLine,
                                                      with: cornersToRound,
-                                                     and: nil,
-                                                     andIsFillerCell: false)
+                                                     shouldAddShadow: shouldAddShadow)
 
         cell.updateCell(with: cellOptions)
 
@@ -245,16 +253,16 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
     private func configureGroupHighlightCell(_ cell: UICollectionViewCell,
                                              hideBottomLine: Bool,
                                              cornersToRound: UIRectCorner,
+                                             shouldAddShadow: Bool,
                                              item: HighlightItem) -> UICollectionViewCell {
 
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
-        let cellOptions = RecentlyVisitedCellOptions(title: item.displayTitle,
+        let cellOptions = HistoryHighlightsViewModel(title: item.displayTitle,
                                                      description: item.description,
                                                      shouldHideBottomLine: hideBottomLine,
                                                      with: cornersToRound,
-                                                     and: nil,
-                                                     andIsFillerCell: false)
+                                                     shouldAddShadow: shouldAddShadow)
 
         cell.updateCell(with: cellOptions)
 
@@ -264,13 +272,14 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
     private func configureFillerCell(_ cell: UICollectionViewCell,
                                      hideBottomLine: Bool,
-                                     cornersToRound: UIRectCorner) -> UICollectionViewCell {
+                                     cornersToRound: UIRectCorner,
+                                     shouldAddShadow: Bool) -> UICollectionViewCell {
 
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
-        let cellOptions = RecentlyVisitedCellOptions(shouldHideBottomLine: hideBottomLine,
+        let cellOptions = HistoryHighlightsViewModel(shouldHideBottomLine: hideBottomLine,
                                                      with: cornersToRound,
-                                                     andIsFillerCell: true)
+                                                     shouldAddShadow: shouldAddShadow)
 
         cell.updateCell(with: cellOptions)
         return cell
