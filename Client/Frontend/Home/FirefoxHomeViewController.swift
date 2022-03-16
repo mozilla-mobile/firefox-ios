@@ -761,9 +761,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                                                          homePanelDelegate: homePanelDelegate,
                                                          isPocket: isPocket,
                                                          isZeroSearch: isZeroSearch)
-        else {
-            return nil
-        }
+        else { return nil }
 
         let bookmarkAction = getBookmarkAction(site: site)
         let shareAction = getShareAction(siteURL: siteURL, sourceView: sourceView)
