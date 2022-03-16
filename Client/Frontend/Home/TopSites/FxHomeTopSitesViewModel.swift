@@ -21,7 +21,7 @@ class FxHomeTopSitesViewModel {
     struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
         // This needs to be removed once we have self sizing sections
-        static let parentInterItemSpacing: CGFloat = 16
+        static let parentInterItemSpacing: CGFloat = 12
     }
 
     private let profile: Profile
