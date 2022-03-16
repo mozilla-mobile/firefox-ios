@@ -277,6 +277,9 @@ class BrowserViewController: UIViewController {
             self.topTabsViewController = topTabsViewController
             topTabsViewController.applyTheme()
 
+        } else if showTopTabs, topTabsViewController != nil {
+            topTabsViewController?.applyTheme()
+            
         } else {
             if let topTabsView = topTabsViewController?.view {
                 header.removeArrangedView(topTabsView)
