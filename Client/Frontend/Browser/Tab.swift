@@ -49,16 +49,6 @@ struct TabState {
     var favicon: Favicon?
 }
 
-public enum TabGroupTimerState: String, Codable {
-    case navSearchLoaded
-    case tabNavigatedToDifferentUrl
-    case tabSwitched
-    case tabSelected
-    case newTab
-    case openInNewTab
-    case none
-}
-
 enum TabUrlType: String {
     case regular
     case search
@@ -90,17 +80,7 @@ class Tab: NSObject {
     var timerPerWebsite: [String: StopWatchTimer] = [:]
     
     // Tab Groups
-    var tabGroupData: TabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
-    
-    struct TabGroupLastUpdatedObservation {
-        var keyUrl: String?
-        var referrerUrl: String?
-        var searchTerm: String?
-    }
-    
-    var lastObservation: TabGroupLastUpdatedObservation = TabGroupLastUpdatedObservation()
-    var tabGroupsTimerHelper = StopWatchTimer()
-    var shouldResetTabGroupData: Bool = false
+    var metadataManager: TabMetadataManager?
     
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
@@ -159,6 +139,79 @@ class Tab: NSObject {
             return siteURL
         }
         return self.url
+    }
+    
+    var loading: Bool {
+        return webView?.isLoading ?? false
+    }
+
+    var estimatedProgress: Double {
+        return webView?.estimatedProgress ?? 0
+    }
+
+    var backList: [WKBackForwardListItem]? {
+        return webView?.backForwardList.backList
+    }
+
+    var forwardList: [WKBackForwardListItem]? {
+        return webView?.backForwardList.forwardList
+    }
+
+    var historyList: [URL] {
+        get {
+            func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
+            
+            var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
+            if let url = url {
+                historyUrls.append(url)
+            }
+            return historyUrls
+        }
+        
+        set { }
+    }
+
+    var title: String? {
+        return webView?.title
+    }
+    
+    var displayTitle: String {
+        if let title = webView?.title, !title.isEmpty {
+            return title
+        }
+        
+        // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
+        // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
+        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !isRestoring {
+            return .AppMenu.AppMenuOpenHomePageTitleString
+        }
+
+        //lets double check the sessionData in case this is a non-restored new tab
+        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
+            return .AppMenu.AppMenuOpenHomePageTitleString
+        }
+
+        if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {
+            return shownUrl
+        }
+
+        guard let lastTitle = lastTitle, !lastTitle.isEmpty else {
+            return self.url?.displayURL?.absoluteString ??  ""
+        }
+
+        return lastTitle
+    }
+
+    var displayFavicon: Favicon? {
+        return favicons.max { $0.width! < $1.width! }
+    }
+
+    var canGoBack: Bool {
+        return webView?.canGoBack ?? false
+    }
+
+    var canGoForward: Bool {
+        return webView?.canGoForward ?? false
     }
 
     var userActivity: NSUserActivity?
@@ -306,87 +359,12 @@ class Tab: NSObject {
         self.nightMode = false
         self.noImageMode = false
         self.browserViewController = bvc
+        self.metadataManager = TabMetadataManager(profile: bvc.profile)
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
-    }
-    
-    func updateObservationForKey(key: HistoryMetadataKey, observation: HistoryMetadataObservation) {
-        if let profile = self.browserViewController?.profile {
-            _ = profile.places.noteHistoryMetadataObservation(key: key, observation: observation)
-        }
-    }
-
-    func updateTimerAndObserving(
-        state: TabGroupTimerState,
-        searchTerm: String? = nil,
-        searchProviderUrl: String? = nil,
-        nextUrl: String = ""
-    ) {
-        switch state {
-        case .navSearchLoaded:
-            shouldResetTabGroupData = false
-            tabGroupsTimerHelper.startOrResume()
-            tabGroupData.tabAssociatedSearchUrl = searchProviderUrl ?? ""
-            tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
-            tabGroupData.tabAssociatedNextUrl = nextUrl
-            tabGroupData.tabHistoryCurrentState = state.rawValue
-
-        case .newTab:
-            shouldResetTabGroupData = false
-            tabGroupsTimerHelper.resetTimer()
-            tabGroupsTimerHelper.startOrResume()
-            tabGroupData.tabHistoryCurrentState = state.rawValue
-
-        case .tabNavigatedToDifferentUrl:
-            if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
-                // reset tab group
-                tabGroupData = TabGroupData(searchTerm: "", searchUrl: "", nextReferralUrl: "", tabHistoryCurrentState: TabGroupTimerState.none.rawValue , tabGroupTimerState: TabGroupTimerState.none.rawValue)
-                shouldResetTabGroupData = true
-            // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
-            } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < 7 {
-                let key = tabGroupData.tabHistoryMetadatakey()
-                if key.referrerUrl != nextUrl {
-                    let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
-                    updateObservationForKey(key: key, observation: observation)
-                    tabGroupData.tabAssociatedNextUrl = nextUrl
-                }
-                tabGroupsTimerHelper.resetTimer()
-                tabGroupsTimerHelper.startOrResume()
-                tabGroupData.tabHistoryCurrentState = state.rawValue
-            }
-
-        case .tabSelected:
-            if !shouldResetTabGroupData {
-                if tabGroupsTimerHelper.isPaused {
-                    tabGroupsTimerHelper.startOrResume()
-                }
-                tabGroupData.tabHistoryCurrentState = state.rawValue
-            }
-
-        case .tabSwitched:
-            if !shouldResetTabGroupData {
-                let key = tabGroupData.tabHistoryMetadatakey()
-                let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: tabGroupsTimerHelper.elapsedTime, documentType: nil, title: nil)
-                updateObservationForKey(key: key, observation: observation)
-                tabGroupsTimerHelper.pauseOrStop()
-                tabGroupData.tabHistoryCurrentState = state.rawValue
-            }
-
-        case .openInNewTab:
-            shouldResetTabGroupData = false
-            if let searchUrl = searchProviderUrl {
-                tabGroupData.tabAssociatedSearchUrl = searchUrl
-                tabGroupData.tabAssociatedSearchTerm = searchTerm ?? ""
-                tabGroupData.tabAssociatedNextUrl = nextUrl
-            }
-            tabGroupData.tabHistoryCurrentState = state.rawValue
-
-        case .none:
-            tabGroupData.tabHistoryCurrentState = state.rawValue
-        }
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -449,6 +427,7 @@ class Tab: NSObject {
             self.webView = webView
             configureEdgeSwipeGestureRecognizers()
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
+            self.webView?.addObserver(self, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
             UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
             tabDelegate?.tab?(self, didCreateWebView: webView)
         }
@@ -527,6 +506,7 @@ class Tab: NSObject {
         contentScriptManager.uninstall(tab: self)
 
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
+        webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
 
         if let webView = webView {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
@@ -535,99 +515,6 @@ class Tab: NSObject {
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
         webView = nil
-    }
-
-    var loading: Bool {
-        return webView?.isLoading ?? false
-    }
-
-    var estimatedProgress: Double {
-        return webView?.estimatedProgress ?? 0
-    }
-
-    var backList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.backList
-    }
-
-    var forwardList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.forwardList
-    }
-
-    var historyList: [URL] {
-        get {
-            func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
-            
-            var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
-            if let url = url {
-                historyUrls.append(url)
-            }
-            return historyUrls
-        }
-        
-        set { }
-        
-    }
-
-    var title: String? {
-        return webView?.title
-    }
-
-    var displayTitle: String {
-        if let title = webView?.title, !title.isEmpty {
-            let key = tabGroupData.tabHistoryMetadatakey()
-            if lastObservation.keyUrl == key.url &&
-                lastObservation.referrerUrl == key.referrerUrl &&
-                lastObservation.searchTerm == key.searchTerm {
-                return title
-                
-            } else if shouldUpdateObservation {
-                let observation = HistoryMetadataObservation(url: key.url, referrerUrl: key.referrerUrl, searchTerm: key.searchTerm, viewTime: nil, documentType: nil, title: title)
-                updateObservationForKey(key: key, observation: observation)
-                lastObservation.keyUrl = key.url
-                lastObservation.referrerUrl = key.referrerUrl
-                lastObservation.searchTerm = key.searchTerm
-            }
-            return title
-        }
-        
-        // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
-        // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
-        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !isRestoring {
-            return .AppMenu.AppMenuOpenHomePageTitleString
-        }
-
-        //lets double check the sessionData in case this is a non-restored new tab
-        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
-            return .AppMenu.AppMenuOpenHomePageTitleString
-        }
-
-        if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {
-            return shownUrl
-        }
-
-        guard let lastTitle = lastTitle, !lastTitle.isEmpty else {
-            return self.url?.displayURL?.absoluteString ??  ""
-        }
-
-        return lastTitle
-    }
-    
-    var shouldUpdateObservation: Bool {
-        tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
-            tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
-            tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue
-    }
-
-    var displayFavicon: Favicon? {
-        return favicons.max { $0.width! < $1.width! }
-    }
-
-    var canGoBack: Bool {
-        return webView?.canGoBack ?? false
-    }
-
-    var canGoForward: Bool {
-        return webView?.canGoForward ?? false
     }
 
     func goBack() {
@@ -821,15 +708,20 @@ class Tab: NSObject {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        guard let webView = object as? WKWebView, webView == self.webView,
-            let path = keyPath, path == KVOConstants.URL.rawValue else {
+        guard let webView = object as? WKWebView,
+              webView == self.webView,
+              let path = keyPath else {
             return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
-        guard let url = self.webView?.url else {
-            return
+        
+        if let url = self.webView?.url, path == KVOConstants.URL.rawValue {
+            self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
         }
-
-        self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
+        
+        if let title = self.webView?.title, !title.isEmpty,
+           path == KVOConstants.title.rawValue {
+            metadataManager?.updateObservationTitle(title)
+        }
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {

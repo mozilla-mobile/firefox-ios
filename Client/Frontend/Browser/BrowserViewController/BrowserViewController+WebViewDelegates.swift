@@ -151,10 +151,13 @@ extension BrowserViewController: WKUIDelegate {
                 }
                 
                 // Record Observation for Search Term Groups
-                let searchTerm = currentTab.tabGroupData.tabAssociatedSearchTerm
-                let searchUrl = currentTab.tabGroupData.tabAssociatedSearchUrl
+                let searchTerm = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchTerm ?? ""
+                let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
                 if !searchTerm.isEmpty, !searchUrl.isEmpty {
-                    tab.updateTimerAndObserving(state: .openInNewTab, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: tab.url?.absoluteString ?? "")
+                    let searchData = TabGroupData(searchTerm: searchTerm,
+                                                  searchUrl: searchUrl,
+                                                  nextReferralUrl: tab.url?.absoluteString ?? "")
+                    tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData)
                 }
                 
                 guard !self.topTabsVisible else {
@@ -708,15 +711,14 @@ extension BrowserViewController: WKNavigationDelegate {
     }
         
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        guard let tab = tabManager[webView] else { return }
+        guard let tab = tabManager[webView],
+              let metadataManager = tab.metadataManager else { return }
+        
         searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
         tab.url = webView.url
 
         // Only update search term data with valid search term data
-        let searchTerm = tab.tabGroupData.tabAssociatedSearchTerm
-        let searchUrl = tab.tabGroupData.tabAssociatedSearchUrl
-        let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
-        if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
+        if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
             
             if tab.adsTelemetryRedirectUrlList.count > 0,
                !tab.adsProviderName.isEmpty,
@@ -731,8 +733,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""
             }
-
-            tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
+            
+            updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString)
         }
 
         // When tab url changes after web content starts loading on the page
@@ -746,15 +748,20 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if let tab = tabManager[webView] {
+        if let tab = tabManager[webView],
+           let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
             // Only update search term data with valid search term data
-            let searchTerm = tab.tabGroupData.tabAssociatedSearchTerm
-            let searchUrl = tab.tabGroupData.tabAssociatedSearchUrl
-            let tabNextUrl = tab.tabGroupData.tabAssociatedNextUrl
-            if !searchTerm.isEmpty, !searchUrl.isEmpty, let nextUrl = webView.url?.absoluteString, !nextUrl.isEmpty, nextUrl != searchUrl, nextUrl != tabNextUrl {
-                tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, searchTerm: searchTerm, searchProviderUrl: searchUrl, nextUrl: nextUrl)
+            if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
+                updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString)
+            } else if !tab.isFxHomeTab {
+                let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+                                              searchUrl: webView.url?.absoluteString ?? "",
+                                              nextReferralUrl: "")
+                metadataManager.updateTimerAndObserving(state: .openURLOnly,
+                                                        searchData: searchData,
+                                                        tabTitle: webView.title)
             }
 
             // If this tab had previously crashed, wait 5 seconds before resetting
@@ -769,5 +776,14 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
         }
+    }
+    
+    private func updateObservationReferral(metadataManager: TabMetadataManager, url: String?) {
+        let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+                                      searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
+                                      nextReferralUrl: url ?? "")
+        metadataManager.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
+                                                searchData: searchData)
+        
     }
 }
