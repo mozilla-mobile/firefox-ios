@@ -69,15 +69,6 @@ class LibraryShortcutView: UIView {
         notificationCenter.removeObserver(self)
     }
 
-    override func layoutSubviews() {
-//        button.imageView?.snp.remakeConstraints { make in
-//            make.size.equalTo(UX.imageSize)
-//            make.center.equalToSuperview()
-//        }
-
-        super.layoutSubviews()
-    }
-
     func configure(_ panel: ASLibraryCell.LibraryPanel, action: @escaping (UIButton) -> Void) {
         button.setImage(panel.image, for: .normal)
         button.touchUpAction = action
