@@ -42,7 +42,7 @@ class FxHomeTopSitesViewModel {
 
     // Need to save the parent's section for the long press action
     // since it's currently handled in FirefoxHomeViewController
-    // TODO: Each section should handle the long press details - not the parent
+    // TODO: https://github.com/mozilla-mobile/firefox-ios/issues/10241
     var topSitesShownInSection: Int = 0
 
     private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {

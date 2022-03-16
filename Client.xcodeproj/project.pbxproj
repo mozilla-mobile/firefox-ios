@@ -451,7 +451,6 @@
 		8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */; };
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
 		8A2D593E27DC0AA100713EC9 /* HomeTopSite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2D593D27DC0AA100713EC9 /* HomeTopSite.swift */; };
-		8A33221D27DFD73A008F809E /* TopSiteCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33221C27DFD73A008F809E /* TopSiteCellProtocol.swift */; };
 		8A33221F27DFE318008F809E /* FxHomeTopSitesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33221E27DFE318008F809E /* FxHomeTopSitesManagerTests.swift */; };
 		8A33222227DFE658008F809E /* NimbusMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33222127DFE658008F809E /* NimbusMock.swift */; };
 		8A35497227BD672700534A65 /* ToggleSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A35497127BD672700534A65 /* ToggleSwitch.swift */; };
@@ -2726,7 +2725,6 @@
 		8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandler.swift; sourceTree = "<group>"; };
 		8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandlerTests.swift; sourceTree = "<group>"; };
 		8A2D593D27DC0AA100713EC9 /* HomeTopSite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopSite.swift; sourceTree = "<group>"; };
-		8A33221C27DFD73A008F809E /* TopSiteCellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCellProtocol.swift; sourceTree = "<group>"; };
 		8A33221E27DFE318008F809E /* FxHomeTopSitesManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeTopSitesManagerTests.swift; sourceTree = "<group>"; };
 		8A33222127DFE658008F809E /* NimbusMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMock.swift; sourceTree = "<group>"; };
 		8A35497127BD672700534A65 /* ToggleSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSwitch.swift; sourceTree = "<group>"; };
@@ -5427,7 +5425,6 @@
 				8A2D593D27DC0AA100713EC9 /* HomeTopSite.swift */,
 				8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */,
 				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
-				8A33221C27DFD73A008F809E /* TopSiteCellProtocol.swift */,
 			);
 			path = TopSites;
 			sourceTree = "<group>";
@@ -8890,7 +8887,6 @@
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
 				39DD030D1CD53E1900BC09B3 /* HomePageHelper.swift in Sources */,
-				8A33221D27DFD73A008F809E /* TopSiteCellProtocol.swift in Sources */,
 				435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */,
 				43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */,
 				C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */,

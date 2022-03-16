@@ -3,11 +3,3 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-
-protocol TopSiteCellProtocol: UICollectionViewCell, ReusableCell {
-    func configure(_ topSite: HomeTopSite)
-}
-
-extension TopSiteCellProtocol {
-    func configure(_ topSite: HomeTopSite) {}
-}

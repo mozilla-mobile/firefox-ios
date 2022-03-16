@@ -15,6 +15,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    var notificationCenter: NotificationCenter = NotificationCenter.default
 
     private let flowLayout = UICollectionViewFlowLayout()
     private var hasSentJumpBackInSectionEvent = false
@@ -60,12 +61,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
-        let refreshEvents: [Notification.Name] = [.DynamicFontChanged,
-                                                  .DisplayThemeChanged,
-                                                  .HomePanelPrefsChanged,
-                                                  .TabClosed,
-                                                  .TabsPrivacyModeChanged]
-        refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
+        setupNotifications(forObserver: self,
+                           observing: [.HomePanelPrefsChanged, .TabClosed, .TabsPrivacyModeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -74,6 +71,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     deinit {
         contextualHintViewController.stopTimer()
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - View lifecycle
@@ -158,15 +156,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
         })
-    }
-
-    @objc func reload(notification: Notification) {
-        switch notification.name {
-        case .TabsPrivacyModeChanged:
-            adjustPrivacySensitiveSections(notification: notification)
-        default:
-            reloadAll()
-        }
     }
 
     private func adjustPrivacySensitiveSections(notification: Notification) {
@@ -874,6 +863,18 @@ extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
             } else {
                 self.collectionView.reloadData()
             }
+        }
+    }
+}
+
+// MARK: - Notifiable
+extension FirefoxHomeViewController: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .TabsPrivacyModeChanged:
+            adjustPrivacySensitiveSections(notification: notification)
+        default:
+            reloadAll()
         }
     }
 }

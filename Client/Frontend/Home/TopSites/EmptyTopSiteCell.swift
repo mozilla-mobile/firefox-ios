@@ -5,7 +5,7 @@
 import Foundation
 
 // An empty cell to show when a row is incomplete
-class EmptyTopSiteCell: UICollectionViewCell, TopSiteCellProtocol, ReusableCell {
+class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
 
     static var cellIdentifier: String = "EmptyTopSiteCell"
 
@@ -22,8 +22,8 @@ class EmptyTopSiteCell: UICollectionViewCell, TopSiteCellProtocol, ReusableCell 
         NSLayoutConstraint.activate([
             emptyBG.topAnchor.constraint(equalTo: contentView.topAnchor),
             emptyBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            emptyBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.backgroundSize.width),
-            emptyBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.backgroundSize.height),
+            emptyBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.width),
+            emptyBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height),
             emptyBG.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
         ])
     }
