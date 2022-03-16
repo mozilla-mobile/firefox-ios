@@ -6,16 +6,12 @@ import Foundation
 import UIKit
 import SnapKit
 import Telemetry
-import LocalAuthentication
 import StoreKit
 import Intents
 import Glean
 import Combine
 
 class BrowserViewController: UIViewController {
-    let appSplashController: AppSplashController
-
-    private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
 
@@ -23,8 +19,6 @@ class BrowserViewController: UIViewController {
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
-    var onboardingEventsHandler: OnboardingEventsHandler!
-    
     private var keyboardState: KeyboardState?
     private let browserToolbar = BrowserToolbar()
     private var homeViewController: HomeViewController!
@@ -49,6 +43,7 @@ class BrowserViewController: UIViewController {
     private var scrollBarState: URLBarScrollState = .expanded
     private var background = UIImageView()
     private var cancellables = Set<AnyCancellable>()
+    private var onboardingEventsHandler: OnboardingEventsHandler
 
     private enum URLBarScrollState {
         case collapsed
@@ -84,15 +79,22 @@ class BrowserViewController: UIViewController {
     }
     private var initialUrl: URL?
     private var orientationWillChange = false
-    var tipManager: TipManager
-    var shortcutManager: ShortcutsManager
+    private let tipManager: TipManager
+    internal let shortcutManager: ShortcutsManager
+    private let authenticationManager: AuthenticationManager
 
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
 
-    init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared, shortcutManager: ShortcutsManager = ShortcutsManager.shared) {
-        self.appSplashController = appSplashController
+    init(
+        tipManager: TipManager = TipManager.shared,
+        shortcutManager: ShortcutsManager = ShortcutsManager.shared,
+        authenticationManager: AuthenticationManager,
+        onboardingEventsHandler: OnboardingEventsHandler
+    ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
+        self.authenticationManager = authenticationManager
+        self.onboardingEventsHandler = onboardingEventsHandler
         super.init(nibName: nil, bundle: nil)
         shortcutManager.delegate = self
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -144,7 +146,6 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupBiometrics()
         NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
         view.addSubview(mainContainerView)
         
@@ -367,52 +368,6 @@ class BrowserViewController: UIViewController {
         browserToolbar.layoutIfNeeded()
 
         super.viewWillAppear(animated)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if presentedViewController == nil && !urlBar.inBrowsingMode {
-            urlBar.activateTextField()
-        }
-    }
-
-    private func setupBiometrics() {
-        // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
-            var biometricError: NSError?
-
-            // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
-            if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
-                self.appSplashController.hideSplashView()
-                return
-            }
-            AppDelegate.needsAuthenticated = false
-
-            self.context = LAContext()
-            self.context.localizedReason = String(format: UIConstants.strings.authenticationReason, AppInfo.productName)
-            self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
-
-            if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: &biometricError) {
-                self.context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.context.localizedReason) {
-                    [unowned self] (success, _) in
-                    DispatchQueue.main.async {
-                        if success {
-                            self.showToolbars()
-                            self.appSplashController.hideSplashView()
-                        } else {
-                            // Clear the browser session, as the user failed to authenticate
-                            self.resetBrowser(hidePreviousSession: true)
-                            self.appSplashController.hideSplashView()
-                        }
-                    }
-                }
-            } else {
-                // Ran into an error with biometrics, so disable them and clear the browser:
-                Settings.set(false, forToggle: SettingsToggle.biometricLogin)
-                self.resetBrowser()
-                self.appSplashController.hideSplashView()
-            }
-        }
     }
     
     private func addShortcuts() {
@@ -1288,7 +1243,7 @@ extension BrowserViewController: URLBarDelegate {
             isSecureConnection: webViewController.connectionIsSecure))
         : .homescreen
         
-        let trackingProtectionViewController = TrackingProtectionViewController(state: state, favIconPublisher: favIconPublisher)
+        let trackingProtectionViewController = TrackingProtectionViewController(state: state, onboardingEventsHandler: onboardingEventsHandler, favIconPublisher: favIconPublisher)
         trackingProtectionViewController.delegate = self
         if UIDevice.current.userInterfaceIdiom == .pad {
             trackingProtectionViewController.modalPresentationStyle = .popover
@@ -1960,8 +1915,13 @@ extension BrowserViewController: MenuActionable {
     func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
 
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
-        settingsViewController.onboardingEventsHandler = onboardingEventsHandler
+        let settingsViewController = SettingsViewController(
+            searchEngineManager: searchEngineManager,
+            whatsNew: browserToolbar.toolset,
+            authenticationManager: authenticationManager,
+            onboardingEventsHandler: onboardingEventsHandler,
+            shouldScrollToSiri: shouldScrollToSiri
+        )
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
 

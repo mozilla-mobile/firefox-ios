@@ -5,7 +5,6 @@
 
 import Foundation
 
-protocol TrackingProtectionDelegate: AnyObject {
-    var onboardingEventsHandler: OnboardingEventsHandler! { get }
+protocol TrackingProtectionDelegate: AnyObject {    
     func trackingProtectionDidToggleProtection(enabled: Bool)
 }

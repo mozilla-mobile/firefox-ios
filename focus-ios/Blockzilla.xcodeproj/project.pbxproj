@@ -122,6 +122,8 @@
 		C89AA96F271720330089838F /* ThemeTableViewAccessoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA96A271720330089838F /* ThemeTableViewAccessoryCell.swift */; };
 		C89AA970271720330089838F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89AA96B271720330089838F /* Theme.swift */; };
 		C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */; };
+		C8AC706427DF972B00165824 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AC706327DF972B00165824 /* AuthenticationManager.swift */; };
+		C8AC706627DF975800165824 /* UIButton+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AC706527DF975800165824 /* UIButton+Background.swift */; };
 		C8C74BF4271D5D310009CE5A /* ActionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */; };
 		C8CE05052743F9EA002057C6 /* PhotonActionSheetItem+MenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE05042743F9EA002057C6 /* PhotonActionSheetItem+MenuAction.swift */; };
 		C8CE05072743FA89002057C6 /* UIAction+MenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE05062743FA89002057C6 /* UIAction+MenuAction.swift */; };
@@ -675,6 +677,8 @@
 		C89AA96A271720330089838F /* ThemeTableViewAccessoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeTableViewAccessoryCell.swift; sourceTree = "<group>"; };
 		C89AA96B271720330089838F /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
+		C8AC706327DF972B00165824 /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		C8AC706527DF975800165824 /* UIButton+Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIButton+Background.swift"; path = "Extensions/UIButton+Background.swift"; sourceTree = "<group>"; };
 		C8C74BF3271D5D310009CE5A /* ActionFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionFooterView.swift; sourceTree = "<group>"; };
 		C8CE05042743F9EA002057C6 /* PhotonActionSheetItem+MenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotonActionSheetItem+MenuAction.swift"; sourceTree = "<group>"; };
 		C8CE05062743FA89002057C6 /* UIAction+MenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAction+MenuAction.swift"; sourceTree = "<group>"; };
@@ -1514,6 +1518,8 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
+				C8AC706527DF975800165824 /* UIButton+Background.swift */,
+				C8AC706327DF972B00165824 /* AuthenticationManager.swift */,
 				6028813C27B1255E00CAF588 /* Onboarding */,
 				C8CE050A2743FE93002057C6 /* Menu */,
 				C83FB7DB273BE4BC00B78CC5 /* Metadata.swift */,
@@ -2204,6 +2210,7 @@
 				31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */,
 				C89AA96D271720330089838F /* SystemThemeDelegate.swift in Sources */,
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
+				C8AC706427DF972B00165824 /* AuthenticationManager.swift in Sources */,
 				C8337E07271089C200093D42 /* DataSource.swift in Sources */,
 				C8A9FE0A26E7A63F00A9C72B /* UserDefault.swift in Sources */,
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
@@ -2242,6 +2249,7 @@
 				C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */,
 				C82D143426EF644E007B275C /* UIViewController+Child.swift in Sources */,
 				C8337DF92710898800093D42 /* TrackingProtectionViewController.swift in Sources */,
+				C8AC706627DF975800165824 /* UIButton+Background.swift in Sources */,
 				C89AA970271720330089838F /* Theme.swift in Sources */,
 				C89AA96C271720330089838F /* ThemeViewController.swift in Sources */,
 				F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */,

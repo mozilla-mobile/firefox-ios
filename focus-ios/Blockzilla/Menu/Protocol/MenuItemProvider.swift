@@ -5,7 +5,7 @@
 import UIKit
 
 protocol MenuItemProvider: AnyObject {
-    var shortcutManager: ShortcutsManager { get set }
+    var shortcutManager: ShortcutsManager { get }
     
     func openInFireFoxItem(for url: URL) -> MenuAction?
     func openInChromeItem(for url: URL) -> MenuAction?

@@ -12,15 +12,26 @@ import XCTest
 
 class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
-
-    class TestAppSplashController: AppSplashController {
-        var splashView = SplashView()
-        func hideSplashView() {}
-        func showSplashView() {}
-    }
+    
+    private lazy var onboardingEventsHandler = OnboardingEventsHandler(
+        alwaysShowOnboarding: {
+            false
+        },
+        shouldShowNewOnboarding: { [unowned self] in
+            false
+        },
+        getShownTips: {
+            return []
+        }, setShownTips: { _ in
+            
+        }
+    )
 
     func testRequestReviewThreshold() {
-        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
+        let bvc = BrowserViewController(
+            authenticationManager: AuthenticationManager(),
+            onboardingEventsHandler: onboardingEventsHandler
+        )
         mockUserDefaults.clear()
 
         // Ensure initial threshold is set

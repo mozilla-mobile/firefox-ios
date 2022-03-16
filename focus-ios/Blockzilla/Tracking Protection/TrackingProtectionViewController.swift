@@ -219,13 +219,14 @@ class TrackingProtectionViewController: UIViewController {
     }
     var state: TrackingProtectionState
     let favIconPublisher: AnyPublisher<UIImage, Never>?
-    var onboardingEventsHandler: OnboardingEventsHandler!
+    private let onboardingEventsHandler: OnboardingEventsHandler
     private var cancellable: AnyCancellable?
     
     //MARK: - VC Lifecycle
-    init(state: TrackingProtectionState, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
-        self.favIconPublisher = favIconPublisher
+    init(state: TrackingProtectionState, onboardingEventsHandler: OnboardingEventsHandler, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
         self.state = state
+        self.onboardingEventsHandler = onboardingEventsHandler
+        self.favIconPublisher = favIconPublisher
         super.init(nibName: nil, bundle: nil)
         
         dataSource.defaultRowAnimation = .middle
@@ -274,7 +275,6 @@ class TrackingProtectionViewController: UIViewController {
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.navigationController?.navigationBar.isTranslucent = false
             
-            onboardingEventsHandler = delegate?.onboardingEventsHandler
             onboardingEventsHandler.send(.showTrackingProtection)
             cancellable = onboardingEventsHandler
                 .$route

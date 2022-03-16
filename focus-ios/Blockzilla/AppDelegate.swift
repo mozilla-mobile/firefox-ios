@@ -8,15 +8,20 @@ import Glean
 import Sentry
 import Combine
 
-protocol AppSplashController {
-    var splashView: SplashView { get }
-    func hideSplashView()
-    func showSplashView()
+enum AppPhase {
+    case notRunning
+    case didFinishLaunching
+    case willEnterForeground
+    case didBecomeActive
+    case willResignActive
+    case didEnterBackgroundkground
+    case willTerminate
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {
-    static var needsAuthenticated = false
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
+    private lazy var authenticationManager = AuthenticationManager()
+    @Published private var appPhase: AppPhase = .notRunning
 
     // This enum can be expanded to support all new shortcuts added to menu.
     enum ShortcutIdentifier: String {
@@ -31,14 +36,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
     var window: UIWindow?
 
-    var splashView = SplashView()
-    private lazy var browserViewController = {
-        BrowserViewController(appSplashController: self)
+    lazy var splashView: SplashView = {
+        let splashView = SplashView()
+        splashView.authenticationManager = authenticationManager
+        return splashView
     }()
+    
+    private lazy var browserViewController = BrowserViewController(
+        authenticationManager: authenticationManager,
+        onboardingEventsHandler: onboardingEventsHandler
+    )
+    
     private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
     private let whatsNewEventsHandler = WhatsNewEventsHandler()
+    private var cancellables = Set<AnyCancellable>()
+    
     private lazy var onboardingEventsHandler = OnboardingEventsHandler(
         alwaysShowOnboarding: {
             UserDefaults.standard.bool(forKey: OnboardingConstants.alwaysShowOnboarding)
@@ -49,9 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 return false
             }
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
-                return true
+                return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
+            } else {
+                return nimbus.shouldShowNewOnboarding
             }
-            return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             #else
             return nimbus.shouldShowNewOnboarding
             #endif
@@ -70,6 +85,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     )
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        appPhase = .didFinishLaunching
+        
+        $appPhase.sink { [unowned self] phase in
+            switch phase {
+            case .didFinishLaunching, .willEnterForeground:
+                authenticateWithBiometrics()
+                
+            case .didBecomeActive:
+                if authenticationManager.authenticationState == .loggedin { hideSplashView() }
+            
+            case .willResignActive:
+                showSplashView()
+                
+            case .didEnterBackgroundkground:
+                authenticationManager.logout()
+                
+            case .notRunning, .willTerminate:
+                break
+            }
+        }
+        .store(in: &cancellables)
+        
+        authenticationManager
+            .$authenticationState
+            .receive(on: DispatchQueue.main)
+            .sink { state in
+                switch state {
+                case .loggedin:
+                    self.hideSplashView()
+                    
+                case .loggedout:
+                    self.splashView.state = .default
+                    self.showSplashView()
+                    
+                case .canceled:
+                    self.splashView.state = .needsAuth
+                }
+            }
+            .store(in: &cancellables)
+        
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -110,14 +165,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         window = UIWindow(frame: UIScreen.main.bounds)
 
         browserViewController.modalDelegate = self
-        browserViewController.onboardingEventsHandler = onboardingEventsHandler
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
         
         WebCacheUtils.reset()
         
-        displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
         
         if AppInfo.isTesting() {
@@ -240,22 +293,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             "" as CFString) as String
     }
     
-    private func displaySplashAnimation() {
-        window!.addSubview(splashView)
-        splashView.snp.makeConstraints { make in
-            make.edges.equalTo(window!)
+    private func authenticateWithBiometrics() {
+        Task {
+            await authenticationManager.authenticateWithBiometrics()
         }
-        splashView.animateDissapear()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        showSplashView()
+        appPhase = .willResignActive
         browserViewController.exitFullScreenVideo()
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        appPhase = .didBecomeActive
+        
         if Settings.siriRequestsErase() {
             browserViewController.photonActionSheetDidDismiss()
             browserViewController.dismiss(animated: true, completion: nil)
@@ -292,8 +345,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
             queuedString = nil
         }
+    }
     
-        browserViewController.activateUrlBarOnHomeView()
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        appPhase = .willEnterForeground
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -301,8 +356,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
-        AppDelegate.needsAuthenticated = true
-        showSplashView()
+        appPhase = .didEnterBackgroundkground
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
