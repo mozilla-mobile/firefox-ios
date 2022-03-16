@@ -301,7 +301,7 @@ class BrowserViewController: UIViewController {
                 case .menu:
                     let controller = self.tooltipController(
                         anchoredBy: self.urlBar.contextMenuButton,
-                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 10, width: 0, height: 0),
+                        sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
                         body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
                         dismiss: { self.onboardingEventsHandler.route = nil }
                     )

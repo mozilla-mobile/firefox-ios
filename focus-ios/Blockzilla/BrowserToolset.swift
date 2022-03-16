@@ -59,6 +59,7 @@ class BrowserToolset {
         contextMenuButton.accessibilityLabel = UIConstants.strings.browserSettings
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
         
         setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
     }

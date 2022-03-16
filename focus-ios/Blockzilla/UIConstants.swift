@@ -151,6 +151,9 @@ struct UIConstants {
         static let onboardingLayoutMarginBottom: CGFloat = 0
         static let onboardingButtonButtomInsetDivider: CGFloat = 20
         static let onboardingButtonLeadingTrailingInsetDivider: CGFloat = 5
+        static let contextMenuButtonSize: CGFloat = 36
+        static let contextMenuButtonMargin: CGFloat = 14
+        static let contextMenuIconSize: CGFloat = 28
     }
 
     struct strings {
