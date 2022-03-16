@@ -83,15 +83,15 @@ class FxHomeTopSitesManager {
     var numberOfRows: Int {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
+        // TODO: When updating the top sites settings, investigate if topsites can be 0. From current settings
+        // it can be a minimum of 1.
         return Int(max(preferredNumberOfRows ?? defaultNumberOfRows, 1))
     }
 
     private func countPinnedSites(sites: [Site]) -> Int {
         var pinnedSites = 0
         sites.forEach {
-            if let _ = $0 as? PinnedSite {
-                pinnedSites += 1
-            }
+            if let _ = $0 as? PinnedSite { pinnedSites += 1 }
         }
         return pinnedSites
     }

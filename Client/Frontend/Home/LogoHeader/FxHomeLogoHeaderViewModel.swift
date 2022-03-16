@@ -8,6 +8,7 @@ import Shared
 class FxHomeLogoHeaderViewModel {
 
     private let profile: Profile
+
     init(profile: Profile) {
         self.profile = profile
     }

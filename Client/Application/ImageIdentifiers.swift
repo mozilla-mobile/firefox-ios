@@ -4,7 +4,7 @@
 
 import Foundation
 
-// Notes: Following images are duplicates and need to be cleaned up
+// TODO: Following images are duplicates and need to be cleaned up
 // - `action_bookmark_remove` and `menu-Bookmark-Remove`
 // - `action_bookmark` and `menu-Bookmark`
 

@@ -215,9 +215,7 @@ extension SiteTableViewController: UITableViewDragDelegate {
         guard let homePanelVC = self as? HomePanelContextMenu,
               let site = homePanelVC.getSiteDetails(for: indexPath),
               let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url)
-        else {
-            return []
-        }
+        else { return [] }
 
         TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
 
