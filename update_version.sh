@@ -1,3 +1,4 @@
+# the first argument is the current version, and the second is the new version
 if [[ "${#}" -ne 2 ]]
 then
   echo 'arg missing for updated version number'
