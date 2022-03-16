@@ -7,22 +7,26 @@ import UIKit
 private struct RecentlyVisitedCellUX {
     static let generalCornerRadius: CGFloat = 10
     static let heroImageDimension: CGFloat = 24
+    static let shadowRadius: CGFloat = 0
+    static let shadowOffset: CGFloat = 2
 }
 
-struct RecentlyVisitedCellOptions {
+struct HistoryHighlightsViewModel {
     let title: String
     let description: String?
     let favIconImage: UIImage?
     let corners: UIRectCorner?
     let hideBottomLine: Bool
     let isFillerCell: Bool
+    let shouldAddShadow: Bool
 
     init(title: String,
          description: String?,
          shouldHideBottomLine: Bool,
          with corners: UIRectCorner? = nil,
          and heroImage: UIImage? = nil,
-         andIsFillerCell: Bool) {
+         andIsFillerCell: Bool = false,
+         shouldAddShadow: Bool = false) {
 
         self.title = title
         self.description = description
@@ -30,18 +34,21 @@ struct RecentlyVisitedCellOptions {
         self.corners = corners
         self.favIconImage = heroImage
         self.isFillerCell = andIsFillerCell
+        self.shouldAddShadow = shouldAddShadow
     }
 
+    // Filler cell init
     init(shouldHideBottomLine: Bool,
          with corners: UIRectCorner? = nil,
-         andIsFillerCell: Bool) {
+         shouldAddShadow: Bool) {
 
         self.init(title: "",
                   description: "",
                   shouldHideBottomLine: shouldHideBottomLine,
                   with: corners,
                   and: nil,
-                  andIsFillerCell: andIsFillerCell)
+                  andIsFillerCell: true,
+                  shouldAddShadow: shouldAddShadow)
     }
 }
 
@@ -49,6 +56,8 @@ struct RecentlyVisitedCellOptions {
 class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
+    var shadowViewLayer: CAShapeLayer?
+    
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
@@ -116,7 +125,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Public methods
-    public func updateCell(with options: RecentlyVisitedCellOptions) {
+    public func updateCell(with options: HistoryHighlightsViewModel) {
         itemTitle.text = options.title
         itemDescription.text = options.description
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
@@ -126,6 +135,16 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         if let corners = options.corners {
             contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
         }
+        
+        if options.shouldAddShadow {
+            addShadowLayer(cornersToRound: options.corners ?? UIRectCorner())
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        shadowViewLayer?.removeFromSuperlayer()
     }
 
     // MARK: - Setup Helper methods
@@ -149,6 +168,27 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             bottomLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             bottomLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
+    }
+    
+    private func addShadowLayer(cornersToRound: UIRectCorner) {
+        let shadowLayer = CAShapeLayer()
+        
+        shadowLayer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        shadowLayer.shadowOffset = CGSize(width: 0,
+                                          height: RecentlyVisitedCellUX.shadowOffset)
+        shadowLayer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        shadowLayer.shadowRadius = RecentlyVisitedCellUX.shadowRadius
+        
+        let radiusSize = CGSize(width: RecentlyVisitedCellUX.generalCornerRadius,
+                                height: RecentlyVisitedCellUX.generalCornerRadius)
+        shadowLayer.shadowPath = UIBezierPath(roundedRect: bounds,
+                                              byRoundingCorners: cornersToRound,
+                                              cornerRadii: radiusSize).cgPath
+        shadowLayer.shouldRasterize = true
+        shadowLayer.rasterizationScale = UIScreen.main.scale
+
+        shadowViewLayer = shadowLayer
+        layer.insertSublayer(shadowLayer, at: 0)
     }
 }
 

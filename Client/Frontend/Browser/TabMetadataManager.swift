@@ -15,10 +15,9 @@ class TabMetadataManager {
     var shouldResetTabGroupData = false
     let minViewTimeInSeconds = 7
     
-    private var shouldUpdateObservationForState: Bool {
+    private var shouldUpdateObservationTitle: Bool {
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
-        tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openInNewTab.rawValue ||
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openURLOnly.rawValue
     }
     
@@ -64,7 +63,7 @@ class TabMetadataManager {
     ///   - title: Title to be saved
     ///   - completion: Completion handler that gets called once the recording is done. Initially used only for Unit test
     func updateObservationTitle(_ title: String, completion: (() -> ())? = nil) {
-        guard shouldUpdateObservationForState else {
+        guard shouldUpdateObservationTitle else {
             completion?()
             return
         }
