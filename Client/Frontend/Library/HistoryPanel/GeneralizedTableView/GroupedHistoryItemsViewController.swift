@@ -104,11 +104,9 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
                 }
                 
                 cell.titleLabel.text = site.title
-                cell.titleLabel.textColor = .label
                 cell.titleLabel.isHidden = site.title.isEmpty
                 cell.descriptionLabel.text = site.url
                 cell.descriptionLabel.isHidden = false
-                cell.descriptionLabel.textColor = ThemeManager.shared.currentTheme.colours.textSecondary
                 cell.leftImageView.layer.borderColor = ThemeManager.shared.currentTheme.colours.layer4.cgColor
                 cell.leftImageView.layer.borderWidth = 0.5
                 cell.leftImageView.contentMode = .center

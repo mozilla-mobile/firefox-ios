@@ -101,6 +101,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
                 
                 self.visibleSections = Sections.allCases.filter { section in
                     self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
+                    || !self.groupsForSection(section: section).isEmpty
                 }
             }
         }
@@ -186,7 +187,19 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         return nil
     }
     
-    /// This will remove entire sections of data.
+    func groupsForSection(section: Sections) -> [ASGroup<Site>] {
+        let groups = searchTermGroups.filter { group in
+            if let groupInSection = groupBelongsToSection(asGroup: group) {
+                return groupInSection == section
+            }
+            
+            return false
+        }
+        
+        return groups
+    }
+    
+    /// This will remove entire sections of data on triggering the Clear History flow.
     func removeVisibleSectionFor(date: Date) {
         // handle the past one hour later
         var sectionToRemove: [Sections]
@@ -208,6 +221,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     func removeHistoryItems(item historyItem: AnyHashable, at section: Int) {
         guard let timeSection = Sections(rawValue: section) else { return }
         
+        let isSectionWithNoSites: Bool
+        let isSectionWithGroups: Bool
+        
         if let site = historyItem as? Site {
             groupedSites.remove(site)
             profile.history.removeHistoryForURL(site.url)
@@ -220,9 +236,19 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             searchTermGroups = searchTermGroups.filter { $0 != group }
         }
         
-        if (groupedSites.numberOfItemsForSection(section - 1)) == 0 {
+        isSectionWithNoSites = groupedSites.numberOfItemsForSection(section - 1) == 0
+        isSectionWithGroups = searchTermGroups.contains { group in
+            if let groupSection = groupBelongsToSection(asGroup: group) {
+                return groupSection == timeSection
+            }
+            
+            return false
+        }
+        
+        if isSectionWithNoSites, !isSectionWithGroups {
             visibleSections = visibleSections.filter { $0 != timeSection }
         }
+        
     }
     
 }

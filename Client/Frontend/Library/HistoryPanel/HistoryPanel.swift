@@ -274,7 +274,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     private func configureDatasource() {
         diffableDatasource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else {
-                os_log(.error, log: .default, "History Panel - self became nil inside diffableDatasource!")
+                Logger.browserLogger.error("History Panel - self became nil inside diffableDatasource!")
                 return nil
             }
             

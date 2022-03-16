@@ -24,7 +24,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         button.setTitle("Show all", for: .normal)
         button.backgroundColor = .clear
         button.titleLabel?.font = .systemFont(ofSize: 12)
-        button.setTitleColor(ThemeManager.shared.currentTheme.colours.iconAccentBlue, for: .normal)
         button.isHidden = true
     }
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
@@ -67,6 +66,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
+        headerActionButton.setTitleColor(UIColor.theme.tableView.rowActionAccessory, for: .normal)
         backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }
