@@ -179,10 +179,11 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         shadowLayer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         shadowLayer.shadowRadius = RecentlyVisitedCellUX.shadowRadius
         
+        let radiusSize = CGSize(width: RecentlyVisitedCellUX.generalCornerRadius,
+                                height: RecentlyVisitedCellUX.generalCornerRadius)
         shadowLayer.shadowPath = UIBezierPath(roundedRect: bounds,
-                                    byRoundingCorners: cornersToRound,
-                     cornerRadii: CGSize(width: RecentlyVisitedCellUX.generalCornerRadius,
-                                         height: RecentlyVisitedCellUX.generalCornerRadius)).cgPath
+                                              byRoundingCorners: cornersToRound,
+                                              cornerRadii: radiusSize).cgPath
         shadowLayer.shouldRasterize = true
         shadowLayer.rasterizationScale = UIScreen.main.scale
 

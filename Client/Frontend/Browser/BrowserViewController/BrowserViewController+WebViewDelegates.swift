@@ -783,7 +783,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                       searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
                                       nextReferralUrl: url ?? "")
         metadataManager.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
-                                                     searchData: searchData)
+                                                searchData: searchData)
         
     }
 }
