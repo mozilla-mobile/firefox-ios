@@ -118,7 +118,7 @@ class TabMetadataManagerTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
     
-    func testUpdateObservationTitle_ForOpenInNewTab() throws {
+    func testNotUpdateObservationTitle_ForOpenInNewTab() throws {
         emptyDB()
         let stringUrl = "https://www.developer.org/"
         let referralURL = "https://www.developer.org/ref"
@@ -130,15 +130,13 @@ class TabMetadataManagerTests: XCTestCase {
                                             nextReferralUrl: referralURL,
                                             tabHistoryCurrentState: TabGroupTimerState.openInNewTab.rawValue)
         
+        // Title should not be updated for this state
         manager.updateObservationTitle(title) {
             let result = self.profile.places.getHistoryMetadataSince(since: 0).value
 
             XCTAssertTrue(result.isSuccess)
             XCTAssertNotNil(result.successValue)
-            XCTAssertEqual(result.successValue!.count, 1)
-            XCTAssertEqual(result.successValue![0].url, stringUrl)
-            XCTAssertEqual(result.successValue![0].title?.lowercased(), title)
-            XCTAssertEqual(result.successValue![0].referrerUrl?.lowercased(), referralURL)
+            XCTAssertEqual(result.successValue!.count, 0)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)

@@ -733,6 +733,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""
             }
+            
+            updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString)
         }
 
         // When tab url changes after web content starts loading on the page
@@ -752,11 +754,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
             // Only update search term data with valid search term data
             if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
-                let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                              searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
-                                              nextReferralUrl: webView.url?.absoluteString ?? "")
-                tab.metadataManager?.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
-                                                             searchData: searchData)
+                updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString)
             } else if !tab.isFxHomeTab {
                 let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
                                               searchUrl: webView.url?.absoluteString ?? "",
@@ -778,5 +776,14 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
         }
+    }
+    
+    private func updateObservationReferral(metadataManager: TabMetadataManager, url: String?) {
+        let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+                                      searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
+                                      nextReferralUrl: url ?? "")
+        metadataManager.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
+                                                searchData: searchData)
+        
     }
 }
