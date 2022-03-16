@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Ulteriori informazioni";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ è realizzato da Mozilla. La nostra missione è promuovere un Internet integro e aperto.";
+"About.missionLabel" = "%@ è realizzato da Mozilla. La nostra missione è promuovere un Internet sano e aperto.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Cerca e naviga direttamente nell’app.";
@@ -302,7 +302,7 @@
 "SearchSuggestions.promptEnable" = "Sì";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Per ricevere suggerimenti, %@ deve inviare ciò che digiti nella barra degli indirizzi al motore di ricerca.";
+"SearchSuggestions.promptMessage" = "Per mostrarti i suggerimenti %@ deve inviare al motore di ricerca il testo che digiti nella barra degli indirizzi.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Mostrare i suggerimenti di ricerca?";

@@ -62,7 +62,7 @@
 "Autocomplete.addCustomUrlError" = "Periksa ulang URL yang Anda masukkan.";
 
 /* A label displaying an example URL */
-"Autocomplete.addCustomUrlExample" = "Contoh: contoh.id";
+"Autocomplete.addCustomUrlExample" = "Contoh: example.com";
 
 /* Label for the input to add a custom URL */
 "Autocomplete.addCustomUrlLabel" = "URL untuk ditambahkan";
@@ -380,7 +380,7 @@
 "Settings.Search.SearchTemplate" = "String pencarian untuk digunakan";
 
 /* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Contoh: contohmesinpencari.id/search/?q=%s";
+"settings.Search.SearchTemplateExample" = "Contoh: mesinpencari.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Tempel atau masukkan string pencarian. Jika diperlukan, ganti istilah pencarian dengan: %s.";
@@ -491,7 +491,7 @@
 "ShareMenu.PageActions" = "Aksi Laman";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
-"ShareMenu.RemoveFromShortcuts" = "Hapuskan dari Shortcuts";
+"ShareMenu.RemoveFromShortcuts" = "Hapus dari Pintasan";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Minta Situs Desktop";
@@ -509,10 +509,10 @@
 "ShareMenu.ShareOpenFirefox" = "Buka di Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Bagikan Laman Dengan...";
+"ShareMenu.SharePage" = "Bagikan Laman...";
 
 /* Text for the long press on a shortcut option in context menu. */
-"ShortcutView.RemoveFromShortcuts" = "Hapuskan dari Shortcuts";
+"ShortcutView.RemoveFromShortcuts" = "Hapus dari Pintasan";
 
 /* Text for the long press on a shortcut rename option in context menu. */
 "ShortcutView.Rename" = "Ganti Nama Pintasan";
@@ -650,7 +650,7 @@
 "trackingProtection.toggleDescription1" = "Nonaktifkan hingga Anda menutup %@ atau mengetuk HAPUS.";
 
 /* Text for the toggle that enables/disables tracking protection. */
-"trackingProtection.toggleLabel2" = "Perlindungan Pelacakan Dipertingkat";
+"trackingProtection.toggleLabel2" = "Perlindungan Pelacakan yang Ditingkatkan";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel2" = "Simpan data Anda untuk diri sendiri. %@ melindungi Anda dari banyak pelacak umum yang mengikuti apa yang Anda lakukan daring.";
