@@ -121,11 +121,11 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
     
     func checkIfShouldDisplayBar() {
         // Clipboard bar feature needs to be enabled by users to be activated in the user settings
-        guard self.prefs.boolForKey("showClipboardBar") ?? false else { return }
+        guard prefs.boolForKey("showClipboardBar") ?? false else { return }
 
         guard UIPasteboard.general.hasURLs,
               let url = UIPasteboard.general.url,
-              self.shouldDisplayBar(url.absoluteString) else { return }
+              shouldDisplayBar(url.absoluteString) else { return }
         
         self.lastDisplayedURL = url.absoluteString
         
@@ -141,7 +141,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
             })
         
         if let toast = self.clipboardToast {
-            self.delegate?.shouldDisplay(clipboardBar: toast)
+            delegate?.shouldDisplay(clipboardBar: toast)
         }
     }
 }
