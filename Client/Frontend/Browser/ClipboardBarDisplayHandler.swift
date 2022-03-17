@@ -119,39 +119,30 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         return false
     }
     
-    
-    
-     func checkIfShouldDisplayBar() {
-         // There's no point in doing any of this work unless the
-         // user has asked for it in settings.
-         guard self.prefs.boolForKey("showClipboardBar") ?? false else { return }
-         
-         guard UIPasteboard.general.hasURLs else { return }
-                 
-         UIPasteboard.general.asyncURL2 { url in
+    func checkIfShouldDisplayBar() {
+        // There's no point in doing any of this work unless the
+        // user has asked for it in settings.
+        guard self.prefs.boolForKey("showClipboardBar") ?? false else { return }
 
-            guard let url = url else { return }
-
-            guard self.shouldDisplayBar(url.absoluteString) else {
-                return
-            }
-
-            self.lastDisplayedURL = url.absoluteString
-
-            self.clipboardToast =
-                ButtonToast(
-                    labelText: .GoToCopiedLink,
-                    descriptionText: url.absoluteDisplayString,
-                    buttonText: .GoButtonTittle,
-                    completion: { buttonPressed in
-                        if buttonPressed {
-                            self.delegate?.settingsOpenURLInNewTab(url)
-                        }
+        guard UIPasteboard.general.hasURLs,
+              let url = UIPasteboard.general.url,
+              self.shouldDisplayBar(url.absoluteString) else { return }
+        
+        self.lastDisplayedURL = url.absoluteString
+        
+        self.clipboardToast =
+        ButtonToast(
+            labelText: .GoToCopiedLink,
+            descriptionText: url.absoluteDisplayString,
+            buttonText: .GoButtonTittle,
+            completion: { buttonPressed in
+                if buttonPressed {
+                    self.delegate?.settingsOpenURLInNewTab(url)
+                }
             })
-
-            if let toast = self.clipboardToast {
-                self.delegate?.shouldDisplay(clipboardBar: toast)
-            }
+        
+        if let toast = self.clipboardToast {
+            self.delegate?.shouldDisplay(clipboardBar: toast)
         }
     }
 }
