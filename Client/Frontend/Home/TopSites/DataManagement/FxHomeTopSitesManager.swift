@@ -70,7 +70,7 @@ protocol FxHomeTopSitesManagerDelegate: AnyObject {
     func reloadTopSites()
 }
 
-class FxHomeTopSitesManager {
+class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     private let contileProvider: ContileProvider
     private let googleTopSiteManager: GoogleTopSiteManager
@@ -133,6 +133,7 @@ class FxHomeTopSitesManager {
 
     private func loadContiles(group: DispatchGroup) {
         group.enter()
+        // TODO: Should I order depending on the position of the Contile? Or can I trust the JSON order.
         contileProvider.fetchContiles { result in
             if case .success(let contiles) = result {
                 self.contiles = contiles
@@ -159,12 +160,15 @@ class FxHomeTopSitesManager {
         var sites = historySites
         let pinnedSiteCount = countPinnedSites(sites: sites)
         let totalNumberOfShownTiles = numberOfTilesPerRow * numberOfRows
+        let availableSpacesCount = totalNumberOfShownTiles - pinnedSiteCount
 
-        if shouldAddSponsoredTiles(pinnedSiteCount: pinnedSiteCount,
-                             totalNumberOfShownTiles: totalNumberOfShownTiles) {
-            addSponsoredTiles(sites: &sites)
+        // Add Sponsored tile if needed
+        let sponsoredTileSpaces = getAvailableSponsoredTilesSpaces(availableSpacesCount: availableSpacesCount)
+        if sponsoredTileSpaces > 0 {
+            addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces, sites: &sites)
         }
 
+        // Add Google top site if needed
         if googleTopSiteManager.shouldAddGoogleTopSite(pinnedSiteCount: pinnedSiteCount,
                                                        totalNumberOfShownTiles: totalNumberOfShownTiles) {
             googleTopSiteManager.addGoogleTopSite(maxItems: totalNumberOfShownTiles, sites: &sites)
@@ -196,28 +200,44 @@ class FxHomeTopSitesManager {
 
     static let maximumNumberOfSponsoredTile = 1
 
-    /// Check if Sponsored Tiles can be added to the top sites.
-    /// We don't add contiles if number of pins exeeds the available top sites spaces available and
+    /// Get the number of available spaces for sponsored tiles.
+    /// We don't add sponsored tile if number of pins exeeds the available top sites spaces available and
     /// ensure that Google tile has precedence over Sponsored Tiles
     /// - Parameters:
-    ///   - pinnedSiteCount: The number of sites that are pinned
-    ///   - totalNumberOfShownTiles: The total number of tiles shown to the user
-    /// - Returns: True when contiles can be added
-    func shouldAddSponsoredTiles(pinnedSiteCount: Int, totalNumberOfShownTiles: Int) -> Bool {
-        // TODO: Will check for user preference here with https://mozilla-hub.atlassian.net/browse/FXIOS-3469
-        // TODO: Feature flag check
-        return !contiles.isEmpty && (pinnedSiteCount < totalNumberOfShownTiles - GoogleTopSiteManager.Constants.reservedSpaceCount)
+    ///   - availableSpacesCount: The number of spaces available once pinned sites are accounted for
+    /// - Returns: Returns the number of spaces available to add Sponsored tiles in
+    private func getAvailableSponsoredTilesSpaces(availableSpacesCount: Int) -> Int {
+        // TODO: Check for settings user preference with https://mozilla-hub.atlassian.net/browse/FXIOS-3469
+        guard !contiles.isEmpty && featureFlags.isFeatureActiveForBuild(.sponsoredTiles) else { return 0 }
+        return availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount
     }
 
-    /// Add a sponsored tiles to the top sites.
+    /// Add sponsored tiles to the top sites.
     /// - Parameters:
+    ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
     ///   - sites: The top sites to add the sponsored tile to
-    func addSponsoredTiles(sites: inout [Site]) {
-        // TODO: Add check to ensure tile doesn't exists (don't duplicate). Check with URL
-        // TODO: Logic to support only one contile (the first one)
-        // TODO: Should I order depending on the position of the Contile? Asked Loren.
-        let site = SponsoredTile(contile: contiles[0])
-        sites.insert(site, at: 0)
+    private func addSponsoredTiles(sponsoredTileSpaces: Int, sites: inout [Site]) {
+        var siteAdded = 0
+        for index in (0..<FxHomeTopSitesManager.maximumNumberOfSponsoredTile) {
+
+            guard siteAdded < sponsoredTileSpaces else { return }
+            let site = SponsoredTile(contile: contiles[index])
+
+            // Show the next non-duplicated sponsored site if it's already present in the pinned sites
+            guard !siteIsAlreadyPresent(site: site, in: sites) else { continue }
+
+            sites.insert(site, at: 0)
+            siteAdded += 1
+        }
+    }
+
+    // Check to ensure a site isn't already existing in the pinned top sites
+    private func siteIsAlreadyPresent(site: Site, in sites: [Site]) -> Bool {
+        return sites.filter {
+            let siteDomain = URL(string: $0.url)?.domainURL
+            let comparedDomain = URL(string: site.url)?.domainURL
+            return siteDomain == comparedDomain && (site as? PinnedSite) == nil
+        }.count > 0
     }
 }
 
