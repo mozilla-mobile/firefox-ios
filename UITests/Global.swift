@@ -275,7 +275,7 @@ class BrowserUtils {
     }
 
     fileprivate class func clearHistoryItemAtIndex(_ index: IndexPath, tester: KIFUITestActor) {
-        if let row = tester.waitForCell(at: index, inTableViewWithAccessibilityIdentifier: "History List") {
+        if let row = tester.waitForCell(at: index, inTableViewWithAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView) {
             tester.swipeView(withAccessibilityLabel: row.accessibilityLabel, value: row.accessibilityValue, in: KIFSwipeDirection.left)
             tester.tapView(withAccessibilityLabel: "Remove")
         }
@@ -324,7 +324,7 @@ class BrowserUtils {
         resetToAboutHomeKIF(tester)
         tester.tapView(withAccessibilityLabel: "History")
 
-        let historyTable = tester.waitForView(withAccessibilityIdentifier: "History List") as! UITableView
+        let historyTable = tester.waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView) as! UITableView
         var index = 0
         for _ in 0 ..< historyTable.numberOfSections {
             for _ in 0 ..< historyTable.numberOfRows(inSection: 0) {

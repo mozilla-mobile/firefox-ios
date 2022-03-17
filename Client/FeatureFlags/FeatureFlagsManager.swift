@@ -191,6 +191,11 @@ class FeatureFlagsManager {
 
         features[.reportSiteIssue] = reportSiteIssue
 
+        let historySearchTermGroups = FlaggableFeature(withID: .historyGroups,
+                                                       and: profile,
+                                                       enabledFor: [.developer])
+        features[.historyGroups] = historySearchTermGroups
+
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
                                               and: profile,
                                               enabledFor: [.beta, .developer, .other])
