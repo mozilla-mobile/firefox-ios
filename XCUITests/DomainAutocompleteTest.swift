@@ -80,7 +80,7 @@ class DomainAutocompleteTest: BaseTestCase {
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
 
-        waitForExistence(app.cells["TopSitesCell"])
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
     }
 
     // Ensure that the scheme is included in the autocompletion.

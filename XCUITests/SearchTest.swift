@@ -120,7 +120,7 @@ class SearchTests: BaseTestCase {
         app.buttons["urlBar-cancel"].tap()
 
         navigator.nowAt(HomePanelsScreen)
-        waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 10)
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section], timeout: 10)
         waitForExistence(app.textFields["url"], timeout: 3)
         app.textFields["url"].tap()
         waitForExistence(app.textFields["address"], timeout: 3)

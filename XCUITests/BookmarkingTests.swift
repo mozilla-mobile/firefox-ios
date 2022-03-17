@@ -219,7 +219,7 @@ class BookmarkingTests: BaseTestCase {
         // Remove by long press and select option from context menu
         app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].cells["action_bookmark_remove"].tap()
+        app.tables["Context Menu"].cells[ImageIdentifiers.actionRemoveBookmark].tap()
         checkItemsInBookmarksList(items: 0)
     }*/
 

@@ -30,7 +30,7 @@ class FirstRunTourTests: BaseTestCase {
     private func tapStartBrowsingButton() {
         app.buttons["startBrowsingButtonSyncView"].tap()
         // User starts in HomePanelScreen with the default Top Sites
-        let topSites = app.collectionViews.cells["TopSitesCell"]
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section]
         waitForExistence(topSites)
     }
     

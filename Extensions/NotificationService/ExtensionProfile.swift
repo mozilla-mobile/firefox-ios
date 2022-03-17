@@ -18,11 +18,6 @@ class ExtensionProfile: BrowserProfile {
 fileprivate let extensionSafeNames = Set(["clients"])
 
 // Mock class required by `BrowserProfile`
-open class PanelDataObservers {
-    init(profile: Any) {}
-}
-
-// Mock class required by `BrowserProfile`
 open class SearchEngines {
     init(prefs: Any, files: Any) {}
 }

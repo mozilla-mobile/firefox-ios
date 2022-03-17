@@ -215,7 +215,7 @@ class ReaderViewTest: BaseTestCase {
         waitForExistence(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements["action_remove"].tap()
+        app.tables.otherElements[ImageIdentifiers.actionRemove].tap()
 
         // Verify the item has been removed
         waitForNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])

@@ -4,100 +4,63 @@
 
 import MozillaAppServices
 
+protocol FirefoxHomeViewModelDelegate: AnyObject {
+    func reloadSection(index: Int?)
+}
+
 class FirefoxHomeViewModel: FeatureFlagsProtocol {
+
+    struct UX {
+        static let topSitesHeight: CGFloat = 90
+        static let homeHorizontalCellHeight: CGFloat = 120
+        static let recentlySavedCellHeight: CGFloat = 136
+        static let historyHighlightsCellHeight: CGFloat = 68
+        static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
+        static let spacingBetweenSections: CGFloat = 24
+        static let sectionInsetsForIpad: CGFloat = 101
+        static let minimumInsets: CGFloat = 15
+        static let libraryShortcutsHeight: CGFloat = 90
+        static let libraryShortcutsMaxWidth: CGFloat = 375
+        static let customizeHomeHeight: CGFloat = 100
+        static let logoHeaderHeight: CGFloat = 85
+    }
 
     // MARK: - Properties
     
     // Privacy of home page is controlled throught notifications since tab manager selected tab
     // isn't always the proper privacy mode that should be reflected on the home page
-    var isPrivate: Bool
+    var isPrivate: Bool {
+        didSet {
+            childViewModels.forEach {
+                $0.updatePrivacyConcernedSection(isPrivate: isPrivate)
+            }
+        }
+    }
+
     let experiments: NimbusApi
     let profile: Profile
     var isZeroSearch: Bool
     var enabledSections = [FirefoxHomeSectionType]()
+    weak var delegate: FirefoxHomeViewModelDelegate?
 
     // Child View models
+    private var childViewModels: [FXHomeViewModelProtocol]
+    var headerViewModel: FxHomeLogoHeaderViewModel
+    var topSiteViewModel: FxHomeTopSitesViewModel
     var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
-    var historyHighlightsViewModel: FxHomeHistoryHightlightsVM
+    var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
 
-    lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
+    private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
         Homescreen(variables: $0)
     }
 
-    lazy var topSitesManager: ASHorizontalScrollCellManager = {
-        let manager = ASHorizontalScrollCellManager()
-        return manager
-    }()
-
     // MARK: - Section availability variables
-    var shouldShowFxLogoHeader: Bool {
-        return featureFlags.isFeatureActiveForBuild(.wallpapers)
-        
-    }
-
-    var isTopSitesSectionEnabled: Bool {
-        homescreen.sectionsEnabled[.topSites] == true
-    }
 
     var isYourLibrarySectionEnabled: Bool {
         UIDevice.current.userInterfaceIdiom != .pad &&
             homescreen.sectionsEnabled[.libraryShortcuts] == true
-    }
-
-    var isJumpBackInSectionEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
-              homescreen.sectionsEnabled[.jumpBackIn] == true,
-              featureFlags.userPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
-        else { return false }
-
-        let tabManager = BrowserViewController.foregroundBVC().tabManager
-        return !isPrivate && !tabManager.recentlyAccessedNormalTabs.isEmpty
-    }
-
-    var shouldShowJumpBackInSection: Bool {
-        guard isJumpBackInSectionEnabled else { return false }
-        return jumpBackInViewModel.jumpBackInList.itemsToDisplay != 0
-    }
-
-    var isRecentlySavedSectionEnabled: Bool {
-        return featureFlags.isFeatureActiveForBuild(.recentlySaved)
-        && homescreen.sectionsEnabled[.recentlySaved] == true
-        && featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
-    }
-
-    // Recently saved section can be enabled but not shown if it has no data - Data is loaded asynchronously
-    var shouldShowRecentlySavedSection: Bool {
-        guard isRecentlySavedSectionEnabled else { return false }
-        return recentlySavedViewModel.hasData
-    }
-
-    var isHistoryHightlightsSectionEnabled: Bool {
-        return featureFlags.isFeatureActiveForBuild(.historyHighlights)
-        && featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled && !isPrivate
-    }
-
-    var shouldShowHistoryHightlightsSection: Bool {
-        guard isHistoryHightlightsSectionEnabled else { return false }
-
-        return historyHighlightsViewModel.hasData
-    }
-
-    var isPocketSectionEnabled: Bool {
-        // For Pocket, the user preference check returns a user preference if it exists in
-        // UserDefaults, and, if it does not, it will return a default preference based on
-        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
-        guard featureFlags.isFeatureActiveForBuild(.pocket),
-              featureFlags.userPreferenceFor(.pocket) == UserFeaturePreference.enabled
-        else { return false }
-
-        return true
-    }
-
-    var shouldShowPocketSection: Bool {
-        guard isPocketSectionEnabled else { return false }
-        return pocketViewModel.hasData
     }
 
     // MARK: - Initializers
@@ -107,53 +70,65 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
          experiments: NimbusApi) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
-        
-        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile)
-        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile)
-        self.historyHighlightsViewModel = FxHomeHistoryHightlightsVM(with: profile)
+
+        self.headerViewModel = FxHomeLogoHeaderViewModel(profile: profile)
+        self.topSiteViewModel = FxHomeTopSitesViewModel(profile: profile, experiments: experiments, isZeroSearch: isZeroSearch)
+        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile, experiments: experiments, isPrivate: isPrivate)
+        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile, experiments: experiments)
+        self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(with: profile, isPrivate: isPrivate)
         self.pocketViewModel = FxHomePocketViewModel(profile: profile, isZeroSearch: isZeroSearch)
+        self.childViewModels = [headerViewModel, topSiteViewModel, jumpBackInViewModel, recentlySavedViewModel, historyHighlightsViewModel, pocketViewModel]
+
         self.experiments = experiments
         self.isPrivate = isPrivate
+
+        topSiteViewModel.delegate = self
     }
     
     // MARK: - Interfaces
+
+    func updateData() {
+        childViewModels.forEach { section in
+            guard section.isEnabled else { return }
+            self.update(section: section)
+        }
+    }
     
-    public func updateEnabledSections() {
+    func updateEnabledSections() {
         enabledSections.removeAll()
 
+        childViewModels.forEach {
+            if $0.shouldShow { enabledSections.append($0.sectionType) }
+        }
+
+        // Sections that have no view model yet
+        // please remove when they have a view model and comform to FXHomeViewModelProtocol
         for section in FirefoxHomeSectionType.allCases {
             switch section {
-            case .logoHeader:
-                if shouldShowFxLogoHeader {
-                    enabledSections.append(.logoHeader)
-                }
-            case .topSites:
-                if isTopSitesSectionEnabled && !topSitesManager.content.isEmpty {
-                    enabledSections.append(.topSites)
-                }
-            case .pocket:
-                if shouldShowPocketSection {
-                    enabledSections.append(.pocket)
-                }
-            case .jumpBackIn:
-                if shouldShowJumpBackInSection {
-                    enabledSections.append(.jumpBackIn)
-                }
-            case .recentlySaved:
-                if shouldShowRecentlySavedSection {
-                    enabledSections.append(.recentlySaved)
-                }
-            case .historyHighlights:
-                if shouldShowHistoryHightlightsSection {
-                    enabledSections.append(.historyHighlights)
-                }
             case .libraryShortcuts:
-                if  isYourLibrarySectionEnabled {
+                if isYourLibrarySectionEnabled {
                     enabledSections.append(.libraryShortcuts)
                 }
             case .customizeHome:
                 enabledSections.append(.customizeHome)
+            default:
+                break
             }
         }
+    }
+
+    private func update(section: FXHomeViewModelProtocol) {
+        section.updateData {
+            guard section.shouldReloadSection else { return }
+            let index = self.enabledSections.firstIndex(of: section.sectionType)
+            self.delegate?.reloadSection(index: index)
+        }
+    }
+}
+
+extension FirefoxHomeViewModel: FxHomeTopSitesViewModelDelegate {
+    func reloadTopSites() {
+        let index = enabledSections.firstIndex(of: FirefoxHomeSectionType.topSites)
+        delegate?.reloadSection(index: index)
     }
 }

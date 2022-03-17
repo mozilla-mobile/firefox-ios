@@ -9,7 +9,10 @@ import Storage
 import SyncTelemetry
 import WidgetKit
 
-struct TopSitesHandler {
+struct TopSitesHelper {
+    
+    static let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
+
     static func getTopSites(profile: Profile) -> Deferred<[Site]> {      
         let maxItems = UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
         return profile.history.getTopSitesWithLimit(maxItems).both(profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
@@ -52,7 +55,7 @@ struct TopSitesHandler {
     
     @available(iOS 14.0, *)
     static func writeWidgetKitTopSites(profile: Profile) {
-        TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { result in
+        TopSitesHelper.getTopSites(profile: profile).uponQueue(.main) { result in
             var widgetkitTopSites = [WidgetKitTopSiteModel]()
             result.forEach { site in
                 // Favicon icon url
@@ -76,8 +79,6 @@ struct TopSitesHandler {
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
     }
-    
-    static let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 }
 
 open class PinnedSite: Site {

@@ -19,7 +19,7 @@ struct HistoryHighlightsCollectionCellUX {
 class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Properties
-    var viewModel: FxHomeHistoryHightlightsVM?
+    var viewModel: FxHomeHistoryHightlightsViewModel?
 
     // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
