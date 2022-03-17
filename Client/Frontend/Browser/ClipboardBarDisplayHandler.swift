@@ -118,26 +118,25 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         }
         return false
     }
+    
+    
+    
+     func checkIfShouldDisplayBar() {
+         // There's no point in doing any of this work unless the
+         // user has asked for it in settings.
+         guard self.prefs.boolForKey("showClipboardBar") ?? false else { return }
+         
+         guard UIPasteboard.general.hasURLs else { return }
+                 
+         UIPasteboard.general.asyncURL2 { url in
 
-    func checkIfShouldDisplayBar() {
-        guard self.prefs.boolForKey("showClipboardBar") ?? false else {
-            // There's no point in doing any of this work unless the
-            // user has asked for it in settings.
-            return
-        }
-        UIPasteboard.general.asyncURL().uponQueue(.main) { res in
-            guard let copiedURL: URL? = res.successValue,
-                let url = copiedURL else {
+            guard let url = url else { return }
+
+            guard self.shouldDisplayBar(url.absoluteString) else {
                 return
             }
 
-            let absoluteString = url.absoluteString
-
-            guard self.shouldDisplayBar(absoluteString) else {
-                return
-            }
-
-            self.lastDisplayedURL = absoluteString
+            self.lastDisplayedURL = url.absoluteString
 
             self.clipboardToast =
                 ButtonToast(
