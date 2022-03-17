@@ -10,6 +10,9 @@ let oldHistoryEntries: [String] = ["Internet for people, not profit — Mozilla"
 let closedWebPageLabel = "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"
 
 class HistoryTests: BaseTestCase {
+    
+    typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
+    
     let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings", "testClearRecentHistory"]
 
     // This DDBB contains those 4 websites listed in the name
@@ -38,8 +41,8 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         // Go to History List from Top Sites and check it is empty
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
-        XCTAssertTrue(app.tables.cells["HistoryPanel.recentlyClosedCell"].exists)
+        waitForExistence(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
+        XCTAssertTrue(app.tables.cells[HistoryPanelA11y.recentlyClosedCell].exists)
     }
 
     func testOpenSyncDevices() {
@@ -56,7 +59,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         // Browse to have an item in history list
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"], timeout: 5)
+        waitForExistence(app.tables.cells[HistoryPanelA11y.recentlyClosedCell], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
 
         // Go to Clear Data
@@ -71,7 +74,7 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
+        waitForExistence(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
         XCTAssertFalse(app.tables.cells.staticTexts[webpage["label"]!].exists)
     }
 
@@ -301,7 +304,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables["History List"], timeout: 5)
+        waitForExistence(app.tables[HistoryPanelA11y.tableView], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts["Example Domain"].exists)
     }
 

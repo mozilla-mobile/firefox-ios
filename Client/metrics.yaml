@@ -876,6 +876,39 @@ library:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
 
+# History Panel
+history:
+  group_list:
+    type: counter
+    description: |
+      Counts the number of times a user has selected a
+      search term group inside the history panel. Selecting
+      this item will navigate them to a view containing a list
+      of all Site items that appear in that group.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2931
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-12-01"
+  selected_item:
+    type: labeled_counter
+    description: |
+      Counts the number of times a user selected an item from
+      the history panel. This labeled counter will tell apart
+      items that appear inside a group, and those that do not.
+    labels:
+      - group-item
+      - non-grouped-item
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2931
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-12-01"
+
 # Legacy IDs for continuity and for deletion-request
 legacy.ids:
   client_id:
