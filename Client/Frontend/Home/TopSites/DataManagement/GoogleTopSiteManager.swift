@@ -15,6 +15,7 @@ class GoogleTopSiteManager {
         // US and rest of the world google urls
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
         static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
+        static let reservedSpaceCount = 1
     }
 
     // No Google Top Site, it should be removed, if it already exists for invalid region
@@ -68,9 +69,9 @@ class GoogleTopSiteManager {
         return pinnedSite
     }
 
-    func shouldAddGoogleTopSite(pinnedSiteCount: Int, maxItems: Int) -> Bool {
+    func shouldAddGoogleTopSite(pinnedSiteCount: Int, totalNumberOfShownTiles: Int) -> Bool {
         let shouldShow = !isHidden && suggestedSiteData() != nil
-        return shouldShow && (hasAdded || pinnedSiteCount < maxItems)
+        return shouldShow && (hasAdded || pinnedSiteCount < totalNumberOfShownTiles)
     }
 
     func removeGoogleTopSite(site: Site) {
