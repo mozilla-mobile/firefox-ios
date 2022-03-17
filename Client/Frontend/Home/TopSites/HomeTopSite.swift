@@ -12,10 +12,21 @@ class HomeTopSite {
     var title: String
     var image: UIImage?
 
-    var isPinned: Bool
-    var isSuggested: Bool
-    var isGoogleGUID: Bool
-    var isGoogleURL: Bool
+    var isPinned: Bool {
+        return (site as? PinnedSite) != nil
+    }
+
+    var isSuggested: Bool {
+        return (site as? SuggestedSite) != nil
+    }
+
+    var isGoogleGUID: Bool {
+        return site.guid == GoogleTopSiteManager.Constants.googleGUID
+    }
+
+    var isGoogleURL: Bool {
+        return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
+    }
 
     var imageLoaded: ((UIImage?) -> Void)?
     var identifier = UUID().uuidString
@@ -27,11 +38,6 @@ class HomeTopSite {
         } else {
             title = site.tileURL.shortDisplayString
         }
-
-        isPinned = ((site as? PinnedSite) != nil)
-        isSuggested = ((site as? SuggestedSite) != nil)
-        isGoogleGUID = site.guid == GoogleTopSiteManager.Constants.googleGUID
-        isGoogleURL = site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
 
         let imageHelper = SiteImageHelper(profile: profile)
         imageHelper.fetchImageFor(site: site,
