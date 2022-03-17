@@ -37,7 +37,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         }
     }
 
-    let experiments: NimbusApi
+    let nimbus: FxNimbus
     let profile: Profile
     var isZeroSearch: Bool
     var enabledSections = [FirefoxHomeSectionType]()
@@ -52,9 +52,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
 
-    private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
-        Homescreen(variables: $0)
-    }
+    lazy var homescreen = nimbus.features.homescreenFeature.value()
 
     // MARK: - Section availability variables
 
@@ -67,7 +65,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     init(profile: Profile,
          isZeroSearch: Bool = false,
          isPrivate: Bool,
-         experiments: NimbusApi) {
+         nimbus: FxNimbus = FxNimbus.shared) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
@@ -78,8 +76,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(with: profile, isPrivate: isPrivate)
         self.pocketViewModel = FxHomePocketViewModel(profile: profile, isZeroSearch: isZeroSearch)
         self.childViewModels = [headerViewModel, topSiteViewModel, jumpBackInViewModel, recentlySavedViewModel, historyHighlightsViewModel, pocketViewModel]
-
-        self.experiments = experiments
+        self.nimbus = nimbus
         self.isPrivate = isPrivate
 
         topSiteViewModel.delegate = self
