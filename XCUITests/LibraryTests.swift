@@ -18,7 +18,7 @@ class LibraryTestsIpad: IpadOnlyTestCase {
         waitForExistence(app.tables["Bookmarks List"])
         // Go to a different panel, like History
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables["History List"])
+        waitForExistence(app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView])
     }
 }
 

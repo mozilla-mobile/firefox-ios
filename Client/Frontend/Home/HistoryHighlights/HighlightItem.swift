@@ -16,24 +16,6 @@ protocol HighlightItem {
     var type: HighlightItemType { get }
 }
 
-extension ASGroup: HighlightItem {
-    var type: HighlightItemType {
-        return .group
-    }
-
-    var displayTitle: String {
-        return searchTerm
-    }
-
-    var description: String? {
-        return "\(groupedItems.count)"
-    }
-
-    var siteUrl: URL? {
-        return nil
-    }
-}
-
 extension HistoryHighlight: HighlightItem {
     var type: HighlightItemType {
         return .item

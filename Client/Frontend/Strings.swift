@@ -244,10 +244,13 @@ extension String {
         }
 
         public struct History {
+            public static let HistoryPanelClearHistoryButtonTitle = MZLocalizedString("HistoryPanel.ClearHistoryButtonTitle", value: "Clear Recent History…", comment: "Title for button in the history panel to clear recent history", lastUpdated: .unknown)
             public static let SearchHistoryPlaceholder = MZLocalizedString("LibraryPanel.History.SearchHistoryPlaceholder.v99", value: "Enter search terms", comment: "In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history.", lastUpdated: .v99)
             public static let NoHistoryResult = MZLocalizedString("LibraryPanel.History.NoHistoryFound.v99", value: "No history found", comment: "In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history.", lastUpdated: .v99)
             public static let RecentlyClosedTabs = MZLocalizedString("LibraryPanel.History.RecentlyClosedTabs.v99", value: "Recently Closed Tabs", comment: "In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs.", lastUpdated: .v99)
+            public static let RecentlyClosedTabsButtonTitle = MZLocalizedString("HistoryPanel.RecentlyClosedTabsButton.Title", value: "Recently Closed", comment: "Title for the Recently Closed button in the History Panel", lastUpdated: .unknown)
             public static let SyncedFromOtherDevices = MZLocalizedString("LibraryPanel.History.SyncedFromOtherDevices.v99", value: "Synced from Other Devices", comment: "In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account.", lastUpdated: .v99)
+            public static let SyncedHistory = MZLocalizedString("LibraryPanel.History.SyncedHistory.v99", value: "Synced History", comment: "Within the History Panel, users can see the option of viewing their history from sycned tabs.", lastUpdated: .v99)
         }
 
         public struct ReadingList {
@@ -556,9 +559,7 @@ extension String {
     public static let EmptySyncedTabsPanelNullStateDescription = MZLocalizedString("HistoryPanel.EmptySyncedTabsNullState.Description", value: "Your tabs from other devices show up here.", comment: "Description for the empty synced tabs null state in the History Panel", lastUpdated: .unknown)
     public static let SyncedTabsTableViewCellDescription = MZLocalizedString("HistoryPanel.SyncedTabsCell.Description.Pluralized", value: "%d device(s) connected", comment: "Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel", lastUpdated: .unknown)
     public static let HistoryPanelEmptyStateTitle = MZLocalizedString("HistoryPanel.EmptyState.Title", value: "Websites you’ve visited recently will show up here.", comment: "Title for the History Panel empty state.", lastUpdated: .unknown)
-    public static let RecentlyClosedTabsButtonTitle = MZLocalizedString("HistoryPanel.RecentlyClosedTabsButton.Title", value: "Recently Closed", comment: "Title for the Recently Closed button in the History Panel", lastUpdated: .unknown)
     public static let RecentlyClosedTabsPanelTitle = MZLocalizedString("RecentlyClosedTabsPanel.Title", value: "Recently Closed", comment: "Title for the Recently Closed Tabs Panel", lastUpdated: .unknown)
-    public static let HistoryPanelClearHistoryButtonTitle = MZLocalizedString("HistoryPanel.ClearHistoryButtonTitle", value: "Clear Recent History…", comment: "Title for button in the history panel to clear recent history", lastUpdated: .unknown)
     public static let FirefoxHomePage = MZLocalizedString("Firefox.HomePage.Title", value: "Firefox Home Page", comment: "Title for firefox about:home page in tab history list", lastUpdated: .unknown)
     public static let HistoryPanelDelete = MZLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.", lastUpdated: .unknown)
 }

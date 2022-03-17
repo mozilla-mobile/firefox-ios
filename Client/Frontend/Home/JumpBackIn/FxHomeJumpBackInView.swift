@@ -118,7 +118,7 @@ extension FxHomeJumpBackInCollectionCell: UICollectionViewDataSource {
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
 
         let descriptionText = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
-        let faviconImage = UIImage(imageLiteralResourceName: "recently_closed").withRenderingMode(.alwaysTemplate)
+        let faviconImage = UIImage(imageLiteralResourceName: ImageIdentifiers.stackedTabsIcon).withRenderingMode(.alwaysTemplate)
         let cellViewModel = FxHomeHorizontalCellViewModel(titleText: group.searchTerm.localizedCapitalized,
                                                           descriptionText: descriptionText,
                                                           tag: indexPath.item,

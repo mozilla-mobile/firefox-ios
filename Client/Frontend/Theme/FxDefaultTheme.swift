@@ -37,6 +37,7 @@ fileprivate struct FxDefaultColourPalette: ThemeColourPalette {
     var layer2: UIColor { return UIColor(named: "Layer2")! }
     var layer2Blur: UIColor { return UIColor(named: "Layer2Blur")! }
     var layer3: UIColor { return UIColor(named: "Layer3")! }
+    var layer4: UIColor { return UIColor(named: "Layer4")! }
     var layerEmphasis: UIColor { return UIColor(named: "LayerEmphasis")! }
     var scrim: UIColor { return UIColor(named: "Scrim")! }
     var textDisabled: UIColor { return UIColor(named: "TextDisabled")! }

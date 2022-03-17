@@ -54,6 +54,19 @@ public struct AccessibilityIdentifiers {
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
     }
+    
+    struct LibraryPanels {
+        struct HistoryPanel {
+            static let tableView = "History List"
+            static let clearHistoryCell = "HistoryPanel.clearHistory"
+            static let recentlyClosedCell = "HistoryPanel.recentlyClosedCell"
+            static let syncedHistoryCell = "HistoryPanel.syncedHistoryCell"
+        }
+        
+        struct GroupedList {
+            static let tableView = "grouped-items-table-view"
+        }
+    }
 
     struct Settings {
         static let tableViewController = "AppSettingsTableViewController.tableView"

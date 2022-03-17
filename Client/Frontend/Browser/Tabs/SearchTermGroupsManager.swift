@@ -7,12 +7,6 @@ import Shared
 import Storage
 import MozillaAppServices
 
-struct ASGroup<T> {
-    var searchTerm: String
-    var groupedItems: [T]
-    var timestamp: Timestamp
-}
-
 class SearchTermGroupsManager {
 
     public static func getHighlightGroups(
@@ -67,7 +61,7 @@ class SearchTermGroupsManager {
         guard (items is [Tab] || items is [Site] || items is [HistoryHighlight]) else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
-        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
+        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.global(qos: .userInteractive)) { result in
             guard let historyMetadata = result.successValue else { return completion(nil, [T]()) }
 
             let searchTermMetaDataGroup = buildMetadataGroups(from: historyMetadata)

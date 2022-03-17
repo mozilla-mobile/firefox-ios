@@ -64,35 +64,27 @@ public struct DateGroupedTableData<T: Equatable> {
 
     public func numberOfItemsForSection(_ section: Int) -> Int {
         switch section {
-        case 0:
-            return today.count
-        case 1:
-            return yesterday.count
-        case 2:
-            return lastWeek.count
-        case 3:
-            return lastMonth.count
-        default:
-            return older.count
+        case 0: return today.count
+        case 1: return yesterday.count
+        case 2: return lastWeek.count
+        case 3: return lastMonth.count
+        case 4: return older.count
+        default: return 0
         }
     }
 
     public func itemsForSection(_ section: Int) -> [T] {
         switch section {
-        case 0:
-            return today.map({ $0.item })
-        case 1:
-            return yesterday.map({ $0.item })
-        case 2:
-            return lastWeek.map({ $0.item })
-        case 3:
-            return lastMonth.map({ $0.item })
-        default:
-            return older.map({ $0.item })
+        case 0: return today.map({ $0.item })
+        case 1: return yesterday.map({ $0.item })
+        case 2: return lastWeek.map({ $0.item })
+        case 3: return lastMonth.map({ $0.item })
+        case 4: return older.map({ $0.item })
+        default: return []
         }
     }
     
-    /// Returns all currently fetched (and grouped) items: `[T.item]`.
+    /// Returns all currently fetched items in a single array: `[T.item]`.
     public func allItems() -> [T] {
         let allItems = (today + yesterday + lastWeek + lastMonth + older)
             .map { $0.item }

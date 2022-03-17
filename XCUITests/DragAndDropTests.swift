@@ -256,6 +256,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
     func test3DragAndDropHistoryEntry() {
         if skipPlatform { return }
+        
+        typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
         waitForExistence(app.textFields["url"], timeout: 5)
@@ -265,15 +267,15 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_History)
 
-        let firstEntryOnList = app.tables["History List"].cells.element(boundBy:
+        let firstEntryOnList = app.tables[historyPanelA11y.tableView].cells.element(boundBy:
             5).staticTexts[exampleDomainTitle]
-        let secondEntryOnList = app.tables["History List"].cells.element(boundBy: 2).staticTexts[twitterTitle]
+        let secondEntryOnList = app.tables[historyPanelA11y.tableView].cells.element(boundBy: 2).staticTexts[twitterTitle]
 
         XCTAssertTrue(firstEntryOnList.exists, "first entry before is not correct")
         XCTAssertTrue(secondEntryOnList.exists, "second entry before is not correct")
 
         // Drag and Drop the element and check that the position of the two elements does not change
-        app.tables["History List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.tables["History List"].cells.staticTexts[exampleDomainTitle])
+        app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.tables[historyPanelA11y.tableView].cells.staticTexts[exampleDomainTitle])
 
         XCTAssertTrue(firstEntryOnList.exists, "first entry after is not correct")
         XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
@@ -306,11 +308,13 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     // Will be removed if this is going the final implementation
     func testTryDragAndDropHistoryToURLBar() {
         if skipPlatform { return }
+        
+        typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables["History List"].cells.staticTexts[twitterTitle])
+        waitForExistence(app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle])
 
-        app.tables["History List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
+        app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 
         // It is not allowed to drop the entry on the url field
         let urlBarValue = app.textFields["url"].value as? String
