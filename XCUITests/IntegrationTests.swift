@@ -134,6 +134,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
+        waitForExistence(app.tables.cells.element(boundBy: 1), timeout: 10)
         app.tables.cells.element(boundBy: 1).tap()
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
         XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (administrator) on iOS")
