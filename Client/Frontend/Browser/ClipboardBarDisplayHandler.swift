@@ -120,8 +120,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
     }
     
     func checkIfShouldDisplayBar() {
-        // There's no point in doing any of this work unless the
-        // user has asked for it in settings.
+        // Clipboard bar feature needs to be enabled by users to be activated in the user settings
         guard self.prefs.boolForKey("showClipboardBar") ?? false else { return }
 
         guard UIPasteboard.general.hasURLs,
