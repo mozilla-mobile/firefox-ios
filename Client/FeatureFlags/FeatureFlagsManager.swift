@@ -163,7 +163,7 @@ class FeatureFlagsManager {
         features[.jumpBackIn] = jumpBackIn
 
         /// Use the Nimbus experimentation platform. If this is `true` then
-        /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
+        /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
         let nimbus = FlaggableFeature(withID: .nimbus,
                                       and: profile,
                                       enabledFor: [.release, .beta, .developer])

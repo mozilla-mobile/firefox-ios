@@ -70,12 +70,31 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = FxHomeLogoHeaderViewModel(profile: profile)
-        self.topSiteViewModel = FxHomeTopSitesViewModel(profile: profile, experiments: experiments, isZeroSearch: isZeroSearch)
-        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile, experiments: experiments, isPrivate: isPrivate)
-        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile, experiments: experiments)
-        self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(with: profile, isPrivate: isPrivate)
-        self.pocketViewModel = FxHomePocketViewModel(profile: profile, isZeroSearch: isZeroSearch)
-        self.childViewModels = [headerViewModel, topSiteViewModel, jumpBackInViewModel, recentlySavedViewModel, historyHighlightsViewModel, pocketViewModel]
+        self.topSiteViewModel = FxHomeTopSitesViewModel(
+            profile: profile,
+            isZeroSearch: isZeroSearch,
+            nimbus: nimbus)
+        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(
+            isZeroSearch: isZeroSearch,
+            profile: profile,
+            isPrivate: isPrivate,
+            nimbus: nimbus)
+        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(
+            isZeroSearch: isZeroSearch,
+            profile: profile,
+            nimbus: nimbus)
+        self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(
+            with: profile,
+            isPrivate: isPrivate)
+        self.pocketViewModel = FxHomePocketViewModel(
+            profile: profile,
+            isZeroSearch: isZeroSearch)
+        self.childViewModels = [headerViewModel,
+                                topSiteViewModel,
+                                jumpBackInViewModel,
+                                recentlySavedViewModel,
+                                historyHighlightsViewModel,
+                                pocketViewModel]
         self.nimbus = nimbus
         self.isPrivate = isPrivate
 

@@ -39,7 +39,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     // MARK: - Initializers
     init(profile: Profile,
          isZeroSearch: Bool = false,
-         experiments: NimbusApi = Experiments.shared,
          wallpaperManager: WallpaperManager = WallpaperManager()
     ) {
         self.isZeroSearch = isZeroSearch
