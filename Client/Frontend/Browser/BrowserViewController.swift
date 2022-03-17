@@ -496,7 +496,6 @@ class BrowserViewController: UIViewController {
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
     }
 
     override func viewDidAppear(_ animated: Bool) {

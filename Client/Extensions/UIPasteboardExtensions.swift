@@ -36,6 +36,13 @@ extension UIPasteboard {
             return UIPasteboard.general.string
         }
     }
+    
+    func asyncURL2(completion: @escaping (URL?) -> ()) {
+        DispatchQueue.global().async {
+            let url = UIPasteboard.general.url
+            completion(url)
+        }
+    }
 
     /// Preferred method to get URLs out of the clipboard.
     /// We use Deferred<Maybe<T?>> to fit in to the rest of the Deferred<Maybe> tools
