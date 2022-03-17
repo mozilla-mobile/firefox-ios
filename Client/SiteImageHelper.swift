@@ -45,7 +45,8 @@ class SiteImageHelper {
             fetchHeroImage(for: site) { image, result in
                 guard let heroImage = image else { return }
                 didCompleteFetch = result ?? false
-                DispatchQueue.main.async { completion(heroImage)
+                DispatchQueue.main.async {
+                    completion(heroImage)
                     return
                 }
             }
@@ -53,7 +54,8 @@ class SiteImageHelper {
             fetchFavicon(for: site) { image, result in
                 guard let favicon = image else { return }
                 didCompleteFetch = result ?? false
-                DispatchQueue.main.async { completion(favicon)
+                DispatchQueue.main.async {
+                    completion(favicon)
                     return
                 }
             }
@@ -62,7 +64,10 @@ class SiteImageHelper {
         throttler.throttle { [weak self] in
             if !didCompleteFetch && imageType.peek() != nil,
                let updatedImageType = imageType.next(), shouldFallback {
-                self?.fetchImageFor(site: site, imageType: updatedImageType, shouldFallback: shouldFallback, completion: completion)
+                self?.fetchImageFor(site: site,
+                                    imageType: updatedImageType,
+                                    shouldFallback: shouldFallback,
+                                    completion: completion)
             } else { return }
         }
     }

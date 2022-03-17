@@ -26,43 +26,28 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         }
     }
 
-    var headerImage: UIImage? {
+    func cellHeight() -> CGFloat {
         switch self {
-        case .pocket: return UIImage.templateImageNamed("menu-pocket")
-        case .topSites: return UIImage.templateImageNamed("menu-panel-TopSites")
-        case .libraryShortcuts: return UIImage.templateImageNamed("menu-library")
-        default : return nil
+        case .pocket: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
+        case .jumpBackIn: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight
+        case .recentlySaved: return FirefoxHomeViewModel.UX.recentlySavedCellHeight
+        case .historyHighlights: return FirefoxHomeViewModel.UX.historyHighlightsCellHeight
+        case .topSites: return FirefoxHomeViewModel.UX.topSitesHeight
+        case .libraryShortcuts: return FirefoxHomeViewModel.UX.libraryShortcutsHeight
+        case .customizeHome: return FirefoxHomeViewModel.UX.customizeHomeHeight
+        case .logoHeader: return FirefoxHomeViewModel.UX.logoHeaderHeight
         }
     }
 
-    var footerHeight: CGSize {
+    // Pocket, historyHighlight, recently saved and jump back in should have full width and add inset in their respective sections
+    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3928
+    // Fix pocket & recently saved cell layout to be able to see next column to enable set full width here and set inset in section
+    var parentMinimumInset: CGFloat {
         switch self {
-        case .topSites, .libraryShortcuts: return CGSize(width: 50, height: 5)
-        default: return .zero
-        }
-    }
-
-    func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
-        switch self {
-        case .pocket: return FirefoxHomeUX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
-        case .jumpBackIn: return FirefoxHomeUX.homeHorizontalCellHeight
-        case .recentlySaved: return FirefoxHomeUX.recentlySavedCellHeight
-        case .historyHighlights: return FirefoxHomeUX.historyHighlightsCellHeight
-        case .topSites: return 0 //calculated dynamically
-        case .libraryShortcuts: return FirefoxHomeUX.libraryShortcutsHeight
-        case .customizeHome: return FirefoxHomeUX.customizeHomeHeight
-        case .logoHeader: return FirefoxHomeUX.logoHeaderHeight
-        }
-    }
-
-    // Pocket and historyHighlight should have full width and add inset in their respective sections
-    // TODO: Fix pocket cell layout to be able to see next column to enable set full width here and set inset in section
-    var parentMinimunInset: CGFloat {
-        switch self {
+//        case .recentlySaved: return 0
 //        case .pocket: return 0
-        case .historyHighlights: return 0
-        case .jumpBackIn: return 0
-        default: return FirefoxHomeUX.minimumInsets
+        case .jumpBackIn, .historyHighlights, .topSites: return 0
+        default: return FirefoxHomeViewModel.UX.minimumInsets
         }
     }
 
@@ -76,15 +61,15 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         if (traits.horizontalSizeClass == .regular && UIScreen.main.bounds.size.width != frameWidth) || UIDevice.current.userInterfaceIdiom == .phone {
             currentTraits = UITraitCollection(horizontalSizeClass: .compact)
         }
-        var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
+        var insets = FirefoxHomeViewModel.UX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
         let window = UIWindow.keyWindow
         let safeAreaInsets = window?.safeAreaInsets.left ?? 0
-        insets += parentMinimunInset + safeAreaInsets
+        insets += parentMinimumInset + safeAreaInsets
         return insets
     }
 
     func cellSize(for traits: UITraitCollection, frameWidth: CGFloat) -> CGSize {
-        let height = cellHeight(traits, width: frameWidth)
+        let height = cellHeight()
         let inset = sectionInsets(traits, frameWidth: frameWidth) * 2
 
         return CGSize(width: frameWidth - inset, height: height)
@@ -99,7 +84,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     var cellIdentifier: String {
         switch self {
         case .logoHeader: return FxHomeLogoHeaderCell.cellIdentifier
-        case .topSites: return ASHorizontalScrollCell.cellIdentifier
+        case .topSites: return TopSiteCollectionCell.cellIdentifier
         case .pocket: return FxHomePocketCollectionCell.cellIdentifier
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
         case .recentlySaved: return FxHomeRecentlySavedCollectionCell.cellIdentifier
@@ -112,7 +97,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     var cellType: UICollectionViewCell.Type {
         switch self {
         case .logoHeader: return FxHomeLogoHeaderCell.self
-        case .topSites: return ASHorizontalScrollCell.self
+        case .topSites: return TopSiteCollectionCell.self
         case .pocket: return FxHomePocketCollectionCell.self
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
         case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self

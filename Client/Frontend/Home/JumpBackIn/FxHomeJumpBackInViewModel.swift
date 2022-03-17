@@ -32,15 +32,25 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     private var recentGroups: [ASGroup<Tab>]?
     private let isZeroSearch: Bool
     private let profile: Profile
+    private let experiments: NimbusApi
     private let tabManager: TabManager
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private var isPrivate: Bool
+
+    private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
+        Homescreen(variables: $0)
+    }
 
     init(isZeroSearch: Bool = false,
          profile: Profile,
+         experiments: NimbusApi,
+         isPrivate: Bool,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager) {
 
         self.profile = profile
+        self.experiments = experiments
         self.isZeroSearch = isZeroSearch
+        self.isPrivate = isPrivate
         self.tabManager = tabManager
     }
 
@@ -69,26 +79,6 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
             return 1
         } else {
             return jumpBackInList.itemsToDisplay > 1 ? 2 : 1
-        }
-    }
-
-    /// Update data with tab and search term group managers
-    func updateData(completion: @escaping () -> Void) {
-        recentTabs = tabManager.recentlyAccessedNormalTabs
-
-        if featureFlags.isFeatureBuildAndUserEnabled(.tabTrayGroups) {
-            SearchTermGroupsManager.getTabGroups(with: profile,
-                                                 from: recentTabs,
-                                                 using: .orderedDescending) { [weak self] groups, _ in
-                guard let strongSelf = self else { completion(); return }
-                strongSelf.recentGroups = groups
-                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(from: strongSelf.recentTabs, and: groups)
-                completion()
-            }
-            
-        } else {
-            jumpBackInList = createJumpBackInList(from: recentTabs)
-            completion()
         }
     }
 
@@ -161,5 +151,62 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
 
         return recentTabs
+    }
+
+    /// Update data with tab and search term group managers
+    private func updateJumpBackInData(completion: @escaping () -> Void) {
+        recentTabs = tabManager.recentlyAccessedNormalTabs
+
+        if featureFlags.isFeatureBuildAndUserEnabled(.tabTrayGroups) {
+            SearchTermGroupsManager.getTabGroups(with: profile,
+                                                 from: recentTabs,
+                                                 using: .orderedDescending) { [weak self] groups, _ in
+                guard let strongSelf = self else { completion(); return }
+                strongSelf.recentGroups = groups
+                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(from: strongSelf.recentTabs, and: groups)
+                completion()
+            }
+
+        } else {
+            jumpBackInList = createJumpBackInList(from: recentTabs)
+            completion()
+        }
+    }
+}
+
+// MARK: FXHomeViewModelProtocol
+extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
+
+    var sectionType: FirefoxHomeSectionType {
+        return .jumpBackIn
+    }
+
+    var isEnabled: Bool {
+        guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
+              homescreen.sectionsEnabled[.jumpBackIn] == true,
+              featureFlags.userPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
+        else { return false }
+
+        return !isPrivate
+    }
+
+    var hasData: Bool {
+        return jumpBackInList.itemsToDisplay != 0
+    }
+
+    func updateData(completion: @escaping () -> Void) {
+        // Has to be on main due to tab manager needing main tread
+        // This can be fixed when tab manager has been revisited
+        DispatchQueue.main.async {
+            self.updateJumpBackInData(completion: completion)
+        }
+    }
+
+    var shouldReloadSection: Bool {
+        return true
+    }
+
+    func updatePrivacyConcernedSection(isPrivate: Bool) {
+        self.isPrivate = isPrivate
     }
 }

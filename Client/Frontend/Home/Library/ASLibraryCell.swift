@@ -4,7 +4,7 @@
 
 import Shared
 
-class ASLibraryCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
+class ASLibraryCell: UICollectionViewCell, ReusableCell {
 
     var mainView: UIStackView = .build()
 
@@ -15,6 +15,7 @@ class ASLibraryCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
     }
 
     var libraryButtons: [LibraryShortcutView] = []
+    var buttonActions: [(UIButton) -> Void] = []
 
     let bookmarks = LibraryPanel(title: .AppMenu.AppMenuBookmarksTitleString,
                                  image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark),
@@ -40,35 +41,24 @@ class ASLibraryCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
             mainView.bottomAnchor.constraint(equalTo: bottomAnchor),
             mainView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+    }
 
-        [bookmarks, history, downloads, readingList].forEach { item in
-            let view = LibraryShortcutView()
-            view.button.setImage(item.image, for: .normal)
-            view.titleLabel.text = item.title
-            let words = view.titleLabel.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
-            view.titleLabel.numberOfLines = words == 1 ? 1 : 2
-            view.button.tintColor = item.color
-            view.accessibilityLabel = item.title
-            mainView.addArrangedSubview(view)
-            libraryButtons.append(view)
-        }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        mainView.removeAllArrangedViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme() {
-        libraryButtons.forEach { button in
-            button.titleLabel.textColor = UIColor.theme.homePanel.activityStreamCellTitle
-            button.button.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-            button.button.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-            button.button.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+    func loadLayout() {
+        [bookmarks, history, downloads, readingList].zip(buttonActions).forEach { (item, action) in
+            let view = LibraryShortcutView()
+            view.configure(item, action: action)
+            view.accessibilityLabel = item.title
+            mainView.addArrangedSubview(view)
+            libraryButtons.append(view)
         }
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        applyTheme()
     }
 }

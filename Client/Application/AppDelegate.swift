@@ -425,7 +425,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
             guard let profile = profile else { return }
-            TopSitesHandler.writeWidgetKitTopSites(profile: profile)
+            TopSitesHelper.writeWidgetKitTopSites(profile: profile)
         }
     }
 

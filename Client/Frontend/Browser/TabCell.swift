@@ -33,12 +33,12 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     }
 
     lazy private var faviconBG: UIView = .build { view in
-        view.layer.cornerRadius = TopSiteCellUX.cellCornerRadius
-        view.layer.borderWidth = TopSiteCellUX.borderWidth
+        view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
+        view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = TopSiteCellUX.shadowRadius
+        view.layer.shadowRadius = TopSiteItemCell.UX.shadowRadius
         view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        view.layer.borderColor = TopSiteCellUX.borderColor.cgColor
+        view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
         view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
     }
@@ -55,7 +55,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.clear
-        view.layer.cornerRadius = TopSiteCellUX.iconCornerRadius
+        view.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
         view.layer.masksToBounds = true
     }
 
@@ -147,11 +147,11 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
             faviconBG.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 10),
             faviconBG.centerXAnchor.constraint(equalTo: centerXAnchor),
-            faviconBG.heightAnchor.constraint(equalToConstant: TopSiteCellUX.backgroundSize.height),
-            faviconBG.widthAnchor.constraint(equalToConstant: TopSiteCellUX.backgroundSize.width),
+            faviconBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height),
+            faviconBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.width),
 
-            smallFaviconView.heightAnchor.constraint(equalToConstant: TopSiteCellUX.iconSize.height),
-            smallFaviconView.widthAnchor.constraint(equalToConstant: TopSiteCellUX.iconSize.width),
+            smallFaviconView.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.iconSize.height),
+            smallFaviconView.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.iconSize.width),
             smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
             smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
         ])

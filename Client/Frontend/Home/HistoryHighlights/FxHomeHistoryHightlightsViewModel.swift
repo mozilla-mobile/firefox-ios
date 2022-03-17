@@ -6,11 +6,12 @@ import Foundation
 import Storage
 import UIKit
 
-class FxHomeHistoryHightlightsVM: FeatureFlagsProtocol {
+class FxHomeHistoryHightlightsViewModel {
 
     // MARK: - Properties & Variables
     var historyItems: [HighlightItem]?
     private var profile: Profile
+    private var isPrivate: Bool
     private var tabManager: TabManager
     private var foregroundBVC: BrowserViewController
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
@@ -33,10 +34,6 @@ class FxHomeHistoryHightlightsVM: FeatureFlagsProtocol {
 
         return count < HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn ? count : HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
     }
-
-    var hasData: Bool {
-        return !(historyItems?.isEmpty ?? true)
-    }
     
     /// Group weight used to create collection view compositional layout
     /// Case 1: For compact and a single column use 0.9 to ocuppy must of the width of the parent
@@ -55,9 +52,11 @@ class FxHomeHistoryHightlightsVM: FeatureFlagsProtocol {
 
     // MARK: - Inits
     init(with profile: Profile,
+         isPrivate: Bool,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
          foregroundBVC: BrowserViewController = BrowserViewController.foregroundBVC()) {
         self.profile = profile
+        self.isPrivate = isPrivate
         self.tabManager = tabManager
         self.foregroundBVC = foregroundBVC
 
@@ -65,11 +64,8 @@ class FxHomeHistoryHightlightsVM: FeatureFlagsProtocol {
     }
 
     // MARK: - Public methods
-    public func updateData(completion: @escaping () -> Void) {
-        loadItems(completion: completion)
-    }
 
-    public func recordSectionHasShown() {
+    func recordSectionHasShown() {
         if !hasSentSectionEvent {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .view,
@@ -80,7 +76,7 @@ class FxHomeHistoryHightlightsVM: FeatureFlagsProtocol {
         }
     }
 
-    public func switchTo(_ highlight: HighlightItem) {
+    func switchTo(_ highlight: HighlightItem) {
         if foregroundBVC.urlBar.inOverlayMode {
             foregroundBVC.urlBar.leaveOverlayMode()
         }
@@ -98,14 +94,36 @@ class FxHomeHistoryHightlightsVM: FeatureFlagsProtocol {
     // MARK: - Private Methods
 
     private func loadItems(completion: @escaping () -> Void) {
-        HistoryHighlightsManager.getHighlightsData(
-            with: profile,
-            and: tabManager.tabs,
-            shouldGroupHighlights: featureFlags.isFeatureActiveForBuild(.historyGroups)
-        ) { [weak self] highlights in
-
+        HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
             self?.historyItems = highlights
             completion()
         }
+    }
+}
+
+// MARK: FXHomeViewModelProtocol
+extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+
+    var sectionType: FirefoxHomeSectionType {
+        return .historyHighlights
+    }
+
+    var isEnabled: Bool {
+        return featureFlags.isFeatureActiveForBuild(.historyHighlights)
+        && featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled && !isPrivate
+    }
+
+    var hasData: Bool {
+        return !(historyItems?.isEmpty ?? true)
+    }
+
+    func updateData(completion: @escaping () -> Void) {
+        loadItems(completion: completion)
+    }
+
+    var shouldReloadSection: Bool { return true }
+
+    func updatePrivacyConcernedSection(isPrivate: Bool) {
+        self.isPrivate = isPrivate
     }
 }

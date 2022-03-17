@@ -48,22 +48,6 @@ enum TabDisplaySection: Int, CaseIterable {
     case inactiveTabs
     case groupedTabs
     case regularTabs
-
-    var title: String? {
-        switch self {
-        case .regularTabs: return .FirefoxHomepage.Pocket.SectionTitle
-        case .inactiveTabs: return .RecentlySavedSectionTitle
-        default: return nil
-        }
-    }
-
-    var image: UIImage? {
-        switch self {
-        case .regularTabs: return UIImage.templateImageNamed("menu-pocket")
-        case .inactiveTabs: return UIImage.templateImageNamed("menu-pocket")
-        default: return nil
-        }
-    }
 }
 
 enum TabDisplayType {
