@@ -49,6 +49,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         super.init(style: .grouped)
 
         self.title = .SettingsHomePageSectionName
+        self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
     }
 
     required init?(coder aDecoder: NSCoder) {
