@@ -215,12 +215,13 @@ class HomePageSettingsUITests: BaseTestCase {
     func testCustomizeHomepage() {
         if !iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
+            waitForExistence(app.cells.otherElements["Bookmarks"], timeout: 5)
             app.cells.otherElements["Bookmarks"].swipeUp()
-            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: 15)
+            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: 25)
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
         // Verify default settings
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: 10)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: 20)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists)
