@@ -125,9 +125,10 @@ async def schedule_build(client, branch, commit, workflow, locales, derived_data
         },
     }
 
-    parsed_data = json.dumps(data)
+    print(data)
 
-    response = await do_http_request_json(client, url, method="post", json=parsed_data)
+    response = await do_http_request_json(client, url, method="post", json=data)
+    await asyncio.sleep(60)
     if response.get("status", "") != "ok":
         raise Exception(f"Bitrise status is not ok. Got: {response}")
 
@@ -216,7 +217,9 @@ async def do_http_request_json(client, url, method="get", **kwargs):
     log.debug(f"Making request {method_and_url}...")
 
     http_function = getattr(client, method)
+    await asyncio.sleep(30)
     async with http_function(url, **kwargs) as r:
+        await asyncio.sleep(30)
         log.debug(f"{method_and_url} returned HTTP code {r.status}")
         response = await r.json()
 
