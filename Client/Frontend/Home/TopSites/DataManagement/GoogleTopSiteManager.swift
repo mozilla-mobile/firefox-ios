@@ -12,9 +12,12 @@ class GoogleTopSiteManager {
     struct Constants {
         // A guid is required in the case the site might become a pinned site
         static let googleGUID = "DefaultGoogleGUID"
+
         // US and rest of the world google urls
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
         static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
+
+        // The number of tiles taken by Google top site manager
         static let reservedSpaceCount = 1
     }
 
