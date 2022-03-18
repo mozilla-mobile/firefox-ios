@@ -209,8 +209,6 @@ extension FxAWebViewModel {
                 }
                 """
             case .emailLoginFlow, .qrCode:
-            // Record Data - Login Flow webpage load started
-            // TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .fxaLoginWebpage)
                 data = """
                     { capabilities:
                         { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },

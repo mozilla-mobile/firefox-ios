@@ -179,9 +179,12 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
 
 extension FxAWebViewController {
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+                               change: [NSKeyValueChangeKey: Any]?,
+                               context: UnsafeMutableRawPointer?) {
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
-            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog, severity: .error, description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
+                               severity: .error, description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
         
