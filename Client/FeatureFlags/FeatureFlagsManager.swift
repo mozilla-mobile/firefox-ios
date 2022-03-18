@@ -144,7 +144,7 @@ class FeatureFlagsManager {
 
         let historyHighlights = FlaggableFeature(withID: .historyHighlights,
                                                  and: profile,
-                                                 enabledFor: [.release, .beta, .developer])
+                                                 enabledFor: [.developer])
         features[.historyHighlights] = historyHighlights
 
         let historyGroups = FlaggableFeature(withID: .historyGroups,
