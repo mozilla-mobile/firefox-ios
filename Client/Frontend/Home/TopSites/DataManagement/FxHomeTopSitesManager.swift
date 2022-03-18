@@ -160,7 +160,7 @@ private extension Array where Element == Site {
     ///   - sites: The top sites to add the sponsored tile to
     mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile]) {
         var siteAdded = 0
-        for index in (0..<FxHomeTopSitesManager.maximumNumberOfSponsoredTile) {
+        for index in (0..<contiles.count) {
 
             guard siteAdded < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
             let site = SponsoredTile(contile: contile)
@@ -170,6 +170,9 @@ private extension Array where Element == Site {
 
             insert(site, at: 0)
             siteAdded += 1
+
+            // Do not add more sponsored tile if we reach the maximum
+            guard siteAdded < FxHomeTopSitesManager.maximumNumberOfSponsoredTile else { break }
         }
     }
 
