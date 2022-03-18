@@ -53,6 +53,15 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         XCTAssertEqual(manager.numberOfRows, 3)
     }
 
+    func testLoadTopSitesData_withoutCalculationHasData() {
+        let manager = createManager()
+
+        testLoadData(manager: manager, numberOfTilesPerRow: nil) {
+            XCTAssertEqual(manager.hasData, true)
+            XCTAssertEqual(manager.siteCount, 0)
+        }
+    }
+
     func testLoadTopSitesData() {
         let manager = createManager()
 
@@ -299,11 +308,13 @@ extension FxHomeTopSitesManagerTests {
         return topSitesManager
     }
 
-    func testLoadData(manager: FxHomeTopSitesManager, numberOfTilesPerRow: Int, completion: @escaping () -> Void) {
+    func testLoadData(manager: FxHomeTopSitesManager, numberOfTilesPerRow: Int?, completion: @escaping () -> Void) {
         let expectation = expectation(description: "Top sites data should be loaded")
 
         manager.loadTopSitesData {
-            manager.calculateTopSiteData(numberOfTilesPerRow: numberOfTilesPerRow)
+            if let numberOfTilesPerRow = numberOfTilesPerRow {
+                manager.calculateTopSiteData(numberOfTilesPerRow: numberOfTilesPerRow)
+            }
             completion()
             expectation.fulfill()
         }

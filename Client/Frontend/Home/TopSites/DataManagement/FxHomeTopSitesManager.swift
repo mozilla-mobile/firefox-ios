@@ -41,7 +41,7 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
     }
 
     var hasData: Bool {
-        return !topSites.isEmpty
+        return !historySites.isEmpty
     }
 
     var siteCount: Int {
