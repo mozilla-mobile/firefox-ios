@@ -41,5 +41,6 @@ extension AppDelegate {
         }
 
         Experiments.intialize(options)
+        FxNimbus.shared.api = Experiments.shared
     }
 }

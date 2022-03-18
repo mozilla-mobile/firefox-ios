@@ -109,6 +109,8 @@ struct FlaggableFeature {
         // Nimbus default options
         case .jumpBackIn, .pocket, .recentlySaved:
             return checkNimbusHomepageFeatures(for: sectionID(from: featureID)).rawValue
+        case .inactiveTabs:
+            return checkNimbusTabTrayFeatures(for: sectionID(from: featureID)).rawValue
         default:
             return UserFeaturePreference.disabled.rawValue
         }
@@ -135,18 +137,36 @@ struct FlaggableFeature {
         guard let featureKey = featureKey else { return }
         profile.prefs.setBool(!isActiveForBuild(), forKey: featureKey)
     }
+}
 
-    // MARK: - Private helper functions
-
-    private func checkNimbusHomepageFeatures(for sectionID: Homescreen.SectionId?, from experiments: NimbusApi = Experiments.shared) -> UserFeaturePreference {
+// MARK: - Nimbus related methods
+extension FlaggableFeature {
+    private func checkNimbusTabTrayFeatures(
+        for sectionID: TabTraySection?,
+        from nimbus: FxNimbus = FxNimbus.shared
+    ) -> UserFeaturePreference {
         guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
 
-        var homePageExperiments = experiments.withVariables(featureId: .homescreen,
-                                                            sendExposureEvent: false) {
-            Homescreen(variables: $0)
+        let nimbusTabTrayConfig = nimbus.features.tabTrayFeature.value()
+
+        if let sectionIsEnabled = nimbusTabTrayConfig.sectionsEnabled[sectionID],
+           sectionIsEnabled {
+            return UserFeaturePreference.enabled
         }
 
-        if let sectionIsEnabled = homePageExperiments.sectionsEnabled[sectionID], sectionIsEnabled {
+        return UserFeaturePreference.disabled
+    }
+
+    private func checkNimbusHomepageFeatures(
+        for sectionID: HomeScreenSection?,
+        from nimbus: FxNimbus = FxNimbus.shared
+    ) -> UserFeaturePreference {
+        guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
+
+        let nimbusHomepageConfig = nimbus.features.homescreenFeature.value()
+
+        if let sectionIsEnabled = nimbusHomepageConfig.sectionsEnabled[sectionID],
+           sectionIsEnabled {
             // For pocket's default value, we also need to check the locale being supported.
             // Here, we want to make sure the section is enabled && locale is supported before
             // we would return that pocket is enabled
@@ -159,7 +179,9 @@ struct FlaggableFeature {
         return UserFeaturePreference.disabled
     }
 
-    private func sectionID(from featureID: FeatureFlagName) -> Homescreen.SectionId? {
+    // Here we encapsulate translation from internal featureIDs to Nimbus' related
+    // feature ids, whose definition can be found in the `nimbus.fml.yaml` file.
+    private func sectionID(from featureID: FeatureFlagName) -> HomeScreenSection? {
         switch featureID {
         case .jumpBackIn:
             return .jumpBackIn
@@ -167,6 +189,15 @@ struct FlaggableFeature {
             return .recentlySaved
         case .pocket:
             return .pocket
+        default:
+            return nil
+        }
+    }
+
+    private func sectionID(from featureID: FeatureFlagName) -> TabTraySection? {
+        switch featureID {
+        case .inactiveTabs:
+            return .inactiveTabs
         default:
             return nil
         }

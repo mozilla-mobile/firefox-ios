@@ -77,7 +77,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     private let tabReuseIdentifer: String
     private var hasSentInactiveTabShownEvent: Bool = false
     var profile: Profile
-    private var inactiveNimbusExperimentStatus: Bool = false
+    private var nimbus: FxNimbus?
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
@@ -87,10 +87,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     }
 
     var shouldEnableInactiveTabs: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.inactiveTabs) else { return false }
-        // TODO: Nimbus Setup and update the following return statement
-        // return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.InactiveTabs) ?? false
-        return true
+        return featureFlags.isFeatureBuildAndUserEnabled(.inactiveTabs)
     }
 
     var orderedTabs: [Tab] {
@@ -169,7 +166,14 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         return isActive
     }
 
-    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String, tabDisplayType: TabDisplayType, profile: Profile) {
+    init(collectionView: UICollectionView,
+         tabManager: TabManager,
+         tabDisplayer: TabDisplayer,
+         reuseID: String,
+         tabDisplayType: TabDisplayType,
+         profile: Profile,
+         nimbus: FxNimbus = FxNimbus.shared
+    ) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
         self.tabManager = tabManager
@@ -177,8 +181,10 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         self.tabReuseIdentifer = reuseID
         self.tabDisplayType = tabDisplayType
         self.profile = profile
+        self.nimbus = nimbus
+
         super.init()
-        self.setupExperiment()
+
         self.inactiveViewModel = InactiveTabViewModel()
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL, .didSetScreenshot)
@@ -194,16 +200,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             }
             self.recordGroupedTabTelemetry()
             self.collectionView.reloadData()
-        }
-    }
-
-    func setupExperiment() {
-        inactiveNimbusExperimentStatus = Experiments.shared.withExperiment(featureId: .inactiveTabs) { branch -> Bool in
-                switch branch {
-                case .some(NimbusExperimentBranch.InactiveTab.control): return false
-                case .some(NimbusExperimentBranch.InactiveTab.treatment): return true
-                default: return false
-            }
         }
     }
 

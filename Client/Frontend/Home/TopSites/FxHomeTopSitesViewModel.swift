@@ -30,7 +30,7 @@ class FxHomeTopSitesViewModel {
     }
 
     private let profile: Profile
-    private let experiments: NimbusApi
+    private let nimbus: FxNimbus
     private let isZeroSearch: Bool
 
     var sectionDimension: SectionDimension = FxHomeTopSitesViewModel.defaultDimension
@@ -49,13 +49,11 @@ class FxHomeTopSitesViewModel {
     // TODO: https://github.com/mozilla-mobile/firefox-ios/issues/10241
     var topSitesShownInSection: Int = 0
 
-    private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
-        Homescreen(variables: $0)
-    }
+    private lazy var homescreen = nimbus.features.homescreenFeature.value()
 
-    init(profile: Profile, experiments: NimbusApi, isZeroSearch: Bool) {
+    init(profile: Profile, isZeroSearch: Bool, nimbus: FxNimbus) {
         self.profile = profile
-        self.experiments = experiments
+        self.nimbus = nimbus
         self.isZeroSearch = isZeroSearch
         tileManager.delegate = self
     }

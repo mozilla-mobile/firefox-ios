@@ -55,8 +55,8 @@ features:
             "jump-back-in": false,
             "recently-saved": false,
             "recent-explorations": false,
-            "pocket": false,
-            "library-shortcuts": false
+            "pocket": true,
+            "library-shortcuts": true
           }
     defaults:
       - channel: Fennec
@@ -70,6 +70,17 @@ features:
             "library-shortcuts": true
           }
         }
+  tabTrayFeature:
+    description: The tab tray screen that the user goes to when they open the tab tray.
+    variables:
+      sections-enabled:
+        description: "This property provides a lookup table of whether or not the given section should be enabled.
+        If the section is enabled, it should be toggleable in the settings screen, and on by default."
+        type: Map<TabTraySection, Boolean>
+        default:
+          {
+            "inactive-tabs": true,
+          }
 types:
   objects:
     AwesomeBar:
@@ -93,7 +104,7 @@ types:
           default: ""
           description: "Is the description of spotlight"
           required: true
-        use-html-content: 
+        use-html-content:
           type: Boolean
           default: true
           description: "Describes whether spotlight should use html content"
@@ -118,17 +129,22 @@ types:
         letter:
           description: A letter icon
     HomeScreenSection:
-        description: The identifiers for the sections of the homescreen.
-        variants:
-          top-sites:
-            description: The frecency and pinned sites.
-          recently-saved:
-            description: The sites the user has bookmarked recently.
-          jump-back-in:
-            description: The tabs the user was looking immediately before being interrupted.
-          recent-explorations:
-            description: The tab groups
-          pocket:
-            description: The pocket section. This should only be available in the US.
-          library-shortcuts:
-            description: Library shortcuts section
+      description: The identifiers for the sections of the homescreen.
+      variants:
+        top-sites:
+          description: The frecency and pinned sites.
+        recently-saved:
+          description: The sites the user has bookmarked recently.
+        jump-back-in:
+          description: The tabs the user was looking immediately before being interrupted.
+        recent-explorations:
+          description: The tab groups
+        pocket:
+          description: The pocket section. This should only be available in the US.
+        library-shortcuts:
+          description: Library shortcuts section
+    TabTraySection:
+      description: The identifiers for the sections of the tab tray.
+      variants:
+        inactive-tabs:
+          description: Tabs that have been automatically closed for the user.
