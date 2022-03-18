@@ -204,9 +204,12 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         // handle the past one hour later
         var sectionToRemove: [Sections]
         
-        if date.isToday() {
+        // Selecting today and every option after gives us a date of the day before... So we adjust.
+        let adjustedDate = date.dayAfter
+        
+        if adjustedDate.isToday() {
             sectionToRemove = [.today]
-        } else if date.isYesterday() {
+        } else if adjustedDate.isYesterday() {
             sectionToRemove = [.today, .yesterday]
         } else {
             sectionToRemove = Sections.allCases
