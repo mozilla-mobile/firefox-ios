@@ -25,12 +25,12 @@ class FxAWebViewTelemetry {
 //    Registration:
 //    -------------
 //    /authorization > /oauth > /oauth/signin > /oauth/signup >
-//    /confirm_signup_code - This is not always guranteed to show up
+//    /confirm_signup_code - This is not always guaranteed to show up
 //
 //    Sign in:
 //    -------------
 //    /authorization > /oauth > /oauth/signin >
-//    /signin_token_code - This is not always guranteed to show up
+//    /signin_token_code - This is not always guaranteed to show up
 //
 //    Other flows:
 //    -------------
@@ -50,7 +50,7 @@ class FxAWebViewTelemetry {
         guard urlComponents.path.isEmpty else { return nil }
         var pathElements = urlComponents.path.components(separatedBy: "/")
         pathElements.reverse()
-        guard let element = pathElements.first(where: {$0 != ""}),
+        guard let element = pathElements.first(where: { $0 != "" }),
               let flow = FxAUrlPathStartedFlow(rawValue: element) else {
             return nil
         }
