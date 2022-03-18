@@ -694,7 +694,7 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.nightModeEnabled.add()
         case (.action, .tap, .nightModeDisabled, _, _):
             GleanMetrics.AppMenu.nightModeDisabled.add()
-        case (.action, .tap, .whatsNew, _, _):
+        case (.action, .open, .whatsNew, _, _):
             GleanMetrics.AppMenu.whatsNew.add()
         case (.action, .open, .settings, _, _):
             GleanMetrics.AppMenu.settings.add()

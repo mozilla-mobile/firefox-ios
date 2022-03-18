@@ -960,19 +960,6 @@ page_action_menu:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
-  add_to_reading_list:
-    type: counter
-    description: |
-        Counts the number of times a user taps Add to Reading List
-        in the page action menu
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
   send_to_device:
     type: counter
     description: |
