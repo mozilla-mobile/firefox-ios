@@ -217,7 +217,9 @@ class HomePageSettingsUITests: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
             waitForExistence(app.cells.otherElements["Bookmarks"], timeout: 5)
             app.cells.otherElements["Bookmarks"].swipeUp()
-            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: 25)
+            waitForExistence(app.collectionViews.scrollViews.firstMatch, timeout: 5)
+            app.collectionViews.scrollViews.firstMatch.swipeUp()
+            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: 5)
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
         // Verify default settings
