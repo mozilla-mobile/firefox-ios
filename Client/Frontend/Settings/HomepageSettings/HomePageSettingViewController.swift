@@ -10,13 +10,12 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
+    var nimbus: FxNimbus
     var currentNewTabChoice: NewTabPage!
     var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
 
-    lazy var homescreen = Experiments.shared.withVariables(featureId: .homescreen, sendExposureEvent: false) {
-        Homescreen(variables: $0)
-    }
+    lazy var homescreen = nimbus.features.homescreenFeature.value()
 
     var isJumpBackInSectionEnabled: Bool {
         let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.jumpBackIn)
@@ -44,8 +43,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     // MARK: - Initializers
-    init(prefs: Prefs) {
+    init(prefs: Prefs,
+         nimbus: FxNimbus = FxNimbus.shared) {
         self.prefs = prefs
+        self.nimbus = nimbus
         super.init(style: .grouped)
 
         self.title = .SettingsHomePageSectionName

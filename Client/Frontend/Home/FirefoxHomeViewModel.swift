@@ -37,7 +37,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         }
     }
 
-    let experiments: NimbusApi
+    let nimbus: FxNimbus
     let profile: Profile
     var isZeroSearch: Bool
     var enabledSections = [FirefoxHomeSectionType]()
@@ -52,9 +52,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
 
-    private lazy var homescreen = experiments.withVariables(featureId: .homescreen, sendExposureEvent: false) {
-        Homescreen(variables: $0)
-    }
+    lazy var homescreen = nimbus.features.homescreenFeature.value()
 
     // MARK: - Section availability variables
 
@@ -67,19 +65,37 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     init(profile: Profile,
          isZeroSearch: Bool = false,
          isPrivate: Bool,
-         experiments: NimbusApi) {
+         nimbus: FxNimbus = FxNimbus.shared) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = FxHomeLogoHeaderViewModel(profile: profile)
-        self.topSiteViewModel = FxHomeTopSitesViewModel(profile: profile, experiments: experiments, isZeroSearch: isZeroSearch)
-        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(isZeroSearch: isZeroSearch, profile: profile, experiments: experiments, isPrivate: isPrivate)
-        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(isZeroSearch: isZeroSearch, profile: profile, experiments: experiments)
-        self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(with: profile, isPrivate: isPrivate)
-        self.pocketViewModel = FxHomePocketViewModel(profile: profile, isZeroSearch: isZeroSearch)
-        self.childViewModels = [headerViewModel, topSiteViewModel, jumpBackInViewModel, recentlySavedViewModel, historyHighlightsViewModel, pocketViewModel]
-
-        self.experiments = experiments
+        self.topSiteViewModel = FxHomeTopSitesViewModel(
+            profile: profile,
+            isZeroSearch: isZeroSearch,
+            nimbus: nimbus)
+        self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(
+            isZeroSearch: isZeroSearch,
+            profile: profile,
+            isPrivate: isPrivate,
+            nimbus: nimbus)
+        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(
+            isZeroSearch: isZeroSearch,
+            profile: profile,
+            nimbus: nimbus)
+        self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(
+            with: profile,
+            isPrivate: isPrivate)
+        self.pocketViewModel = FxHomePocketViewModel(
+            profile: profile,
+            isZeroSearch: isZeroSearch)
+        self.childViewModels = [headerViewModel,
+                                topSiteViewModel,
+                                jumpBackInViewModel,
+                                recentlySavedViewModel,
+                                historyHighlightsViewModel,
+                                pocketViewModel]
+        self.nimbus = nimbus
         self.isPrivate = isPrivate
 
         topSiteViewModel.delegate = self

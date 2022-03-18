@@ -39,7 +39,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     // MARK: - Initializers
     init(profile: Profile,
          isZeroSearch: Bool = false,
-         experiments: NimbusApi = Experiments.shared,
          wallpaperManager: WallpaperManager = WallpaperManager()
     ) {
         self.isZeroSearch = isZeroSearch
@@ -47,8 +46,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         let isPrivate = BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = FirefoxHomeViewModel(profile: profile,
                                               isZeroSearch: isZeroSearch,
-                                              isPrivate: isPrivate,
-                                              experiments: experiments)
+                                              isPrivate: isPrivate)
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
@@ -114,7 +112,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        viewModel.experiments.recordExposureEvent(featureId: .homescreen)
+        viewModel.nimbus.features.homescreenFeature.recordExposure()
         animateFirefoxLogo()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,

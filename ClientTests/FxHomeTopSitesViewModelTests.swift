@@ -18,7 +18,9 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
         super.setUp()
         self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
         self.nimbusMock = NimbusMock()
-        self.viewModel = FxHomeTopSitesViewModel(profile: self.profile, experiments: nimbusMock, isZeroSearch: false)
+        self.viewModel = FxHomeTopSitesViewModel(profile: self.profile,
+                                                 isZeroSearch: false,
+                                                 nimbus: nimbusMock)
     }
 
     override func tearDown() {
