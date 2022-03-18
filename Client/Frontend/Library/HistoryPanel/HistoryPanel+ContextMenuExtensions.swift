@@ -5,7 +5,7 @@
 import UIKit
 import Storage
 
-extension HistoryPanel: LibraryPanelContextMenu {
+extension HistoryPanelV2: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         
