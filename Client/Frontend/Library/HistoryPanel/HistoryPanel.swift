@@ -2,6 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// TODO: HistoryPanel AND HistoryPanelV2 currently coexist until v100. Revert https://github.com/mozilla-mobile/firefox-ios/pull/10259 in v100.
+// Related to: https://mozilla-hub.atlassian.net/browse/FXIOS-2931 
+
 import UIKit
 import Shared
 import Storage
