@@ -184,7 +184,8 @@ extension FxAWebViewController {
                                context: UnsafeMutableRawPointer?) {
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
             Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
-                               severity: .error, description: "Unhandled KVO key: \(keyPath ?? "nil")")
+                               severity: .error,
+                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
         
@@ -194,7 +195,9 @@ extension FxAWebViewController {
                 viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
             }
         default:
-            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog, severity: .error, description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
+                               severity: .error,
+                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
         }
     }
 }
