@@ -12,22 +12,23 @@ protocol FxHomeTopSitesManagerDelegate: AnyObject {
 
 class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
-    private let contileProvider: ContileProvider
     private let googleTopSiteManager: GoogleTopSiteManager
     private let profile: Profile
 
     private var topSites: [HomeTopSite] = []
+    private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue")
+
+    // Raw data to build top sites with
     private var historySites: [Site] = []
     private var contiles: [Contile] = []
 
-    private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue")
     weak var delegate: FxHomeTopSitesManagerDelegate?
     lazy var topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
+    lazy var contileProvider: ContileProvider = ContileProviderMock(successData: ContileProviderMock.mockSuccessData)
     
     init(profile: Profile) {
         self.profile = profile
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
-        self.contileProvider = ContileProviderMock(successData: ContileProviderMock.mockSuccessData)
         topSiteHistoryManager.delegate = self
     }
 
@@ -73,7 +74,6 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     private func loadContiles(group: DispatchGroup) {
         group.enter()
-        // TODO: Should I order depending on the position of the Contile? Or can I trust the JSON order.
         contileProvider.fetchContiles { result in
             if case .success(let contiles) = result {
                 self.contiles = contiles
@@ -102,17 +102,8 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
         let totalNumberOfShownTiles = numberOfTilesPerRow * numberOfRows
         let availableSpacesCount = totalNumberOfShownTiles - pinnedSiteCount
 
-        // Add Sponsored tile if needed
-        let sponsoredTileSpaces = getAvailableSponsoredTilesSpaces(availableSpacesCount: availableSpacesCount)
-        if sponsoredTileSpaces > 0 {
-            addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces, sites: &sites)
-        }
-
-        // Add Google top site if needed
-        if googleTopSiteManager.shouldAddGoogleTopSite(pinnedSiteCount: pinnedSiteCount,
-                                                       totalNumberOfShownTiles: totalNumberOfShownTiles) {
-            googleTopSiteManager.addGoogleTopSite(maxItems: totalNumberOfShownTiles, sites: &sites)
-        }
+        addSponsoredTiles(sites: &sites, availableSpacesCount: availableSpacesCount)
+        addGoogleTopSite(sites: &sites, availableSpacesCount: availableSpacesCount)
 
         topSites = sites.map { HomeTopSite(site: $0, profile: profile) }
 
@@ -128,6 +119,21 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
         return Int(preferredNumberOfRows ?? defaultNumberOfRows)
     }
 
+    private func addSponsoredTiles(sites: inout [Site], availableSpacesCount: Int) {
+        guard shouldShowSponsoredTiles else { return }
+
+        // Google tile has precedence over Sponsored Tiles
+        let sponsoredTileSpaces = availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount
+        if sponsoredTileSpaces > 0 {
+            addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces, sites: &sites)
+        }
+    }
+
+    private func addGoogleTopSite(sites: inout [Site], availableSpacesCount: Int) {
+        guard googleTopSiteManager.shouldAddGoogleTopSite(availableSpacesCount: availableSpacesCount) else { return }
+        googleTopSiteManager.addGoogleTopSite(sites: &sites)
+    }
+
     private func countPinnedSites(sites: [Site]) -> Int {
         var pinnedSites = 0
         sites.forEach {
@@ -140,16 +146,10 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     static let maximumNumberOfSponsoredTile = 1
 
-    /// Get the number of available spaces for sponsored tiles.
-    /// We don't add sponsored tile if number of pins exeeds the available top sites spaces available and
-    /// ensure that Google tile has precedence over Sponsored Tiles
-    /// - Parameters:
-    ///   - availableSpacesCount: The number of spaces available once pinned sites are accounted for
-    /// - Returns: Returns the number of spaces available to add Sponsored tiles in
-    private func getAvailableSponsoredTilesSpaces(availableSpacesCount: Int) -> Int {
-        // TODO: Check for settings user preference with https://mozilla-hub.atlassian.net/browse/FXIOS-3469
-        guard !contiles.isEmpty && featureFlags.isFeatureActiveForBuild(.sponsoredTiles) else { return 0 }
-        return availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount
+    // TODO: Check for settings user preference with https://mozilla-hub.atlassian.net/browse/FXIOS-3469
+    // TODO: Check for nimbus with https://mozilla-hub.atlassian.net/browse/FXIOS-3468
+    private var shouldShowSponsoredTiles: Bool {
+        return !contiles.isEmpty && featureFlags.isFeatureActiveForBuild(.sponsoredTiles)
     }
 
     /// Add sponsored tiles to the top sites.
@@ -163,7 +163,7 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
             guard siteAdded < sponsoredTileSpaces else { return }
             let site = SponsoredTile(contile: contiles[index])
 
-            // Show the next non-duplicated sponsored site if it's already present in the pinned sites
+            // Show the next sponsored site if site is already present in the pinned sites
             guard !siteIsAlreadyPresent(site: site, in: sites) else { continue }
 
             sites.insert(site, at: 0)
@@ -173,11 +173,7 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     // Check to ensure a site isn't already existing in the pinned top sites
     private func siteIsAlreadyPresent(site: Site, in sites: [Site]) -> Bool {
-        return sites.filter {
-            let siteDomain = URL(string: $0.url)?.domainURL
-            let comparedDomain = URL(string: site.url)?.domainURL
-            return siteDomain == comparedDomain && (site as? PinnedSite) == nil
-        }.count > 0
+        return sites.filter { $0.url == site.url && (site as? PinnedSite) == nil }.count > 0
     }
 }
 

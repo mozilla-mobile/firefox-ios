@@ -5486,8 +5486,8 @@
 			children = (
 				8AD3271627E3D12300EAF033 /* ContileProviderMock.swift */,
 				8AB8572B27D945FA0075C173 /* FxHomeTopSitesManager.swift */,
-				43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */,
 				43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */,
+				43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */,
 			);
 			path = DataManagement;
 			sourceTree = "<group>";
