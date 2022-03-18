@@ -32,6 +32,7 @@ class FxAWebViewModel {
     fileprivate let profile: Profile
     fileprivate var deepLinkParams: FxALaunchParams?
     fileprivate(set) var baseURL: URL?
+    let fxAWebViewTelemetry = FxAWebViewTelemetry()
 
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
@@ -208,6 +209,8 @@ extension FxAWebViewModel {
                 }
                 """
             case .emailLoginFlow, .qrCode:
+            // Record Data - Login Flow webpage load started
+            // TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .fxaLoginWebpage)
                 data = """
                     { capabilities:
                         { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
@@ -244,7 +247,8 @@ extension FxAWebViewModel {
                 }
             }
         }
-        
+        // Record login or registration completed telemetry
+        fxAWebViewTelemetry.recordTelemetry(for: .completed)
         onDismissController?()
     }
     
