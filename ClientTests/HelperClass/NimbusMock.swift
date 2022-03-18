@@ -8,24 +8,4 @@ import MozillaAppServices
 
 class NimbusMock: FxNimbus {
 
-    ///
-    /// This should be populated at app launch.
-    ///
-    public var api: FeaturesInterface? {
-        fatalError("Not implemented in mock yet")
-    }
-
-    ///
-    /// Represents all the features supported by Nimbus
-    ///
-    public let features = MockFeatures()
-
-    ///
-    /// A singleton instance of FxNimbus
-    ///
-    public static let shared = NimbusMock()
-}
-
-class MockFeatures: Features {
-    
 }
