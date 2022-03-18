@@ -125,9 +125,7 @@ async def schedule_build(client, branch, commit, workflow, locales, derived_data
         },
     }
 
-    parsed_data = json.dumps(data)
-
-    response = await do_http_request_json(client, url, method="post", json=parsed_data)
+    response = await do_http_request_json(client, url, method="post", json=data)
     if response.get("status", "") != "ok":
         raise Exception(f"Bitrise status is not ok. Got: {response}")
 
