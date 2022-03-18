@@ -1421,7 +1421,7 @@ sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3719
     data_reviews:
-      - todo-add-pr
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-17"
@@ -1432,7 +1432,7 @@ sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3719
     data_reviews:
-      - todo-add-pr
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-17"
@@ -1443,7 +1443,7 @@ sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3719
     data_reviews:
-      - todo-add-pr
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-17"
@@ -1454,7 +1454,7 @@ sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3719
     data_reviews:
-      - todo-add-pr
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-17"
@@ -1465,7 +1465,7 @@ sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3719
     data_reviews:
-      - todo-add-pr
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-17"
@@ -1476,7 +1476,7 @@ sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3719
     data_reviews:
-      - todo-add-pr
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-17"
