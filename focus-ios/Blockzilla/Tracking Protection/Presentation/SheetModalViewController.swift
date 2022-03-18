@@ -57,7 +57,7 @@ class SheetModalViewController: UIViewController {
     
     override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
         super.preferredContentSizeDidChange(forChildContentContainer: container)
-        let height = min(container.preferredContentSize.height, metrics.maximumContainerHeight)
+        let height = min(container.preferredContentSize.height + metrics.closeButtonSize + metrics.closeButtonInset, metrics.maximumContainerHeight)
         animateContainerHeight(height)
     }
     
@@ -92,16 +92,15 @@ class SheetModalViewController: UIViewController {
         
         containerView.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
-            make.trailing.top.equalToSuperview().inset(16)
-            make.height.width.equalTo(30)
+            make.trailing.top.equalToSuperview().inset(metrics.closeButtonInset)
+            make.height.width.equalTo(metrics.closeButtonSize)
         }
     }
     
     // MARK: Present and dismiss animation
     
     func animatePresentContainer() {
-        let springTiming = UISpringTimingParameters(dampingRatio: 0.75, initialVelocity: CGVector(dx: 0, dy: 4))
-        let animator = UIViewPropertyAnimator(duration: 0.4, timingParameters: springTiming)
+        let animator = UIViewPropertyAnimator(duration: .animationDuration, curve: .easeOut)
         
         animator.addAnimations {
             self.containerViewBottomConstraint.update(offset: 0)
@@ -111,7 +110,7 @@ class SheetModalViewController: UIViewController {
     }
     
     func animateContainerHeight(_ height: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
+        let animator = UIViewPropertyAnimator(duration: .animationDuration, curve: .easeOut) {
             self.containerViewHeightConstraint?.update(offset: height)
             self.view.layoutIfNeeded()
         }
@@ -120,7 +119,7 @@ class SheetModalViewController: UIViewController {
     
     func animateShowDimmedView() {
         dimmedView.alpha = 0
-        UIView.animate(withDuration: 0.4) {
+        UIView.animate(withDuration: .animationDuration) {
             self.dimmedView.alpha = self.maximumDimmingAlpha
         }
     }
@@ -130,8 +129,8 @@ class SheetModalViewController: UIViewController {
         dimmedView.alpha = maximumDimmingAlpha
         
         let springTiming = UISpringTimingParameters(dampingRatio: 0.75, initialVelocity: CGVector(dx: 0, dy: 4))
-        let dimmAnimator = UIViewPropertyAnimator(duration: 0.4, timingParameters: springTiming)
-        let dismissAnimator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut)
+        let dimmAnimator = UIViewPropertyAnimator(duration: .animationDuration, timingParameters: springTiming)
+        let dismissAnimator = UIViewPropertyAnimator(duration: .animationDuration, curve: .easeOut)
         
         dismissAnimator.addAnimations {
             self.containerViewBottomConstraint?.update(offset: 1000)
@@ -146,4 +145,8 @@ class SheetModalViewController: UIViewController {
         dimmAnimator.startAnimation()
         dismissAnimator.startAnimation()
     }
+}
+
+fileprivate extension TimeInterval {
+    static let animationDuration: TimeInterval = 0.25
 }

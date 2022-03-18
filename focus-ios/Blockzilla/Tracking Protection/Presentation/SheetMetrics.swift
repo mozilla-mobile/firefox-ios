@@ -11,6 +11,9 @@ public struct SheetMetrics {
     public let cornerRadius: CGFloat = 10
     public let shadowRadius: CGFloat = 10
     public let shadowOpacity: CGFloat = 0.12
+    public let closeButtonSize: CGFloat = 30
+    public let closeButtonInset: CGFloat = 16
+
 
     public var maximumContainerHeight: CGFloat { UIScreen.main.bounds.height }
 }
