@@ -40,8 +40,12 @@ class TooltipViewController: UIViewController {
 
 // MARK: - Delegates
 extension TooltipViewController: UIPopoverPresentationControllerDelegate {
-    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .none
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        .none
+    }
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        dismiss?()
     }
 }
 
