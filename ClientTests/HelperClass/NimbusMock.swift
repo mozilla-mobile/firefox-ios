@@ -18,14 +18,14 @@ class NimbusMock: FxNimbus {
     ///
     /// Represents all the features supported by Nimbus
     ///
-    public let features: Features {
-        fatalError("Not implemented in mock yet")
-    }
+    public let features = MockFeatures()
 
     ///
     /// A singleton instance of FxNimbus
     ///
-    public static let shared: FxNimbus {
-        fatalError("Not implemented in mock yet")
-    }
+    public static let shared = NimbusMock()
+}
+
+class MockFeatures: Features {
+    
 }
