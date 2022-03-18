@@ -43,13 +43,13 @@ class PocketStoriesTests: XCTestCase {
 
         PocketFeed.globalFeed(items: 4).upon { result in
             let items = result
-            XCTAssertEqual(items.count, 2, "We are fetching a static feed. There are only 2 items in it")
+            XCTAssertEqual(items.count, 4, "We are fetching a static feed. There are only 4 items in it")
             self.webServer.stop() // Stop the webserver so we can check caching
 
             // Try again now that the webserver is down
             PocketFeed.globalFeed(items: 4).upon { result in
                 let items = result
-                XCTAssertEqual(items.count, 2, "We are fetching a static feed. There are only 2 items in it")
+                XCTAssertEqual(items.count, 4, "We are fetching a static feed. There are only 4 items in it")
                 let item = items.first
                 //These are all not optional so they should never be nil.
                 //But lets check in case someone decides to change something
