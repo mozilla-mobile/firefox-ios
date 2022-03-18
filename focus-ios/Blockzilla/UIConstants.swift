@@ -14,7 +14,7 @@ struct UIConstants {
         static let deleteAnimationDuration: TimeInterval = 0.25
         static let shieldIconInset: Float = 9
         static let shieldIconIPadInset: Float = 15
-        static let shieldIconSize: Float = 24
+        static let urlButtonSize: Float = 24
         static let overlayAnimationDuration: TimeInterval = 0.25
         static let autocompleteAnimationDuration: TimeInterval = 0.2
         static let autocompleteAfterDelayDuration: TimeInterval = 0.5

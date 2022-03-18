@@ -399,7 +399,7 @@ class URLBar: UIView {
         shieldIcon.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview()
             make.leading.equalTo(leftBarViewLayoutGuide).inset(isIPadRegularDimensions ? UIConstants.layout.shieldIconIPadInset : UIConstants.layout.shieldIconInset)
-            make.width.equalTo(UIConstants.layout.shieldIconSize)
+            make.width.equalTo(UIConstants.layout.urlButtonSize)
         }
     }
     
@@ -1010,19 +1010,19 @@ class TrackingProtectionBadge: UIView {
         trackingProtectionOn.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionOn.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
+            make.width.equalTo(UIConstants.layout.urlButtonSize)
         }
 
         trackingProtectionOff.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionOff.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
+            make.width.equalTo(UIConstants.layout.urlButtonSize)
         }
         
         connectionNotSecure.setContentHuggingPriority(.required, for: .horizontal)
         connectionNotSecure.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
+            make.width.equalTo(UIConstants.layout.urlButtonSize)
         }
     }
 
