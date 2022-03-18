@@ -25,12 +25,9 @@ struct Contile: Codable {
 // TODO: Use in tests only when provider exists
 class ContileProviderMock: ContileProvider {
 
-    var shouldSucceed: Bool = true
-    private var successData: [Contile]
-    private var failureResult = Result.failure(Error.invalidData)
-    private var successResult: ContileProvider.Result
+    private var result: ContileProvider.Result
 
-    static var mockSuccessData: [Contile] {
+    static var defaultSuccessData: [Contile] {
         return [Contile(id: 1,
                         name: "Firefox",
                         url: "https://firefox.com",
@@ -49,13 +46,12 @@ class ContileProviderMock: ContileProvider {
                         position: 2)]
     }
 
-    init(successData: [Contile] = []) {
-        self.successData = successData
-        self.successResult = Result.success(successData)
+    init(result: ContileProvider.Result = .success([])) {
+        self.result = result
     }
 
     func fetchContiles(completion: @escaping (ContileProvider.Result) -> Void) {
-        completion(shouldSucceed ? successResult : failureResult)
+        completion(result)
     }
 
     enum Error: Swift.Error {

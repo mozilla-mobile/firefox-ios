@@ -12,9 +12,7 @@ protocol FxHomeTopSitesManagerDelegate: AnyObject {
 
 class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
-    private let googleTopSiteManager: GoogleTopSiteManager
     private let profile: Profile
-
     private var topSites: [HomeTopSite] = []
     private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue")
 
@@ -24,30 +22,30 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     weak var delegate: FxHomeTopSitesManagerDelegate?
     lazy var topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
-    lazy var contileProvider: ContileProvider = ContileProviderMock(successData: ContileProviderMock.mockSuccessData)
+    lazy var googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
+    lazy var contileProvider: ContileProvider = ContileProviderMock()
     
     init(profile: Profile) {
         self.profile = profile
-        self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
         topSiteHistoryManager.delegate = self
     }
 
     func getSite(index: Int) -> HomeTopSite? {
-        guard !topSites.isEmpty, index < topSites.count, index >= 0 else { return nil }
-        return topSites[index]
+        guard let topSite = topSites[safe: index] else { return nil }
+        return topSite
     }
 
     func getSiteDetail(index: Int) -> Site? {
-        guard !topSites.isEmpty, index < topSites.count, index >= 0 else { return nil }
-        return topSites[index].site
+        guard let siteDetail = topSites[safe: index]?.site else { return nil }
+        return siteDetail
     }
 
     var hasData: Bool {
-        return !historySites.isEmpty
+        return !topSites.isEmpty
     }
 
     var siteCount: Int {
-        return historySites.count
+        return topSites.count
     }
 
     func removePinTopSite(site: Site) {
@@ -125,7 +123,7 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
         // Google tile has precedence over Sponsored Tiles
         let sponsoredTileSpaces = availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount
         if sponsoredTileSpaces > 0 {
-            addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces, sites: &sites)
+            sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces, contiles: contiles)
         }
     }
 
@@ -151,32 +149,37 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
     private var shouldShowSponsoredTiles: Bool {
         return !contiles.isEmpty && featureFlags.isFeatureActiveForBuild(.sponsoredTiles)
     }
+}
+
+// MARK: Site Array extension
+private extension Array where Element == Site {
 
     /// Add sponsored tiles to the top sites.
     /// - Parameters:
     ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
     ///   - sites: The top sites to add the sponsored tile to
-    private func addSponsoredTiles(sponsoredTileSpaces: Int, sites: inout [Site]) {
+    mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile]) {
         var siteAdded = 0
         for index in (0..<FxHomeTopSitesManager.maximumNumberOfSponsoredTile) {
 
-            guard siteAdded < sponsoredTileSpaces else { return }
-            let site = SponsoredTile(contile: contiles[index])
+            guard siteAdded < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
+            let site = SponsoredTile(contile: contile)
 
             // Show the next sponsored site if site is already present in the pinned sites
-            guard !siteIsAlreadyPresent(site: site, in: sites) else { continue }
+            guard !siteIsAlreadyPresent(site: site) else { continue }
 
-            sites.insert(site, at: 0)
+            insert(site, at: 0)
             siteAdded += 1
         }
     }
 
     // Check to ensure a site isn't already existing in the pinned top sites
-    private func siteIsAlreadyPresent(site: Site, in sites: [Site]) -> Bool {
-        return sites.filter { $0.url == site.url && (site as? PinnedSite) == nil }.count > 0
+    private func siteIsAlreadyPresent(site: Site) -> Bool {
+        return filter { $0.url == site.url && ($0 as? PinnedSite) != nil }.count > 0
     }
 }
 
+// MARK: - DataObserverDelegate
 extension FxHomeTopSitesManager: DataObserverDelegate {
 
     func didInvalidateDataSources(refresh forced: Bool, topSitesRefreshed: Bool) {
