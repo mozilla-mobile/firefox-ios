@@ -123,15 +123,35 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: - Tabs quantity
 
-    func test_tabsQuantityAreRecorded() {
-        TelemetryWrapper.recordWillTerminatePreferenceMetrics()
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: 0)
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: 0)
+    func test_tabsNormalQuantity_GleanIsCalled() {
+        let expectTabCount: Int64 = 80
+        let extra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: expectTabCount]
+        TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabNormalQuantity, value: nil, extras: extra)
+
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: expectTabCount)
+    }
+
+    func test_tabsPrivateQuantity_GleanIsCalled() {
+        let expectTabCount: Int64 = 60
+        let extra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: expectTabCount]
+        TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: extra)
+
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: expectTabCount)
+    }
+
+    func test_tabsNormalQuantityWithoutExtras_GleanIsNotCalled() {
+        TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabNormalQuantity, value: nil, extras: nil)
+        XCTAssertFalse(GleanMetrics.Tabs.normalTabsQuantity.testHasValue())
+    }
+
+    func test_tabsPrivateQuantityWithoutExtras_GleanIsNotCalled() {
+        TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: nil)
+        XCTAssertFalse(GleanMetrics.Tabs.privateTabsQuantity.testHasValue())
     }
 }
 
-// MARK: - Helper functions
-extension TelemetryWrapperTests {
+// MARK: - Helper functions to test telemetry
+extension XCTestCase {
 
     func testEventMetricRecordingSuccess<Keys: ExtraKeys, Extras: EventExtras>(metric: EventMetricType<Keys, Extras>,
                                                                                file: StaticString = #file,

@@ -252,19 +252,6 @@ class TelemetryWrapper {
         GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
     }
 
-    // Function for recording metrics that are better recorded when terminating the application
-    static func recordWillTerminatePreferenceMetrics() {
-
-        let delegate = UIApplication.shared.delegate as? AppDelegate
-        if let normalTabsQuantity = delegate?.tabManager.normalTabs.count {
-            GleanMetrics.Tabs.normalTabsQuantity.set(Int64(normalTabsQuantity))
-        }
-
-        if let privateTabsQuantity = delegate?.tabManager.privateTabs.count {
-            GleanMetrics.Tabs.privateTabsQuantity.set(Int64(privateTabsQuantity))
-        }
-    }
-
     @objc func uploadError(notification: NSNotification) {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
         Sentry.shared.send(message: "Upload Error", tag: SentryTag.unifiedTelemetry, severity: .info, description: error.debugDescription)
@@ -279,6 +266,7 @@ extension TelemetryWrapper {
         case prompt = "prompt"
         case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
+        case information = "information"
     }
 
     public enum EventMethod: String {
@@ -327,6 +315,8 @@ extension TelemetryWrapper {
         case setting = "setting"
         case tab = "tab"
         case tabTray = "tab-tray"
+        case tabNormalQuantity = "normal-tab-quantity"
+        case tabPrivateQuantity = "private-tab-quantity"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -490,6 +480,7 @@ extension TelemetryWrapper {
         case topSiteTileType = "tileType"
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
+        case tabsQuantity = "tabsQuantity"
 
         case preference = "pref"
         case preferenceChanged = "to"
@@ -597,6 +588,20 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.navigateTabBackSwipe.add()
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
+
+        case(.information, .background, .tabNormalQuantity, _, let extras):
+            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        case(.information, .background, .tabPrivateQuantity, _, let extras):
+            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Tabs.privateTabsQuantity.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
 
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
