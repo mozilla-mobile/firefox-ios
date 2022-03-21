@@ -128,7 +128,9 @@ class TelemetryWrapperTests: XCTestCase {
         let extra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: expectTabCount]
         TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabNormalQuantity, value: nil, extras: extra)
 
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: expectTabCount)
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity,
+                                  expectedValue: expectTabCount,
+                                  failureMessage: "Should have \(expectTabCount) tabs for normal tabs")
     }
 
     func test_tabsPrivateQuantity_GleanIsCalled() {
@@ -136,7 +138,9 @@ class TelemetryWrapperTests: XCTestCase {
         let extra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: expectTabCount]
         TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: extra)
 
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: expectTabCount)
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
+                                  expectedValue: expectTabCount,
+                                  failureMessage: "Should have \(expectTabCount) tabs for private tabs")
     }
 
     func test_tabsNormalQuantityWithoutExtras_GleanIsNotCalled() {
@@ -188,10 +192,11 @@ extension XCTestCase {
 
     func testQuantityMetricSuccess(metric: QuantityMetricType,
                                    expectedValue: Int64,
+                                   failureMessage: String,
                                    file: StaticString = #file,
                                    line: UInt = #line) {
-        XCTAssertTrue(metric.testHasValue())
-        XCTAssertEqual(try! metric.testGetValue(), expectedValue)
+        XCTAssertTrue(metric.testHasValue(), "Should have value on quantity metric")
+        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
