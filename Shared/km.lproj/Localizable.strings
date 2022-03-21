@@ -744,9 +744,6 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ចម្លងអាសយដ្ឋាន";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "បម្រុងទុកនិងធ្វើសមកាលកម្មទិន្នន័យ";
-
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "ចំណាំ​";
 
@@ -815,9 +812,6 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "បានដកចេញពីគេហទំព័រកំពូល";
-
-/* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "បានយកចេញពីផ្លូវកាត់";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "បានផ្ញើផ្ទាំង";

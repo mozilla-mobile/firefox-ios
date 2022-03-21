@@ -113,6 +113,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "ທີ່ຢູ່ ແລະ ການຄົ້ນຫາ";
 
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "ແທັບທີ່ຢູ່";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "ສົ່ງຕະຫລອດເວລາ";
 
@@ -432,6 +435,12 @@
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "ປັບແຕ່ງຫນ້າທຳອິດ";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d ນາທີ";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "ລຶບ";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "ໄປຂ້າງຫນ້າ";
@@ -903,9 +912,6 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ເພີ່ມເຂົ້າໄປໃນລາຍການອ່ານແລ້ວ";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "ສຳຮອງ ແລະ Sync ຂໍ້ມູນ";
-
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "ບຸກມາກ";
 
@@ -980,9 +986,6 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "ລຶບອອກຈາກເວັບໄຊທຍອດນິຍົມແລ້ວ";
-
-/* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "ລຶບອອກຈາກທາງລັດແລ້ວ";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ແທັບຖືກສົ່ງແລ້ວ";
