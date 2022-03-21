@@ -32,24 +32,24 @@ class SyncTelemetryTests: XCTestCase {
     func testSignInFlow() {
         let flow = fxaWebViewTelemetry.getFlowFromUrl(fxaUrl: MockFxAUrls.mockSigInUrl)
         XCTAssertNotNil(flow)
-        XCTAssert(flow == FxAUrlPathStartedFlow.signinStarted)
+        XCTAssertEqual(flow, FxAUrlPathStartedFlow.signinStarted)
     }
     
     func testSignUpFlow() {
         let flow = fxaWebViewTelemetry.getFlowFromUrl(fxaUrl: MockFxAUrls.mockSignUpUrl)
         XCTAssertNotNil(flow)
-        XCTAssert(flow == FxAUrlPathStartedFlow.signupStarted)
+        XCTAssertEqual(flow, FxAUrlPathStartedFlow.signupStarted)
     }
     
     func testSignInTokenFlow() {
         let flow = fxaWebViewTelemetry.getFlowFromUrl(fxaUrl: MockFxAUrls.mockSignInTockenUrl)
         XCTAssertNotNil(flow)
-        XCTAssert(flow == FxAUrlPathStartedFlow.signinTokenCode)
+        XCTAssertEqual(flow, FxAUrlPathStartedFlow.signinTokenCode)
     }
     
     func testConfirmSignUpCodeFlow() {
         let flow = fxaWebViewTelemetry.getFlowFromUrl(fxaUrl: MockFxAUrls.mockConfirmSignUpCodeUrl)
         XCTAssertNotNil(flow)
-        XCTAssert(flow == FxAUrlPathStartedFlow.confirmSignupCode)
+        XCTAssertEqual(flow, FxAUrlPathStartedFlow.confirmSignupCode)
     }
 }
