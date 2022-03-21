@@ -403,6 +403,12 @@ extension TelemetryWrapper {
         case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
+        case fxaLoginWebpage = "fxa-login-webpage"
+        case fxaLoginCompleteWebpage = "fxa-login-complete-webpage"
+        case fxaRegistrationWebpage = "fxa-registration-webpage"
+        case fxaRegistrationCompletedWebpage = "fxa-registration-completed-webpage"
+        case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
+        case fxaConfirmSignInToken = "fxa-confirm-signin-token"
     }
 
     public enum EventValue: String {
@@ -676,7 +682,18 @@ extension TelemetryWrapper {
             GleanMetrics.Sync.signInSyncPressed.add()
         case (.action, .tap, .syncCreateAccount, _, _):
             GleanMetrics.Sync.createAccountPressed.add()
-
+        case (.firefoxAccount, .view, .fxaRegistrationWebpage, _, _):
+            GleanMetrics.Sync.registrationView.record()
+        case (.firefoxAccount, .view, .fxaRegistrationCompletedWebpage, _, _):
+            GleanMetrics.Sync.registrationCompletedView.record()
+        case (.firefoxAccount, .view, .fxaLoginWebpage, _, _):
+            GleanMetrics.Sync.loginView.record()
+        case (.firefoxAccount, .view, .fxaLoginCompleteWebpage, _, _):
+            GleanMetrics.Sync.loginCompletedView.record()
+        case (.firefoxAccount, .view, .fxaConfirmSignUpCode, _, _):
+            GleanMetrics.Sync.registrationCodeView.record()
+        case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
+            GleanMetrics.Sync.loginTokenView.record()
         // MARK: App menu
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
