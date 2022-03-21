@@ -124,8 +124,8 @@ class Pocket {
         let locale = Locale.current.identifier
         let pocketLocale = locale.replacingOccurrences(of: "_", with: "-")
         var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale), URLQueryItem(name: "version", value: "3")]
-        if let _ = Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String {
-            params.append(URLQueryItem(name: "consumer_key", value: "69688-0187b8205b7a75b05d897e97"))
+        if let pocketKey = Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String {
+            params.append(URLQueryItem(name: "consumer_key", value: pocketKey))
         }
 
         guard let feedURL = URL(string: pocketGlobalFeed)?.withQueryParams(params) else {
