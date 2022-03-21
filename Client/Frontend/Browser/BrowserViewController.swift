@@ -87,7 +87,6 @@ class BrowserViewController: UIViewController {
     weak var gridTabTrayController: GridTabViewController?
     weak var chronTabTrayController: ChronologicalTabsViewController?
     var tabTrayViewController: TabTrayViewController?
-    private var tabsQuantityTelemetry = TabsQuantityTelemetry()
 
     let profile: Profile
     let tabManager: TabManager
@@ -519,7 +518,7 @@ class BrowserViewController: UIViewController {
 
         prepareURLOnboardingContextualHint()
 
-        tabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
     }
 
     private func prepareURLOnboardingContextualHint() {

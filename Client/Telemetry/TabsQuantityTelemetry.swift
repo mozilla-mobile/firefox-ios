@@ -4,21 +4,9 @@
 
 import Foundation
 
-final class TabsQuantityTelemetry {
+struct TabsQuantityTelemetry {
 
-    var notificationCenter = NotificationCenter.default
-
-    init() {
-        setupNotifications(forObserver: self, observing: [UIApplication.didFinishLaunchingNotification])
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
-    func trackTabsQuantity(tabManager: TabManager) {
-        guard !TabsQuantityTelemetry.quantitySent else { return }
-
+    static func trackTabsQuantity(tabManager: TabManager) {
         let privateExtra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: Int64(tabManager.privateTabs.count)]
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .background,
@@ -30,31 +18,5 @@ final class TabsQuantityTelemetry {
                                      method: .background,
                                      object: .tabNormalQuantity,
                                      extras: normalExtra)
-
-        TabsQuantityTelemetry.quantitySent = true
-    }
-
-
-    // MARK: UserDefaults
-
-    /// Make sure we only send the tabs quantity once per app lifecycle
-    static var quantitySent: Bool {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.tabsQuantitySent.rawValue) as? Bool ?? false }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.tabsQuantitySent.rawValue) }
-    }
-
-    private enum UserDefaultsKey: String {
-        case tabsQuantitySent = "com.moz.tabsQuantitySent.key"
-    }
-}
-
-// MARK: - Notifiable
-extension TabsQuantityTelemetry: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.didFinishLaunchingNotification:
-            TabsQuantityTelemetry.quantitySent = false
-        default: break
-        }
     }
 }
