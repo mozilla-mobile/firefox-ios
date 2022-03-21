@@ -1445,7 +1445,7 @@ tabs:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/9627
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-21"
@@ -1458,7 +1458,7 @@ tabs:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/9627
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-21"
