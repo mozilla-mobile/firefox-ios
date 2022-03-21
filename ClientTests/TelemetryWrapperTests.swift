@@ -125,7 +125,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_tabsQuantityAreRecorded() {
         TelemetryWrapper.recordWillTerminatePreferenceMetrics()
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: 1)
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: 0)
         testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: 0)
     }
 }
