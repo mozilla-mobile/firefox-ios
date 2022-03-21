@@ -15,7 +15,7 @@ class TelemetryWrapperTests: XCTestCase {
         Glean.shared.resetGlean(clearStores: true)
     }
 
-    // MARK: Top Site
+    // MARK: - Top Site
 
     func test_topSiteTileWithExtras_GleanIsCalled() {
         let topSitePositionKey = TelemetryWrapper.EventExtraKey.topSitePosition.rawValue
@@ -31,7 +31,7 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertFalse(GleanMetrics.TopSite.tilePressed.testHasValue())
     }
 
-    // MARK: Preferences
+    // MARK: - Preferences
 
     func test_preferencesWithExtras_GleanIsCalled() {
         let extras: [String : Any] = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
@@ -46,7 +46,7 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertFalse(GleanMetrics.Preferences.changed.testHasValue())
     }
 
-    // MARK: Firefox Home Page
+    // MARK: - Firefox Home Page
 
     func test_recentlySavedBookmarkViewWithExtras_GleanIsCalled() {
         let extras: [String : Any] = [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\([].count)"]
@@ -79,7 +79,7 @@ class TelemetryWrapperTests: XCTestCase {
         testLabeledMetricSuccess(metric: GleanMetrics.FirefoxHomePage.firefoxHomepageOrigin)
     }
 
-    // MARK: CFR Analytics
+    // MARK: - CFR Analytics
 
     func test_contextualHintDismissButton_GleanIsCalled() {
         let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: ContextualHintViewType.toolbarLocation.rawValue]
@@ -116,9 +116,17 @@ class TelemetryWrapperTests: XCTestCase {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .contextualHint, value: .pressCFRActionButton)
         XCTAssertFalse(GleanMetrics.CfrAnalytics.pressCfrActionButton.testHasValue())
     }
+
+    // MARK: - Tabs quantity
+
+    func test_tabsQuantityAreRecorded() {
+        TelemetryWrapper.recordWillTerminatePreferenceMetrics()
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: 1)
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: 0)
+    }
 }
 
-// Helper functions
+// MARK: - Helper functions
 extension TelemetryWrapperTests {
 
     func testEventMetricRecordingSuccess<Keys: ExtraKeys, Extras: EventExtras>(metric: EventMetricType<Keys, Extras>,
@@ -148,6 +156,19 @@ extension TelemetryWrapperTests {
     func testLabeledMetricSuccess(metric: LabeledMetricType<CounterMetricType>,
                                   file: StaticString = #file,
                                   line: UInt = #line) {
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
+        XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+    }
+
+    func testQuantityMetricSuccess(metric: QuantityMetricType,
+                                   expectedValue: Int64,
+                                   file: StaticString = #file,
+                                   line: UInt = #line) {
+        XCTAssertTrue(metric.testHasValue())
+        XCTAssertEqual(try! metric.testGetValue(), expectedValue)
+
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)

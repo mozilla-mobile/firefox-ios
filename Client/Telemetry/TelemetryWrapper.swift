@@ -151,7 +151,7 @@ class TelemetryWrapper {
         // record on going to background rather than during initialization.
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(recordPreferenceMetrics(notification:)),
+            selector: #selector(recordEnteredBackgroundPreferenceMetrics(notification:)),
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
@@ -172,7 +172,7 @@ class TelemetryWrapper {
 
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
-    @objc func recordPreferenceMetrics(notification: NSNotification) {
+    @objc func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else { assert(false); return; }
 
         // Record default search engine setting
@@ -250,6 +250,19 @@ class TelemetryWrapper {
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
         // Device Authentication
         GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
+    }
+
+    // Function for recording metrics that are better recorded when terminating the application
+    static func recordWillTerminatePreferenceMetrics() {
+
+        let delegate = UIApplication.shared.delegate as? AppDelegate
+        if let normalTabsQuantity = delegate?.tabManager.normalTabs.count {
+            GleanMetrics.Tabs.normalTabsQuantity.set(Int64(normalTabsQuantity))
+        }
+
+        if let privateTabsQuantity = delegate?.tabManager.privateTabs.count {
+            GleanMetrics.Tabs.privateTabsQuantity.set(Int64(privateTabsQuantity))
+        }
     }
 
     @objc func uploadError(notification: NSNotification) {

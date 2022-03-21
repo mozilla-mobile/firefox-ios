@@ -172,6 +172,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        TelemetryWrapper.recordWillTerminatePreferenceMetrics()
+
         // We have only five seconds here, so let's hope this doesn't take too long.
         profile?._shutdown()
 
