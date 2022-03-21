@@ -15,8 +15,8 @@ class TabsQuantityTelemetryTests: XCTestCase {
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: 0)
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: 1)
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: 0, "Should have 0 private tabs")
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: 1, "Should have 1 normal tab")
     }
 
     func testTrackTabsQuantity_withPrivateTab_gleanIsCalled() {
@@ -25,7 +25,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: 1)
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: 0)
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity, expectedValue: 1, "Should have 1 private tab")
+        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity, expectedValue: 0, "Should have 0 normal tabs")
     }
 }
