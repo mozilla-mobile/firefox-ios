@@ -79,7 +79,7 @@ features:
         type: Map<TabTraySection, Boolean>
         default:
           {
-            "inactive-tabs": true,
+            "inactive-tabs": false,
           }
 types:
   objects:
