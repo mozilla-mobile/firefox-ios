@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import SnapKit
 
 class ShareTrackersViewController: UIViewController {
     
@@ -52,7 +53,7 @@ class ShareTrackersViewController: UIViewController {
     
     lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [shieldLogo, trackerStatsLabel, trackerStatsShareButton])
-        stackView.spacing = 16
+        stackView.spacing = .shareTrackerStackViewSpacing
         stackView.alignment = .center
         stackView.axis = .horizontal
         return stackView
@@ -63,18 +64,28 @@ class ShareTrackersViewController: UIViewController {
         view.addSubview(stackView)
         trackerStatsLabel.text = trackerTitle
         trackerStatsShareButton.snp.makeConstraints {
-            $0.width.equalTo(80)
-            $0.height.equalTo(30)
+            $0.width.equalTo(CGFloat.trackerStatsShareButtonWidth)
+            $0.height.equalTo(CGFloat.trackerStatsShareButtonHeight)
         }
         shieldLogo.snp.makeConstraints {
-            $0.width.height.equalTo(20)
+            $0.size.equalTo(CGFloat.shieldLogoSize)
         }
         stackView.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
+            $0.center.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview().offset(CGFloat.shareTrackersLeadingTrailingOffset)
+            $0.trailing.lessThanOrEqualToSuperview().offset(CGFloat.shareTrackersLeadingTrailingOffset)
         }
     }
     
     @objc private func shareTapped(sender: UIButton) {
         shareTap(sender)
     }
+}
+
+fileprivate extension CGFloat {
+    static let shieldLogoSize: CGFloat = 20
+    static let trackerStatsShareButtonWidth: CGFloat = 80
+    static let trackerStatsShareButtonHeight: CGFloat = 30
+    static let shareTrackersLeadingTrailingOffset: CGFloat = 16
+    static let shareTrackerStackViewSpacing: CGFloat = 16
 }
