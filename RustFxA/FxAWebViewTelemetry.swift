@@ -47,7 +47,7 @@ class FxAWebViewTelemetry {
         guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
         }
-        guard urlComponents.path.isEmpty else { return nil }
+        guard !urlComponents.path.isEmpty else { return nil }
         var pathElements = urlComponents.path.components(separatedBy: "/")
         pathElements.reverse()
         guard let element = pathElements.first(where: { $0 != "" }),

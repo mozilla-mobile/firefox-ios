@@ -1419,7 +1419,8 @@ sync:
     description: |
       Recorded when user opens a registration fxa page
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9946    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9946
+    data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -1429,7 +1430,8 @@ sync:
     description: |
       Recorded when user opens successfully completes registration
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9946    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9946
+    data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -1439,7 +1441,8 @@ sync:
     description: |
       Recorded when user opens login fxa page
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9946    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9946
+    data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -1449,7 +1452,8 @@ sync:
     description: |
       Recorded when user successfully logs in
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9946    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9946
+    data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -1459,7 +1463,8 @@ sync:
     description: |
       Recorded when user is on fxa webpage to confirm signin token
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9946    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9946
+    data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -1469,7 +1474,8 @@ sync:
     description: |
       Recorded when user is on fxa webpage to confirm signup code
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9946    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9946
+    data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10254
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
