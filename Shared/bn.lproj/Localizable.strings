@@ -876,9 +876,6 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "পঠন তালিকায় যোগ করা হয়েছে";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "ব্যাক আপ এবং সিঙ্ক ডেটা";
-
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "বুকমার্ক";
 
@@ -953,9 +950,6 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "টপ সাইটগুলো থেকে সরানো হয়েছে";
-
-/* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "শর্টকাট থেকে সরানো হয়েছে";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ট্যাব প্রেরিত";

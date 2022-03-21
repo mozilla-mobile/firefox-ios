@@ -113,6 +113,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Dirección y búsqueda";
 
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Barra de direcciones";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "Siempre enviar";
 
@@ -362,7 +365,7 @@
 "Downloads.CancelDialog.Cancel" = "Cancelar";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "¿Estás seguro de que quieres cancelar esta descarga?";
+"Downloads.CancelDialog.Message" = "¿De verdad quieres cancelar esta descarga?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Continuar";
@@ -444,6 +447,9 @@
 
 /* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
 "FirefoxHome.Pocket.DiscoverMore" = "Descubrir más";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d min";
 
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle" = "Historias que provocan reflexión";
@@ -548,7 +554,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un dispositivo ha sido desconectado de Firefox Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel" = "Logotipo de Firefox, cambiar el fondo de pantalla, botón";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logotipo de Firefox, cambiar el fondo de pantalla.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Obtén tus pestañas abiertas, marcadores y contraseñas de tus otros dispositivos.";
@@ -787,11 +793,17 @@
 /* History tableview section header */
 "Last week" = "Última semana";
 
-/* In the history panel, this placeholder text inside the search component will indicate that a user can search through their browsing history. */
-"LibraryPanel.History.SearchHistoryPlaceholder" = "Buscar en historial";
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "No se encontró historial";
 
-/* In the history panel, this label indicates that tapping on this item will navigate the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
-"LibraryPanel.History.SyncedHistory" = "Historial sincronizado";
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Pestañas cerradas recientemente";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Ingresa los términos de búsqueda";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Sincronizado de otro dispositivo";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "Más antiguos";
@@ -918,8 +930,14 @@
    Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Marcar como no leído";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "Añadir marcador";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Marcador añadido";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Añadir";
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Fijado en sitios favoritos";
@@ -927,11 +945,14 @@
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "Añadido a atajos";
 
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Añadir";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Añadido a la Lista de lectura";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "Respaldar y sincronizar datos";
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Añadir a atajos";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Marcadores";
@@ -941,6 +962,9 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL copiada al portapapeles";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Personalizar página de inicio";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Descargas";
@@ -957,6 +981,9 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox bloquea los rastreadores de sitios cruzados, los rastreadores sociales, los criptomineros, los creadores de huellas digitales (fingerprinters) y el contenido de rastreo.";
 
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Ayuda";
+
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Historial";
 
@@ -965,6 +992,9 @@
 
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
 "Menu.ManageAccount.Label" = "Administrar cuenta %@";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Nueva pestaña";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "Desactivar el modo nocturno";
@@ -1005,14 +1035,41 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Marcador eliminado";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "Eliminar";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "Eliminar de los atajos";
+
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Removido de los sitios favoritos";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "Eliminado de atajos";
+"Menu.RemovePin.Confirm2.v99" = "Eliminado de atajos";
+
+/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
+"Menu.RemoveReadingList.AlternateLabel.v99" = "Borrar de la Lista de lectura";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "Borrado de la Lista de lectura";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Eliminar";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Compartir";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.SignInToSync.Label.v99" = "Conectarse a Sync";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Pestaña enviada";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Marcadores";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Inicio";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Bloqueado";
@@ -1288,6 +1345,9 @@
 
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Por favor, permite a Firefox acceder a la cámara del dispositivo en ‘Ajustes‘ -> ‘Privacidad‘ -> ‘Cámara‘.";
+
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v99" = "Ve a ‘Ajustes’ > ‘Firefox.’ Permitir que Firefox acceda a la cámara.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Escanear código QR";
@@ -1588,16 +1648,16 @@
 "Settings.Home.Option.Wallpaper" = "Fondo de pantalla";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper" = "Fondo de pantalla de Firefox, patrón amatista, botón";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fondo de pantalla de Firefox, patrón de amatista.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper" = "Fondo de pantalla de Firefox, patrón cerúleo, botón";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fondo de pantalla de Firefox, patrón cerúleo.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper" = "Fondo de pantalla claro predeterminado, botón";
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Fondo de pantalla claro predeterminado.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper" = "Fondo de pantalla de Firefox, patrón de amanecer, botón";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fondo de pantalla de Firefox, patrón de amanecer.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Botón de cambio cíclico del fondo de pantalla de la página de inicio";
@@ -1605,11 +1665,8 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "PANTALLA DE APERTURA";
 
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the string describing the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchDescription" = "Recorre y actualiza la imagen sin salir de la página de inicio.";
-
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle" = "Toca el logo para cambiar el fondo de pantalla";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Cambia el fondo de pantalla tocando el logo de Firefox en la página de inicio";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Fondo de pantalla";
@@ -1712,6 +1769,9 @@
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "Elegir que cargar al abrir una nueva pestaña";
+
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Bloquear imagenes";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Al abrir Firefox";

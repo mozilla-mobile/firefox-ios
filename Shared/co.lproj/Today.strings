@@ -92,13 +92,13 @@
 "TodayWidget.QuickViewGalleryDescription" = "Accidite à e vostre unghjette aperte direttamente da u vostru screnu d’accolta.";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescriptionV2" = "Aghjunghjite accurtatoghji ver di e vostre unghjette aperte.";
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Aghjunghjite accurtatoghji à e vostre unghjette aperte.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Vista presta";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewLargeGalleryDescription" = "Aghjunghjite accurtatoghji ver di e vostre unghjette aperte.";
+"TodayWidget.QuickViewLargeGalleryDescription" = "Aghjunghjite accurtatoghji à e vostre unghjette aperte.";
 
 /* Sub label for Top Sites widget */
 "TodayWidget.QuickViewOpenTabsSubLabel" = "Firefox - Unghjette aperte";
@@ -113,7 +113,7 @@
 "TodayWidget.SearchInPrivateTabLabelV2" = "Ricercà in un’\nunghjetta privata";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "Aghjunghjite accurtatoghji ver di i siti visitati aspessu è pocu fà.";
+"TodayWidget.TopSitesGalleryDescription" = "Aghjunghjite accurtatoghji à i siti visitati aspessu è pocu fà.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Siti principale";

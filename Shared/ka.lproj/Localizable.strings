@@ -113,6 +113,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "მისამართი და ძიება";
 
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "მისამართების ველი";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "გაგზავნა ყოველთვის";
 
@@ -198,7 +201,7 @@
 "Bookmarks.Title.Label" = "დასახელება";
 
 /* The label for the URL of a bookmark */
-"Bookmarks.URL.Label" = "URL";
+"Bookmarks.URL.Label" = "ბმული";
 
 /* Status label for the empty Bookmarks state. */
 "BookmarksPanel.EmptyState.Title" = "თქვენ მიერ ჩანიშნული გვერდები გამოჩნდება აქ.";
@@ -287,8 +290,17 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ბმულის გაზიარება";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "ახლა უკვე შეგიძლიათ ხელსაწყოების ქვემოთ გადატანა, მოხერხებულად გამოყენებისთვის";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "ტექსტის მოხერხებულად შეყვანისთვის, ხელსაწყოები ნაგულისხმევად ქვემოთაა განთავსებული.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Firefox-ის მორგებული საწყისი გვერდით, შეძლებთ მარტივად განაგრძოთ იქიდან, სადაც შეჩერდით. იპოვეთ ბოლოს გახსნილი ჩანართები, სანიშნები და მოძიებული გვერდები.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "ხელსაწყოთა ზოლის პარამეტრები";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "ორი კვირის მოუნახულებელი ჩანართები, აქ გადმოვა.";
@@ -433,6 +445,18 @@
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "საწყისი გვერდის მორგება";
 
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "აღმოაჩინეთ მეტი";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d წთ";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "მეტად სააზროვნო მასალები";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "მოცილება";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "მომდევნო";
 
@@ -485,7 +509,7 @@
 "fxa.signin.create-account-pt-2" = "შექმენით Firefox-ანგარიში.";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "გახსენით კომპიუტერში Firefox და იხილეთ გვერდი firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "ჩართეთ კომპიუტერში Firefox და გახსენით გვერდი firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
 "fxa.signin.ready-to-scan" = "მზადაა წასაკითხად";
@@ -528,6 +552,9 @@
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "მოწყობილობა გამოთიშულია Firefox-სინქრონიზაციიდან";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox-ლოგო, ფონის შეცვლა.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "მიიღეთ წვდომა თქვენს გახსნილ ჩანართებთან, სანიშნებთან და პაროლებთან, ყველა თქვენი მოწყობილობიდან.";
@@ -766,6 +793,18 @@
 /* History tableview section header */
 "Last week" = "ბოლო კვირა";
 
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "ისტორია არაა";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "ბოლოს დახურული ჩანართები";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "შეიყვანეთ საძიებო ფრაზა";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "სხვა მოწყობილობიდან დასინქრონებული";
+
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "უფრო ძველი";
 
@@ -891,8 +930,14 @@
    Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "წაუკითხავად მონიშვნა";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "სანიშნის დამატება";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "ჩანიშნულია";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "დამატება";
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "მიმაგრებული რჩეულ საიტებში";
@@ -900,11 +945,14 @@
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "მალსახმობებში დამატება";
 
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "დამატება";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "დამატებულია წასაკითხებში";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "მარქაფი და დასინქრონება";
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "მალსახმობებში დამატება";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "სანიშნები";
@@ -913,7 +961,10 @@
 "Menu.Copy.Title" = "მისამართის ასლი";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "URL-ს ასლი აღებულია";
+"Menu.CopyURL.Confirm" = "ბმულის ასლი აღებულია";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "საწყისი გვერდის მორგება";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ჩამოტვირთვები";
@@ -930,6 +981,9 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox ზღუდავს საიტთაშორის, სოცქსელის, კრიპტო, ამომცნობ და მეთვალყურე შიგთავსს.";
 
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "დახმარება";
+
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "ისტორია";
 
@@ -938,6 +992,9 @@
 
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
 "Menu.ManageAccount.Label" = "მართვა ანგარიშის %@";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "ახალი ჩანართი";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "ღამის რეჟიმის გამორთვა";
@@ -967,7 +1024,7 @@
 "Menu.PasteAndGo.Title" = "ჩასმა და გადასვლა";
 
 /* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
-"Menu.ReadingList.Label" = "საკითხავი სია";
+"Menu.ReadingList.Label" = "წასაკითხი";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "დაცვის გარეშე გახსნა ხელახლა";
@@ -978,14 +1035,41 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "სანიშნი მოცილებულია";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "მოცილება";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "მოცილება მალსახმობებიდან";
+
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "მოცილება რჩეული საიტებიდან";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "მოცილდა მალსახმობებიდან";
+"Menu.RemovePin.Confirm2.v99" = "მოცილდა მალსახმობებიდან";
+
+/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
+"Menu.RemoveReadingList.AlternateLabel.v99" = "წასაკითხებიდან მოცილება";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "მოცილდა წასაკითხებიდან";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "მოცილება";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "გაზიარება";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.SignInToSync.Label.v99" = "დასინქრონება – შესვლა";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ჩანართი გაიგზავნა";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "სანიშნები";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "საწყისი გვერდი";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "შეიზღუდა";
@@ -1262,6 +1346,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "გთხოვთ, დართოთ Firefox-ს კამერასთან წვდომის ნება ‘პარამეტრებიდან’-> ‘პირადულობა’ -> ‘კამერა’.";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v99" = "გადადით მოწყობილობის „პარამეტრებში“ > „Firefox“. დართეთ Firefox-ს კამერასთან წვდომის ნება.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR კოდის წაკითხვა";
 
@@ -1410,10 +1497,10 @@
 "Settings.AddCustomEngine.TitlePlaceholder" = "საძიებო სისტემა";
 
 /* The title for URL Field */
-"Settings.AddCustomEngine.URLLabel" = "URL";
+"Settings.AddCustomEngine.URLLabel" = "ბმული";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (%s აღნიშნავს საძიებო ტექსტს)";
+"Settings.AddCustomEngine.URLPlaceholder" = "მისამართი (%s აღნიშნავს საძიებო ტექსტს)";
 
 /* Button in Data Management that clears private data for the selected items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "საიტების ყველა მონაცემის წაშლა";
@@ -1557,6 +1644,39 @@
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
 "Settings.Home.Option.Title" = "Firefox საწყისი გვერდი";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "ფონი";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox-ის ფონი, ამეთვისტოს მოხატულობა.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox-ის ფონი, ლაჟვარდოვანი მოხატულობა.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "ნაგულისხმევი სუფთა ფონი.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox-ის ფონი, რიჟრაჟის მოხატულობა.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "საწყისი გვერდის ფონის წრიულად ცვლა";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "ᲡᲐᲬᲧᲘᲡᲘ ᲔᲙᲠᲐᲜᲘ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "შეცვალეთ ფონი Firefox-ის საწყისი გვერდის ნიშანზე შეხებით";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "ფონი";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "ფონი განახლებულია!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "ნახვა";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "გასუფთავება";
 
@@ -1585,7 +1705,7 @@
 "Settings.LoginsAndPasswordsTitle" = "ანგარიშები და პაროლები";
 
 /* Label used to set a custom url as the new tab option (homepage). */
-"Settings.NewTab.CustomURL" = "მითითებული URL";
+"Settings.NewTab.CustomURL" = "საკუთარი ბმული";
 
 /* A description in settings of what the new tab choice means */
 "Settings.NewTab.Description" = "ახალი ჩანართის გახსნისას:";
@@ -1649,6 +1769,9 @@
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "აირჩიეთ რისი ხილვა გსურთ ახალი ჩანართის გახსნისას";
+
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "სურათების შეზღუდვა";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Firefox-ის გახსნისას";
@@ -1740,11 +1863,20 @@
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "ჩანართები";
 
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "ქვემოთ";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "ხელსაწყოთა ზოლი";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "ზემოთ";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "კარგი, გასაგებია";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად ამ გვერდზე.";
+"Settings.TrackingProtection.Alert.Description" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად აღნიშნულ გვერდზე.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ყურადღება!";
@@ -1771,10 +1903,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "ამცირებს მიზნობრივ რეკლამებს და გეხმარებათ აირიდოთ სარეკლამოებისგან თვალის დევნება.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად ამ გვერდზე.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად აღნიშნულ გვერდზე.";
 
 /* Description for standard level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის, ზოგიერთი მეთვალყურე დაიშვება.";
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის, ზოგიერთი მეთვალყურე ნებადართულია.";
 
 /* Description for strict level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStrict.Description" = "შეიზღუდება მეტი მეთვალყურე, რეკლამა, ამომხტომი. გვერდები სწრაფად ჩაიტვირთება, თუმცა შესაძლოა, გაუმართავად იმუშაოს.";

@@ -35,7 +35,7 @@
 "Modified %@" = "Ostatnia modyfikacja: %@";
 
 /* Label displayed when no logins are found after searching. */
-"No logins found" = "Brak danych logowania";
+"No logins found" = "Nie odnaleziono danych logowania";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Otwórz i wypełnij";

@@ -1,5 +1,5 @@
 /* Prompt title when deleting logins */
-"Are you sure?" = "¿Seguro?";
+"Are you sure?" = "¿De verdad quieres hacerlo?";
 
 /* Prompt option for cancelling out of deletion */
 "Cancel" = "Cancelar";

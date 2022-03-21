@@ -1,8 +1,8 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "このページをブックマーク";
 
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction2.Title" = "ブックマークを追加";
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "リーディングリストに追加";
 
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "リーディングリストに追加";
@@ -60,6 +60,9 @@
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "Menu.RecentlySaved.Title" = "最近保存";
+
+/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
+"Menu.RemoveBookmark.AlternateLabel.v99" = "ブックマークを削除";
 
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "ブックマークを削除";

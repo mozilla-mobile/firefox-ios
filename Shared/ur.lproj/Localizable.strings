@@ -900,9 +900,6 @@
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "سر فہرست سائٹس سے ہٹا دیا گیا";
 
-/* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "شارٹ کٹ سے ہٹا دیاگیا";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ٹیب بھیج دیا گیا";
 

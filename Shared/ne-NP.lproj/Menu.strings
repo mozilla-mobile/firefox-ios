@@ -1,8 +1,8 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "यस पृष्ठमा पुस्तकचिनो लगाउनुहोस्";
 
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction2.Title" = "बुकमार्क थप्नुहोस्";
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "पठन सूचीमा थप्नुहोस्";
 
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "पढ्ने सूचीमा थप्नुहोस्";
@@ -60,6 +60,9 @@
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "Menu.RecentlySaved.Title" = "भर्खरै बचत गरिएका";
+
+/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
+"Menu.RemoveBookmark.AlternateLabel.v99" = "बुकमार्क हटाउनुहोस्";
 
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "पुस्तकचिनो हटाउनुहोस्";

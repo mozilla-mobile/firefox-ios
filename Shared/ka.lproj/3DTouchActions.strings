@@ -5,7 +5,7 @@
 "Close Tab" = "ჩანართის დახურვა";
 
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
-"Copy URL" = "URL-ს ასლი";
+"Copy URL" = "ბმულის ასლი";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
 "Menu.SendLinkToDevice" = "ბმულის გაგზავნა მოწყობილობაზე";

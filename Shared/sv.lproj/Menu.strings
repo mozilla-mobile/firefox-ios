@@ -1,8 +1,8 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Bokmärk denna sida";
 
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction2.Title" = "Lägg till bokmärke";
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "Lägg till i läslistan";
 
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "Lägg till i läslistan";
@@ -60,6 +60,9 @@
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "Menu.RecentlySaved.Title" = "Nyligen sparad";
+
+/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
+"Menu.RemoveBookmark.AlternateLabel.v99" = "Ta bort bokmärke";
 
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "Ta bort bokmärke";
