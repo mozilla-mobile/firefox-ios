@@ -20,6 +20,6 @@ extension UIImage {
     static let removeShortcut = UIImage(named: "icon_shortcuts_remove")!
     static let renameShortcut = UIImage(named: "edit")!
     
-    static let faceid = UIImage(systemName: "faceid")!
-    static let touchid = UIImage(systemName: "touchid")!
+    static let faceid = UIImage(named: "faceid")!
+    static let touchid = UIImage(named: "touchid")!
 }
