@@ -17,6 +17,18 @@ extension InternalTelemetrySettingsView {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=events")!)
     }
     
+    func sendPendingBaselinePings() {
+        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=baseline")!)
+    }
+    
+    func sendPendingMetricsPings() {
+        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=metrics")!)
+    }
+    
+    func sendPendingDeletionRequestPings() {
+        Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=deletion-request")!)
+    }
+    
     func changeLogPingsToConsole(_ value: Bool) {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=\(value)")!)
     }
@@ -65,6 +77,18 @@ extension InternalTelemetrySettingsView: View {
                 SwiftUI.Section {
                     Button(action: { sendPendingEventPings() }) {
                         Text(verbatim: "Send Pending Event Pings")
+                    }
+                    
+                    Button(action: { sendPendingBaselinePings() }) {
+                        Text(verbatim: "Send Baseline Event Pings")
+                    }
+                    
+                    Button(action: { sendPendingMetricsPings() }) {
+                        Text(verbatim: "Send Metrics Event Pings")
+                    }
+                    
+                    Button(action: { sendPendingDeletionRequestPings() }) {
+                        Text(verbatim: "Send Deletion Request Event Pings")
                     }
                 }
             } else {
