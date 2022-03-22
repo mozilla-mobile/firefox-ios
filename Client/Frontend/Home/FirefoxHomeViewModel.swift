@@ -144,7 +144,6 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
 
 extension FirefoxHomeViewModel: FxHomeTopSitesViewModelDelegate {
     func reloadTopSites() {
-        let index = enabledSections.firstIndex(of: FirefoxHomeSectionType.topSites)
-        delegate?.reloadSection(index: index)
+        update(section: topSiteViewModel)
     }
 }
