@@ -14,8 +14,11 @@ import Combine
 class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
-
-    private let webViewController = WebViewController()
+    private lazy var trackingProtectionManager = TrackingProtectionManager(
+        isTrackingEnabled: {
+            Settings.getToggle(.trackingProtection)
+        })
+    private lazy var webViewController = WebViewController(trackingProtectionManager: trackingProtectionManager)
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
@@ -50,12 +53,6 @@ class BrowserViewController: UIViewController {
         case expanded
         case transitioning
         case animating
-    }
-
-    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
-        didSet {
-            updateLockIcon()
-        }
     }
 
     private var homeViewContainer = UIView()
@@ -351,6 +348,13 @@ class BrowserViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
+        
+        trackingProtectionManager
+            .$trackingProtectionStatus
+            .sink { [unowned self] status in
+                updateLockIcon(trackingProtectionStatus: status)
+            }
+            .store(in: &cancellables)
        
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -420,7 +424,7 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    private func updateLockIcon() {
+    private func updateLockIcon(trackingProtectionStatus: TrackingProtectionStatus) {
         urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
     }
 
@@ -620,9 +624,6 @@ class BrowserViewController: UIViewController {
         interaction.donate { (error) in
             if let error = error { print(error.localizedDescription) }
         }
-        
-        // Reenable tracking protection after reset
-        Settings.set(true, forToggle: .trackingProtection)
     }
 
     private func clearBrowser() {
@@ -640,6 +641,7 @@ class BrowserViewController: UIViewController {
         homeViewController.refreshTipsDisplay()
         homeViewController.view.isHidden = false
         createURLBar()
+        updateLockIcon(trackingProtectionStatus: trackingProtectionManager.trackingProtectionStatus)
         shortcutsContainer.isHidden = false
         shortcutsBackground.isHidden = true
 
@@ -1229,13 +1231,6 @@ extension BrowserViewController: URLBarDelegate {
             .replaceError(with: .defaultFavicon)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
-
-        switch trackingProtectionStatus {
-        case .on:
-            Settings.set(true, forToggle: .trackingProtection)
-        case .off:
-            Settings.set(false, forToggle: .trackingProtection)
-        }
         
         let state: TrackingProtectionState = urlBar.inBrowsingMode
         ? .browsing(status: SecureConnectionStatus(
@@ -1582,9 +1577,6 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.canDelete = true
         toggleURLBarBackground(isBright: false)
         updateURLBar()
-        if trackingProtectionStatus == .off {
-            updateLockIcon()
-        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
@@ -1714,12 +1706,12 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
         // Calculate the number of trackers blocked and add that to lifetime total
         if case .on(let info) = trackingStatus,
-           case .on(let oldInfo) = trackingProtectionStatus {
+           case .on(let oldInfo) = trackingStatus {
             let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
             setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
         }
-        trackingProtectionStatus = trackingStatus
+        updateLockIcon(trackingProtectionStatus: trackingStatus)
     }
 
     private func showToolbars() {

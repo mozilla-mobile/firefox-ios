@@ -44,6 +44,15 @@ protocol WebControllerDelegate: AnyObject {
     func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
 }
 
+class TrackingProtectionManager {
+    @Published var trackingProtectionStatus: TrackingProtectionStatus
+    
+    init(isTrackingEnabled: () -> Bool) {
+        let isTrackingEnabled = isTrackingEnabled()
+        self.trackingProtectionStatus = isTrackingEnabled ? .on(TPPageStats()) : .off
+    }
+}
+
 class WebViewController: UIViewController, WebController {
     private enum ScriptHandlers: String, CaseIterable {
         case focusTrackingProtection
@@ -64,19 +73,7 @@ class WebViewController: UIViewController, WebController {
     var browserView: WKWebView!
     private var progressObserver: NSKeyValueObservation?
     private var currentBackForwardItem: WKBackForwardListItem?
-    private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
-        didSet {
-            delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtectionStatus)
-        }
-    }
-
-    private var trackingInformation = TPPageStats() {
-        didSet {
-            if case .on = trackingProtectionStatus {
-                trackingProtectionStatus = .on(trackingInformation)
-            }
-        }
-    }
+    private let trackingProtectionManager: TrackingProtectionManager
 
     var pageTitle: String? {
         return browserView.title
@@ -93,17 +90,21 @@ class WebViewController: UIViewController, WebController {
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    init(trackingProtectionManager: TrackingProtectionManager) {
+        self.trackingProtectionManager = trackingProtectionManager
+        super.init(nibName: nil, bundle: nil)
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func reset() {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
-        trackingProtectionStatus = .on(TPPageStats())
         setupWebview()
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
@@ -156,9 +157,11 @@ class WebViewController: UIViewController, WebController {
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
-
-        setupBlockLists()
-        setupTrackingProtectionScripts()
+        
+        if case .on(_) = trackingProtectionManager.trackingProtectionStatus {
+            setupBlockLists()
+            setupTrackingProtectionScripts()
+        }
         setupFindInPageScripts()
         setupMetadataScripts()
         setupFullScreen()
@@ -213,7 +216,7 @@ class WebViewController: UIViewController, WebController {
     }
 
     func disableTrackingProtection() {
-        guard case .on = trackingProtectionStatus else { return }
+        guard case .on = trackingProtectionManager.trackingProtectionStatus else { return }
         ScriptHandlers.allCases.forEach {
             browserView.configuration.userContentController.removeScriptMessageHandler(forName: $0.rawValue)
         }
@@ -221,15 +224,15 @@ class WebViewController: UIViewController, WebController {
         browserView.configuration.userContentController.removeAllContentRuleLists()
         setupFindInPageScripts()
         setupMetadataScripts()
-        trackingProtectionStatus = .off
+        setupFullScreen()
+        trackingProtectionManager.trackingProtectionStatus = .off
     }
 
     func enableTrackingProtection() {
-        guard case .off = trackingProtectionStatus else { return }
-
+        guard case .off = trackingProtectionManager.trackingProtectionStatus else { return }
         setupBlockLists()
         setupTrackingProtectionScripts()
-        trackingProtectionStatus = .on(TPPageStats())
+        trackingProtectionManager.trackingProtectionStatus = .on(TPPageStats())
     }
 
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
@@ -320,7 +323,7 @@ extension WebViewController: UIScrollViewDelegate {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
-        if case .on = trackingProtectionStatus { trackingInformation = TPPageStats() }
+        trackingProtectionManager.trackingProtectionStatus.trackingInformation = TPPageStats()
         currentContentMode = navigation?.effectiveContentMode
     }
 
@@ -485,9 +488,10 @@ extension WebViewController: WKScriptMessageHandler {
         guard let url = components.url else { return }
 
         let enabled = Utils.getEnabledLists().compactMap { BlocklistName(rawValue: $0) }
-        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).uponQueue(.main) { listItem in
+        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).uponQueue(.main) { [unowned self] listItem in
             if let listItem = listItem {
-                self.trackingInformation = self.trackingInformation.create(byAddingListItem: listItem)
+                let currentInfo = trackingProtectionManager.trackingProtectionStatus.trackingInformation
+                trackingProtectionManager.trackingProtectionStatus.trackingInformation = currentInfo.map { $0.create(byAddingListItem: listItem) }
             }
         }
     }

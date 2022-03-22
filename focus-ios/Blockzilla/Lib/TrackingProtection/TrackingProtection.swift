@@ -4,10 +4,23 @@
 
 import Foundation
 
-enum TrackingProtectionStatus: Equatable {
+enum TrackingProtectionStatus {
     case on(TPPageStats)
     case off
     
+    var trackingInformation: TPPageStats? {
+        get {
+            guard case let .on(value) = self else { return nil }
+            return value
+        }
+        set {
+            guard case .on = self, let newValue = newValue else { return }
+            self = .on(newValue)
+        }
+    }
+}
+
+extension TrackingProtectionStatus: Equatable {
     static func == (lhs: TrackingProtectionStatus, rhs: TrackingProtectionStatus) -> Bool {
         switch (lhs, rhs) {
         case (.on, .on), (.off, .off):
