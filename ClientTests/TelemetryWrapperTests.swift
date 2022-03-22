@@ -13,10 +13,6 @@ class TelemetryWrapperTests: XCTestCase {
         super.setUp()
 
         Glean.shared.resetGlean(clearStores: true)
-
-        // Ensure tab manager has clean state for tests
-        let delegate = UIApplication.shared.delegate as? AppDelegate
-        delegate?.tabManager.removeAll()
     }
 
     // MARK: - Top Site

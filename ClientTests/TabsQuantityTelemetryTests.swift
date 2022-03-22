@@ -9,6 +9,12 @@ import XCTest
 
 class TabsQuantityTelemetryTests: XCTestCase {
 
+    override func setUp() {
+        super.setUp()
+
+        Glean.shared.resetGlean(clearStores: true)
+    }
+
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
         let tabManager = TabManager(profile: MockProfile(), imageStore: nil)
         tabManager.addTab()
