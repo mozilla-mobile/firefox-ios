@@ -151,7 +151,7 @@ class TelemetryWrapper {
         // record on going to background rather than during initialization.
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(recordPreferenceMetrics(notification:)),
+            selector: #selector(recordEnteredBackgroundPreferenceMetrics(notification:)),
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
@@ -172,7 +172,7 @@ class TelemetryWrapper {
 
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
-    @objc func recordPreferenceMetrics(notification: NSNotification) {
+    @objc func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else { assert(false); return; }
 
         // Record default search engine setting
@@ -266,6 +266,7 @@ extension TelemetryWrapper {
         case prompt = "prompt"
         case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
+        case information = "information"
     }
 
     public enum EventMethod: String {
@@ -314,6 +315,8 @@ extension TelemetryWrapper {
         case setting = "setting"
         case tab = "tab"
         case tabTray = "tab-tray"
+        case tabNormalQuantity = "normal-tab-quantity"
+        case tabPrivateQuantity = "private-tab-quantity"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -483,6 +486,7 @@ extension TelemetryWrapper {
         case topSiteTileType = "tileType"
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
+        case tabsQuantity = "tabsQuantity"
 
         case preference = "pref"
         case preferenceChanged = "to"
@@ -590,6 +594,20 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.navigateTabBackSwipe.add()
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
+
+        case(.information, .background, .tabNormalQuantity, _, let extras):
+            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        case(.information, .background, .tabPrivateQuantity, _, let extras):
+            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Tabs.privateTabsQuantity.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
 
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
