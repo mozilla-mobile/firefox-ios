@@ -36,6 +36,16 @@ protocol ShortcutsManagerDelegate: AnyObject {
 
 class ShortcutsManager {
     
+    enum ShortcutsState {
+        case createShortcutViews
+        case onHomeView
+        case editingURL(text: String)
+        case activeURLBar
+        case dismissedURLBar
+    }
+    
+    @Published var shortcutsState: ShortcutsState?
+    
     let shortcutsKey = "Shortcuts"
     static let shared = ShortcutsManager()
     private var shortcuts = [Shortcut]()

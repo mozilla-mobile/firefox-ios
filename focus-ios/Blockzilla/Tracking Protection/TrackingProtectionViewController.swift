@@ -81,20 +81,20 @@ class TrackingProtectionViewController: UIViewController {
                     item: self.trackingProtectionItem,
                     reuseIdentifier: "SwitchTableViewCell"
                 )
-                cell.valueChanged.sink { isOn in
+                cell.valueChanged.sink { [unowned self] isOn in
                     self.trackingProtectionItem.settingsValue = isOn
                     self.toggleProtection(isOn: isOn)
                     if isOn {
-                        var snapshot = dataSource.snapshot()
+                        var snapshot = self.dataSource.snapshot()
                         snapshot.insertSections([.trackers], afterSection: .enableTrackers)
-                        snapshot.appendItems(trackersSectionItems, toSection: .trackers)
+                        snapshot.appendItems(self.trackersSectionItems, toSection: .trackers)
                         snapshot.reloadSections([.enableTrackers])
-                        dataSource.apply(snapshot, animatingDifferences: true)
+                        self.dataSource.apply(snapshot, animatingDifferences: true)
                     } else {
-                        var snapshot = dataSource.snapshot()
+                        var snapshot = self.dataSource.snapshot()
                         snapshot.deleteSections([.trackers])
                         snapshot.reloadSections([.enableTrackers])
-                        dataSource.apply(snapshot, animatingDifferences: true)
+                        self.dataSource.apply(snapshot, animatingDifferences: true)
                     }
                     self.calculatePreferredSize()
                 }
@@ -131,39 +131,39 @@ class TrackingProtectionViewController: UIViewController {
         SectionItem(
             configureCell: { [unowned self] _, _ in
                 let cell = SwitchTableViewCell(item: blockOtherItem, reuseIdentifier: "SwitchTableViewCell")
-                cell.valueChanged.sink { isOn in
+                cell.valueChanged.sink { [unowned self] isOn in
                     if isOn {
                         let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
-                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { _ in
+                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { [unowned self] _ in
                             //TODO: Make sure to reset the toggle
                             cell.isOn = false
-                            blockOtherItem.settingsValue = false
-                            self.updateTelemetry(blockOtherItem.settingsKey, false)
+                            self.blockOtherItem.settingsValue = false
+                            self.updateTelemetry(self.blockOtherItem.settingsKey, false)
                             GleanMetrics
                                 .TrackingProtection
                                 .trackerSettingChanged
                                 .record(.init(
                                     isEnabled: false,
                                     sourceOfChange: self.sourceOfChange,
-                                    trackerChanged: blockOtherItem.settingsKey.trackerChanged
+                                    trackerChanged: self.blockOtherItem.settingsKey.trackerChanged
                                 ))
                         })
-                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { _ in
-                            blockOtherItem.settingsValue = true
-                            self.updateTelemetry(blockOtherItem.settingsKey, true)
+                        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { [unowned self] _ in
+                            self.blockOtherItem.settingsValue = true
+                            self.updateTelemetry(self.blockOtherItem.settingsKey, true)
                             GleanMetrics
                                 .TrackingProtection
                                 .trackerSettingChanged
                                 .record(.init(
                                     isEnabled: true,
                                     sourceOfChange: self.sourceOfChange,
-                                    trackerChanged: blockOtherItem.settingsKey.trackerChanged
+                                    trackerChanged: self.blockOtherItem.settingsKey.trackerChanged
                                 ))
                         })
                         self.present(alertController, animated: true, completion: nil)
                     } else {
-                        blockOtherItem.settingsValue = isOn
-                        updateTelemetry(blockOtherItem.settingsKey, isOn)
+                        self.blockOtherItem.settingsValue = isOn
+                        self.updateTelemetry(blockOtherItem.settingsKey, isOn)
                         GleanMetrics
                             .TrackingProtection
                             .trackerSettingChanged
