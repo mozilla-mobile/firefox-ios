@@ -61,7 +61,11 @@ class OnboardingEventsHandler {
         switch action {
         case .applicationDidLaunch:
             let onboardingRoute = ToolTipRoute.onboarding(OnboardingType(shouldShowNewOnboarding()))
-            show(route: onboardingRoute)
+            if shownTips.contains(onboardingRoute) {
+                show(route: .menu)
+            } else {
+                show(route: onboardingRoute)
+            }
             
         case .enterHome:
             guard shouldShowNewOnboarding() else { return }
