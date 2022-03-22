@@ -71,6 +71,8 @@ function checkReadability() {
 
       // Sanitize the title to prevent a malicious page from inserting HTML in the `<title>`.
       readabilityResult.title = escapeHTML(readabilityResult.title);
+      // Sanitize the credits to prevent a malicious page from inserting HTML in the `<credits>`.
+      readabilityResult.credits = escapeHTML(readabilityResult.credits);
 
       debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
       webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
