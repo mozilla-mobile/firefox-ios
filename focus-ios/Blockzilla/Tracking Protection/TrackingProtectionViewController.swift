@@ -88,8 +88,9 @@ class TrackingProtectionViewController: UIViewController {
                         var snapshot = self.dataSource.snapshot()
                         snapshot.insertSections([.trackers], afterSection: .enableTrackers)
                         snapshot.appendItems(self.trackersSectionItems, toSection: .trackers)
-                        snapshot.reloadSections([.enableTrackers])
                         self.dataSource.apply(snapshot, animatingDifferences: true)
+                        snapshot.reloadSections([.enableTrackers])
+                        self.dataSource.apply(snapshot, animatingDifferences: false)
                     } else {
                         var snapshot = self.dataSource.snapshot()
                         snapshot.deleteSections([.trackers])
