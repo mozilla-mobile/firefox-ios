@@ -1503,6 +1503,32 @@ sync:
 
 # Tab metrics
 tabs:
+  normal_tabs_quantity:
+    type: quantity
+    description: |
+      A snapshot of how many normal tabs a user has opened when he
+      closes the application.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9627
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-09-21"
+    unit: quantity of normal tabs
+  private_tabs_quantity:
+    type: quantity
+    description: |
+      A snapshot of how many private tabs a user has opened when he
+      closes the application.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9627
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-09-21"
+    unit: quantity of private tabs
   cumulative_count:
     type: counter
     description: |

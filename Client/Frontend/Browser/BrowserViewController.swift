@@ -87,6 +87,7 @@ class BrowserViewController: UIViewController {
     weak var gridTabTrayController: GridTabViewController?
     weak var chronTabTrayController: ChronologicalTabsViewController?
     var tabTrayViewController: TabTrayViewController?
+
     let profile: Profile
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
@@ -516,6 +517,8 @@ class BrowserViewController: UIViewController {
         showQueuedAlertIfAvailable()
 
         prepareURLOnboardingContextualHint()
+
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
     }
 
     private func prepareURLOnboardingContextualHint() {
