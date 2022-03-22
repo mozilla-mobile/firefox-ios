@@ -1326,12 +1326,14 @@ extension BrowserViewController: ShortcutViewDelegate {
             textfield.placeholder = UIConstants.strings.renameShortcutAlertPlaceholder
             textfield.text = shortcut.name
             textfield.clearButtonMode = .always
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textfield, queue: OperationQueue.main, using: { _ in
+                alert.actions.last?.isEnabled = !(textfield.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? false)
+            })
         }
         
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertSecondaryAction, style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert] action in
             let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !newName.isEmpty, newName != shortcut.name else { return }
             ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
         }))
         self.show(alert, sender: nil)
@@ -1356,6 +1358,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }
 }
+
 
 extension BrowserViewController: ShortcutsManagerDelegate {
     func shortcutsUpdated() {
