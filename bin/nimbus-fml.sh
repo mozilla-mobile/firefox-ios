@@ -60,7 +60,7 @@ helptext() {
 MANIFEST_PATH=
 OUTPUT_DIR="${SOURCE_ROOT}/${PROJECT}/Generated"
 NAMESPACE=
-AS_VERSION=v91.1.0
+AS_VERSION=v92.0.0
 
 while (( "$#" )); do
     case "$1" in
