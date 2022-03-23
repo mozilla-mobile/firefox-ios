@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Private Mode-25.pdf",
+      "filename" : "icon_private_mode_dark.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Private Mode-24.pdf",
+      "filename" : "icon_private_mode.pdf",
       "idiom" : "universal"
     }
   ],
