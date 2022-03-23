@@ -595,8 +595,9 @@ extension HistoryPanelV2 {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
             header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
             header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
-            
-            let historySectionsWithGroups = viewModel.searchTermGroups.map { group in
+
+            // let historySectionsWithGroups
+            let _ = viewModel.searchTermGroups.map { group in
                 viewModel.groupBelongsToSection(asGroup: group)
             }
             
