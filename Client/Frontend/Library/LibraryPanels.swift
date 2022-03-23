@@ -76,8 +76,6 @@ class LibraryPanelDescriptor {
     }
 }
 
-//featureFlags.isFeatureActiveForBuild(.historyGroups)
-
 class LibraryPanels: FeatureFlagsProtocol {
     fileprivate let profile: Profile
     fileprivate let tabManager: TabManager
