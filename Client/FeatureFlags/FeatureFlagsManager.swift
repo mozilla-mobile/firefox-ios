@@ -129,7 +129,7 @@ class FeatureFlagsManager {
 
         let adjustEnvironmentProd = FlaggableFeature(withID: .adjustEnvironmentProd,
                                                      and: profile,
-                                                     enabledFor: [.release])
+                                                     enabledFor: [.release, .beta])
         features[.adjustEnvironmentProd] = adjustEnvironmentProd
 
         let bottomSearchBar = FlaggableFeature(withID: .bottomSearchBar,
