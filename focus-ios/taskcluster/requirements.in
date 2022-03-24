@@ -1,0 +1,4 @@
+# For instructions on managing dependencies, see:
+# https://taskcluster-taskgraph.readthedocs.io/en/latest/howto/bootstrap-taskgraph.html
+
+taskcluster-taskgraph>=1.3.1
