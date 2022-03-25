@@ -2443,6 +2443,10 @@ extension BrowserViewController: TabTrayDelegate {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return nil }
         return profile.readingList.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.current.name).value.successValue
     }
+
+    func tabTrayDidRequestTabsSettings() {
+        print("roux - open the settings")
+    }
 }
 
 // MARK: Browser Chrome Theming
