@@ -873,7 +873,13 @@ extension TabDisplayManager: TabManagerDelegate {
             let indexToPlaceTab = getIndexToPlaceTab(placeNextToParentTab: placeNextToParentTab)
             self.dataStore.insert(tab, at: indexToPlaceTab)
             let section = self.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
-            self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: section)])
+
+            // If section is empty, don't insert, just reload it.
+            if self.collectionView.numberOfItems(inSection: section) <= 0 {
+                self.collectionView.reloadSections(IndexSet([section]))
+            } else {
+                self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: section)])
+            }
         }
     }
 
