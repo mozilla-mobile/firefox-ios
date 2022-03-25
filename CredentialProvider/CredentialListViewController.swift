@@ -20,6 +20,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         tableView.showsVerticalScrollIndicator = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableFooterView = UIView()
         return tableView
     }()
