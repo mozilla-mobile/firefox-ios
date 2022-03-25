@@ -2445,7 +2445,7 @@ extension BrowserViewController: TabTrayDelegate {
     }
 
     func tabTrayDidRequestTabsSettings() {
-        print("roux - open the settings")
+        showSettingsWithDeeplink(to: .customizeTabs)
     }
 }
 

@@ -622,6 +622,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
     func toggleInactiveTabSection(hasExpanded: Bool) {
         let hasExpandedEvent: TelemetryWrapper.EventValue = hasExpanded ? .inactiveTabExpand : .inactiveTabCollapse
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: hasExpandedEvent, extras: nil)
+
         isInactiveViewExpanded = hasExpanded
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
         collectionView.reloadItems(at: [indexPath])
@@ -630,6 +631,10 @@ extension TabDisplayManager: InactiveTabsDelegate {
 
     func setupCFR(with view: UILabel) {
         cfrDelegate?.setupCFR(with: view)
+    }
+
+    func presentCFR() {
+        cfrDelegate?.presentCFR()
     }
 }
 

@@ -233,7 +233,6 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         tableView.reloadData()
         delegate?.toggleInactiveTabSection(hasExpanded: hasExpanded)
 
-        // ROUX - do more checks here!
         if hasExpanded { delegate?.presentCFR() }
     }
     

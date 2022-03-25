@@ -63,16 +63,16 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
+
         contentView.addSubview(titleLabel)
         contentView.addSubview(moreButton)
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 17),
             titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 
             moreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            moreButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             moreButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 17),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -28),
         ])

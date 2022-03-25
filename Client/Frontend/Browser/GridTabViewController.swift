@@ -176,7 +176,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
         tabDisplayManager = nil
-        // ROUX
         contextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
     }
@@ -832,12 +831,21 @@ extension GridTabViewController: Notifiable {
 
 protocol InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel)
+    func presentCFR()
 }
 
 // MARK: - Contextual Hint
 extension GridTabViewController: InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel) {
-        print("roux - setup \(view)")
+        prepareJumpBackInContextualHint(on: view)
+    }
+
+    func presentCFR() {
+        contextualHintViewController.startTimer()
+    }
+
+    func presentCFROnView() {
+        present(contextualHintViewController, animated: true, completion: nil)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {
@@ -846,16 +854,12 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
         contextualHintViewController.configure(
             anchor: title,
             withArrowDirection: .up,
-            andDelegate: self,
-            andActionForButton: { self.delegate?.tabTrayDidRequestTabsSettings() })
-
-//        guard BrowserViewController.foregroundBVC().searchController == nil,
-//              presentedViewController == nil
-//        else {
-//            contextualHintViewController.stopTimer()
-//            return
-//        }
-//
-//        present(contextualHintViewController, animated: true, completion: nil)
+            andDelegate: self, presentedUsing: { self.presentCFROnView() },
+            andActionForButton: {
+                self.dismissTabTray()
+                self.delegate?.tabTrayDidRequestTabsSettings()
+            },
+            andShouldStartTimerRightAway: false
+        )
     }
 }
