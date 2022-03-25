@@ -11,7 +11,7 @@ protocol LibraryPanel: NotificationThemeable {
 }
 
 struct LibraryPanelUX {
-    static let EmptyTabContentOffset = -180
+    static let EmptyTabContentOffset: CGFloat = -180
 }
 
 protocol LibraryPanelDelegate: AnyObject {
