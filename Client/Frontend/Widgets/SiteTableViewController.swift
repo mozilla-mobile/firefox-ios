@@ -134,12 +134,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
+        
+        setupView()
     }
 
     deinit {
@@ -164,6 +160,17 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
 
+    private func setupView() {
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
     func reloadData() {
         if data.status != .success {
             print("Err: \(data.statusMessage)", terminator: "\n")
