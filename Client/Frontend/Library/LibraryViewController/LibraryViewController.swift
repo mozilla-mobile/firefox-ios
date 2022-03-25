@@ -46,7 +46,7 @@ class LibraryViewController: UIViewController {
     }
 
     fileprivate lazy var topLeftButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack"),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(),
                                      style: .plain,
                                      target: self,
                                      action: #selector(topLeftButtonAction))
@@ -322,7 +322,7 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
-            topLeftButton.image = UIImage.templateImageNamed("goBack")
+            topLeftButton.image = UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
         case .bookmarks(state: .itemEditMode):
             topLeftButton.image = UIImage.templateImageNamed("nav-stop")
