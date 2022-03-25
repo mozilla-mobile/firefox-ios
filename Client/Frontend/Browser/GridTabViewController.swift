@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import SnapKit
 import Storage
 import Shared
 
@@ -41,7 +40,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     static let independentTabsHeaderIdentifier = "IndependentTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
-    var webViewContainerBackdrop: UIView!
+    var webViewContainerBackdrop = UIView()
     var collectionView: UICollectionView!
     var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
     var notificationCenter: NotificationCenter
@@ -122,7 +121,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         tabManager.addDelegate(self)
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
 
-        webViewContainerBackdrop = UIView()
         webViewContainerBackdrop.alpha = 0
 
         collectionView.alwaysBounceVertical = true
@@ -136,9 +134,12 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         makeConstraints()
 
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
-        emptyPrivateTabsView.snp.makeConstraints { make in
-            make.top.bottom.left.right.equalTo(self.collectionView)
-        }
+        NSLayoutConstraint.activate([
+            emptyPrivateTabsView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
+            emptyPrivateTabsView.topAnchor.constraint(equalTo: collectionView.topAnchor),
+            emptyPrivateTabsView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
+            emptyPrivateTabsView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor),
+        ])
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
@@ -621,7 +622,6 @@ extension GridTabViewController {
 fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
     weak var tabPeekDelegate: TabPeekDelegate?
-    var searchHeightConstraint: Constraint?
     let scrollView: UIScrollView
     var lastYOffset: CGFloat = 0
     var tabDisplayManager: TabDisplayManager

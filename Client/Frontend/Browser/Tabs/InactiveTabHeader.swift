@@ -8,12 +8,12 @@ enum ExpandButtonState {
     case right
     case down
 
-    var image: UIImage {
+    var image: UIImage? {
         switch self {
         case .right:
-            return UIImage(named: "menu-Disclosure")!
+            return UIImage(named: ImageIdentifiers.menuChevron)
         case .down:
-            return UIImage(named: "find_next")!
+            return UIImage(named: ImageIdentifiers.findNext)
         }
     }
 }
@@ -32,12 +32,11 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
-
     }
 
     lazy var moreButton: UIButton = .build { button in
         button.isHidden = true
-        button.setImage(self.state?.image, for: .normal)
+        button.setImage(state?.image, for: .normal)
         button.contentHorizontalAlignment = .right
     }
 
@@ -48,7 +47,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
     }
 
     var titleInsets: CGFloat {
-        let isHomeHeaderInset = (UIScreen.main.bounds.size.width == self.frame.size.width) && UIDevice.current.userInterfaceIdiom == .pad
+        let isHomeHeaderInset = (UIScreen.main.bounds.size.width == frame.size.width) && UIDevice.current.userInterfaceIdiom == .pad
         return isHomeHeaderInset ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeViewModel.UX.minimumInsets
     }
 
@@ -56,7 +55,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
         super.prepareForReuse()
         applyTheme()
         moreButton.setTitle(nil, for: .normal)
-        moreButton.accessibilityIdentifier = nil;
+        moreButton.accessibilityIdentifier = nil
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
     }
