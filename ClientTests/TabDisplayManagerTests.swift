@@ -10,7 +10,7 @@ import XCTest
 
 class TabDisplayManagerTests: XCTestCase {
 
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.Identifier
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
 
     var mockDataStore = WeakListMock<Tab>()
     var dataStore = WeakList<Tab>()
@@ -242,7 +242,7 @@ extension TabDisplayManagerTests {
         let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
                                                   tabManager: manager,
                                                   tabDisplayer: self,
-                                                  reuseID: TopTabCell.Identifier,
+                                                  reuseID: TopTabCell.cellIdentifier,
                                                   tabDisplayType: .TopTabTray,
                                                   profile: profile)
         collectionView.dataSource = tabDisplayManager
@@ -288,8 +288,8 @@ class MockCollectionView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: collectionViewLayout)
 
-        register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
-        register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
+        register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.cellIdentifier)
+        register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.cellIdentifier)
     }
 
     required init?(coder: NSCoder) {
