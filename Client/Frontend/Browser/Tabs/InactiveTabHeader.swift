@@ -36,7 +36,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
 
     lazy var moreButton: UIButton = .build { button in
         button.isHidden = true
-        button.setImage(state?.image, for: .normal)
+        button.setImage(self.state?.image, for: .normal)
         button.contentHorizontalAlignment = .right
     }
 
