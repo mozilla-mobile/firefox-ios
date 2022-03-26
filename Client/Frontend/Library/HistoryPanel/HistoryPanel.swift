@@ -523,17 +523,17 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-
         // overlayView becomes the footer view, and for unknown reason, setting the bgcolor is ignored.
         // Create an explicit view for setting the color.
         let bgColor = UIView()
         bgColor.backgroundColor = UIColor.theme.homePanel.panelBackground
+        bgColor.translatesAutoresizingMaskIntoConstraints = false
         overlayView.addSubview(bgColor)
-        bgColor.snp.makeConstraints { make in
-            // Height behaves oddly: equalToSuperview fails in this case, as does setting top.equalToSuperview(), simply setting this to ample height works.
-            make.height.equalTo(UIScreen.main.bounds.height)
-            make.width.equalToSuperview()
-        }
+        
+        NSLayoutConstraint.activate([
+            bgColor.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height),
+            bgColor.widthAnchor.constraint(equalTo: overlayView.widthAnchor)
+        ])
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
@@ -543,15 +543,18 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
-
-        welcomeLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
-            // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(overlayView).offset(50)
-            make.width.equalTo(HistoryPanelUX.WelcomeScreenItemWidth)
-        }
+        welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let welcomeLabelPriority = UILayoutPriority(100)
+        NSLayoutConstraint.activate([
+            welcomeLabel.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
+            welcomeLabel.centerYAnchor.constraint(equalTo: overlayView.centerYAnchor,
+                                                  constant: LibraryPanelUX.EmptyTabContentOffset).priority(welcomeLabelPriority),
+            welcomeLabel.topAnchor.constraint(greaterThanOrEqualTo: overlayView.topAnchor,
+                                              constant: 50),
+            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(HistoryPanelUX.WelcomeScreenItemWidth))
+        ])
+        
         return overlayView
     }
 
