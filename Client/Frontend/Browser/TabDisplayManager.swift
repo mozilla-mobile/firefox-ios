@@ -77,6 +77,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     private let tabReuseIdentifer: String
     private var hasSentInactiveTabShownEvent: Bool = false
     var profile: Profile
+    var cfrDelegate: InactiveTabsCFRProtocol?
     private var nimbus: FxNimbus?
 
     lazy var filteredTabs = [Tab]()
@@ -172,6 +173,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
          reuseID: String,
          tabDisplayType: TabDisplayType,
          profile: Profile,
+         cfrDelegate: InactiveTabsCFRProtocol? = nil,
          nimbus: FxNimbus = FxNimbus.shared
     ) {
         self.collectionView = collectionView
@@ -181,6 +183,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         self.tabReuseIdentifer = reuseID
         self.tabDisplayType = tabDisplayType
         self.profile = profile
+        self.cfrDelegate = cfrDelegate
         self.nimbus = nimbus
 
         super.init()
@@ -501,7 +504,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
         assert(tabDisplayer != nil)
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
-            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
+            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.cellIdentifier, for: indexPath) as? InactiveTabCell {
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
                 inactiveCell.hasExpanded = isInactiveViewExpanded
                 inactiveCell.delegate = self
@@ -512,8 +515,9 @@ extension TabDisplayManager: UICollectionViewDataSource {
                     TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabShown, extras: nil)
                 }
             }
+
         case .groupedTabs:
-            if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.Identifier, for: indexPath) as? GroupedTabCell {
+            if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.cellIdentifier, for: indexPath) as? GroupedTabCell {
                 groupedCell.tabDisplayManagerDelegate = self
                 groupedCell.tabGroups = self.tabGroups
                 groupedCell.hasExpanded = true
@@ -522,12 +526,15 @@ extension TabDisplayManager: UICollectionViewDataSource {
                 groupedCell.scrollToSelectedGroup()
                 cell = groupedCell
             }
+
         case .regularTabs:
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
+
         case .none:
             return cell
         }
+
         return cell
     }
 
@@ -615,10 +622,19 @@ extension TabDisplayManager: InactiveTabsDelegate {
     func toggleInactiveTabSection(hasExpanded: Bool) {
         let hasExpandedEvent: TelemetryWrapper.EventValue = hasExpanded ? .inactiveTabExpand : .inactiveTabCollapse
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: hasExpandedEvent, extras: nil)
+
         isInactiveViewExpanded = hasExpanded
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
         collectionView.reloadItems(at: [indexPath])
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+    }
+
+    func setupCFR(with view: UILabel) {
+        cfrDelegate?.setupCFR(with: view)
+    }
+
+    func presentCFR() {
+        cfrDelegate?.presentCFR()
     }
 }
 
