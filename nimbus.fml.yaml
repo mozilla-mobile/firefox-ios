@@ -51,23 +51,23 @@ features:
         type: Map<HomeScreenSection, Boolean>
         default:
           {
-            "top-sites": true,
-            "jump-back-in": false,
-            "recently-saved": false,
-            "recent-explorations": false,
+            "topSites": true,
+            "jumpBackIn": false,
+            "recentlySaved": false,
+            "recentExplorations": false,
             "pocket": true,
-            "library-shortcuts": true
+            "libraryShortcuts": true
           }
     defaults:
       - channel: Fennec
         value: {
           "sections-enabled": {
-            "top-sites": true,
-            "jump-back-in": true,
-            "recently-saved": true,
-            "recent-explorations": true,
+            "topSites": true,
+            "jumpBackIn": true,
+            "recentlySaved": true,
+            "recentExplorations": true,
             "pocket": true,
-            "library-shortcuts": true
+            "libraryShortcuts": true
           }
         }
   tabTrayFeature:
@@ -131,17 +131,20 @@ types:
     HomeScreenSection:
       description: The identifiers for the sections of the homescreen.
       variants:
-        top-sites:
+ # These values were updated to camelCase in order to match the currently
+ # running experiment. Once that experiment is over in v100, these values
+ # should be returned to kebab-case.
+        topSites:
           description: The frecency and pinned sites.
-        recently-saved:
+        recentlySaved:
           description: The sites the user has bookmarked recently.
-        jump-back-in:
+        jumpBackIn:
           description: The tabs the user was looking immediately before being interrupted.
-        recent-explorations:
+        recentExplorations:
           description: The tab groups
         pocket:
           description: The pocket section. This should only be available in the US.
-        library-shortcuts:
+        libraryShortcuts:
           description: Library shortcuts section
     TabTraySection:
       description: The identifiers for the sections of the tab tray.
