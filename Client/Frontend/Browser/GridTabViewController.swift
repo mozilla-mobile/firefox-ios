@@ -130,16 +130,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         collectionView.dragDelegate = tabDisplayManager
         collectionView.dropDelegate = tabDisplayManager
 
-        [webViewContainerBackdrop, collectionView].forEach { view.addSubview($0) }
-        makeConstraints()
-
-        view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
-        NSLayoutConstraint.activate([
-            emptyPrivateTabsView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
-            emptyPrivateTabsView.topAnchor.constraint(equalTo: collectionView.topAnchor),
-            emptyPrivateTabsView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
-            emptyPrivateTabsView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor),
-        ])
+        setupView()
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
@@ -154,6 +145,29 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
             UIApplication.didBecomeActiveNotification,
             .DisplayThemeChanged
         ])
+    }
+
+    private func setupView() {
+        // TODO: Remove SNAPKIT - this will require some work as the layouts
+        // are using other snapkit constraints and this will require modification
+        // in several places.
+        [webViewContainerBackdrop, collectionView].forEach { view.addSubview($0) }
+        setupConstraints()
+
+        view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
+        emptyPrivateTabsView.snp.makeConstraints { make in
+            make.top.bottom.left.right.equalTo(self.collectionView)
+        }
+    }
+
+    private func setupConstraints() {
+        webViewContainerBackdrop.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
+
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -239,16 +253,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         super.traitCollectionDidChange(previousTraitCollection)
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
-    }
-
-    fileprivate func makeConstraints() {
-        webViewContainerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
     }
 
     @objc func didTogglePrivateMode() {
