@@ -11,8 +11,16 @@ struct CellWithRoundedButtonUX {
     static let HorizontalMargin: CGFloat = 16
 }
 
-class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
+class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCell {
 
+    // MARK: - Properties
+    var buttonClosure: (() -> Void)?
+
+    let containerView = UIView()
+    var shouldLeftAlignTitle = false
+    var customization: OneLineTableViewCustomization = .regular
+
+    // MARK: - UI Elements
     private let selectedView: UIView = .build { view in
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
     }
@@ -34,7 +42,8 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
@@ -43,12 +52,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    var buttonClosure: (() -> Void)?
-    
-    let containerView = UIView()
-    var shouldLeftAlignTitle = false
-    var customization: OneLineTableViewCustomization = .regular
+
     func initialViewSetup() {
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         self.selectionStyle = .default

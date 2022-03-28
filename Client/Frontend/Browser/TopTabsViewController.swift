@@ -30,16 +30,19 @@ protocol TopTabsDelegate: AnyObject {
 }
 
 class TopTabsViewController: UIViewController {
+
+    // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var topTabDisplayManager: TabDisplayManager!
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.Identifier
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
     var profile: Profile
-    
+
+    // MARK: - UI ELements
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
-        collectionView.register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
-        collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
+        collectionView.register(cellType: TopTabCell.self)
+        collectionView.register(cellType: InactiveTabCell.self)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
@@ -88,12 +91,18 @@ class TopTabsViewController: UIViewController {
         return fader
     }()
 
+    // MARK: - Inits
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 
-        topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TopTabCell.Identifier, tabDisplayType: .TopTabTray, profile: profile)
+        topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
+                                                 tabManager: self.tabManager,
+                                                 tabDisplayer: self,
+                                                 reuseID: TopTabCell.cellIdentifier,
+                                                 tabDisplayType: .TopTabTray,
+                                                 profile: profile)
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }

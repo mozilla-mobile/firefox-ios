@@ -5,9 +5,9 @@
 import Foundation
 import Shared
 
-class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
+class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, ReusableCell {
 
-    static let Identifier = "TopTabCellIdentifier"
+    // MARK: - Properties
     static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
 
     var isSelectedTab = false {
@@ -21,6 +21,9 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
         }
     }
 
+    weak var delegate: TopTabCellDelegate?
+
+    // MARK: - UI Elements
     let selectedBackground: UIView = {
         let view = UIView()
         view.clipsToBounds = false
@@ -67,8 +70,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
         return closeButton
     }()
 
-    weak var delegate: TopTabCellDelegate?
-
+    // MARK: - Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
 

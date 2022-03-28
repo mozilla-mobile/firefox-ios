@@ -81,6 +81,13 @@ features:
           {
             "inactive-tabs": false,
           }
+    defaults:
+      - channel: Fennec
+        value: {
+          "sections-enabled": {
+            "inactive-tabs": true
+          }
+        }
 types:
   objects:
     AwesomeBar:

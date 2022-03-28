@@ -259,10 +259,11 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         anchor: UIView,
         withArrowDirection arrowDirection: UIPopoverArrowDirection,
         andDelegate delegate: UIPopoverPresentationControllerDelegate,
-        presentedUsing presentation: (() -> Void)? = nil,
+        presentedUsing presentation: (() -> Void)?,
         withActionBeforeAppearing preAction: (() -> Void)? = nil,
         actionOnDismiss postAction: (() -> Void)? = nil,
-        andActionForButton buttonAction: (() -> Void)? = nil
+        andActionForButton buttonAction: (() -> Void)? = nil,
+        andShouldStartTimerRightAway shouldStartTimer: Bool = true
     ) {
         stopTimer()
         self.modalPresentationStyle = .popover
@@ -277,10 +278,16 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
         setupContent()
         toggleArrowBasedConstraints()
-        if viewModel.shouldPresentContextualHint() { viewModel.startTimer() }
+        if viewModel.shouldPresentContextualHint() && shouldStartTimer {
+            viewModel.startTimer()
+        }
     }
 
     public func stopTimer() {
         viewModel.stopTimer()
+    }
+
+    public func startTimer() {
+        viewModel.startTimer()
     }
 }
