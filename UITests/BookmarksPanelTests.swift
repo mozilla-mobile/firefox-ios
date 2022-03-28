@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 @testable import Client
 @testable import Storage
@@ -70,7 +70,6 @@ class BookmarksPanelTests: KIFTestCase {
         EarlGrey.selectElement(with: grey_accessibilityLabel("Some Livemark")).perform(grey_tap())
 
         // … so we show the truncated URL.
-        // Strangely, earlgrey cannot find the label in buddybuild, but passes locally.
         // Using KIF for this check for now.
         EarlGrey.selectElement(with: grey_accessibilityValue("www.google.ca/")).assert(grey_sufficientlyVisible())
 

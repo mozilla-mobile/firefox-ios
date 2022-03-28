@@ -1,10 +1,15 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 import Foundation
+
+protocol TopTabsScrollDelegate: AnyObject {
+    func collectionViewDidScroll(_ scrollView: UIScrollView)
+}
 
 class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     weak var tabSelectionDelegate: TabSelectionDelegate?
+    weak var scrollViewDelegate: TopTabsScrollDelegate?
     let HeaderFooterWidth = TopTabsUX.SeparatorWidth + TopTabsUX.FaderPading
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -37,7 +42,12 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         return CGSize(width: 0, height: 0)
     }
+}
 
+extension TopTabsLayoutDelegate: UICollectionViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollViewDelegate?.collectionViewDidScroll(scrollView)
+    }
 }
 
 class TopTabsViewLayout: UICollectionViewFlowLayout {

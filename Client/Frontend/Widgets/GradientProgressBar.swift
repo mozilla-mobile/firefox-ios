@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 // ADAPTED FROM:
 //
@@ -166,7 +166,7 @@ open class GradientProgressBar: UIProgressView {
     }
 
     override open func setProgress(_ progress: Float, animated: Bool) {
-        if progress < self.progress && self.progress != 1 {
+        if progress != 0 && progress < self.progress && self.progress != 1 {
             return
         }
         // Setup animations

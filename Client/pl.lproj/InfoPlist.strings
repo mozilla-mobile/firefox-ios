@@ -1,16 +1,14 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Pozwoli to robić i wgrywać zdjęcia.";
+"NSCameraUsageDescription" = "Firefox używa aparatu do skanowania kodów QR, robienia zdjęć i nagrywania filmów.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox wymaga Face ID, by uzyskać dostęp do zachowanych danych logowania.";
 
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Pozwoli to odwiedzanym stronom żądać informacji o położeniu.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Pozwoli to kręcić i wgrywać filmy.";
+"NSMicrophoneUsageDescription" = "Firefox używa mikrofonu do nagrywania i przesyłania dźwięku.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Pozwoli to zachowywać zdjęcia.";

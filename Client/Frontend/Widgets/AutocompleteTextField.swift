@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 // This code is loosely based on https://github.com/Antol/APAutocompleteTextField
 
@@ -79,12 +79,22 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override var keyCommands: [UIKeyCommand]? {
-        return [
+        let commands = [
+            UIKeyCommand(input: copyShortcutKey, modifierFlags: .command, action: #selector(self.handleKeyCommand(sender:)))
+        ]
+
+        let arrowKeysCommands = [
             UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
-            UIKeyCommand(input: copyShortcutKey, modifierFlags: .command, action: #selector(self.handleKeyCommand(sender:)))
         ]
+
+        // In iOS 15+, certain keys events are delivered to the text input or focus systems first, unless specified otherwise
+        if #available(iOS 15, *) {
+            arrowKeysCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
+        }
+
+        return arrowKeysCommands + commands
     }
 
     @objc func handleKeyCommand(sender: UIKeyCommand) {
@@ -237,8 +247,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.textAlignment = .left
 
         let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
-        frame.origin.x = (enteredTextSize?.width.rounded() ?? 0)
-        frame.size.width = self.frame.size.width - frame.origin.x
+        frame.origin.x = (enteredTextSize?.width.rounded() ?? 0) + textRect(forBounds: bounds).origin.x
+        frame.size.width = self.frame.size.width - clearButtonRect(forBounds: self.frame).size.width - frame.origin.x
         frame.size.height = self.frame.size.height
         label.frame = frame
         return label
@@ -276,9 +286,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()
 
-        let isAtEnd = selectedTextRange?.start == endOfDocument
         let isKeyboardReplacingText = lastReplacement != nil
-        if isKeyboardReplacingText, isAtEnd, markedTextRange == nil {
+        if isKeyboardReplacingText, markedTextRange == nil {
             notifyTextChanged?()
         } else {
             hideCursor = false

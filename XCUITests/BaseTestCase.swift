@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import MappaMundi
 import XCTest
@@ -21,7 +21,16 @@ class BaseTestCase: XCTestCase {
 
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
-    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.StageServer, LaunchArguments.SkipDefaultBrowserOnboarding, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)", LaunchArguments.SkipContextualHintJumpBackIn, LaunchArguments.ChronTabs]
+    var launchArguments = [LaunchArguments.ClearProfile,
+                           LaunchArguments.SkipIntro,
+                           LaunchArguments.SkipWhatsNew,
+                           LaunchArguments.SkipETPCoverSheet,
+                           LaunchArguments.StageServer,
+                           LaunchArguments.SkipDefaultBrowserOnboarding,
+                           LaunchArguments.DeviceName,
+                           "\(LaunchArguments.ServerPort)\(serverPort)",
+                           LaunchArguments.SkipContextualHints,
+                           LaunchArguments.ChronTabs]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
@@ -87,12 +96,16 @@ class BaseTestCase: XCTestCase {
     }
 
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+
         let predicate = NSPredicate(format: predicateString)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
         if result != .completed {
             let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
-            self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
+            var issue = XCTIssue(type: .assertionFailure, compactDescription: message)
+            let location = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
+            issue.sourceCodeContext = XCTSourceCodeContext(location: location)
+            self.record(issue)
         }
     }
 
@@ -100,7 +113,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields["url"].press(forDuration: 2.0)
-        app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
+        app.tables["Context Menu"].cells[ImageIdentifiers.pasteAndGo].firstMatch.tap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30

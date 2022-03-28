@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
@@ -41,6 +41,8 @@ class TopTabsTest: BaseTestCase {
     }
 
     func testAddTabFromContext() {
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(urlExample)
         // Initially there is only one tab open
         let tabsOpenInitially = app.buttons["Show Tabs"].value
@@ -57,7 +59,7 @@ class TopTabsTest: BaseTestCase {
         waitForExistence(app.cells.staticTexts["Example Domain"])
         if !app.cells.staticTexts["IANA — IANA-managed Reserved Domains"].exists {
             navigator.goto(TabTray)
-            app.cells.staticTexts["Example Domain"].tap()
+            app.cells.staticTexts["Example Domain"].firstMatch.tap()
             waitUntilPageLoad()
             navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
@@ -104,8 +106,8 @@ class TopTabsTest: BaseTestCase {
         }
 
         // After removing only one tab it automatically goes to HomepanelView
-        waitForExistence(app.collectionViews.cells["TopSitesCell"])
-        XCTAssert(app.cells["TopSitesCell"].cells["TopSite"].exists)
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
+        XCTAssert(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
     }
 
     private func openNtabsFromTabTray(numTabs: Int) {
@@ -116,8 +118,8 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testCloseAllTabsUndo() {
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -133,11 +135,11 @@ class TopTabsTest: BaseTestCase {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
         }
-
-        navigator.goto(URLBarOpen)
-        navigator.back()
+        
         if iPad() {
             navigator.goto(TabTray)
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
@@ -147,17 +149,16 @@ class TopTabsTest: BaseTestCase {
         waitForExistence(app.otherElements.buttons.staticTexts["Undo"])
         app.otherElements.buttons.staticTexts["Undo"].tap()
 
-        waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 5)
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section], timeout: 5)
         navigator.nowAt(BrowserTab)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
         }
 
-        navigator.goto(URLBarOpen)
-        navigator.back()
-
         if iPad() {
             navigator.goto(TabTray)
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
@@ -273,53 +274,53 @@ class TopTabsTest: BaseTestCase {
     // Smoketest
     func testLongTapTabCounter() throws {
         throw XCTSkip("This test is failing. Isabel will be looking into it")
-        if !iPad() {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-            // Long tap on Tab Counter should show the correct options
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-            waitForExistence(app.buttons["Show Tabs"], timeout: 10)
-            app.buttons["Show Tabs"].press(forDuration: 1)
-            waitForExistence(app.cells["quick_action_new_tab"])
-            XCTAssertTrue(app.cells["quick_action_new_tab"].exists)
-            XCTAssertTrue(app.cells["tab_close"].exists)
-
-            // Open New Tab
-            app.cells["quick_action_new_tab"].tap()
-            navigator.performAction(Action.CloseURLBarOpen)
-
-            waitForTabsButton()
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-            waitForExistence(app.cells.staticTexts["Home"])
-            app.cells.staticTexts["Home"].firstMatch.tap()
-
-            // Close tab
-            navigator.nowAt(HomePanelsScreen)
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-
-            waitForExistence(app.buttons["Show Tabs"])
-            app.buttons["Show Tabs"].press(forDuration: 1)
-            waitForExistence(app.cells["quick_action_new_tab"])
-            app.cells["tab_close"].tap()
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-
-            // Go to Private Mode
-            waitForExistence(app.cells.staticTexts["Home"])
-            app.cells.staticTexts["Home"].firstMatch.tap()
-            navigator.nowAt(HomePanelsScreen)
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-            waitForExistence(app.buttons["Show Tabs"])
-            app.buttons["Show Tabs"].press(forDuration: 1)
-            waitForExistence(app.cells["nav-tabcounter"])
-            app.cells["nav-tabcounter"].tap()
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        }
+//        if !iPad() {
+//            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+//            // Long tap on Tab Counter should show the correct options
+//            navigator.performAction(Action.CloseURLBarOpen)
+//            navigator.nowAt(NewTabScreen)
+//            waitForExistence(app.buttons["Show Tabs"], timeout: 10)
+//            app.buttons["Show Tabs"].press(forDuration: 1)
+//            waitForExistence(app.cells[ImageIdentifiers.newTab])
+//            XCTAssertTrue(app.cells[ImageIdentifiers.newTab].exists)
+//            XCTAssertTrue(app.cells["tab_close"].exists)
+//
+//            // Open New Tab
+//            app.cells[ImageIdentifiers.newTab].tap()
+//            navigator.performAction(Action.CloseURLBarOpen)
+//
+//            waitForTabsButton()
+//            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+//            waitForExistence(app.cells.staticTexts["Home"])
+//            app.cells.staticTexts["Home"].firstMatch.tap()
+//
+//            // Close tab
+//            navigator.nowAt(HomePanelsScreen)
+//            navigator.performAction(Action.CloseURLBarOpen)
+//            navigator.nowAt(NewTabScreen)
+//
+//            waitForExistence(app.buttons["Show Tabs"])
+//            app.buttons["Show Tabs"].press(forDuration: 1)
+//            waitForExistence(app.cells[ImageIdentifiers.newTab])
+//            app.cells["tab_close"].tap()
+//            navigator.performAction(Action.CloseURLBarOpen)
+//            navigator.nowAt(NewTabScreen)
+//            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+//
+//            // Go to Private Mode
+//            waitForExistence(app.cells.staticTexts["Home"])
+//            app.cells.staticTexts["Home"].firstMatch.tap()
+//            navigator.nowAt(HomePanelsScreen)
+//            navigator.performAction(Action.CloseURLBarOpen)
+//            navigator.nowAt(NewTabScreen)
+//            waitForExistence(app.buttons["Show Tabs"])
+//            app.buttons["Show Tabs"].press(forDuration: 1)
+//            waitForExistence(app.cells["nav-tabcounter"])
+//            app.cells["nav-tabcounter"].tap()
+//            navigator.performAction(Action.CloseURLBarOpen)
+//            navigator.nowAt(NewTabScreen)
+//            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+//        }
     }
 }
 
@@ -343,50 +344,52 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
     func testCloseTabFromLongPressTabsButton() throws {
         throw XCTSkip("This test is failing. Isabel will be looking into it")
-        if skipPlatform { return }
-        navigator.goto(URLBarOpen)
-        navigator.back()
-        waitForTabsButton()
-        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        closeTabTrayView(goBackToBrowserTab: "Home")
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        closeTabTrayView(goBackToBrowserTab: "Home")
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        closeTabTrayView(goBackToBrowserTab: "Home")
+//        if skipPlatform { return }
+//        navigator.goto(URLBarOpen)
+//        navigator.back()
+//        waitForTabsButton()
+//        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
+//        navigator.performAction(Action.OpenNewTabFromTabTray)
+//        navigator.performAction(Action.CloseURLBarOpen)
+//        navigator.nowAt(NewTabScreen)
+//        waitForTabsButton()
+//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+//        closeTabTrayView(goBackToBrowserTab: "Home")
+//        navigator.performAction(Action.CloseURLBarOpen)
+//        navigator.nowAt(NewTabScreen)
+//        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+//        navigator.performAction(Action.CloseURLBarOpen)
+//        navigator.nowAt(NewTabScreen)
+//        waitForTabsButton()
+//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+//        closeTabTrayView(goBackToBrowserTab: "Home")
+//        navigator.performAction(Action.CloseURLBarOpen)
+//        navigator.nowAt(NewTabScreen)
+//        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+//        navigator.performAction(Action.CloseURLBarOpen)
+//        navigator.nowAt(NewTabScreen)
+//        waitForTabsButton()
+//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+//        closeTabTrayView(goBackToBrowserTab: "Home")
     }
 
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
         navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.goto(URLBarOpen)
         navigator.back()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
         navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
         navigator.goto(URLBarOpen)
@@ -476,11 +479,11 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("3", numTab)
         // Remove one tab by tapping on 'x' button
-        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "Home").element(boundBy: 1).buttons["Remove page — Home"].tap()
+        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "Homepage").element(boundBy: 1).buttons["Remove page — Homepage"].tap()
         waitForExistence(app.buttons["Show Tabs"])
         let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTabAfterRemovingThirdTab)
-        app.collectionViews["Top Tabs View"].children(matching: .cell).element(boundBy: 1).buttons["Remove page — Home"].tap()
+        app.collectionViews["Top Tabs View"].children(matching: .cell).element(boundBy: 1).buttons["Remove page — Homepage"].tap()
         waitForExistence(app.buttons["Show Tabs"])
         let numTabAfterRemovingSecondTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("1", numTabAfterRemovingSecondTab)
@@ -494,33 +497,33 @@ class TopTabsTestIpad: IpadOnlyTestCase {
     func testTopSitesScrollToVisible() throws {
         throw XCTSkip("Not sure about new behaviour with urlBar focused")
 
-        if skipPlatform { return }
-
-        // This first cell gets closed during the test
-        navigator.openURL(urlValueLong)
-
-        // Create enough tabs that tabs bar needs to scroll
-        for _ in 0..<6 {
-            navigator.createNewTab()
-        }
-
-        // This is the selected tab for the duration of this test
-        navigator.openNewURL(urlString: urlValueLongExample)
-
-        waitUntilPageLoad()
-
-        // This is the index of the last visible cell, it doesn't change during the test
-        let lastCell = app.collectionViews["Top Tabs View"].cells.count - 1
-
-        cellIsSelectedTab(index: lastCell, url: urlValueLongExample, title: urlLabelExample)
-
-        // Scroll to first tab and delete it, swipe twice to ensure we are fully scrolled.
-        app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).swipeRight()
-        app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).swipeRight()
-        app.collectionViews["Top Tabs View"].cells[urlLabel].buttons.element(boundBy: 0).tap()
-        // Confirm the view did not scroll to the selected cell
-        XCTAssertEqual(app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).label, "Home")
-        // Confirm the url bar still has selected cell value
-        waitForValueContains(app.textFields["url"], value: urlValueLongExample)
+//        if skipPlatform { return }
+//
+//        // This first cell gets closed during the test
+//        navigator.openURL(urlValueLong)
+//
+//        // Create enough tabs that tabs bar needs to scroll
+//        for _ in 0..<6 {
+//            navigator.createNewTab()
+//        }
+//
+//        // This is the selected tab for the duration of this test
+//        navigator.openNewURL(urlString: urlValueLongExample)
+//
+//        waitUntilPageLoad()
+//
+//        // This is the index of the last visible cell, it doesn't change during the test
+//        let lastCell = app.collectionViews["Top Tabs View"].cells.count - 1
+//
+//        cellIsSelectedTab(index: lastCell, url: urlValueLongExample, title: urlLabelExample)
+//
+//        // Scroll to first tab and delete it, swipe twice to ensure we are fully scrolled.
+//        app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).swipeRight()
+//        app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).swipeRight()
+//        app.collectionViews["Top Tabs View"].cells[urlLabel].buttons.element(boundBy: 0).tap()
+//        // Confirm the view did not scroll to the selected cell
+//        XCTAssertEqual(app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).label, "Home")
+//        // Confirm the url bar still has selected cell value
+//        waitForValueContains(app.textFields["url"], value: urlValueLongExample)
     }
 }

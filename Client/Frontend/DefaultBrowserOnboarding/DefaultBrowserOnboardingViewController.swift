@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import UIKit
@@ -45,21 +45,26 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
     let theme = LegacyThemeManager.instance
+
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
         return theme.currentName == .dark ? .white : .black
     }
+
     private var fxBackgroundThemeColour: UIColor = UIColor.theme.onboarding.backgroundColor
+
     private var descriptionFontSize: CGFloat {
         return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall :
                screenSize.height > 668 ? DBOnboardingUX.fontSize :
                screenSize.height > 640 ? DBOnboardingUX.fontSizeSmall : DBOnboardingUX.fontSizeXSmall
     }
+
     private var titleFontSize: CGFloat {
         return screenSize.height > 1000 ? DBOnboardingUX.titleSizeLarge :
                screenSize.height > 640 ? DBOnboardingUX.titleSize : DBOnboardingUX.titleSizeSmall
     }
+
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
 
@@ -69,7 +74,9 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         button.tintColor = .secondaryLabel
         button.addTarget(self, action: #selector(self?.dismissAnimated), for: .touchUpInside)
     }
+
     private let textView: UIView = .build { view in }
+
     private lazy var titleLabel: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.titleText
@@ -77,6 +84,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.textAlignment = .center
         label.numberOfLines = 2
     }
+
     private lazy var descriptionText: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[0]
@@ -85,6 +93,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.numberOfLines = 5
         label.adjustsFontSizeToFitWidth = true
     }
+
     private lazy var descriptionLabel1: UILabel = .build() { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[1]
@@ -93,6 +102,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
     }
+
     private lazy var descriptionLabel2: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[2]
@@ -101,6 +111,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
     }
+
     private lazy var descriptionLabel3: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[3]
@@ -109,9 +120,10 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
     }
+
     private lazy var goToSettingsButton: UIButton = .build { [weak self] button in
         guard let self = self else { return }
-        button.setTitle(.CoverSheetETPSettingsButton, for: .normal)
+        button.setTitle(.DefaultBrowserOnboardingButton, for: .normal)
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
@@ -171,10 +183,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         
         // Theme change notification
         NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .DisplayThemeChanged, object: nil)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
     
     private func setupView() {

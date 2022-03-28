@@ -26,7 +26,7 @@
 "Enter passcode" = "Ingresar código de acceso";
 
 /* Title of the dialog used to request the passcode */
-"Enter Passcode" = "Ingresar código de acceso";
+"Enter Passcode" = "Escribe el código de acceso";
 
 /* Label for the Face ID/Passcode item in Settings */
 "Face ID & Passcode" = "Face ID & código";

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 
@@ -30,24 +30,39 @@ public struct PrefsKeys {
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
-    public static let ChronTabsPrefKey = "chronTabsPrefKey"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
     public static let SessionCount = "sessionCount"
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
-    public static let StartAtHome = "startAtHome"
-    public static let PullToRefresh = "pullToRefresh"
-    
+    public static let KeySearchBarPosition = "SearchBarPosition"
+
+    public struct FeatureFlags {
+        public static let ASPocketStories = "ASPocketStoriesVisible"
+        public static let ChronologicalTabs = "chronTabsPrefKey"
+        public static let CustomWallpaper = "customWallpaperPrefKey"
+        public static let HistoryHighlightsSection = "historyHighlightsSectionEnabled"
+        public static let HistoryGroups = "historyGroupsEnabled"
+        public static let InactiveTabs = "KeyInactiveTabs"
+        public static let JumpBackInSection = "jumpBackInSectionEnabled"
+        public static let PullToRefresh = "pullToRefresh"
+        public static let RecentlySavedSection = "recentlySavedSectionEnabled"
+        public static let StartAtHome = "startAtHome"
+        public static let TabTrayGroups = "KeyEnableGroupedTabsKey"
+    }
+
     // Firefox contextual hint
-    public static let ContextualHintJumpBackinKey = "ContextualHintJumpBackin"
+    public enum ContextualHints: String, CaseIterable {
+        case JumpBackinKey = "ContextualHintJumpBackin"
+        case InactiveTabsKey = "ContextualHintInactiveTabs"
+        case ToolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
+    }
 
     // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyNewTab = "NewTabPrefKey"
-    public static let ASPocketStoriesVisible = "ASPocketStoriesVisible"
     public static let ASLastInvalidation = "ASLastInvalidation"
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
@@ -59,15 +74,11 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
-    public static let RecentlySavedSectionEnabled = "recentlySavedSectionEnabled"
-    public static let JumpBackInSectionEnabled = "jumpBackInSectionEnabled"
 
     // Tabs Tray
-    public static let KeyEnableInactiveTabs = "KeyInactiveTabs"
-    public static let KeyInactiveTabsModel = "KeyInactiveTabsModel"
-    public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRun"
-    public static let KeyEnableGroupedTabs = "KeyEnableGroupedTabs"
-    public static let KeyTabDisplayOrder = "KeyTabDisplayOrder"
+    public static let KeyInactiveTabsModel = "KeyInactiveTabsModelKey"
+    public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRunKey"
+    public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
 
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
@@ -75,6 +86,13 @@ public struct PrefsKeys {
 
     // ThemeManager key
     public static let ThemeManagerCustomizationKey = "ThemeManagerCustomizationKey"
+
+    // WallpaperManager Key
+    public static let WallpaperManagerCurrentWallpaperObject = "WallpaperManagerCurrentWallpaperObject"
+    public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
+    public static let WallpaperManagerCurrentWallpaperImageLandscape = "WallpaperManagerCurrentWallpaperImageLandscape"
+    public static let WallpaperManagerLogoSwitchPreference = "WallpaperManagerLogoSwitchPreference"
+    public static let WallpaperLogoHasShownAnimation = "WallpaperLogoHasShownAnimation"
 }
 
 public struct PrefsDefaults {

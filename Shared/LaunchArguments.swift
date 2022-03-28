@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 
@@ -10,7 +10,7 @@ public struct LaunchArguments {
     public static let SkipIntro = "FIREFOX_SKIP_INTRO"
     public static let SkipWhatsNew = "FIREFOX_SKIP_WHATS_NEW"
     public static let SkipETPCoverSheet = "FIREFOX_SKIP_ETP_COVER_SHEET"
-    public static let SkipContextualHintJumpBackIn = "FIREFOX_SKIP_CONTEXTUAL_HINT_JUMP_BACK_IN"
+    public static let SkipContextualHints = "FIREFOX_SKIP_CONTEXTUAL_HINTS"
     public static let ClearProfile = "FIREFOX_CLEAR_PROFILE"
     public static let StageServer = "FIREFOX_USE_STAGE_SERVER"
     public static let FxAChinaServer = "FIREFOX_USE_FXA_CHINA_SERVER"

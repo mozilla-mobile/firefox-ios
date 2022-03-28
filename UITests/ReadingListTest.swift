@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import WebKit
@@ -45,8 +45,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier:
-                            "menu-panel-ReadingList")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.readingList)
 
         // Tap to open it
         let firstIndexPath = IndexPath(row: 0, section: 0)
@@ -59,7 +58,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it no longer appears in the reading list home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-ReadingList")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.readingList)
         waitForEmptyReadingList()
 
         // Close the menu
@@ -79,7 +78,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel and make sure it marked as unread
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-ReadingList")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.readingList)
 
         tester().waitForView(withAccessibilityLabel: "Readable page, unread, localhost")
         // Select to Read
@@ -89,7 +88,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Go back to the reading list panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-ReadingList")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.readingList)
 
         // Make sure the article is marked as read
         tester().waitForView(withAccessibilityLabel: "Readable page, read, localhost")

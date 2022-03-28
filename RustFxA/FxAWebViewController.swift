@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import WebKit
 import Account
@@ -67,7 +67,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     private func setup() {
         webView.navigationDelegate = self
         view = webView
-        
+        webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
         viewModel.setupFirstPage { [weak self] (request, telemetryEventMethod) in
             if let method = telemetryEventMethod {
                 TelemetryWrapper.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
@@ -87,7 +87,6 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         if dismissType == .dismiss {
             super.dismiss(animated: animated, completion: completion)
         } else if dismissType == .popToTabTray {
-            print("SOMETHING")
             shouldDismissFxASignInViewController?()
         } else {
             navigationController?.popToRootViewController(animated: true)
@@ -98,6 +97,10 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
         decisionHandler(decision)
+    }
+
+    deinit {
+        webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
     }
 }
 
@@ -136,7 +139,7 @@ extension FxAWebViewController: WKUIDelegate {
         helpBrowser = wv
         helpBrowser?.navigationDelegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: AccessibilityIdentifiers.GeneralizedIdentifiers.back, style: .plain, target: self, action: #selector(closeHelpBrowser)) 
 
         return helpBrowser
     }
@@ -171,5 +174,30 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
             return
         }
         delegate.userContentController(userContentController, didReceive: message)
+    }
+}
+
+extension FxAWebViewController {
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+                               change: [NSKeyValueChangeKey: Any]?,
+                               context: UnsafeMutableRawPointer?) {
+        guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
+            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
+                               severity: .error,
+                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            return
+        }
+        
+        switch path {
+        case .URL:
+            if let flow = viewModel.fxAWebViewTelemetry.getFlowFromUrl(fxaUrl: webView.url) {
+                viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
+            }
+        default:
+            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
+                               severity: .error,
+                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
+        }
     }
 }

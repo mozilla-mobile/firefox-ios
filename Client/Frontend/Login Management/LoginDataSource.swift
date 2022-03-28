@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -49,10 +49,8 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             setting.onConfigureCell(cell)
             if hideSettings {
                 cell.isHidden = true
-            }
-
-            // Fade in the cell while dismissing the search or the cell showing suddenly looks janky
-            if viewModel.isDuringSearchControllerDismiss {
+            } else if viewModel.isDuringSearchControllerDismiss {
+                // Fade in the cell while dismissing the search or the cell showing suddenly looks janky
                 cell.isHidden = false
                 cell.contentView.alpha = 0
                 cell.accessoryView?.alpha = 0

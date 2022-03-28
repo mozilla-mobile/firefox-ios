@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -54,7 +54,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController> {
 
     var query: String = "" {
         didSet {
-            guard let profile = self.profile as? BrowserProfile else {
+            guard self.profile is BrowserProfile else {
                 assertionFailure("nil profile")
                 return
             }

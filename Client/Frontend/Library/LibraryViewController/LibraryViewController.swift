@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import UIKit
@@ -24,7 +24,6 @@ class LibraryViewController: UIViewController {
 
     // Views
     fileprivate var controllerContainerView: UIView = .build { view in }
-    fileprivate var buttons: [LibraryPanelButton] = []
 
     // UI Elements
     lazy var librarySegmentControl: UISegmentedControl = {
@@ -47,7 +46,7 @@ class LibraryViewController: UIViewController {
     }
 
     fileprivate lazy var topLeftButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack"),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(),
                                      style: .plain,
                                      target: self,
                                      action: #selector(topLeftButtonAction))
@@ -86,8 +85,8 @@ class LibraryViewController: UIViewController {
     }()
 
     // MARK: - Initializers
-    init(profile: Profile) {
-        self.viewModel = LibraryViewModel(withProfile: profile)
+    init(profile: Profile, tabManager: TabManager) {
+        self.viewModel = LibraryViewModel(withProfile: profile, tabManager: tabManager)
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -130,8 +129,8 @@ class LibraryViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            navigationToolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            navigationToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             librarySegmentControl.widthAnchor.constraint(equalToConstant: 343),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: CGFloat(ChronologicalTabsControllerUX.navigationMenuHeight)),
@@ -195,20 +194,9 @@ class LibraryViewController: UIViewController {
                 return
             }
 
-            if let index = oldValue?.rawValue {
-                if index < buttons.count {
-                    let currentButton = buttons[index]
-                    currentButton.isSelected = false
-                }
-            }
-
             hideCurrentPanel()
 
             if let index = selectedPanel?.rawValue {
-                if index < buttons.count {
-                    let newButton = buttons[index]
-                    newButton.isSelected = true
-                }
 
                 if index < viewModel.panelDescriptors.count {
                     viewModel.panelDescriptors[index].setup()
@@ -273,9 +261,9 @@ class LibraryViewController: UIViewController {
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             libraryPanel.view.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
-            libraryPanel.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            libraryPanel.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            libraryPanel.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            libraryPanel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            libraryPanel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            libraryPanel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         libraryPanel.didMove(toParent: self)
         updateTitle()
@@ -334,7 +322,7 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
-            topLeftButton.image = UIImage.templateImageNamed("goBack")
+            topLeftButton.image = UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
         case .bookmarks(state: .itemEditMode):
             topLeftButton.image = UIImage.templateImageNamed("nav-stop")

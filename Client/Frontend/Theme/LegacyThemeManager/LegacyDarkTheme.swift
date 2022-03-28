@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 
@@ -126,6 +126,8 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     
     override var recentlySavedBookmarkCellBackground: UIColor { return UIColor.Photon.DarkGrey30 }
 
+    override var recentlyVisitedCellGroupImage: UIColor { return .white }
+    
     override var downloadedFileIcon: UIColor { return UIColor.Photon.Grey30 }
 
     override var historyHeaderIconsBackground: UIColor { return UIColor.clear }

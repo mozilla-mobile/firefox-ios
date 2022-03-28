@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -27,6 +27,8 @@ class FindInPageBar: UIView {
     fileprivate let matchCountView = UILabel()
     fileprivate let previousButton = UIButton()
     fileprivate let nextButton = UIButton()
+
+    private static let savedTextKey = "findInPageSavedTextKey"
 
     var currentResult = 0 {
         didSet {
@@ -167,11 +169,21 @@ class FindInPageBar: UIView {
 
     @objc fileprivate func didTextChange(_ sender: UITextField) {
         matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
+        saveSearchText(searchText.text)
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
 
     @objc fileprivate func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
+    }
+
+    private func saveSearchText(_ searchText: String?) {
+        guard let text = searchText, !text.isEmpty else { return }
+        UserDefaults.standard.set(text, forKey: FindInPageBar.savedTextKey)
+    }
+
+    static var retrieveSavedText: String? {
+        return UserDefaults.standard.object(forKey: FindInPageBar.savedTextKey) as? String
     }
 }
 

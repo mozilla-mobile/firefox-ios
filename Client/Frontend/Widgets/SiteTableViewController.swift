@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Storage
@@ -12,10 +12,19 @@ struct SiteTableViewControllerUX {
     static let HeaderTextMargin = CGFloat(16)
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
+class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
+    
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         label.textColor = UIColor.theme.tableView.headerTextDark
+    }
+    
+    // Currently, historyPanel uses this WHEN STG is available in that section.
+    let headerActionButton: UIButton = .build { button in
+        button.setTitle("Show all", for: .normal)
+        button.backgroundColor = .clear
+        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.isHidden = true
     }
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
@@ -27,14 +36,19 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
         super.init(reuseIdentifier: reuseIdentifier)
         
         translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
+        contentView.addSubviews(titleLabel, headerActionButton)
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
+        
+        backgroundView = UIView()
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            
+            headerActionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            headerActionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
         ])
 
         applyTheme()
@@ -52,7 +66,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        headerActionButton.setTitleColor(UIColor.theme.tableView.rowActionAccessory, for: .normal)
+        backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }
 
@@ -97,6 +112,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         // Set an empty footer to prevent empty cells from appearing in the list.
         table.tableFooterView = UIView()
+        
+        if #available(iOS 15.0, *) {
+            table.sectionHeaderTopPadding = 0
+        }
     }
 
     private override init(nibName: String?, bundle: Bundle?) {
@@ -115,12 +134,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
+        
+        setupView()
     }
 
     deinit {
@@ -139,14 +154,23 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         tableView.setEditing(false, animated: false)
-        coordinator.animate(alongsideTransition: { context in
-            //The AS context menu does not behave correctly. Dismiss it when rotating.
-            if let _ = self.presentedViewController as? PhotonActionSheet {
-                self.presentedViewController?.dismiss(animated: true, completion: nil)
-            }
-        }, completion: nil)
+        // The AS context menu does not behave correctly. Dismiss it when rotating.
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }
     }
 
+    private func setupView() {
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
     func reloadData() {
         if data.status != .success {
             print("Err: \(data.statusMessage)", terminator: "\n")
@@ -208,9 +232,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
 extension SiteTableViewController: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard let homePanelVC = self as? HomePanelContextMenu, let site = homePanelVC.getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {
-            return []
-        }
+        guard let homePanelVC = self as? HomePanelContextMenu,
+              let site = homePanelVC.getSiteDetails(for: indexPath),
+              let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url)
+        else { return [] }
 
         TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
 

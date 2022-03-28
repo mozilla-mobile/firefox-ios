@@ -1,7 +1,7 @@
 /* vim: set ts=2 sts=2 sw=2 et tw=80: */
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 "use strict";
 
@@ -71,6 +71,8 @@ function checkReadability() {
 
       // Sanitize the title to prevent a malicious page from inserting HTML in the `<title>`.
       readabilityResult.title = escapeHTML(readabilityResult.title);
+      // Sanitize the credits to prevent a malicious page from inserting HTML in the `<credits>`.
+      readabilityResult.credits = escapeHTML(readabilityResult.credits);
 
       debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
       webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});

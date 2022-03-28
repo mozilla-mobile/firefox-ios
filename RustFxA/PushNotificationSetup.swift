@@ -3,7 +3,6 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import SwiftKeychainWrapper
 import MozillaAppServices
 
 open class PushNotificationSetup {
@@ -13,7 +12,7 @@ open class PushNotificationSetup {
     public func didRegister(withDeviceToken deviceToken: Data) {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else {
             return
         }

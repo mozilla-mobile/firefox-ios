@@ -1,11 +1,9 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
-import SwiftKeychainWrapper
-
 @_exported import MozillaAppServices
 
 private let log = Logger.syncLogger
@@ -345,7 +343,7 @@ public class RustLoginEncryptionKeys {
     public let loginsPostMigrationSalt = "sqlcipher.key.logins.salt.post.migration"
     public let loginsPostMigrationKey = "sqlcipher.key.logins.db.post.migration"
     
-    let keychain: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain
+    let keychain: MZKeychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
     let canaryPhraseKey = "canaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
     
@@ -356,8 +354,8 @@ public class RustLoginEncryptionKeys {
             let secret = try createKey()
             let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
             
-            keychain.set(secret, forKey: loginPerFieldKeychainKey, withAccessibility: .afterFirstUnlock)
-            keychain.set(canary, forKey: canaryPhraseKey, withAccessibility: .afterFirstUnlock)
+            keychain.set(secret, forKey: loginPerFieldKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            keychain.set(canary, forKey: canaryPhraseKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             
             return secret
         } catch let err as NSError {
@@ -744,7 +742,7 @@ public class RustLogins {
     }
     
     private func migrateSQLCipherDBIfNeeded(key: String) {
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         let rustKeys: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
         let sqlCipherLoginsKey: String? = keychain.string(forKey: rustKeys.loginsUnlockKeychainKey)
         let sqlCipherLoginsSalt: String? = keychain.string(forKey: rustKeys.loginsSaltKeychainKey)

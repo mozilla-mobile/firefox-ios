@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -123,10 +123,10 @@ class ThemeSettingsController: ThemedTableViewController {
     @objc func systemThemeSwitchValueChanged(control: UISwitch) {
         LegacyThemeManager.instance.systemThemeIsOn = control.isOn
     
-        let userInterfaceStyle = traitCollection.userInterfaceStyle
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
             UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
         } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
             LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
@@ -150,7 +150,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     private func makeSlider(parent: UIView) -> UISlider {
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
-        let images = ["menu-NightMode", "themeBrightness"].map { name in
+        let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
             UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: UIColor.theme.browser.tint)
         }
 

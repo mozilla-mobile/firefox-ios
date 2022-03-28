@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import UIKit
@@ -174,7 +174,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
         closeButton.addTarget(self, action: #selector(handleCloseButtonTapped), for: .touchUpInside)
         closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(buttonEdgeInset)
-            make.right.equalToSuperview().inset(buttonEdgeInset)
+            make.trailing.equalToSuperview().inset(buttonEdgeInset)
         }
 
         closeButton.tintColor = .secondaryLabel

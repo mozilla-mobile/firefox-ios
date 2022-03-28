@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 @testable import Client
@@ -39,7 +39,7 @@ class ETPCoverSheetTests: XCTestCase {
         var sessionValue:Int32 = 0
         var shouldShow = false
         var isCleanInstall = true // Only for the first time
-        for session in 0...2 {
+        for _ in 0...2 {
            shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: prefs, currentAppVersion: currentTestAppVersion, isCleanInstall: isCleanInstall, supportedAppVersions: supportedVersion)
             // False after the 1st run
             isCleanInstall = false

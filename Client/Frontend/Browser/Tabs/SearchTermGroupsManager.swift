@@ -1,24 +1,38 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
+import Storage
 import MozillaAppServices
-
-struct ASGroup<T> {
-    let searchTerm: String
-    let groupedItems: [T]
-    let timestamp: Timestamp
-}
 
 class SearchTermGroupsManager {
 
-    public static func getURLGroups(with profile: Profile, from urls: [URL], using ordering: ComparisonResult, completion: @escaping ([ASGroup<URL>]?, _ filteredItems: [URL]) -> Void) {
-        getGroups(with: profile, from: urls, using: ordering, completion: completion)
+    public static func getHighlightGroups(
+        with profile: Profile,
+        from highlights: [HistoryHighlight],
+        using ordering: ComparisonResult,
+        completion: @escaping ([ASGroup<HistoryHighlight>]?, _ filteredItems: [HistoryHighlight]) -> Void
+    ) {
+        getGroups(with: profile, from: highlights, using: ordering, completion: completion)
+    }
+    
+    public static func getSiteGroups(
+        with profile: Profile,
+        from sites: [Site],
+        using ordering: ComparisonResult,
+        completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void
+    ) {
+        getGroups(with: profile, from: sites, using: ordering, completion: completion)
     }
 
-    public static func getTabGroups(with profile: Profile, from tabs: [Tab], using ordering: ComparisonResult, completion: @escaping ([ASGroup<Tab>]?, _ filteredItems: [Tab]) -> Void) {
+    public static func getTabGroups(
+        with profile: Profile,
+        from tabs: [Tab],
+        using ordering: ComparisonResult,
+        completion: @escaping ([ASGroup<Tab>]?, _ filteredItems: [Tab]) -> Void
+    ) {
         getGroups(with: profile, from: tabs, using: ordering, completion: completion)
     }
 
@@ -30,7 +44,7 @@ class SearchTermGroupsManager {
     /// - Parameters:
     ///   - profile: The user's `Profile` info
     ///   - items: List of items we want to make the groups from. This is a generic type and
-    ///   currently only supports `Tab` and `URL`
+    ///   currently only supports `Tab`, `URL` and `HistoryHighlight`
     ///   - ordering: Order in which we want to return groups, `.orderedAscending` or
     ///   `.orderedDescending`. `.orderedSame` is also possible, but will return the exact
     ///   order of the group that was provided. Note: this does not affect the groups' items,
@@ -38,13 +52,16 @@ class SearchTermGroupsManager {
     ///   - completion: completion handler that contains `[ASGroup<T>]`  dictionary and a
     ///   filteredItems list, `[T]`, which is comprised of items from the original input
     ///   that are not part of a group.
-    private static func getGroups<T: Equatable>(with profile: Profile, from items: [T], using ordering: ComparisonResult, completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void) {
-//        ROUX TODO: when URL support is added, fix check
-//        guard (items is [Tab] || items is [URL]) else { return completion(nil, [T]()) }
-        guard (items is [Tab]) else { return completion(nil, [T]()) }
+    private static func getGroups<T: Equatable>(
+        with profile: Profile,
+        from items: [T],
+        using ordering: ComparisonResult,
+        completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void
+    ) {
+        guard (items is [Tab] || items is [Site] || items is [HistoryHighlight]) else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
-        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.main) { result in
+        profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.global(qos: .userInteractive)) { result in
             guard let historyMetadata = result.successValue else { return completion(nil, [T]()) }
 
             let searchTermMetaDataGroup = buildMetadataGroups(from: historyMetadata)
@@ -105,15 +122,16 @@ class SearchTermGroupsManager {
             innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata {
                 if historyMetaList.contains(where: { metadata in
                     var stringURL: String = ""
-                    if let item = item as? URL {
-                        stringURL = item.absoluteString
 
+                    if let item = item as? Site {
+                        stringURL = item.url
                     } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
                         stringURL = url
+                    } else if let item = item as? HistoryHighlight {
+                        stringURL = item.url
                     }
 
                     return metadata.url == stringURL || metadata.referrerUrl == stringURL
-
                 }) {
                     itemsInGroups.append(item)
                     if itemGroupData[searchTerm] == nil {
@@ -125,7 +143,6 @@ class SearchTermGroupsManager {
                 }
             }
         }
-
         return (itemGroupData, itemsInGroups)
     }
 
@@ -186,14 +203,17 @@ class SearchTermGroupsManager {
 
     /// Takes a dictionary and creates ASGroups from it.
     ///
+    /// If dictionary contains `Tab`s, then the group will be assigned a timestap based
+    /// on the `firstCreatedTime` of the first item in the group.
+    ///
     /// - Parameter groupDictionary: Dictionary that is to be processed
     /// - Returns: An array of `ASGroup<T>`
     private static func createGroups<T: Equatable>(from groupDictionary: [String: [T]]) -> [ASGroup<T>] {
         return groupDictionary.map() {
                 let orderedItems = orderItemsIn(group: $0.value)
                 var timestamp: Timestamp = 0
-                if let lastItem = orderedItems.last, let tab = lastItem as? Tab {
-                    timestamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+                if let firstItem = orderedItems.first, let tab = firstItem as? Tab {
+                    timestamp = tab.firstCreatedTime ?? 0
                 }
 
                 return ASGroup<T>(searchTerm: $0.key.capitalized, groupedItems: orderedItems, timestamp: timestamp)
@@ -207,9 +227,17 @@ class SearchTermGroupsManager {
     private static func orderItemsIn<T: Equatable>(group: [T]) -> [T] {
         return group.sorted {
             if let firstTab = $0 as? Tab, let secondTab = $1 as? Tab {
-                let firstTabTimestamp = firstTab.lastExecutedTime ?? firstTab.sessionData?.lastUsedTime ?? firstTab.firstCreatedTime ?? 0
-                let secondTabTimestamp = secondTab.lastExecutedTime ?? secondTab.sessionData?.lastUsedTime ?? secondTab.firstCreatedTime ?? 0
+                let firstTabTimestamp = firstTab.firstCreatedTime ?? 0
+                let secondTabTimestamp = secondTab.firstCreatedTime ?? 0
                 return firstTabTimestamp < secondTabTimestamp
+
+            } else if let firstSite = $0 as? Site, let secondSite = $1 as? Site {
+                let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
+                let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
+                return firstSiteATimestamp < secondSiteTimestamp
+
+            } else if let firstHighlight = $0 as? HistoryHighlight, let secondHighlight = $1 as? HistoryHighlight {
+                return firstHighlight.score > secondHighlight.score
             } else {
                 fatalError("Error: We should never pass a type \(T.self) to this function.")
             }

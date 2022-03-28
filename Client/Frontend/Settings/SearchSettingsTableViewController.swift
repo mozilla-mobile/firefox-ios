@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import SDWebImage
@@ -122,7 +122,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             } else {
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = .SettingsAddCustomEngineTitle
-                cell.accessibilityIdentifier = "customEngineViewButton"
+                cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
                 cell.textLabel?.text = .SettingsAddCustomEngine
             }
         }
@@ -339,7 +339,10 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             model.defaultEngine = engine
             updateSearchIcon?()
             self.tableView.reloadData()
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": "defaultSearchEngine", "to": engine.engineID ?? "custom"])
+
+            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "defaultSearchEngine",
+                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engine.engineID ?? "custom"]
+            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
         }
         _ = navigationController?.popViewController(animated: true)
     }

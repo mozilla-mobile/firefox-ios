@@ -4,12 +4,14 @@
 //
 //  Created by Felix Krause on 10/8/15.
 //
+
 // -----------------------------------------------------
 // IMPORTANT: When modifying this file, make sure to
 //            increment the version number at the very
 //            bottom of the file to notify users about
 //            the new SnapshotHelper.swift
 // -----------------------------------------------------
+
 import Foundation
 import XCTest
 
@@ -143,6 +145,7 @@ open class Snapshot: NSObject {
         }
 
         NSLog("snapshot: \(name)") // more information about this, check out https://docs.fastlane.tools/actions/snapshot/#how-does-it-work
+
         if Snapshot.waitForAnimations {
             sleep(1) // Waiting for the animation to be finished (kind of)
         }
@@ -190,16 +193,16 @@ open class Snapshot: NSObject {
     }
 
     class func fixLandscapeOrientation(image: UIImage) -> UIImage {
-        #if os(watchOS)
-            return image
-        #else
+        if #available(iOS 10.0, *) {
             let format = UIGraphicsImageRendererFormat()
             format.scale = image.scale
             let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
             return renderer.image { context in
                 image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
             }
-        #endif
+        } else {
+            return image
+        }
     }
 
     class func waitForLoadingIndicatorToDisappear(within timeout: TimeInterval) {

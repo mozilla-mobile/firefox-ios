@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import MozillaAppServices
@@ -14,23 +14,30 @@ struct FlaggableFeature {
     private var featureID: FeatureFlagName
 
     private var featureKey: String? {
+        typealias FlagKeys = PrefsKeys.FeatureFlags
         switch featureID {
         case .chronologicalTabs:
-            return PrefsKeys.ChronTabsPrefKey
+            return FlagKeys.ChronologicalTabs
+        case .historyHighlights:
+            return FlagKeys.HistoryHighlightsSection
+        case .historyGroups:
+            return FlagKeys.HistoryGroups
         case .inactiveTabs:
-            return PrefsKeys.KeyEnableInactiveTabs
-        case .groupedTabs:
-            return PrefsKeys.KeyEnableGroupedTabs
+            return FlagKeys.InactiveTabs
         case .jumpBackIn:
-            return PrefsKeys.JumpBackInSectionEnabled
+            return FlagKeys.JumpBackInSection
         case .pocket:
-            return PrefsKeys.ASPocketStoriesVisible
+            return FlagKeys.ASPocketStories
         case .pullToRefresh:
-            return PrefsKeys.PullToRefresh
+            return FlagKeys.PullToRefresh
         case .recentlySaved:
-            return PrefsKeys.RecentlySavedSectionEnabled
+            return FlagKeys.RecentlySavedSection
         case .startAtHome:
-            return PrefsKeys.StartAtHome
+            return FlagKeys.StartAtHome
+        case .tabTrayGroups:
+            return FlagKeys.TabTrayGroups
+        case .wallpapers:
+            return FlagKeys.CustomWallpaper
         default: return nil
         }
     }
@@ -43,7 +50,10 @@ struct FlaggableFeature {
 
     // MARK: - Initializers
 
-    init(withID featureID: FeatureFlagName, and profile: Profile, enabledFor channels: [AppBuildChannel]) {
+    init(withID featureID: FeatureFlagName,
+         and profile: Profile,
+         enabledFor channels: [AppBuildChannel]
+    ) {
         self.featureID = featureID
         self.profile = profile
         self.buildChannels = channels
@@ -91,10 +101,16 @@ struct FlaggableFeature {
         switch featureID {
         case .startAtHome:
             return StartAtHomeSetting.afterFourHours.rawValue
+        case .wallpapers:
+            // In this case, we want to enable the tap banner to cycle through
+            // wallpapers behaviour by default.
+            return UserFeaturePreference.enabled.rawValue
 
         // Nimbus default options
         case .jumpBackIn, .pocket, .recentlySaved:
             return checkNimbusHomepageFeatures(for: sectionID(from: featureID)).rawValue
+        case .inactiveTabs:
+            return checkNimbusTabTrayFeatures(for: sectionID(from: featureID)).rawValue
         default:
             return UserFeaturePreference.disabled.rawValue
         }
@@ -121,18 +137,36 @@ struct FlaggableFeature {
         guard let featureKey = featureKey else { return }
         profile.prefs.setBool(!isActiveForBuild(), forKey: featureKey)
     }
+}
 
-    // MARK: - Private helper functions
-
-    private func checkNimbusHomepageFeatures(for sectionID: Homescreen.SectionId?, from experiments: NimbusApi = Experiments.shared) -> UserFeaturePreference {
+// MARK: - Nimbus related methods
+extension FlaggableFeature {
+    private func checkNimbusTabTrayFeatures(
+        for sectionID: TabTraySection?,
+        from nimbus: FxNimbus = FxNimbus.shared
+    ) -> UserFeaturePreference {
         guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
 
-        var homePageExperiments = experiments.withVariables(featureId: .homescreen,
-                                                            sendExposureEvent: false) {
-            Homescreen(variables: $0)
+        let nimbusTabTrayConfig = nimbus.features.tabTrayFeature.value()
+
+        if let sectionIsEnabled = nimbusTabTrayConfig.sectionsEnabled[sectionID],
+           sectionIsEnabled {
+            return UserFeaturePreference.enabled
         }
 
-        if let sectionIsEnabled = homePageExperiments.sectionsEnabled[sectionID], sectionIsEnabled {
+        return UserFeaturePreference.disabled
+    }
+
+    private func checkNimbusHomepageFeatures(
+        for sectionID: HomeScreenSection?,
+        from nimbus: FxNimbus = FxNimbus.shared
+    ) -> UserFeaturePreference {
+        guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
+
+        let nimbusHomepageConfig = nimbus.features.homescreenFeature.value()
+
+        if let sectionIsEnabled = nimbusHomepageConfig.sectionsEnabled[sectionID],
+           sectionIsEnabled {
             // For pocket's default value, we also need to check the locale being supported.
             // Here, we want to make sure the section is enabled && locale is supported before
             // we would return that pocket is enabled
@@ -145,7 +179,9 @@ struct FlaggableFeature {
         return UserFeaturePreference.disabled
     }
 
-    private func sectionID(from featureID: FeatureFlagName) -> Homescreen.SectionId? {
+    // Here we encapsulate translation from internal featureIDs to Nimbus' related
+    // feature ids, whose definition can be found in the `nimbus.fml.yaml` file.
+    private func sectionID(from featureID: FeatureFlagName) -> HomeScreenSection? {
         switch featureID {
         case .jumpBackIn:
             return .jumpBackIn
@@ -153,6 +189,15 @@ struct FlaggableFeature {
             return .recentlySaved
         case .pocket:
             return .pocket
+        default:
+            return nil
+        }
+    }
+
+    private func sectionID(from featureID: FeatureFlagName) -> TabTraySection? {
+        switch featureID {
+        case .inactiveTabs:
+            return .inactiveTabs
         default:
             return nil
         }
