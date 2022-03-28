@@ -20,7 +20,7 @@ open class Avatar {
             if let image = image {
                 self.image.fill(image)
             } else {
-                self.image.fill(UIImage(named: "placeholder-avatar")!)
+                self.image.fill(UIImage(named: ImageIdentifiers.placeholderAvatar)!)
             }
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }

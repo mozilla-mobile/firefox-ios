@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import WebKit
@@ -62,6 +62,14 @@ extension WKUserContentController {
     public func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
         if #available(iOS 14.3, *), USE_NEW_SANDBOX_APIS {
             add(scriptMessageHandler, contentWorld: .defaultClient, name: name)
+        } else {
+            add(scriptMessageHandler, name: name)
+        }
+    }
+
+    public func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        if #available(iOS 14.3, *), USE_NEW_SANDBOX_APIS {
+            add(scriptMessageHandler, contentWorld: .page, name: name)
         } else {
             add(scriptMessageHandler, name: name)
         }

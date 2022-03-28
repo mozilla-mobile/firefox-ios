@@ -1,12 +1,12 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Account
 import Shared
 import XCGLogger
-import SwiftKeychainWrapper
+import MozillaAppServices
 import SwiftyJSON
 
 private let log = Logger.syncLogger
@@ -459,8 +459,8 @@ open class Scratchpad {
             b.keyLabel = keyLabel
             if let ckTS = prefs.unsignedLongForKey(PrefKeysTS) {
                 let key = "keys." + keyLabel
-                KeychainWrapper.sharedAppContainerKeychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
-                if let keys = KeychainWrapper.sharedAppContainerKeychain.string(forKey: key) {
+                MZKeychainWrapper.sharedClientAppContainerKeychain.ensureClientStringItemAccessibility(.afterFirstUnlock, forKey: key)
+                if let keys = MZKeychainWrapper.sharedClientAppContainerKeychain.string(forKey: key) {
                     // We serialize as JSON.
                     let keys = Keys(payload: KeysPayload(keys))
                     if keys.valid {
@@ -530,7 +530,7 @@ open class Scratchpad {
     open class func clearFromPrefs(_ prefs: Prefs) {
         if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
             log.debug("Removing saved key from keychain.")
-            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: keyLabel)
+            MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: keyLabel)
         } else {
             log.debug("No key label; nothing to remove from keychain.")
         }
@@ -578,10 +578,10 @@ open class Scratchpad {
             log.debug("Storing keys in Keychain with label \(label).")
             prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
             prefs.setLong(keys.timestamp, forKey: PrefKeysTS)
-            KeychainWrapper.sharedAppContainerKeychain.set(payload, forKey: label, withAccessibility: .afterFirstUnlock)
+            MZKeychainWrapper.sharedClientAppContainerKeychain.set(payload, forKey: label, withAccessibility: .afterFirstUnlock)
         } else {
             log.debug("Removing keys from Keychain.")
-            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: self.keyLabel)
+            MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: self.keyLabel)
         }
 
         prefs.setString(clientName, forKey: PrefClientName)

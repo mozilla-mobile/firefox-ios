@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 @testable import Client
@@ -47,17 +47,17 @@ class NoImageModeTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().wait(forTimeInterval: 3)
         if BrowserUtils.iPad() {
-            tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+            tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         } else {
             tester().tapView(withAccessibilityLabel: "Menu")
         }
-        tester().tapView(withAccessibilityIdentifier: "menu-NoImageMode")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.noImageMode)
 
         checkHiding(isOn: true)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().wait(forTimeInterval: 3)
         if BrowserUtils.iPad() {
-            tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+            tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         } else {
              tester().tapView(withAccessibilityLabel: "Menu")
         }

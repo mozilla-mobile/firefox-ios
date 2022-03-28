@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import Storage
@@ -8,7 +8,6 @@ import AVFoundation
 import XCGLogger
 import MessageUI
 import SDWebImage
-import SwiftKeychainWrapper
 import SyncTelemetry
 import LocalAuthentication
 import SyncTelemetry
@@ -31,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var tabTrayController: GridTabViewController!
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
@@ -43,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var receivedURLs = [URL]()
     var telemetry: TelemetryWrapper?
+    var adjustHelper: AdjustHelper?
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
@@ -104,7 +103,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
-        NSUserDefaultsPrefs(prefix: "profile").setBool(true, forKey: "isColdLaunch")
         FeatureFlagsManager.shared.initializeFeatures(with: profile)
         ThemeManager.shared.updateProfile(with: profile)
 
@@ -123,12 +121,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        self.tabTrayController = GridTabViewController(tabManager: self.tabManager, profile: profile)
+        
+        setupRootViewController()
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
-
-        setupRootViewController()
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
@@ -145,6 +142,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
+        adjustHelper = AdjustHelper(profile: profile)
         SystemUtils.onFirstRun()
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
@@ -170,6 +168,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
+        browserViewController.updateState = .coldStart
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -223,11 +222,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // This will block "performActionForShortcutItem:completionHandler" from being called.
             shouldPerformAdditionalDelegateHandling = false
         }
-
-        // Force the ToolbarTextField in LTR mode - without this change the UITextField's clear
-        // button will be in the incorrect position and overlap with the input text. Not clear if
-        // that is an iOS bug or not.
-        AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
         pushNotificationSetup()
 
@@ -290,6 +284,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         updateSessionCount()
+        adjustHelper?.setupAdjust()
 
         return shouldPerformAdditionalDelegateHandling
     }
@@ -320,7 +315,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC(), tray: self.tabTrayController)
+            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC())
         }
         return true
     }
@@ -385,13 +380,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             self.profile?.cleanupHistoryIfNeeded()
+            self.browserViewController.ratingPromptManager.updateData()
         }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
         updateTopSitesWidget()
         UserDefaults.standard.setValue(Date(), forKey: "LastActiveTimestamp")
-        NSUserDefaultsPrefs(prefix: "profile").setBool(false, forKey: "isColdLaunch")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -430,7 +425,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
             guard let profile = profile else { return }
-            TopSitesHandler.writeWidgetKitTopSites(profile: profile)
+            TopSitesHelper.writeWidgetKitTopSites(profile: profile)
         }
     }
 

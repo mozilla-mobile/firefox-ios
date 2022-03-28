@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Storage
@@ -88,13 +88,13 @@ class BackForwardTableViewCell: UITableViewCell {
             make.height.equalTo(BackForwardViewCellUX.faviconWidth)
             make.width.equalTo(BackForwardViewCellUX.faviconWidth)
             make.centerY.equalTo(self)
-            make.leading.equalTo(self.snp.leading).offset(BackForwardViewCellUX.faviconPadding)
+            make.leading.equalTo(self.safeArea.leading).offset(BackForwardViewCellUX.faviconPadding)
         }
 
         label.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.leading.equalTo(faviconView.snp.trailing).offset(BackForwardViewCellUX.labelPadding)
-            make.trailing.equalTo(self.snp.trailing).offset(-BackForwardViewCellUX.labelPadding)
+            make.trailing.equalTo(self.safeArea.trailing).offset(-BackForwardViewCellUX.labelPadding)
         }
 
     }
@@ -107,9 +107,9 @@ class BackForwardTableViewCell: UITableViewCell {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
 
-        var startPoint = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
+        var startPoint = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5) + safeAreaInsets.left,
                                      y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
-        var endPoint   = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5),
+        var endPoint   = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5) + safeAreaInsets.left,
                                      y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
 
         // flip the x component if RTL

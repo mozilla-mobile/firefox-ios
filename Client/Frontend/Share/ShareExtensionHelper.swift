@@ -1,10 +1,10 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
-import OnePasswordExtension
+import MobileCoreServices
 
 private let log = Logger.browserLogger
 
@@ -58,7 +58,9 @@ class ShareExtensionHelper: NSObject {
         // This needs to be ready by the time the share menu has been displayed and
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.
-        findLoginExtensionItem()
+        guard (selectedTab?.webView) != nil else {
+            return activityViewController
+        }
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
@@ -71,14 +73,9 @@ class ShareExtensionHelper: NSObject {
                 UIPasteboard.general.urls = [url]
             }
 
-            if self.isPasswordManager(activityType: activityType) {
-                if let logins = returnedItems {
-                    self.fillPasswords(logins as [AnyObject])
-                }
-            }
-
             completionHandler(completed, activityType)
         }
+        
         return activityViewController
     }
 }
@@ -127,36 +124,5 @@ extension ShareExtensionHelper: UIActivityItemSource {
     private func isOpenByCopy(activityType: UIActivity.ActivityType?) -> Bool {
         guard let activityType = activityType?.rawValue else { return false }
         return activityType.lowercased().range(of: "remoteopeninapplication-bycopy") != nil
-    }
-}
-
-private extension ShareExtensionHelper {
-    func findLoginExtensionItem() {
-        guard let selectedWebView = selectedTab?.webView else {
-            return
-        }
-
-        // Add 1Password to share sheet
-        OnePasswordExtension.shared().createExtensionItem(forWebView: selectedWebView, completion: {(extensionItem, error) -> Void in
-            if extensionItem == nil {
-                log.error("Failed to create the password manager extension item: \(error.debugDescription).")
-                return
-            }
-
-            // Set the 1Password extension item property
-            self.onePasswordExtensionItem = extensionItem
-        })
-    }
-
-    func fillPasswords(_ returnedItems: [AnyObject]) {
-        guard let selectedWebView = selectedTab?.webView else {
-            return
-        }
-
-        OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: selectedWebView, completion: { (success, returnedItemsError) -> Void in
-            if !success {
-                log.error("Failed to fill item into webview: \(returnedItemsError ??? "nil").")
-            }
-        })
     }
 }

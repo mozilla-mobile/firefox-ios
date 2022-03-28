@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -74,7 +74,7 @@ class SyncCommandsTests: XCTestCase {
 
         let j = JSON(parseJSON: syncCommand.value)
 
-        XCTAssertEqual(j.dictionary!["command"]?.stringValue, jsonObj["command"] as! String)
+        XCTAssertEqual(j.dictionary!["command"]?.stringValue, jsonObj["command"] as? String)
         XCTAssert(j.dictionary!["args"]!.arrayObject as! [String] == jsonObj["args"] as! [String])
         XCTAssertEqual(j.dictionary!.keys.count, jsonObj.keys.count)
     }

@@ -1,8 +1,8 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Foundation
+import UIKit
 import Shared
 import Account
 import Storage
@@ -371,11 +371,11 @@ public struct SyncPing: SyncTelemetryPing {
             // start, return why and a reason.
             switch status {
             case .completed(let stats):
-                engine.merge(with: stats.asDictionary())
+                engine = engine.merge(with: stats.asDictionary())
             case .partial(let stats):
-                engine.merge(with: stats.asDictionary())
+                engine = engine.merge(with: stats.asDictionary())
             case .notStarted(let reason):
-                engine.merge(with: [
+                engine = engine.merge(with: [
                     "status": reason.telemetryId
                 ])
             }

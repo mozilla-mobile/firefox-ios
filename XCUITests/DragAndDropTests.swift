@@ -1,13 +1,13 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
 let firstWebsite = (url: path(forTestPage: "test-mozilla-org.html"), tabName: "Internet for people, not profit — Mozilla")
-let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
+let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla. Currently selected tab.")
 let exampleWebsite = (url: path(forTestPage: "test-example.html"), tabName: "Example Domain")
-let homeTabName = "Home"
+let homeTabName = "Homepage"
 let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 
 let exampleDomainTitle = "Example Domain"
@@ -101,9 +101,13 @@ class DragAndDropTests: BaseTestCase {
 fileprivate extension BaseTestCase {
     func openTwoWebsites() {
         // Open two tabs
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(firstWebsite.url)
         waitForTabsButton()
-        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()
@@ -130,7 +134,7 @@ fileprivate extension BaseTestCase {
 
 class DragAndDropTestIpad: IpadOnlyTestCase {
 
-    let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkToURLBar","testDragAndDropBookmarkEntry","testDragAndDropHistoryEntry"]
+    let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkToURLBar","testDragAndDropBookmarkEntry","test3DragAndDropHistoryEntry"]
 
         // This DDBB contains those 4 websites listed in the name
     let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample.db"
@@ -141,7 +145,11 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyAndBookmarksDB, LaunchArguments.SkipContextualHintJumpBackIn]
+                launchArguments = [LaunchArguments.SkipIntro,
+                                   LaunchArguments.SkipWhatsNew,
+                                   LaunchArguments.SkipETPCoverSheet,
+                                   LaunchArguments.LoadDatabasePrefix + historyAndBookmarksDB,
+                                   LaunchArguments.SkipContextualHints]
         }
         super.setUp()
     }
@@ -151,7 +159,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         super.tearDown()
     }
 
-    func testRearrangeTabs() {
+    func test4RearrangeTabs() {
         if skipPlatform { return }
 
         openTwoWebsites()
@@ -181,25 +189,29 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
     func testDragAndDropHomeTab() {
         if skipPlatform { return }
-
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
         // Home tab is open and then a new website
-        navigator.openNewURL(urlString: secondWebsite.url)
+        navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
         waitForExistence(app.collectionViews.cells.element(boundBy: 1))
 
         // Drag and drop home tab from the second position to the first one
-        dragAndDrop(dragElement: app.collectionViews.cells["Home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        dragAndDrop(dragElement: app.collectionViews.cells["Homepage"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName , secondTab: homeTabName)
         // Check that focus is kept on last website open
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
 
-    func testRearrangeTabsPrivateMode() {
+    func test2RearrangeTabsPrivateMode() {
         if skipPlatform { return }
 
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        app.buttons["TopTabsViewController.privateModeButton"].tap()
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         // Drag first tab on the second one
@@ -242,8 +254,10 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssertEqual(app.webViews.searchFields.element(boundBy: 0).value as? String, websiteWithSearchField)
     }*/
 
-    func testDragAndDropHistoryEntry() {
+    func test3DragAndDropHistoryEntry() {
         if skipPlatform { return }
+        
+        typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
         waitForExistence(app.textFields["url"], timeout: 5)
@@ -253,15 +267,15 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_History)
 
-        let firstEntryOnList = app.tables["History List"].cells.element(boundBy:
+        let firstEntryOnList = app.tables[historyPanelA11y.tableView].cells.element(boundBy:
             5).staticTexts[exampleDomainTitle]
-        let secondEntryOnList = app.tables["History List"].cells.element(boundBy: 2).staticTexts[twitterTitle]
+        let secondEntryOnList = app.tables[historyPanelA11y.tableView].cells.element(boundBy: 2).staticTexts[twitterTitle]
 
         XCTAssertTrue(firstEntryOnList.exists, "first entry before is not correct")
         XCTAssertTrue(secondEntryOnList.exists, "second entry before is not correct")
 
         // Drag and Drop the element and check that the position of the two elements does not change
-        app.tables["History List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.tables["History List"].cells.staticTexts[exampleDomainTitle])
+        app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.tables[historyPanelA11y.tableView].cells.staticTexts[exampleDomainTitle])
 
         XCTAssertTrue(firstEntryOnList.exists, "first entry after is not correct")
         XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
@@ -294,11 +308,13 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     // Will be removed if this is going the final implementation
     func testTryDragAndDropHistoryToURLBar() {
         if skipPlatform { return }
+        
+        typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables["History List"].cells.staticTexts[twitterTitle])
+        waitForExistence(app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle])
 
-        app.tables["History List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
+        app.tables[historyPanelA11y.tableView].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 
         // It is not allowed to drop the entry on the url field
         let urlBarValue = app.textFields["url"].value as? String

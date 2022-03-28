@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -8,6 +8,9 @@ import Shared
 enum AppSettingsDeeplinkOption {
     case contentBlocker
     case customizeHomepage
+    case customizeTabs
+    case customizeToolbar
+    case wallpaper
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
@@ -48,6 +51,20 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         case .customizeHomepage:
             viewController = HomePageSettingViewController(prefs: profile.prefs)
+            
+        case .customizeTabs:
+            viewController = TabsSettingsViewController()
+            
+        case .customizeToolbar:
+            let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+            viewController = SearchBarSettingsViewController(viewModel: viewModel)
+
+        case .wallpaper:
+            let viewModel = WallpaperSettingsViewModel(with: tabManager, and: WallpaperManager())
+            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            // Push wallpaper settings view controller directly as its not of type settings viewcontroller
+            navigationController?.pushViewController(wallpaperVC, animated: true)
+            return
         }
 
         viewController.profile = profile
@@ -66,13 +83,17 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             HomeSetting(settings: self),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
+            SiriPageSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
                         titleText: .AppSettingsBlockPopups),
+            NoImageModeSetting(settings: self)
            ]
 
-        generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        if SearchBarSettingsViewModel.isEnabled {
+            generalSettings.insert(SearchBarSetting(settings: self), at: 5)
+        }
 
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 
@@ -148,6 +169,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 OpenSupportPageSetting(delegate: settingsDelegate),
             ]),
             SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
+                AppStoreReviewSetting(),
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
@@ -163,7 +185,9 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
-                ResetJumpBackInContextualHint(settings: self),
+                ToggleHistoryGroups(settings: self),
+                ResetContextualHints(settings: self),
+                OpenFiftyTabsDebugOption(settings: self),
                 ExperimentsSettings(settings: self)
             ])]
 

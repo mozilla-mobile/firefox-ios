@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import SnapKit
@@ -20,6 +20,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     private var tableView: UITableView!
 
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
+    private var currentSearchText = ""
     
     init(viewModel: WebsiteDataManagementViewModel) {
         self.viewModel = viewModel
@@ -51,11 +52,13 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
+        KeyboardHelper.defaultHelper.addDelegate(self)
     }
     
     func reloadData() {
-        guard let tableView = tableView else { return }
-        tableView.reloadData()
+        guard let _ = tableView else { return }
+        // to update filteredSiteRecords before reloading the tableView
+        filterContentForSearchText(currentSearchText)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -97,7 +100,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.selectItem(item)
             break
         case .clearButton:
@@ -112,7 +115,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.deselectItem(item)
             break
         default: break;
@@ -169,6 +172,19 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
 extension WebsiteDataSearchResultsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
+        currentSearchText = searchController.searchBar.text ?? ""
+        filterContentForSearchText(currentSearchText)
+    }
+}
+
+extension WebsiteDataSearchResultsViewController: KeyboardHelperDelegate {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        let coveredHeight = state.intersectionHeightForView(view)
+        tableView.contentInset.bottom = coveredHeight
+        tableView.verticalScrollIndicatorInsets.bottom = coveredHeight
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        tableView.contentInset.bottom = 0
     }
 }

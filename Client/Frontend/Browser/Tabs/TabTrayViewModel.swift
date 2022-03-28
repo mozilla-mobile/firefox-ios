@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import Storage
@@ -18,9 +18,13 @@ class TabTrayViewModel {
         (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile, showChronTabs: Bool = false, tabToFocus: Tab? = nil) {
+    init(tabTrayDelegate: TabTrayDelegate? = nil,
+         profile: Profile,
+         showChronTabs: Bool = false,
+         tabToFocus: Tab? = nil,
+         tabManager: TabManager) {
         self.profile = profile
-        self.tabManager = BrowserViewController.foregroundBVC().tabManager
+        self.tabManager = tabManager
 
         if showChronTabs {
             self.tabTrayView = ChronologicalTabsViewController(tabTrayDelegate: tabTrayDelegate, profile: self.profile)
@@ -33,10 +37,12 @@ class TabTrayViewModel {
     func navTitle(for segmentIndex: Int, foriPhone: Bool) -> String? {
         if foriPhone {
             switch segmentIndex {
-            case 0, 1:
+            case 0:
                 return .TabTrayV2Title
+            case 1:
+                return . TabTrayPrivateBrowsingTitle
             case 2:
-                return .AppMenuSyncedTabsTitleString
+                return .AppMenu.AppMenuSyncedTabsTitleString
             default:
                 return nil
             }

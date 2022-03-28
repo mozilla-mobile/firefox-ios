@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -14,7 +14,6 @@ struct TopTabsUX {
     static let MaxTabWidth: CGFloat = 220
     static let FaderPading: CGFloat = 8
     static let SeparatorWidth: CGFloat = 1
-    static let HighlightLineWidth: CGFloat = 3
     static let TabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
     static let TabTitlePadding: CGFloat = 10
     static let AnimationSpeed: TimeInterval = 0.1
@@ -44,7 +43,7 @@ class TopTabsViewController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
-        collectionView.clipsToBounds = false
+        collectionView.clipsToBounds = true
         collectionView.accessibilityIdentifier = "Top Tabs View"
         collectionView.semanticContentAttribute = .forceLeftToRight
         return collectionView
@@ -77,8 +76,16 @@ class TopTabsViewController: UIViewController {
 
     fileprivate lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
+        delegate.scrollViewDelegate = self
         delegate.tabSelectionDelegate = topTabDisplayManager
         return delegate
+    }()
+    
+    private lazy var topTabFader: TopTabFader = {
+        let fader = TopTabFader()
+        fader.semanticContentAttribute = .forceLeftToRight
+        
+        return fader
     }()
 
     init(tabManager: TabManager, profile: Profile) {
@@ -116,10 +123,7 @@ class TopTabsViewController: UIViewController {
 
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
-
-        let topTabFader = TopTabFader()
-        topTabFader.semanticContentAttribute = .forceLeftToRight
-
+  
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
         view.addSubview(tabsButton)
@@ -128,8 +132,12 @@ class TopTabsViewController: UIViewController {
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links onto the "New Tab" button.
-            let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
-            newTab.addInteraction(dropInteraction)
+        let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
+        newTab.addInteraction(dropInteraction)
+
+        view.snp.makeConstraints { make in
+            make.height.equalTo(TopTabsUX.TopTabsViewHeight)
+        }
 
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)
@@ -154,7 +162,7 @@ class TopTabsViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(topTabFader)
         }
-
+        
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
@@ -218,13 +226,30 @@ class TopTabsViewController: UIViewController {
             }
         }
     }
-
+    
+    private func handleFadeOutAfterTabSelection() {
+        guard let currentTab = tabManager.selectedTab, let index = topTabDisplayManager.dataStore.index(of: currentTab), !collectionView.frame.isEmpty else {
+            return
+        }
+        
+        // Check wether first or last tab is being selected.
+        if index == 0 {
+            topTabFader.setFader(forSides: .right)
+            
+        } else if index == topTabDisplayManager.dataStore.count - 1 {
+            topTabFader.setFader(forSides: .left)
+            
+        } else if collectionView.contentSize.width <= collectionView.frame.size.width { // all tabs are visible
+            topTabFader.setFader(forSides: .none)
+        }
+    }
 }
 
 extension TopTabsViewController: TabDisplayer {
 
     func focusSelectedTab() {
         self.scrollToCurrentTab(true)
+        self.handleFadeOutAfterTabSelection()
     }
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
@@ -242,6 +267,7 @@ extension TopTabsViewController: TabDisplayer {
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
         topTabDisplayManager.closeActionPerformed(forCell: cell)
+        NotificationCenter.default.post(name: .TabClosed, object: nil)
     }
 }
 
@@ -267,7 +293,30 @@ extension TopTabsViewController: NotificationThemeable, PrivateModeUI {
     }
 }
 
-// Functions for testing
+// MARK: TopTabsScrollDelegate
+extension TopTabsViewController: TopTabsScrollDelegate {
+    // disable / enable TopTabFader dynamically based on visible tabs
+    func collectionViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetX = scrollView.contentOffset.x
+        let scrollViewWidth = scrollView.frame.size.width
+        let scrollViewContentSize = scrollView.contentSize.width
+        
+        let reachedLeftEnd = offsetX == 0
+        let reachedRightEnd = (scrollViewContentSize - offsetX) == scrollViewWidth
+        
+        if reachedLeftEnd {
+            topTabFader.setFader(forSides: .right)
+            
+        } else if reachedRightEnd {
+            topTabFader.setFader(forSides: .left)
+            
+        } else {
+            topTabFader.setFader(forSides: .both)
+        }
+    }
+}
+
+// MARK: Functions for testing
 extension TopTabsViewController {
     func test_getDisplayManager() -> TabDisplayManager {
         assert(AppConstants.IsRunningTest)

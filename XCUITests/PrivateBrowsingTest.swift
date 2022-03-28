@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
@@ -13,17 +13,20 @@ let url1And3Label = "Example Domain"
 let url2Label = "Internet for people, not profit — Mozilla"
 
 class PrivateBrowsingTest: BaseTestCase {
+    
+    typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
+    
     func testPrivateTabDoesNotTrackHistory() {
         navigator.openURL(url1)
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
         // Go to History screen
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables["History List"])
+        waitForExistence(app.tables[HistoryPanelA11y.tableView])
 
-        XCTAssertTrue(app.tables["History List"].staticTexts[url1And3Label].exists)
+        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label].exists)
         // History without counting Clear Recent History and Recently Closed
-        let history = app.tables["History List"].cells.count - 2
+        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 2
 
         XCTAssertEqual(history, 1, "History entries in regular browsing do not match")
 
@@ -33,12 +36,12 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(url2)
         waitForValueContains(app.textFields["url"], value: "mozilla")
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables["History List"])
-        XCTAssertTrue(app.tables["History List"].staticTexts[url1And3Label].exists)
-        XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
+        waitForExistence(app.tables[HistoryPanelA11y.tableView])
+        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label].exists)
+        XCTAssertFalse(app.tables[HistoryPanelA11y.tableView].staticTexts[url2Label].exists)
 
         // Open one tab in private browsing and check the total number of tabs
-        let privateHistory = app.tables["History List"].cells.count - 2
+        let privateHistory = app.tables[HistoryPanelA11y.tableView].cells.count - 2
         XCTAssertEqual(privateHistory, 1, "History entries in private browsing do not match")
     }
 
@@ -81,9 +84,9 @@ class PrivateBrowsingTest: BaseTestCase {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
+        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
         while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
             settingsTableView.swipeUp()
@@ -112,7 +115,7 @@ class PrivateBrowsingTest: BaseTestCase {
             app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url2Label].tap()
         }
         waitForTabsButton()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
         closePrivateTabsSwitch.tap()
@@ -164,8 +167,8 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(numPrivTabsFirstTime, 0, "The number of tabs is not correct, there should not be any private tab yet")
 
         // If a private tab is open Private Browsing screen is not shown anymore
-        navigator.goto(BrowserTab)
 
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         //Wait until the page loads and go to regular browser
         waitUntilPageLoad()
         waitForTabsButton()
@@ -174,8 +177,6 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go back to private browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitForNoExistence(app.staticTexts["Private Browsing"])
-        XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
         navigator.nowAt(TabTray)
         let numPrivTabsOpen = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")
@@ -211,13 +212,16 @@ fileprivate extension BaseTestCase {
 }
 
 class PrivateBrowsingTestIpad: IpadOnlyTestCase {
+    
+    typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
+    
     // This test is only enabled for iPad. Shortcut does not exists on iPhone
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
         if skipPlatform { return }
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(url2)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         enableClosePrivateBrowsingOptionWhenLeaving()
         // Leave PM by tapping on PM shourt cut
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
@@ -243,9 +247,9 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables["History List"])
+        waitForExistence(app.tables[HistoryPanelA11y.tableView])
         // History without counting Clear Recent History, Recently Closed
-        let history = app.tables["History List"].cells.count - 2
+        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 2
         XCTAssertEqual(history, 0, "History list should be empty")
     }
 
@@ -262,11 +266,11 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.openURL("http://example.com")
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.tables["History List"])
+        waitForExistence(app.tables[HistoryPanelA11y.tableView])
         // History without counting Clear Recent History, Recently Closed
-        let history = app.tables["History List"].cells.count - 2
+        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 2
         XCTAssertEqual(history, 1, "There should be one entry in History")
-        let savedToHistory = app.tables["History List"].cells.staticTexts[url2Label]
+        let savedToHistory = app.tables[HistoryPanelA11y.tableView].cells.staticTexts[url2Label]
         waitForExistence(savedToHistory)
         XCTAssertTrue(savedToHistory.exists)
     }

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
@@ -29,7 +29,7 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
+        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.sync])
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         verifyFxASigninScreen()
@@ -116,6 +116,6 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.OpenEmailToQR)
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 5)
         app.navigationBars["Turn on Sync"].buttons["Close"].tap()
-        waitForExistence(app.collectionViews.cells["TopSitesCell"])
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
     }
 }

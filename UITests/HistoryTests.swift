@@ -1,11 +1,14 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import WebKit
 
 class HistoryTests: KIFTestCase {
+    
+    typealias a11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
+    
     fileprivate var webRoot: String!
 
     override func setUp() {
@@ -39,7 +42,7 @@ class HistoryTests: KIFTestCase {
 
         // Check that both appear in the history home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.history)
 
         // Wait until the dialog shows up
         tester().waitForAnimationsToFinish()
@@ -102,13 +105,13 @@ class HistoryTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         tester().waitForAnimationsToFinish(withTimeout: 10)
-        tester().waitForView(withAccessibilityIdentifier: "menu-panel-History")
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().waitForView(withAccessibilityIdentifier: ImageIdentifiers.history)
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.history)
         tester().waitForAnimationsToFinish(withTimeout: 10)
         tester().waitForView(withAccessibilityLabel: "Page 102")
 
         let firstIndexPath = IndexPath(row: 4, section: 1)
-        let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "History List")
+        let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: a11y.tableView)
         tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.left)
      
         if !BrowserUtils.iPad() {
@@ -116,7 +119,7 @@ class HistoryTests: KIFTestCase {
         }
 
         // The history list still exists
-        tester().waitForView(withAccessibilityIdentifier: "History List")
+        tester().waitForView(withAccessibilityIdentifier: a11y.tableView)
         tester().waitForView(withAccessibilityLabel: oldestUrl)
 
         // check page 1 does not exist

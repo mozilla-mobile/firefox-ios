@@ -1,12 +1,11 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import GCDWebServers
 import Storage
 import WebKit
-import SwiftKeychainWrapper
 import Shared
 @testable import Client
 
@@ -276,7 +275,7 @@ class BrowserUtils {
     }
 
     fileprivate class func clearHistoryItemAtIndex(_ index: IndexPath, tester: KIFUITestActor) {
-        if let row = tester.waitForCell(at: index, inTableViewWithAccessibilityIdentifier: "History List") {
+        if let row = tester.waitForCell(at: index, inTableViewWithAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView) {
             tester.swipeView(withAccessibilityLabel: row.accessibilityLabel, value: row.accessibilityValue, in: KIFSwipeDirection.left)
             tester.tapView(withAccessibilityLabel: "Remove")
         }
@@ -325,7 +324,7 @@ class BrowserUtils {
         resetToAboutHomeKIF(tester)
         tester.tapView(withAccessibilityLabel: "History")
 
-        let historyTable = tester.waitForView(withAccessibilityIdentifier: "History List") as! UITableView
+        let historyTable = tester.waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView) as! UITableView
         var index = 0
         for _ in 0 ..< historyTable.numberOfSections {
             for _ in 0 ..< historyTable.numberOfRows(inSection: 0) {
@@ -358,8 +357,8 @@ class BrowserUtils {
 
     class func openLibraryMenu(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
-        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+        tester.waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         tester.waitForAnimationsToFinish()
     }
 
@@ -503,7 +502,7 @@ class SimplePageServer {
 class SearchUtils {
     static func navigateToSearchSettings(_ tester: KIFUITestActor) {
         let engine = SearchUtils.getDefaultEngine().shortName
-        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         tester.waitForAnimationsToFinish()
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.waitForView(withAccessibilityLabel: "Settings")
@@ -598,7 +597,7 @@ class DynamicFontUtils {
 class HomePageUtils {
     static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+        tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.tapView(withAccessibilityIdentifier: "Homepage")
     }

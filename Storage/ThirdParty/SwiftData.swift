@@ -1094,6 +1094,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         } catch let error1 as NSError {
             error = error1
             statement = nil
+            Sentry.shared.sendWithStacktrace(message: "Execute error DBStatement", tag: SentryTag.swiftData, severity: .error, description: error1.localizedDescription)
+            return Cursor<T>(err: error1)
         }
 
         // Close, not reset -- this isn't going to be reused, and the FilledSQLiteCursor
@@ -1110,6 +1112,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             if error.code != Int(SQLITE_INTERRUPT) {
                 Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500))).")
             }
+            
+            Sentry.shared.sendWithStacktrace(message: "Execute error", tag: SentryTag.swiftData, severity: .error, description: error.localizedDescription)
 
             return Cursor<T>(err: error)
         }

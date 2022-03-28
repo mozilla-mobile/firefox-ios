@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 /// The `Theme` protocol, which contains the implementation of themes,
 /// which comprise of a set of standardized colours (including light and
@@ -32,6 +32,7 @@ protocol ThemeColourPalette {
     var layer2: UIColor { get }
     var layer2Blur: UIColor { get }
     var layer3: UIColor { get }
+    var layer4: UIColor { get }
     var layerEmphasis: UIColor { get }
     var scrim: UIColor { get }
     var textDisabled: UIColor { get }

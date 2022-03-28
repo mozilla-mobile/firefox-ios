@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -118,6 +118,11 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         return nil
     }
+    
+    func updateSaveButton() {
+        let isEnabled = !self.engineTitle.isEmptyOrWhitespace() && !(self.urlString?.isEmptyOrWhitespace() ?? true)
+        self.navigationItem.rightBarButtonItem?.isEnabled = isEnabled
+    }
 
     override func generateSettings() -> [SettingSection] {
 
@@ -135,6 +140,7 @@ class CustomSearchViewController: SettingsTableViewController {
                 return
             }
             self.engineTitle = title
+            self.updateSaveButton()
         })
         titleField.textField.text = engineTitle
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
@@ -145,6 +151,7 @@ class CustomSearchViewController: SettingsTableViewController {
             return true
         }, settingDidChange: {fieldText in
             self.urlString = fieldText
+            self.updateSaveButton()
         })
 
         urlField.textField.autocapitalizationType = .none
@@ -158,14 +165,15 @@ class CustomSearchViewController: SettingsTableViewController {
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
-
+        
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
         return settings
     }
 
     @objc func addCustomSearchEngine(_ nav: UINavigationController?) {
         self.view.endEditing(true)
-        navigationItem.rightBarButtonItem?.isEnabled = false
         if let url = self.urlString {
+            navigationItem.rightBarButtonItem?.isEnabled = false
             self.addSearchEngine(url, title: self.engineTitle)
         }
     }

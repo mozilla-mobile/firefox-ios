@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -276,6 +276,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
         // top section: no top border (this is a plain table)
         guard let section = Section(rawValue: section) else { return headerView }
+        
         if section == .sites {
             headerView?.showBorder(for: .top, false)
 
@@ -284,7 +285,11 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             if emptyRecords {
                 headerView?.showBorder(for: .bottom, false)
             }
+        } else if section == .clearButton {
+            headerView?.showBorder(for: .top, false)
+            headerView?.showBorder(for: .bottom, true)
         }
+        
         return headerView
     }
 

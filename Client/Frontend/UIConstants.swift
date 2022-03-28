@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import Shared
@@ -12,7 +12,7 @@ extension UIColor {
         static let iOSTextHighlightBlue = UIColor(rgb: 0xccdded) // This color should exactly match the ios text highlight
         static let Purple60A30 = UIColor(rgba: 0x8000d74c)
         static let MobilePrivatePurple = UIColor.Photon.Purple60
-    // Reader Mode Sepia
+        // Reader Mode Sepia
         static let LightBeige = UIColor(rgb: 0xf0e6dc)
     }
 }

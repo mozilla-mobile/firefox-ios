@@ -1,13 +1,13 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import SwiftyJSON
 import SyncTelemetry
 import Account
-import SwiftKeychainWrapper
 import os.log
+import MozillaAppServices
 
 private let log = Logger.syncLogger
 
@@ -31,7 +31,7 @@ extension FxAPushMessageHandler {
     /// This method then decrypts it according to the content-encoding (aes128gcm or aesgcm)
     /// and then effects changes on the logged in account.
     @discardableResult func handle(userInfo: [AnyHashable: Any]) -> PushMessageResult {
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         guard let pushReg = keychain.object(forKey: KeychainKey.fxaPushRegistration) as? PushRegistration else {
             return deferMaybe(PushMessageError.accountError)
         }
@@ -57,7 +57,7 @@ extension FxAPushMessageHandler {
 
         guard let string = plaintext else {
             // The app will detect this missing, and re-register. see AppDelegate+PushNotifications.swift.
-            keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+            keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             return deferMaybe(PushMessageError.notDecrypted)
         }
 

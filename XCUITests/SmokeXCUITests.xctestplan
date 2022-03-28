@@ -9,7 +9,7 @@
     }
   ],
   "defaultOptions" : {
-
+    "codeCoverage" : false
   },
   "testTargets" : [
     {
@@ -25,6 +25,7 @@
         "ActivityStreamTest\/testTopSitesRemoveDefaultTopSite()",
         "ActivityStreamTest\/testTopSitesShareDefaultTopSite()",
         "ActivityStreamTest\/testTopSitesShiftAfterRemovingOne()",
+        "AuthenticationTest\/testBasicHTTPAuthenticationPromptVisible()",
         "AuthenticationTest\/testChangePassCode()",
         "AuthenticationTest\/testChangePasscodeShowsErrorStates()",
         "AuthenticationTest\/testChangeRequirePasscodeInterval()",
@@ -131,7 +132,6 @@
         "ReaderViewTest\/testRemoveFromReadingList()",
         "ReaderViewTest\/testRemoveFromReadingView()",
         "ReaderViewTest\/testRemoveSavedForReadingLongPress()",
-        "SaveLoginTest",
         "SaveLoginTest\/testDeleteLogin()",
         "SaveLoginTest\/testDoNotSaveLogin()",
         "SaveLoginTest\/testLoginsListFromBrowserTabMenu()",

@@ -1,0 +1,142 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AStar",
+        "repositoryURL": "https://github.com/Dev1an/A-Star",
+        "state": {
+          "branch": null,
+          "revision": "036256f9a8d1dda44085a2b92fa58199446a8339",
+          "version": "3.0.0-beta-1"
+        }
+      },
+      {
+        "package": "Fuzi",
+        "repositoryURL": "https://github.com/nbhasin2/Fuzi.git",
+        "state": {
+          "branch": "master",
+          "revision": "04170682baf5c013a41270963c689c87ba0d1374",
+          "version": null
+        }
+      },
+      {
+        "package": "GCDWebServer",
+        "repositoryURL": "https://github.com/nbhasin2/GCDWebServer.git",
+        "state": {
+          "branch": "master",
+          "revision": "7674c93e79ee5aac17681acace324761325e7346",
+          "version": null
+        }
+      },
+      {
+        "package": "Glean",
+        "repositoryURL": "https://github.com/mozilla/glean-swift",
+        "state": {
+          "branch": null,
+          "revision": "e8fef341610de380b55cd5a057f9a3adf7cebb44",
+          "version": "43.0.2"
+        }
+      },
+      {
+        "package": "Adjust",
+        "repositoryURL": "https://github.com/adjust/ios_sdk.git",
+        "state": {
+          "branch": null,
+          "revision": "43c5bb5eb8f77c72da856637dac5c46087c27848",
+          "version": "4.29.6"
+        }
+      },
+      {
+        "package": "KIF",
+        "repositoryURL": "https://github.com/kif-framework/KIF.git",
+        "state": {
+          "branch": null,
+          "revision": "709adbc64f2d8d40d48136cdd56b0a706010904b",
+          "version": "3.8.6"
+        }
+      },
+      {
+        "package": "MappaMundi",
+        "repositoryURL": "https://github.com/nbhasin2/MappaMundi.git",
+        "state": {
+          "branch": "master",
+          "revision": "7fcd2b7910550227088480490ac19ea66044b3d1",
+          "version": null
+        }
+      },
+      {
+        "package": "MozillaRustComponentsSwift",
+        "repositoryURL": "https://github.com/mozilla/rust-components-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "29772c84fd7dd17c9f2981c51ea4ccc04e353b32",
+          "version": "91.1.0"
+        }
+      },
+      {
+        "package": "SDWebImage",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
+        "state": {
+          "branch": null,
+          "revision": "d6367439527663d2038ca445a3c3c4e4bac40d60",
+          "version": "5.12.0"
+        }
+      },
+      {
+        "package": "Sentry",
+        "repositoryURL": "https://github.com/getsentry/sentry-cocoa.git",
+        "state": {
+          "branch": null,
+          "revision": "967f04b3cd6989df3f9ced3060481a21646c146d",
+          "version": "7.9.0"
+        }
+      },
+      {
+        "package": "SnapKit",
+        "repositoryURL": "https://github.com/SnapKit/SnapKit.git",
+        "state": {
+          "branch": null,
+          "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
+          "version": "5.0.1"
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
+        "state": {
+          "branch": null,
+          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
+          "version": "1.18.0"
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON",
+        "state": {
+          "branch": null,
+          "revision": "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
+          "version": "5.0.1"
+        }
+      },
+      {
+        "package": "Telemetry",
+        "repositoryURL": "https://github.com/mozilla-mobile/telemetry-ios",
+        "state": {
+          "branch": null,
+          "revision": "68f2d813320c9fda2fb4aee4548c64293500200a",
+          "version": "2.0.0"
+        }
+      },
+      {
+        "package": "XCGLogger",
+        "repositoryURL": "https://github.com/DaveWoodCom/XCGLogger.git",
+        "state": {
+          "branch": null,
+          "revision": "a9c4667b247928a29bdd41be2ec2c8d304215a54",
+          "version": "7.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

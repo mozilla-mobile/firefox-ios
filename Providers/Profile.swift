@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 // IMPORTANT!: Please take into consideration when adding new imports to
 // this file that it is utilized by external components besides the core
@@ -12,9 +12,9 @@ import Shared
 import Storage
 import Sync
 import XCGLogger
-import SwiftKeychainWrapper
 import SyncTelemetry
 import AuthenticationServices
+import MozillaAppServices
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT
@@ -105,7 +105,6 @@ protocol Profile: AnyObject {
     var logins: RustLogins { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
-    var panelDataObservers: PanelDataObservers { get }
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE
         var readingList: ReadingList { get }
@@ -234,7 +233,7 @@ extension Profile {
 
 open class BrowserProfile: Profile {
     fileprivate let name: String
-    fileprivate let keychain: KeychainWrapper
+    fileprivate let keychain: MZKeychainWrapper
     var isShutdown = false
 
     internal let files: FileAccessor
@@ -261,7 +260,7 @@ open class BrowserProfile: Profile {
         log.debug("Initing profile \(localName) on thread \(Thread.current).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.keychain = KeychainWrapper.sharedAppContainerKeychain
+        self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         self.syncDelegate = syncDelegate
 
         if clear {
@@ -285,7 +284,7 @@ open class BrowserProfile: Profile {
 
         if isNewProfile {
             log.info("New profile. Removing old Keychain/Prefs data.")
-            KeychainWrapper.wipeKeychain()
+            MZKeychainWrapper.wipeKeychain()
             prefs.clearAll()
         }
 
@@ -454,10 +453,6 @@ open class BrowserProfile: Profile {
         return self.legacyPlaces
     }
 
-    lazy var panelDataObservers: PanelDataObservers = {
-        return PanelDataObservers(profile: self)
-    }()
-
     lazy var metadata: Metadata = {
         return SQLiteMetadata(db: self.db)
     }()
@@ -590,10 +585,10 @@ open class BrowserProfile: Profile {
     func removeAccount() {
         RustFirefoxAccounts.shared.disconnect()
 
-        // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
-        if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
-            application.unregisterForRemoteNotifications()
-        }
+        // Not available in extensions
+        #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
+        unregisterRemoteNotifiation()
+        #endif
 
         // remove Account Metadata
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
@@ -609,11 +604,11 @@ open class BrowserProfile: Profile {
         
         // Restore the keys that are still needed
         if let sqlCipherKey = sqlCipherKey {
-            keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
+            keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
         }
         
         if let sqlCipherSalt = sqlCipherSalt {
-            keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
+            keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
         }
         
         if let perFieldKey = perFieldKey {
@@ -626,6 +621,14 @@ open class BrowserProfile: Profile {
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
         self.syncManager.onRemovedAccount()
+    }
+
+    // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
+    @available(iOSApplicationExtension, unavailable, message: "UIApplication.shared is unavailable in application extensions")
+    private func unregisterRemoteNotifiation() {
+        if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
+            application.unregisterForRemoteNotifications()
+        }
     }
 
     class NoAccountError: MaybeErrorType {

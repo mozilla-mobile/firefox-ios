@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -160,7 +160,7 @@ class TabTrayV2ViewModel: NSObject {
         }
 
         let tabCount = self.getTabs().count
-        tabManager.removeTabAndUpdateSelectedIndex(tab)
+        tabManager.removeTab(tab)
         NotificationCenter.default.post(name: .TabClosed, object: nil)
         if tabCount == 1 && self.getTabs().count == 1 {
             // The last tab was removed. Dismiss the tab tray
