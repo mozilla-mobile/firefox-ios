@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 
@@ -9,15 +9,19 @@ fileprivate struct HomeViewUX {
     static let settingsButtonTopAnchorSpace: CGFloat = 28
 }
 
-class FxHomeCustomizeHomeView: UICollectionViewCell {
+class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
+    typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     // MARK: - UI Elements
     let goToSettingsButton: UIButton = .build { button in
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
         button.layer.cornerRadius = 5
-        button.accessibilityIdentifier = "FxHomeCustomizeHomeSettingButton"
+        button.accessibilityIdentifier = a11y.customizeHome
     }
+    
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -25,10 +29,8 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
         setupView()
         applyTheme()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications(_:)),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
     }
 
     required init?(coder: NSCoder) {
@@ -36,7 +38,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - UI Setup
@@ -51,21 +53,23 @@ class FxHomeCustomizeHomeView: UICollectionViewCell {
             goToSettingsButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
-    
-    // MARK: - Notifications
-    
-    @objc private func handleNotifications(_ notification: Notification) {
+}
+
+// MARK: - Theme
+extension FxHomeCustomizeHomeView: NotificationThemeable {
+    func applyTheme() {
+        goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
+        goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
+    }
+}
+
+// MARK: - Notifiable
+extension FxHomeCustomizeHomeView: Notifiable {
+    func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
         default: break
         }
-    }
-}
-
-extension FxHomeCustomizeHomeView: NotificationThemeable {
-    func applyTheme() {
-        goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
-        goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
     }
 }

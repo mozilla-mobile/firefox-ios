@@ -5,7 +5,7 @@
 "Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "Squassà";
 
 /* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
-"Bookmarks.DeleteFolderWarning.Description" = "Site sicuru di vulè squassà stu cartulare è u so cuntenutu ?";
+"Bookmarks.DeleteFolderWarning.Description" = "Vulete veramente squassà stu cartulare è u so cuntenutu ?";
 
 /* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
 "Bookmarks.DeleteFolderWarning.Title" = "Stu cartulare ùn hè micca viotu.";

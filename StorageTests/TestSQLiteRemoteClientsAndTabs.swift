@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -162,7 +162,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             remoteDevicesToInsert.append(remoteDevice)
             clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs).succeeded()
         }
-        _ = clientsAndTabs.replaceRemoteDevices(remoteDevicesToInsert).succeeded()
+        clientsAndTabs.replaceRemoteDevices(remoteDevicesToInsert).succeeded()
 
         let f = self.expectation(description: "Get after insert.")
         clientsAndTabs.getClientsAndTabs().upon {
@@ -281,13 +281,13 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         let device3 = RemoteDevice(id: nil, name: "Device 3 (fauly)", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
         let device4 = RemoteDevice(id: "fx4", name: "Device 4 (fauly)", type: nil, isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
 
-        _ = clientsAndTabs.replaceRemoteDevices([device1, device2, device3, device4]).succeeded()
+        clientsAndTabs.replaceRemoteDevices([device1, device2, device3, device4]).succeeded()
 
         let devices = clientsAndTabs.db.runQuery("SELECT * FROM remote_devices", args: nil, factory: SQLiteRemoteClientsAndTabs.remoteDeviceFactory).value.successValue!.asArray()
         XCTAssertEqual(devices.count, 1) // Fauly devices + local device were not inserted.
 
         let device5 = RemoteDevice(id: "fx5", name: "Device 5", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
-        _ = clientsAndTabs.replaceRemoteDevices([device5]).succeeded()
+        clientsAndTabs.replaceRemoteDevices([device5]).succeeded()
 
         let newDevices = clientsAndTabs.db.runQuery("SELECT * FROM remote_devices", args: nil, factory: SQLiteRemoteClientsAndTabs.remoteDeviceFactory).value.successValue!.asArray()
         XCTAssertEqual(newDevices.count, 1) // replaceRemoteDevices wipes the whole list before inserting.

@@ -1,11 +1,15 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Storage
 import Shared
 import AuthenticationServices
+
+struct NewSearchInProgressError: MaybeErrorType {
+    public let description: String
+}
 
 // MARK: - Main View Model
 // Login List View Model
@@ -42,7 +46,7 @@ final class LoginListViewModel {
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
         // Fill in an in-flight query and re-query
-        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+        activeLoginQuery?.fillIfUnfilled(Maybe(failure: NewSearchInProgressError(description: "Updated search string provided")))
         activeLoginQuery = queryLogins(query ?? "")
         activeLoginQuery! >>== self.setLogins
         // Loading breaches is a heavy operation hence loading it once per opening logins screen

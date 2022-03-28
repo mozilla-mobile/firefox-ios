@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import MappaMundi
 import XCTest
@@ -14,7 +14,12 @@ class L10nBaseSnapshotTests: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     var userState: FxUserState!
 
-    var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet,LaunchArguments.SkipIntro, LaunchArguments.SkipContextualHintJumpBackIn, LaunchArguments.ChronTabs]
+    var args = [LaunchArguments.ClearProfile,
+                LaunchArguments.SkipWhatsNew,
+                LaunchArguments.SkipETPCoverSheet,
+                LaunchArguments.SkipIntro,
+                LaunchArguments.SkipContextualHints,
+                LaunchArguments.ChronTabs]
 
     override func setUp() {
         super.setUp()
@@ -48,7 +53,10 @@ class L10nBaseSnapshotTests: XCTestCase {
             let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
             if result != .completed {
                 let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
-                self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
+                var issue = XCTIssue(type: .assertionFailure, compactDescription: message)
+                let location = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
+                issue.sourceCodeContext = XCTSourceCodeContext(location: location)
+                self.record(issue)
             }
         }
 

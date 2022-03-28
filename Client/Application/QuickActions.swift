@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Storage
@@ -105,8 +105,6 @@ class QuickActions: NSObject {
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)
         case .newPrivateTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: true)
-        // even though we're removing OpenLastTab, it's possible that someone will use an existing last tab quick action to open the app
-        // the first time after upgrading, so we should still handle it
         case .openLastBookmark:
             if let urlToOpen = (userData?[QuickActions.TabURLKey] as? String)?.asURL {
                 handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
@@ -134,6 +132,7 @@ class QuickActions: NSObject {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = vc
         let controller = UINavigationController(rootViewController: qrCodeViewController)
+        vc.presentedViewController?.dismiss(animated: true)
         vc.present(controller, animated: true, completion: nil)
     }
 }

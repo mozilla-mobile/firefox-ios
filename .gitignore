@@ -97,6 +97,7 @@ Client/Assets/*.js.LICENSE.txt
 # L10n
 /firefoxios-l10n
 /ios-l10n-scripts
+/shavar-prod-lists
 
-# Glean 
-sdk_generator.sh
+# Nimbus
+nimbus-fml/

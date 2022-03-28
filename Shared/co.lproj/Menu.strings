@@ -1,8 +1,8 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Indettà sta pagina";
 
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction2.Title" = "Aghjunghje un’indetta";
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "Aghjunghje à a lista di lettura";
 
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "Aghjunghje à a lista di lettura";
@@ -38,7 +38,7 @@
 "Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Scaricamenti";
 
 /* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
-"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Crunulogia";
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Cronolugia";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "Menu.OpenHomePageAction.Title" = "Accolta";
@@ -60,6 +60,9 @@
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "Menu.RecentlySaved.Title" = "Arregistrati pocu fà";
+
+/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
+"Menu.RemoveBookmark.AlternateLabel.v99" = "Caccià l’indetta";
 
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "Caccià l’indetta";

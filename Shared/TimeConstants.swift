@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 
@@ -28,6 +28,10 @@ fileprivate let rfc822DateFormatter: DateFormatter = {
 extension TimeInterval {
     public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> TimeInterval {
         return Double(microsecondTimestamp) / 1000000
+    }
+    
+    public static func timeIntervalSince1970ToDate(timeInterval: TimeInterval) -> Date {
+        Date(timeIntervalSince1970: timeInterval)
     }
 }
 
@@ -158,6 +162,10 @@ extension Date {
     public func isWithinLast7Days() -> Bool {
         return (Date().lastWeek ... Date()).contains(self)
     }
+    
+    public func isWithinLast14Days() -> Bool {
+        return (Date().lastTwoWeek ... Date()).contains(self)
+    }
 }
 
 let MaxTimestampAsDouble = Double(UInt64.max)
@@ -167,8 +175,7 @@ let MaxTimestampAsDouble = Double(UInt64.max)
  *  when seconds were expected.
  */
 public func someKindOfTimestampStringToTimestamp(_ input: String) -> Timestamp? {
-    var double = 0.0
-    if Scanner(string: input).scanDouble(&double) {
+    if let double = Scanner(string: input).scanDouble() {
         // This should never happen. Hah!
         if double.isNaN || double.isInfinite {
             return nil
@@ -202,8 +209,7 @@ public func someKindOfTimestampStringToTimestamp(_ input: String) -> Timestamp? 
 }
 
 public func decimalSecondsStringToTimestamp(_ input: String) -> Timestamp? {
-    var double = 0.0
-    if Scanner(string: input).scanDouble(&double) {
+    if let double = Scanner(string: input).scanDouble() {
         // This should never happen. Hah!
         if double.isNaN || double.isInfinite {
             return nil

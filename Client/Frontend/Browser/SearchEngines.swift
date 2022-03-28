@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -18,8 +18,11 @@ private let customSearchEnginesFileName = "customEngines.plist"
 /**
  * Manage a set of Open Search engines.
  *
- * The search engines are ordered.  Individual search engines can be enabled and disabled.  The
- * first search engine is distinguished and labeled the "default" search engine; it can never be
+ * The search engines are ordered.
+ *
+ * Individual search engines can be enabled and disabled.
+ *
+ * The first search engine is distinguished and labeled the "default" search engine; it can never be
  * disabled.  Search suggestions should always be sourced from the default search engine.
  *
  * Two additional bits of information are maintained: whether the user should be shown "opt-in to
@@ -195,9 +198,13 @@ class SearchEngines {
         assert(engineNames.count > 0, "No search engines")
 
         return engineNames.map({ (name: $0, path: pluginDirectory.appendingPathComponent("\($0).xml").path) })
-            .filter({ FileManager.default.fileExists(atPath: $0.path) })
-            .compactMap({ parser.parse($0.path, engineID: $0.name) })
-            .sorted { e, _ in e.shortName == defaultEngineName }
+            .filter({
+                FileManager.default.fileExists(atPath: $0.path)
+            }).compactMap({
+                parser.parse($0.path, engineID: $0.name)
+            }).sorted { e, _ in
+                e.shortName == defaultEngineName
+            }
     }
 
     /// Get all known search engines, possibly as ordered by the user.

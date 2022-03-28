@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -28,8 +28,11 @@ class ClearableError: MaybeErrorType {
 // Clears our browsing history, including favicons and thumbnails.
 class HistoryClearable: Clearable {
     let profile: Profile
-    init(profile: Profile) {
+    let tabManager: TabManager
+    
+    init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
+        self.tabManager = tabManager
     }
 
     var label: String { .ClearableHistory }
@@ -46,6 +49,9 @@ class HistoryClearable: Clearable {
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
+            
+            self.tabManager.clearAllTabsHistory()
+            
             return Deferred(value: success)
         }
     }

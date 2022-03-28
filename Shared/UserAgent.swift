@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import WebKit
 import UIKit
@@ -70,7 +70,7 @@ open class UserAgent {
         case .Desktop:
             return desktopUserAgent()
         case .Mobile:
-            if let customUA = CustomUserAgentConstant.mobileUserAgent[domain] {
+            if let customUA = CustomUserAgentConstant.customUAFor[domain] {
                 return customUA
             } else {
                 return mobileUserAgent()
@@ -97,10 +97,11 @@ public enum UserAgentPlatform {
 public struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
-    public static let mobileUserAgent = [
+    
+    public static let customUAFor = [
         "paypal.com": defaultMobileUA,
-        "yahoo.com": defaultMobileUA ]
-
+        "yahoo.com": defaultMobileUA,
+        "disneyplus.com": customDesktopUA]
 }
 
 public struct UserAgentBuilder {

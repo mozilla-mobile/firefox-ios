@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
@@ -78,9 +78,11 @@ class ThirdPartySearchTest: BaseTestCase {
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
         app.buttons["urlBar-cancel"].tap()
-        app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton].tap()
-        app.tables["Context Menu"].staticTexts["Settings"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
+        app.tables["Context Menu"].otherElements["Settings"].tap()
+        waitForExistence(app.tables.staticTexts["Google"])
         app.tables.staticTexts["Google"].tap()
+        
         navigator.performAction(Action.RemoveCustomSearchEngine)
         dismissSearchScreen()
         

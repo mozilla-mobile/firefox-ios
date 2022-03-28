@@ -4,16 +4,14 @@
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "ᱟᱢᱟᱜ ᱥᱟᱺᱪᱟᱣ ᱠᱟᱱ ᱵᱚᱞᱚ ᱠᱚ ᱟᱫᱮᱨ ᱞᱟᱹᱜᱤᱫ Firefox ᱟᱢᱟᱜ ᱢᱚᱦᱲᱟ ID ᱫᱚᱨᱠᱟᱨ ᱾";
 
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ᱦᱤᱨᱤᱟᱠᱟᱱ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱟᱢᱟᱜ ᱡᱟᱭᱜᱟ ᱠᱚ ᱠᱷᱚᱡ ᱫᱟᱲᱮᱟᱜᱼᱟ᱾";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱣᱤᱲᱤᱭᱚ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱥᱟᱸᱪᱟᱣ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
+"NSPhotoLibraryAddUsageDescription" = "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾";
 
 /* (No Comment) */
 "ShortcutItemTitleNewPrivateTab" = "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵ";

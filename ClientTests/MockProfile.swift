@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 @testable import Client
 import Foundation
@@ -72,25 +72,6 @@ open class MockTabQueue: TabQueue {
     }
 }
 
-open class MockPanelDataObservers: PanelDataObservers {
-    override init(profile: Client.Profile) {
-        super.init(profile: profile)
-        self.activityStream = MockActivityStreamDataObserver(profile: profile)
-    }
-}
-
-open class MockActivityStreamDataObserver: DataObserver {
-    public func refreshIfNeeded(forceTopSites topSites: Bool) {
-    }
-
-    public var profile: Client.Profile
-    public weak var delegate: DataObserverDelegate?
-
-    init(profile: Client.Profile) {
-        self.profile = profile
-    }
-}
-
 class MockFiles: FileAccessor {
     init() {
         let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -112,10 +93,6 @@ open class MockProfile: Client.Profile {
     public var syncManager: SyncManager!
 
     fileprivate var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
-
-    public lazy var panelDataObservers: PanelDataObservers = {
-        return MockPanelDataObservers(profile: self)
-    }()
 
     var db: BrowserDB
     var readingListDB: BrowserDB
@@ -213,8 +190,9 @@ open class MockProfile: Client.Profile {
         return true
     }
 
+    var hasSyncableAccountMock: Bool = true
     public func hasSyncableAccount() -> Bool {
-        return true
+        return hasSyncableAccountMock
     }
 
     public func flushAccount() {}

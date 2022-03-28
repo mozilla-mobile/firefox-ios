@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import SwiftUI
 import WidgetKit
@@ -10,7 +10,7 @@ import Combine
 struct OpenTabsWidget: Widget {
     private let kind: String = "Quick View"
 
-     var body: some WidgetConfiguration {
+    var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TabProvider()) { entry in
             OpenTabsView(entry: entry)
         }

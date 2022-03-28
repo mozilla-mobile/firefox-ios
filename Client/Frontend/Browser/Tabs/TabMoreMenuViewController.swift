@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -19,18 +19,18 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
     let titles: [Int: [String]] = [ 1: [.ShareAddToReadingList,
                                         .BookmarkContextMenuTitle,
                                         .AddToShortcutsActionTitle],
-                                    2: [.CloseTabTitle],
+                                    2: [.KeyboardShortcuts.CloseCurrentTab],
                                     0: [.CopyAddressTitle,
                                         .ShareContextMenuTitle,
-                                        .SendToDeviceTitle]
+                                        .AppMenu.TouchActions.SendToDeviceTitle]
     ]
     let imageViews: [Int: [UIImageView]] = [ 1: [UIImageView(image: UIImage.templateImageNamed("library-readinglist")),
                                                  UIImageView(image: UIImage.templateImageNamed("bookmark")),
-                                                 UIImageView(image: UIImage.templateImageNamed("action_pin"))],
+                                                 UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.addShortcut))],
                                              2: [UIImageView(image: UIImage.templateImageNamed("menu-CloseTabs"))],
-                                             0: [UIImageView(image: UIImage.templateImageNamed("menu-Copy-Link")),
+                                             0: [UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.copyLink)),
                                                  UIImageView(image: UIImage.templateImageNamed("menu-Send")),
-                                                 UIImageView(image: UIImage.templateImageNamed("menu-Send-to-Device"))]
+                                                 UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.sendToDevice))]
     ]
     lazy var tableView: UITableView = {
         var tableView = UITableView(frame: CGRect(), style: .insetGrouped)
@@ -195,7 +195,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
                 dismissMenu()
             case 1:
                 dismissMenu()

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
 
@@ -15,7 +15,9 @@ let requestDesktopSiteLabel = "Request Desktop Site"
 
 class NavigationTest: BaseTestCase {
     func testNavigation() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         let urlPlaceholder = "Search or enter address"
         XCTAssert(app.textFields["url"].exists)
@@ -24,7 +26,6 @@ class NavigationTest: BaseTestCase {
         // Check the url placeholder text and that the back and forward buttons are disabled
         XCTAssert(urlPlaceholder == defaultValuePlaceholder)
         if iPad() {
-            app.buttons["urlBar-cancel"].tap()
             XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["Forward"].isEnabled)
             app.textFields["url"].tap()
@@ -34,6 +35,10 @@ class NavigationTest: BaseTestCase {
         }
 
         // Once an url has been open, the back button is enabled but not the forward button
+        if iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "test-example.html")
@@ -67,6 +72,7 @@ class NavigationTest: BaseTestCase {
             app.buttons["Forward"].tap()
         } else {
             // Go forward to next visited web site
+            waitForExistence(app.buttons["TabToolbar.forwardButton"])
             app.buttons["TabToolbar.forwardButton"].tap()
         }
         waitUntilPageLoad()
@@ -89,7 +95,7 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
-        let signInToFirefoxStaticText = app.tables["AppSettingsTableViewController.tableView"].staticTexts["Sign in to Sync"]
+        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Sign in to Sync"]
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
@@ -194,7 +200,7 @@ class NavigationTest: BaseTestCase {
         app.textFields["url"].press(forDuration: 2)
 
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["menu-Paste"].tap()
+        app.tables.otherElements[ImageIdentifiers.paste].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -206,9 +212,10 @@ class NavigationTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Copy Link")
         navigator.goto(NewTabScreen)
+        waitForExistence(app.textFields["url"])
         app.textFields["url"].press(forDuration: 2)
 
-        app.tables.cells["menu-Paste"].tap()
+        app.tables.otherElements[ImageIdentifiers.paste].tap()
         app.buttons["Go"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
@@ -233,22 +240,24 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
             XCTAssertTrue(app.menuItems["Share…"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
         } else {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
         }
         
         app.textFields["address"].typeText("\n")
         waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+
         app.textFields["url"].press(forDuration:3)
-        app.tables.cells["menu-Copy-Link"].tap()
+        app.tables.otherElements[ImageIdentifiers.copyLink].tap()
+        
+        sleep(2)
         app.textFields["url"].tap()
         // Since the textField value appears all selected first time is clicked
         // this workaround is necessary
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         app.textFields["address"].tap()
         waitForExistence(app.menuItems["Copy"])
         if iPad() {
@@ -275,8 +284,8 @@ class NavigationTest: BaseTestCase {
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
-        app.tables["Context Menu"].cells["download"].tap()
+        XCTAssertTrue(app.tables["Context Menu"].otherElements["download"].exists)
+        app.tables["Context Menu"].otherElements["download"].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
@@ -328,6 +337,7 @@ class NavigationTest: BaseTestCase {
         // Now disable the Block PopUps option
         navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
+        waitForExistence(switchBlockPopUps, timeout: 5)
         switchBlockPopUps.tap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
@@ -365,7 +375,8 @@ class NavigationTest: BaseTestCase {
         switchBlockPopUps.tap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
-        navigator.goto(BrowserTab)
+        navigator.goto(HomePanelsScreen)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         waitForExistence(app.links["link-created-by-parent"], timeout: 10)
@@ -375,21 +386,23 @@ class NavigationTest: BaseTestCase {
     func testVerifyBrowserTabMenu() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
 
-        XCTAssertTrue(app.tables.cells["menu-panel-Bookmarks"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-History"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-Downloads"].exists)
-        XCTAssertTrue(app.tables.cells["menu-panel-ReadingList"].exists)
-        XCTAssertTrue(app.tables.cells["key"].exists)
-        XCTAssertTrue(app.tables.cells["menu-sync"].exists)
-        XCTAssertTrue(app.tables.cells["menu-NoImageMode"].exists)
-        XCTAssertTrue(app.tables.cells["menu-NightMode"].exists)
-        XCTAssertTrue(app.tables.cells["whatsnew"].exists)
-        XCTAssertTrue(app.tables.cells["menu-Settings"].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.bookmarks].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.history].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.downloads].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.readingList].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.key].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.sync].exists)
+//        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.noImageMode].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.nightMode].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.whatsNew].exists)
+        XCTAssertTrue(app.tables.otherElements[ImageIdentifiers.settings].exists)
+        // TODO: Add new options added [Customize home page, new tab, help]
+        // Customize home page, help and whatsNew are only there when we are on the homepage menu
     }
 
     // Smoketest

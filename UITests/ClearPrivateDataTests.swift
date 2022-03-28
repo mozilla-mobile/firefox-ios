@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
 import WebKit
@@ -75,7 +75,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().wait(forTimeInterval: 10)
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.history)
         tester().waitForView(withAccessibilityLabel: url1)
         tester().waitForView(withAccessibilityLabel: url2)
 
@@ -86,7 +86,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.closeClearPrivateDataDialog(tester())
 
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.history)
 
         // Open History Panel
         tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
@@ -114,7 +114,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: "menu-panel-History")
+        tester().tapView(withAccessibilityIdentifier: ImageIdentifiers.history)
         tester().waitForAnimationsToFinish()
 
         tester().waitForView(withAccessibilityLabel: url1)

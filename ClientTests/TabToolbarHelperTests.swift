@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 @testable import Client
 
@@ -10,10 +10,9 @@ class TabToolbarHelperTests: XCTestCase {
     var subject: TabToolbarHelper!
     var mockToolbar: MockTabToolbar!
 
-    let backButtonImage = UIImage.templateImageNamed("nav-back")
-    let forwardButtonImage = UIImage.templateImageNamed("nav-forward")
+    let backButtonImage = UIImage.templateImageNamed("nav-back")?.imageFlippedForRightToLeftLayoutDirection()
+    let forwardButtonImage = UIImage.templateImageNamed("nav-forward")?.imageFlippedForRightToLeftLayoutDirection()
     let menuButtonImage = UIImage.templateImageNamed("nav-menu")
-    let libraryButtonImage = UIImage.templateImageNamed("menu-library")
     let searchButtonImage = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
     let ImageHome = UIImage.templateImageNamed("menu-Home")

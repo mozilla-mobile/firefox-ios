@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import AuthenticationServices
@@ -20,6 +20,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         tableView.showsVerticalScrollIndicator = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableFooterView = UIView()
         return tableView
     }()
@@ -126,14 +127,16 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
     
     private func addViewConstraints() {
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
         
-        cancelButton.snp.makeConstraints { make in
-            make.width.equalTo(60)
-        }
-        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+
+            cancelButton.widthAnchor.constraint(equalToConstant: 60)
+        ])
+                
     }
     
     private func registerCells() {

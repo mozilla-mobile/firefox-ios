@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
 import Shared
@@ -50,7 +50,7 @@ class TestAppDelegate: AppDelegate {
 
                 try! FileManager.default.copyItem(at: input, to: output)
             }
-            
+
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
                  if launchArguments.contains(LaunchArguments.ClearProfile) {
                      fatalError("Clearing profile and loading a TabsState.Archive is not a supported combination.")
@@ -70,7 +70,7 @@ class TestAppDelegate: AppDelegate {
 
                  try! FileManager.default.copyItem(at: input, to: output)
              }
-            
+
         }
 
         if launchArguments.contains(LaunchArguments.ClearProfile) {
@@ -80,21 +80,23 @@ class TestAppDelegate: AppDelegate {
         } else {
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
         }
-        
+
         if launchArguments.contains(LaunchArguments.SkipAddingGoogleTopSite) {
             profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
         }
 
         // Don't show the Contextual hint for jump back in section.
-        if launchArguments.contains(LaunchArguments.SkipContextualHintJumpBackIn) {
-            profile.prefs.setBool(false, forKey: PrefsKeys.ContextualHintJumpBackinKey)
+        if launchArguments.contains(LaunchArguments.SkipContextualHints) {
+            PrefsKeys.ContextualHints.allCases.forEach {
+                profile.prefs.setBool(true, forKey: $0.rawValue)
+            }
         }
-        
+
         // Don't show the ETP Coversheet New page.
         if launchArguments.contains(LaunchArguments.SkipETPCoverSheet) {
             profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
         }
-        
+
         // Don't show the What's New page.
         if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
             profile.prefs.setInt(1, forKey: PrefsKeys.KeyLastVersionNumber)
@@ -111,7 +113,7 @@ class TestAppDelegate: AppDelegate {
 
         // Change to 0 to deactivate chron tabs
         if launchArguments.contains(LaunchArguments.ChronTabs) {
-            profile.prefs.setInt(0, forKey: PrefsKeys.ChronTabsPrefKey)
+            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.ChronologicalTabs)
         }
 
         if launchArguments.contains(LaunchArguments.StageServer) {
@@ -173,7 +175,7 @@ class TestAppDelegate: AppDelegate {
 
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Speed up the animations to 100 times as fast.
-        defer { application.keyWindow?.layer.speed = 100.0 }
+        defer { UIWindow.keyWindow?.layer.speed = 100.0 }
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
 import SnapKit
@@ -12,7 +12,11 @@ struct TwoLineCellUX {
 
 // TODO: Add support for accessibility for when text size changes
 
-class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
+class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableCell {
+    
+    /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
+    static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
+    
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -34,6 +38,13 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
         imgView.clipsToBounds = true
         return imgView
     }()
+    
+    lazy var chevronAccessoryView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: "goBack")?.withHorizontallyFlippedOrientation()
+        imageView.image?.imageFlippedForRightToLeftLayoutDirection()
+        imageView.image?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
+        imageView.isHidden = true
+    }
 
     var titleLabel: UILabel = {
         let label = UILabel()
@@ -72,6 +83,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
         midView.addSubview(descriptionLabel)
 
         containerView.addSubview(leftImageView)
+        containerView.addSubview(chevronAccessoryView)
         containerView.addSubview(midView)
 
         containerView.addSubview(leftOverlayImageView)
@@ -90,6 +102,13 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
             make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
+        }
+        
+        // Only shown when we need a chevron, and is made visible at call site
+        chevronAccessoryView.snp.makeConstraints { make in
+            make.height.width.equalTo(28)
+            make.centerY.equalTo(containerView.snp.centerY)
+            make.trailing.equalTo(containerView.snp.trailing).offset(-8)
         }
 
         leftOverlayImageView.snp.makeConstraints { make in
@@ -129,10 +148,12 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
+            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
             self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
+            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         }
     }
     
@@ -146,7 +167,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
     override func layoutSubviews() {
         super.layoutSubviews()
         containerView.snp.remakeConstraints { make in
-            make.height.equalTo(55)
+            make.height.equalTo(58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
@@ -198,7 +219,7 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         midView.addSubview(descriptionLabel)
         let containerView = UIView()
         containerView.addSubview(midView)
-        addSubview(containerView)
+        contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints { make in
             make.height.equalTo(65)

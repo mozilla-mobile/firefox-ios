@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Хосусый табларны ябу";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Яңа хосусый табта ачу";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox сезнең гизү тарихыгызны яки кукиларны хәтерләмәячәк, ләкин яңа кыстыргычлар сакланачак.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Күбрәк белү";
+
+/* Toggled OFF accessibility value */
+"Off" = "Сүнгән";
+
+/* Toggled ON accessibility value */
+"On" = "Кабынган";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Хосусый гизү";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Хосусый режим";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Хосусый режимны кабыза яки сүндерә";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Хосусый гизү режимыннан чыкканда";
+
