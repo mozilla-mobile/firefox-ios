@@ -32,12 +32,11 @@ protocol GroupedTabDelegate {
     func newSearchFromGroup(searchTerm: String)
 }
 
-class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
+class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate, ReusableCell {
     
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?
     var selectedTab: Tab? = nil
-    static let Identifier = "GroupedTabCellIdentifier"
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
     let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
     let GroupedTabCellIdentifier = "GroupedTabCellIdentifier"
