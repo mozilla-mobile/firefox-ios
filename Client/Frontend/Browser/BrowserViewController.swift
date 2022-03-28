@@ -517,8 +517,6 @@ class BrowserViewController: UIViewController {
         showQueuedAlertIfAvailable()
 
         prepareURLOnboardingContextualHint()
-
-        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
     }
 
     private func prepareURLOnboardingContextualHint() {
