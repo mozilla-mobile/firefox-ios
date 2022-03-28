@@ -51,23 +51,23 @@ features:
         type: Map<HomeScreenSection, Boolean>
         default:
           {
-            "top-sites": true,
-            "jump-back-in": false,
-            "recently-saved": false,
-            "recent-explorations": false,
+            "topSites": true,
+            "jumpBackIn": false,
+            "recentlySaved": false,
+            "recentExplorations": false,
             "pocket": true,
-            "library-shortcuts": true
+            "libraryShortcuts": true
           }
     defaults:
       - channel: Fennec
         value: {
           "sections-enabled": {
-            "top-sites": true,
-            "jump-back-in": true,
-            "recently-saved": true,
-            "recent-explorations": true,
+            "topSites": true,
+            "jumpBackIn": true,
+            "recentlySaved": true,
+            "recentExplorations": true,
             "pocket": true,
-            "library-shortcuts": true
+            "libraryShortcuts": true
           }
         }
   tabTrayFeature:
