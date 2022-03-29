@@ -16,43 +16,34 @@ class LoginListTableViewSettingsCell: ThemedTableViewCell {
 
 class LoginListTableViewCell: ThemedTableViewCell {
     private let breachAlertSize: CGFloat = 24
-    lazy var breachAlertImageView: UIImageView = {
-        let imageView = UIImageView(image: BreachAlertsManager.icon)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
+    lazy var breachAlertImageView: UIImageView = .build { imageView in
+        imageView.image = BreachAlertsManager.icon
+    }
 
-    lazy var breachAlertContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(breachAlertImageView)
+    lazy var breachAlertContainer: UIView = .build { [weak self] view in
+        guard let self = self else { return }
+
+        view.addSubview(self.breachAlertImageView)
         view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        return view
-    }()
+    }
 
     lazy var breachMargin: CGFloat = {
-        breachAlertSize + LoginTableViewCellUX.HorizontalMargin * 2
+        return breachAlertSize + LoginTableViewCellUX.HorizontalMargin * 2
     }()
 
-    lazy var hostnameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
+    lazy var hostnameLabel: UILabel = .build { label in
         label.textColor = UIColor.theme.tableView.rowText
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
-        return label
-    }()
+    }
 
-    lazy var usernameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
+    lazy var usernameLabel: UILabel = .build { label in
         label.textColor = UIColor.theme.tableView.rowDetailText
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
-        return label
-    }()
+    }
 
     private lazy var textStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [hostnameLabel, usernameLabel])
@@ -93,6 +84,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
             contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             contentStack.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: inset.left),
+
             breachAlertImageView.widthAnchor.constraint(equalToConstant: breachAlertSize),
             breachAlertImageView.heightAnchor.constraint(equalToConstant: breachAlertSize),
             breachAlertImageView.centerYAnchor.constraint(equalTo: breachAlertContainer.centerYAnchor),

@@ -29,11 +29,7 @@ enum LoginTableViewCellStyle {
 
 class LoginDetailTableViewCell: ThemedTableViewCell {
 
-    fileprivate lazy var labelContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    fileprivate lazy var labelContainer: UIView = .build { _ in }
 
     weak var delegate: LoginDetailTableViewCellDelegate?
 
@@ -46,9 +42,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         delegate?.canPerform(action: action, for: self) ?? false
     }
 
-    lazy var descriptionLabel: UITextField = {
-        let label = UITextField()
-        label.translatesAutoresizingMaskIntoConstraints = false
+    lazy var descriptionLabel: UITextField = .build { [self] label in
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
@@ -58,8 +52,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         label.delegate = self
         label.isAccessibilityElement = true
         label.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        return label
-    }()
+    }
 
     // Exposing this label as internal/public causes the Xcode 7.2.1 compiler optimizer to
     // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
@@ -156,17 +149,13 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         NSLayoutConstraint.activate([
             labelContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -LoginTableViewCellUX.HorizontalMargin),
-            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LoginTableViewCellUX.HorizontalMargin)
-        ])
+            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
 
-        NSLayoutConstraint.activate([
             highlightedLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
             highlightedLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
             highlightedLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor),
-            highlightedLabel.widthAnchor.constraint(equalTo: labelContainer.widthAnchor)
-        ])
+            highlightedLabel.widthAnchor.constraint(equalTo: labelContainer.widthAnchor),
 
-        NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
             descriptionLabel.bottomAnchor.constraint(equalTo: labelContainer.bottomAnchor),
             descriptionLabel.topAnchor.constraint(equalTo: highlightedLabel.bottomAnchor),

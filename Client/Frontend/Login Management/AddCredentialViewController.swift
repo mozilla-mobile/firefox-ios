@@ -12,24 +12,23 @@ enum AddCredentialField: Int {
     case passwordItem
     
     var indexPath: IndexPath {
-        IndexPath(row: rawValue, section: 0)
+        return IndexPath(row: rawValue, section: 0)
     }
 }
 
 class AddCredentialViewController: UIViewController {
-    
-    fileprivate lazy var tableView: UITableView = {
-        let tableView = UITableView()
+
+    lazy var tableView: UITableView = .build { [weak self] tableView in
+        guard let self = self else { return }
         tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Add Credential"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44.0
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        // Add empty footer view to prevent separators from being drawn past the last item.
         tableView.tableFooterView = UIView()
-        return tableView
-    }()
+    }
     fileprivate weak var websiteField: UITextField!
     fileprivate weak var usernameField: UITextField!
     fileprivate weak var passwordField: UITextField!
@@ -161,14 +160,14 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        return 3
     }
 }
 
 // MARK: - UITableViewDelegate
 extension AddCredentialViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        LoginDetailUX.InfoRowHeight
+        return LoginDetailUX.InfoRowHeight
     }
 }
 
