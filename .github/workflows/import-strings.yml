@@ -1,0 +1,45 @@
+name: Create a PR with changes after importing strings
+
+permissions:
+  contents: write
+  pull-requests: write
+
+schedule:
+    - cron: '0 5 * * *'
+
+jobs:
+  build:
+    runs-on: macos-11
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.9]
+        xcode: ["13.0"]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false 
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Select Xcode ${{ matrix.xcode }}
+      run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Get the current date for PR title
+      run: echo "current_date=$(date +"%m-%d-%Y")" >> $GITHUB_ENV
+    - name: Run script to import strings
+      run: sh ./bootstrap.sh --importLocales
+    - name: Update new strings
+      run: |-
+        git diff || (git add Shared/*/*.lproj/* Shared/*.lproj/* WidgetKit/*.lproj/* Client/*/*.lproj/* Client/*.lproj/*)
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: string-import-${{ env.current_date }}
+        title: "string-import-${{ env.current_date }}"
+        branch: string-import-${{ env.current_date }}
+        body: "This (automated) PR import string changes"

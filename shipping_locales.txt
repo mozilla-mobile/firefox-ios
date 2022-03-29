@@ -88,6 +88,5 @@ uk
 ur
 uz
 vi
-zgh
 zh-CN
 zh-TW

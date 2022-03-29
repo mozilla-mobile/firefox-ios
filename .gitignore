@@ -98,6 +98,9 @@ Client/Assets/*.js.LICENSE.txt
 /firefoxios-l10n
 /ios-l10n-scripts
 /shavar-prod-lists
+/LocalizationTools
+import-strings.log
+export-strings.log
 
 # Nimbus
 nimbus-fml/
