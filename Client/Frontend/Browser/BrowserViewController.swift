@@ -2572,6 +2572,3 @@ extension BrowserViewController {
         return (UIApplication.shared.delegate as! AppDelegate).browserViewController
     }
 }
-
-// MARK: CanRemoveQuickActionBookmark
-extension BrowserViewController: CanRemoveQuickActionBookmark {}
