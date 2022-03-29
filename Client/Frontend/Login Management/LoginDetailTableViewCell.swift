@@ -35,14 +35,16 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
     // In order for context menu handling, this is required
     override var canBecomeFirstResponder: Bool {
-        true
+        return true
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        delegate?.canPerform(action: action, for: self) ?? false
+        return delegate?.canPerform(action: action, for: self) ?? false
     }
 
-    lazy var descriptionLabel: UITextField = .build { [self] label in
+    lazy var descriptionLabel: UITextField = .build { [weak self] label in
+        guard let self = self else { return }
+
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
@@ -51,20 +53,17 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         label.adjustsFontSizeToFitWidth = false
         label.delegate = self
         label.isAccessibilityElement = true
-        label.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        label.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged)
     }
 
     // Exposing this label as internal/public causes the Xcode 7.2.1 compiler optimizer to
     // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
     // and the text property is exposed using a get/set property below.
-    fileprivate lazy var highlightedLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
+    fileprivate lazy var highlightedLabel: UILabel = .build { label in
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
         label.numberOfLines = 1
-        return label
-    }()
+    }
 
     /// Override the default accessibility label since it won't include the description by default
     /// since it's a UITextField acting as a label.
@@ -114,7 +113,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
     var highlightedLabelTitle: String? {
         get {
-            highlightedLabel.text
+            return highlightedLabel.text
         }
         set(newTitle) {
             highlightedLabel.text = newTitle
@@ -202,7 +201,7 @@ extension LoginDetailTableViewCell {
 
 extension LoginDetailTableViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        delegate?.shouldReturnAfterEditingDescription(self) ?? true
+        return delegate?.shouldReturnAfterEditingDescription(self) ?? true
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {

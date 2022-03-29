@@ -20,6 +20,7 @@ class AddCredentialViewController: UIViewController {
 
     lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
+
         tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Add Credential"
@@ -226,7 +227,7 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
     }
     
     fileprivate func cellForItem(_ item: AddCredentialField) -> LoginDetailTableViewCell? {
-        tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
+        return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) { }

@@ -15,7 +15,7 @@ enum InfoItem: Int {
     case deleteItem
 
     var indexPath: IndexPath {
-        IndexPath(row: rawValue, section: 0)
+        return IndexPath(row: rawValue, section: 0)
     }
 }
 
@@ -37,17 +37,16 @@ fileprivate class CenteredDetailCell: ThemedTableViewCell {
 class LoginDetailViewController: SensitiveViewController {
     fileprivate let profile: Profile
 
-    fileprivate lazy var tableView: UITableView = {
-        let tableView = UITableView()
+    fileprivate lazy var tableView: UITableView = .build { [weak self] tableView in
+        guard let self = self else { return }
+
         tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Login Detail List"
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableFooterView = UIView()
-        return tableView
-    }()
+    }
 
     fileprivate weak var websiteField: UITextField?
     fileprivate weak var usernameField: UITextField?
@@ -235,7 +234,7 @@ extension LoginDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        6
+        return 6
     }
 }
 
@@ -350,7 +349,7 @@ extension LoginDetailViewController {
 
         // Only update if user made changes
         guard let username = usernameField?.text, let password = passwordField?.text else { return }
-        
+
         guard username != login.decryptedUsername || password != login.decryptedPassword else { return }
 
         let updatedLogin = LoginEntry(
@@ -376,10 +375,10 @@ extension LoginDetailViewController {
 extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell) { }
     func textFieldDidChange(_ cell: LoginDetailTableViewCell) { }
-    
+
     func canPerform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
         guard let item = infoItemForCell(cell) else { return false }
-        
+
         switch item {
         case .websiteItem:
             // Menu actions for Website
@@ -395,9 +394,9 @@ extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
             return false
         }
     }
-    
+
     fileprivate func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
-        tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
+        return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }
 
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {

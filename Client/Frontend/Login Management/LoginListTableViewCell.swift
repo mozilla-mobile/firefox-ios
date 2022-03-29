@@ -45,21 +45,23 @@ class LoginListTableViewCell: ThemedTableViewCell {
         label.numberOfLines = 1
     }
 
-    private lazy var textStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [hostnameLabel, usernameLabel])
-        stack.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var textStack: UIStackView = .build { [weak self] stack in
+        guard let self = self else { return }
+
+        stack.addArrangedSubview(self.hostnameLabel)
+        stack.addArrangedSubview(self.usernameLabel)
         stack.axis = .vertical
         stack.isLayoutMarginsRelativeArrangement = true
         stack.layoutMargins = .init(top: 8, left: 0, bottom: 8, right: 0)
-        return stack
-    }()
+    }
 
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [textStack, breachAlertContainer])
-        stack.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var contentStack: UIStackView = .build { [weak self] stack in
+        guard let self = self else { return }
+
+        stack.addArrangedSubview(self.textStack)
+        stack.addArrangedSubview(self.breachAlertContainer)
         stack.axis = .horizontal
-        return stack
-    }()
+    }
 
     private let inset: UIEdgeInsets
 
