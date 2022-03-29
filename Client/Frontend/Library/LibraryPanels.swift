@@ -101,7 +101,7 @@ class LibraryPanels: FeatureFlagsProtocol {
                 
                 // NOTE: Switch to HistoryPanelV2 from v100 onwards.
                 if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
-                    return HistoryPanelV2(profile: profile, tabManager: tabManager)
+                    return HistoryPanelWithGroups(profile: profile, tabManager: tabManager)
                 } else {
                     return HistoryPanel(profile: profile, tabManager: tabManager)
                 }

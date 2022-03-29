@@ -73,12 +73,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         browserLog.debug("HistoryPanelViewModel Deinitialized.")
     }
     
-    // MARK: - Lifecycles
-    
-    func viewDidLoad() {
-        reloadData()
-    }
-    
     // MARK: - Private helpers
     
     /// Begin the process of fetching history data, and creating ASGroups from them. A prefetch also triggers this.
@@ -109,11 +103,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     
     /// A helper for the reload function.
     private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
-        guard !isFetchInProgress else {
-            browserLog.debug("Could not fetch data! A fetch is currently in progress and blocking the action.")
-            return deferMaybe(FetchInProgressError())
-        }
-
         isFetchInProgress = true
 
         return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in

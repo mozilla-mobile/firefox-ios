@@ -60,28 +60,39 @@ class LibraryViewController: UIViewController {
         return button
     }()
 
-    fileprivate lazy var bottomLeftButton: UIBarButtonItem = {
+    // MARK: - Bottom Toolbar
+    private lazy var bottomLeftButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self,  action: #selector(bottomLeftButtonAction))
         button.accessibilityIdentifier = "libraryPanelBottomLeftButton"
         return button
     }()
 
-    fileprivate lazy var bottomRightButton: UIBarButtonItem = {
+    private lazy var bottomRightButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
         button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
         return button
     }()
+    
+    private lazy var bottomCenterButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("search"), style: .plain, target: self, action: #selector(bottomCenterButtonAction))
+        button.accessibilityIdentifier = "historyPanelBottomCenterButton"
+        return button
+    }()
 
-    lazy var flexibleSpace: UIBarButtonItem = {
+    private lazy var flexibleSpace: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     }()
 
-    fileprivate lazy var bottomToolbarItemsBothButtons: [UIBarButtonItem] = {
+    private lazy var bottomToolbarItemsBothButtons: [UIBarButtonItem] = {
         return [bottomLeftButton, flexibleSpace, bottomRightButton]
     }()
 
-    fileprivate lazy var bottomToolbarItemsSingleButton: [UIBarButtonItem] = {
+    private lazy var bottomToolbarItemsSingleButton: [UIBarButtonItem] = {
         return [flexibleSpace, bottomRightButton]
+    }()
+    
+    private lazy var bottomToolbarItemsCenterButton: [UIBarButtonItem] = {
+        return [flexibleSpace, bottomCenterButton, flexibleSpace]
     }()
 
     // MARK: - Initializers
@@ -180,6 +191,8 @@ class LibraryViewController: UIViewController {
             } else {
                 navigationController?.setToolbarHidden(false, animated: true)
             }
+        case .history(_):
+            navigationController?.setToolbarHidden(false, animated: true)
         default:
             navigationController?.setToolbarHidden(true, animated: true)
         }
@@ -311,7 +324,7 @@ class LibraryViewController: UIViewController {
     }
 
     // MARK: - Buttons setup
-    fileprivate func setupButtons() {
+    private func setupButtons() {
         topLeftButtonSetup()
         topRightButtonSetup()
         bottomToolbarButtonSetup()
@@ -349,6 +362,8 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolderEditMode):
             setToolbarItems(bottomToolbarItemsBothButtons, animated: true)
+        case .history(_):
+            setToolbarItems(bottomToolbarItemsCenterButton, animated: true)
         default:
             setToolbarItems(bottomToolbarItemsSingleButton, animated: false)
         }
@@ -460,6 +475,14 @@ class LibraryViewController: UIViewController {
         default:
             return
         }
+    }
+    
+    @objc func bottomCenterButtonAction() {
+//        print("**** Let's search something")
+        guard let panel = children.first as? UINavigationController,
+              let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
+        
+        historyPanel.updateLayout()
     }
 }
 

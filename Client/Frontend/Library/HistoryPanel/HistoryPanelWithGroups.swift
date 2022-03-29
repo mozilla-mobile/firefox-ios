@@ -28,7 +28,7 @@ private class FetchInProgressError: MaybeErrorType {
 }
 
 @objcMembers
-class HistoryPanelV2: UIViewController, LibraryPanel, Loggable, NotificationThemeable {
+class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, NotificationThemeable {
     
     // MARK: - Properties
     
@@ -41,6 +41,7 @@ class HistoryPanelV2: UIViewController, LibraryPanel, Loggable, NotificationThem
     let profile: Profile
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistoryHelper
+    private var keyboardState: KeyboardState?
     
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -48,7 +49,21 @@ class HistoryPanelV2: UIViewController, LibraryPanel, Loggable, NotificationThem
     private var diffableDatasource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
     private var hasRecentlyClosed: Bool { profile.recentlyClosedTabs.tabs.count > 0 }
     
+    private var searchController: UISearchController?
+    
     // UI
+    var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
+    var bottomStackView: BaseAlphaStackView = .build { stackview in
+        stackview.isClearBackground = true
+    }
+    
+    lazy private var searchbar: UISearchBar = .build { searchbar in
+        searchbar.setImage(UIImage(named: "library-history"), for: .search, state: .normal)
+        searchbar.searchTextField.placeholder = "Search text"
+        searchbar.returnKeyType = .done
+        searchbar.delegate = self
+    }
+    
     lazy private var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.dataSource = self.diffableDatasource
@@ -97,7 +112,8 @@ class HistoryPanelV2: UIViewController, LibraryPanel, Loggable, NotificationThem
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.viewDidLoad()
+        KeyboardHelper.defaultHelper.addDelegate(self)
+        viewModel.reloadData()
         viewModel.historyPanelNotifications.forEach {
             NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: $0, object: nil)
         }
@@ -124,17 +140,43 @@ class HistoryPanelV2: UIViewController, LibraryPanel, Loggable, NotificationThem
         
     }
     
-    // MARK: - Misc. helpers
+    func updateLayout() {
+        bottomStackView.isHidden = false
+        searchbar.becomeFirstResponder()
+    }
+    
+    func updateConstraints(openKeyboard: Bool) {
+        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 else {
+            return
+        }
+        
+        if openKeyboard {
+            let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
+            bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
+        } else {
+            bottomStackView.removeKeyboardSpacer()
+        }
+    }
+    
+    // MARK: - Private helpers
     
     private func setupLayout() {
         view.addSubview(tableView)
+        view.addSubview(bottomStackView)
+        bottomStackView.addArrangedSubview(searchbar)
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
+        
+        bottomStackView.isHidden = true
     }
     
     // Use to enable/disable the additional history action rows. `HistoryActionablesModel`
@@ -168,7 +210,7 @@ class HistoryPanelV2: UIViewController, LibraryPanel, Loggable, NotificationThem
     
     // MARK: - Datasource helpers
     
-    func siteAt(indexPath: IndexPath) -> Site? {
+    private func siteAt(indexPath: IndexPath) -> Site? {
         guard let siteItem = diffableDatasource?.itemIdentifier(for: indexPath) as? Site else { return nil }
         
         return siteItem
@@ -447,12 +489,11 @@ class HistoryPanelV2: UIViewController, LibraryPanel, Loggable, NotificationThem
         
         tableView.reloadData()
     }
-    
 }
 
 // MARK: - UITableViewDelegate related helpers
 
-extension HistoryPanelV2: UITableViewDelegate {
+extension HistoryPanelWithGroups: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -506,10 +547,48 @@ extension HistoryPanelV2: UITableViewDelegate {
         navigationController?.pushViewController(asGroupListVC, animated: true)
     }
     
+    // MARK: - TableView's Header & Footer view
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? SiteTableViewHeader, let actualSection = viewModel.visibleSections[safe: section - 1] {
+            
+            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
+            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
+            header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
+
+            // let historySectionsWithGroups
+            let _ = viewModel.searchTermGroups.map { group in
+                viewModel.groupBelongsToSection(asGroup: group)
+            }
+            
+            // NOTE: Uncomment this when we support showing the Show all button and its functionality in a later time.
+            // let visibleSectionsWithGroups = viewModel.visibleSections.filter { historySectionsWithGroups.contains($0) }
+            // header.headerActionButton.isHidden = !visibleSectionsWithGroups.contains(actualSection)
+        }
+        
+    }
+
+    // viewForHeaderInSection REQUIRES implementing heightForHeaderInSection
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // First section is for recently closed and its header has no view.
+        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else {
+            return nil
+        }
+
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // First section is for recently closed and its header has no height.
+        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else {
+            return 0
+        }
+
+        return HistoryPanelUX.HeaderHeight
+    }    
 }
 
 /// Refresh controls helpers
-extension HistoryPanelV2 {
+extension HistoryPanelWithGroups {
     private func handleRefreshControl() {
         if profile.hasSyncableAccount() && refreshControl == nil {
             let control = UIRefreshControl()
@@ -538,15 +617,12 @@ extension HistoryPanelV2 {
                 self.viewModel.reloadData()
                 self.applySnapshot(animatingDifferences: true)
             }
-            
         }
-        
     }
-    
 }
 
 /// User actions helpers
-extension HistoryPanelV2 {
+extension HistoryPanelWithGroups {
     // MARK: - User Interactions
     
     /// When long pressed, a menu appears giving the choice of pinning as a Top Site.
@@ -586,50 +662,7 @@ extension HistoryPanelV2 {
     
 }
 
-// MARK: - TableView's Header & Footer view helpers
-extension HistoryPanelV2 {
-        
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let header = view as? SiteTableViewHeader, let actualSection = viewModel.visibleSections[safe: section - 1] {
-            
-            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
-            header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
-
-            // let historySectionsWithGroups
-            let _ = viewModel.searchTermGroups.map { group in
-                viewModel.groupBelongsToSection(asGroup: group)
-            }
-            
-            // NOTE: Uncomment this when we support showing the Show all button and its functionality in a later time.
-            // let visibleSectionsWithGroups = viewModel.visibleSections.filter { historySectionsWithGroups.contains($0) }
-            // header.headerActionButton.isHidden = !visibleSectionsWithGroups.contains(actualSection)
-        }
-        
-    }
-
-    // viewForHeaderInSection REQUIRES implementing heightForHeaderInSection
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // First section is for recently closed and its header has no view.
-        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else {
-            return nil
-        }
-
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // First section is for recently closed and its header has no height.
-        guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else {
-            return 0
-        }
-
-        return HistoryPanelUX.HeaderHeight
-    }
-    
-}
-
-extension HistoryPanelV2: UITableViewDataSourcePrefetching {
+extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
     
     // Happens WAY too often. We should consider fetching the next set when the user HITS the bottom instead.
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
@@ -645,4 +678,45 @@ extension HistoryPanelV2: UITableViewDataSourcePrefetching {
         return indexPath.row >= viewModel.groupedSites.numberOfItemsForSection(indexPath.section - 1) - historyPanelPrefetchOffset
     }
     
+}
+// MARK: - UISearchBarDelegate
+extension HistoryPanelWithGroups: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+
+        // Do search and show
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let searchText = searchBar.text else { return }
+
+        // Do cancelable search
+    }
+}
+
+// MARK: - KeyboardHelperDelegate
+extension HistoryPanelWithGroups: KeyboardHelperDelegate {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        keyboardState = state
+        updateConstraints(openKeyboard: true)
+        UIView.animate(withDuration: state.animationDuration, delay: 0,
+                       options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
+            self.bottomStackView.layoutIfNeeded()
+        })
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        keyboardState = nil
+        updateConstraints(openKeyboard:false)
+
+        UIView.animate(withDuration: state.animationDuration, delay: 0,
+                       options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
+            self.bottomStackView.layoutIfNeeded()
+        })
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
+        keyboardState = state
+//        updateLayout()
+    }
 }
