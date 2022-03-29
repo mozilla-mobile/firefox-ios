@@ -68,39 +68,32 @@ class DeferredTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
     }
 
-    func testPassAccumulate() {
-        class TestClass {
-            init() {
-                accumulate([self.aSimpleFunction]).upon { _ in }
-            }
-
-            func aSimpleFunction() -> Success {
-                return succeed()
-            }
+    func testPassAccumulate_andDoesntLeak() {
+        let expectation = self.expectation(description: "Deinit is called")
+        let accumulateCall: () -> Success = {
+            return succeed()
         }
 
-        let myclass = TestClass()
-        trackForMemoryLeaks(myclass)
+        var myclass: AccumulateTestClass? = AccumulateTestClass(expectation: expectation, accumulateCall: accumulateCall)
+        trackForMemoryLeaks(myclass!)
+        myclass = nil
+
+        waitForExpectations(timeout: 3, handler: nil)
+
     }
 
-    func testFailAccumulate() {
+    func testFailAccumulate_andDoesntLeak() {
+        let expectation = self.expectation(description: "Deinit is called")
 
-        class TestError: MaybeErrorType {
-            var description = "Error"
+        let accumulateCall: () -> Success = {
+            return Deferred(value: Maybe(failure: AccumulateTestClass.Error()))
         }
 
-        class TestClass {
-            init() {
-                accumulate([self.aSimpleFunction]).upon { _ in }
-            }
+        var myclass: AccumulateTestClass? = AccumulateTestClass(expectation: expectation, accumulateCall: accumulateCall)
+        trackForMemoryLeaks(myclass!)
+        myclass = nil
 
-            func aSimpleFunction() -> Success {
-                return Deferred(value: Maybe(failure: TestError()))
-            }
-        }
-
-        let myclass = TestClass()
-        trackForMemoryLeaks(myclass)
+        waitForExpectations(timeout: 3, handler: nil)
     }
 
     func testDeferMaybe() {
@@ -110,6 +103,25 @@ class DeferredTests: XCTestCase {
 
 // MARK: Helper
 private extension DeferredTests {
+
+    class AccumulateTestClass {
+        class Error: MaybeErrorType {
+            var description = "Error"
+        }
+
+        let expectation: XCTestExpectation
+
+        init(expectation: XCTestExpectation,
+             accumulateCall: @escaping () -> Success) {
+
+            self.expectation = expectation
+            accumulate([accumulateCall]).upon { _ in }
+        }
+
+        deinit {
+            expectation.fulfill()
+        }
+    }
 
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
