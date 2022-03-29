@@ -6,8 +6,8 @@
 import XCTest
 
 // Trivial test for using Deferred.
-
 class DeferredTests: XCTestCase {
+
     func testDeferred() {
         let d = Deferred<Int>()
         XCTAssertNil(d.peek(), "Value not yet filled.")
@@ -69,61 +69,51 @@ class DeferredTests: XCTestCase {
     }
 
     func testPassAccumulate() {
-        let leak = self.expectation(description: "deinit")
-
         class TestClass {
-            let end: XCTestExpectation
-            init(e: XCTestExpectation) {
-                end = e
-                accumulate([self.aSimpleFunction]).upon { _ in
-
-                }
+            init() {
+                accumulate([self.aSimpleFunction]).upon { _ in }
             }
 
             func aSimpleFunction() -> Success {
                 return succeed()
             }
-            deinit {
-                end.fulfill()
-            }
         }
 
-        var myclass: TestClass? = TestClass(e: leak)
-        myclass = nil
-        waitForExpectations(timeout: 3, handler: nil)
+        let myclass = TestClass()
+        trackForMemoryLeaks(myclass)
     }
 
-
     func testFailAccumulate() {
-        let leak = self.expectation(description: "deinit")
 
         class TestError: MaybeErrorType {
             var description = "Error"
         }
 
         class TestClass {
-            let end: XCTestExpectation
-            init(e: XCTestExpectation) {
-                end = e
-                accumulate([self.aSimpleFunction]).upon { _ in
-
-                }
+            init() {
+                accumulate([self.aSimpleFunction]).upon { _ in }
             }
 
             func aSimpleFunction() -> Success {
                 return Deferred(value: Maybe(failure: TestError()))
             }
-            deinit {
-                end.fulfill()
-            }
         }
 
-        var myclass: TestClass? = TestClass(e: leak)
-        myclass = nil
-        waitForExpectations(timeout: 3, handler: nil)
+        let myclass = TestClass()
+        trackForMemoryLeaks(myclass)
     }
 
     func testDeferMaybe() {
         XCTAssertTrue(deferMaybe("foo").value.isSuccess)
+    }
+}
+
+// MARK: Helper
+private extension DeferredTests {
+
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated, potential memory leak.", file: file, line: line)
+        }
     }
 }
