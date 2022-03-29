@@ -31,10 +31,12 @@ enum ReferringPage {
 }
 
 final class BrowserViewController: UIViewController {
+
     private enum UX {
-        fileprivate static let ShowHeaderTapAreaHeight: CGFloat = 32
-        fileprivate static let ActionSheetTitleMaxLength = 120
+        static let ShowHeaderTapAreaHeight: CGFloat = 32
+        static let ActionSheetTitleMaxLength = 120
     }
+
     private let KVOs: [KVOConstants] = [
         .estimatedProgress,
         .loading,
@@ -43,6 +45,7 @@ final class BrowserViewController: UIViewController {
         .URL,
         .title,
     ]
+
     var firefoxHomeViewController: FirefoxHomeViewController?
     var libraryViewController: LibraryViewController?
     var libraryDrawerViewController: DrawerViewController?
@@ -620,7 +623,7 @@ final class BrowserViewController: UIViewController {
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
-            make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
+            make.height.equalTo(UX.ShowHeaderTapAreaHeight)
         }
 
         readerModeBar?.snp.remakeConstraints { make in
