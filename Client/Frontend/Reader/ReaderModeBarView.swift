@@ -39,12 +39,12 @@ enum ReaderModeBarButtonType {
     }
 }
 
-protocol ReaderModeBarViewDelegate {
+protocol ReaderModeBarViewDelegate: AnyObject {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 
 class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
-    var delegate: ReaderModeBarViewDelegate?
+    weak var delegate: ReaderModeBarViewDelegate?
 
     var parent: UIStackView?
     private var isBottomPresented: Bool {
