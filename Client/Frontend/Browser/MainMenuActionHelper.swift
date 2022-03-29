@@ -396,10 +396,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
 
         let openSettings = SingleActionViewModel(title: title,
                                                  iconString: icon) { _ in
-            let settingsTableViewController = AppSettingsTableViewController()
-            settingsTableViewController.profile = self.profile
-            settingsTableViewController.tabManager = self.tabManager
-            settingsTableViewController.settingsDelegate = self.menuActionDelegate
+            let settingsTableViewController = AppSettingsTableViewController(
+                with: self.profile,
+                and: self.tabManager,
+                delegate: self.menuActionDelegate)
 
             let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
             // On iPhone iOS13 the WKWebview crashes while presenting file picker if its not full screen. Ref #6232

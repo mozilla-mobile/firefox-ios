@@ -21,8 +21,18 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
     var nimbus: FxNimbus
 
     // MARK: - Initializers
-    init(with nimbus: FxNimbus = FxNimbus.shared) {
+    init(with profile: Profile,
+         and tabManager: TabManager,
+         delegate: SettingsDelegate?,
+         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil,
+         with nimbus: FxNimbus = FxNimbus.shared) {
+        self.deeplinkTo = destination
         self.nimbus = nimbus
+
+        super.init()
+        self.profile = profile
+        self.tabManager = tabManager
+        self.settingsDelegate = delegate
     }
 
     required init?(coder aDecoder: NSCoder) {
