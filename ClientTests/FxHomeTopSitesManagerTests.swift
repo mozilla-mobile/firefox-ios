@@ -170,13 +170,15 @@ class FxHomeTopSitesManagerTests: XCTestCase {
 
     func testCalculateTopSitesData_doesNotAddMoreSponsoredTileThanMaximum() {
         let manager = createManager()
-        manager.addContiles(shouldSucceed: true, contilesCount: 2)
+        // Max contiles is currently at 2, so it should add 2 contiles only
+        manager.addContiles(shouldSucceed: true, contilesCount: 3)
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
             XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
             XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
             XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, true)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, true)
+            XCTAssertEqual(manager.getSite(index: 3)?.isSponsoredTile, false)
         }
     }
 

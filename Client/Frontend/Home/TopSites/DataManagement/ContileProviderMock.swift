@@ -43,7 +43,15 @@ class ContileProviderMock: ContileProvider {
                         imageURL: "https://test.com/image2.jpg",
                         imageSize: 200,
                         impressionUrl: "https://example.com",
-                        position: 2)]
+                        position: 2),
+                Contile(id: 3,
+                        name: "Focus",
+                        url: "https://support.mozilla.org/en-US/kb/firefox-focus-ios",
+                        clickUrl: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
+                        imageURL: "https://test.com/image3.jpg",
+                        imageSize: 200,
+                        impressionUrl: "https://another-example.com",
+                        position: 3)]
     }
 
     init(result: ContileProvider.Result = .success([])) {
