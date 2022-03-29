@@ -4,12 +4,13 @@
 
 import Foundation
 
-protocol CanRemoveQuickActionBookMark {
+protocol CanRemoveQuickActionBookmark {
     var profile: Profile { get }
     func removeBookmarkShortcut()
 }
 
-extension CanRemoveQuickActionBookMark {
+// Extension to easily remove a bookmark from the quick actions
+extension CanRemoveQuickActionBookmark {
 
     func removeBookmarkShortcut() {
         let dataQueue = DispatchQueue(label: "com.moz.removeShortcut.queue")

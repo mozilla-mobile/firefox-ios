@@ -33,7 +33,7 @@ fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
     }
 }
 
-class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookMark {
+class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
         case recent

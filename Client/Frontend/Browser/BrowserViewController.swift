@@ -2573,4 +2573,5 @@ extension BrowserViewController {
     }
 }
 
-extension BrowserViewController: CanRemoveQuickActionBookMark {}
+// MARK: CanRemoveQuickActionBookmark
+extension BrowserViewController: CanRemoveQuickActionBookmark {}
