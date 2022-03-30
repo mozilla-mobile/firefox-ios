@@ -8,16 +8,23 @@ import Shared
 @testable import Client
 @testable import Storage
 
-// A few tests here have built in assumptions:
-// 1. HistoryHighlights write&delete data correctly
-// 2. History write&delete data correctly
+// This file has two built in assumptions:
+// 1. HistoryHighlights writes&deletes data correctly
+// 2. History writes&deletes data correctly
 // These basic cases are not tested here as they are tested in
 // `HistoryHighlightsManagerTests` and `TestHistory` respectively
 class HistoryDeletionUtilityTests: XCTestCase {
-    typealias manager = HistoryHighlightsManager
+    private struct SiteElements {
+        let domain: String
+        let path: String
+
+        init(domain: String, path: String = "") {
+            self.domain = domain
+            self.path = path
+        }
+    }
 
     private var profile: MockProfile!
-    private var tabManager: TabManager!
     private var deletionUtility: HistoryDeletionUtility!
 
     override func setUp() {
@@ -25,7 +32,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
 
         profile = MockProfile(databasePrefix: "historyDeletion_tests")
         profile._reopen()
-        tabManager = TabManager(profile: profile, imageStore: nil)
         deletionUtility = HistoryDeletionUtility(with: profile)
     }
 
@@ -35,7 +41,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deletionUtility = nil
         profile._shutdown()
         profile = nil
-        tabManager = nil
     }
 
     func testEmptyRead() {
@@ -46,8 +51,8 @@ class HistoryDeletionUtilityTests: XCTestCase {
     func testSingleDataExists() {
         emptyDB()
 
-        let testSites = [("mozilla", "")]
-        createHistoryEntry(siteEntry: testSites)
+        let testSites = [SiteElements(domain: "mozilla")]
+        populateDBHistory(with: testSites)
 
         assertDBStateFor(testSites)
     }
@@ -55,10 +60,10 @@ class HistoryDeletionUtilityTests: XCTestCase {
     func testDeletingSingleItem() {
         emptyDB()
 
-        let testSites = [("mozilla", "")]
-        createHistoryEntry(siteEntry: testSites)
+        let testSites = [SiteElements(domain: "mozilla")]
+        populateDBHistory(with: testSites)
 
-        let siteEntry = createWebsiteEntry(named: "mozilla", with: "")
+        let siteEntry = createWebsiteFor(domain: "mozilla", with: "")
         deletionUtility.delete([siteEntry.url])
 
         assertDBIsEmpty()
@@ -67,13 +72,13 @@ class HistoryDeletionUtilityTests: XCTestCase {
    func testDeletingMultipleItemsEmptyingDatabase() {
        emptyDB()
 
-       let sitesToDelete = [("mozilla", ""),
-                            ("amazon", ""),
-                            ("google", "")]
-       createHistoryEntry(siteEntry: sitesToDelete)
+       let sitesToDelete = [SiteElements(domain: "mozilla"),
+                            SiteElements(domain: "amazon"),
+                            SiteElements(domain: "google")]
+       populateDBHistory(with: sitesToDelete)
 
        let siteEntries = sitesToDelete
-           .map { self.createWebsiteEntry(named: $0.1, with:  $0.1) }
+           .map { self.createWebsiteFor(domain: $0.domain, with:  $0.path) }
            .map { $0.url }
        deletionUtility.delete(siteEntries)
 
@@ -83,16 +88,15 @@ class HistoryDeletionUtilityTests: XCTestCase {
    func testDeletingMultipleTopLevelItems() {
        emptyDB()
 
-       let testSites = [("cnn", ""),
-                        ("macrumors", "")]
-       let sitesToDelete = [("mozilla", ""),
-                            ("google", ""),
-                            ("amazon", "")]
-       var randomizedSites = (testSites + sitesToDelete).shuffled()
-       createHistoryEntry(siteEntry: randomizedSites)
+       let testSites = [SiteElements(domain: "cnn"),
+                        SiteElements(domain: "macrumors")]
+       let sitesToDelete = [SiteElements(domain: "mozilla"),
+                            SiteElements(domain: "google"),
+                            SiteElements(domain: "amazon")]
+       populateDBHistory(with: (testSites + sitesToDelete).shuffled())
 
        let siteEntries = sitesToDelete
-           .map { self.createWebsiteEntry(named: $0.1, with:  $0.1) }
+           .map { self.createWebsiteFor(domain: $0.domain, with:  $0.path) }
            .map { $0.url }
        deletionUtility.delete(siteEntries)
 
@@ -103,18 +107,17 @@ class HistoryDeletionUtilityTests: XCTestCase {
    func testDeletingMultipleSpecificItems() {
        emptyDB()
 
-       let testSites = [("cnn", "newsOne/test1.html"),
-                        ("mozilla", "fancypants.html"),
-                        ("cnn", "newsTwo/test2.html")]
-       let sitesToDelete = [("cnn", "newsOne/test2.html"),
-                            ("cnn", "newsOne/test3.html"),
-                            ("cnn", "newsTwo/test1.html")]
-       var randomizedSites = (testSites + sitesToDelete).shuffled()
-       createHistoryEntry(siteEntry: randomizedSites)
+       let testSites = [SiteElements(domain: "cnn", path: "newsOne/test1.html"),
+                        SiteElements(domain: "mozilla", path: "fancypants.html"),
+                        SiteElements(domain: "cnn", path: "newsTwo/test2.html")]
+       let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
+                            SiteElements(domain: "cnn", path: "newsOne/test3.html"),
+                            SiteElements(domain: "cnn", path: "newsTwo/test1.html")]
+       populateDBHistory(with: (testSites + sitesToDelete).shuffled())
 
        let siteEntries = sitesToDelete
-         .map { self.createWebsiteEntry(named: $0.1, with:  $0.1) }
-         .map { $0.url }
+           .map { self.createWebsiteFor(domain: $0.domain, with:  $0.path) }
+           .map { $0.url }
        deletionUtility.delete(siteEntries)
 
        // Assert DB contains only the expected number of things
@@ -150,7 +153,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         XCTAssertEqual(emptyHistory.successValue!.count, 0)
     }
 
-    private func assertDBStateFor(_ sites: [(String, String)]) {
+    private func assertDBStateFor(_ sites: [SiteElements]) {
         let metadataItems = profile.places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(metadataItems.isSuccess)
         XCTAssertNotNil(metadataItems.successValue)
@@ -162,34 +165,34 @@ class HistoryDeletionUtilityTests: XCTestCase {
         XCTAssertEqual(historyItems.successValue!.count, sites.count)
 
         for (index, site) in sites.enumerated() {
-            XCTAssertEqual(metadataItems.successValue![index].url, "https://www.\(site.0).com/\(site.1)")
-            XCTAssertEqual(metadataItems.successValue![index].title?.lowercased(), "\(site) test")
+            XCTAssertEqual(metadataItems.successValue![index].url, "https://www.\(site.domain).com/\(site.path)")
+            XCTAssertEqual(metadataItems.successValue![index].title?.lowercased(), "\(site.domain) test")
             XCTAssertEqual(metadataItems.successValue![index].documentType, DocumentType.regular)
             XCTAssertEqual(metadataItems.successValue![index].totalViewTime, 1)
 
-            XCTAssertEqual(historyItems.successValue![index]?.url, "https://www.\(site.0).com/\(site.1)")
-            XCTAssertEqual(historyItems.successValue![index]?.title.lowercased(), "\(site) test")
+            XCTAssertEqual(historyItems.successValue![index]?.url, "https://www.\(site.domain).com/\(site.path)")
+            XCTAssertEqual(historyItems.successValue![index]?.title.lowercased(), "\(site.domain) test")
         }
     }
 
-    private func createHistoryEntry(siteEntry: [(String, String)]) {
-        for (siteText, suffix) in siteEntry {
-            let site = createWebsiteEntry(named: siteText, with: suffix)
-            addHistory(site: site)
+    private func populateDBHistory(with entries: [SiteElements]) {
+        for entry in entries {
+            let site = createWebsiteFor(domain: entry.domain, with: entry.path)
+            addToLocalHistory(site: site)
             setupMetadataItem(forTestURL: site.url,
                               withTitle: site.title,
                               andViewTime: 1)
         }
     }
 
-    private func createWebsiteEntry(named name: String, with sufix: String = "") -> Site {
-        let urlString = "https://www.\(name).com/\(sufix)"
+    private func createWebsiteFor(domain name: String, with path: String = "") -> Site {
+        let urlString = "https://www.\(name).com/\(path)"
         let urlTitle = "\(name) test"
 
         return Site(url: urlString, title: urlTitle)
     }
 
-    private func addHistory(site: Site) {
+    private func addToLocalHistory(site: Site) {
         let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
         XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
     }
@@ -227,40 +230,4 @@ class HistoryDeletionUtilityTests: XCTestCase {
             )
         ).value.isSuccess)
     }
-
-//    private func checkHistorySites(urls: [String: String], s: Bool = true) {
-//        // Retrieve the entry.
-//        let history = profile.history
-//        if let cursor = history.getSitesByLastVisit(limit: 100, offset: 0).value.successValue {
-//            XCTAssertEqual(cursor.status, CursorStatus.success,
-//                           "Returned success \(cursor.statusMessage).")
-//            XCTAssertEqual(cursor.count, urls.count,
-//                           "Cursor has \(urls.count) entries.")
-//
-//            for index in 0..<cursor.count {
-//                let s = cursor[index]!
-//                XCTAssertNotNil(s, "Cursor has a site for entry.")
-//                let title = urls[s.url]
-//                XCTAssertNotNil(title, "Found right URL.")
-//                XCTAssertEqual(s.title, title!, "Found right title.")
-//            }
-//        } else {
-//            XCTFail("Couldn't get cursor.")
-//        }
-//    }
-
-//    private func checkHistoryVisits(url: String) {
-//        let history = profile.history
-//        let expectation = self.expectation(description: "Wait for history")
-//        history.getSitesByLastVisit(limit: 100, offset: 0).upon { result in
-//            XCTAssertTrue(result.isSuccess)
-//            history.getFrecentHistory().getSites(matchingSearchQuery: url, limit: 100).upon { result in
-//                XCTAssertTrue(result.isSuccess)
-//                let cursor = result.successValue!
-//                XCTAssertEqual(cursor.status, CursorStatus.success, "returned success \(cursor.statusMessage)")
-//                expectation.fulfill()
-//            }
-//        }
-//        self.waitForExpectations(timeout: 100, handler: nil)
-//    }
 }
