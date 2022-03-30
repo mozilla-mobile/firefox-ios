@@ -17,11 +17,14 @@ class FxHomeTopSitesManagerTests: XCTestCase {
 
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
         profile._reopen()
+
+        profile.prefs.clearAll()
     }
 
     override func tearDown() {
         super.tearDown()
 
+        profile.prefs.clearAll()
         profile._shutdown()
         profile = nil
     }
@@ -53,12 +56,12 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         XCTAssertEqual(manager.numberOfRows, 3)
     }
 
-    func testLoadTopSitesData_withoutCalculationHasData() {
+    func testLoadTopSitesData_hasDataWithDefaultCalculation() {
         let manager = createManager()
 
         testLoadData(manager: manager, numberOfTilesPerRow: nil) {
             XCTAssertEqual(manager.hasData, true)
-            XCTAssertEqual(manager.siteCount, 0)
+            XCTAssertEqual(manager.siteCount, 11)
         }
     }
 
@@ -89,17 +92,32 @@ class FxHomeTopSitesManagerTests: XCTestCase {
 
     // MARK: Google top site
 
-    func testCalculateTopSitesData_hasGoogleTopSite() {
+    func testCalculateTopSitesData_hasGoogleTopSite_googlePrefsNil() {
         let manager = createManager()
 
+        // We test that without a pref, google is added
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
             XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
             XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
         }
     }
 
-    func testCalculateTopSitesData_hasNotGoogleTopSite() {
+
+    func testCalculateTopSitesData_hasGoogleTopSiteWithPinnedCount_googlePrefsNi() {
         let manager = createManager(addPinnedSiteCount: 3)
+
+        // We test that without a pref, google is added even with pinned tiles
+        testLoadData(manager: manager, numberOfTilesPerRow: 1) {
+            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
+            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
+        }
+    }
+
+    func testCalculateTopSitesData_hasNotGoogleTopSite_IfHidden() {
+        let manager = createManager(addPinnedSiteCount: 3)
+
+        profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
+        profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
 
         // We test that having more pinned than available tiles, google tile isn't put in
         testLoadData(manager: manager, numberOfTilesPerRow: 1) {
