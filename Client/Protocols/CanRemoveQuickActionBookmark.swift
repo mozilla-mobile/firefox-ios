@@ -13,7 +13,7 @@ protocol CanRemoveQuickActionBookmark {
 extension CanRemoveQuickActionBookmark {
 
     func removeBookmarkShortcut() {
-        let dataQueue = DispatchQueue(label: "com.moz.removeShortcut.queue")
+        let dataQueue = DispatchQueue(label: "com.moz.removeShortcut.queue", qos: .userInteractive)
 
         // Get most recent bookmark
         profile.places.getRecentBookmarks(limit: 1).uponQueue(dataQueue) { result in
