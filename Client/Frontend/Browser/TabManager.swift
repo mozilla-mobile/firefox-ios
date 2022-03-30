@@ -10,7 +10,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-protocol TabManagerDelegate: AnyObject {
+@objc protocol TabManagerDelegate: AnyObject {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool)
@@ -18,6 +18,7 @@ protocol TabManagerDelegate: AnyObject {
     func tabManagerDidRestoreTabs(_ tabManager: TabManager)
     func tabManagerDidAddTabs(_ tabManager: TabManager)
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?)
+    @objc optional func tabManagerUpdateCount()
 }
 
 // We can't use a WeakList here because this is a protocol.
@@ -62,17 +63,19 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
     func addDelegate(_ delegate: TabManagerDelegate) {
-        assert(Thread.isMainThread)
-        delegates.append(WeakTabManagerDelegate(value: delegate))
+        DispatchQueue.main.async {
+            self.delegates.append(WeakTabManagerDelegate(value: delegate))
+        }
     }
 
     func removeDelegate(_ delegate: TabManagerDelegate) {
-        assert(Thread.isMainThread)
-        for i in 0 ..< delegates.count {
-            let del = delegates[i]
-            if delegate === del.get() || del.get() == nil {
-                delegates.remove(at: i)
-                return
+        DispatchQueue.main.async { [unowned self] in
+            for i in 0 ..< self.delegates.count {
+                let del = self.delegates[i]
+                if delegate === del.get() || del.get() == nil {
+                    self.delegates.remove(at: i)
+                    return
+                }
             }
         }
     }
@@ -114,19 +117,16 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     var recentlyClosedForUndo = [SavedTab]()
 
     var normalTabs: [Tab] {
-        assert(Thread.isMainThread)
         return tabs.filter { !$0.isPrivate }
     }
 
     var privateTabs: [Tab] {
-        assert(Thread.isMainThread)
         return tabs.filter { $0.isPrivate }
     }
 
     /// This variable returns all normal tabs, sorted chronologically, excluding any
     /// home page tabs.
     var recentlyAccessedNormalTabs: [Tab] {
-        assert(Thread.isMainThread)
         var eligibleTabs: [Tab]
 
         if featureFlags.isFeatureBuildAndUserEnabled(.inactiveTabs) {
@@ -163,7 +163,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     // MARK: - Initializer
     init(profile: Profile, imageStore: DiskImageStore?) {
-        assert(Thread.isMainThread)
+
 
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
@@ -180,19 +180,16 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
-        assert(Thread.isMainThread)
-
-        self.navDelegate.insert(delegate)
+        DispatchQueue.main.async {
+            self.navDelegate.insert(delegate)
+        }
     }
 
     var count: Int {
-        assert(Thread.isMainThread)
-
         return tabs.count
     }
 
     var selectedTab: Tab? {
-        assert(Thread.isMainThread)
         if !(0..<count ~= _selectedIndex) {
             return nil
         }
@@ -201,7 +198,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     subscript(index: Int) -> Tab? {
-        assert(Thread.isMainThread)
 
         if index >= tabs.count {
             return nil
@@ -210,7 +206,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     subscript(webView: WKWebView) -> Tab? {
-        assert(Thread.isMainThread)
 
         for tab in tabs where tab.webView === webView {
             return tab
@@ -220,7 +215,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func getTabFor(_ url: URL) -> Tab? {
-        assert(Thread.isMainThread)
+
 
         for tab in tabs {
             if let webViewUrl = tab.webView?.url,
@@ -252,7 +247,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     // This function updates the _selectedIndex.
     // Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case where the index of the tab has changed (such as after deletion).
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
-        assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
 
         previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched)
@@ -309,7 +303,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func expireSnackbars() {
-        assert(Thread.isMainThread)
+
 
         for tab in tabs {
             tab.expireSnackbars()
@@ -335,7 +329,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool) {
-        assert(Thread.isMainThread)
+
 
         if urls.isEmpty {
             return
@@ -356,7 +350,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func addTab(_ request: URLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool = false) -> Tab {
-        assert(Thread.isMainThread)
+
 
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
@@ -368,7 +362,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
-        assert(Thread.isMainThread)
+
 
         let currentTabs = privateMode ? privateTabs : normalTabs
 
@@ -391,7 +385,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false) {
-        assert(Thread.isMainThread)
+
 
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
@@ -476,8 +470,10 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func removeTab(_ tab: Tab) {
         guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
-        removeTab(tab, flushToDisk: true)
-        updateIndexAfterRemovalOf(tab, deletedIndex: index)
+        DispatchQueue.main.async { [unowned self] in
+            self.removeTab(tab, flushToDisk: true)
+            self.updateIndexAfterRemovalOf(tab, deletedIndex: index)
+        }
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -510,13 +506,122 @@ class TabManager: NSObject, FeatureFlagsProtocol {
             selectTab(selected, previous: selected)
         }
     }
+    
+    // MARK: Tab Tray close all tabs
+
+    func backgroundRemoveAllTabs(isPrivate: Bool = false,
+                                 didClearTabs: @escaping (_ urlsVal: [URL], _ tabsToRemove: [Tab],
+                                                          _ isPrivate: Bool,
+                                                          _ previousTabUUID: String) -> Void) {
+        // moved closing of multiple tabs to background thread
+        DispatchQueue.global(qos: .background).async { [unowned self] in
+
+            let tabsToRemove = isPrivate ? self.privateTabs : self.normalTabs
+            let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
+
+            if isPrivate && self.privateTabs.count < 1 {
+                //Bugzilla 1646756: close last private tab clears the WKWebViewConfiguration (#6827)
+                DispatchQueue.main.async { [unowned self] in
+                    self.privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true,
+                                                                             prefs: self.profile.prefs)
+                }
+            }
+
+            // clear Tabs from the list that we need to remove
+            self.tabs = self.tabs.filter { !tabsToRemove.contains($0) }
+
+            // update tab manager count
+            self.delegates.forEach { $0.get()?.tabManagerUpdateCount?() }
+
+            var urls = [URL]()
+            tabsToRemove.forEach { tab in
+                if let url = tab.lastKnownUrl {
+                    return urls.append(url)
+                }
+            }
+
+            DispatchQueue.main.async { [unowned self] in
+                // after closing all normal tabs we should add a normal tab
+                if self.normalTabs.isEmpty {
+                    self.selectTab(self.addTab())
+                    storeChanges()
+                }
+            }
+
+            didClearTabs(urls, tabsToRemove, isPrivate, previousSelectedTabUUID)
+        }
+    }
+    
+    func makeToastFromRecentlyClosedUrls(_ urls: [URL], recentlyClosedTabs: [Tab], isPrivate: Bool,
+                                         previousTabUUID: String) {
+        var toast: ButtonToast?
+        let numberOfTabs = urls.count
+        if numberOfTabs > 0 {
+            var didPressButton = false
+            toast = ButtonToast(labelText:
+                    String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs),
+                    buttonText: .TabsDeleteAllUndoAction) { buttonPressed in
+                if buttonPressed {
+                    self.reAddTabs(tabsToAdd: recentlyClosedTabs, previousTabUUID: previousTabUUID)
+                    NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
+                }
+                didPressButton = true
+            } autoDismissCompletion: {
+                guard !didPressButton else { return }
+                DispatchQueue.global(qos: .background).async { [unowned self] in
+                    let previousTab = tabs.filter { $0.tabUUID == previousTabUUID }.first
+                    self.cleanupClosedTabs(closedTabs: recentlyClosedTabs, previous: previousTab,
+                                           isPrivate: isPrivate)
+                }
+            }
+        }
+
+        if let toast = toast {
+            delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
+        }
+    }
+    
+    func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {
+        tabs.append(contentsOf: tabsToAdd)
+        let tabToSelect = tabs.filter { $0.tabUUID == previousTabUUID }.first
+        let currentlySelectedTab = selectedTab
+        if let tabToSelect = tabToSelect, let currentlySelectedTab = currentlySelectedTab {
+            // remove currently selected tab
+            removeTabs([currentlySelectedTab])
+            // select previous tab
+            selectTab(tabToSelect, previous: nil)
+        }
+        delegates.forEach { $0.get()?.tabManagerUpdateCount?() }
+    }
+
+    func cleanupClosedTabs(closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {
+
+        DispatchQueue.main.async { [unowned self] in
+            // select normal tab if there are no private tabs, we need to do this
+            // to accomodate for the case when a user dismisses tab tray while
+            // they are in private mode and there are no tabs
+            if isPrivate && self.privateTabs.count < 1 && !self.normalTabs.isEmpty {
+                self.selectTab(mostRecentTab(inTabs: self.normalTabs) ?? self.normalTabs.last,
+                               previous: previous)
+            }
+        }
+
+        // perform remaining tab cleanup related to removing wkwebview
+        // observers which can only happen on main thread in close() call
+        closedTabs.forEach { tab in
+            DispatchQueue.main.async {
+                tab.close()
+                TabEvent.post(.didClose, for: tab)
+            }
+        }
+    }
 
     /// Remove a tab, will notify delegate of the tab removal
     /// - Parameters:
     ///   - tab: the tab to remove
     ///   - flushToDisk: Will store changes if true, and update selected index
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
-        assert(Thread.isMainThread)
+
 
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
             Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
@@ -651,12 +756,12 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func getTabForURL(_ url: URL) -> Tab? {
-        assert(Thread.isMainThread)
+
         return tabs.filter({ $0.webView?.url == url }).first
     }
 
     func getTabForUUID(uuid: String) -> Tab? {
-        assert(Thread.isMainThread)
+
         let filterdTabs = tabs.filter { tab -> Bool in
             tab.tabUUID == uuid
         }
@@ -677,7 +782,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func resetProcessPool() {
-        assert(Thread.isMainThread)
+
         configuration.processPool = WKProcessPool()
     }
     

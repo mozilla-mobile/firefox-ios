@@ -30,10 +30,11 @@ class ButtonToast: Toast {
         }
     }
 
-    init(labelText: String, descriptionText: String? = nil, imageName: String? = nil, buttonText: String? = nil, backgroundColor: UIColor = SimpleToastUX.ToastDefaultColor, textAlignment: NSTextAlignment = .left, completion: ((_ buttonPressed: Bool) -> Void)? = nil) {
+    init(labelText: String, descriptionText: String? = nil, imageName: String? = nil, buttonText: String? = nil, backgroundColor: UIColor = SimpleToastUX.ToastDefaultColor, textAlignment: NSTextAlignment = .left, completion: ((_ buttonPressed: Bool) -> Void)? = nil, autoDismissCompletion: (() -> Void)? = nil) {
         super.init(frame: .zero)
 
         self.completionHandler = completion
+        self.didDismissWithoutTapHandler = autoDismissCompletion
 
         self.clipsToBounds = true
         let createdToastView = createView(labelText, descriptionText: descriptionText, imageName: imageName, buttonText: buttonText, textAlignment: textAlignment)

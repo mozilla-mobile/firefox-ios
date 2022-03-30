@@ -382,19 +382,19 @@ extension GridTabViewController {
         }
     }
 
-    func closeTabsForCurrentTray() {
-        let tabs = self.tabDisplayManager.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        let maxTabs = 100
-        if self.tabDisplayManager.isPrivate {
-            let previous = self.tabManager.selectedTab
-            self.tabManager.removeTabsWithoutToast(tabs)
-            self.tabManager.selectTab(mostRecentTab(inTabs: tabManager.normalTabs) ?? tabManager.normalTabs.last, previous: previous)
-        } else if tabs.count >= maxTabs {
-            self.tabManager.removeTabsAndAddNormalTab(tabs)
-        } else {
-            self.tabManager.removeTabsWithToast(tabs)
+    func closeTabsTrayBackground() {
+        tabDisplayManager.removeAllTabs()
+        tabManager.backgroundRemoveAllTabs(isPrivate: tabDisplayManager.isPrivate) {
+        urls, tabsToRemove, isPrivateState, previousTabUUID in
+            DispatchQueue.main.async { [unowned self] in
+                self.tabManager.makeToastFromRecentlyClosedUrls(urls,
+                    recentlyClosedTabs: tabsToRemove,
+                    isPrivate: isPrivateState,
+                    previousTabUUID: previousTabUUID)
+
+                closeTabsTrayHelper()
+            }
         }
-        closeTabsTrayHelper()
     }
 
     func closeTabsTrayHelper() {
@@ -420,8 +420,6 @@ extension GridTabViewController {
     }
 
     func dismissTabTray() {
-        collectionView.layer.removeAllAnimations()
-        collectionView.cellForItem(at: IndexPath(row: 0, section: 0))?.layer.removeAllAnimations()
         _ = self.navigationController?.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
@@ -611,7 +609,7 @@ extension GridTabViewController {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
-                                           handler: { _ in self.closeTabsForCurrentTray() }),
+                                           handler: { _ in self.closeTabsTrayBackground() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
