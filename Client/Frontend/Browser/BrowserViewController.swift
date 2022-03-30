@@ -1396,10 +1396,10 @@ class BrowserViewController: UIViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
 
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = profile
-        settingsTableViewController.tabManager = tabManager
-        settingsTableViewController.settingsDelegate = self
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: self)
 
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
@@ -1481,12 +1481,12 @@ class BrowserViewController: UIViewController {
     }
 
     func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = self.profile
-        settingsTableViewController.tabManager = self.tabManager
-        settingsTableViewController.settingsDelegate = self
-        settingsTableViewController.deeplinkTo = destination
-
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: self,
+            deeplinkingTo: destination)
+        
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
         presentWithModalDismissIfNeeded(controller, animated: true)

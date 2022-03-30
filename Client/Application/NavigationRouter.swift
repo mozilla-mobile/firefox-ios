@@ -163,11 +163,11 @@ enum NavigationPath {
         case .settings(let settingsPath):
             guard let rootVC = bvc.navigationController else { return }
             
-            let settingsTableViewController = AppSettingsTableViewController()
-            settingsTableViewController.profile = bvc.profile
-            settingsTableViewController.tabManager = bvc.tabManager
-            settingsTableViewController.settingsDelegate = bvc
-            
+            let settingsTableViewController = AppSettingsTableViewController(
+                with: bvc.profile,
+                and: bvc.tabManager,
+                delegate: bvc)
+
             NavigationPath.handleSettings(settings: settingsPath,
                                           with: rootVC,
                                           baseSettingsVC: settingsTableViewController,
