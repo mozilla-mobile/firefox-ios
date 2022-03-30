@@ -2,7 +2,6 @@
 channels:
   - release
   - beta
-  - nightly
   - developer
 features:
   search:
