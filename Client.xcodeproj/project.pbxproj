@@ -14118,14 +14118,6 @@
 				version = 1.18.0;
 			};
 		};
-		1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mozilla/rust-components-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 92.0.0;
-			};
-		};
 		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adjust/ios_sdk.git";
