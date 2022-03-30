@@ -585,7 +585,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
     before_run:
     - 1_git_clone_and_post_clone
