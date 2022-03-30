@@ -97,6 +97,10 @@ class TestAppDelegate: AppDelegate {
             profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
         }
 
+        if launchArguments.contains(LaunchArguments.SkipSponsoredShortcuts) {
+            profile.prefs.setBool(false, forKey: PrefsKeys.KeyShowSponsoredShortcuts)
+        }
+
         // Don't show the What's New page.
         if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
             profile.prefs.setInt(1, forKey: PrefsKeys.KeyLastVersionNumber)

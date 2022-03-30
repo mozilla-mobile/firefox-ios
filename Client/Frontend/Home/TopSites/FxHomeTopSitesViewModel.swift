@@ -220,7 +220,7 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol
     }
 
     func updateData(completion: @escaping () -> Void) {
-        tileManager.loadTopSitesData(completion: completion)
+        tileManager.loadTopSitesData(dataLoadingCompletion: completion)
     }
 }
 
