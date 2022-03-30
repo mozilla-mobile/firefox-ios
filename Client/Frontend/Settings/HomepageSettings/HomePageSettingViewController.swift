@@ -15,7 +15,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
 
-    lazy var homescreen = nimbus.features.homescreenFeature.value()
+    lazy var homescreen = nimbus.features.homescreen.value()
 
     var isJumpBackInSectionEnabled: Bool {
         let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.jumpBackIn)

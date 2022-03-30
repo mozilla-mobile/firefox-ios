@@ -42,7 +42,7 @@ features:
         description: The drawable displayed in the app menu for Settings
         type: String
         default: "menu-Settings"
-  homescreenFeature:
+  homescreen:
     description: The homescreen that the user goes to when they press home or new tab.
     variables:
       sections-enabled:

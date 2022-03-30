@@ -49,7 +49,7 @@ class FxHomeTopSitesViewModel {
     // TODO: https://github.com/mozilla-mobile/firefox-ios/issues/10241
     var topSitesShownInSection: Int = 0
 
-    private lazy var homescreen = nimbus.features.homescreenFeature.value()
+    private lazy var homescreen = nimbus.features.homescreen.value()
 
     init(profile: Profile, isZeroSearch: Bool, nimbus: FxNimbus) {
         self.profile = profile
