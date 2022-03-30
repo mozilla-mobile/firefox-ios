@@ -30,6 +30,7 @@ enum FeatureFlagName: String, CaseIterable {
     case recentlySaved
     case reportSiteIssue
     case shakeToRestore
+    case sponsoredTiles
     case startAtHome
     case tabTrayGroups
     case wallpapers
@@ -195,6 +196,11 @@ class FeatureFlagsManager {
                                               and: profile,
                                               enabledFor: [.beta, .developer, .other])
         features[.shakeToRestore] = shakeToRestore
+
+        let sponsoredTiles = FlaggableFeature(withID: .sponsoredTiles,
+                                              and: profile,
+                                              enabledFor: [.developer])
+        features[.sponsoredTiles] = sponsoredTiles
 
         let startAtHome = FlaggableFeature(withID: .startAtHome,
                                            and: profile,

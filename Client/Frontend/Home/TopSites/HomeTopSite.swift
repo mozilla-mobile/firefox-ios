@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 // Top site UI class, used in the home top site section
-class HomeTopSite {
+final class HomeTopSite {
 
     var site: Site
     var title: String
@@ -18,6 +18,10 @@ class HomeTopSite {
 
     var isSuggested: Bool {
         return (site as? SuggestedSite) != nil
+    }
+
+    var isSponsoredTile: Bool {
+        return (site as? SponsoredTile) != nil
     }
 
     var isGoogleGUID: Bool {

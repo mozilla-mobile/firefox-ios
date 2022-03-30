@@ -12,9 +12,13 @@ class GoogleTopSiteManager {
     struct Constants {
         // A guid is required in the case the site might become a pinned site
         static let googleGUID = "DefaultGoogleGUID"
+
         // US and rest of the world google urls
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
         static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
+
+        // The number of tiles taken by Google top site manager
+        static let reservedSpaceCount = 1
     }
 
     // No Google Top Site, it should be removed, if it already exists for invalid region
@@ -68,9 +72,11 @@ class GoogleTopSiteManager {
         return pinnedSite
     }
 
-    func shouldAddGoogleTopSite(pinnedSiteCount: Int, maxItems: Int) -> Bool {
+    // Once Google top site is added, we don't remove unless it's explicitly unpinned
+    // Add it when pinned websites are less than max pinned sites
+    func shouldAddGoogleTopSite(availableSpacesCount: Int) -> Bool {
         let shouldShow = !isHidden && suggestedSiteData() != nil
-        return shouldShow && (hasAdded || pinnedSiteCount < maxItems)
+        return shouldShow && (hasAdded || availableSpacesCount > 0)
     }
 
     func removeGoogleTopSite(site: Site) {
@@ -78,9 +84,7 @@ class GoogleTopSiteManager {
         isHidden = true
     }
 
-    // Once Google top site is added, we don't remove unless it's explicitly unpinned
-    // Add it when pinned websites are less than max pinned sites
-    func addGoogleTopSite(maxItems: Int, sites: inout [Site]) {
+    func addGoogleTopSite(sites: inout [Site]) {
         guard let googleSite = suggestedSiteData() else { return }
         sites.insert(googleSite, at: 0)
         hasAdded = true

@@ -500,6 +500,8 @@
 		8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */; };
 		8AD08D1727E91AC800B8E907 /* TabsQuantityTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
+		8AD3271527E3B45D00EAF033 /* SponsoredTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */; };
+		8AD3271727E3D12300EAF033 /* ContileProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271627E3D12300EAF033 /* ContileProviderMock.swift */; };
 		8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */; };
 		8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC627BADC3400672675 /* ToolbarTextField.swift */; };
 		8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC827BADC4B00672675 /* ReaderModeButton.swift */; };
@@ -2791,6 +2793,8 @@
 		8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsQuantityTelemetry.swift; sourceTree = "<group>"; };
 		8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsQuantityTelemetryTests.swift; sourceTree = "<group>"; };
 		8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetViewModel.swift; sourceTree = "<group>"; };
+		8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTile.swift; sourceTree = "<group>"; };
+		8AD3271627E3D12300EAF033 /* ContileProviderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContileProviderMock.swift; sourceTree = "<group>"; };
 		8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarHelper.swift; sourceTree = "<group>"; };
 		8AD40FC627BADC3400672675 /* ToolbarTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTextField.swift; sourceTree = "<group>"; };
 		8AD40FC827BADC4B00672675 /* ReaderModeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeButton.swift; sourceTree = "<group>"; };
@@ -5462,6 +5466,7 @@
 				8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */,
 				8AB8571C27D929350075C173 /* FxHomeTopSitesViewModel.swift */,
 				8A2D593D27DC0AA100713EC9 /* HomeTopSite.swift */,
+				8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */,
 				8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */,
 				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
 			);
@@ -5481,9 +5486,10 @@
 		8AB8572A27D944B70075C173 /* DataManagement */ = {
 			isa = PBXGroup;
 			children = (
+				8AD3271627E3D12300EAF033 /* ContileProviderMock.swift */,
 				8AB8572B27D945FA0075C173 /* FxHomeTopSitesManager.swift */,
-				43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */,
 				43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */,
+				43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */,
 			);
 			path = DataManagement;
 			sourceTree = "<group>";
@@ -8827,6 +8833,7 @@
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesHelper.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
+				8AD3271727E3D12300EAF033 /* ContileProviderMock.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				D5D052EF2645ACBF00759F85 /* View.swift in Sources */,
@@ -8936,6 +8943,7 @@
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				8A56955227C68AE00077A89E /* UILabelExtensions.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
+				8AD3271527E3B45D00EAF033 /* SponsoredTile.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,
 				4331A9BD271D267E005E8080 /* ContextualHintViewModel.swift in Sources */,
