@@ -98,7 +98,7 @@ class TestAppDelegate: AppDelegate {
         }
 
         if launchArguments.contains(LaunchArguments.SkipSponsoredShortcuts) {
-            profile.prefs.setBool(true, forKey: PrefsKeys.KeyShowSponsoredShortcuts)
+            profile.prefs.setBool(false, forKey: PrefsKeys.KeyShowSponsoredShortcuts)
         }
 
         // Don't show the What's New page.
