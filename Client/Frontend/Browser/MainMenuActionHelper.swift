@@ -39,7 +39,7 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
+class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, CanRemoveQuickActionBookmark {
 
     typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
 
@@ -689,6 +689,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol {
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
                 self.delegate?.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url.absoluteString)
+                self.removeBookmarkShortcut()
             }
 
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
