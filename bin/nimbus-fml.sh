@@ -61,6 +61,7 @@ MANIFEST_PATH=
 OUTPUT_DIR="${SOURCE_ROOT}/${PROJECT}/Generated"
 NAMESPACE=
 AS_VERSION=v92.0.1
+FRESHEN_FML=
 
 while (( "$#" )); do
     case "$1" in
@@ -75,6 +76,15 @@ while (( "$#" )); do
         -h|--help)
             helptext
             exit 0
+            ;;
+        -a|--use-fml-version)
+            AS_VERSION=$2
+            FRESHEN_FML="true"
+            shift 2
+            ;;
+        -F|--fresh)
+            FRESHEN_FML="true"
+            shift 2
             ;;
         --) # end argument parsing
             shift
@@ -110,14 +120,18 @@ if [ -z "$PROJECT" ]; then
     echo "Execute this script as a build step in Xcode."
     exit 2
 fi
-if [ -z "$MOZ_BUNDLE_DISPLAY_NAME" ]; then
-    echo "Error: No \$MOZ_BUNDLE_DISPLAY_NAME defined."
+if [ -z "$CONFIGURATION" ]; then
+    echo "Error: No \$CONFIGURATION defined."
     echo "Execute this script as a build step in Xcode."
     exit 2
 fi
 
 ## We create the nimbus-fml directory, which is gitignored, we use -p to make sure this doesn't fail if it already exists
 FML_DIR="$SOURCE_ROOT/build/nimbus-tools"
+
+if [ ! -z $FRESHEN_FML ]; then
+    rm -Rf "$FML_DIR"
+fi
 mkdir -p "$FML_DIR"
 if [[ ! -f "$FML_DIR/nimbus-fml.zip" ]] ; then
     # We now download the nimbus-fml from the github release
@@ -151,21 +165,41 @@ if [[ ! -f "$BINARY_PATH" ]] ; then
     unzip -o -j "$FML_DIR/nimbus-fml.zip" $EXE_ARCH/release/nimbus-fml -d "$FML_DIR"
 fi
 
-## The `MOZ_BUNDLE_DISPLAY_NAME` has the name of the scheme
-## we use it as a channel in the Feature Manifest.
-## We seperate the first word of it, since Fennec builds sometimes have the user name after the scheme
-SCHEME=${MOZ_BUNDLE_DISPLAY_NAME%% *}
+#SCHEME=${MOZ_BUNDLE_DISPLAY_NAME%% *}
+SCHEME=${CONFIGURATION}
+## The `CONFIGURATION` to derive the channel used in the feature manifest.
+CHANNEL=
+case "${SCHEME}" in
+    Fennec)
+        CHANNEL="developer"
+        ;;
+    FirefoxBeta)
+        CHANNEL="beta"
+        ;;
+    Firefox)
+        CHANNEL="release"
+        ;;
+    *) # preserve positional arguments
+        CHANNEL="unknown"
+        ;;
+esac
 
 ##################
-## Construct and un the command.
+## Construct and run the command.
 ##################
 # We'll generate the command, and output some nice copy/pastable version of the command to the Build console…
-CMD="$BINARY_PATH $MANIFEST_PATH -o $OUTPUT_DIR/FxNimbus.swift ios features --classname FxNimbus --channel $SCHEME"
+CMD="$BINARY_PATH $MANIFEST_PATH -o $OUTPUT_DIR/FxNimbus.swift ios features --classname FxNimbus --channel $CHANNEL"
 echo "SOURCE_ROOT=$SOURCE_ROOT"
 # …truncating the absolute paths into something easier to read.
 echo ${CMD//"$SOURCE_ROOT"/\$SOURCE_ROOT}
+$CMD
 
-## Finally, run!
+# Now generate the YAML that the `experimenter` server will use to keep up to date.
+# This file, `.experimenter.yaml` **must** be checked into source control, and kept up-to-date.
+# Experimenter will download it regularly/nightly.
+# (FWIW: I don't think the `channel` is needed in this command, but if it is, we need the release version).
+CMD="$BINARY_PATH $MANIFEST_PATH -o $SOURCE_ROOT/.experimenter.yaml experimenter --channel release"
+echo ${CMD//"$SOURCE_ROOT"/\$SOURCE_ROOT}
 $CMD
 
 # The FML doesn't currenlty support adding a custom import, so we do this in this script.
