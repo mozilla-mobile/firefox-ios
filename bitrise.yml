@@ -60,6 +60,11 @@ workflows:
     - script@1:
         inputs:
         - content: |-
+            swiftlint
+        title: Run swiftlint
+    - script@1:
+        inputs:
+        - content: |-
             #!/usr/bin/env bash
             set -e
             set -x
