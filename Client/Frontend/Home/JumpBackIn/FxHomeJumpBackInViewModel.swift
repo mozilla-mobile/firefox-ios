@@ -37,7 +37,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var isPrivate: Bool
 
-    private lazy var homescreen = nimbus.features.homescreenFeature.value()
+    private lazy var homescreen = nimbus.features.homescreen.value()
 
     init(isZeroSearch: Bool = false,
          profile: Profile,
