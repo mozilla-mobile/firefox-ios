@@ -30,7 +30,7 @@ enum ReferringPage {
     case tabTray
 }
 
-final class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController {
 
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
