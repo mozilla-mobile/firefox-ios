@@ -163,7 +163,7 @@ extension FlaggableFeature {
     ) -> UserFeaturePreference {
         guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
 
-        let nimbusHomepageConfig = nimbus.features.homescreenFeature.value()
+        let nimbusHomepageConfig = nimbus.features.homescreen.value()
 
         if let sectionIsEnabled = nimbusHomepageConfig.sectionsEnabled[sectionID],
            sectionIsEnabled {
