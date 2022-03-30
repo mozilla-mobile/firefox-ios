@@ -18,6 +18,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = .build { imageView in
         imageView.image = BreachAlertsManager.icon
+        imageView.isHidden = true
     }
 
     lazy var breachAlertContainer: UIView = .build { [weak self] view in
@@ -51,7 +52,9 @@ class LoginListTableViewCell: ThemedTableViewCell {
         stack.addArrangedSubview(self.hostnameLabel)
         stack.addArrangedSubview(self.usernameLabel)
         stack.axis = .vertical
+        stack.distribution = .fillProportionally        
         stack.isLayoutMarginsRelativeArrangement = true
+        stack.spacing = 8
         stack.layoutMargins = .init(top: 8, left: 0, bottom: 8, right: 0)
     }
 

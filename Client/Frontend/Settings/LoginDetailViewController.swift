@@ -45,6 +45,8 @@ class LoginDetailViewController: SensitiveViewController {
         tableView.accessibilityIdentifier = "Login Detail List"
         tableView.delegate = self
         tableView.dataSource = self
+
+        // Add empty footer view to prevent seperators from being drawn past the last item.
         tableView.tableFooterView = UIView()
     }
 
