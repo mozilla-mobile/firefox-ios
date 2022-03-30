@@ -33,7 +33,7 @@ fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
     }
 }
 
-class BookmarksPanel: SiteTableViewController, LibraryPanel {
+class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
         case recent
@@ -228,6 +228,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             }
             tableView.deleteRows(at: [indexPath], with: .left)
             tableView.endUpdates()
+            removeBookmarkShortcut()
         }
 
         // If this node is a folder and it is not empty, we need
