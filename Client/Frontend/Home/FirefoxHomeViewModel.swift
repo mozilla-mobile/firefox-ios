@@ -52,7 +52,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
 
-    lazy var homescreen = nimbus.features.homescreenFeature.value()
+    lazy var homescreen = nimbus.features.homescreen.value()
 
     // MARK: - Section availability variables
 
