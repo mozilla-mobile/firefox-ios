@@ -1,8 +1,9 @@
 ---
 channels:
-  - Fennec
-  - FirefoxBeta
-  - Firefox
+  - release
+  - beta
+  - nightly
+  - developer
 features:
   search:
     description: The search feature
@@ -59,7 +60,7 @@ features:
             "libraryShortcuts": true
           }
     defaults:
-      - channel: Fennec
+      - channel: developer
         value: {
           "sections-enabled": {
             "topSites": true,
@@ -82,7 +83,7 @@ features:
             "inactive-tabs": false,
           }
     defaults:
-      - channel: Fennec
+      - channel: developer
         value: {
           "sections-enabled": {
             "inactive-tabs": true
