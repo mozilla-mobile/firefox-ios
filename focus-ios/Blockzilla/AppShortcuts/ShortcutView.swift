@@ -44,6 +44,8 @@ class ShortcutView: UIView {
         let nameLabel = UILabel()
         nameLabel.textColor = .primaryText
         nameLabel.font = .footnote12
+        nameLabel.numberOfLines = 2
+        nameLabel.textAlignment = .center
         return nameLabel
     }()
     
@@ -83,6 +85,7 @@ class ShortcutView: UIView {
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(outerView.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
+            make.trailing.lessThanOrEqualToSuperview().offset(8)
         }
         
         let interaction = UIContextMenuInteraction(delegate: self)
