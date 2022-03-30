@@ -24,7 +24,7 @@ class SheetModalViewController: UIViewController {
     private lazy var dimmedView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
-        view.alpha = maximumDimmingAlpha
+        view.alpha = 0
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateDismissView))
         view.addGestureRecognizer(tapGesture)
         return view
@@ -118,7 +118,6 @@ class SheetModalViewController: UIViewController {
     }
     
     func animateShowDimmedView() {
-        dimmedView.alpha = 0
         UIView.animate(withDuration: .animationDuration) {
             self.dimmedView.alpha = self.maximumDimmingAlpha
         }
