@@ -14,7 +14,7 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     private let profile: Profile
     private var topSites: [HomeTopSite] = []
-    private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue")
+    private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue", qos: .userInteractive)
 
     // Raw data to build top sites with
     private var historySites: [Site] = []
@@ -71,6 +71,8 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
     }
 
     private func loadContiles(group: DispatchGroup) {
+        guard shouldLoadSponsoredTiles else { return }
+
         group.enter()
         contileProvider.fetchContiles { result in
             if case .success(let contiles) = result {
@@ -146,8 +148,12 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     // TODO: Check for settings user preference with https://mozilla-hub.atlassian.net/browse/FXIOS-3469
     // TODO: Check for nimbus with https://mozilla-hub.atlassian.net/browse/FXIOS-3468
+    private var shouldLoadSponsoredTiles: Bool {
+        return featureFlags.isFeatureActiveForBuild(.sponsoredTiles) && profile.prefs.boolForKey(PrefsKeys.KeyShowSponsoredShortcuts) ?? true
+    }
+
     private var shouldShowSponsoredTiles: Bool {
-        return !contiles.isEmpty && featureFlags.isFeatureActiveForBuild(.sponsoredTiles)
+        return !contiles.isEmpty && shouldLoadSponsoredTiles
     }
 }
 
