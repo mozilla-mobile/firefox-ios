@@ -5,7 +5,7 @@
 import Foundation
 import MozillaAppServices
 
-class HistoryDeleteUtility {
+class HistoryDeletionUtility {
 
     private var profile: Profile
 
@@ -13,20 +13,20 @@ class HistoryDeleteUtility {
         self.profile = profile
     }
 
-    public func delete(_ sites: [URL]) {
-        deleteFromProfile(sites)
+    public func delete(_ sites: [String]) {
+        deleteFromHistory(sites)
         deleteMetadata(sites)
     }
 
-    private func deleteFromProfile(_ sites: [URL]) {
+    private func deleteFromHistory(_ sites: [String]) {
         sites.forEach { site in
-            profile.history.removeHistoryForURL(site.absoluteString)
+            profile.history.removeHistoryForURL(site)
         }
     }
 
-    private func deleteMetadata(_ sites: [URL]) {
+    private func deleteMetadata(_ sites: [String]) {
         sites.forEach { site in
-            let metadataKey = HistoryMetadataKey(url: site.absoluteString,
+            let metadataKey = HistoryMetadataKey(url: site,
                                                  searchTerm: nil,
                                                  referrerUrl: nil)
             _ = profile.places.deleteHistoryMetadata(key: metadataKey)
