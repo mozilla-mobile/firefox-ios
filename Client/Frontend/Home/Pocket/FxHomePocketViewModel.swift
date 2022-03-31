@@ -18,9 +18,10 @@ class FxHomePocketViewModel {
 
     var onTapTileAction: ((URL) -> Void)? = nil
     var onLongPressTileAction: ((IndexPath) -> Void)? = nil
+
     // Need to save the parent's section for the long press action
     // since it's currently handled in FirefoxHomeViewController
-    // TODO: Each section should handle the long press details - not the parent
+    // TODO: https://github.com/mozilla-mobile/firefox-ios/issues/10241
     var pocketShownInSection: Int = 0
 
     init(profile: Profile, isZeroSearch: Bool) {
@@ -29,9 +30,6 @@ class FxHomePocketViewModel {
     }
 
     var pocketStories: [PocketStory] = []
-    var hasData: Bool {
-        return !pocketStories.isEmpty
-    }
 
     // The dimension of a cell
     // Fractions for iPhone to only show a slight portion of the next column
@@ -55,12 +53,6 @@ class FxHomePocketViewModel {
 
     func isStoryCell(index: Int) -> Bool {
         return index < pocketStories.count
-    }
-
-    func updateData(completion: @escaping () -> Void) {
-        getPocketSites().uponQueue(.main) { _ in
-            completion()
-        }
     }
 
     func getSitesDetail(for index: Int) -> Site {
@@ -100,4 +92,35 @@ class FxHomePocketViewModel {
             return succeed()
         }
     }
+}
+
+// MARK: FXHomeViewModelProtocol
+extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+
+    var sectionType: FirefoxHomeSectionType {
+        return .pocket
+    }
+
+    var isEnabled: Bool {
+        // For Pocket, the user preference check returns a user preference if it exists in
+        // UserDefaults, and, if it does not, it will return a default preference based on
+        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
+        guard featureFlags.isFeatureActiveForBuild(.pocket),
+              featureFlags.userPreferenceFor(.pocket) == UserFeaturePreference.enabled
+        else { return false }
+
+        return true
+    }
+
+    var hasData: Bool {
+        return !pocketStories.isEmpty
+    }
+
+    func updateData(completion: @escaping () -> Void) {
+        getPocketSites().uponQueue(.main) { _ in
+            completion()
+        }
+    }
+
+    var shouldReloadSection: Bool { return true }
 }

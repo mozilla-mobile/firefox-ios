@@ -32,6 +32,7 @@ class FxAWebViewModel {
     fileprivate let profile: Profile
     fileprivate var deepLinkParams: FxALaunchParams?
     fileprivate(set) var baseURL: URL?
+    let fxAWebViewTelemetry = FxAWebViewTelemetry()
 
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
@@ -244,7 +245,8 @@ extension FxAWebViewModel {
                 }
             }
         }
-        
+        // Record login or registration completed telemetry
+        fxAWebViewTelemetry.recordTelemetry(for: .completed)
         onDismissController?()
     }
     

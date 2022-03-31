@@ -32,12 +32,11 @@ protocol GroupedTabDelegate {
     func newSearchFromGroup(searchTerm: String)
 }
 
-class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate {
+class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate, ReusableCell {
     
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?
     var selectedTab: Tab? = nil
-    static let Identifier = "GroupedTabCellIdentifier"
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
     let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
     let GroupedTabCellIdentifier = "GroupedTabCellIdentifier"
@@ -134,7 +133,7 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
     }
 
     func scrollToSelectedGroup() {
-        if let searchTerm = selectedTab?.tabGroupData.tabAssociatedSearchTerm {
+        if let searchTerm = selectedTab?.metadataManager?.tabGroupData.tabAssociatedSearchTerm {
             if let index = tabGroups?.firstIndex(where: { $0.searchTerm == searchTerm}) {
                 tableView.scrollToRow(at: IndexPath(row: index , section: 0) , at: .bottom , animated: true)
             }

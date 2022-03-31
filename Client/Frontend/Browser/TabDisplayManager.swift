@@ -48,22 +48,6 @@ enum TabDisplaySection: Int, CaseIterable {
     case inactiveTabs
     case groupedTabs
     case regularTabs
-
-    var title: String? {
-        switch self {
-        case .regularTabs: return .FirefoxHomepage.Pocket.SectionTitle
-        case .inactiveTabs: return .RecentlySavedSectionTitle
-        default: return nil
-        }
-    }
-
-    var image: UIImage? {
-        switch self {
-        case .regularTabs: return UIImage.templateImageNamed("menu-pocket")
-        case .inactiveTabs: return UIImage.templateImageNamed("menu-pocket")
-        default: return nil
-        }
-    }
 }
 
 enum TabDisplayType {
@@ -93,23 +77,18 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     private let tabReuseIdentifer: String
     private var hasSentInactiveTabShownEvent: Bool = false
     var profile: Profile
-    private var inactiveNimbusExperimentStatus: Bool = false
+    var cfrDelegate: InactiveTabsCFRProtocol?
+    private var nimbus: FxNimbus?
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
 
     var shouldEnableGroupedTabs: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.groupedTabs),
-              featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled
-        else { return false }
-        return true
+        return featureFlags.isFeatureBuildAndUserEnabled(.tabTrayGroups)
     }
 
     var shouldEnableInactiveTabs: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.inactiveTabs) else { return false }
-        // TODO: Nimbus Setup and update the following return statement
-        // return inactiveNimbusExperimentStatus ? inactiveNimbusExperimentStatus : profile.prefs.boolForKey(PrefsKeys.KeyEnableInactiveTabs) ?? false
-        return true
+        return featureFlags.isFeatureBuildAndUserEnabled(.inactiveTabs)
     }
 
     var orderedTabs: [Tab] {
@@ -188,7 +167,15 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         return isActive
     }
 
-    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String, tabDisplayType: TabDisplayType, profile: Profile) {
+    init(collectionView: UICollectionView,
+         tabManager: TabManager,
+         tabDisplayer: TabDisplayer,
+         reuseID: String,
+         tabDisplayType: TabDisplayType,
+         profile: Profile,
+         cfrDelegate: InactiveTabsCFRProtocol? = nil,
+         nimbus: FxNimbus = FxNimbus.shared
+    ) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
         self.tabManager = tabManager
@@ -196,8 +183,11 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         self.tabReuseIdentifer = reuseID
         self.tabDisplayType = tabDisplayType
         self.profile = profile
+        self.cfrDelegate = cfrDelegate
+        self.nimbus = nimbus
+
         super.init()
-        self.setupExperiment()
+
         self.inactiveViewModel = InactiveTabViewModel()
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL, .didSetScreenshot)
@@ -213,16 +203,6 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             }
             self.recordGroupedTabTelemetry()
             self.collectionView.reloadData()
-        }
-    }
-
-    func setupExperiment() {
-        inactiveNimbusExperimentStatus = Experiments.shared.withExperiment(featureId: .inactiveTabs) { branch -> Bool in
-                switch branch {
-                case .some(NimbusExperimentBranch.InactiveTab.control): return false
-                case .some(NimbusExperimentBranch.InactiveTab.treatment): return true
-                default: return false
-            }
         }
     }
 
@@ -524,7 +504,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
         assert(tabDisplayer != nil)
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
-            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.Identifier, for: indexPath) as? InactiveTabCell {
+            if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.cellIdentifier, for: indexPath) as? InactiveTabCell {
                 inactiveCell.inactiveTabsViewModel = inactiveViewModel
                 inactiveCell.hasExpanded = isInactiveViewExpanded
                 inactiveCell.delegate = self
@@ -535,8 +515,9 @@ extension TabDisplayManager: UICollectionViewDataSource {
                     TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabShown, extras: nil)
                 }
             }
+
         case .groupedTabs:
-            if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.Identifier, for: indexPath) as? GroupedTabCell {
+            if let groupedCell = collectionView.dequeueReusableCell(withReuseIdentifier: GroupedTabCell.cellIdentifier, for: indexPath) as? GroupedTabCell {
                 groupedCell.tabDisplayManagerDelegate = self
                 groupedCell.tabGroups = self.tabGroups
                 groupedCell.hasExpanded = true
@@ -545,12 +526,15 @@ extension TabDisplayManager: UICollectionViewDataSource {
                 groupedCell.scrollToSelectedGroup()
                 cell = groupedCell
             }
+
         case .regularTabs:
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
+
         case .none:
             return cell
         }
+
         return cell
     }
 
@@ -638,10 +622,19 @@ extension TabDisplayManager: InactiveTabsDelegate {
     func toggleInactiveTabSection(hasExpanded: Bool) {
         let hasExpandedEvent: TelemetryWrapper.EventValue = hasExpanded ? .inactiveTabExpand : .inactiveTabCollapse
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: hasExpandedEvent, extras: nil)
+
         isInactiveViewExpanded = hasExpanded
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
         collectionView.reloadItems(at: [indexPath])
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+    }
+
+    func setupCFR(with view: UILabel) {
+        cfrDelegate?.setupCFR(with: view)
+    }
+
+    func presentCFR() {
+        cfrDelegate?.presentCFR()
     }
 }
 

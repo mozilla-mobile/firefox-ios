@@ -151,7 +151,7 @@ class TelemetryWrapper {
         // record on going to background rather than during initialization.
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(recordPreferenceMetrics(notification:)),
+            selector: #selector(recordEnteredBackgroundPreferenceMetrics(notification:)),
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
@@ -172,7 +172,7 @@ class TelemetryWrapper {
 
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
-    @objc func recordPreferenceMetrics(notification: NSNotification) {
+    @objc func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else { assert(false); return; }
 
         // Record default search engine setting
@@ -226,7 +226,7 @@ class TelemetryWrapper {
             GleanMetrics.Preferences.closePrivateTabs.set(false)
         }
         // Pocket stories visible
-        if let pocketStoriesVisible = prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) {
+        if let pocketStoriesVisible = prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
             GleanMetrics.ApplicationServices.pocketStoriesVisible.set(pocketStoriesVisible)
         } else {
             GleanMetrics.ApplicationServices.pocketStoriesVisible.set(true)
@@ -266,6 +266,7 @@ extension TelemetryWrapper {
         case prompt = "prompt"
         case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
+        case information = "information"
     }
 
     public enum EventMethod: String {
@@ -314,6 +315,8 @@ extension TelemetryWrapper {
         case setting = "setting"
         case tab = "tab"
         case tabTray = "tab-tray"
+        case tabNormalQuantity = "normal-tab-quantity"
+        case tabPrivateQuantity = "private-tab-quantity"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -382,6 +385,8 @@ extension TelemetryWrapper {
         case syncSignIn = "sync-sign-in"
         case syncCreateAccount = "sync-create-account"
         case libraryPanel = "library-panel"
+        case navigateToGroupHistory = "navigate-to-group-history"
+        case selectedHistoryItem = "selected-history-item"
         case sharePageWith = "share-page-with"
         case sendToDevice = "send-to-device"
         case copyAddress = "copy-address"
@@ -401,6 +406,12 @@ extension TelemetryWrapper {
         case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
+        case fxaLoginWebpage = "fxa-login-webpage"
+        case fxaLoginCompleteWebpage = "fxa-login-complete-webpage"
+        case fxaRegistrationWebpage = "fxa-registration-webpage"
+        case fxaRegistrationCompletedWebpage = "fxa-registration-completed-webpage"
+        case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
+        case fxaConfirmSignInToken = "fxa-confirm-signin-token"
     }
 
     public enum EventValue: String {
@@ -430,6 +441,8 @@ extension TelemetryWrapper {
         case tabView = "tab-view"
         case bookmarksPanel = "bookmarks-panel"
         case historyPanel = "history-panel"
+        case historyPanelNonGroupItem = "history-panel-non-grouped-item"
+        case historyPanelGroupedItem = "history-panel-grouped-item"
         case readingPanel = "reading-panel"
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
@@ -473,6 +486,7 @@ extension TelemetryWrapper {
         case topSiteTileType = "tileType"
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
+        case tabsQuantity = "tabsQuantity"
 
         case preference = "pref"
         case preferenceChanged = "to"
@@ -581,6 +595,20 @@ extension TelemetryWrapper {
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
 
+        case(.information, .background, .tabNormalQuantity, _, let extras):
+            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        case(.information, .background, .tabPrivateQuantity, _, let extras):
+            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
+                GleanMetrics.Tabs.privateTabsQuantity.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
@@ -657,9 +685,14 @@ extension TelemetryWrapper {
         case (.action, .view, .pocketSectionImpression, _, _):
             GleanMetrics.Pocket.sectionImpressions.add()
 
-        // MARK: Library
+        // MARK: Library Panel
         case (.action, .tap, .libraryPanel, let type?, _):
             GleanMetrics.Library.panelPressed[type.rawValue].add()
+        // History Panel related
+        case (.action, .navigate, .navigateToGroupHistory, _, _):
+            GleanMetrics.History.groupList.add()
+        case (.action, .tap, .selectedHistoryItem, let type?, _):
+            GleanMetrics.History.selectedItem[type.rawValue].add()
         // MARK: Sync
         case (.action, .open, .syncTab, _, _):
             GleanMetrics.Sync.openTab.add()
@@ -667,7 +700,18 @@ extension TelemetryWrapper {
             GleanMetrics.Sync.signInSyncPressed.add()
         case (.action, .tap, .syncCreateAccount, _, _):
             GleanMetrics.Sync.createAccountPressed.add()
-
+        case (.firefoxAccount, .view, .fxaRegistrationWebpage, _, _):
+            GleanMetrics.Sync.registrationView.record()
+        case (.firefoxAccount, .view, .fxaRegistrationCompletedWebpage, _, _):
+            GleanMetrics.Sync.registrationCompletedView.record()
+        case (.firefoxAccount, .view, .fxaLoginWebpage, _, _):
+            GleanMetrics.Sync.loginView.record()
+        case (.firefoxAccount, .view, .fxaLoginCompleteWebpage, _, _):
+            GleanMetrics.Sync.loginCompletedView.record()
+        case (.firefoxAccount, .view, .fxaConfirmSignUpCode, _, _):
+            GleanMetrics.Sync.registrationCodeView.record()
+        case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
+            GleanMetrics.Sync.loginTokenView.record()
         // MARK: App menu
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
@@ -685,7 +729,7 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.nightModeEnabled.add()
         case (.action, .tap, .nightModeDisabled, _, _):
             GleanMetrics.AppMenu.nightModeDisabled.add()
-        case (.action, .tap, .whatsNew, _, _):
+        case (.action, .open, .whatsNew, _, _):
             GleanMetrics.AppMenu.whatsNew.add()
         case (.action, .open, .settings, _, _):
             GleanMetrics.AppMenu.settings.add()

@@ -76,7 +76,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
     private func shouldShowChronTabs() -> Bool {
         var shouldShowChronTabs = false // default don't show
-        let chronDebugValue = profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey)
+        let chronDebugValue = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ChronologicalTabs)
         let chronLPValue = chronTabsUserResearch?.chronTabsState ?? false
 
         // Only allow chron tabs on iPhone
@@ -92,7 +92,8 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
                     // Respect LP value
                     shouldShowChronTabs = chronLPValue
                 }
-                profile.prefs.setBool(shouldShowChronTabs, forKey: PrefsKeys.ChronTabsPrefKey)
+                profile.prefs.setBool(shouldShowChronTabs,
+                                      forKey: PrefsKeys.FeatureFlags.ChronologicalTabs)
             }
         }
 
@@ -114,11 +115,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         if let tab = self.tabManager.selectedTab {
             let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile, tabManager: tabManager)
             etpViewModel.onOpenSettingsTapped = {
-                let settingsTableViewController = AppSettingsTableViewController()
-                settingsTableViewController.profile = self.profile
-                settingsTableViewController.tabManager = self.tabManager
-                settingsTableViewController.settingsDelegate = self
-                settingsTableViewController.deeplinkTo = .contentBlocker
+                let settingsTableViewController = AppSettingsTableViewController(
+                    with: self.profile,
+                    and: self.tabManager,
+                    delegate: self,
+                    deeplinkingTo: .contentBlocker)
 
                 let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
                 controller.presentingModalViewControllerDelegate = self
@@ -321,7 +322,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
             searchTelemetry?.shouldSetUrlTypeSearch = true
-            tab.updateTimerAndObserving(state: .navSearchLoaded, searchTerm: text, searchProviderUrl: searchURL.absoluteString, nextUrl: "")
+            
+            let searchData = TabGroupData(searchTerm: text,
+                                          searchUrl: searchURL.absoluteString,
+                                          nextReferralUrl: "")
+            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.

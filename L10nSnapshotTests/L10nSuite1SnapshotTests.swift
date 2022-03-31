@@ -90,7 +90,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         app.buttons["urlBar-cancel"].tap()
         //waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         navigator.nowAt(NewTabScreen)
-        app.collectionViews.cells["TopSite"].firstMatch.swipeUp()
+        app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].firstMatch.swipeUp()
         snapshot("TopSitesMenu-00")
 
         // Workaround since in some locales Top Sites are not shown right away

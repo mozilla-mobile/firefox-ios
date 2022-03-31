@@ -1,0 +1,42 @@
+---
+homescreenFeature:
+  description: The homescreen that the user goes to when they press home or new tab.
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    sections-enabled:
+      type: json
+      description: "This property provides a lookup table of whether or not the given section should be enabled. If the section is enabled, it should be toggleable in the settings screen, and on by default."
+nimbus-validation:
+  description: A feature that does not correspond to an application feature suitable for showing that Nimbus is working.
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    settings-icon:
+      type: string
+      description: The drawable displayed in the app menu for Settings
+    settings-title:
+      type: string
+      description: The title of displayed in the Settings screen and app menu.
+    settings-title-punctuation:
+      type: string
+      description: The emoji displayed in the Settings screen title.
+search:
+  description: The search feature
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    awesome-bar:
+      type: json
+      description: This property is covers the properties related to the awesome-bar
+    spotlight:
+      type: json
+      description: This property is covers the properties related to the spotlight
+tabTrayFeature:
+  description: The tab tray screen that the user goes to when they open the tab tray.
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    sections-enabled:
+      type: json
+      description: "This property provides a lookup table of whether or not the given section should be enabled. If the section is enabled, it should be toggleable in the settings screen, and on by default."

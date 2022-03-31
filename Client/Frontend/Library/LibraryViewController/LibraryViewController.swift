@@ -24,7 +24,6 @@ class LibraryViewController: UIViewController {
 
     // Views
     fileprivate var controllerContainerView: UIView = .build { view in }
-    fileprivate var buttons: [LibraryPanelButton] = []
 
     // UI Elements
     lazy var librarySegmentControl: UISegmentedControl = {
@@ -47,7 +46,7 @@ class LibraryViewController: UIViewController {
     }
 
     fileprivate lazy var topLeftButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack"),
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(),
                                      style: .plain,
                                      target: self,
                                      action: #selector(topLeftButtonAction))
@@ -195,20 +194,9 @@ class LibraryViewController: UIViewController {
                 return
             }
 
-            if let index = oldValue?.rawValue {
-                if index < buttons.count {
-                    let currentButton = buttons[index]
-                    currentButton.isSelected = false
-                }
-            }
-
             hideCurrentPanel()
 
             if let index = selectedPanel?.rawValue {
-                if index < buttons.count {
-                    let newButton = buttons[index]
-                    newButton.isSelected = true
-                }
 
                 if index < viewModel.panelDescriptors.count {
                     viewModel.panelDescriptors[index].setup()
@@ -334,7 +322,7 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
-            topLeftButton.image = UIImage.templateImageNamed("goBack")
+            topLeftButton.image = UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
         case .bookmarks(state: .itemEditMode):
             topLeftButton.image = UIImage.templateImageNamed("nav-stop")

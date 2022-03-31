@@ -16,23 +16,6 @@ import SDWebImage
 import Telemetry
 import Sentry
 
-private let KVOs: [KVOConstants] = [
-    .estimatedProgress,
-    .loading,
-    .canGoBack,
-    .canGoForward,
-    .URL,
-    .title,
-]
-
-private let ActionSheetTitleMaxLength = 120
-
-private struct BrowserViewControllerUX {
-    fileprivate static let ShowHeaderTapAreaHeight: CGFloat = 32
-    fileprivate static let BookmarkStarAnimationDuration: Double = 0.5
-    fileprivate static let BookmarkStarAnimationOffset: CGFloat = 80
-}
-
 struct UrlToOpenModel {
     var url: URL?
     var isPrivate: Bool
@@ -48,6 +31,21 @@ enum ReferringPage {
 }
 
 class BrowserViewController: UIViewController {
+
+    private enum UX {
+        static let ShowHeaderTapAreaHeight: CGFloat = 32
+        static let ActionSheetTitleMaxLength = 120
+    }
+
+    private let KVOs: [KVOConstants] = [
+        .estimatedProgress,
+        .loading,
+        .canGoBack,
+        .canGoForward,
+        .URL,
+        .title,
+    ]
+
     var firefoxHomeViewController: FirefoxHomeViewController?
     var libraryViewController: LibraryViewController?
     var libraryDrawerViewController: DrawerViewController?
@@ -87,6 +85,7 @@ class BrowserViewController: UIViewController {
     weak var gridTabTrayController: GridTabViewController?
     weak var chronTabTrayController: ChronologicalTabsViewController?
     var tabTrayViewController: TabTrayViewController?
+
     let profile: Profile
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
@@ -277,6 +276,9 @@ class BrowserViewController: UIViewController {
             self.topTabsViewController = topTabsViewController
             topTabsViewController.applyTheme()
 
+        } else if showTopTabs, topTabsViewController != nil {
+            topTabsViewController?.applyTheme()
+            
         } else {
             if let topTabsView = topTabsViewController?.view {
                 header.removeArrangedView(topTabsView)
@@ -496,7 +498,6 @@ class BrowserViewController: UIViewController {
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -622,7 +623,7 @@ class BrowserViewController: UIViewController {
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
-            make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
+            make.height.equalTo(UX.ShowHeaderTapAreaHeight)
         }
 
         readerModeBar?.snp.remakeConstraints { make in
@@ -1240,7 +1241,10 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
-            tab.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl, nextUrl: displayUrl.absoluteString)
+            let searchData = tab.metadataManager?.tabGroupData ?? TabGroupData()
+            searchData.tabAssociatedNextUrl = displayUrl.absoluteString
+            tab.metadataManager?.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
+                                                         searchData: searchData)
         }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.tabDidChangeContentBlocking(tab)
@@ -1315,7 +1319,7 @@ class BrowserViewController: UIViewController {
 
         openURLInNewTab(nil, isPrivate: isPrivate)
         let freshTab = tabManager.selectedTab
-        freshTab?.updateTimerAndObserving(state: .newTab)
+        freshTab?.metadataManager?.updateTimerAndObserving(state: .newTab)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
@@ -1327,7 +1331,10 @@ class BrowserViewController: UIViewController {
         if let searchURL = engine.searchURLForQuery(text) {
             openURLInNewTab(searchURL, isPrivate: isPrivate)
             if let tab = tabManager.selectedTab {
-                tab.updateTimerAndObserving(state: .navSearchLoaded, searchTerm: text, searchProviderUrl: searchURL.absoluteString, nextUrl: "")
+                let searchData = TabGroupData(searchTerm: text,
+                                              searchUrl: searchURL.absoluteString,
+                                              nextReferralUrl: "")
+                tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
             }
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -1387,10 +1394,10 @@ class BrowserViewController: UIViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
 
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = profile
-        settingsTableViewController.tabManager = tabManager
-        settingsTableViewController.settingsDelegate = self
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: self)
 
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
@@ -1472,12 +1479,12 @@ class BrowserViewController: UIViewController {
     }
 
     func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = self.profile
-        settingsTableViewController.tabManager = self.tabManager
-        settingsTableViewController.settingsDelegate = self
-        settingsTableViewController.deeplinkTo = destination
-
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: self,
+            deeplinkingTo: destination)
+        
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
         presentWithModalDismissIfNeeded(controller, animated: true)
@@ -1795,7 +1802,11 @@ extension BrowserViewController: HomePanelDelegate {
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
-        tab.updateTimerAndObserving(state: .navSearchLoaded, searchTerm: searchTerm, searchProviderUrl: url.absoluteString, nextUrl: "")
+        
+        let searchData = TabGroupData(searchTerm: searchTerm ?? "",
+                                      searchUrl: url.absoluteString,
+                                      nextReferralUrl: "")
+        tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
@@ -2323,7 +2334,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
         if let dialogTitle = dialogTitle {
             if let _ = dialogTitle.asURL {
-                actionSheetController.title = dialogTitle.ellipsize(maxLength: ActionSheetTitleMaxLength)
+                actionSheetController.title = dialogTitle.ellipsize(maxLength: UX.ActionSheetTitleMaxLength)
             } else {
                 actionSheetController.title = dialogTitle
             }
@@ -2427,6 +2438,10 @@ extension BrowserViewController: TabTrayDelegate {
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return nil }
         return profile.readingList.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.current.name).value.successValue
+    }
+
+    func tabTrayDidRequestTabsSettings() {
+        showSettingsWithDeeplink(to: .customizeTabs)
     }
 }
 

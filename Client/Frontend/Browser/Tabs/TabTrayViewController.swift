@@ -24,6 +24,7 @@ class TabTrayViewController: UIViewController {
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)?
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)?
     var notificationCenter: NotificationCenter
+    var nimbus: FxNimbus
     
     // MARK: - UI Elements
     // Buttons & Menus
@@ -127,7 +128,7 @@ class TabTrayViewController: UIViewController {
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
         return UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel),
                                           UIImage(named: "smallPrivateMask")!,
-                                          UIImage(named: "synced_devices")!])
+                                          UIImage(named: ImageIdentifiers.syncedDevicesIcon)!])
     }()
 
     // Toolbars
@@ -149,7 +150,10 @@ class TabTrayViewController: UIViewController {
          showChronTabs: Bool = false,
          tabToFocus: Tab? = nil,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
-         and notificationCenter: NotificationCenter = NotificationCenter.default) {
+         and notificationCenter: NotificationCenter = NotificationCenter.default,
+         with nimbus: FxNimbus = FxNimbus.shared
+    ) {
+        self.nimbus = nimbus
         self.notificationCenter = notificationCenter
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
                                           profile: profile,
@@ -186,6 +190,9 @@ class TabTrayViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        // We expose the tab tray feature whenever it's going to be seen by the user
+        nimbus.features.tabTrayFeature.recordExposure()
 
         if shouldUseiPadSetup() {
             navigationController?.isToolbarHidden = true
@@ -227,6 +234,8 @@ class TabTrayViewController: UIViewController {
     }
 
     fileprivate func iPhoneViewSetup() {
+        navigationItem.rightBarButtonItem = doneButton
+        
         view.addSubview(navigationToolbar)
 
         navigationToolbar.snp.makeConstraints { make in
@@ -243,7 +252,7 @@ class TabTrayViewController: UIViewController {
     fileprivate func updateTitle() {
         if let newTitle = viewModel.navTitle(for: navigationMenu.selectedSegmentIndex,
                                              foriPhone: !shouldUseiPadSetup()) {
-            navigationItem.title  = newTitle
+            navigationItem.title = newTitle
         }
     }
 

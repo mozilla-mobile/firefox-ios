@@ -129,7 +129,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         assert(Thread.isMainThread)
         var eligibleTabs: [Tab]
 
-        if featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+        if featureFlags.isFeatureBuildAndUserEnabled(.inactiveTabs) {
             eligibleTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
         } else {
             eligibleTabs = normalTabs
@@ -255,8 +255,8 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
 
-        previous?.updateTimerAndObserving(state: .tabSwitched)
-        tab?.updateTimerAndObserving(state: .tabSelected)
+        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched)
+        tab?.metadataManager?.updateTimerAndObserving(state: .tabSelected)
 
         // Make sure to wipe the private tabs if the user has the pref turned on
         if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {

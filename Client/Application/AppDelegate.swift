@@ -404,6 +404,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BrowserViewController.foregroundBVC().downloadQueue.pauseAll()
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.
@@ -425,7 +426,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
             guard let profile = profile else { return }
-            TopSitesHandler.writeWidgetKitTopSites(profile: profile)
+            TopSitesHelper.writeWidgetKitTopSites(profile: profile)
         }
     }
 

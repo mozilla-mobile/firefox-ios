@@ -43,6 +43,11 @@ public struct AccessibilityIdentifiers {
             static let library = "libraryTitle"
             static let topSites = "topSitesTitle"
         }
+
+        struct TopSites {
+            static let section = "TopSitesSection"
+            static let itemCell = "TopSitesCell"
+        }
     }
     
     struct GeneralizedIdentifiers {
@@ -53,6 +58,19 @@ public struct AccessibilityIdentifiers {
         static let filteredTabs = "filteredTabs"
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
+    }
+    
+    struct LibraryPanels {
+        struct HistoryPanel {
+            static let tableView = "History List"
+            static let clearHistoryCell = "HistoryPanel.clearHistory"
+            static let recentlyClosedCell = "HistoryPanel.recentlyClosedCell"
+            static let syncedHistoryCell = "HistoryPanel.syncedHistoryCell"
+        }
+        
+        struct GroupedList {
+            static let tableView = "grouped-items-table-view"
+        }
     }
 
     struct Settings {

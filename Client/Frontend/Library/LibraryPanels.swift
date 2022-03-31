@@ -11,7 +11,7 @@ protocol LibraryPanel: NotificationThemeable {
 }
 
 struct LibraryPanelUX {
-    static let EmptyTabContentOffset = -180
+    static let EmptyTabContentOffset: CGFloat = -180
 }
 
 protocol LibraryPanelDelegate: AnyObject {
@@ -76,7 +76,7 @@ class LibraryPanelDescriptor {
     }
 }
 
-class LibraryPanels {
+class LibraryPanels: FeatureFlagsProtocol {
     fileprivate let profile: Profile
     fileprivate let tabManager: TabManager
 
@@ -98,7 +98,14 @@ class LibraryPanels {
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
-                return HistoryPanel(profile: profile, tabManager: tabManager)
+                
+                // NOTE: Switch to HistoryPanelV2 from v100 onwards.
+                if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
+                    return HistoryPanelV2(profile: profile, tabManager: tabManager)
+                } else {
+                    return HistoryPanel(profile: profile, tabManager: tabManager)
+                }
+                
             },
             profile: profile,
             tabManager: tabManager,

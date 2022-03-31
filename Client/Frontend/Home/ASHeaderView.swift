@@ -6,7 +6,11 @@ import UIKit
 
 // MARK: - Section Header View
 public struct FirefoxHomeHeaderViewUX {
-    static let insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.sectionInsetsForIpad + FirefoxHomeUX.minimumInsets : FirefoxHomeUX.minimumInsets
+    static var insets: CGFloat {
+        let iPadInsets = FirefoxHomeViewModel.UX.sectionInsetsForIpad + FirefoxHomeViewModel.UX.minimumInsets
+        return UIDevice.current.userInterfaceIdiom == .pad ? iPadInsets : FirefoxHomeViewModel.UX.minimumInsets
+    }
+
     static let titleTopInset: CGFloat = 5
     static let sectionHeaderSize: CGFloat = 20
     static let maxTitleLabelTextSize: CGFloat = 55 // Style title3 - AX5
@@ -46,9 +50,8 @@ class ASHeaderView: UICollectionReusableView {
     }
 
     var titleInsets: CGFloat {
-        get {
-            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeUX.minimumInsets
-        }
+        let isHomeHeaderInset = UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad
+        return isHomeHeaderInset ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeViewModel.UX.minimumInsets
     }
 
     static let verticalInsets: CGFloat = 4

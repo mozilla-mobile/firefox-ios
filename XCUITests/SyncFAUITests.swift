@@ -116,6 +116,6 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.OpenEmailToQR)
         waitForExistence(app.navigationBars["Turn on Sync"], timeout: 5)
         app.navigationBars["Turn on Sync"].buttons["Close"].tap()
-        waitForExistence(app.collectionViews.cells["TopSitesCell"])
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
     }
 }

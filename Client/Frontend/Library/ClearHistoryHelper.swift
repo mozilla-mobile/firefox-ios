@@ -19,14 +19,15 @@ class ClearHistoryHelper {
     /// - Parameters:
     ///   - viewController: The view controller the clear history prompt is shown on
     ///   - didComplete: Did complete a recent history clear up action
-    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: @escaping () -> Void) {
+    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: ((Date?) -> Void)? = nil) {
         func remove(hoursAgo: Int) {
             if let date = Calendar.current.date(byAdding: .hour, value: -hoursAgo, to: Date()) {
                 let types = WKWebsiteDataStore.allWebsiteDataTypes()
                 WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date, completionHandler: {})
 
-                self.profile.history.removeHistoryFromDate(date).uponQueue(.main) { _ in
-                    didComplete()
+                self.profile.history.removeHistoryFromDate(date).uponQueue(.global(qos: .userInteractive)) { _ in
+                    guard let completion = didComplete else { return }
+                    completion(date)
                 }
             }
         }
@@ -53,8 +54,9 @@ class ClearHistoryHelper {
         alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
             let types = WKWebsiteDataStore.allWebsiteDataTypes()
             WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
-            self.profile.history.clearHistory().uponQueue(.main) { _ in
-                didComplete()
+            self.profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { item in
+                guard let completion = didComplete else { return }
+                completion(nil)
             }
             self.profile.recentlyClosedTabs.clearTabs()
             self.tabManager.clearAllTabsHistory()

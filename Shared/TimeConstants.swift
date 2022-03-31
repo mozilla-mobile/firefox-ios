@@ -29,6 +29,10 @@ extension TimeInterval {
     public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> TimeInterval {
         return Double(microsecondTimestamp) / 1000000
     }
+    
+    public static func timeIntervalSince1970ToDate(timeInterval: TimeInterval) -> Date {
+        Date(timeIntervalSince1970: timeInterval)
+    }
 }
 
 extension Timestamp {
@@ -157,6 +161,10 @@ extension Date {
     
     public func isWithinLast7Days() -> Bool {
         return (Date().lastWeek ... Date()).contains(self)
+    }
+    
+    public func isWithinLast14Days() -> Bool {
+        return (Date().lastTwoWeek ... Date()).contains(self)
     }
 }
 

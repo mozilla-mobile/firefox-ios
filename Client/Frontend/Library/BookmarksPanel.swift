@@ -33,7 +33,7 @@ fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
     }
 }
 
-class BookmarksPanel: SiteTableViewController, LibraryPanel {
+class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
         case recent
@@ -86,7 +86,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
     
     func addNewBookmarkItemAction() {
-        let newBookmark = SingleActionViewModel(title: .BookmarksNewBookmark, iconString: "action_bookmark", tapHandler: { _ in
+        let newBookmark = SingleActionViewModel(title: .BookmarksNewBookmark, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
             guard let bookmarkFolder = self.bookmarkFolder else {
                 return
             }
@@ -228,6 +228,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             }
             tableView.deleteRows(at: [indexPath], with: .left)
             tableView.endUpdates()
+            removeBookmarkShortcut()
         }
 
         // If this node is a folder and it is not empty, we need
@@ -506,7 +507,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         }).items
         actions.append(pinTopSite)
 
-        let removeAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", tapHandler: { _ in
+        let removeAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle, iconString: ImageIdentifiers.actionRemoveBookmark, tapHandler: { _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "long-press"])
         }).items

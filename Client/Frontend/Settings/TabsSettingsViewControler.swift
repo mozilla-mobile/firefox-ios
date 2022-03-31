@@ -7,7 +7,11 @@ import Shared
 
 class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProtocol {
 
-    init() {
+    var nimbus: FxNimbus
+
+    init(nimbus: FxNimbus = FxNimbus.shared) {
+        self.nimbus = nimbus
+
         super.init(style: .grouped)
 
         self.title = .Settings.SectionTitles.TabsTitle
@@ -25,15 +29,17 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                               titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
 
-        let tabGroupsSetting = BoolSetting(with: .groupedTabs,
+        let tabGroupsSetting = BoolSetting(with: .tabTrayGroups,
                                            titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
 
 
-        if featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
+           let isNimbusEnabled = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
+           isNimbusEnabled {
             sectionItems.append(inactiveTabsSetting)
         }
 
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs) {
+        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) {
             sectionItems.append(tabGroupsSetting)
         }
 
