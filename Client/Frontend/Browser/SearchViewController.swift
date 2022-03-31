@@ -546,8 +546,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     func getAttributedBoldSearchSuggestions(searchPhrase: String, query: String) -> NSAttributedString {
-        let boldAttributes = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: DynamicFontHelper().DefaultStandardFont.pointSize)]
-        let regularAttributes = [NSAttributedString.Key.font : DynamicFontHelper().DefaultStandardFont]
+        let boldAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: DynamicFontHelper().DefaultStandardFont.pointSize)]
+        let regularAttributes = [NSAttributedString.Key.font: DynamicFontHelper().DefaultStandardFont]
         let attributedString = NSMutableAttributedString(string: "", attributes: regularAttributes)
         let phraseString = NSAttributedString(string: searchPhrase, attributes: regularAttributes)
         let suggestion = searchPhrase.components(separatedBy: query)

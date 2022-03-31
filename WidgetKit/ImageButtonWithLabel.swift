@@ -48,7 +48,7 @@ import SwiftUI
 //+-------------------------------------------------------+
 
 struct ImageButtonWithLabel: View {
-    var isSmall : Bool
+    var isSmall: Bool
     var link: QuickLink
 
     var paddingValue: CGFloat {

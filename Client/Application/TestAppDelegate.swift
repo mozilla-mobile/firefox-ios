@@ -132,7 +132,7 @@ class TestAppDelegate: AppDelegate {
         return profile
     }
 
-    override func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    override func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 
         // If the app is running from a XCUITest reset all settings in the app
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {

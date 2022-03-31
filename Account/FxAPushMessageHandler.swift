@@ -144,7 +144,7 @@ enum PushMessageType: String {
 }
 
 enum PushMessage: Equatable {
-    case commandReceived(tab: [String : String])
+    case commandReceived(tab: [String: String])
     case deviceConnected(String)
     case deviceDisconnected(String?)
     case profileUpdated

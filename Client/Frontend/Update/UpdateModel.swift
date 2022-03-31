@@ -17,5 +17,5 @@ struct Update {
 struct UpdateCoverSheetModel: UpdateCoverSheet {
     var titleImage: UIImage
     var titleText: String
-    var updates:[Update]
+    var updates: [Update]
 }

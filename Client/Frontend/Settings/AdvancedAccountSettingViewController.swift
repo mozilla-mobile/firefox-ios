@@ -90,7 +90,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             customSyncTokenServerURISetting
         ]
 
-        var settings: [SettingSection] = [SettingSection(title:nil, children: [useStage])]
+        var settings: [SettingSection] = [SettingSection(title: nil, children: [useStage])]
 
         if !(prefs.boolForKey(PrefsKeys.UseStageServer) ?? false) {
             settings.append(SettingSection(title: nil, children: autoconfigSettings))

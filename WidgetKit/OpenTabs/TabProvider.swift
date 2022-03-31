@@ -22,7 +22,7 @@ struct TabProvider: TimelineProvider {
             !$0.isPrivate
         }
         
-        var tabFaviconDictionary = [String : Image]()
+        var tabFaviconDictionary = [String: Image]()
         let simpleTabs = SimpleTab.getSimpleTabs()
         for (_ , tab) in simpleTabs {
             guard !tab.imageKey.isEmpty else { continue }
@@ -61,6 +61,6 @@ struct TabProvider: TimelineProvider {
 
 struct OpenTabsEntry: TimelineEntry {
     let date: Date
-    let favicons: [String : Image]
+    let favicons: [String: Image]
     let tabs: [SimpleTab]
 }

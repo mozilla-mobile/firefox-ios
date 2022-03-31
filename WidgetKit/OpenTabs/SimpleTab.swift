@@ -33,7 +33,7 @@ extension SimpleTab {
         return [String: SimpleTab]()
     }
     
-    static func saveSimpleTab(tabs:[String: SimpleTab]?) {
+    static func saveSimpleTab(tabs: [String: SimpleTab]?) {
         guard let tabs = tabs, !tabs.isEmpty else {
             userDefaults.removeObject(forKey: PrefsKeys.WidgetKitSimpleTabKey)
             return
@@ -47,7 +47,7 @@ extension SimpleTab {
     static func convertToSimpleTabs(_ tabs: [SavedTab]) -> [String: SimpleTab] {
         var simpleTabs: [String: SimpleTab] = [:]
         for tab in tabs {
-            var url:URL?
+            var url: URL?
             // Set URL
             if tab.url != nil {
                 url = tab.url

@@ -370,7 +370,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         }
     }
     
-    func removeGroupTab(with tab:Tab) {
+    func removeGroupTab(with tab: Tab) {
         let groupData = indexOfGroupTab(tab: tab)
         let groupIndexPath = IndexPath(row: 0, section: TabDisplaySection.groupedTabs.rawValue)
         guard let groupName = groupData?.groupName,

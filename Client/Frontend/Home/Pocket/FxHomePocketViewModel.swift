@@ -75,7 +75,7 @@ class FxHomePocketViewModel {
     func recordTapOnStory(index: Int) {
         // Pocket site extra
         let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
-        let siteExtra = [key : "\(index)"]
+        let siteExtra = [key: "\(index)"]
 
         // Origin extra
         let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)

@@ -28,8 +28,8 @@ let longBreach = BreachRecord(
  breachDate: "1970-01-02",
  description: "A mock BreachRecord for testing purposes."
 )
-let unbreachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://unbreached.com", "timePasswordChanged": 1594411049000])
-let breachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://blockbuster.com", "timePasswordChanged": 46800000])
+let unbreachedLogin = LoginRecord(fromJSONDict: ["hostname": "http://unbreached.com", "timePasswordChanged": 1594411049000])
+let breachedLogin = LoginRecord(fromJSONDict: ["hostname": "http://blockbuster.com", "timePasswordChanged": 46800000])
 
 class MockBreachAlertsClient: BreachAlertsClientProtocol {
     func fetchEtag(endpoint: BreachAlertsClient.Endpoint, profile: Client.Profile, completion: @escaping (String?) -> Void) {

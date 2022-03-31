@@ -106,7 +106,7 @@ class FeatureFlagsManager {
 
     /// Main interface for setting a feature's state and options. Options are enums of
     /// `FlaggableFeatureOptions` type and also conform to Int.
-    public func setUserPreferenceFor<T:FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to option: T) {
+    public func setUserPreferenceFor<T: FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to option: T) {
 
         switch featureID {
         case .startAtHome:

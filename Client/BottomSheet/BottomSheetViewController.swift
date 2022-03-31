@@ -109,7 +109,7 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
         panView.addGestureRecognizer(gesture)
         panView.translatesAutoresizingMaskIntoConstraints = true
         
-        let overlayTapGesture = UITapGestureRecognizer(target: self, action:  #selector(self.hideViewWithAnimation))
+        let overlayTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.hideViewWithAnimation))
         overlay.addGestureRecognizer(overlayTapGesture)
         
         hideView(shouldAnimate: false)

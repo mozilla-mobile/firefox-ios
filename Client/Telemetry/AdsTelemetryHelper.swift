@@ -115,7 +115,7 @@ class AdsTelemetryHelper: TabContentScript {
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard
             let provider = getProviderForMessage(message: message),
-            let body = message.body as? [String : Any],
+            let body = message.body as? [String: Any],
             let urls = body["urls"] as? [String] else { return }
         let adUrls = provider.listAdUrls(urls: urls)
         if !adUrls.isEmpty {
@@ -127,7 +127,7 @@ class AdsTelemetryHelper: TabContentScript {
     }
     
     private func getProviderForMessage(message: WKScriptMessage) -> SearchProviderModel? {
-        guard let body = message.body as? [String : Any], let url = body["url"] as? String else { return nil }
+        guard let body = message.body as? [String: Any], let url = body["url"] as? String else { return nil }
         for provider in SearchProviderModel.searchProviderList {
             guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
             return provider

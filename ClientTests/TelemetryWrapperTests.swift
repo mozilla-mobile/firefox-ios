@@ -20,7 +20,7 @@ class TelemetryWrapperTests: XCTestCase {
     func test_topSiteTileWithExtras_GleanIsCalled() {
         let topSitePositionKey = TelemetryWrapper.EventExtraKey.topSitePosition.rawValue
         let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
-        let extras = [topSitePositionKey : "\(1)", topSiteTileTypeKey: "history-based"]
+        let extras = [topSitePositionKey: "\(1)", topSiteTileTypeKey: "history-based"]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.TopSite.tilePressed)
@@ -34,7 +34,7 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: - Preferences
 
     func test_preferencesWithExtras_GleanIsCalled() {
-        let extras: [String : Any] = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
+        let extras: [String: Any] = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
                                       TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: BlockingStrength.strict.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
 
@@ -49,7 +49,7 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: - Firefox Home Page
 
     func test_recentlySavedBookmarkViewWithExtras_GleanIsCalled() {
-        let extras: [String : Any] = [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\([].count)"]
+        let extras: [String: Any] = [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\([].count)"]
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .firefoxHomepage, value: .recentlySavedBookmarkItemView, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView)
@@ -61,7 +61,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_recentlySavedReadingListViewViewWithExtras_GleanIsCalled() {
-        let extras: [String : Any] = [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\([].count)"]
+        let extras: [String: Any] = [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\([].count)"]
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .firefoxHomepage, value: .recentlySavedReadingListView, extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.FirefoxHomePage.readingListView)

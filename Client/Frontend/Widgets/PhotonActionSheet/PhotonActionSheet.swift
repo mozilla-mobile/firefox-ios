@@ -271,7 +271,7 @@ class PhotonActionSheet: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?,
                                of object: Any?,
-                               change: [NSKeyValueChangeKey : Any]?,
+                               change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         if viewModel.presentationStyle == .popover && !wasHeightOverriden {
             preferredContentSize = tableView.contentSize

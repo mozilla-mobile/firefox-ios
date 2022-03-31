@@ -99,7 +99,7 @@ struct SyncDeleteRequestSpec {
     static func fromRequest(request: GCDWebServerRequest) -> SyncDeleteRequestSpec? {
         // Input is "/1.5/user{/storage{/collection{/id}}}".
         // That means we get four, five, or six path components here, the first being empty.
-        return SyncDeleteRequestSpec.fromPath(path: request.path, withQuery: request.query! as [NSString : AnyObject])
+        return SyncDeleteRequestSpec.fromPath(path: request.path, withQuery: request.query! as [NSString: AnyObject])
     }
 
     static func fromPath(path: String, withQuery query: [NSString: AnyObject]) -> SyncDeleteRequestSpec? {
@@ -170,7 +170,7 @@ class MockSyncServer {
             "type": "mobile",
         ]
         let clientBodyString = JSON(clientBody).stringify()!
-        let clientRecord: [String : Any] = [
+        let clientRecord: [String: Any] = [
             "id": guid,
             "collection": "clients",
             "payload": clientBodyString,

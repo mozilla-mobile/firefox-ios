@@ -29,7 +29,7 @@ public enum FxAClientError: Error, CustomStringConvertible {
     case remote(RemoteError)
     case local(NSError)
 
-    public var description : String {
+    public var description: String {
         switch self {
         case .remote(let err): return "FxA remote error: \(err)"
         case .local(let err): return "FxA local error: \(err)"

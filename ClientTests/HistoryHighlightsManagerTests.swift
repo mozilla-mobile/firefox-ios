@@ -232,7 +232,7 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     private func createTabs(named name: String) -> Tab {
-        guard let url = URL(string:"https://www.\(name).com/") else {
+        guard let url = URL(string: "https://www.\(name).com/") else {
             return tabManager.addTab()
         }
 

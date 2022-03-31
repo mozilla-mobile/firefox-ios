@@ -136,8 +136,8 @@ class TestBrowserDB: XCTestCase {
             }
         }
 
-        func fooBarFactory(_ row: SDRow) -> [String : Any] {
-            var result: [String : Any] = [:]
+        func fooBarFactory(_ row: SDRow) -> [String: Any] {
+            var result: [String: Any] = [:]
             result["id"] = row["id"]
             result["bar"] = row["bar"]
             return result
@@ -153,7 +153,7 @@ class TestBrowserDB: XCTestCase {
         var shortConcurrentQueryRuntimeDuration: Timestamp = 0
 
         let longQueryStartTimestamp = Date.now()
-        let longQueryResult = longQuery.bind { result -> Deferred<Maybe<[[String : Any]]>> in
+        let longQueryResult = longQuery.bind { result -> Deferred<Maybe<[[String: Any]]>> in
             if let results = result.successValue?.asArray() {
                 isLongQueryDone = true
                 longQueryRuntimeDuration = Date.now() - longQueryStartTimestamp
@@ -165,7 +165,7 @@ class TestBrowserDB: XCTestCase {
         }
 
         let shortConcurrentQueryStartTimestamp = Date.now()
-        let shortConcurrentQueryResult = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String : Any]]>> in
+        let shortConcurrentQueryResult = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String: Any]]>> in
             if let results = result.successValue?.asArray() {
                 isShortConcurrentQueryDone = true
                 shortConcurrentQueryRuntimeDuration = Date.now() - shortConcurrentQueryStartTimestamp
@@ -198,8 +198,8 @@ class TestBrowserDB: XCTestCase {
             }
         }
 
-        func fooBarFactory(_ row: SDRow) -> [String : Any] {
-            var result: [String : Any] = [:]
+        func fooBarFactory(_ row: SDRow) -> [String: Any] {
+            var result: [String: Any] = [:]
             result["id"] = row["id"]
             result["bar"] = row["bar"]
             return result
@@ -207,7 +207,7 @@ class TestBrowserDB: XCTestCase {
 
         let shortConcurrentQuery = db.runQueryConcurrently("SELECT * FROM foo LIMIT 1", args: nil, factory: fooBarFactory)
 
-        _ = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String : Any]]>> in
+        _ = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String: Any]]>> in
             if let results = result.successValue?.asArray() {
                 expectation.fulfill()
                 return deferMaybe(results)

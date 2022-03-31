@@ -12,14 +12,14 @@ class UserScriptManager {
     // Singleton instance.
     public static let shared = UserScriptManager()
 
-    private let compiledUserScripts: [String : WKUserScript]
+    private let compiledUserScripts: [String: WKUserScript]
 
     private let noImageModeUserScript = WKUserScript.createInDefaultContentWorld(source: "window.__firefox__.NoImageMode.setEnabled(true)", injectionTime: .atDocumentStart, forMainFrameOnly: true)
     private let nightModeUserScript = WKUserScript.createInDefaultContentWorld(source: "window.__firefox__.NightMode.setEnabled(true)", injectionTime: .atDocumentStart, forMainFrameOnly: true)
     private let printHelperUserScript = WKUserScript.createInPageContentWorld(source: "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }", injectionTime: .atDocumentEnd, forMainFrameOnly: false)
 
     private init() {
-        var compiledUserScripts: [String : WKUserScript] = [:]
+        var compiledUserScripts: [String: WKUserScript] = [:]
 
         // Cache all of the pre-compiled user scripts so they don't
         // need re-fetched from disk for each webview.
