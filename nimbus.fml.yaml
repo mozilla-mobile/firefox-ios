@@ -178,7 +178,7 @@ features:
               priority: 100
               max-display-count: 10
 
-      - channel: Fennec
+      - channel: developer
         value:
           styles:
             DEFAULT:
@@ -187,7 +187,7 @@ features:
             EXPIRES_QUICKLY:
               priority: 100
               max-display-count: 1
-      - channel: Fennec
+      - channel: developer
         value: {
           "messages": {
             "my-viewpoint-survey": {
@@ -200,7 +200,7 @@ features:
             }
           }
         }
-      - channel: Fennec
+      - channel: developer
         value: {
           "messages": {
             "private-tabs-auto-close": {
@@ -212,7 +212,7 @@ features:
             }
           }
         }
-      - channel: Fennec
+      - channel: developer
         value: {
           "triggers": {
             "USER_IE_COUNTRY": "'IE' in locale"
