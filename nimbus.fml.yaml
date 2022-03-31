@@ -94,8 +94,217 @@ features:
             "inactive-tabs": true
           }
         }
+  messaging:
+    description: |
+      Configuration for the messaging system.
+
+      In practice this is a set of growable lookup tables for the
+      message controller to piece together.
+
+    variables:
+      message-under-experiment:
+        description: Id or prefix of the message under experiment.
+        type: Option<String>
+        default: null
+
+      messages:
+        description: A growable collection of messages
+        type: Map<String, MessageData>
+        default: {}
+
+      triggers:
+        description: >
+          A collection of out the box trigger
+          expressions. Each entry maps to a
+          valid JEXL expression.
+        type: Map<String, String>
+        default: {}
+      styles:
+        description: >
+          A map of styles to configure message
+          appearance.
+        type: Map<String, StyleData>
+        default: {}
+
+      actions:
+        type: Map<String, String>
+        description: A growable map of action URLs.
+        default: {}
+      on-control:
+        type: ControlMessageBehavior
+        description: What should be displayed when a control message is selected.
+        default: show-next-message
+    defaults:
+      - value:
+          triggers:
+            USER_RECENTLY_INSTALLED:  days_since_install < 7
+            USER_RECENTLY_UPDATED:    days_since_update < 7 && days_since_install != days_since_update
+            USER_TIER_ONE_COUNTRY:    ('US' in locale || 'GB' in locale || 'CA' in locale || 'DE' in locale || 'FR' in locale)
+            USER_EN_SPEAKER:          "'en' in locale"
+            USER_DE_SPEAKER:          "'de' in locale"
+            USER_FR_SPEAKER:          "'fr' in locale"
+            DEVICE_ANDROID:           os == 'Android'
+            DEVICE_IOS:               os == 'iOS'
+            ALWAYS:                   "true"
+            NEVER:                    "false"
+          actions:
+            OPEN_SETTINGS:               ://deep-link?url=settings/general
+            OPEN_SETTINGS_NEW_TAB:       ://deep-link?url=settings/newtab
+            OPEN_SETTINGS_HOMESCREEN:    ://deep-link?url=settings/homepage
+            OPEN_SETTINGS_WALLPAPERS:    ://deep-link?url=settings/wallpaper
+            OPEN_SETTINGS_EMAIL:         ://deep-link?url=settings/mailto
+            OPEN_SETTINGS_SEARCH_ENGINE: ://deep-link?url=settings/search
+            OPEN_SETTINGS_PRIVACY:       ://deep-link?url=settings/clear-private-data
+            OPEN_SETTINGS_FXA:           ://deep-link?url=settings/fxa
+            OPEN_SETTINGS_THEME:         ://deep-link?url=settings/theme
+            VIEW_BOOKMARKS:              ://deep-link?url=homepanel/bookmarks
+            VIEW_TOP_SITES:              ://deep-link?url=homepanel/top-sites
+            VIEW_READING_LIST:           ://deep-link?url=homepanel/reading-list
+            VIEW_HISTORY:                ://deep-link?url=homepanel/history
+            VIEW_DOWNLOADS:              ://deep-link?url=homepanel/downloads
+            ENABLE_PRIVATE_BROWSING:     ://deep-link?url=homepanel/new-private-tab
+            MAKE_DEFAULT_BROWSER:        ://deep-link?url=default-browser/system-settings
+          styles:
+            DEFAULT:
+              priority: 50
+              max-display-count: 5
+            PERSISTENT:
+              priority: 50
+              max-display-count: 20
+            WARNING:
+              priority: 60
+              max-display-count: 10
+            URGENT:
+              priority: 100
+              max-display-count: 10
+
+      - channel: developer
+        value:
+          styles:
+            DEFAULT:
+              priority: 50
+              max-display-count: 100
+            EXPIRES_QUICKLY:
+              priority: 100
+              max-display-count: 1
+      - channel: developer
+        value: {
+          "messages": {
+            "my-viewpoint-survey": {
+              "title": "Message tile",
+              "text": "Love Firefox? Fill in our survey!",
+              "action": "https://surveyprovider.com/survey-id/{uuid}",
+              "trigger": [ "ALWAYS" ],
+              "style": "DEFAULT",
+              "button-label": "Go to the survey"
+            }
+          }
+        }
+      - channel: developer
+        value: {
+          "messages": {
+            "private-tabs-auto-close": {
+              "action": "OPEN_SETTINGS",
+              "text": "Sharing your phone? Autoclosing private tabs is for you!",
+              "trigger": [
+                  "USER_RECENTLY_INSTALLED"
+              ]
+            }
+          }
+        }
+      - channel: developer
+        value: {
+          "triggers": {
+            "USER_IE_COUNTRY": "'IE' in locale"
+          },
+
+          "styles": {
+            "irish-green": {
+              "priority": 50
+            }
+          },
+
+          "messages": {
+            "eu-tracking-protection-for-ireland": {
+              "action": "OPEN_SETTINGS",
+              "text": "GDPR has you covered. Firefox has GDPR covered",
+              "style": "irish-green",
+              "trigger": [
+                  "NEW_USER",
+                  "USER_IE_COUNTRY"
+              ]
+            }
+          },
+
+          "message-under-experiment": "eu-tracking-protection-for-"
+        }
+
 types:
   objects:
+    MessageData:
+      description: >
+        An object to describe a message. It uses human
+        readable strings to describe the triggers, action and
+        style of the message as well as the text of the message
+        and call to action.
+      fields:
+        action:
+          type: String
+          description: >
+            A URL of a page or a deeplink.
+            This may have substitution variables in.
+          # This should never be defaulted.
+          default: ""
+        title:
+          type: Option<String>
+          description: "The title text displayed to the user"
+          default: null
+        text:
+          type: String
+          description: "The message text displayed to the user"
+          # This should never be defaulted.
+          default: ""
+        is-control:
+          type: Boolean
+          description: "Indicates if this message is the control message, if true shouldn't be displayed"
+          default: false
+        button-label:
+          type: Option<String>
+          description: >
+            The text on the button. If no text
+            is present, the whole message is clickable.
+          default: null
+        style:
+          type: String
+          description: >
+            The style as described in a
+            `StyleData` from the styles table.
+          default: DEFAULT
+        trigger:
+          type: List<String>
+          description: >
+            A list of strings corresponding to
+            targeting expressions. The message will be
+            shown if all expressions `true`.
+          default: []
+    StyleData:
+      description: >
+        A group of properities (predominantly visual) to
+        describe the style of the message.
+      fields:
+        priority:
+          type: Int
+          description: >
+            The importance of this message.
+            0 is not very important, 100 is very important.
+          default: 50
+        max-display-count:
+          type: Int
+          description: >
+            How many sessions will this message be shown to the user
+            before it is expired.
+          default: 5
+
     AwesomeBar:
       description: "Represents the awesome bar object"
       fields:
@@ -164,3 +373,10 @@ types:
       variants:
         inactive-tabs:
           description: Tabs that have been automatically closed for the user.
+    ControlMessageBehavior:
+      description: An enum to influence what should be displayed when a control message is selected.
+      variants:
+        show-next-message:
+          description: The next eligible message should be shown.
+        show-none:
+          description: The surface should show no message.
