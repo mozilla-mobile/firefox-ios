@@ -29,7 +29,7 @@ struct SimpleEntry: TimelineEntry {
     public let date: Date
 }
 
-struct SearchQuickLinksEntryView : View {
+struct SearchQuickLinksEntryView: View {
     @ViewBuilder
     var body: some View {
         VStack {

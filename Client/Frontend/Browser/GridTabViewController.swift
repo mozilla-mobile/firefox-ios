@@ -227,7 +227,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
             let groupName = tabIndex.groupName
             let groupIndex: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
             let offSet = Int(GroupedTabCellProperties.CellUX.defaultCellHeight) * groupIndex
-            let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width:  self.collectionView.frame.width, height: self.collectionView.frame.height))
+            let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width: self.collectionView.frame.width, height: self.collectionView.frame.height))
             DispatchQueue.main.async {
                 self.collectionView.scrollRectToVisible(rect, animated: false)
             }
