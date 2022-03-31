@@ -89,7 +89,7 @@ open class Cursor<T>: TypedCursor {
 /*
  * A cursor implementation that wraps an array.
  */
-open class ArrayCursor<T> : Cursor<T> {
+open class ArrayCursor<T>: Cursor<T> {
     fileprivate var data: [T]
 
     open override var count: Int {

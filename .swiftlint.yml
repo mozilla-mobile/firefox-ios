@@ -1,103 +1,142 @@
 disabled_rules: # rule identifiers to exclude from running
-  - variable_name
-  - todo
-  - trailing_newline
-  - type_name
-  - function_body_length
-  - missing_docs
-  - valid_docs
-  - cyclomatic_complexity
-  - type_body_length
-  - function_parameter_count
-  - file_length
-  - mark
-  - unused_closure_parameter
-  - empty_parentheses_with_trailing_closure
-  - redundant_string_enum_value
-  - large_tuple
-  - class_delegate_protocol
-  - syntactic_sugar
-  - implicit_getter
-  - weak_delegate
-  - shorthand_operator
-  - trailing_comma
-  - unused_optional_binding
-  - private_over_fileprivate
-  - empty_enum_arguments
-  - discarded_notification_center_observer
-  - block_based_kvo
-  - nesting
-  - is_disjoint
-  - multiple_closures_with_trailing_closure
-  - fallthrough
-  - switch_case_alignment
-  - trailing_whitespace
-  - leading_whitespace
-  - operator_whitespace
-  - legacy_cggeometry_functions
-  - unneeded_break_in_switch
-  - closure_parameter_position
+# Auto-correctable rules
+- void_return
+- vertical_whitespace
+- trailing_whitespace
+- trailing_semicolon
+- trailing_newline
+- trailing_comma
+- syntactic_sugar
+- statement_position
+- return_arrow_whitespace
+- redundant_void_return
+- redundant_optional_initialization
+- redundant_objc_attribute
+- redundant_discardable_let
+- protocol_property_accessors_order
+- private_over_fileprivate
+- operator_whitespace
+- opening_brace
+- no_space_in_method_call
+- mark
+- legacy_nsgeometry_functions
+- legacy_constructor
+- legacy_constant
+- legacy_cggeometry_functions
+- leading_whitespace
+- empty_parentheses_with_trailing_closure
+- empty_parameters
+- empty_enum_arguments
+- control_statement
+- comment_spacing
+- comma
+- closing_brace
+
+# These rules were originally disabled. Leaving them separate
+# just in case, but they will each be looked at in turn.
+- variable_name
+- type_name
+- function_body_length
+- missing_docs
+- valid_docs
+- cyclomatic_complexity
+- type_body_length
+- function_parameter_count
+- weak_delegate
+- discarded_notification_center_observer
+- fallthrough
+
+# Disabled all default rules
+- block_based_kvo
+- class_delegate_protocol
+- closure_parameter_position
+- compiler_protocol_init
+- computed_accessors_order
+- custom_rules
+- deployment_target
+- discouraged_direct_init
+- duplicate_enum_cases
+- duplicate_imports
+- duplicated_key_in_dictionary_literal
+- dynamic_inline
+- file_length
+- for_where
+- force_cast
+- force_try
+- generic_type_name
+- identifier_name
+- implicit_getter
+- inclusive_language
+- inert_defer
+- is_disjoint
+- large_tuple
+- legacy_hashing
+- legacy_random
+- line_length
+- multiple_closures_with_trailing_closure
+- nesting
+- no_fallthrough_only
+- notification_center_detachment
+- nsobject_prefer_isequal
+- orphaned_doc_comment
+- private_unit_test
+- reduce_boolean
+- redundant_set_access_control
+- redundant_string_enum_value
+- self_in_property_initialization
+- shorthand_operator
+- superfluous_disable_command
+- switch_case_alignment
+- todo
+- type_body_length
+- unneeded_break_in_switch
+- unused_capture_list
+- unused_closure_parameter
+- unused_control_flow_label
+- unused_enumerated
+- unused_optional_binding
+- unused_setter_value
+- valid_ibinspectable
+- vertical_parameter_alignment
+- xctfail_message
+
 opt_in_rules: # some rules are only opt-in
-  - closing_brace
-  - opening_brace
-  - return_arrow_whitespace
-  - trailing_semicolon
-  - statement_position
-  - explicit_init
-  - shorthand_operator
-  - file_header
-  - deployment_target
-  - discouraged_optional_collection
-  - duplicate_imports
-  - empty_string
-  - overridden_super_call
-  - prohibited_interface_builder
-  - prohibited_super_call
-  - protocol_property_accessors_order
-  - redundant_objc_attribute
-  - redundant_type_annotation
-  - unused_import
+# These rules were originally opted into. Disabling for now to get
+# Swiftlint up and running.
+  # - closing_brace
+  # - opening_brace
+  # - return_arrow_whitespace
+  # - trailing_semicolon
+  # - statement_position
+  # - explicit_init
+  # - file_header
+  # - deployment_target
+  # - discouraged_optional_collection
+  # - duplicate_imports
+  # - empty_string
+  # - overridden_super_call
+  # - prohibited_interface_builder
+  # - prohibited_super_call
+  # - protocol_property_accessors_order
+  # - redundant_objc_attribute
+  # - redundant_type_annotation
+  # - unused_import
   # Find all the available rules by running:
   # swiftlint rules
-included: # paths to include during linting. `--path` is ignored if present.
+
 excluded: # paths to ignore during linting. Takes precedence over `included`.
-  - Carthage
-  - Pods
   - Source/ExcludedFolder
   - Source/ExcludedFile.swift
   - ThirdParty
   - FxA
   - FxAClient
   - build
-  - UITests/EarlGrey.swift
   - Storage/ThirdParty/SwiftData.swift
   - UITests/
   - XCUITests/
-  - SyncTests/
-  - StorageTests/
-  - ReadingListTests/
-  - ClientTests/
-  - AccountTests/
   - fastlane/
-  - SharedTests/
   - Client/Assets/Search/get_supported_locales.swift
+  - Client/Generated
 
-# configurable rules can be customized from this configuration file
-# binary rules can set their severity level
-trailing_semicolon: error
-empty_count: error
-closing_brace: error
-opening_brace: error
-return_arrow_whitespace: error
-statement_position: error
-colon: error
-comma: error
-force_try: warning
-force_cast: warning
-
-file_header:
-  required_pattern: \/\* This Source Code Form is subject to the terms of the Mozilla Public.+
-
-line_length: 1000
-
-reporter: "json" # reporter type (xcode, json, csv, checkstyle)
+# reporter: "json" # reporter type (xcode, json, csv, checkstyle)
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)

@@ -52,7 +52,7 @@ class ToolbarTextField: AutocompleteTextField {
     override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
         let r = super.clearButtonRect(forBounds: bounds)
         let grow: CGFloat = 16
-        let r2 = CGRect(x: r.minX - grow/2, y:r.minY - grow/2, width: r.width + grow, height: r.height + grow)
+        let r2 = CGRect(x: r.minX - grow/2, y: r.minY - grow/2, width: r.width + grow, height: r.height + grow)
         return r2
     }
 }

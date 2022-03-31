@@ -35,7 +35,7 @@ struct UpdateViewControllerUX {
     
     struct StartBrowsingButton {
         static let colour = UIColor.Photon.Blue50
-        static let cornerRadius:CGFloat = 10
+        static let cornerRadius: CGFloat = 10
         static let font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         static let height = 46
         static let edgeInset = 18
@@ -67,7 +67,7 @@ struct UpdateViewControllerUX {
 
 class UpdateViewController: UIViewController {
     // Public constants 
-    let viewModel:UpdateViewModel = UpdateViewModel()
+    let viewModel: UpdateViewModel = UpdateViewModel()
     static let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
     // Private vars
     private var fxTextThemeColour: UIColor {
