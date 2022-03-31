@@ -86,7 +86,7 @@ class LoginOnboardingViewController: SettingsViewController {
 
     @objc func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
-        viewController.url = SupportUtils.URLForTopic("placeholder4")
+        viewController.url = SupportUtils.URLForTopic("set-passcode-and-touch-id-firefox")
         navigationController?.pushViewController(viewController, animated: true)
     }
 

@@ -64,7 +64,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
 
     @objc func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
-        viewController.url = SupportUtils.URLForTopic("placeholder4")
+        viewController.url = SupportUtils.URLForTopic("manage-saved-passwords-firefox-ios")
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
