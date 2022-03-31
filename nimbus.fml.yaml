@@ -82,6 +82,12 @@ features:
             "inactive-tabs": false,
           }
     defaults:
+      - channel: beta
+        value: {
+          "sections-enabled": {
+            "inactive-tabs": true
+          }
+        }
       - channel: developer
         value: {
           "sections-enabled": {
