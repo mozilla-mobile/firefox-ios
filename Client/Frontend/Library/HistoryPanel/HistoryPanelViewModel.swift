@@ -15,29 +15,6 @@ private class FetchInProgressError: MaybeErrorType {
 
 class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     
-    // MARK: - Properties
-    
-    private let profile: Profile
-    private let queryFetchLimit = 100
-    let historyActionables = HistoryActionablesModel.activeActionables
-    
-    private var currentFetchOffset = 0
-    var visibleSections: [Sections] = []
-    var searchTermGroups: [ASGroup<Site>] = []
-    var isFetchInProgress = false
-    var groupedSites = DateGroupedTableData<Site>()
-    var filterMockSites = [Site]()
-    
-    private var hasRecentlyClosed: Bool {
-        return profile.recentlyClosedTabs.tabs.count > 0
-    }
-    
-    let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
-                                     Notification.Name.PrivateDataClearedHistory,
-                                     Notification.Name.DynamicFontChanged,
-                                     Notification.Name.DatabaseWasReopened,
-                                     Notification.Name.OpenClearRecentHistory]
-    
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
         case today
@@ -64,6 +41,35 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             }
         }
     }
+    
+    // MARK: - Properties
+    
+    private let profile: Profile
+    private let queryFetchLimit = 100
+    let historyActionables = HistoryActionablesModel.activeActionables
+    
+    private var currentFetchOffset = 0
+    var visibleSections: [Sections] = []
+    var searchTermGroups: [ASGroup<Site>] = []
+    var isFetchInProgress = false
+    var isSearchInProgress = false
+    var groupedSites = DateGroupedTableData<Site>()
+    var filterMockSites = [Site]()
+    var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
+    
+    private var hasRecentlyClosed: Bool {
+        return profile.recentlyClosedTabs.tabs.count > 0
+    }
+    
+    var emptyStateText: String {
+        return !isSearchInProgress ? .HistoryPanelEmptyStateTitle : .LibraryPanel.History.NoHistoryResult
+    }
+    
+    let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
+                                     Notification.Name.PrivateDataClearedHistory,
+                                     Notification.Name.DynamicFontChanged,
+                                     Notification.Name.DatabaseWasReopened,
+                                     Notification.Name.OpenClearRecentHistory]
     
     // MARK: - Inits
     

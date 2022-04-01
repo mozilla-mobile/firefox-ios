@@ -57,7 +57,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     
     lazy var searchbar: UISearchBar = .build { searchbar in
         searchbar.setImage(UIImage(named: "library-history"), for: .search, state: .normal)
-        searchbar.searchTextField.placeholder = "Search text"
+        searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
         searchbar.returnKeyType = .done
         searchbar.delegate = self
     }
@@ -163,6 +163,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     func startSearchState() {
         bottomStackView.isHidden = false
         searchbar.becomeFirstResponder()
+        viewModel.isSearchInProgress = true
     }
     
     func updateLayoutForKeyboard() {
@@ -432,7 +433,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         }
     }
 
-    // TODO: Remove snapkit
     private func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
 
@@ -440,44 +440,51 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         // Create an explicit view for setting the color.
         let bgColor = UIView()
         bgColor.backgroundColor = UIColor.theme.homePanel.panelBackground
+        bgColor.translatesAutoresizingMaskIntoConstraints = false
         overlayView.addSubview(bgColor)
-        bgColor.snp.makeConstraints { make in
-            // Height behaves oddly: equalToSuperview fails in this case, as does setting top.equalToSuperview(), simply setting this to ample height works.
-            make.height.equalTo(UIScreen.main.bounds.height)
-            make.width.equalToSuperview()
-        }
+        
+        NSLayoutConstraint.activate([
+            bgColor.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height),
+            bgColor.widthAnchor.constraint(equalTo: overlayView.widthAnchor)
+        ])
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = .HistoryPanelEmptyStateTitle
+        welcomeLabel.text = viewModel.emptyStateText
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
-
-        welcomeLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
-            // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(overlayView).offset(50)
-            make.width.equalTo(HistoryPanelUX.WelcomeScreenItemWidth)
-        }
+        welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let welcomeLabelPriority = UILayoutPriority(100)
+        NSLayoutConstraint.activate([
+            welcomeLabel.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
+            welcomeLabel.centerYAnchor.constraint(equalTo: overlayView.centerYAnchor,
+                                                  constant: LibraryPanelUX.EmptyTabContentOffset).priority(welcomeLabelPriority),
+            welcomeLabel.topAnchor.constraint(greaterThanOrEqualTo: overlayView.topAnchor,
+                                              constant: 50),
+            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(HistoryPanelUX.WelcomeScreenItemWidth))
+        ])
         return overlayView
     }
 
     // MARK: - Themeable
     
     func applyTheme() {
-        emptyStateOverlayView.removeFromSuperview()
-        emptyStateOverlayView = createEmptyStateOverlayView()
-        updateEmptyPanelState()
+        toggleEmptyState()
         
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
         
         tableView.reloadData()
+    }
+    
+    func toggleEmptyState() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
     }
 }
 

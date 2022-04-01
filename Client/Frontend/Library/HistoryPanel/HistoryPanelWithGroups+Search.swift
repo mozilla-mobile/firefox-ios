@@ -26,12 +26,14 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
     func exitSearchState() {
         applySnapshot()
         self.searchbar.resignFirstResponder()
+        viewModel.isSearchInProgress = false
+        toggleEmptyState()
     }
     
     private func performSearch(term: String) {
         viewModel.performSearch(term: term) { success in
             guard success, !viewModel.filterMockSites.isEmpty else {
-                // TODO: Show empty state
+                toggleEmptyState()
                 return
             }
             
