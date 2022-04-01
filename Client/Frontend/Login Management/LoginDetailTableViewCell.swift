@@ -3,13 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import SnapKit
+
 import Storage
 
 protocol LoginDetailTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool
-    func canPeform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool
+    func canPerform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool
     func textFieldDidChange(_ cell: LoginDetailTableViewCell)
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
@@ -29,7 +29,7 @@ enum LoginTableViewCellStyle {
 
 class LoginDetailTableViewCell: ThemedTableViewCell {
 
-    fileprivate let labelContainer = UIView()
+    fileprivate lazy var labelContainer: UIView = .build { _ in }
 
     weak var delegate: LoginDetailTableViewCellDelegate?
 
@@ -39,11 +39,12 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return delegate?.canPeform(action: action, for: self) ?? false
+        return delegate?.canPerform(action: action, for: self) ?? false
     }
 
-    lazy var descriptionLabel: UITextField = {
-        let label = UITextField()
+    lazy var descriptionLabel: UITextField = .build { [weak self] label in
+        guard let self = self else { return }
+
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
@@ -52,20 +53,17 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         label.adjustsFontSizeToFitWidth = false
         label.delegate = self
         label.isAccessibilityElement = true
-        label.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        return label
-    }()
+        label.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged)
+    }
 
     // Exposing this label as internal/public causes the Xcode 7.2.1 compiler optimizer to
     // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
     // and the text property is exposed using a get/set property below.
-    fileprivate lazy var highlightedLabel: UILabel = {
-        let label = UILabel()
+    fileprivate lazy var highlightedLabel: UILabel = .build { label in
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
         label.numberOfLines = 1
-        return label
-    }()
+    }
 
     /// Override the default accessibility label since it won't include the description by default
     /// since it's a UITextField acting as a label.
@@ -147,23 +145,21 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
     }
 
     fileprivate func configureLayout() {
-        labelContainer.snp.remakeConstraints { make in
-            make.centerY.equalTo(contentView)
-            make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-            make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
-        }
+        NSLayoutConstraint.activate([
+            labelContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -LoginTableViewCellUX.HorizontalMargin),
+            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
 
-        highlightedLabel.snp.remakeConstraints { make in
-            make.leading.top.equalTo(labelContainer)
-            make.bottom.equalTo(descriptionLabel.snp.top)
-            make.width.equalTo(labelContainer)
-        }
+            highlightedLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
+            highlightedLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
+            highlightedLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor),
+            highlightedLabel.widthAnchor.constraint(equalTo: labelContainer.widthAnchor),
 
-        descriptionLabel.snp.remakeConstraints { make in
-            make.leading.bottom.equalTo(labelContainer)
-            make.top.equalTo(highlightedLabel.snp.bottom)
-            make.width.equalTo(labelContainer)
-        }
+            descriptionLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: labelContainer.bottomAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: highlightedLabel.bottomAnchor),
+            descriptionLabel.widthAnchor.constraint(equalTo: labelContainer.widthAnchor)
+        ])
 
         setNeedsUpdateConstraints()
     }
@@ -205,7 +201,7 @@ extension LoginDetailTableViewCell {
 
 extension LoginDetailTableViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return self.delegate?.shouldReturnAfterEditingDescription(self) ?? true
+        return delegate?.shouldReturnAfterEditingDescription(self) ?? true
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
