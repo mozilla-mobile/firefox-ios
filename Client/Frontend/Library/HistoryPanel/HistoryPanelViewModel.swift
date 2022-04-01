@@ -26,6 +26,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     var searchTermGroups: [ASGroup<Site>] = []
     var isFetchInProgress = false
     var groupedSites = DateGroupedTableData<Site>()
+    var filterMockSites = [Site]()
     
     private var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
@@ -44,6 +45,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         case lastWeek
         case lastMonth
         case older
+        case searchResults
 
         var title: String? {
             switch self {
@@ -57,7 +59,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
                 return .LibraryPanel.Sections.LastMonth
             case .older:
                 return .LibraryPanel.Sections.Older
-            default:
+            case .additionalHistoryActions, .searchResults:
                 return nil
             }
         }
@@ -99,6 +101,12 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
                 }
             }
         }
+    }
+    
+    // Add completion to reload on finish
+    func performSearch(term: String, completion: (Bool) -> Void) {
+        filterMockSites = groupedSites.itemsForSection(0)
+        completion(true)
     }
     
     /// A helper for the reload function.
@@ -240,7 +248,5 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         if isSectionWithNoSites, !isSectionWithGroups {
             visibleSections = visibleSections.filter { $0 != timeSection }
         }
-        
     }
-    
 }

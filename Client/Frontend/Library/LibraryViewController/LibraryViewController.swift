@@ -394,11 +394,12 @@ class LibraryViewController: UIViewController {
         updateViewWithState()
     }
 
-
     @objc func topRightButtonAction() {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .itemEditMode):
             rightButtonBookmarkActions(for: .itemEditMode)
+        case .history(state: .search):
+            rightButtonHistoryActions(for: .search)
         default:
             self.dismiss(animated: true, completion: nil)
         }
@@ -449,7 +450,7 @@ class LibraryViewController: UIViewController {
         updateViewWithState()
     }
 
-    fileprivate func rightButtonBookmarkActions(for state: LibraryPanelSubState) {
+    private func rightButtonBookmarkActions(for state: LibraryPanelSubState) {
         guard let panel = children.first as? UINavigationController else { return }
         switch state {
         case .inFolder:
@@ -477,12 +478,20 @@ class LibraryViewController: UIViewController {
         }
     }
     
-    @objc func bottomCenterButtonAction() {
-//        print("**** Let's search something")
+    private func rightButtonHistoryActions(for state: LibraryPanelSubState) {
         guard let panel = children.first as? UINavigationController,
               let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
         
-        historyPanel.updateLayout()
+        historyPanel.exitSearchState()
+        viewModel.currentPanelState = .history(state: .mainView)
+    }
+    
+    @objc func bottomCenterButtonAction() {
+        viewModel.currentPanelState = .history(state: .search)
+        guard let panel = children.first as? UINavigationController,
+              let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
+        
+        historyPanel.startSearchState()
     }
 }
 
@@ -512,8 +521,10 @@ extension LibraryViewController: NotificationThemeable {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            bottomCenterButton.tintColor = .white
         } else {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            bottomCenterButton.tintColor = .black
         }
         setNeedsStatusBarAppearanceUpdate()
     }

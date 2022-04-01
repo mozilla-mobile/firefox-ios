@@ -129,7 +129,7 @@ open class KeyboardHelper: NSObject {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardDidChangeWithState: currentState!)
+                weakDelegate.delegate?.keyboardHelper(self, keyboardWillChangeWithState: currentState!)
             }
         }
     }
@@ -138,7 +138,7 @@ open class KeyboardHelper: NSObject {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardWillChangeWithState: currentState!)
+                weakDelegate.delegate?.keyboardHelper(self, keyboardDidChangeWithState: currentState!)
             }
         }
     }

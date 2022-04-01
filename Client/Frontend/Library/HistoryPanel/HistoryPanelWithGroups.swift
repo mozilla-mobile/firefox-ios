@@ -41,15 +41,13 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     let profile: Profile
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistoryHelper
-    private var keyboardState: KeyboardState?
+    var keyboardState: KeyboardState?
     
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
 
-    private var diffableDatasource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
+    var diffableDatasource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
     private var hasRecentlyClosed: Bool { profile.recentlyClosedTabs.tabs.count > 0 }
-    
-    private var searchController: UISearchController?
     
     // UI
     var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
@@ -57,7 +55,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         stackview.isClearBackground = true
     }
     
-    lazy private var searchbar: UISearchBar = .build { searchbar in
+    lazy var searchbar: UISearchBar = .build { searchbar in
         searchbar.setImage(UIImage(named: "library-history"), for: .search, state: .normal)
         searchbar.searchTextField.placeholder = "Search text"
         searchbar.returnKeyType = .done
@@ -140,24 +138,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         
     }
     
-    func updateLayout() {
-        bottomStackView.isHidden = false
-        searchbar.becomeFirstResponder()
-    }
-    
-    func updateConstraints(openKeyboard: Bool) {
-        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 else {
-            return
-        }
-        
-        if openKeyboard {
-            let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
-            bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
-        } else {
-            bottomStackView.removeKeyboardSpacer()
-        }
-    }
-    
     // MARK: - Private helpers
     
     private func setupLayout() {
@@ -168,9 +148,10 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             
+            bottomStackView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
             bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
@@ -179,14 +160,32 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         bottomStackView.isHidden = true
     }
     
+    func startSearchState() {
+        bottomStackView.isHidden = false
+        searchbar.becomeFirstResponder()
+    }
+    
+    func updateLayoutForKeyboard() {
+        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
+              keyboardHeight > 0 else {
+            bottomStackView.removeKeyboardSpacer()
+            bottomStackView.isHidden = true
+            return
+        }
+        
+        let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
+        bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
+        bottomStackView.isHidden = false
+    }
+    
     // Use to enable/disable the additional history action rows. `HistoryActionablesModel`
     private func setTappableStateAndStyle(with item: AnyHashable, on cell: OneLineTableViewCell) {
-        var isEnabled: Bool = false
+        var isEnabled = false
         
         if let actionableItem = item as? HistoryActionablesModel {
             switch actionableItem.itemIdentity {
             case .clearHistory:
-                viewModel.groupedSites.isEmpty ? (isEnabled = false) : (isEnabled = true)
+                isEnabled = viewModel.groupedSites.isEmpty
             case .recentlyClosed:
                 isEnabled = hasRecentlyClosed
             default: break
@@ -194,23 +193,15 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         }
         
         // Set interaction behavior and style
-        if isEnabled {
-            cell.titleLabel.alpha = 1.0
-            cell.leftImageView.alpha = 1.0
-            cell.selectionStyle = .default
-            cell.isUserInteractionEnabled = true
-        } else {
-            cell.titleLabel.alpha = 0.5
-            cell.leftImageView.alpha = 0.5
-            cell.selectionStyle = .none
-            cell.isUserInteractionEnabled = false
-        }
-        
+        cell.titleLabel.alpha = isEnabled ? 1.0 : 0.5
+        cell.leftImageView.alpha = isEnabled ? 1.0 : 0.5
+        cell.selectionStyle = isEnabled ? .default : .none
+        cell.isUserInteractionEnabled = isEnabled
     }
     
     // MARK: - Datasource helpers
     
-    private func siteAt(indexPath: IndexPath) -> Site? {
+    func siteAt(indexPath: IndexPath) -> Site? {
         guard let siteItem = diffableDatasource?.itemIdentifier(for: indexPath) as? Site else { return nil }
         
         return siteItem
@@ -234,7 +225,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
                     on: cell)
             }
         })
-        
     }
 
     func handleNotifications(_ notification: Notification) {
@@ -271,6 +261,49 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     }
 
     // MARK: - UITableViewDataSource
+    
+    /// Handles dequeuing the appropriate type of cell when needed.
+    private func configureDatasource() {
+        diffableDatasource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+            guard let self = self else {
+                Logger.browserLogger.error("History Panel - self became nil inside diffableDatasource!")
+                return nil
+            }
+            
+            if let historyActionable = item as? HistoryActionablesModel {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as? OneLineTableViewCell else {
+                    self.browserLog.error("History Panel - cannot create OneLineTableViewCell for historyActionable!")
+                    return nil
+                }
+                
+                let actionableCell = self.configureHistoryActionableCell(historyActionable, cell)
+                return actionableCell
+            }
+            
+            if let site = item as? Site {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                    self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for site!")
+                    return nil
+                }
+                
+                let siteCell = self.configureSiteCell(site, cell)
+                return siteCell
+            }
+            
+            if let searchTermGroup = item as? ASGroup<Site> {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                    self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for STG!")
+                    return nil
+                }
+                
+                let asGroupCell = self.configureASGroupCell(searchTermGroup, cell)
+                return asGroupCell
+            }
+            
+            // This should never happen! You will have an empty row!
+            return UITableViewCell()
+        }
+    }
     
     private func configureHistoryActionableCell(_ historyActionable: HistoryActionablesModel, _ cell: OneLineTableViewCell) -> OneLineTableViewCell {
         cell.titleLabel.text = historyActionable.itemTitle
@@ -315,52 +348,8 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         return cell
     }
     
-    /// Handles dequeuing the appropriate type of cell when needed.
-    private func configureDatasource() {
-        diffableDatasource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
-            guard let self = self else {
-                Logger.browserLogger.error("History Panel - self became nil inside diffableDatasource!")
-                return nil
-            }
-            
-            if let historyActionable = item as? HistoryActionablesModel {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as? OneLineTableViewCell else {
-                    self.browserLog.error("History Panel - cannot create OneLineTableViewCell for historyActionable!")
-                    return nil
-                }
-                
-                let actionableCell = self.configureHistoryActionableCell(historyActionable, cell)
-                return actionableCell
-            }
-            
-            if let site = item as? Site {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
-                    self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for site!")
-                    return nil
-                }
-                
-                let siteCell = self.configureSiteCell(site, cell)
-                return siteCell
-            }
-            
-            if let searchTermGroup = item as? ASGroup<Site> {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
-                    self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for STG!")
-                    return nil
-                }
-                
-                let asGroupCell = self.configureASGroupCell(searchTermGroup, cell)
-                return asGroupCell
-            }
-            
-            // This should never happen! You will have an empty row!
-            return UITableViewCell()
-        }
-        
-    }
-    
     /// The data source gets populated here for your choice of section.
-    fileprivate func applySnapshot(animatingDifferences: Bool = false) {
+    func applySnapshot(animatingDifferences: Bool = false) {
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
         
         snapshot.appendSections(viewModel.visibleSections)
@@ -443,6 +432,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         }
     }
 
+    // TODO: Remove snapkit
     private func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
 
@@ -584,7 +574,7 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
         }
 
         return HistoryPanelUX.HeaderHeight
-    }    
+    }
 }
 
 /// Refresh controls helpers
@@ -659,7 +649,6 @@ extension HistoryPanelWithGroups {
         refreshControl?.beginRefreshing()
         resyncHistory()
     }
-    
 }
 
 extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
@@ -676,47 +665,5 @@ extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
         guard HistoryPanelSections(rawValue: indexPath.section) != .additionalHistoryActions else { return false }
 
         return indexPath.row >= viewModel.groupedSites.numberOfItemsForSection(indexPath.section - 1) - historyPanelPrefetchOffset
-    }
-    
-}
-// MARK: - UISearchBarDelegate
-extension HistoryPanelWithGroups: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-
-        // Do search and show
-    }
-
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let searchText = searchBar.text else { return }
-
-        // Do cancelable search
-    }
-}
-
-// MARK: - KeyboardHelperDelegate
-extension HistoryPanelWithGroups: KeyboardHelperDelegate {
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        keyboardState = state
-        updateConstraints(openKeyboard: true)
-        UIView.animate(withDuration: state.animationDuration, delay: 0,
-                       options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
-            self.bottomStackView.layoutIfNeeded()
-        })
-    }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        keyboardState = nil
-        updateConstraints(openKeyboard:false)
-
-        UIView.animate(withDuration: state.animationDuration, delay: 0,
-                       options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
-            self.bottomStackView.layoutIfNeeded()
-        })
-    }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
-        keyboardState = state
-//        updateLayout()
     }
 }
