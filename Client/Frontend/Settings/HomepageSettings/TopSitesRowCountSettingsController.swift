@@ -32,7 +32,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         }
 
         let rows = [1, 2, 3, 4].map(createSetting)
-        let section = SettingSection(title: NSAttributedString(string: .TopSitesRowSettingFooter), footerTitle: nil, children: rows)
+        let section = SettingSection(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.RowSettingFooter), footerTitle: nil, children: rows)
         return [section]
     }
 }

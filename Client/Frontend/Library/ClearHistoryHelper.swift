@@ -32,7 +32,7 @@ class ClearHistoryHelper {
             }
         }
 
-        let alert = UIAlertController(title: .ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: .LibraryPanel.History.ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
 
         // This will run on the iPad-only, and sets the alert to be centered with no arrow.
         guard let view = viewController.view else { return }
