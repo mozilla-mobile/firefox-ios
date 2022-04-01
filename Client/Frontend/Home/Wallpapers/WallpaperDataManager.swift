@@ -139,7 +139,7 @@ struct WallpaperDataManager {
         var specialCollections = [WallpaperCollection]()
 
         let houseExpiryDate = Calendar.current.date(
-            from: DateComponents(year: 2022, month: 5, day:1))
+            from: DateComponents(year: 2022, month: 5, day: 1))
         let projectHouse = WallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "trRed",
                                              accessibilityLabel: "Turning Red wallpaper, giant red panda"),

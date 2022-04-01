@@ -23,7 +23,7 @@ class ETPCoverSheetTests: XCTestCase {
     func testShouldNotShowCoverSheetCleanInstallSessionLessThan3() {
         let currentTestAppVersion = "18"
         let supportedVersion = ["18"]
-        var sessionValue:Int32 = 0
+        var sessionValue: Int32 = 0
         let shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: prefs, currentAppVersion: currentTestAppVersion, isCleanInstall: true, supportedAppVersions: supportedVersion)
         // The session value should increase
         sessionValue = prefs.intForKey(PrefsKeys.KeyInstallSession) ?? 0
@@ -36,7 +36,7 @@ class ETPCoverSheetTests: XCTestCase {
     func testShouldShowCoverSheetCleanInstallSessionEqualTo3() {
         let currentTestAppVersion = "18"
         let supportedVersion = ["18"]
-        var sessionValue:Int32 = 0
+        var sessionValue: Int32 = 0
         var shouldShow = false
         var isCleanInstall = true // Only for the first time
         for _ in 0...2 {

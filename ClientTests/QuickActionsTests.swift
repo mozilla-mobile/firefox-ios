@@ -68,7 +68,7 @@ private class BookmarkShortcutItem: UIApplicationShortcutItem {
         self.init(type: ShortcutType.openLastBookmark.rawValue, localizedTitle: "")
     }
 
-    override var userInfo: [String : NSSecureCoding]? {
+    override var userInfo: [String: NSSecureCoding]? {
         return [QuickActions.TabURLKey: "https://www.mozilla.org/en-CA/" as NSSecureCoding]
     }
 }

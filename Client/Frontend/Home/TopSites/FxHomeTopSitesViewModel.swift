@@ -124,7 +124,7 @@ class FxHomeTopSitesViewModel {
         let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
         let isPinnedAndGoogle = site.isPinned && site.isGoogleGUID
         let type = isPinnedAndGoogle ? "google" : site.isPinned ? "user-added" : site.isSuggested ? "suggested" : "history-based"
-        let topSiteExtra = [topSitePositionKey : "\(position)", topSiteTileTypeKey: type]
+        let topSiteExtra = [topSitePositionKey: "\(position)", topSiteTileTypeKey: type]
 
         // Origin extra
         let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)

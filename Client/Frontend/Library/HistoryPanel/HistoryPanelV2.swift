@@ -334,7 +334,7 @@ class HistoryPanelV2: UIViewController, LibraryPanel, Loggable, NotificationThem
                 
                 let groupTimeInterval = TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
                 
-                if let groupPlacedAfterItem = (viewModel.groupedSites.itemsForSection(groupSection.rawValue - 1)).first(where : { site in
+                if let groupPlacedAfterItem = (viewModel.groupedSites.itemsForSection(groupSection.rawValue - 1)).first(where: { site in
                     guard let lastVisit = site.latestVisit else { return false }
                     return groupTimeInterval > TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
                 }) {

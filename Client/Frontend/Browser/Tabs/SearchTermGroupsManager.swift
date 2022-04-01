@@ -80,7 +80,7 @@ class SearchTermGroupsManager {
     private static func buildMetadataGroups(from ASMetadata: [HistoryMetadata]) -> [String: [HistoryMetadata]] {
 
         let searchTerms = Set(ASMetadata.map({ return $0.searchTerm }))
-        var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
+        var searchTermMetaDataGroup: [String: [HistoryMetadata]] = [:]
 
         for term in searchTerms {
             if let term = term {
