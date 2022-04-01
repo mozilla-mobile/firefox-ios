@@ -399,6 +399,8 @@
 		59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */; };
+		5F97DD5F27FB0FE800AD3C60 /* GleanTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */; };
+		5FA2233C27F74071005B3D87 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA2233B27F74071005B3D87 /* Glean */; };
 		6025B109267B6BB300F59F6B /* NoSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B107267B6BB300F59F6B /* NoSearchResultCell.swift */; };
 		6025B10A267B6BB300F59F6B /* SelectPasswordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B108267B6BB300F59F6B /* SelectPasswordCell.swift */; };
 		6025B10C267B6BEA00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
@@ -1251,6 +1253,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4368F86F27966E810013419B;
 			remoteInfo = SDWebImage;
+		};
+		5FA2233627F73E28005B3D87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2827315D1ABC9BE600AA1954;
+			remoteInfo = Sync;
 		};
 		7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2415,6 +2424,7 @@
 		5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAWebViewModel.swift; sourceTree = "<group>"; };
 		5F194C3596E08BAB72BC6879 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5F684EB59A149BD03A1E5247 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanTelemetryTests.swift; sourceTree = "<group>"; };
 		5FAD4F1A8770848F48AF6023 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Today.strings; sourceTree = "<group>"; };
 		5FCB495FBF06EA94CC67B800 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		5FDA464827F20C9C0060E924 /* FxNimbus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxNimbus.swift; sourceTree = "<group>"; };
@@ -4669,6 +4679,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5FA2233A27F74067005B3D87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FA2233C27F74071005B3D87 /* Glean in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7BEB64461C7345600092C02E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6808,6 +6826,7 @@
 				215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */,
 				8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */,
 				8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */,
+				5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -7442,14 +7461,19 @@
 			buildConfigurationList = E69DB0921E97DEAA008A67E6 /* Build configuration list for PBXNativeTarget "SyncTelemetryTests" */;
 			buildPhases = (
 				E69DB0791E97DEA9008A67E6 /* Sources */,
+				5FA2233A27F74067005B3D87 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5FA2233727F73E28005B3D87 /* PBXTargetDependency */,
 				E69DB0801E97DEAA008A67E6 /* PBXTargetDependency */,
 				E69DB0821E97DEAA008A67E6 /* PBXTargetDependency */,
 			);
 			name = SyncTelemetryTests;
+			packageProductDependencies = (
+				5FA2233B27F74071005B3D87 /* Glean */,
+			);
 			productName = SyncTelemetryTests;
 			productReference = E69DB07D1E97DEA9008A67E6 /* SyncTelemetryTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -8226,7 +8250,7 @@
 		};
 		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -9256,6 +9280,7 @@
 				D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */,
 				8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */,
 				554867231DC3935A00183DAA /* HomePageTests.swift in Sources */,
+				5F97DD5F27FB0FE800AD3C60 /* GleanTelemetryTests.swift in Sources */,
 				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
 				DFA51484276103A000266AA0 /* HistoryHighlightsManagerTests.swift in Sources */,
 				3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */,
@@ -9465,6 +9490,11 @@
 		43EFA63E2786562600400DF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 43EFA63D2786562600400DF0 /* Places */;
+		};
+		5FA2233727F73E28005B3D87 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2827315D1ABC9BE600AA1954 /* Sync */;
+			targetProxy = 5FA2233627F73E28005B3D87 /* PBXContainerItemProxy */;
 		};
 		7B9BF92F1E435DE400CB24F4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -14225,6 +14255,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Places;
+		};
+		5FA2233B27F74071005B3D87 /* Glean */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
+			productName = Glean;
 		};
 		D433852B27ABC8150069DD33 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;

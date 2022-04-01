@@ -1126,6 +1126,14 @@ open class BrowserProfile: Profile {
             return syncSeveral(why: why, synchronizers: synchronizers)
         }
 
+        func getProfileAndDeviceId() -> (MozillaAppServices.Profile, String)? {
+            guard let fxa = RustFirefoxAccounts.shared.accountManager.peek(), let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
+                return nil
+            }
+            
+            return (profile, deviceID)
+        }
+
         /**
          * Runs each of the provided synchronization functions with the same inputs.
          * Returns an array of IDs and SyncStatuses at least length as the input.
@@ -1136,7 +1144,7 @@ open class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
 
-            guard let fxa = RustFirefoxAccounts.shared.accountManager.peek(), let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
+            guard let (profile, deviceID) = self.getProfileAndDeviceId() else {
                 return deferMaybe(NoAccountError())
             }
 
