@@ -214,6 +214,8 @@ extension SiriFavoriteViewController: UITextFieldDelegate {
 extension SiriFavoriteViewController: INUIAddVoiceShortcutViewControllerDelegate {
     func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
+        guard voiceShortcut != nil else { return }
+        navigationController?.popViewController(animated: true)
     }
 
     func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
