@@ -51,8 +51,7 @@ extension HomePanelContextMenu {
             }
         }.items
 
-        // TODO: Laurie - Image quick_action_new_private_tab
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
+        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
             delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }.items
 
