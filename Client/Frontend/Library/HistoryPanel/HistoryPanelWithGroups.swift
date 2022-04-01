@@ -56,7 +56,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     }
     
     lazy var searchbar: UISearchBar = .build { searchbar in
-        searchbar.setImage(UIImage(named: "library-history"), for: .search, state: .normal)
+        searchbar.setImage(UIImage(named: ImageIdentifiers.libraryPanelHistory), for: .search, state: .normal)
         searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
         searchbar.returnKeyType = .done
         searchbar.delegate = self
@@ -477,6 +477,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
+        searchbar.backgroundColor = UIColor.theme.textField.backgroundInOverlay
         
         tableView.reloadData()
     }
@@ -564,7 +565,6 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
         
     }
 
-    // viewForHeaderInSection REQUIRES implementing heightForHeaderInSection
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // First section is for recently closed and its header has no view.
         guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else {
@@ -573,7 +573,8 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
 
         return tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier)
     }
-
+    
+    // viewForHeaderInSection REQUIRES implementing heightForHeaderInSection
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // First section is for recently closed and its header has no height.
         guard HistoryPanelSections(rawValue: section) != .additionalHistoryActions else {

@@ -74,7 +74,10 @@ class LibraryViewController: UIViewController {
     }()
     
     private lazy var bottomCenterButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("search"), style: .plain, target: self, action: #selector(bottomCenterButtonAction))
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelSearch),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(bottomCenterButtonAction))
         button.accessibilityIdentifier = "historyPanelBottomCenterButton"
         return button
     }()
@@ -191,8 +194,9 @@ class LibraryViewController: UIViewController {
             } else {
                 navigationController?.setToolbarHidden(false, animated: true)
             }
-        case .history(_):
-            navigationController?.setToolbarHidden(false, animated: true)
+        case .history:
+            let shouldShowSearch = viewModel.isHistoryPanelWithGroups
+            navigationController?.setToolbarHidden(!shouldShowSearch, animated: true)
         default:
             navigationController?.setToolbarHidden(true, animated: true)
         }
@@ -362,8 +366,10 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolderEditMode):
             setToolbarItems(bottomToolbarItemsBothButtons, animated: true)
-        case .history(_):
-            setToolbarItems(bottomToolbarItemsCenterButton, animated: true)
+        case .history:
+            if viewModel.isHistoryPanelWithGroups {
+                setToolbarItems(bottomToolbarItemsCenterButton, animated: true)
+            }
         default:
             setToolbarItems(bottomToolbarItemsSingleButton, animated: false)
         }
