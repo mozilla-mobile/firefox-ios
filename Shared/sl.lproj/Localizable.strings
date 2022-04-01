@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Dovolite Firefoxu dostop do kamere vaše naprave v \"Nastavitve\" -> \"Zasebnost\" -> \"Kamera\".";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "Izberite \"Nastavitve\" > \"Firefox\". Dajte Firefoxu dovoljenje za dostop do kamere.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skenirajte QR-kodo";
 

@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Engedélyezze a Firefoxnak, hogy elérje a készülék kameráját a „Beállítások” -> „Adatvédelem” -> „Kamera” alatt.";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "Ugorjon az eszköz „Beállítások” > „Firefox” menüpontjához. Engedélyezze a Firefox számára a kamera elérését.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR-kód leolvasása";
 

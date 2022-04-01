@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Sta toegang tot de camera van uw apparaat voor Firefox toe in ‘Instellingen’ -> ‘Privacy’ -> ‘Camera’.";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "Ga op uw apparaat naar ‘Instellingen’ > ‘Firefox’. Geef Firefox toegang tot uw camera.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR-code scannen";
 

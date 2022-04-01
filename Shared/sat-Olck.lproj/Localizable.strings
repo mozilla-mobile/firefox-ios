@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "ᱫᱚᱭᱟᱠᱟᱛᱮ Firefox ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱠᱮᱢᱨᱟ ᱵᱮᱵᱷᱟᱨ ᱪᱷᱚᱭ ᱮᱢ ‘ᱥᱟᱡᱟᱣ’ -> ‘ᱫᱟᱱᱟᱲ’ -> ‘ᱠᱮᱢᱨᱟ’ ᱾";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "ᱥᱟᱫᱷᱚᱱ ‘ᱥᱟᱡᱟᱣ ᱠᱚ’> ‘Firefox ᱾’ Firefox ᱫᱚ ᱠᱮᱢᱨᱟ ᱟᱫᱮᱨ ᱪᱷᱚᱟᱭᱮᱢ ᱾";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR ᱠᱚᱰ ᱥᱠᱟᱱ ᱢᱮ";
 
