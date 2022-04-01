@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Baimendu Firefoxi zure gailuaren kamerarako sarbidea 'Ezarpenak' -> 'Pribatutasuna' -> 'Kamera' menu-aukeran.";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "Zoaz 'Ezarpenak' > 'Firefox' menu-aukerara eta baimendu Firefoxi zure gailuaren kamerarako sarbidea.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Eskaneatu QR kodea";
 
