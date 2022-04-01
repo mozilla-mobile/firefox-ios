@@ -137,6 +137,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - fastlane/
   - Client/Assets/Search/get_supported_locales.swift
   - Client/Generated
+  - Carthage
 
 # reporter: "json" # reporter type (xcode, json, csv, checkstyle)
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
