@@ -8,7 +8,7 @@ class LoginListTableViewSettingsCell: ThemedTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -16,53 +16,55 @@ class LoginListTableViewSettingsCell: ThemedTableViewCell {
 
 class LoginListTableViewCell: ThemedTableViewCell {
     private let breachAlertSize: CGFloat = 24
-    lazy var breachAlertImageView: UIImageView = {
-        let imageView = UIImageView(image: BreachAlertsManager.icon)
+    lazy var breachAlertImageView: UIImageView = .build { imageView in
+        imageView.image = BreachAlertsManager.icon
         imageView.isHidden = true
-        return imageView
-    }()
-    lazy var breachAlertContainer: UIView = {
-        let view = UIView()
-        view.addSubview(breachAlertImageView)
+    }
+
+    lazy var breachAlertContainer: UIView = .build { [weak self] view in
+        guard let self = self else { return }
+
+        view.addSubview(self.breachAlertImageView)
         view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        return view
-    }()
+    }
+
     lazy var breachMargin: CGFloat = {
-        return breachAlertSize+LoginTableViewCellUX.HorizontalMargin*2
+        return breachAlertSize + LoginTableViewCellUX.HorizontalMargin * 2
     }()
-    
-    lazy var hostnameLabel: UILabel = {
-        let label = UILabel()
+
+    lazy var hostnameLabel: UILabel = .build { label in
         label.textColor = UIColor.theme.tableView.rowText
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
-        return label
-    }()
-    
-    lazy var usernameLabel: UILabel = {
-        let label = UILabel()
+    }
+
+    lazy var usernameLabel: UILabel = .build { label in
         label.textColor = UIColor.theme.tableView.rowDetailText
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
-        return label
-    }()
-    
-    private lazy var textStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [hostnameLabel, usernameLabel])
+    }
+
+    private lazy var textStack: UIStackView = .build { [weak self] stack in
+        guard let self = self else { return }
+
+        stack.addArrangedSubview(self.hostnameLabel)
+        stack.addArrangedSubview(self.usernameLabel)
         stack.axis = .vertical
-        stack.spacing = 8
+        stack.distribution = .fillProportionally        
         stack.isLayoutMarginsRelativeArrangement = true
+        stack.spacing = 8
         stack.layoutMargins = .init(top: 8, left: 0, bottom: 8, right: 0)
-        return stack
-    }()
-    
-    private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [textStack, breachAlertContainer])
+    }
+
+    private lazy var contentStack: UIStackView = .build { [weak self] stack in
+        guard let self = self else { return }
+
+        stack.addArrangedSubview(self.textStack)
+        stack.addArrangedSubview(self.breachAlertContainer)
         stack.axis = .horizontal
-        return stack
-    }()
+    }
 
     private let inset: UIEdgeInsets
 
@@ -72,8 +74,8 @@ class LoginListTableViewCell: ThemedTableViewCell {
         accessoryType = .disclosureIndicator
         contentView.addSubview(contentStack)
         // Need to override the default background multi-select color to support theming
-        self.multipleSelectionBackgroundView = UIView()
-        self.applyTheme()
+        multipleSelectionBackgroundView = UIView()
+        applyTheme()
         setConstraints()
     }
 
@@ -82,25 +84,18 @@ class LoginListTableViewCell: ThemedTableViewCell {
     }
 
     private func setConstraints() {
-        self.contentStack.snp.remakeConstraints { make in
-            make.top.bottom.trailing.equalTo(contentView)
-            make.left.equalTo(contentView).inset(self.inset.left)
-        }
-        self.hostnameLabel.snp.remakeConstraints { make in
-            make.bottom.equalTo(self.contentStack.snp.centerY)
-            make.leading.equalToSuperview()
-            make.trailing.lessThanOrEqualTo(self.textStack.snp.trailing)
-        }
-        self.usernameLabel.snp.remakeConstraints { make in
-            make.top.equalTo(self.contentStack.snp.centerY)
-        }
-        self.breachAlertImageView.snp.remakeConstraints { make in
-            make.width.height.equalTo(breachAlertSize)
-            make.center.equalTo(self.breachAlertContainer.snp.center)
-        }
-        self.breachAlertContainer.snp.remakeConstraints { make in
-            make.width.equalTo(breachMargin)
-        }
+        NSLayoutConstraint.activate([
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentStack.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: inset.left),
+
+            breachAlertImageView.widthAnchor.constraint(equalToConstant: breachAlertSize),
+            breachAlertImageView.heightAnchor.constraint(equalToConstant: breachAlertSize),
+            breachAlertImageView.centerYAnchor.constraint(equalTo: breachAlertContainer.centerYAnchor),
+            breachAlertImageView.centerXAnchor.constraint(equalTo: breachAlertContainer.centerXAnchor),
+            breachAlertContainer.widthAnchor.constraint(equalToConstant: breachMargin)
+        ])
     }
 
     override func layoutSubviews() {
