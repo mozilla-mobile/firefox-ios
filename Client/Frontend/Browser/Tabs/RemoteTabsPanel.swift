@@ -13,10 +13,10 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 private struct RemoteTabsPanelUX {
-    static let HeaderHeight = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
+    static let HeaderHeight = SiteTableViewControllerUX.RowHeight
     static let RowHeight = SiteTableViewControllerUX.RowHeight
     static let EmptyStateInstructionsWidth = 170
-    static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
+    static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15
     static let EmptyStateSignInButtonColor = UIColor.Photon.Blue40
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44
