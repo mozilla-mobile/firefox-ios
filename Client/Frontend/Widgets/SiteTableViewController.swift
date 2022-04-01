@@ -106,10 +106,6 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
         
-        if let _ = self as? HomePanelContextMenu {
-            table.dragDelegate = self
-        }
-        
         // Set an empty footer to prevent empty cells from appearing in the list.
         table.tableFooterView = UIView()
         
@@ -228,25 +224,4 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
             tableView.reloadSections(IndexSet(rows.map { $0.section }), with: .none)
         }
     }
-}
-
-extension SiteTableViewController: UITableViewDragDelegate {
-    // TODO: Laurie - SiteTableViewController
-    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-//        guard let homePanelVC = self as? HomePanelContextMenu,
-//              let site = homePanelVC.getSiteDetails(for: indexPath),
-//              let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url)
-//        else { return [] }
-//
-//        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
-//
-//        let dragItem = UIDragItem(itemProvider: itemProvider)
-//        dragItem.localObject = site
-//        return [dragItem]
-        return []
-    }
-
-    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
-        presentedViewController?.dismiss(animated: true)
-    }
-}
+//}
