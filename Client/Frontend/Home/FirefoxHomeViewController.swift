@@ -533,7 +533,7 @@ extension FirefoxHomeViewController {
         }
 
         viewModel.topSiteViewModel.tileLongPressedHandler = { [weak self] (site, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(with: site, with: sourceView)
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .topSites)
         }
 
         return cell
@@ -547,7 +547,7 @@ extension FirefoxHomeViewController {
         }
 
         viewModel.pocketViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(with: site, with: sourceView)
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .pocket)
         }
 
         viewModel.pocketViewModel.recordSectionHasShown()
@@ -759,7 +759,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         self.viewModel = viewModel
     }
 
-    func presentContextMenu(for site: Site, with sourceView: UIView?, completionHandler: @escaping () -> PhotonActionSheet?) {
+    func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType, completionHandler: @escaping () -> PhotonActionSheet?) {
 
         fetchBookmarkStatus(for: site) {
             guard let contextMenu = completionHandler() else { return }
@@ -767,14 +767,12 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         }
     }
 
-    func getContextMenuActions(for site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
+    func getContextMenuActions(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        // TODO: Laurie - Pocket related action
-//        let isPocket = FirefoxHomeSectionType(indexPath.section) == .pocket
         guard var actions = getDefaultContextMenuActions(for: site,
                                                          delegate: delegate,
-//                                                         isPocket: isPocket,
+                                                         sectionType: sectionType,
                                                          isZeroSearch: viewModel.isZeroSearch)
         else { return nil }
 
@@ -783,10 +781,9 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         actions.append(contentsOf: [bookmarkAction,
                                     shareAction])
 
-        // TODO: Laurie - Get section specific actions
-//        if FirefoxHomeSectionType(indexPath.section) == .topSites {
-//            actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
-//        }
+        if sectionType == .topSites {
+            actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
+        }
         
         return actions
     }
