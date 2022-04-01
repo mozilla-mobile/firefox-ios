@@ -90,11 +90,12 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
         let point = longPressGestureRecognizer.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: point),
               let viewModel = viewModel,
-              let tileLongPressedHandler = viewModel.tileLongPressedHandler
+              let tileLongPressedHandler = viewModel.tileLongPressedHandler,
+              let site = viewModel.tileManager.getSiteDetail(index: indexPath.row)
         else { return }
 
-        let parentIndexPath = IndexPath(row: indexPath.row, section: viewModel.topSitesShownInSection)
-        tileLongPressedHandler(parentIndexPath)
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        tileLongPressedHandler(site, sourceView)
     }
 }
 

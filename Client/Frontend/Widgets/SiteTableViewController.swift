@@ -231,17 +231,19 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 }
 
 extension SiteTableViewController: UITableViewDragDelegate {
+    // TODO: Laurie - SiteTableViewController
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard let homePanelVC = self as? HomePanelContextMenu,
-              let site = homePanelVC.getSiteDetails(for: indexPath),
-              let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url)
-        else { return [] }
-
-        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
-
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = site
-        return [dragItem]
+//        guard let homePanelVC = self as? HomePanelContextMenu,
+//              let site = homePanelVC.getSiteDetails(for: indexPath),
+//              let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url)
+//        else { return [] }
+//
+//        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
+//
+//        let dragItem = UIDragItem(itemProvider: itemProvider)
+//        dragItem.localObject = site
+//        return [dragItem]
+        return []
     }
 
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {

@@ -22,6 +22,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     private var hasSentHistoryHighlightsSectionEvent = false
     private var isZeroSearch: Bool
     private var viewModel: FirefoxHomeViewModel
+    private var contextMenuHelper: FirefoxHomeContextMenuHelper
 
     private var wallpaperManager: WallpaperManager
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
@@ -50,8 +51,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
+        self.contextMenuHelper = FirefoxHomeContextMenuHelper(viewModel: viewModel)
 
         super.init(collectionViewLayout: flowLayout)
+
+        contextMenuHelper.delegate = self
+        contextMenuHelper.getPopoverSourceRect = getPopoverSourceRect
 
         viewModel.delegate = self
         collectionView?.delegate = self
@@ -519,7 +524,6 @@ extension FirefoxHomeViewController {
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let topSiteCell = cell as? TopSiteCollectionCell else { return UICollectionViewCell() }
         topSiteCell.viewModel = viewModel.topSiteViewModel
-        topSiteCell.viewModel?.topSitesShownInSection = indexPath.section
         topSiteCell.reloadLayout()
         topSiteCell.setNeedsLayout()
 
@@ -528,8 +532,8 @@ extension FirefoxHomeViewController {
             self?.showSiteWithURLHandler(url, isGoogleTopSite: isGoogle)
         }
 
-        viewModel.topSiteViewModel.tileLongPressedHandler = { [weak self] indexPath in
-            self?.presentContextMenu(for: indexPath)
+        viewModel.topSiteViewModel.tileLongPressedHandler = { [weak self] (site, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(with: site, with: sourceView)
         }
 
         return cell
@@ -542,13 +546,12 @@ extension FirefoxHomeViewController {
             self?.showSiteWithURLHandler(url)
         }
 
-        viewModel.pocketViewModel.onLongPressTileAction = { [weak self] indexPath in
-            self?.presentContextMenu(for: indexPath)
+        viewModel.pocketViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(with: site, with: sourceView)
         }
 
         viewModel.pocketViewModel.recordSectionHasShown()
         pocketCell.viewModel = viewModel.pocketViewModel
-        pocketCell.viewModel?.pocketShownInSection = indexPath.section
         pocketCell.reloadLayout()
         pocketCell.setNeedsLayout()
 
@@ -713,52 +716,66 @@ extension FirefoxHomeViewController {
     @objc func changeHomepageWallpaper() {
         wallpaperView.cycleWallpaper()
     }
+
+    func getPopoverSourceRect(sourceView: UIView?) -> CGRect {
+        let cellRect = sourceView?.frame ?? .zero
+        let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? .zero
+
+        return CGRect(origin: CGPoint(x: cellFrameInSuperview.size.width / 2,
+                                      y: cellFrameInSuperview.height / 2),
+                      size: .zero)
+    }
+}
+
+// MARK: FirefoxHomeContextMenuHelperDelegate
+extension FirefoxHomeViewController: FirefoxHomeContextMenuHelperDelegate {
+    func present(_ viewController: UIViewController) {
+        self.present(viewController, animated: true, completion: nil)
+    }
 }
 
 // MARK: - Context Menu
 
-extension FirefoxHomeViewController: HomePanelContextMenu {
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
+protocol FirefoxHomeContextMenuHelperDelegate: UIViewController {
+    func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool)
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
+}
+
+extension FirefoxHomeContextMenuHelperDelegate {
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
+        homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+    }
+}
+
+class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
+
+    typealias ContextHelperDelegate = FirefoxHomeContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
+    private var viewModel: FirefoxHomeViewModel
+
+    weak var delegate: ContextHelperDelegate?
+    var getPopoverSourceRect: ((UIView?) -> CGRect)?
+
+    init(viewModel: FirefoxHomeViewModel) {
+        self.viewModel = viewModel
+    }
+
+    func presentContextMenu(for site: Site, with sourceView: UIView?, completionHandler: @escaping () -> PhotonActionSheet?) {
 
         fetchBookmarkStatus(for: site) {
             guard let contextMenu = completionHandler() else { return }
-            self.present(contextMenu, animated: true, completion: nil)
+            self.delegate?.present(contextMenu, animated: true, completion: nil)
         }
     }
 
-    func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        switch FirefoxHomeSectionType(indexPath.section) {
-        case .pocket:
-            return viewModel.pocketViewModel.getSitesDetail(for: indexPath.row)
-        case .topSites:
-            return viewModel.topSiteViewModel.tileManager.getSiteDetail(index: indexPath.row)
-        default:
-            return nil
-        }
-    }
-
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
+    func getContextMenuActions(for site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
-        var sourceView: UIView?
 
-        switch FirefoxHomeSectionType(indexPath.section) {
-        case .topSites:
-            if let topSiteCell = collectionView?.cellForItem(at: IndexPath(row: 0, section: indexPath.section)) as? TopSiteCollectionCell {
-                sourceView = topSiteCell.collectionView.cellForItem(at: IndexPath(row: indexPath.row, section: 0))
-            }
-        case .pocket:
-            if let pocketCell = collectionView?.cellForItem(at: IndexPath(row: 0, section: indexPath.section)) as? FxHomePocketCollectionCell {
-                sourceView = pocketCell.collectionView.cellForItem(at: IndexPath(row: indexPath.row, section: 0))
-            }
-        default:
-            return nil
-        }
-
-        let isPocket = FirefoxHomeSectionType(indexPath.section) == .pocket
+        // TODO: Laurie - Pocket related action
+//        let isPocket = FirefoxHomeSectionType(indexPath.section) == .pocket
         guard var actions = getDefaultContextMenuActions(for: site,
-                                                         homePanelDelegate: homePanelDelegate,
-                                                         isPocket: isPocket,
-                                                         isZeroSearch: isZeroSearch)
+                                                         delegate: delegate,
+//                                                         isPocket: isPocket,
+                                                         isZeroSearch: viewModel.isZeroSearch)
         else { return nil }
 
         let bookmarkAction = getBookmarkAction(site: site)
@@ -766,9 +783,10 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         actions.append(contentsOf: [bookmarkAction,
                                     shareAction])
 
-        if FirefoxHomeSectionType(indexPath.section) == .topSites {
-            actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
-        }
+        // TODO: Laurie - Get section specific actions
+//        if FirefoxHomeSectionType(indexPath.section) == .topSites {
+//            actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
+//        }
         
         return actions
     }
@@ -816,16 +834,17 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { (_, _) in }
-            if UIDevice.current.userInterfaceIdiom == .pad, let popoverController = controller.popoverPresentationController {
-                let cellRect = sourceView?.frame ?? .zero
-                let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? .zero
+            if UIDevice.current.userInterfaceIdiom == .pad,
+               let popoverController = controller.popoverPresentationController,
+               let getSourceRect = self.getPopoverSourceRect {
 
                 popoverController.sourceView = sourceView
-                popoverController.sourceRect = CGRect(origin: CGPoint(x: cellFrameInSuperview.size.width/2, y: cellFrameInSuperview.height/2), size: .zero)
+                popoverController.sourceRect = getSourceRect(sourceView)
                 popoverController.permittedArrowDirections = [.up, .down, .left]
-                popoverController.delegate = self
+                popoverController.delegate = self.delegate
             }
-            self.presentWithModalDismissIfNeeded(controller, animated: true)
+
+            self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
         }).items
     }
 
