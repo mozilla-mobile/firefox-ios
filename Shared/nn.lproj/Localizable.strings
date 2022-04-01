@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "La Firefox få tilgang til kameraet i eininga, i «Innstilligar» -> «Personvern» -> «Kamera».";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "På eininga di, gå til «Innstillingar» > «Firefox.» Gi Firefox tilgang til kameraet.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skann QR-kode";
 

@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "请在 设置 -> 隐私 -> 相机 中允许 Firefox 访问设备的相机。";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "请到设备的“设置”>“Firefox”，允许 Firefox 使用相机。";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "扫描 QR 码";
 

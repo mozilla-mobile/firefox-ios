@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Caniatewch i Firefox to gael mynediad i gamera eich dyfais yn 'Gosodiadau' -> 'Preifatrwydd' -> 'Camera'.";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "Ewch ‘Gosodiadau’ > ‘Firefox’ y ddyfais. Caniatewch i Firefox gael mynediad i’r camera.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Sganio'r Cod QR";
 

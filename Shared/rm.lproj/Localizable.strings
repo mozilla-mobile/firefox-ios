@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Permetta a Firefox dad acceder a la camera da tes apparat via «Einstellungen → Datenschutz → Kamera» («Settings → Privacy → Camera»).";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "Ir als parameters da l'apparat > «Firefox». Permetter a Firefox dad acceder a la camera.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scannar in code QR";
 
