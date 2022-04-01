@@ -37,6 +37,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
+        label.setContentHuggingPriority(.required, for: .vertical)
     }
 
     lazy var usernameLabel: UILabel = .build { label in
@@ -52,7 +53,6 @@ class LoginListTableViewCell: ThemedTableViewCell {
         stack.addArrangedSubview(self.hostnameLabel)
         stack.addArrangedSubview(self.usernameLabel)
         stack.axis = .vertical
-        stack.distribution = .fillProportionally        
         stack.isLayoutMarginsRelativeArrangement = true
         stack.spacing = 8
         stack.layoutMargins = .init(top: 8, left: 0, bottom: 8, right: 0)
