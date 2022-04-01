@@ -729,8 +729,8 @@ extension FirefoxHomeViewController {
 
 // MARK: FirefoxHomeContextMenuHelperDelegate
 extension FirefoxHomeViewController: FirefoxHomeContextMenuHelperDelegate {
-    func present(_ viewController: UIViewController) {
-        self.present(viewController, animated: true, completion: nil)
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        homePanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 }
 
