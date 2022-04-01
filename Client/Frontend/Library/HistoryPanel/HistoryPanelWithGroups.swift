@@ -186,7 +186,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         if let actionableItem = item as? HistoryActionablesModel {
             switch actionableItem.itemIdentity {
             case .clearHistory:
-                isEnabled = viewModel.groupedSites.isEmpty
+                isEnabled = !viewModel.groupedSites.isEmpty
             case .recentlyClosed:
                 isEnabled = hasRecentlyClosed
             default: break

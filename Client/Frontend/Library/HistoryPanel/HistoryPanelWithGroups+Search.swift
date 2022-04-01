@@ -30,6 +30,8 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         toggleEmptyState()
     }
     
+    // Using mock query that returns history from today's section
+    // TODO: Replace with query in https://mozilla-hub.atlassian.net/browse/FXIOS-4000
     private func performSearch(term: String) {
         viewModel.performSearch(term: term) { success in
             guard success, !viewModel.filterMockSites.isEmpty else {
@@ -37,7 +39,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
                 return
             }
             
-            // Create new snapshot and apply
+            // Create search results snapshot and apply
             var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
             snapshot.appendSections([HistoryPanelSections.searchResults])
             snapshot.appendItems(viewModel.filterMockSites)
@@ -49,12 +51,10 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
 // MARK: - KeyboardHelperDelegate
 extension HistoryPanelWithGroups: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        print("**** keyboardWillShow")
         keyboardState = state
     }
     
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
-        print("**** keyboardDidShow")
         keyboardState = state
         updateLayoutForKeyboard()
         UIView.animate(withDuration: state.animationDuration, delay: 0,
@@ -64,7 +64,6 @@ extension HistoryPanelWithGroups: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        print("**** keyboardWillHide")
         keyboardState = nil
         updateLayoutForKeyboard()
         UIView.animate(withDuration: state.animationDuration, delay: 0,

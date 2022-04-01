@@ -766,7 +766,6 @@ extension String {
     public static let BookmarksNewSeparator = MZLocalizedString("Bookmarks.NewSeparator.Label", value: "New Separator", comment: "The button to create a new separator", lastUpdated: .unknown)
     public static let BookmarksEditBookmark = MZLocalizedString("Bookmarks.EditBookmark.Label", value: "Edit Bookmark", comment: "The button to edit a bookmark", lastUpdated: .unknown)
     public static let BookmarksEdit = MZLocalizedString("Bookmarks.Edit.Button", value: "Edit", comment: "The button on the snackbar to edit a bookmark after adding it.", lastUpdated: .unknown)
-    // TODO: Yoana Add search text and use it
     public static let BookmarksEditFolder = MZLocalizedString("Bookmarks.EditFolder.Label", value: "Edit Folder", comment: "The button to edit a folder", lastUpdated: .unknown)
     public static let BookmarksFolderName = MZLocalizedString("Bookmarks.FolderName.Label", value: "Folder Name", comment: "The label for the title of the new folder", lastUpdated: .unknown)
     public static let BookmarksFolderLocation = MZLocalizedString("Bookmarks.FolderLocation.Label", value: "Location", comment: "The label for the location of the new folder", lastUpdated: .unknown)
