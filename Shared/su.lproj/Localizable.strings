@@ -566,7 +566,7 @@
 "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Poé Ieu jeung Kamari";
 
 /* Title for popup action menu to clear recent history. */
-"HistoryPanel.ClearHistoryMenuTitle" = "Ngahapus Jujutan Anyar bakal miceun jujutan, réméh, jeung data browser lianna.";
+"HistoryPanel.ClearHistoryMenuTitle" = "Ngahapus Jujutan Anyar bakal miceun jujutan, réméh, jeung data panyungsi lianna.";
 
 /* Title for the History Panel empty state. */
 "HistoryPanel.EmptyState.Title" = "Raramatloka nu geus anjeun sorang bakal némbongan di dieu.";
