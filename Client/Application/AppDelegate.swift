@@ -404,6 +404,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BrowserViewController.foregroundBVC().downloadQueue.pauseAll()
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.
@@ -608,7 +609,7 @@ extension AppDelegate {
             }
         }
 
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation: UIInterfaceOrientation) {
             self.lockOrientation(orientation)
             UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
         }

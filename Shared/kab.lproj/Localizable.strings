@@ -1346,9 +1346,6 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Ttxilek sireg Firefox ad ikcem ɣer tkamiṛat n ubnek-inek deg 'iɣewwaṛen' -> 'Tabaḍnit' -> 'Takamiṛat'.";
 
-/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v99" = "Rzu ɣer 'Iɣewwaṛen' n yibenk > 'Firefox.' Sireg Firefox akken ad yekcem ɣer tkamirat.";
-
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Semḍen Tangalt QR";
 

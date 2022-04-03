@@ -9,6 +9,7 @@ import Foundation
  - `ActivityStream.Pocket.SectionTitle`      --> replaced by `FirefoxHome.Pocket.SectionTitle`
  - `ActivityStream.Pocket.SectionTitle2`    --> replaced by `FirefoxHome.Pocket.SectionTitle`
  - All Strings marked under "unused" in AppMenu struct
+ - "HistoryPanel.ClearHistoryMenuTitle" string
  */
 
 // MARK: - Localization bundle setup
@@ -23,7 +24,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99
+    case v39, v96, v97, v98, v99, v100
 
     // Used for all cases before version 39.
     case unknown
@@ -164,7 +165,7 @@ extension String {
         }
 
         public struct Shortcuts {
-
+            public static let Sponsored = MZLocalizedString("FirefoxHomepage.Shortcuts.Sponsored.v100", value: "Sponsored", comment: "This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible.", lastUpdated: .v100)
         }
 
         public struct YourLibrary {
@@ -250,7 +251,11 @@ extension String {
             public static let RecentlyClosedTabs = MZLocalizedString("LibraryPanel.History.RecentlyClosedTabs.v99", value: "Recently Closed Tabs", comment: "In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs.", lastUpdated: .v99)
             public static let RecentlyClosedTabsButtonTitle = MZLocalizedString("HistoryPanel.RecentlyClosedTabsButton.Title", value: "Recently Closed", comment: "Title for the Recently Closed button in the History Panel", lastUpdated: .unknown)
             public static let SyncedFromOtherDevices = MZLocalizedString("LibraryPanel.History.SyncedFromOtherDevices.v99", value: "Synced from Other Devices", comment: "In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account.", lastUpdated: .v99)
-            public static let SyncedHistory = MZLocalizedString("LibraryPanel.History.SyncedHistory.v99", value: "Synced History", comment: "Within the History Panel, users can see the option of viewing their history from sycned tabs.", lastUpdated: .v99)
+            public static let SyncedHistory = MZLocalizedString("LibraryPanel.History.SyncedHistory.v100", value: "Synced History", comment: "Within the History Panel, users can see the option of viewing their history from synced tabs.", lastUpdated: .v100)
+            public static let ClearHistoryMenuTitle = MZLocalizedString("LibraryPanel.History.ClearHistoryMenuTitle.v100", value: "Removes history (including history synced from other devices), cookies and other browsing data.", comment: "Within the History Panel, users can open an action menu to clear recent history.", lastUpdated: .v100)
+            public static let ClearGroupedTabsTitle = MZLocalizedString("LibraryPanel.History.ClearGroupedTabsTitle.v100", value: "Delete all sites in %@?", comment: "Within the History Panel, users can delete search group sites history. %@ represents the search group name.", lastUpdated: .v100)
+            public static let ClearGroupedTabsCancel = MZLocalizedString("LibraryPanel.History.ClearGroupedTabsCancel.v100", value: "Cancel", comment: "Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button.", lastUpdated: .v100)
+            public static let ClearGroupedTabsDelete = MZLocalizedString("LibraryPanel.History.ClearGroupedTabsDelete.v100", value: "Delete", comment: "Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button.", lastUpdated: .v100)
         }
 
         public struct ReadingList {
@@ -277,20 +282,13 @@ extension String {
     }
 }
 
-// MARK: - Ratings Prompt
-extension String {
-    public struct RatingsPrompt {
-        
-        public struct Settings {
-            public static let RateOnAppStore = MZLocalizedString("Ratings.Settings.RateOnAppStore", value: "Rate on App Store", comment: "A label indicating the action that a user can rate the Firefox app in the App store.", lastUpdated: .v96)
-        }
-    
-    }
-}
-
 // MARK: - Settings screen
 extension String {
     public struct Settings {
+
+        public struct About {
+            public static let RateOnAppStore = MZLocalizedString("Ratings.Settings.RateOnAppStore", value: "Rate on App Store", comment: "A label indicating the action that a user can rate the Firefox app in the App store.", lastUpdated: .v96)
+        }
         
         public struct SectionTitles {
             public static let TabsTitle = MZLocalizedString("Settings.Tabs.Title", value: "Tabs", comment: "In the settings menu, this is the title for the Tabs customization section option", lastUpdated: .v39)
@@ -306,6 +304,18 @@ extension String {
                 public static let Pocket = MZLocalizedString("Settings.Home.Option.Pocket", value: "Recommended by Pocket", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Description = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v39)
                 public static let Wallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper", value: "Wallpaper", comment: "In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application.", lastUpdated: .v98)
+            }
+
+            public struct Shortcuts {
+                public static let RowSettingFooter = MZLocalizedString("ActivityStream.TopSites.RowSettingFooter", value: "Set Rows", comment: "The title for the setting page which lets you select the number of top site rows", lastUpdated: .unknown)
+                public static let RowCount = MZLocalizedString("ActivityStream.TopSites.RowCount", value: "Rows: %d", comment: "label showing how many rows of topsites are shown. %d represents a number", lastUpdated: .unknown)
+                public static let ToggleOn = MZLocalizedString("Settings.Homepage.Shortcuts.ToggleOn.v100", value: "On", comment: "Toggled ON to show the shortcuts section", lastUpdated: .v100)
+                public static let ToggleOff = MZLocalizedString("Settings.Homepage.Shortcuts.ToggleOff.v100", value: "Off", comment: "Toggled OFF to hide the shortcuts section", lastUpdated: .v100)
+                public static let ShortcutsPageTitle = MZLocalizedString("Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100", value: "Shortcuts", comment: "Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings.", lastUpdated: .v100)
+                public static let ShortcutsToggle = MZLocalizedString("Settings.Homepage.Shortcuts.ShortcutsToggle.v100", value: "Shortcuts", comment: "This string is the title of the toggle to disable the shortcuts section in the settings page.", lastUpdated: .v100)
+                public static let SponsoredShortcutsToggle = MZLocalizedString("Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100", value: "Sponsored Shortcuts", comment: "This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page.", lastUpdated: .v100)
+                public static let Rows = MZLocalizedString("Settings.Homepage.Shortcuts.Rows.v100", value: "Rows", comment: "This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section", lastUpdated: .v100)
+                public static let RowsPageTitle = MZLocalizedString("Settings.Homepage.Shortcuts.RowsPageTitle.v100", value: "Rows", comment: "This string is the title of the page to customize the number of rows in the shortcuts section", lastUpdated: .v100)
             }
             
             public struct StartAtHome {
@@ -445,8 +455,6 @@ extension String {
     public static let HighlightBookmarkText = MZLocalizedString("ActivityStream.Highlights.Bookmark", value: "Bookmarked", comment: "The description of a highlight if it is a site the user has bookmarked", lastUpdated: .unknown)
     public static let PocketTrendingText = MZLocalizedString("ActivityStream.Pocket.Trending", value: "Trending", comment: "The description of a Pocket Story", lastUpdated: .unknown)
     public static let PocketMoreStoriesText = MZLocalizedString("ActivityStream.Pocket.MoreLink", value: "More", comment: "The link that shows more Pocket trending stories", lastUpdated: .unknown)
-    public static let TopSitesRowSettingFooter = MZLocalizedString("ActivityStream.TopSites.RowSettingFooter", value: "Set Rows", comment: "The title for the setting page which lets you select the number of top site rows", lastUpdated: .unknown)
-    public static let TopSitesRowCount = MZLocalizedString("ActivityStream.TopSites.RowCount", value: "Rows: %d", comment: "label showing how many rows of topsites are shown. %d represents a number", lastUpdated: .unknown)
     public static let RecentlyBookmarkedTitle = MZLocalizedString("ActivityStream.NewRecentBookmarks.Title", value: "Recent Bookmarks", comment: "Section title label for recently bookmarked websites", lastUpdated: .unknown)
     public static let RecentlySavedSectionTitle = MZLocalizedString("ActivityStream.Library.Title", value: "Recently Saved", comment: "A string used to signify the start of the Recently Saved section in Home Screen.", lastUpdated: .unknown)
     public static let RecentlySavedShowAllText = MZLocalizedString("RecentlySaved.Actions.More", value: "Show All", comment: "More button text for Recently Saved items at the home page.", lastUpdated: .unknown)
@@ -924,7 +932,7 @@ extension String {
     public static let ScanQRCodeViewTitle = MZLocalizedString("ScanQRCode.View.Title", value: "Scan QR Code", comment: "Title for the QR code scanner view.", lastUpdated: .unknown)
     public static let ScanQRCodeInstructionsLabel = MZLocalizedString("ScanQRCode.Instructions.Label", value: "Align QR code within frame to scan", comment: "Text for the instructions label, displayed in the QR scanner view", lastUpdated: .unknown)
     public static let ScanQRCodeInvalidDataErrorMessage = MZLocalizedString("ScanQRCode.InvalidDataError.Message", value: "The data is invalid", comment: "Text of the prompt that is shown to the user when the data is invalid", lastUpdated: .unknown)
-    public static let ScanQRCodePermissionErrorMessage = MZLocalizedString("ScanQRCode.PermissionError.Message.v99", value: "Go to device ‘Settings’ > ‘Firefox.’ Allow Firefox to access camera.", comment: "Text of the prompt to setup the camera authorization for the Scan QR Code feature.", lastUpdated: .v99)
+    public static let ScanQRCodePermissionErrorMessage = MZLocalizedString("ScanQRCode.PermissionError.Message.v100", value: "Go to device ‘Settings’ > ‘Firefox’. Allow Firefox to access camera.", comment: "Text of the prompt to setup the camera authorization for the Scan QR Code feature.", lastUpdated: .v99)
     public static let ScanQRCodeErrorOKButton = MZLocalizedString("ScanQRCode.Error.OK.Button", value: "OK", comment: "OK button to dismiss the error prompt.", lastUpdated: .unknown)
 }
 

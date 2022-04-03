@@ -115,11 +115,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         if let tab = self.tabManager.selectedTab {
             let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile, tabManager: tabManager)
             etpViewModel.onOpenSettingsTapped = {
-                let settingsTableViewController = AppSettingsTableViewController()
-                settingsTableViewController.profile = self.profile
-                settingsTableViewController.tabManager = self.tabManager
-                settingsTableViewController.settingsDelegate = self
-                settingsTableViewController.deeplinkTo = .contentBlocker
+                let settingsTableViewController = AppSettingsTableViewController(
+                    with: self.profile,
+                    and: self.tabManager,
+                    delegate: self,
+                    deeplinkingTo: .contentBlocker)
 
                 let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
                 controller.presentingModalViewControllerDelegate = self

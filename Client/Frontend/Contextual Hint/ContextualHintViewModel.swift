@@ -95,6 +95,7 @@ class ContextualHintViewModel {
         var timeInterval: TimeInterval = 0
 
         switch hintType {
+        case .inactiveTabs: timeInterval = 0.25
         case .toolbarLocation: timeInterval = 0.5
         default: timeInterval = 1.25
         }
@@ -180,6 +181,8 @@ class ContextualHintViewModel {
 
     // MARK: - Present
     @objc private func presentHint() {
+        guard shouldPresentContextualHint() else { return }
+
         timer?.invalidate()
         timer = nil
         presentFromTimer?()

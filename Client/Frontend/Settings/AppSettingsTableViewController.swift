@@ -15,8 +15,31 @@ enum AppSettingsDeeplinkOption {
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsProtocol {
-    var deeplinkTo: AppSettingsDeeplinkOption?
 
+    // MARK: - Properties
+    var deeplinkTo: AppSettingsDeeplinkOption?
+    var nimbus: FxNimbus
+
+    // MARK: - Initializers
+    init(with profile: Profile,
+         and tabManager: TabManager,
+         delegate: SettingsDelegate?,
+         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil,
+         with nimbus: FxNimbus = FxNimbus.shared) {
+        self.deeplinkTo = destination
+        self.nimbus = nimbus
+
+        super.init()
+        self.profile = profile
+        self.tabManager = tabManager
+        self.settingsDelegate = delegate
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -93,7 +116,10 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             generalSettings.insert(SearchBarSetting(settings: self), at: 5)
         }
 
-        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureActiveForBuild(.tabTrayGroups)
+        let inactiveTabsAreBuildActive = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
+        if let inactiveTabsAreNimbusActive = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
+           tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 

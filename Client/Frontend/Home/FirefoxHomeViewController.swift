@@ -112,7 +112,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        viewModel.nimbus.features.homescreenFeature.recordExposure()
+        viewModel.nimbus.features.homescreen.recordExposure()
         animateFirefoxLogo()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
