@@ -6,21 +6,27 @@ import Storage
 import Shared
 import UIKit
 
-struct DefaultBrowserCardUX {
-    static let cardSize = CGSize(width: 360, height: 224)
-    static let logoSize = CGSize(width: 64, height: 64)
-    static let learnHowButtonSize: CGSize = CGSize(width: 304, height: 44)
-}
+/// The Home Tab Banner is the card that appears at the top of the FIrefox Homepage.
+/// 
+/// The HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
+/// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
+/// default browser message AKA the evergreen.
 
-class DefaultBrowserCard: UIView {
+class HomeTabBanner: UIView, GleanPlumbMessageManagable {
+
+    struct UX {
+        static let cardSize = CGSize(width: 360, height: 224)
+        static let logoSize = CGSize(width: 64, height: 64)
+        static let learnHowButtonSize: CGSize = CGSize(width: 304, height: 44)
+    }
 
     // MARK: - Properties
 
     public var dismissClosure: (() -> Void)?
+    var message: GleanPlumbMessage?
 
     // UI
-    private lazy var title: UILabel = .build { label in
-        label.text = String.DefaultBrowserCardTitle
+    private lazy var bannerTitle: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -28,7 +34,6 @@ class DefaultBrowserCard: UIView {
     }
 
     private lazy var descriptionText: UILabel = .build { label in
-        label.text = String.DefaultBrowserCardDescription
         label.numberOfLines = 4
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
@@ -36,15 +41,14 @@ class DefaultBrowserCard: UIView {
         label.textColor = UIColor.theme.defaultBrowserCard.textColor
     }
 
-    private lazy var learnHowButton: UIButton = .build { [weak self] button in
-        button.setTitle(String.DefaultBrowserCardButton, for: .normal)
+    private lazy var ctaButton: UIButton = .build { [weak self] button in
         button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.titleLabel?.textAlignment = .center
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
         button.accessibilityIdentifier = "Home.learnMoreDefaultBrowserbutton"
-        button.addTarget(self, action: #selector(self?.showOnboarding), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
     }
 
     private lazy var image: UIImageView = .build { imageView in
@@ -52,7 +56,7 @@ class DefaultBrowserCard: UIView {
         imageView.contentMode = .scaleAspectFit
     }
 
-    private lazy var closeButton: UIButton = .build { [weak self] button in
+    private lazy var dismissButton: UIButton = .build { [weak self] button in
         button.setImage(UIImage(named: "nav-stop")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
@@ -77,7 +81,10 @@ class DefaultBrowserCard: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.message = messagingManager.getNextMessage(for: .newTabCard)
+
         setupLayout()
+        applyMessage()
     }
 
     required init(coder: NSCoder) {
@@ -85,7 +92,7 @@ class DefaultBrowserCard: UIView {
     }
 
     private func setupLayout() {
-        cardView.addSubviews(learnHowButton, image, title, descriptionText, closeButton)
+        cardView.addSubviews(ctaButton, image, bannerTitle, descriptionText, dismissButton)
         containerView.addSubview(cardView)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
@@ -123,54 +130,103 @@ class DefaultBrowserCard: UIView {
             cardView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor, constant: 20),
             cardView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -20),
             cardView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            cardView.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.cardSize.width),
-            cardView.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.cardSize.height),
+            cardView.widthAnchor.constraint(equalToConstant: UX.cardSize.width),
+            cardView.heightAnchor.constraint(equalToConstant: UX.cardSize.height),
 
             image.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 48),
             image.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
-            image.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.logoSize.width),
-            image.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.logoSize.height),
+            image.widthAnchor.constraint(equalToConstant: UX.logoSize.width),
+            image.heightAnchor.constraint(equalToConstant: UX.logoSize.height),
 
-            title.topAnchor.constraint(equalTo: image.topAnchor, constant: -16),
-            title.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16),
-            title.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
+            bannerTitle.topAnchor.constraint(equalTo: image.topAnchor, constant: -16),
+            bannerTitle.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16),
+            bannerTitle.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
 
-            descriptionText.topAnchor.constraint(equalTo: title.bottomAnchor),
-            descriptionText.leadingAnchor.constraint(equalTo: title.leadingAnchor),
+            descriptionText.topAnchor.constraint(equalTo: bannerTitle.bottomAnchor),
+            descriptionText.leadingAnchor.constraint(equalTo: bannerTitle.leadingAnchor),
             descriptionText.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            descriptionText.bottomAnchor.constraint(greaterThanOrEqualTo: learnHowButton.topAnchor, constant: -16),
+            descriptionText.bottomAnchor.constraint(greaterThanOrEqualTo: ctaButton.topAnchor, constant: -16),
 
-            closeButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
-            closeButton.heightAnchor.constraint(equalToConstant: 16),
-            closeButton.widthAnchor.constraint(equalToConstant: 16),
+            dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16),
+            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
+            dismissButton.heightAnchor.constraint(equalToConstant: 16),
+            dismissButton.widthAnchor.constraint(equalToConstant: 16),
 
-            learnHowButton.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
-            learnHowButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16),
-            learnHowButton.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.learnHowButtonSize.width),
-            learnHowButton.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.learnHowButtonSize.height)
+            ctaButton.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
+            ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16),
+            ctaButton.widthAnchor.constraint(equalToConstant: UX.learnHowButtonSize.width),
+            ctaButton.heightAnchor.constraint(equalToConstant: UX.learnHowButtonSize.height)
         ])
+    }
+
+    /// Apply message data, including handling of cases where certain parts of the message are missing.
+    private func applyMessage() {
+
+        /// If no messages exist, continue using our evergreen message.
+        guard let message = message else {
+            bannerTitle.text = String.DefaultBrowserCardTitle
+            descriptionText.text = String.DefaultBrowserCardDescription
+            ctaButton.setTitle(String.DefaultBrowserCardButton, for: .normal)
+
+            return
+        }
+
+        if let buttonLabel = message.data.buttonLabel {
+            ctaButton.setTitle(buttonLabel, for: .normal)
+        } else {
+            ctaButton.removeFromSuperview()
+            let cardTapped = UITapGestureRecognizer(target: self, action: #selector(handleCTA))
+
+            cardView.addGestureRecognizer(cardTapped)
+            cardView.isUserInteractionEnabled = true
+        }
+
+        if let title = message.data.title {
+            bannerTitle.text = title
+        } else {
+            cardView.willRemoveSubview(bannerTitle)
+            bannerTitle.removeFromSuperview()
+        }
+
+        descriptionText.text = message.data.text
+        messagingManager.onMessageDisplayed(message)
     }
 
     @objc private func dismissCard() {
         self.dismissClosure?()
-        UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard")
-        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
+
+        guard let message = message else {
+            /// If we're here, that means we've shown the evergreen. Handle it as we always did.
+            UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard")
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
+
+            return
+        }
+
+        messagingManager.onMessageDismissed(message)
     }
 
-    @objc private func showOnboarding() {
-        BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
-        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
+    /// The surface needs to handle CTAs a certain way when there's a message OR the evergreen.
+    @objc func handleCTA() {
+        guard let message = message else {
+            /// If we're here, that means we've shown the evergreen. Handle it as we always did.
+            BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
 
-        // Set default browser onboarding did show to true so it will not show again after user clicks this button
-        UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
+            // Set default browser onboarding did show to true so it will not show again after user clicks this button
+            UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
+
+            return
+        }
+
+        messagingManager.onMessagePressed(message)
     }
 
     func applyTheme() {
         cardView.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
-        title.textColor = UIColor.theme.defaultBrowserCard.textColor
+        bannerTitle.textColor = UIColor.theme.defaultBrowserCard.textColor
         descriptionText.textColor = UIColor.theme.defaultBrowserCard.textColor
-        closeButton.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
+        dismissButton.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
         containerView.backgroundColor = .clear
         backgroundColor = .clear
     }
