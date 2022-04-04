@@ -7,7 +7,13 @@ import UIKit
 
 //MARK: - Tracking protection images
 
-extension UIImage {
+public extension UIImage {
+    convenience init?(named name: String) {
+        self.init(named: name, in: Bundle.module, compatibleWith: nil)
+    }
+}
+
+public extension UIImage {
     static let trackingProtectionOff = UIImage(named: "tracking_protection_off")!
     static let trackingProtectionOn = UIImage(named: "tracking_protection")!
     static let connectionNotSecure = UIImage(named: "connection_not_secure")!

@@ -4,7 +4,7 @@
 
 import UIKit
 
-extension UIFont {
+public extension UIFont {
     
     static let footnote12 = UIFont.systemFont(ofSize: 12)
     static let footnote12Semibold = UIFont.systemFont(ofSize: 12, weight: .semibold)

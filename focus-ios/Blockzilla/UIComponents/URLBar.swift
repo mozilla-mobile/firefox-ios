@@ -951,7 +951,7 @@ private class URLTextField: AutocompleteTextField {
 
     override var placeholder: String? {
         didSet {
-            attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [.foregroundColor: UIColor(named: "SecondaryText")!])
+            attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [.foregroundColor: UIColor.secondaryText])
         }
     }
 

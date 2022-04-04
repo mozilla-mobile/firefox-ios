@@ -8,6 +8,7 @@ import UIKit
 import Telemetry
 import Glean
 import Combine
+import UIHelpers
 
 enum SectionType: Int, Hashable {
     case tip

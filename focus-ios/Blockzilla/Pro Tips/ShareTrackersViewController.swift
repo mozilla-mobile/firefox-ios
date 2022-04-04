@@ -32,7 +32,7 @@ class ShareTrackersViewController: UIViewController {
     
     private lazy var shieldLogo: UIImageView = {
         let shieldLogo = UIImageView()
-        shieldLogo.image = #imageLiteral(resourceName: "tracking_protection")
+        shieldLogo.image = .trackingProtectionOn
         shieldLogo.tintColor = UIColor.white
         return shieldLogo
     }()

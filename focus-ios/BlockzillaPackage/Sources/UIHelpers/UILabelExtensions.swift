@@ -4,7 +4,7 @@
 
 import UIKit
 
-extension UILabel {
+public extension UILabel {
     func setupShrinkage() {
         adjustsFontSizeToFitWidth = true
         minimumScaleFactor = 0.6 // Arbitrarily set to 60%

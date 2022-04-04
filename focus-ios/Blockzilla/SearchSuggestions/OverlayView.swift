@@ -6,6 +6,7 @@ import UIKit
 import SnapKit
 import Telemetry
 import Glean
+import UIHelpers
 
 protocol OverlayViewDelegate: AnyObject {
     func overlayViewDidTouchEmptyArea(_ overlayView: OverlayView)
@@ -227,7 +228,7 @@ class OverlayView: UIView {
     func setColorstToSearchButtons() {
         for button in searchButtonGroup {
             button.backgroundColor = isIpadView ? .secondarySystemBackground.withAlphaComponent(0.95) : .foundation
-            button.highlightedBackgroundColor = UIColor(named: "SearchSuggestionButtonHighlight")
+            button.highlightedBackgroundColor = .searchSuggestionButtonHighlight
         }
     }
 

@@ -4,7 +4,7 @@
 
 import UIKit
 
-extension UIScreen {
+public extension UIScreen {
     var isSmallScreen: Bool {
         return min(bounds.size.width, bounds.size.height) < 700
     }

@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import SnapKit
 
 public extension UIViewController {
     func install(_ child: UIViewController, on view: UIView, insets: UIEdgeInsets = .zero) {

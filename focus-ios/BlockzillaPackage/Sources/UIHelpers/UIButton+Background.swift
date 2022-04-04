@@ -4,7 +4,7 @@
 
 import UIKit
 
-extension UIButton {
+public extension UIButton {
     func addBackgroundView(color: UIColor = .white, cornerRadius: CGFloat = 0, padding: CGFloat = 0) {
         backgroundColor = .clear
         let backgroundView = UIView()

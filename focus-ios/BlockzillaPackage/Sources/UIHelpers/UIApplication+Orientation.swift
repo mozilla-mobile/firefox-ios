@@ -4,7 +4,7 @@
 
 import UIKit
 
-extension UIApplication {
+public extension UIApplication {
     var orientation : UIInterfaceOrientation? {
         UIApplication
             .shared

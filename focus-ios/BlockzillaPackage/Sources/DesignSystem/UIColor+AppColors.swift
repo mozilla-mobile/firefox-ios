@@ -5,9 +5,13 @@
 import Foundation
 import UIKit
 
+public extension UIColor {
+    convenience init?(named name: String) {
+        self.init(named: name, in: Bundle.module, compatibleWith: nil)
+    }
+}
 
-
-extension UIColor {
+public extension UIColor {
     
     static let above = UIColor(named: "Above")!
     static let accent = UIColor(named: "Accent")!
@@ -44,11 +48,12 @@ extension UIColor {
     static let secondaryText = UIColor(named: "SecondaryText")!
     static let secondaryButton = UIColor(named: "SecondaryButton")!
     static let primaryButton = UIColor(named: "PrimaryButton")!
+    static let searchSuggestionButtonHighlight = UIColor(named: "SearchSuggestionButtonHighlight")!
     
     /**
      * Initializes and returns a color object for the given RGB hex integer.
      */
-    public convenience init(rgb: Int, alpha: Float = 1) {
+    convenience init(rgb: Int, alpha: Float = 1) {
         self.init(
             red: CGFloat((rgb & 0xFF0000) >> 16) / 255.0,
             green: CGFloat((rgb & 0x00FF00) >> 8)  / 255.0,
