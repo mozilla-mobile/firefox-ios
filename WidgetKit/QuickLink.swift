@@ -68,11 +68,11 @@ enum QuickLink: Int {
         case .search:
             return [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]
         case .privateSearch:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+            return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
         case .copiedLink:
             return [Color("goToCopiedLinkSolid")]
         case .closePrivateTabs:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+            return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
         }
     }
 

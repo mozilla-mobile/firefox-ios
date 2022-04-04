@@ -283,7 +283,7 @@ extension ChronologicalTabsViewController: UIPopoverPresentationControllerDelega
     func presentActivityViewController(_ url: URL, tab: Tab? = nil) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
 
-        let controller = helper.createActivityViewController({ _,_ in })
+        let controller = helper.createActivityViewController({ _, _ in })
 
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = view

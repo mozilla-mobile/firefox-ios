@@ -61,7 +61,7 @@ class LibraryViewController: UIViewController {
     }()
 
     fileprivate lazy var bottomLeftButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self,  action: #selector(bottomLeftButtonAction))
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self, action: #selector(bottomLeftButtonAction))
         button.accessibilityIdentifier = "libraryPanelBottomLeftButton"
         return button
     }()

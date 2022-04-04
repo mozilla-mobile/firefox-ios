@@ -178,7 +178,7 @@ class FeatureFlagsManager {
 
         let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
                                              and: profile,
-                                             enabledFor: [.release ,.beta, .developer])
+                                             enabledFor: [.release, .beta, .developer])
         features[.pullToRefresh] = pullToRefresh
 
         let recentlySaved = FlaggableFeature(withID: .recentlySaved,
