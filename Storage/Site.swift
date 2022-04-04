@@ -67,6 +67,7 @@ open class Site: Identifiable {
 
 }
 
+// MARK: - Hashable
 extension Site: Hashable {
      public func hash(into hasher: inout Hasher) {
          hasher.combine(id)

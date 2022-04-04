@@ -46,6 +46,7 @@ enum LibraryPanelSubState {
     case inFolder
     case inFolderEditMode
     case itemEditMode
+    case search
 
     // The following two functions enable checking that substate moves are legal.
     // For example, you can move from .mainView to .inFolder, but not from
@@ -146,7 +147,8 @@ class LibraryPanelViewState {
             self.state = category
         } else if newSubviewState.isChildState(of: oldSubviewState) || newSubviewState.isParentState(of: oldSubviewState) || oldSubviewState == newSubviewState {
             self.state = newState
+        } else if newSubviewState == .search || oldSubviewState == .search {
+            self.state = newState
         }
-
     }
 }
