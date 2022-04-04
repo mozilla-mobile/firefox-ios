@@ -65,6 +65,10 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         return !isSearchInProgress ? .HistoryPanelEmptyStateTitle : .LibraryPanel.History.NoHistoryResult
     }
     
+    var shouldShowEmptyState: Bool {
+        return isSearchInProgress ? filterMockSites.isEmpty : groupedSites.isEmpty
+    }
+    
     let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
                                      Notification.Name.PrivateDataClearedHistory,
                                      Notification.Name.DynamicFontChanged,

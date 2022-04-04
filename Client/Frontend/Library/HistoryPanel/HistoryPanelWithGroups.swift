@@ -162,6 +162,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     
     func startSearchState() {
         bottomStackView.isHidden = false
+        searchbar.text = ""
         searchbar.becomeFirstResponder()
         viewModel.isSearchInProgress = true
     }
@@ -425,7 +426,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     // MARK: - Empty State helpers
     
     private func updateEmptyPanelState() {
-        if viewModel.groupedSites.isEmpty, emptyStateOverlayView.superview == nil {
+        if viewModel.shouldShowEmptyState, emptyStateOverlayView.superview == nil {
             tableView.tableFooterView = emptyStateOverlayView
         } else {
             tableView.alwaysBounceVertical = true
@@ -508,6 +509,12 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
         
         if let asGroupItem = item as? ASGroup<Site> {
             handleASGroupItemTapped(asGroupItem: asGroupItem)
+        }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if searchbar.isFirstResponder {
+            searchbar.resignFirstResponder()
         }
     }
     

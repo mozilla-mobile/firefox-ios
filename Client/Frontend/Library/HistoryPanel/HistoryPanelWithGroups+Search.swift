@@ -8,14 +8,18 @@ import Shared
 // MARK: - UISearchBarDelegate
 extension HistoryPanelWithGroups: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        guard let searchText = searchBar.text, !searchText.isEmpty else {
+            return
+        }
 
         // Do search and show
         performSearch(term: searchText)
+        searchBar.resignFirstResponder()
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchText = searchBar.text, !searchText.isEmpty else {
+            viewModel.filterMockSites.removeAll()
             return
         }
 
@@ -33,18 +37,27 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
     // Using mock query that returns history from today's section
     // TODO: Replace with query in https://mozilla-hub.atlassian.net/browse/FXIOS-4000
     private func performSearch(term: String) {
-        viewModel.performSearch(term: term) { success in
+        viewModel.performSearch(term: term.lowercased()) { success in
             guard success, !viewModel.filterMockSites.isEmpty else {
                 toggleEmptyState()
                 return
             }
             
-            // Create search results snapshot and apply
-            var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
-            snapshot.appendSections([HistoryPanelSections.searchResults])
-            snapshot.appendItems(viewModel.filterMockSites)
-            diffableDatasource?.apply(snapshot, animatingDifferences: false)
+            applySearchSnapshot()
         }
+    }
+    
+    private func applySearchSnapshot() {
+        // Create search results snapshot and apply
+        var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
+        snapshot.appendSections([HistoryPanelSections.searchResults])
+        snapshot.appendItems(viewModel.filterMockSites)
+        diffableDatasource?.apply(snapshot, animatingDifferences: false)
+    }
+    
+    private func handleNoResults() {
+        applySearchSnapshot()
+        toggleEmptyState()
     }
 }
 
