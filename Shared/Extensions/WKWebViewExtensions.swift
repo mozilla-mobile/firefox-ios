@@ -34,7 +34,7 @@ extension WKWebView {
     /// - Parameters:
     ///     - javascript: String representing javascript to be evaluated
     ///     - completion: Tuple containing optional data and an optional error
-    public func evaluateJavascriptInDefaultContentWorld(_ javascript: String,_ completion: @escaping ((Any?, Error?) -> Void)) {
+    public func evaluateJavascriptInDefaultContentWorld(_ javascript: String, _ completion: @escaping ((Any?, Error?) -> Void)) {
         #if compiler(>=5.3)
             if #available(iOS 14.3, *), USE_NEW_SANDBOX_APIS {
                 self.evaluateJavaScript(javascript, in: nil, in: .defaultClient) { result in
