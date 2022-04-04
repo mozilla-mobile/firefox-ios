@@ -32,19 +32,6 @@ disabled_rules: # rule identifiers to exclude from running
 - comma
 - closing_brace
 
-# These rules were originally disabled. Leaving them separate
-# just in case, but they will each be looked at in turn.
-- variable_name
-- type_name
-- function_body_length
-- missing_docs
-- valid_docs
-- cyclomatic_complexity
-- type_body_length
-- function_parameter_count
-- weak_delegate
-- discarded_notification_center_observer
-- fallthrough
 
 # Disabled all default rules
 - block_based_kvo
@@ -53,16 +40,21 @@ disabled_rules: # rule identifiers to exclude from running
 - compiler_protocol_init
 - computed_accessors_order
 - custom_rules
+- cyclomatic_complexity
 - deployment_target
 - discouraged_direct_init
+- discarded_notification_center_observer
 - duplicate_enum_cases
 - duplicate_imports
 - duplicated_key_in_dictionary_literal
 - dynamic_inline
+- fallthrough
 - file_length
 - for_where
 - force_cast
 - force_try
+- function_body_length
+- function_parameter_count
 - generic_type_name
 - identifier_name
 - implicit_getter
@@ -73,6 +65,7 @@ disabled_rules: # rule identifiers to exclude from running
 - legacy_hashing
 - legacy_random
 - line_length
+- missing_docs
 - multiple_closures_with_trailing_closure
 - nesting
 - no_fallthrough_only
@@ -88,6 +81,7 @@ disabled_rules: # rule identifiers to exclude from running
 - superfluous_disable_command
 - switch_case_alignment
 - todo
+- type_name
 - type_body_length
 - unneeded_break_in_switch
 - unused_capture_list
@@ -98,6 +92,7 @@ disabled_rules: # rule identifiers to exclude from running
 - unused_setter_value
 - valid_ibinspectable
 - vertical_parameter_alignment
+- weak_delegate
 - xctfail_message
 
 opt_in_rules: # some rules are only opt-in
