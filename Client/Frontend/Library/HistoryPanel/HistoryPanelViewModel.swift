@@ -114,9 +114,17 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
     
     // Add completion to reload on finish
-    func performSearch(term: String, completion: (Bool) -> Void) {
-        filterMockSites = groupedSites.itemsForSection(0)
-        completion(true)
+    func performSearch(term: String, completion: @escaping (Bool) -> Void) {
+
+        profile.history.getHistory(matching: term) { results in
+            guard !results.isEmpty else {
+                completion(false)
+                return
+            }
+            
+            self.filterMockSites = results
+            completion(true)
+        }
     }
     
     /// A helper for the reload function.
