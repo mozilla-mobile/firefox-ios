@@ -532,6 +532,12 @@
 		8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD3BCC1ED5B7FA00446D38 /* FxADeepLinkingTests.swift */; };
 		9609F4CA26B57CE800F81493 /* CalendarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* CalendarExtensions.swift */; };
 		962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962F39492672D57A006BDA2A /* RecentItemsHelper.swift */; };
+		9636D92827F5D72D00771F5E /* MessagingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92727F5D72D00771F5E /* MessagingManager.swift */; };
+		9636D92A27F767EC00771F5E /* MessagingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92927F767EC00771F5E /* MessagingHelper.swift */; };
+		9636D92C27F9E50100771F5E /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92B27F9E50100771F5E /* MessageStore.swift */; };
+		9636D92E27F9E5D900771F5E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92D27F9E5D900771F5E /* Message.swift */; };
+		9636D93027F9F96F00771F5E /* UserDefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92F27F9F96F00771F5E /* UserDefaultsHelper.swift */; };
+		9636D93227FA43A000771F5E /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D93127FA43A000771F5E /* Style.swift */; };
 		9638332327E14ACC0011EEFC /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		966206CD2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */; };
 		966ECDAC27E4FA89006C93C8 /* HistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966ECDAB27E4FA89006C93C8 /* HistoryPanel.swift */; };
@@ -2911,6 +2917,12 @@
 		9609F4C926B57CE800F81493 /* CalendarExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensions.swift; sourceTree = "<group>"; };
 		962A450E9186BF349E535413 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		962F39492672D57A006BDA2A /* RecentItemsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsHelper.swift; sourceTree = "<group>"; };
+		9636D92727F5D72D00771F5E /* MessagingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingManager.swift; sourceTree = "<group>"; };
+		9636D92927F767EC00771F5E /* MessagingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingHelper.swift; sourceTree = "<group>"; };
+		9636D92B27F9E50100771F5E /* MessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
+		9636D92D27F9E5D900771F5E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		9636D92F27F9F96F00771F5E /* UserDefaultsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelper.swift; sourceTree = "<group>"; };
+		9636D93127FA43A000771F5E /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxHomeRecentlySavedViewModel.swift; sourceTree = "<group>"; };
 		966ECDAB27E4FA89006C93C8 /* HistoryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanel.swift; sourceTree = "<group>"; };
 		967AF157275FF4C60099E161 /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -5188,6 +5200,7 @@
 				962F39492672D57A006BDA2A /* RecentItemsHelper.swift */,
 				9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */,
 				8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */,
+				9636D92F27F9F96F00771F5E /* UserDefaultsHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -5204,11 +5217,12 @@
 		39EF434C260A736D0011E22E /* Experiments */ = {
 			isa = PBXGroup;
 			children = (
-				D51EA5B82640697100334331 /* Settings */,
+				9636D92627F5D71A00771F5E /* Messaging */,
 				39EF434D260A73950011E22E /* Experiments.swift */,
 				39EF4362260CEE5E0011E22E /* ExperimentConstants.swift */,
 				3964F5FB2656D2B500065278 /* initial_experiments.json */,
 				C80685D026A0C93900DCD895 /* UserResearch.swift */,
+				D51EA5B82640697100334331 /* Settings */,
 			);
 			path = Experiments;
 			sourceTree = "<group>";
@@ -5555,6 +5569,18 @@
 				8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		9636D92627F5D71A00771F5E /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				9636D92727F5D72D00771F5E /* MessagingManager.swift */,
+				9636D92927F767EC00771F5E /* MessagingHelper.swift */,
+				9636D92B27F9E50100771F5E /* MessageStore.swift */,
+				9636D92D27F9E5D900771F5E /* Message.swift */,
+				9636D93127FA43A000771F5E /* Style.swift */,
+			);
+			path = Messaging;
 			sourceTree = "<group>";
 		};
 		96EB6C3627D821A400A9D159 /* HistoryPanel */ = {
@@ -8934,6 +8960,7 @@
 				D0EAE0E2228B3762001C875A /* DrawerViewController.swift in Sources */,
 				E689C7301E0C7617008BAADB /* NSAttributedStringExtensions.swift in Sources */,
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
+				9636D93227FA43A000771F5E /* Style.swift in Sources */,
 				EB9854FF2422686F0040F24B /* AppDelegate+PushNotifications.swift in Sources */,
 				DFACBF85277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
@@ -8952,6 +8979,7 @@
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				966ECDAC27E4FA89006C93C8 /* HistoryPanel.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
+				9636D92827F5D72D00771F5E /* MessagingManager.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
 				8AED23C527AC1F9500DE7E97 /* BaseContentStackView.swift in Sources */,
 				DA9FD88924E213E500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
@@ -8970,6 +8998,7 @@
 				D30B101E1AA7F9C600C01CA3 /* LibraryPanels.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
+				9636D92A27F767EC00771F5E /* MessagingHelper.swift in Sources */,
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
 				39DD030D1CD53E1900BC09B3 /* HomePageHelper.swift in Sources */,
 				435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */,
@@ -9035,6 +9064,7 @@
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
+				9636D93027F9F96F00771F5E /* UserDefaultsHelper.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */,
 				39EF434E260A73950011E22E /* Experiments.swift in Sources */,
@@ -9084,6 +9114,7 @@
 				8AD40FD127BADCBA00672675 /* ToolbarButton.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				8A35497227BD672700534A65 /* ToggleSwitch.swift in Sources */,
+				9636D92C27F9E50100771F5E /* MessageStore.swift in Sources */,
 				213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */,
 				8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
@@ -9117,6 +9148,7 @@
 				43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */,
 				DFF95955279B021700ECC572 /* WallpaperDataManager.swift in Sources */,
 				D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */,
+				9636D92E27F9E5D900771F5E /* Message.swift in Sources */,
 				455880A127B42F720078DEBB /* FxNimbus.swift in Sources */,
 				8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,

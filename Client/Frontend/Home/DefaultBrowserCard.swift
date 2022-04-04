@@ -12,11 +12,12 @@ struct DefaultBrowserCardUX {
     static let learnHowButtonSize: CGSize = CGSize(width: 304, height: 44)
 }
 
-class DefaultBrowserCard: UIView {
+class DefaultBrowserCard: UIView, MessagingManagable {
     
     // MARK: - Properties
     
     public var dismissClosure: (() -> Void)?
+    lazy var messageToDisplay = messagingManager.getNextMessage(for: .newTabCard)
     
     // UI
     private lazy var title: UILabel = .build { label in
@@ -78,6 +79,7 @@ class DefaultBrowserCard: UIView {
         super.init(frame: frame)
 
         setupLayout()
+        applyMessage()
     }
     
     required init(coder: NSCoder) {
@@ -85,6 +87,9 @@ class DefaultBrowserCard: UIView {
     }
     
     private func setupLayout() {
+        messagingManager.prepareMessagesForSurfaces()
+        
+        
         cardView.addSubviews(learnHowButton, image, title, descriptionText, closeButton)
         containerView.addSubview(cardView)
         scrollView.addSubview(containerView)
@@ -150,6 +155,14 @@ class DefaultBrowserCard: UIView {
             learnHowButton.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.learnHowButtonSize.width),
             learnHowButton.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.learnHowButtonSize.height)
         ])
+    }
+    
+    private func applyMessage() {
+        guard let message = messageToDisplay else { return }
+        
+        title.text = message.messageData.title ?? String.DefaultBrowserCardTitle
+        descriptionText.text = message.messageData.text
+        learnHowButton.setTitle(message.messageData.buttonLabel ?? String.DefaultBrowserCardButton, for: .normal)
     }
     
     @objc private func dismissCard() {

@@ -79,6 +79,22 @@ public extension Sequence {
     }
 }
 
+/// This allows us to test against a Nil in a pretty way.
+/// i.e.:  [item1, item2, item3].anyNil()
+public extension Collection where Element == Optional<Any> {
+    func allNil() -> Bool {
+        return allSatisfy { $0 == nil }
+    }
+    
+    func anyNil() -> Bool {
+        return first { $0 == nil } != nil
+    }
+    
+    func allNotNil() -> Bool {
+        return !allNil()
+    }
+}
+
 public extension Collection {
     /// Returns the element at the specified index iff it is within bounds, otherwise nil.
     subscript (safe index: Index) -> Element? {
