@@ -23,7 +23,7 @@ sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - technical
     notification_emails:
@@ -44,7 +44,7 @@ sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -68,7 +68,7 @@ history_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -92,7 +92,7 @@ history_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -114,7 +114,7 @@ history_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -142,7 +142,7 @@ history_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -160,7 +160,7 @@ logins_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -184,7 +184,7 @@ logins_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -206,7 +206,7 @@ logins_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -234,7 +234,7 @@ logins_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -252,7 +252,7 @@ bookmarks_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -272,7 +272,7 @@ bookmarks_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -291,7 +291,7 @@ bookmarks_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -319,7 +319,7 @@ bookmarks_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -337,7 +337,7 @@ tabs_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -360,7 +360,7 @@ tabs_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -382,7 +382,7 @@ tabs_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:
@@ -410,7 +410,7 @@ tabs_sync:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/SYNC-3008
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
     data_sensitivity:
       - interaction
     notification_emails:

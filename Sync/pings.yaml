@@ -28,7 +28,7 @@ temp-sync:
   notification_emails:
     - sync-core@mozilla.com
   data_reviews:
-    - TODO
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
 temp-history-sync:
   description: >
     A ping sent for every history sync. It doesn't include the `client_id`
@@ -39,7 +39,7 @@ temp-history-sync:
   notification_emails:
     - sync-core@mozilla.com
   data_reviews:
-    - TODO https://github.com/mozilla-mobile/android-components/pull/3092
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
 temp-bookmarks-sync:
   description: >
     A ping sent for every bookmarks sync. It doesn't include the `client_id`
@@ -50,7 +50,7 @@ temp-bookmarks-sync:
   notification_emails:
     - sync-core@mozilla.com
   data_reviews:
-    - TODO
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
 temp-logins-sync:
   description: >
     A ping sent for every logins/passwords sync.
@@ -62,7 +62,7 @@ temp-logins-sync:
   notification_emails:
     - sync-core@mozilla.com
   data_reviews:
-    - TODO
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
 temp-tabs-sync:
   description: >
     A ping sent for every Tabs engine sync.
@@ -74,4 +74,4 @@ temp-tabs-sync:
   notification_emails:
     - sync-core@mozilla.com
   data_reviews:
-    - TODO
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
