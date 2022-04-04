@@ -57,6 +57,9 @@ workflows:
         - content: |-
             ./bootstrap.sh
         title: Run bootstrap
+    - swiftlint-extended@1:
+        inputs:
+        - linting_path: "$BITRISE_SOURCE_DIR"
     - script@1:
         inputs:
         - content: |-
