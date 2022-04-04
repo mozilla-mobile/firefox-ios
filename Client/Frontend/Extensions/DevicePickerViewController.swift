@@ -64,8 +64,7 @@ class DevicePickerViewController: UITableViewController {
 
         tableView.allowsSelection = true
 
-        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate
-        , object: nil, queue: .main) { [weak self ] _ in
+        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: .main) { [weak self ] _ in
             self?.loadList()
             self?.refreshControl?.endRefreshing()
         }

@@ -29,7 +29,6 @@ disabled_rules: # rule identifiers to exclude from running
 - empty_enum_arguments
 - control_statement
 - comment_spacing
-- comma
 - closing_brace
 
 

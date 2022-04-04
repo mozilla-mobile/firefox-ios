@@ -70,7 +70,7 @@ private let miniConfig = InfoConfiguration(maxRequestBytes: 1_048_576, maxPostRe
 class Sync15BatchClientTests: XCTestCase {
 
     func testAddLargeRecordFails() {
-        let uploader: BatchUploadFunction = { _,_, _  in deferEmptyResponse(lastModified: 10_000) }
+        let uploader: BatchUploadFunction = { _, _, _  in deferEmptyResponse(lastModified: 10_000) }
         let serializeRecord = { massivify($0)?.stringify() }
 
         let batch = Sync15BatchClient(config: miniConfig,
@@ -86,7 +86,7 @@ class Sync15BatchClientTests: XCTestCase {
     }
 
     func testFailToSerializeRecord() {
-        let uploader: BatchUploadFunction = { _,_, _  in deferEmptyResponse(lastModified: 10_000) }
+        let uploader: BatchUploadFunction = { _, _, _  in deferEmptyResponse(lastModified: 10_000) }
         let batch = Sync15BatchClient(config: miniConfig,
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: { _ in nil },

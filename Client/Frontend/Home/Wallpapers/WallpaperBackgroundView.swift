@@ -101,7 +101,7 @@ class WallpaperBackgroundView: UIView {
         gradientView.configureGradient(
             colors: [UIColor(white: contrastColour, alpha: gradientValue.start),
                      UIColor(white: contrastColour, alpha: gradientValue.transition),
-                     UIColor(white: contrastColour , alpha: gradientValue.end)],
+                     UIColor(white: contrastColour, alpha: gradientValue.end)],
             positions: [0, 0.5, 0.8],
             startPoint: .zero,
             endPoint: CGPoint(x: 0, y: 1)

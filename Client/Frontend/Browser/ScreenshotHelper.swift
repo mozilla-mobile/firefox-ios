@@ -34,7 +34,7 @@ class ScreenshotHelper {
                 let screenshot = homePanel.view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
-                TabEvent.post(.didSetScreenshot(isHome: true) , for: tab)
+                TabEvent.post(.didSetScreenshot(isHome: true), for: tab)
             }
         //Handle webview screenshots
         } else {
@@ -46,7 +46,7 @@ class ScreenshotHelper {
                 if let image = image {
                     tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)
-                    TabEvent.post(.didSetScreenshot(isHome: false) , for: tab)
+                    TabEvent.post(.didSetScreenshot(isHome: false), for: tab)
                 } else if let error = error {
                     Sentry.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: error.localizedDescription)
                 } else {
