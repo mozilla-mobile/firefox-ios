@@ -1234,7 +1234,7 @@ extension BrowserViewController: URLBarDelegate {
         homeViewController.updateUI(urlBarIsActive: false)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.urlBarContainer.alpha = 0
-            self.view.layoutIfNeeded()
+            self.view.setNeedsLayout()
         }
     }
 
