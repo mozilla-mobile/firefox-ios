@@ -200,7 +200,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         if #available(iOS 14, *) {
             waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 15)
             app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
-            waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 15)
+            waitForExistence(app.buttons["HomeTabBanner.goToSettingsButton"], timeout: 15)
             snapshot("HomeDefaultBrowserLearnMore")
         }
     }

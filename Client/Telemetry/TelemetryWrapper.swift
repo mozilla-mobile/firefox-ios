@@ -295,6 +295,7 @@ extension TelemetryWrapper {
         case emailLogin = "email"
         case qrPairing = "pairing"
         case settings = "settings"
+        case application = "application"
     }
 
     public enum EventObject: String {
@@ -372,6 +373,7 @@ extension TelemetryWrapper {
         case pocketSectionImpression = "pocket-section-impression"
         case library = "library"
         case home = "home-page"
+        case homeTabBanner = "home-tab-banner"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
         case navigateTabHistoryBack = "navigate-tab-history-back"
@@ -479,6 +481,11 @@ extension TelemetryWrapper {
         case openRecentlyClosedTab = "openRecentlyClosedTab"
         case tabGroupWithExtras = "tabGroupWithExtras"
         case closeGroupedTab = "recordCloseGroupedTab"
+        case messageImpression = "message-impression"
+        case messageDismissed = "message-dismissed"
+        case messageInteracted = "message-interacted"
+        case messageExpired = "message-expired"
+        case messageMalformed = "message-malformed"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -509,6 +516,10 @@ extension TelemetryWrapper {
         // Inactive Tab
         case inactiveTabsCollapsed = "collapsed"
         case inactiveTabsExpanded = "expanded"
+
+        // GleanPlumb
+        case messageKey = "message-key"
+        case actionUUID = "action-uuid"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -909,6 +920,39 @@ extension TelemetryWrapper {
                     GleanMetrics.CfrAnalytics.PressCfrActionButtonExtra(hintType: hintType))
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        // MARK: - GleanPlumb Messaging
+        case (.information, .view, .homeTabBanner, .messageImpression, let extras):
+            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
+                GleanMetrics.Messaging.shown.record(
+                    GleanMetrics.Messaging.ShownExtra(messageKey: messageId)
+                )
+            }
+        case(.action, .tap, .homeTabBanner, .messageDismissed, let extras):
+            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
+                GleanMetrics.Messaging.dismissed.record(
+                    GleanMetrics.Messaging.DismissedExtra(messageKey: messageId)
+                )
+            }
+        case(.action, .tap, .homeTabBanner, .messageInteracted, let extras):
+            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String,
+                let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
+                GleanMetrics.Messaging.clicked.record(
+                    GleanMetrics.Messaging.ClickedExtra(actionUuid: actionUUID, messageKey: messageId)
+                )
+            }
+        case(.information, .view, .homeTabBanner, .messageExpired, let extras):
+            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
+                GleanMetrics.Messaging.expired.record(
+                    GleanMetrics.Messaging.ExpiredExtra(messageKey: messageId)
+                )
+            }
+        case(.information, .application, .homeTabBanner, .messageMalformed, let extras):
+            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
+                GleanMetrics.Messaging.malformed.record(
+                    GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
+                )
             }
 
         default:
