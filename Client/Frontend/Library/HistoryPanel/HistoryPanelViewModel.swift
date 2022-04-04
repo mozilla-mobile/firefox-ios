@@ -15,28 +15,6 @@ private class FetchInProgressError: MaybeErrorType {
 
 class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     
-    // MARK: - Properties
-    
-    private let profile: Profile
-    private let queryFetchLimit = 100
-    let historyActionables = HistoryActionablesModel.activeActionables
-    
-    private var currentFetchOffset = 0
-    var visibleSections: [Sections] = []
-    var searchTermGroups: [ASGroup<Site>] = []
-    var isFetchInProgress = false
-    var groupedSites = DateGroupedTableData<Site>()
-    
-    private var hasRecentlyClosed: Bool {
-        return profile.recentlyClosedTabs.tabs.count > 0
-    }
-    
-    let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
-                                     Notification.Name.PrivateDataClearedHistory,
-                                     Notification.Name.DynamicFontChanged,
-                                     Notification.Name.DatabaseWasReopened,
-                                     Notification.Name.OpenClearRecentHistory]
-    
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
         case today
@@ -44,6 +22,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         case lastWeek
         case lastMonth
         case older
+        case searchResults
 
         var title: String? {
             switch self {
@@ -57,11 +36,44 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
                 return .LibraryPanel.Sections.LastMonth
             case .older:
                 return .LibraryPanel.Sections.Older
-            default:
+            case .additionalHistoryActions, .searchResults:
                 return nil
             }
         }
     }
+    
+    // MARK: - Properties
+    
+    private let profile: Profile
+    private let queryFetchLimit = 100
+    let historyActionables = HistoryActionablesModel.activeActionables
+    
+    private var currentFetchOffset = 0
+    var visibleSections: [Sections] = []
+    var searchTermGroups: [ASGroup<Site>] = []
+    var isFetchInProgress = false
+    var isSearchInProgress = false
+    var groupedSites = DateGroupedTableData<Site>()
+    var filterMockSites = [Site]()
+    var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
+    
+    private var hasRecentlyClosed: Bool {
+        return profile.recentlyClosedTabs.tabs.count > 0
+    }
+    
+    var emptyStateText: String {
+        return !isSearchInProgress ? .HistoryPanelEmptyStateTitle : .LibraryPanel.History.NoHistoryResult
+    }
+    
+    var shouldShowEmptyState: Bool {
+        return isSearchInProgress ? filterMockSites.isEmpty : groupedSites.isEmpty
+    }
+    
+    let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
+                                     Notification.Name.PrivateDataClearedHistory,
+                                     Notification.Name.DynamicFontChanged,
+                                     Notification.Name.DatabaseWasReopened,
+                                     Notification.Name.OpenClearRecentHistory]
     
     // MARK: - Inits
     
@@ -71,12 +83,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     
     deinit {
         browserLog.debug("HistoryPanelViewModel Deinitialized.")
-    }
-    
-    // MARK: - Lifecycles
-    
-    func viewDidLoad() {
-        reloadData()
     }
     
     // MARK: - Private helpers
@@ -107,13 +113,14 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         }
     }
     
+    // Add completion to reload on finish
+    func performSearch(term: String, completion: (Bool) -> Void) {
+        filterMockSites = groupedSites.itemsForSection(0)
+        completion(true)
+    }
+    
     /// A helper for the reload function.
     private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
-        guard !isFetchInProgress else {
-            browserLog.debug("Could not fetch data! A fetch is currently in progress and blocking the action.")
-            return deferMaybe(FetchInProgressError())
-        }
-
         isFetchInProgress = true
 
         return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
@@ -251,7 +258,5 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         if isSectionWithNoSites, !isSectionWithGroups {
             visibleSections = visibleSections.filter { $0 != timeSection }
         }
-        
     }
-    
 }

@@ -109,18 +109,18 @@ open class KeyboardHelper: NSObject {
 
     @objc private func keyboardDidShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardDidShowWithState: currentState!)
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardDidShowWithState: KeyboardState(userInfo))
             }
         }
     }
 
     @objc private func keyboardWillHide(_ notification: Notification) {
         if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardWillHideWithState: currentState!)
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardWillHideWithState: KeyboardState(userInfo))
             }
         }
     }
@@ -129,16 +129,17 @@ open class KeyboardHelper: NSObject {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardDidChangeWithState: currentState!)
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardWillChangeWithState: KeyboardState(userInfo))
             }
         }
     }
 
     @objc private func keyboardDidChange(_ notification: Notification) {
         if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardWillChangeWithState: currentState!)
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardDidChangeWithState: KeyboardState(userInfo))
             }
         }
     }

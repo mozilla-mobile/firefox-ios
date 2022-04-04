@@ -4,7 +4,7 @@
 
 import Foundation
 
-class LibraryViewModel {
+class LibraryViewModel: FeatureFlagsProtocol {
 
     let profile: Profile
     let tabManager: TabManager
@@ -20,5 +20,9 @@ class LibraryViewModel {
         self.profile = profile
         self.tabManager = tabManager
         self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
+    }
+    
+    var isHistoryPanelWithGroups: Bool {
+        return self.featureFlags.isFeatureActiveForBuild(.historyGroups)
     }
 }

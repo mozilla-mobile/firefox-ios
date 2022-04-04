@@ -31,7 +31,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     typealias HistoryPanelStrings = String.LibraryPanel.History
     
     enum Section: Int {
-        // Showing showing recently closed, and clearing recent history are action rows of this type.
+        // Showing recently closed, and clearing recent history are action rows of this type.
         case additionalHistoryActions
         case today
         case yesterday
