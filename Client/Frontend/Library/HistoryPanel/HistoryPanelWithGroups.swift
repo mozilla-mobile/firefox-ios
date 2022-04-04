@@ -58,7 +58,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     lazy var searchbar: UISearchBar = .build { searchbar in
         searchbar.setImage(UIImage(named: ImageIdentifiers.libraryPanelHistory), for: .search, state: .normal)
         searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
-        searchbar.returnKeyType = .done
+        searchbar.returnKeyType = .go
         searchbar.delegate = self
     }
     
@@ -438,9 +438,9 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
         // overlayView becomes the footer view, and for unknown reason, setting the bgcolor is ignored.
         // Create an explicit view for setting the color.
-        let bgColor = UIView()
-        bgColor.backgroundColor = UIColor.theme.homePanel.panelBackground
-        bgColor.translatesAutoresizingMaskIntoConstraints = false
+        let bgColor: UIView = .build { view in
+            view.backgroundColor = UIColor.theme.homePanel.panelBackground
+        }
         overlayView.addSubview(bgColor)
         
         NSLayoutConstraint.activate([
@@ -448,15 +448,15 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             bgColor.widthAnchor.constraint(equalTo: overlayView.widthAnchor)
         ])
 
-        let welcomeLabel = UILabel()
+        let welcomeLabel: UILabel = .build { label in
+            label.text = self.viewModel.emptyStateText
+            label.textAlignment = .center
+            label.font = DynamicFontHelper.defaultHelper.DeviceFontLight
+            label.textColor = UIColor.theme.homePanel.welcomeScreenText
+            label.numberOfLines = 0
+            label.adjustsFontSizeToFitWidth = true
+        }
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = viewModel.emptyStateText
-        welcomeLabel.textAlignment = .center
-        welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
-        welcomeLabel.numberOfLines = 0
-        welcomeLabel.adjustsFontSizeToFitWidth = true
-        welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let welcomeLabelPriority = UILayoutPriority(100)
         NSLayoutConstraint.activate([
