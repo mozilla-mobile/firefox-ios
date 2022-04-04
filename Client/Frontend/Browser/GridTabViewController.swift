@@ -244,7 +244,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
                     self.collectionView.scrollRectToVisible(rect, animated: false)
                 }
             } else {
-                self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally] , animated: false)
+                self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally], animated: false)
             }
         }
     }

@@ -24,7 +24,7 @@ struct TabProvider: TimelineProvider {
         
         var tabFaviconDictionary = [String: Image]()
         let simpleTabs = SimpleTab.getSimpleTabs()
-        for (_ , tab) in simpleTabs {
+        for (_, tab) in simpleTabs {
             guard !tab.imageKey.isEmpty else { continue }
             let fetchedImage = FaviconFetcher.getFaviconFromDiskCache(imageKey: tab.imageKey)
             let bundledFavicon = getBundledFavicon(siteUrl: tab.url)

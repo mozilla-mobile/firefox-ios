@@ -127,7 +127,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
             title.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.TextBoxHeight),
 
             favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: 6),
-            favicon.topAnchor.constraint(equalTo: title.topAnchor , constant: (GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2),
+            favicon.topAnchor.constraint(equalTo: title.topAnchor, constant: (GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2),
             favicon.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
             favicon.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
 
