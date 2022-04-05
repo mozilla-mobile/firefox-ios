@@ -617,10 +617,10 @@ extension SQLiteHistory: BrowserHistory {
             INNER JOIN history_fts historyFTS ON
                 historyFTS.rowid = hist.rowid
             WHERE historyFTS.title LIKE "%\(searchTerm)%" OR
-                historyFTS.title LIKE "%\(searchTerm)%";
+                historyFTS.url LIKE "%\(searchTerm)%";
             """
 
-        db.runQueryConcurrently(query, args: nil, factory: SQLiteHistory.iconHistoryColumnFactory).uponQueue(.main) { result in
+        db.runQueryConcurrently(query, args: nil, factory: SQLiteHistory.basicHistoryColumnFactory).uponQueue(.main) { result in
             guard result.isSuccess else {
                 completion([Site]())
                 return

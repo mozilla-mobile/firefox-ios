@@ -65,10 +65,6 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
 extension HistoryPanelWithGroups: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
-    }
-    
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
-        keyboardState = state
         updateLayoutForKeyboard()
         UIView.animate(withDuration: state.animationDuration, delay: 0,
                        options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))], animations: {
