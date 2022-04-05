@@ -86,7 +86,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
 
-        if shouldShowDefaultBrowserCard {
+        if shouldDisplayDefaultBrowserCard {
             showDefaultBrowserCard()
         }
 
@@ -206,7 +206,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: ASHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
-              !shouldShowDefaultBrowserCard
+              !shouldDisplayDefaultBrowserCard
         else { return }
 
         contextualHintViewController.configure(
@@ -230,14 +230,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
     }
 
     // MARK: - Default browser card
-
-    private var shouldShowDefaultBrowserCard: Bool {
-        if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
-            return true
-        } else {
-            return false
-        }
-    }
     
     private var shouldDisplayDefaultBrowserCard: Bool {
         if #available(iOS 14.0, *),

@@ -17,7 +17,7 @@ extension MessagingHelperProtocol {
 
 /// The Message Helper is responsible for preparing fetched messages to appear in a UI surface.
 /// It should do all operations on a message and return only valid, eligible, non-expired messages FOR the associated surface.
-class MessagingHelper: Loggable, UserDefaultsManageable {
+class MessagingHelper: Loggable {
     
     // MARK: - Properties
     

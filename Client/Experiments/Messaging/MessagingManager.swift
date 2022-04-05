@@ -43,7 +43,7 @@ protocol MessagingManagerProvider {
 ///     - user dismissal of a message
 ///     - expiration logic
 /// - reporting telemetry for `Message`s
-class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, UserDefaultsManageable {
+class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol {
     
     // MARK: - Properties
     
