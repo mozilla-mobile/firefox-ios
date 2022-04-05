@@ -8,14 +8,14 @@ import Foundation
 /// will primarily help us determine if messages are expired, and perhaps what caused expiry.
 
 protocol MessageStoreProtocol {
-    /// The message store is responsible for knowing if it's an old or new message, and
-    /// return associated metadata.
+    
+    /// Return associated metadata for preexisting or new messages.
     func getMessageMetadata(messageId: String) -> MessageMeta
     
-    /// Do the bookkeeping to track and persist impression counts.
+    /// Do the bookkeeping to track and persist impression counts on that message.
     func onMessageDisplayed(message: Message)
     
-    ///
+    /// TODO
     func hasMessageExpired(message: Message)
     
     /// Do the bookkeeping for message dismissed Counts and expiry.
@@ -28,15 +28,16 @@ class MessageStore: MessageStoreProtocol {
     let decoder = JSONDecoder()
     let encoder = JSONEncoder()
     
+    /// Returns the metadata that persists on system. If there's none, it returns default data.
     func getMessageMetadata(messageId: String) -> MessageMeta {
-        /// Handles returning preexisting message meta.
-        let decoder = JSONDecoder()
-    
+        
+        /// Handles returning preexisting Message Metadata.
         if let decodableMessageMetadata = UserDefaults.standard.data(forKey: messageId),
            let decodedData = try? decoder.decode(MessageMeta.self, from: decodableMessageMetadata) {
             return decodedData
         }
-            
+        
+        /// If we're here, we're encountered a new message. So, return the defaults.
         return MessageMeta(messageId: messageId,
                            messageImpressions: 0,
                            messageDismissed: 0,

@@ -187,20 +187,20 @@ features:
             EXPIRES_QUICKLY:
               priority: 100
               max-display-count: 1
-      - channel: developer
-        value: {
-          "messages": {
-            "my-viewpoint-survey": {
-              "title": "Message tile",
-              "text": "Love Firefox? Fill in our survey!",
-              "action": "https://surveyprovider.com/survey-id/{uuid}",
-              "trigger": [ "ALWAYS" ],
-              "style": "DEFAULT",
-              "button-label": "Go to the survey",
-              "surface": "NewTabCard"
-            }
-          }
-        }
+      # - channel: developer
+      #   value: {
+      #     "messages": {
+      #       "my-viewpoint-survey": {
+      #         "title": "Message tile",
+      #         "text": "Love Firefox? Fill in our survey!",
+      #         "action": "https://surveyprovider.com/survey-id/{uuid}",
+      #         "trigger": [ "ALWAYS" ],
+      #         "style": "DEFAULT",
+      #         "button-label": "Go to the survey",
+      #         "surface": "NewTabCard"
+      #       }
+      #     }
+      #   }
       - channel: developer
         value: {
           "messages": {
@@ -215,25 +215,25 @@ features:
             }
           }
         }
+      # - channel: developer
+      #   value: {
+      #     "messages": {
+      #       "a-different-message-yes": {
+      #         "title": "A dummy message for you!",
+      #         "text": "Love Firefox? Fill in our survey!",
+      #         "action": "https://surveyprovider.com/survey-id/{uuid}",
+      #         "trigger": [ "ALWAYS" ],
+      #         "style": "DEFAULT",
+      #         "button-label": "Go to the survey",
+      #         "surface": "NewTabCard"
+      #       }
+      #     }
+      #   }
       - channel: developer
         value: {
-          "messages": {
-            "a-different-message-yes": {
-              "title": "A dummy message for you!",
-              "text": "Love Firefox? Fill in our survey!",
-              "action": "https://surveyprovider.com/survey-id/{uuid}",
-              "trigger": [ "ALWAYS" ],
-              "style": "DEFAULT",
-              "button-label": "Go to the survey",
-              "surface": "NewTabCard"
-            }
-          }
-        }
-      - channel: developer
-        value: {
-      #     "triggers": {
-      #       "USER_IE_COUNTRY": "'IE' in locale"
-      #     },
+          "triggers": {
+            "USER_IE_COUNTRY": "'IE' in locale"
+          },
 
           "styles": {
             "irish-green": {
@@ -241,14 +241,14 @@ features:
             }
           },
 
-      #     "messages": {
-      #       "eu-tracking-protection-for-ireland": {
-      #         "action": "OPEN_SETTINGS",
-      #         "text": "GDPR has you covered. Firefox has GDPR covered",
-      #         "style": "irish-green",
-      #         "trigger": ["NEW_USER", "USER_IE_COUNTRY"]
-      #       }
-      #     },
+          "messages": {
+            "eu-tracking-protection-for-ireland": {
+              "action": "OPEN_SETTINGS",
+              "text": "GDPR has you covered. Firefox has GDPR covered",
+              "style": "irish-green",
+              "trigger": ["NEW_USER", "USER_IE_COUNTRY"]
+            }
+          },
 
           "message-under-experiment": "eu-tracking-protection-for-"
         }

@@ -232,8 +232,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
     // MARK: - Default browser card
     
     private var shouldDisplayDefaultBrowserCard: Bool {
-        if #available(iOS 14.0, *),
-           !(messagingManager.showableMessagesForSurface[.newTabCard]?.isEmpty ?? false) {
+        if #available(iOS 14.0, *) {
             return true
         } else {
             return false

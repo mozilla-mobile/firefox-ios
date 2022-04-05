@@ -130,26 +130,6 @@ class MessagingHelper: Loggable {
         return styles
     }
     
-    // MARK: - Private surface helpers
-    
-    /// The NewTabCard (DefaultBrowserCard) expects certain things from a message. We need
-    /// to check that all these are NOT nil. The also ends up checking if a message is malformed.
-    /// - title
-    /// - text
-    /// - button-label
-    /// - action
-    /// - trigger
-    /// - style
-    private func evalNewTabCardNils(message: MessageData) -> Bool {
-        let anyPropertiesNil = [message.title,
-                                message.text,
-                                message.buttonLabel,
-                                message.action,
-                                message.style].allNotNil() && !message.trigger.isEmpty
-        
-        return anyPropertiesNil
-    }
-    
     // MARK: - Private message helpers
     
     /// We expect messages to utilize triggers we're aware of from the FML. So, we can evaluate them
@@ -205,6 +185,66 @@ class MessagingHelper: Loggable {
         nonNilStyles.forEach { style in
             styles[style.key] = Style(priority: style.value.priority, maxDisplayCount: style.value.maxDisplayCount)
         }
+    }
+    
+    ///////////////// NEW CODE!!!!
+    ///
+    
+    /// JEXLs are more accurately evaluated when given certain details about the app on device.
+    /// There is a limited amount of context you can give. See:
+    /// - https://experimenter.info/mobile-messaging/#list-of-attributes
+    func createAdditionalContext() -> [String: Any] {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-mm-dd"
+        let todaysDate = dateFormatter.string(from: Date())
+        
+        return ["date_string": todaysDate]
+    }
+    
+    /// We check whether this message is triggered by evaluating message JEXLs.
+    func isMessageEligible(message: Message, messageHelper: GleanPlumbMessageHelper) throws -> Bool {
+        /// TODO: Save these in a lookup table so we don't need to reevaluate triggers every time.
+        try message.triggers.reduce(true) { acc, trigger in
+            guard acc else { return false }
+            
+            return try messageHelper.evalJexl(expression: trigger)
+        }
+    }
+    
+    /// Check message expiration.
+    func isMessageExpired(message: Message) -> Bool {
+        return message.metadata.isExpired && message.metadata.messageImpressions >= message.styleData.maxDisplayCount
+    }
+    
+    /// The NewTabCard (DefaultBrowserCard) expects certain things from a message. We need
+    /// to check that all these are NOT nil. The also ends up checking if a message is malformed.
+    /// - title
+    /// - text
+    /// - button-label
+    /// - action
+    /// - trigger
+    /// - style
+    func evalNewTabCardNils(message: MessageData) -> Bool {
+        let areAnyPropertiesNil = [message.title,
+                                   message.text,
+                                   message.buttonLabel,
+                                   message.action,
+                                   message.style].anyNil() && !message.trigger.isEmpty
+        
+        return areAnyPropertiesNil
+    }
+    
+    /// If the message is under experiment, the call site needs to handle it in a special way.
+    func isMessageUnderExperiment(experimentKey: String?, message: Message) -> Bool {
+        guard let key = experimentKey else { return false }
+
+        if message.messageData.isControl { return true }
+        
+        if message.messageId.hasSuffix("-") {
+            return message.messageId.hasPrefix(key)
+        }
+        
+        return message.messageId == key
     }
     
 }
