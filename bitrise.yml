@@ -961,8 +961,8 @@ trigger_map:
 - push_branch: v101.1
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipelines: pipeline_multiple_shards
+  pipeline: pipeline_multiple_shards
 - push_branch: '*'
-  pipelines: pipeline_multiple_shards
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   workflow: RunUnitTests
