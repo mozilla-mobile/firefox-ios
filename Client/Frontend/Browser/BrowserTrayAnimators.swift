@@ -64,14 +64,14 @@ private extension TrayToBrowserAnimator {
         // Re-calculate the starting transforms for header/footer views in case we switch orientation
         resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.overKeyboardContainer])
         transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container: container)
-        
+
         let frameResizeClosure = {
             // Scale up the cell and reset the transforms for the header/footers
             cell.frame = finalFrame
             container.layoutIfNeeded()
             cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
             bvc.tabTrayDidDismiss(tabTray)
-            tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9) 
+            tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         }
 
         if UIAccessibility.isReduceMotionEnabled {
@@ -170,14 +170,14 @@ private extension BrowserToTrayAnimator {
             tabTray.collectionView.isHidden = true
             let finalFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView,
                 atIndex: scrollToIndex)
-            
+
             let frameResizeClosure = {
                 cell.frame = finalFrame
                 cell.layoutIfNeeded()
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
                 resetTransformsForViews([tabCollectionViewSnapshot])
             }
-            
+
             if UIAccessibility.isReduceMotionEnabled {
                 frameResizeClosure()
             }
@@ -195,11 +195,11 @@ private extension BrowserToTrayAnimator {
                 bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.toolbar.isHidden = true
                 tabCollectionViewSnapshot.alpha = 1
-                
+
                 if !UIAccessibility.isReduceMotionEnabled {
                     frameResizeClosure()
                 }
-                    
+
             }, completion: { finished in
                 // Remove any of the views we used for the animation
                 cell.removeFromSuperview()

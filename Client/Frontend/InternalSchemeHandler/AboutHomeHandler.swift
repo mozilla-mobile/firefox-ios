@@ -26,7 +26,7 @@ class AboutHomeHandler: InternalSchemeResponse {
 
 class AboutLicenseHandler: InternalSchemeResponse {
     static let path = "about/license"
-    
+
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
         guard let url = request.url else { return nil }
         let response = InternalSchemeHandler.response(forUrl: url)

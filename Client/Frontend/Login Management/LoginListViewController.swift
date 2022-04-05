@@ -62,7 +62,7 @@ class LoginListViewController: SensitiveViewController {
                 deferred.fill(nil)
             }
         }
-        
+
         AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
             switch result {
                 case .success():
@@ -171,7 +171,7 @@ class LoginListViewController: SensitiveViewController {
 
         let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
         let searchTextField = searchController.searchBar.searchTextField
-        
+
         // Theme the search text field (Dark / Light)
         if isDarkTheme {
             searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
@@ -200,7 +200,7 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate func setupDefaultNavButtons() {
          navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
-        
+
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
         } else {
@@ -269,7 +269,7 @@ private extension LoginListViewController {
         tableView.setEditing(true, animated: true)
         tableView.reloadData()
     }
-    
+
     @objc func presentAddCredential() {
         let addController = AddCredentialViewController() { [weak self] record in
             let result = self?.viewModel.save(loginRecord: record)
@@ -282,7 +282,7 @@ private extension LoginListViewController {
                 }
             }
         }
-        
+
         let controller = UINavigationController(
             rootViewController: addController
         )

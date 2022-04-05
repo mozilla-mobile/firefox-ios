@@ -71,11 +71,11 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertEqual(NavigationPath(url: URL(string: "HtTp://www.apple.com")!), NavigationPath.url(webURL: URL(string: "http://www.apple.com")!, isPrivate: false))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme.uppercased())://Deep-Link?url=/settings/newTab")!), NavigationPath.deepLink(DeepLink.settings(.newtab)))
     }
-    
+
     func testHostDoesntSpill() {
         // i.e ensure we check the entire host for our schemes, not just that they have the host as a prefix
         XCTAssertEqual(NavigationPath(url: URL(string: "http://glean.mywindows.com")!), NavigationPath.url(webURL: URL(string: "http://glean.mywindows.com")!, isPrivate: false))
-        
+
         XCTAssertNil(NavigationPath(url: URL(string: "\(appScheme)://glean.mywindows.com")!))
         XCTAssertNil(NavigationPath(url: URL(string: "\(appScheme)://deep-links-are-fun?url=/settings/newTab/")!))
 

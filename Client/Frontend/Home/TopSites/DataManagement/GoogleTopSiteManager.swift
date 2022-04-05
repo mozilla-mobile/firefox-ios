@@ -35,7 +35,7 @@ class GoogleTopSiteManager {
         }
         return Constants.rowUrl
     }
-    
+
     var hasAdded: Bool {
         get {
             guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteAddedKey) else {
@@ -47,7 +47,7 @@ class GoogleTopSiteManager {
             prefs.setBool(value, forKey: PrefsKeys.GoogleTopSiteAddedKey)
         }
     }
-    
+
     var isHidden: Bool {
         get {
             guard let value = prefs.boolForKey(PrefsKeys.GoogleTopSiteHideKey) else {
@@ -59,11 +59,11 @@ class GoogleTopSiteManager {
             prefs.setBool(value, forKey: PrefsKeys.GoogleTopSiteHideKey)
         }
     }
-    
+
     init(prefs: Prefs) {
         self.prefs = prefs
     }
-    
+
     func suggestedSiteData() -> PinnedSite? {
         guard let url = self.url else { return nil }
 

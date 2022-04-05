@@ -17,7 +17,7 @@ class SearchTermGroupsManager {
     ) {
         getGroups(with: profile, from: highlights, using: ordering, completion: completion)
     }
-    
+
     public static func getSiteGroups(
         with profile: Profile,
         from sites: [Site],

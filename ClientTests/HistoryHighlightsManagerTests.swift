@@ -24,7 +24,7 @@ class HistoryHighlightsTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        
+
         profile._shutdown()
         profile = nil
         tabManager = nil

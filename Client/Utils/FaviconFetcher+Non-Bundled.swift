@@ -10,7 +10,7 @@ import Fuzi
 
 // Extension of FaviconFetcher that handles fetching non-bundled, non-letter favicons
 extension FaviconFetcher {
-    
+
     class func getForURL(_ url: URL, profile: Profile) -> Deferred<Maybe<[Favicon]>> {
         let favicon = FaviconFetcher()
         return favicon.loadFavicons(url, profile: profile)
@@ -52,7 +52,7 @@ extension FaviconFetcher {
 
         return deferred
     }
-    
+
     // Loads and parses an html document and tries to find any known favicon-type tags for the page
     fileprivate func parseHTMLForFavicons(_ url: URL) -> Deferred<Maybe<[Favicon]>> {
         return fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in
@@ -95,7 +95,7 @@ extension FaviconFetcher {
             return deferMaybe(icons)
         })
     }
-    
+
     fileprivate func fetchDataForURL(_ url: URL) -> Deferred<Maybe<Data>> {
         let deferred = Deferred<Maybe<Data>>()
         urlSession.dataTask(with: url) { (data, _, error) in
@@ -110,7 +110,7 @@ extension FaviconFetcher {
 
         return deferred
     }
-    
+
     func getFavicon(_ siteUrl: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
@@ -157,7 +157,7 @@ extension FaviconFetcher {
         let deferred = Deferred<Maybe<UIImage>>()
         FaviconFetcher.getForURL(url.domainURL, profile: profile).uponQueue(.main) { result in
             var iconURL: URL?
-            
+
             if let favicons = result.successValue, favicons.count > 0, let faviconImageURL =
                 favicons.first?.url.asURL {
                 iconURL = faviconImageURL

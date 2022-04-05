@@ -137,7 +137,7 @@ class FeatureFlagsManager {
                                                and: profile,
                                                enabledFor: [.release, .beta, .developer])
         features[.bottomSearchBar] = bottomSearchBar
-        
+
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
                                          and: profile,
                                          enabledFor: [])
@@ -206,7 +206,7 @@ class FeatureFlagsManager {
                                            and: profile,
                                            enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
-        
+
         let tabTrayGroups = FlaggableFeature(withID: .tabTrayGroups,
                                            and: profile,
                                            enabledFor: [.developer])

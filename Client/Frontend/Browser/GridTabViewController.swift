@@ -88,7 +88,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
                                                           with: profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
-        
+
         super.init(nibName: nil, bundle: nil)
         collectionViewSetup()
     }
@@ -710,7 +710,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         }
     }
-    
+
     private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
         guard !tabDisplayManager.isPrivate, let inactiveTabViewModel = tabDisplayManager.inactiveViewModel, inactiveTabViewModel.activeTabs.count > 0 else {
             return CGSize(width: 0, height: 0)

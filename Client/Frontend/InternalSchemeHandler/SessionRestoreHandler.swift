@@ -26,7 +26,7 @@ func generateResponseThatRedirects(toUrl url: URL) -> (URLResponse, Data) {
     }
 
     urlString = urlString.replacingOccurrences(of: "'", with: apostropheEncoded)
-    
+
     let startTags = "<!DOCTYPE html><html><head><script>"
     let endTags = "</script></head></html>"
     let html = startTags + "location.replace('\(urlString)');" + endTags

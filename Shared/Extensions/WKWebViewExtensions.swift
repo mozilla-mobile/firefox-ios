@@ -10,7 +10,7 @@ import WebKit
 private let USE_NEW_SANDBOX_APIS = true
 
 extension WKWebView {
-    
+
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version
     ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
     ///  - If below iOS14, evaluates Javascript without sandboxed environment
@@ -27,7 +27,7 @@ extension WKWebView {
             self.evaluateJavaScript(javascript)
         #endif
     }
-    
+
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version with a completion that passes a tuple with optional data or an optional error
     ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
     ///  - If below iOS14, evaluates Javascript without sandboxed environment
@@ -84,7 +84,7 @@ extension WKUserScript {
             return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly)
         }
     }
-    
+
     public class func createInPageContentWorld(source: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly: Bool) -> WKUserScript {
         if #available(iOS 14.3, *), USE_NEW_SANDBOX_APIS {
             return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly, in: .page)

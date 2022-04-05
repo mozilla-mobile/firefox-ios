@@ -24,7 +24,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
     }()
     // Closure delegate
     var didFinishClosure: ((IntroViewController, FxAPageType?) -> Void)?
-    
+
     // MARK: Initializer
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -33,7 +33,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         initialViewSetup()
@@ -44,23 +44,23 @@ class IntroViewController: UIViewController, OnViewDismissable {
         onViewDismissed?()
         onViewDismissed = nil
     }
-    
+
     // MARK: View setup
     private func initialViewSetup() {
         setupIntroView()
     }
-    
+
     //onboarding intro view
     private func setupIntroView() {
         // Initialize
         view.addSubview(syncCard)
         view.addSubview(welcomeCard)
-        
+
         // Constraints
         setupWelcomeCard()
         setupSyncCard()
     }
-    
+
     private func setupWelcomeCard() {
         NSLayoutConstraint.activate([
             welcomeCard.topAnchor.constraint(equalTo: view.topAnchor),
@@ -68,7 +68,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
             welcomeCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             welcomeCard.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        
+
         // Buton action closures
         // Next button action
         welcomeCard.nextClosure = {
@@ -92,7 +92,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
             self.didFinishClosure?(self, .emailLoginFlow)
         }
     }
-    
+
     private func setupSyncCard() {
         NSLayoutConstraint.activate([
             syncCard.topAnchor.constraint(equalTo: view.topAnchor),

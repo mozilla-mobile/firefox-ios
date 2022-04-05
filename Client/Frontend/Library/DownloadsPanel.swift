@@ -62,7 +62,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
     }
-    
+
 
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
 
@@ -91,7 +91,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        
+
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -238,7 +238,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubviewToFront(emptyStateOverlayView)
-                
+
                 NSLayoutConstraint.activate([
                     emptyStateOverlayView.topAnchor.constraint(equalTo: view.topAnchor),
                     emptyStateOverlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -271,13 +271,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         overlayView.addSubview(logoImageView)
         overlayView.addSubview(welcomeLabel)
-        
+
         NSLayoutConstraint.activate([
             logoImageView.topAnchor.constraint(equalTo: overlayView.topAnchor, constant: DownloadsPanelUX.WelcomeScreenTopPadding),
             logoImageView.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 60),
             logoImageView.widthAnchor.constraint(equalToConstant: 60),
-            
+
             welcomeLabel.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
             welcomeLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: DownloadsPanelUX.WelcomeScreenPadding),
             welcomeLabel.widthAnchor.constraint(equalToConstant: DownloadsPanelUX.WelcomeScreenItemWidth)

@@ -322,7 +322,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
             searchTelemetry?.shouldSetUrlTypeSearch = true
-            
+
             let searchData = TabGroupData(searchTerm: text,
                                           searchUrl: searchURL.absoluteString,
                                           nextReferralUrl: "")

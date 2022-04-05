@@ -166,7 +166,7 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: .zero)

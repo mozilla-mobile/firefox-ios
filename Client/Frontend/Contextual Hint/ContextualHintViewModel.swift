@@ -43,7 +43,7 @@ class ContextualHintViewModel {
     // CFR has not yet been presented. On iPad we don't present the onboarding CFR
     private var canJumpBackInBePresented: Bool {
         guard UIDevice.current.userInterfaceIdiom != .pad else { return true }
-        
+
         if let hasShownOnboardingCFR = profile.prefs.boolForKey(CFRPrefsKeys.ToolbarOnboardingKey.rawValue),
            hasShownOnboardingCFR {
             return true
