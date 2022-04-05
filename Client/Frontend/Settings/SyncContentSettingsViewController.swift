@@ -117,7 +117,6 @@ class DeviceNameSetting: StringSetting {
     }
 }
 
-
 class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 

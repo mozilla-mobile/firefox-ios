@@ -4,7 +4,6 @@
 
 import Foundation
 
-
 struct CellWithRoundedButtonUX {
     static let ImageSize: CGFloat = 29
     static let ImageCornerRadius: CGFloat = 6

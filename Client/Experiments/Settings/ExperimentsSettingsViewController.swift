@@ -93,7 +93,6 @@ class ExperimentsSettingsViewController: UIViewController {
     }
 }
 
-
 extension ExperimentsSettingsViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         updateState()

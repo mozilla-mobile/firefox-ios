@@ -316,8 +316,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         return 0
     }
 
-
-
     private func unfoldSearchbar() {
         guard let searchBarHeight = navigationItem.searchController?.searchBar.intrinsicContentSize.height else { return }
         tableView.setContentOffset(CGPoint(x: 0, y: -searchBarHeight + tableView.contentOffset.y), animated: true)

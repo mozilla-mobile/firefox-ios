@@ -110,7 +110,6 @@ public extension EncryptedLogin {
         }
     }
 
-
     var decryptedUsername: String {
         get {
             let rustKeys = RustLoginEncryptionKeys()

@@ -156,7 +156,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return eligibleTabs
     }
 
-
     var lastSessionWasPrivate: Bool {
         return UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
     }

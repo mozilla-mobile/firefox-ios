@@ -43,7 +43,6 @@ class CredentialProviderPresenter {
         }
     }
 
-
     func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
@@ -70,7 +69,6 @@ class CredentialProviderPresenter {
             }
         }
     }
-
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         // Force a short delay before we trigger authentication. See https://github.com/mozilla-mobile/firefox-ios/issues/9354

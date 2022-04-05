@@ -175,7 +175,6 @@ class FeatureFlagsManager {
                                       enabledFor: [.release, .beta, .developer])
         features[.pocket] = pocket
 
-
         let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
                                              and: profile,
                                              enabledFor: [.release, .beta, .developer])

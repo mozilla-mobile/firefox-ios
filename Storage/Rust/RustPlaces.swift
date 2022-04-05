@@ -236,13 +236,11 @@ public class RustPlaces {
         }
     }
 
-
     public func createSeparator(parentGUID: GUID, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createSeparator(parentGUID: parentGUID, position: position)
         }
     }
-
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {

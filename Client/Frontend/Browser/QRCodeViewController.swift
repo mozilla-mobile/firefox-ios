@@ -175,7 +175,6 @@ class QRCodeViewController: UIViewController {
         }
     }
 
-
     @objc func startScanLineAnimation() {
         if !isAnimationing {
             return

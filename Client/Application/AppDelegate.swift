@@ -251,7 +251,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
             guard self.profile?.hasSyncableAccount() ?? false else {
                 self.shutdownProfileWhenNotActive(application)

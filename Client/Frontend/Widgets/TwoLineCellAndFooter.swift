@@ -183,7 +183,6 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
     }
 }
 
-
 class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {

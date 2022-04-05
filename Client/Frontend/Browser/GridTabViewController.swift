@@ -681,7 +681,6 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         return .zero
     }
 
-
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }

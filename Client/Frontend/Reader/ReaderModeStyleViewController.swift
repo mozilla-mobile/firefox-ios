@@ -167,7 +167,6 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
         applyTheme()
     }
 
-
     // MARK: - Applying Theme
     func applyTheme() {
         fontTypeRow.backgroundColor = UIColor.theme.tableView.rowBackground

@@ -370,7 +370,6 @@ extension String {
     }
 }
 
-
 // MARK: - Switch Default Browser Screen
 extension String {
     public struct SwitchDefaultBrowser {
@@ -419,14 +418,12 @@ extension String {
     }
 }
 
-
 // MARK: - Strings: unorganized & unchecked for use
 // Here we have the original strings. What follows below is unorganized. As
 // the team continues to work on new updates to strings, or to work on a view,
 // these strings should be checked if in use, still. If not, they should be
 // removed; if used, they should be added to the organized section of this
 // file, for easier classification and use.
-
 
 // MARK: - General
 extension String {
@@ -1356,7 +1353,6 @@ extension String {
     public static let OpenFirefoxLabel = MZLocalizedString("TodayWidget.OpenFirefoxLabel", tableName: "Today", value: "Open Firefox", comment: "Open Firefox when there are no tabs opened in tab tray i.e. Empty State", lastUpdated: .unknown)
     public static let NoOpenTabsLabel = MZLocalizedString("TodayWidget.NoOpenTabsLabel", tableName: "Today", value: "No open tabs.", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State", lastUpdated: .unknown)
     public static let NoOpenTabsLabelV2 = MZLocalizedString("TodayWidget.NoOpenTabsLabelV2", tableName: "Today", value: "No Open Tabs", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State", lastUpdated: .unknown)
-
 
     // Quick View Open Tabs - Medium Size - Gallery View
     public static let QuickViewGalleryTitle = MZLocalizedString("TodayWidget.QuickViewGalleryTitle", tableName: "Today", value: "Quick View", comment: "Title for Quick View widget in Gallery View where user can add it to home screen", lastUpdated: .unknown)

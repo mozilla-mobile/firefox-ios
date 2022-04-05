@@ -16,16 +16,13 @@ class GroupedHistoryItemsViewModel {
     // UI
     let notifications = [Notification.Name.DisplayThemeChanged]
 
-
     // MARK: - Inits
 
     init(asGroup: ASGroup<Site>) {
         self.asGroup = asGroup
     }
 
-
     // MARK: - Lifecycles
-
 
     // MARK: - Misc helpers
 

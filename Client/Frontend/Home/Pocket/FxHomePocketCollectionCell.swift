@@ -107,7 +107,6 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
     }
 }
 
-
 // MARK: - UICollectionViewDataSource
 extension FxHomePocketCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -149,7 +148,6 @@ extension FxHomePocketCollectionCell: UICollectionViewDelegate {
         }
     }
 }
-
 
 // MARK: - FxHomePocketDiscoverMoreCell
 /// A cell to be placed at the last position in the Pocket section

@@ -63,7 +63,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.tableFooterView = UIView()
     }
 
-
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()

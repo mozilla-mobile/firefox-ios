@@ -573,7 +573,6 @@ class Tab: NSObject {
         self.webView?.scrollView.refreshControl?.endRefreshing()
     }
 
-
     @objc func zoomIn() {
         switch pageZoom {
         case 0.75:

@@ -37,7 +37,6 @@ class FxAWebViewTelemetry {
 //    /reset_password
 //    /confirm_reset_password
 
-
     // There are two valid started flow
     // signup and signin
     var validStartedFlow: FxAUrlPathStartedFlow?

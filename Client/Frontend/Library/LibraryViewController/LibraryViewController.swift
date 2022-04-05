@@ -202,7 +202,6 @@ class LibraryViewController: UIViewController {
         }
     }
 
-
     // MARK: - Panel
     var selectedPanel: LibraryPanelType? = nil {
         didSet {

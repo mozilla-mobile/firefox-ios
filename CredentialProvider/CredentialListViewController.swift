@@ -217,7 +217,6 @@ extension CredentialListViewController: UITableViewDelegate {
     }
 }
 
-
 extension CredentialListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         presenter?.filterCredentials(for: searchController.searchBar.text ?? "")

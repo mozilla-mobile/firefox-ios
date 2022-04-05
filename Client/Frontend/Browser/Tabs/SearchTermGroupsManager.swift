@@ -187,7 +187,6 @@ class SearchTermGroupsManager {
         return (filteredGroupData, itemsInGroups)
     }
 
-
     /// Removes duplicate items from the original item list; specifically, any items in
     /// groups are removed.
     ///
@@ -263,7 +262,6 @@ class SearchTermGroupsManager {
         }
     }
 }
-
 
 class StopWatchTimer {
     private var timer: Timer?
