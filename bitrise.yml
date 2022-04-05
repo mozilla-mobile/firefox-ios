@@ -90,10 +90,10 @@ workflows:
         inputs:
         - scheme: Fennec
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-    #- xcode-test@3.1:
-    #    inputs:
-    #    - scheme: Fennec
-    #    - simulator_device: iPhone 8
+    - xcode-test@3.1:
+        inputs:
+        - scheme: Fennec
+        - simulator_device: iPhone 8
   5_deploy_and_slack:
     steps:
     - deploy-to-bitrise-io@1.9: {}
