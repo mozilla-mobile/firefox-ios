@@ -1363,12 +1363,20 @@ extension BrowserViewController: ShortcutViewDelegate {
 }
 
 
-extension BrowserViewController: ShortcutsManagerDelegate {
+extension BrowserViewController: ShortcutsManagerDelegate {    
     func shortcutsUpdated() {
         for subview in shortcutsContainer.subviews {
             subview.removeFromSuperview()
         }
         addShortcuts()
+    }
+    func shortcutDidUpdate(shortcut: Shortcut) {
+        for subview in shortcutsContainer.subviews {
+            let subview = subview as? ShortcutView
+            if let subviewShortcut = subview?.shortcut, subviewShortcut.url == shortcut.url {
+                subview?.renameShortcut(with: shortcut)
+            }
+        }
     }
 }
 
