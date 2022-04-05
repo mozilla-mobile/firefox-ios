@@ -290,6 +290,9 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ແບ່ງປັນລີ້ງ";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "ຕອນນີ້ທ່ານສາມາດຍ້າຍແຖບເຄື່ອງມືໄປໄວ້ຢູ່ລຸ່ມສຸດໄດ້ ດັ່ງນັ້ນມັນຈຶ່ງງ່າຍຕໍ່ການໃສ່ຂໍ້ມູນ.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "ຕອນນີ້ຫນ້າທໍາອິດຂອງ Firefox ທີ່ໄດ້ຮັບການປັບແຕ່ງຕາມແບບຂອງທ່ານຈະເຮັດໃຫ້ທ່ານສາມາດກັບໄປເບິງຫນ້າເວັບທີ່ໄດ້ເປີດປະໄວ້ໄດ້ງ່າຍຂື້ນແລ້ວ. ຊອກຫາແທັບ, ບຸກມາກ, ແລະ ຜົນການຄົ້ນຫາຫຼ້າສຸດຂອງທ່ານ.";
 

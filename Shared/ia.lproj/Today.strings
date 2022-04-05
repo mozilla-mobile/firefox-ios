@@ -119,7 +119,7 @@
 "TodayWidget.TopSitesGalleryTitle" = "Sitos preferite";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryTitleV2" = "Vias breve al sito web";
+"TodayWidget.TopSitesGalleryTitleV2" = "Accessos directe a sitos web";
 
 /* Sub label for Top Sites widget */
 "TodayWidget.TopSitesSubLabel" = "Firefox - Sitos preferite";
