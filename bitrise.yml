@@ -2,6 +2,12 @@ format_version: '6'
 default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: ios
 workflows:
+  pipeline_test_shards:
+    - script@1.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            echo "hello"
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
