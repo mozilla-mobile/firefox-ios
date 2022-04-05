@@ -3,11 +3,22 @@ default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: ios
 workflows:
   pipeline_test_shards:
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            echo "hello"
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone@6: {}
+      - cocoapods-install@2: {}
+      - git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
+          title: Bitrise Test Plan Sharder
+          inputs:
+            - xcode_project: Client.xcodeproj
+            - target: Fennec_Enterprise_XCUITests
+            - shards: '2'
+            - scheme: Fennec_Enterprise_XCUITests
+            - test_plan: SmokeXCUITests.xctestplan
+            - debug_mode: 'true'
+            - test_path: ''
+            - file_type: ".swift"
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
