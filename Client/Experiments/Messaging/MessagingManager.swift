@@ -111,7 +111,7 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, UserD
             upcomingMessage.metadata.isExpired = true
             
             if let encoded = try? encoder.encode(upcomingMessage.metadata) {
-                userDefaultsManager.setPreference(encoded, key: upcomingMessage.messageId)
+                UserDefaults.standard.set(encoded, forKey: upcomingMessage.messageId)
             }
             
             /// Filter expired messages from our collection of showable messages

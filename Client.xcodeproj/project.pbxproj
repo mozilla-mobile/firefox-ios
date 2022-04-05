@@ -536,7 +536,6 @@
 		9636D92A27F767EC00771F5E /* MessagingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92927F767EC00771F5E /* MessagingHelper.swift */; };
 		9636D92C27F9E50100771F5E /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92B27F9E50100771F5E /* MessageStore.swift */; };
 		9636D92E27F9E5D900771F5E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92D27F9E5D900771F5E /* Message.swift */; };
-		9636D93027F9F96F00771F5E /* UserDefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92F27F9F96F00771F5E /* UserDefaultsHelper.swift */; };
 		9636D93227FA43A000771F5E /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D93127FA43A000771F5E /* Style.swift */; };
 		9638332327E14ACC0011EEFC /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		966206CD2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */; };
@@ -2921,7 +2920,6 @@
 		9636D92927F767EC00771F5E /* MessagingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingHelper.swift; sourceTree = "<group>"; };
 		9636D92B27F9E50100771F5E /* MessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
 		9636D92D27F9E5D900771F5E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		9636D92F27F9F96F00771F5E /* UserDefaultsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelper.swift; sourceTree = "<group>"; };
 		9636D93127FA43A000771F5E /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		966206CC2698DE1E005C0A55 /* FirefoxHomeRecentlySavedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxHomeRecentlySavedViewModel.swift; sourceTree = "<group>"; };
 		966ECDAB27E4FA89006C93C8 /* HistoryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanel.swift; sourceTree = "<group>"; };
@@ -5200,7 +5198,6 @@
 				962F39492672D57A006BDA2A /* RecentItemsHelper.swift */,
 				9699F77226F39E5100C5FA47 /* SiteImageHelper.swift */,
 				8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */,
-				9636D92F27F9F96F00771F5E /* UserDefaultsHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -9064,7 +9061,6 @@
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
-				9636D93027F9F96F00771F5E /* UserDefaultsHelper.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */,
 				39EF434E260A73950011E22E /* Experiments.swift in Sources */,
