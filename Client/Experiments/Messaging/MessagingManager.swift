@@ -123,10 +123,30 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, UserD
         return nil
     }
     
+    /// Handle when a user hits the CTA of the surface.
     func onMessagePressed(message: Message) {
-        // Handle substitutions
-        /// TODO: Telemetry for CTA event
-        /// Update metadta?
+        /// TODO: Track in telemetry
+        /// handle substitutions
+        
+        var messageToOperateOn = message
+        let surface = messageToOperateOn.messageData.surface
+        let encoder = JSONEncoder()
+        
+        switch message.messageData.surface {
+        case .newTabCard:
+            messageToOperateOn.metadata.isExpired = true
+            
+            if let encoded = try? encoder.encode(messageToOperateOn.metadata) {
+                UserDefaults.standard.set(encoded, forKey: messageToOperateOn.messageId)
+            }
+            
+            /// Remove this message from showables.
+            showableMessagesForSurface[surface] = showableMessagesForSurface[surface]?.filter {
+                $0.messageId != messageToOperateOn.messageId
+            }
+            
+        default: break
+        }
     }
     
     /// For now, we will assume all dismissed messages should become expired.
@@ -142,7 +162,7 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, UserD
         messageToOperateOn.metadata.isExpired = true
         
         if let encoded = try? encoder.encode(messageToOperateOn.metadata) {
-            userDefaultsManager.setPreference(encoded, key: messageToOperateOn.messageId)
+            UserDefaults.standard.set(encoded, forKey: messageToOperateOn.messageId)
         }
         
         /// Remove this message from showables.

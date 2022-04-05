@@ -19,7 +19,6 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     // MARK: - Properties
     
     public var dismissClosure: (() -> Void)?
-    lazy var messageToDisplay = messagingManager.getNextMessage(for: .newTabCard)
     var message: Message?
     
     // UI
@@ -89,8 +88,6 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     }
     
     private func setupLayout() {
-//        messagingManager.prepareMessagesForSurfaces()
-        
         
         cardView.addSubviews(learnHowButton, image, title, descriptionText, closeButton)
         containerView.addSubview(cardView)

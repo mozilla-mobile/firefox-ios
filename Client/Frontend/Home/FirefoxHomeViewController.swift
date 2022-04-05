@@ -8,7 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 
-class FirefoxHomeViewController: UICollectionViewController, HomePanel {
+class FirefoxHomeViewController: UICollectionViewController, HomePanel, MessagingManagable {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
@@ -233,6 +233,15 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
     private var shouldShowDefaultBrowserCard: Bool {
         if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    private var shouldDisplayDefaultBrowserCard: Bool {
+        if #available(iOS 14.0, *),
+           !(messagingManager.showableMessagesForSurface[.newTabCard]?.isEmpty ?? false) {
             return true
         } else {
             return false
