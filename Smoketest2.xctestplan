@@ -1,0 +1,102 @@
+{
+  "configurations" : [
+    {
+      "id" : "A939854E-B2BB-4DCE-B79A-89210EF0E606",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "ActivityStreamTest",
+        "AuthenticationTest",
+        "BaseTestCase",
+        "BookmarkingTests",
+        "BrowsingPDFTests",
+        "ClipBoardTests",
+        "CopiedLinksTests",
+        "CronTabsPerformanceTest",
+        "DataManagementTests",
+        "DatabaseFixtureTest",
+        "DesktopModeTestsIpad",
+        "DesktopModeTestsIphone",
+        "DisplaySettingTests",
+        "DomainAutocompleteTest",
+        "DownloadFilesTests",
+        "DragAndDropTestIpad",
+        "DragAndDropTests",
+        "FindInPageTests",
+        "FirstRunTourTests",
+        "FxScreenGraphTests",
+        "HistoryTests",
+        "HomeButtonTests",
+        "HomePageSettingsUITests",
+        "IntegrationTests",
+        "IpadOnlyTestCase",
+        "IphoneOnlyTestCase",
+        "LibraryTestsIpad",
+        "LibraryTestsIphone",
+        "MailAppSettingsTests",
+        "NavigationTest",
+        "NewTabSettingsTest",
+        "NightModeTests",
+        "NoImageTests",
+        "PhotonActionSheetTest\/testSendToDeviceFromPageOptionsMenu()",
+        "PhotonActionSheetTest\/testShareOptionIsShown()",
+        "PhotonActionSheetTest\/testShareSheetOpenAndCancel()",
+        "PhotonActionSheetTest\/testShareSheetSendToDevice()",
+        "PocketTest",
+        "PrivateBrowsingTest",
+        "PrivateBrowsingTestIpad\/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()",
+        "PrivateBrowsingTestIpad\/testiPadDirectAccessPrivateModeBrowserTab()",
+        "ReaderViewTest\/testAddToReadingListPrivateMode()",
+        "ReaderViewTest\/testMarkAsReadAndUnreadFromReadingList()",
+        "ReaderViewTest\/testMarkAsReadAndUreadFromReaderView()",
+        "ReaderViewTest\/testOpenSavedForReadingLongPressInNewTab()",
+        "ReaderViewTest\/testRemoveFromReadingList()",
+        "ReaderViewTest\/testRemoveFromReadingView()",
+        "ReaderViewTest\/testRemoveSavedForReadingLongPress()",
+        "SaveLoginTest\/testDeleteLogin()",
+        "SaveLoginTest\/testDoNotSaveLogin()",
+        "SaveLoginTest\/testLoginsListFromBrowserTabMenu()",
+        "SaveLoginTest\/testSavedLoginSelectUnselect()",
+        "SaveLoginTest\/testSearchLogin()",
+        "ScreenGraphTest",
+        "SearchSettingsUITests",
+        "SearchTests\/testCopyPasteComplete()",
+        "SearchTests\/testDefaultSearchEngine()",
+        "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
+        "SearchTests\/testPromptPresence()",
+        "SearchTests\/testSearchIconOnAboutHome()",
+        "SearchTests\/testSearchWithFirefoxOption()",
+        "SettingsTest",
+        "SiteLoadTest",
+        "SyncUITests",
+        "TabCounterTests",
+        "ThirdPartySearchTest",
+        "ToolbarTests",
+        "TopTabsTest\/testAddTabFromContext()",
+        "TopTabsTest\/testCloseAllTabs()",
+        "TopTabsTest\/testCloseAllTabsPrivateMode()",
+        "TopTabsTest\/testCloseOneTab()",
+        "TopTabsTest\/testSwitchBetweenTabs()",
+        "TopTabsTestIpad",
+        "TrackingProtectionTests\/testBasicMoreInfo()",
+        "TrackingProtectionTests\/testETPLockMenu()",
+        "WhatsNewTest"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "3BFE4B061D342FB800DDF53F",
+        "name" : "XCUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
