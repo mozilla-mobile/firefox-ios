@@ -12,16 +12,18 @@ struct DefaultBrowserCardUX {
     static let learnHowButtonSize: CGSize = CGSize(width: 304, height: 44)
 }
 
+/// The DefaultBrowserCard is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
+
 class DefaultBrowserCard: UIView, MessagingManagable {
     
     // MARK: - Properties
     
     public var dismissClosure: (() -> Void)?
     lazy var messageToDisplay = messagingManager.getNextMessage(for: .newTabCard)
+    var message: Message?
     
     // UI
     private lazy var title: UILabel = .build { label in
-        label.text = String.DefaultBrowserCardTitle
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -29,7 +31,6 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     }
 
     private lazy var descriptionText: UILabel = .build { label in
-        label.text = String.DefaultBrowserCardDescription
         label.numberOfLines = 4
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
@@ -38,7 +39,6 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     }
 
     private lazy var learnHowButton: UIButton = .build { [weak self] button in
-        button.setTitle(String.DefaultBrowserCardButton, for: .normal)
         button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.titleLabel?.textAlignment = .center
@@ -78,6 +78,8 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.message = messagingManager.getNextMessage(for: .newTabCard)
+        
         setupLayout()
         applyMessage()
     }
@@ -87,7 +89,7 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     }
     
     private func setupLayout() {
-        messagingManager.prepareMessagesForSurfaces()
+//        messagingManager.prepareMessagesForSurfaces()
         
         
         cardView.addSubviews(learnHowButton, image, title, descriptionText, closeButton)
@@ -158,7 +160,7 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     }
     
     private func applyMessage() {
-        guard let message = messageToDisplay else { return }
+        guard let message = message else { return }
         
         title.text = message.messageData.title ?? String.DefaultBrowserCardTitle
         descriptionText.text = message.messageData.text
@@ -169,6 +171,10 @@ class DefaultBrowserCard: UIView, MessagingManagable {
         self.dismissClosure?()
         UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard")
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
+        
+        /// Handle user dismissal of message.
+        guard let message = message else { return }
+        messagingManager.onMessageDismissed(message: message)
     }
     
     @objc private func showOnboarding() {
@@ -177,6 +183,10 @@ class DefaultBrowserCard: UIView, MessagingManagable {
         
         // Set default browser onboarding did show to true so it will not show again after user clicks this button
         UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
+        
+        /// Handle user CTA interaction.
+        guard let message = message else { return }
+        messagingManager.onMessagePressed(message: message)
     }
     
     func applyTheme() {

@@ -17,9 +17,6 @@ struct Message {
     /// The action to be done when a user positively engages with the message (CTA).
     let action: String
     
-    /// A message will always have conditions to meet prior to being marked showable. These are known as triggers.
-//    let triggers = [String]
-    
     /// The access point to StyleData from Nimbus Messaging.
     let styleData: Style
     
@@ -29,7 +26,7 @@ struct Message {
 }
 
 /// `MessageMeta` is where we store parts of the message that help us aggregate, query and determine non-expired messages.
-struct MessageMeta {
+struct MessageMeta: Codable {
     
     /// The message Key.
     let messageId: String

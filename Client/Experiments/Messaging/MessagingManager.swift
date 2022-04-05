@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
 import Foundation
 import Combine
 
@@ -18,6 +17,25 @@ extension MessagingManagable {
     }
 }
 
+protocol MessagingManagerProvider {
+    
+    /// Does the bookkeeping and preparation of messages for their respective surfaces.
+    func onStartup()
+    
+    /// Finds the next message to be displayed out of all showable messages.
+    func getNextMessage(for surface: MessageSurfaceId) -> Message?
+    
+    /// Using the helper, this should get the message action string ready for use.
+    func onMessagePressed(message: Message)
+    
+    /// Handles what to do with a message when a user has dismissed it.
+    func onMessageDismissed(message: Message)
+    
+    /// If the message is malformed (missing key elements the surface expects), then
+    /// report the malformed message.
+    func onMalformedMessage(message: Message)
+}
+
 /// The `MessagingManager` is responsible for several things including:
 /// - preparing Messages for a given UI surface
 /// - reacting to user interactions on the `Message` to handle:
@@ -25,7 +43,7 @@ extension MessagingManagable {
 ///     - user dismissal of a message
 ///     - expiration logic
 /// - reporting telemetry for `Message`s
-class MessagingManager: MessagingHelperProtocol, UserDefaultsManageable {
+class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, UserDefaultsManageable {
     
     // MARK: - Properties
     
@@ -51,35 +69,19 @@ class MessagingManager: MessagingHelperProtocol, UserDefaultsManageable {
     // MARK: - Inits
     
     init() {
+        onStartup()
+    }
+    
+    // MARK: - Messaging Protocol Conformance
+    
+    func onStartup() {
         prepareStylesForSurfaces()
         
         prepareMessagesForSurfaces()
     }
     
-    // MARK: - Misc helpers
-    
-    /// This takes all fetched messages, works on them step by step, to give us a collection of non-expired, valid and triggered messages for its associated UI surface.
-    func prepareMessagesForSurfaces() {
-        let initialMessageSet = FxNimbus.shared.features.messaging.value().messages
-        
-        let nonExpiredMessages = messagingHelper.evalExpiry(messages: initialMessageSet)
-        
-        let nonExpiredAndNonNilMessages = messagingHelper.evalMessageNilValues(messages: nonExpiredMessages)
-        
-        let nonExpiredNonNilAndTriggeredMessages = messagingHelper.evalMessageTriggers(messages: nonExpiredAndNonNilMessages)
-        
-        /// Substitutions pending!!!
-        ///
-        
-        
-        /// Populate showables, and sort later
-        populateShowableMessagesWith(messages: nonExpiredNonNilAndTriggeredMessages)
-    }
-    
     /// The assumption is that the array will be ordered from highest to lowest priority messages.
     /// That's why we'll always work with the first item from it.
-    ///
-    /// NOTE THIS IS CRASHING on saving to userDefaults. FIX SOON.
     func getNextMessage(for surface: MessageSurfaceId) -> Message? {
         
         /// If we have an empty array, that means all showable messages for that surface are expired by this point.
@@ -88,37 +90,73 @@ class MessagingManager: MessagingHelperProtocol, UserDefaultsManageable {
         
         let currentImpressionCount = upcomingMessage.metadata.messageImpressions
         let currentMessageMaxCount = upcomingMessage.styleData.maxDisplayCount
+        let encoder = JSONEncoder()
         
         if currentImpressionCount < currentMessageMaxCount {
-            /// We have a non-expired message. Do the necessary bookkeeping and return it.
             
+            /// We have a non-expired message. Do the necessary bookkeeping and return it.
             upcomingMessage.metadata.messageImpressions += 1
             
-            /// Custom objects need to be saved as a `Data` instance.
-            let encodedData = try? NSKeyedArchiver.archivedData(withRootObject: upcomingMessage.metadata, requiringSecureCoding: false)
-//            userDefaultsManager.setPreference(encodedData, key: upcomingMessage.messageId)
+            if let encoded = try? encoder.encode(upcomingMessage.metadata) {
+                UserDefaults.standard.set(encoded, forKey: upcomingMessage.messageId)
+            }
             
             return upcomingMessage
         } else {
+            /// Technically, we should never deal with this case. Our `onStartup` prepares the list of showable messages
+            /// cleanly, assuming we both store message Metadata properly here and retrieve metadata in the helper's `evalExpiry`
+            
             /// We're dealing with an expired message. Do the bookkeeping, remove it from showables, and return the
             /// Message that follows.
-            
             upcomingMessage.metadata.isExpired = true
             
-            /// Custom objects need to be saved as a `Data` instance.
-            let encodedData = try? NSKeyedArchiver.archivedData(withRootObject: upcomingMessage.metadata, requiringSecureCoding: false)
-//            userDefaultsManager.setPreference(encodedData, key: upcomingMessage.messageId)
+            if let encoded = try? encoder.encode(upcomingMessage.metadata) {
+                userDefaultsManager.setPreference(encoded, key: upcomingMessage.messageId)
+            }
             
             /// Filter expired messages from our collection of showable messages
-            let nonExpiredMessagesForSurface = showableMessagesForSurface[surface]?.filter {
-                !$0.metadata.isExpired
-            } ?? []
+            let nonExpiredMessagesForSurface = showableMessagesForSurface[surface]?.filter { !$0.metadata.isExpired } ?? []
             
             showableMessagesForSurface[surface]?.append(contentsOf: nonExpiredMessagesForSurface)
         }
         
         return nil
     }
+    
+    func onMessagePressed(message: Message) {
+        // Handle substitutions
+        /// TODO: Telemetry for CTA event
+        /// Update metadta?
+    }
+    
+    /// For now, we will assume all dismissed messages should become expired.
+    func onMessageDismissed(message: Message) {
+        var messageToOperateOn = message
+        let surface = message.messageData.surface
+        let encoder = JSONEncoder()
+   
+        /// TODO: Track the dismissal in telemetry
+
+        /// Expire the message and save.
+        messageToOperateOn.metadata.messageDismissed += 1
+        messageToOperateOn.metadata.isExpired = true
+        
+        if let encoded = try? encoder.encode(messageToOperateOn.metadata) {
+            userDefaultsManager.setPreference(encoded, key: messageToOperateOn.messageId)
+        }
+        
+        /// Remove this message from showables.
+        showableMessagesForSurface[surface] = showableMessagesForSurface[surface]?.filter {
+            $0.messageId != messageToOperateOn.messageId
+        }
+    }
+    
+    func onMalformedMessage(message: Message) {
+        // telemetry
+        // expiry of message
+    }
+    
+    // MARK: - Misc helpers
     
     /// This takes a set of styles and creates a dictionary from them, for easier access to its properties.
     func prepareStylesForSurfaces() {
@@ -129,8 +167,24 @@ class MessagingManager: MessagingHelperProtocol, UserDefaultsManageable {
         }
     }
     
-    /// This populates showable messages without sorting by priority.
-    func populateShowableMessagesWith(messages: [String : MessageData]) {
+    /// This takes all fetched messages, works on them step by step, to give us a collection of
+    /// non-expired, valid, triggered and sorted messages for its associated UI surface.
+    func prepareMessagesForSurfaces() {
+        let initialMessageSet = FxNimbus.shared.features.messaging.value().messages
+        
+        let nonExpiredMessages = messagingHelper.evalExpiry(messages: initialMessageSet)
+        
+        let nonExpiredAndNonNilMessages = messagingHelper.evalMessageNilValues(messages: nonExpiredMessages)
+        
+        let nonExpiredNonNilAndTriggeredMessages = messagingHelper.evalMessageTriggers(messages: nonExpiredAndNonNilMessages)
+        
+        /// Populate showables sorted by priority.
+        populateShowableMessagesWith(messages: nonExpiredNonNilAndTriggeredMessages)
+    }
+    
+    /// This populates showable messages.
+    private func populateShowableMessagesWith(messages: [String : MessageData]) {
+        let decoder = JSONDecoder()
         
         /// Populate our showables first, and sort afterwards.
         messages.forEach { message in
@@ -138,26 +192,26 @@ class MessagingManager: MessagingHelperProtocol, UserDefaultsManageable {
             
             let surfaceId = message.value.surface
             
-            
             let newMessageMeta = MessageMeta(messageId: message.key,
                                              messageImpressions: 0,
                                              messageDismissed: 0,
                                              isExpired: false)
             
-            /// We have a preexisting message. So, fill in our showable message with its associated metadata.
-            if let preExistingMessageMeta: MessageMeta = userDefaultsManager.getPreference(message.key) {
+            /// If we have a preexisting message, fill in our showable message with its associated metadata.
+            if let decodableMessageMetadata = UserDefaults.standard.data(forKey: message.key),
+                let decodedData = try? decoder.decode(MessageMeta.self, from: decodableMessageMetadata) {
                 preparedMessage = Message(messageId: message.key,
-                                      messageData: message.value,
-                                      action: message.value.action,
-                                      styleData: styles[message.key] ?? Style(priority: 50, maxDisplayCount: 5),
-                                      metadata: preExistingMessageMeta)
+                                          messageData: message.value,
+                                          action: message.value.action,
+                                          styleData: styles[message.value.style] ?? Style(priority: 50, maxDisplayCount: 5),
+                                          metadata: decodedData)
             } else {
-                /// We have a brand new message. Fill in the defaults as one.
+                /// We have a brand new message. Fill in the defaults.
                 preparedMessage = Message(messageId: message.key,
-                                      messageData: message.value,
-                                      action: message.value.action,
-                                      styleData: styles[message.key] ?? Style(priority: 50, maxDisplayCount: 5),
-                                      metadata: newMessageMeta)
+                                          messageData: message.value,
+                                          action: message.value.action,
+                                          styleData: styles[message.value.style] ?? Style(priority: 50, maxDisplayCount: 5),
+                                          metadata: newMessageMeta)
             }
             
             if showableMessagesForSurface.keys.contains(surfaceId) {
@@ -169,7 +223,26 @@ class MessagingManager: MessagingHelperProtocol, UserDefaultsManageable {
             
         }
         
-        // Now, I think I can access the inner elements and sort on priority.
+        /// Sort these messages according to their priority.
+        showableMessagesForSurface.keys.forEach { key in
+            let sortedMessages = showableMessagesForSurface[key]?.sorted(by: { message1, message2 in
+                message1.styleData.priority > message2.styleData.priority
+            }) ?? []
+            
+            showableMessagesForSurface[key]?.removeAll()
+            showableMessagesForSurface[key]?.append(contentsOf: sortedMessages)
+        }
+        
+        /// Persist these messages' metadata for future tracking.
+        let encoder = JSONEncoder()
+        
+        showableMessagesForSurface.keys.forEach { key in
+            showableMessagesForSurface[key]?.forEach { message in
+                if let encoded = try? encoder.encode(message.metadata) {
+                    UserDefaults.standard.set(encoded, forKey: message.messageId)
+                }
+            }
+        }
         
         print("sup")
     }

@@ -23,18 +23,48 @@ class MessagingHelper: Loggable, UserDefaultsManageable {
     
     static let shared = MessagingHelper()
     
+    let userDefaults = UserDefaults.standard
+    
+    /// Styles inform us of a message's priority and maximum display count. The ordering goes from
+    /// `DEFAULT` being the lowest to `URGENT` being the highest for priority. However, they CAN
+    /// be overriden to mean different things!
+    var styles: [String: Style] = [:]
+    
+    init() {
+        prepareStylesForSurfaces()
+    }
+    
     // MARK: - Public helpers
     
     /// Filter messages that are EXPIRED.
     func evalExpiry(messages: [String : MessageData]) -> [String : MessageData] {
+        let decoder = JSONDecoder()
+        
         let nonExpiredMessages = messages.filter { message in
             
-            /// If this is the first time we're dealing with this `Message`, then we have no expiration data.
-            /// Therefore, it's not expired for now.
-            guard let preExistingMessage: MessageMeta = userDefaultsManager.getPreference(message.key) else { return true }
+            /// Determine if we've encountered this message before.
+            /// If we have, determine its status.
+            if let decodableMessageMetadata = UserDefaults.standard.data(forKey: message.key),
+                var decodedData = try? decoder.decode(MessageMeta.self, from: decodableMessageMetadata) {
+                
+                let hasExceededImpressionLimit = decodedData.messageImpressions >= styles[message.value.style]?.maxDisplayCount ?? 5
+                
+                /// Expire it, and remember it!
+                if hasExceededImpressionLimit {
+                    let encoder = JSONEncoder()
+                    
+                    decodedData.isExpired = true
+                    
+                    if let encoded = try? encoder.encode(decodedData) {
+                        UserDefaults.standard.set(encoded, forKey: message.key)
+                    }
+                }
+                
+                return !decodedData.isExpired && !hasExceededImpressionLimit
+            }
             
-            /// Not the first time we're seeing this `Message`, so we should have expiry data.
-            return !preExistingMessage.isExpired
+            /// If we're here, that means we haven't seen this message before and therefore, not expired.
+            return true
         }
         
         return nonExpiredMessages
@@ -129,11 +159,14 @@ class MessagingHelper: Loggable, UserDefaultsManageable {
         let gleanPlumbHelper: GleanPlumbMessageHelper
         var admissableTriggers: [String: Bool] = [:]
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-mm-dd"
+        let todaysDate = dateFormatter.string(from: Date())
+        
         do {
-            // JEXLS are evaluated against app context
-            // app can provide details about itself  to JEXL --> like isDefaultBrowser
-            // Look up how to do these in iOS and pass it in!!
-            gleanPlumbHelper = try Experiments.shared.createMessageHelper(additionalContext: ["is_default_browser" : false, "date_string": "YYYY-MM-DD"])
+            /// JEXLS are evaluated more accurately when given app context (details about the app on device).
+            gleanPlumbHelper = try Experiments.shared.createMessageHelper(additionalContext: ["is_default_browser" : false,
+                                                                                              "date_string": todaysDate])
         } catch {
             Logger.browserLogger.error("GleanPlumbMessageHelper could not be created!")
             return [:]
@@ -163,12 +196,15 @@ class MessagingHelper: Loggable, UserDefaultsManageable {
         return triggerValue
     }
     
-    /// We expect to encounter `Style`s that are already within the FML for the MVP. So, we evaluate them and
-    /// pass to where they're needed.
-    private func evalProvidedStyles() {
-        let styles = FxNimbus.shared.features.messaging.value().styles
+    // MARK: - Misc. helpers
+    
+    /// This takes a set of styles and creates a dictionary from them, for easier access to its properties.
+    func prepareStylesForSurfaces() {
+        let nonNilStyles = evalStyleNilValues()
         
-        
+        nonNilStyles.forEach { style in
+            styles[style.key] = Style(priority: style.value.priority, maxDisplayCount: style.value.maxDisplayCount)
+        }
     }
     
 }

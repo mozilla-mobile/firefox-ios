@@ -201,16 +201,20 @@ features:
             }
           }
         }
-      # - channel: developer
-      #   value: {
-      #     "messages": {
-      #       "private-tabs-auto-close": {
-      #         "action": "OPEN_SETTINGS",
-      #         "text": "Sharing your phone? Autoclosing private tabs is for you!",
-      #         "trigger": ["USER_RECENTLY_INSTALLED"]
-      #       }
-      #     }
-      #   }
+      - channel: developer
+        value: {
+          "messages": {
+            "my-viewpoint-survey-2": {
+              "title": "Message title",
+              "text": "Love Firefox? Fill in our survey!",
+              "action": "https://surveyprovider.com/survey-id/{uuid}",
+              "trigger": [ "ALWAYS" ],
+              "style": "URGENT",
+              "button-label": "Go to the survey",
+              "surface": "NewTabCard"
+            }
+          }
+        }
       - channel: developer
         value: {
       #     "triggers": {
