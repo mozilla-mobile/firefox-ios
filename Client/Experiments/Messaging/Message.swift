@@ -17,8 +17,11 @@ struct Message {
     /// The action to be done when a user positively engages with the message (CTA).
     let action: String
     
+    /// 
+    let triggers: [String]
+    
     /// The access point to StyleData from Nimbus Messaging.
-    let styleData: Style
+    let styleData: StyleData
     
     /// The minimal data about a message that we should persist.
     var metadata: MessageMeta

@@ -3,9 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Combine
 
 import MozillaAppServices
+import Shared
 
 /// `Messaging` is synonymous with `GleanPlumb`.
 
@@ -25,6 +25,9 @@ protocol MessagingManagerProvider {
     /// Finds the next message to be displayed out of all showable messages.
     func getNextMessage(for surface: MessageSurfaceId) -> Message?
     
+    /// Track the impression display in Glean, and do the pass the bookeeping to increment the impression count and expire to `MessageStore`.
+    func onMessageDisplayed(message: Message)
+    
     /// Using the helper, this should get the message action string ready for use.
     func onMessagePressed(message: Message)
     
@@ -43,7 +46,7 @@ protocol MessagingManagerProvider {
 ///     - user dismissal of a message
 ///     - expiration logic
 /// - reporting telemetry for `Message`s
-class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol {
+class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Loggable {
     
     // MARK: - Properties
     
@@ -61,11 +64,6 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol {
     /// - reaching the expiry impression limit
     var showableMessagesForSurface: [MessageSurfaceId: [Message]] = [:]
     
-    /// Styles inform us of a message's priority and maximum display count. The ordering goes from
-    /// `DEFAULT` being the lowest to `URGENT` being the highest for priority. However, they CAN
-    /// be overriden to mean different things!
-    var styles: [String: Style] = [:]
-    
     // MARK: - Inits
     
     init() {
@@ -75,53 +73,202 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol {
     // MARK: - Messaging Protocol Conformance
     
     func onStartup() {
-        prepareStylesForSurfaces()
+//        prepareMessagesForSurfaces()
+    }
+    
+    /// We will assemble the message. If there's any issue with it, return `nil`.
+    func createMessage(messageId: String, message: MessageData, lookupTables: Messaging, messageStore: MessageStoreProtocol) -> Message? {
+        /// pick up its style
+        /// look up its triggers
+        /// look up the action
+        ///     otherwise return nil
+        ///
+        ///
         
-        prepareMessagesForSurfaces()
+        /// we know is well formed, triggers exist but not evaluted
+        guard let style = lookupTables.styles[message.style] else { return nil }
+        
+        /// TODO: Check that the actions inside the lookup table OR it's well-formed.
+        
+        let action = lookupTables.actions[message.action] ?? message.action
+        guard action.contains("://") else { return nil }
+//        guard let action = lookupTables.actions[message.action] else { return nil }
+        
+        /// TODO: Check that triggers are the same length as what messageData contains.
+        let triggers = message.trigger.compactMap { trigger in
+            lookupTables.triggers[trigger]
+        }
+        
+        return Message(messageId: messageId,
+                       messageData: message,
+                       action: action,
+                       triggers: triggers,
+                       styleData: style,
+                       metadata: messageStore.getMessageMetadata(messageId: messageId))
+        
+    }
+    
+    /// Evaluate the JEXLs on the message using the helper.
+    func isMessageEligible(message: Message, messageHelper: GleanPlumbMessageHelper) throws -> Bool {
+        /// TODO: Save these in a lookup table so we don't need to reevaluate triggers every time.
+        try message.triggers.reduce(true) { acc, trigger in
+            guard acc else { return false }
+            
+            return try messageHelper.evalJexl(expression: trigger)
+        }
+    }
+    
+    func isMessageExpired(message: Message) -> Bool {
+        return message.metadata.isExpired && message.metadata.messageImpressions >= message.styleData.maxDisplayCount
+    }
+    
+    func createAdditionalContext() -> [String: Any] {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-mm-dd"
+        let todaysDate = dateFormatter.string(from: Date())
+        
+        return ["date_string": todaysDate]
+    }
+    
+    /// Returns well-formed, non-expired, eligible messages.
+    func getNextMessage(for surface: MessageSurfaceId) -> Message? {
+        let feature = FxNimbus.shared.features.messaging.value()
+        
+        let helper: GleanPlumbMessageHelper
+        
+        do {
+            helper = try Experiments.shared.createMessageHelper(additionalContext: createAdditionalContext())
+        } catch {
+            Logger.browserLogger.error("GleanPlumbMessageHelper could not be created! With error \(error)")
+            return nil
+        }
+        
+        let messageStore = MessageStore()
+        
+        /// All these are non-expired and well formed messages.
+        let messages = feature.messages.compactMap { key, messageData -> Message? in
+            if let message = self.createMessage(messageId: key,
+                                                message: messageData,
+                                                lookupTables: feature,
+                                                messageStore: messageStore) {
+                return message
+            }
+            
+            /// TODO: report message malformed to glean
+            
+            return nil
+        }.filter { message in
+            !self.isMessageExpired(message: message)
+        }
+        
+        /// Take the first triggered message.
+        guard let message = messages.first(where: { message in
+            do {
+                return try self.isMessageEligible(message: message, messageHelper: helper)
+            } catch {
+                /// TODO: report this as a malformed message.
+                return false
+            }
+        }) else {
+            return nil
+        }
+        
+        ///
+        if self.isMessageUnderExperiment(key: feature.messageUnderExperiment, message: message) {
+            /// TODO: Report via telemetry
+            FxNimbus.shared.features.messaging.recordExposure()
+            let onControlActions = FxNimbus.shared.features.messaging.value().onControl
+            
+            if message.messageData.isControl {
+                switch onControlActions {
+                case .showNone:
+                    return nil
+                case .showNextMessage:
+                    /// return the next message in the array of messages
+                    return messages.first { message in
+                        do {
+                            return try self.isMessageEligible(message: message, messageHelper: helper) && !message.messageData.isControl
+                        } catch {
+                            /// TODO: report this as a malformed message.
+                            return false
+                        }
+                    }
+                }
+            }
+        }
+        
+        return message
+    }
+    
+    /// Where key is the message under experiment string
+    func isMessageUnderExperiment(key: String?, message: Message) -> Bool {
+        guard let key = key else {
+            return false
+        }
+
+        if message.messageData.isControl {
+            return true
+        }
+        
+        if message.messageId.hasSuffix("-") {
+            return message.messageId.hasPrefix(key)
+        }
+        
+        return message.messageId == key
+    }
+    
+    /// We report to Glean, and do give the rest to the MessageStore
+    func onMessageDisplayed(message: Message) {
+        /// TODO: Report an impression event for Glean
+        
+        
     }
     
     /// The assumption is that the array will be ordered from highest to lowest priority messages.
     /// That's why we'll always work with the first item from it.
-    func getNextMessage(for surface: MessageSurfaceId) -> Message? {
-        
-        /// If we have an empty array, that means all showable messages for that surface are expired by this point.
-        /// The injection site should handle the `nil` case by resorting to its default behavior and message.
-        guard var upcomingMessage = showableMessagesForSurface[surface]?.first else { return nil }
-        
-        let currentImpressionCount = upcomingMessage.metadata.messageImpressions
-        let currentMessageMaxCount = upcomingMessage.styleData.maxDisplayCount
-        let encoder = JSONEncoder()
-        
-        if currentImpressionCount < currentMessageMaxCount {
-            
-            /// We have a non-expired message. Do the necessary bookkeeping and return it.
-            upcomingMessage.metadata.messageImpressions += 1
-            
-            if let encoded = try? encoder.encode(upcomingMessage.metadata) {
-                UserDefaults.standard.set(encoded, forKey: upcomingMessage.messageId)
-            }
-            
-            return upcomingMessage
-        } else {
-            /// Technically, we should never deal with this case. Our `onStartup` prepares the list of showable messages
-            /// cleanly, assuming we both store message Metadata properly here and retrieve metadata in the helper's `evalExpiry`
-            
-            /// We're dealing with an expired message. Do the bookkeeping, remove it from showables, and return the
-            /// Message that follows.
-            upcomingMessage.metadata.isExpired = true
-            
-            if let encoded = try? encoder.encode(upcomingMessage.metadata) {
-                UserDefaults.standard.set(encoded, forKey: upcomingMessage.messageId)
-            }
-            
-            /// Filter expired messages from our collection of showable messages
-            let nonExpiredMessagesForSurface = showableMessagesForSurface[surface]?.filter { !$0.metadata.isExpired } ?? []
-            
-            showableMessagesForSurface[surface]?.append(contentsOf: nonExpiredMessagesForSurface)
-        }
-        
-        return nil
-    }
+//    func LegacygetNextMessage(for surface: MessageSurfaceId) -> Message? {
+//
+//        /// If we have an empty array, that means all showable messages for that surface are expired by this point.
+//        /// The injection site should handle the `nil` case by resorting to its default behavior and message.
+//        guard var upcomingMessage = showableMessagesForSurface[surface]?.first else { return nil }
+//
+//        let currentImpressionCount = upcomingMessage.metadata.messageImpressions
+//        let currentMessageMaxCount = upcomingMessage.styleData.maxDisplayCount
+//        let encoder = JSONEncoder()
+//
+//        if currentImpressionCount < currentMessageMaxCount {
+//
+//            if let messageIndex = showableMessagesForSurface[surface]?.firstIndex(where: { $0.messageId == upcomingMessage.messageId }) {
+//                showableMessagesForSurface[surface]?.remove(at: messageIndex)
+//            }
+//
+//            /// We have a non-expired message. Do the necessary bookkeeping and return it.
+//            upcomingMessage.metadata.messageImpressions += 1
+//
+//            if let encoded = try? encoder.encode(upcomingMessage.metadata) {
+//                UserDefaults.standard.set(encoded, forKey: upcomingMessage.messageId)
+//            }
+//
+//            return upcomingMessage
+//        } else {
+//            /// onStartup doesn't handle messages from showables. We need to do that here.
+//
+//            /// We're dealing with an expired message. Do the bookkeeping, remove it from showables, and return the
+//            /// Message that follows.
+//            upcomingMessage.metadata.isExpired = true
+//
+//            if let encoded = try? encoder.encode(upcomingMessage.metadata) {
+//                UserDefaults.standard.set(encoded, forKey: upcomingMessage.messageId)
+//            }
+//
+//            /// Filter expired messages from our collection of showable messages
+//            let nonExpiredMessagesForSurface = showableMessagesForSurface[surface]?.filter { !$0.metadata.isExpired } ?? []
+//
+//            showableMessagesForSurface[surface]?.append(contentsOf: nonExpiredMessagesForSurface)
+//        }
+//
+//        return nil
+//    }
     
     /// Handle when a user hits the CTA of the surface.
     func onMessagePressed(message: Message) {
@@ -178,93 +325,86 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol {
     
     // MARK: - Misc helpers
     
-    /// This takes a set of styles and creates a dictionary from them, for easier access to its properties.
-    func prepareStylesForSurfaces() {
-        let nonNilStyles = messagingHelper.evalStyleNilValues()
-        
-        nonNilStyles.forEach { style in
-            styles[style.key] = Style(priority: style.value.priority, maxDisplayCount: style.value.maxDisplayCount)
-        }
-    }
-    
     /// This takes all fetched messages, works on them step by step, to give us a collection of
     /// non-expired, valid, triggered and sorted messages for its associated UI surface.
-    func prepareMessagesForSurfaces() {
-        let initialMessageSet = FxNimbus.shared.features.messaging.value().messages
-        
-        let nonExpiredMessages = messagingHelper.evalExpiry(messages: initialMessageSet)
-        
-        let nonExpiredAndNonNilMessages = messagingHelper.evalMessageNilValues(messages: nonExpiredMessages)
-        
-        let nonExpiredNonNilAndTriggeredMessages = messagingHelper.evalMessageTriggers(messages: nonExpiredAndNonNilMessages)
-        
-        /// Populate showables sorted by priority.
-        populateShowableMessagesWith(messages: nonExpiredNonNilAndTriggeredMessages)
-    }
+//    func prepareMessagesForSurfaces() {
+//        let initialMessageSet = FxNimbus.shared.features.messaging.value().messages
+//        
+//        let nonExpiredMessages = messagingHelper.evalExpiry(messages: initialMessageSet)
+//        
+//        let nonExpiredAndNonNilMessages = messagingHelper.evalMessageNilValues(messages: nonExpiredMessages)
+//        
+//        let nonExpiredNonNilAndTriggeredMessages = messagingHelper.evalMessageTriggers(messages: nonExpiredAndNonNilMessages)
+//        
+//        /// Populate showables sorted by priority.
+////        populateShowableMessagesWith(messages: nonExpiredNonNilAndTriggeredMessages)
+//    }
     
     /// This populates showable messages.
-    private func populateShowableMessagesWith(messages: [String : MessageData]) {
-        let decoder = JSONDecoder()
-        
-        /// Populate our showables first, and sort afterwards.
-        messages.forEach { message in
-            var preparedMessage: Message
-            
-            let surfaceId = message.value.surface
-            
-            let newMessageMeta = MessageMeta(messageId: message.key,
-                                             messageImpressions: 0,
-                                             messageDismissed: 0,
-                                             isExpired: false)
-            
-            /// If we have a preexisting message, fill in our showable message with its associated metadata.
-            if let decodableMessageMetadata = UserDefaults.standard.data(forKey: message.key),
-                let decodedData = try? decoder.decode(MessageMeta.self, from: decodableMessageMetadata) {
-                preparedMessage = Message(messageId: message.key,
-                                          messageData: message.value,
-                                          action: message.value.action,
-                                          styleData: styles[message.value.style] ?? Style(priority: 50, maxDisplayCount: 5),
-                                          metadata: decodedData)
-            } else {
-                /// We have a brand new message. Fill in the defaults.
-                preparedMessage = Message(messageId: message.key,
-                                          messageData: message.value,
-                                          action: message.value.action,
-                                          styleData: styles[message.value.style] ?? Style(priority: 50, maxDisplayCount: 5),
-                                          metadata: newMessageMeta)
-            }
-            
-            if showableMessagesForSurface.keys.contains(surfaceId) {
-                showableMessagesForSurface[surfaceId]?.append(preparedMessage)
-            } else {
-                showableMessagesForSurface[surfaceId] = []
-                showableMessagesForSurface[surfaceId]?.append(preparedMessage)
-            }
-            
-        }
-        
-        /// Sort these messages according to their priority.
-        showableMessagesForSurface.keys.forEach { key in
-            let sortedMessages = showableMessagesForSurface[key]?.sorted(by: { message1, message2 in
-                message1.styleData.priority > message2.styleData.priority
-            }) ?? []
-            
-            showableMessagesForSurface[key]?.removeAll()
-            showableMessagesForSurface[key]?.append(contentsOf: sortedMessages)
-        }
-        
-        /// Persist these messages' metadata for future tracking.
-        let encoder = JSONEncoder()
-        
-        showableMessagesForSurface.keys.forEach { key in
-            showableMessagesForSurface[key]?.forEach { message in
-                if let encoded = try? encoder.encode(message.metadata) {
-                    UserDefaults.standard.set(encoded, forKey: message.messageId)
-                }
-            }
-        }
-        
-        print("sup")
-    }
+//    private func populateShowableMessagesWith(messages: [String : MessageData]) {
+//        let decoder = JSONDecoder()
+//
+//        /// Populate our showables first, and sort afterwards.
+//        messages.forEach { message in
+//            var preparedMessage: Message
+//
+//            let surfaceId = message.value.surface
+//
+//            let newMessageMeta = MessageMeta(messageId: message.key,
+//                                             messageImpressions: 0,
+//                                             messageDismissed: 0,
+//                                             isExpired: false)
+//
+//            /// If we have a preexisting message, fill in our showable message with its associated metadata.
+//            if let decodableMessageMetadata = UserDefaults.standard.data(forKey: message.key),
+//                let decodedData = try? decoder.decode(MessageMeta.self, from: decodableMessageMetadata) {
+//                preparedMessage = Message(messageId: message.key,
+//                                          messageData: message.value,
+//                                          action: message.value.action,
+//                                          triggers: <#[String]#>,
+//                                          styleData: styles[message.value.style] ?? Style(priority: 50, maxDisplayCount: 5),
+//                                          metadata: decodedData)
+//            } else {
+//                /// We have a brand new message. Fill in the defaults.
+//                preparedMessage = Message(messageId: message.key,
+//                                          messageData: message.value,,
+//                                          triggers: <#[String]#>
+//                                          action: message.value.action,
+//                                          styleData: styles[message.value.style] ?? Style(priority: 50, maxDisplayCount: 5),
+//                                          metadata: newMessageMeta)
+//            }
+//
+//            if showableMessagesForSurface.keys.contains(surfaceId) {
+//                showableMessagesForSurface[surfaceId]?.append(preparedMessage)
+//            } else {
+//                showableMessagesForSurface[surfaceId] = []
+//                showableMessagesForSurface[surfaceId]?.append(preparedMessage)
+//            }
+//
+//        }
+//
+//        /// Sort these messages according to their priority.
+//        showableMessagesForSurface.keys.forEach { key in
+//            let sortedMessages = showableMessagesForSurface[key]?.sorted(by: { message1, message2 in
+//                message1.styleData.priority > message2.styleData.priority
+//            }) ?? []
+//
+//            showableMessagesForSurface[key]?.removeAll()
+//            showableMessagesForSurface[key]?.append(contentsOf: sortedMessages)
+//        }
+//
+//        /// Persist these messages' metadata for future tracking.
+//        let encoder = JSONEncoder()
+//
+//        showableMessagesForSurface.keys.forEach { key in
+//            showableMessagesForSurface[key]?.forEach { message in
+//                if let encoded = try? encoder.encode(message.metadata) {
+//                    UserDefaults.standard.set(encoded, forKey: message.messageId)
+//                }
+//            }
+//        }
+//
+//        print("sup")
+//    }
     
 }

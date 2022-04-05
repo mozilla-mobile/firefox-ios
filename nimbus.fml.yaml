@@ -183,7 +183,7 @@ features:
           styles:
             DEFAULT:
               priority: 50
-              max-display-count: 100
+              max-display-count: 6
             EXPIRES_QUICKLY:
               priority: 100
               max-display-count: 1
@@ -204,12 +204,26 @@ features:
       - channel: developer
         value: {
           "messages": {
-            "my-viewpoint-survey-2": {
+            "my-viewpoint-survey-3": {
               "title": "Message title",
               "text": "Love Firefox? Fill in our survey!",
               "action": "https://surveyprovider.com/survey-id/{uuid}",
               "trigger": [ "ALWAYS" ],
-              "style": "URGENT",
+              "style": "DEFAULT",
+              "button-label": "Go to the survey",
+              "surface": "NewTabCard"
+            }
+          }
+        }
+      - channel: developer
+        value: {
+          "messages": {
+            "a-different-message-yes": {
+              "title": "A dummy message for you!",
+              "text": "Love Firefox? Fill in our survey!",
+              "action": "https://surveyprovider.com/survey-id/{uuid}",
+              "trigger": [ "ALWAYS" ],
+              "style": "DEFAULT",
               "button-label": "Go to the survey",
               "surface": "NewTabCard"
             }
@@ -236,7 +250,7 @@ features:
       #       }
       #     },
 
-      #     "message-under-experiment": "eu-tracking-protection-for-"
+          "message-under-experiment": "eu-tracking-protection-for-"
         }
 
 types:
