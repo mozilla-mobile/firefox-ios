@@ -457,6 +457,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Remover";
 
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Sponsorisate";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Avante";
 
@@ -554,7 +557,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparato se ha disconnectite de Firefox Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox logo, cambia le fundo.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo de Firefox, cambia le fundo.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Obtene le schedas aperte, le marcapaginas e le contrasignos de tu altere apparatos.";
@@ -793,6 +796,18 @@
 /* History tableview section header */
 "Last week" = "Le ultime septimana";
 
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Cancellar";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Deler";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Deler tote le sitos in %@?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Remove le chronologia (incluse le chronologia synchronisate de altere apparatos), cookies e altere datos de navigation.";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Nulle chronologia trovate";
 
@@ -804,6 +819,9 @@
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
 "LibraryPanel.History.SyncedFromOtherDevices.v99" = "Synchronisate ab altere apparatos";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Chronologia synchronisate";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "Plus ancian";
@@ -952,7 +970,7 @@
 "Menu.AddToReadingList.Confirm" = "Addite al lista de lectura";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
-"Menu.AddToShortcuts.v99" = "Adder al vias breve";
+"Menu.AddToShortcuts.v99" = "Adder al accessos directe";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Marcapaginas";
@@ -1045,13 +1063,13 @@
 "Menu.RemovePin.Confirm" = "Removite del sitos preferite";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2.v99" = "Removite ex vias breve";
+"Menu.RemovePin.Confirm2.v99" = "Removite del accessos directe";
 
 /* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
-"Menu.RemoveReadingList.AlternateLabel.v99" = "Remover ex le lista de lectura";
+"Menu.RemoveReadingList.AlternateLabel.v99" = "Remover del lista de lectura";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
-"Menu.RemoveReadingList.Confirm.v99" = "Removite ex le lista de lectura";
+"Menu.RemoveReadingList.Confirm.v99" = "Removite del lista de lectura";
 
 /* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
 "Menu.RemoveReadingList.Label.v99" = "Remover";
@@ -1069,7 +1087,7 @@
 "Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Marcapaginas";
 
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
-"Menu.Toolbar.Home.AccessibilityLabel.v99" = "A casa";
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Initio";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Blocate";
@@ -1346,6 +1364,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Per favor permitte a Firefox de acceder al camera de tu apparato in ‘Parametros’ -> ‘Confidentialitate’ -> ‘Camera’.";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Va a ‘Parametros’ > ‘Firefox’ del apparato. Permitte a Firefox de acceder al camera.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scannar codice QR";
 
@@ -1621,7 +1642,7 @@
 "Settings.Home.Option.RecentlyVisited" = "Visitate recentemente";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
-"Settings.Home.Option.Shortcuts" = "Vias breve";
+"Settings.Home.Option.Shortcuts" = "Accessos directe";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "Pagina initial post 4 horas de inactivitate";
@@ -1645,16 +1666,16 @@
 "Settings.Home.Option.Wallpaper" = "Fundo";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fundo de Firefox, modello amethysto.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fundo de Firefox, motivo amethysto.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fundo de Firefox, modello cerulee.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fundo de Firefox, motivo cerulee.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Fundo de Firefox, modello cerulee.";
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Fundo clar predefinite.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fundo de Firefox, modello sol levante.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fundo de Firefox, motivo de sol levante.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Pagina principal button pro recyclar le fundos";
@@ -1679,6 +1700,27 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Pagina initial";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Lineas";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Lineas";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Accessos directe";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Accessos directe";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Accessos directe sponsorisate";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Inactive";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Active";
 
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "Parametros del pagina initial";

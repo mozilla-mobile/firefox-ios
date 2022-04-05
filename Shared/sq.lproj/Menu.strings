@@ -1,6 +1,9 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Faqeruaje Këtë Faqe";
 
+/* Long label for the button displayed in the menu, used to add a page to the reading list. */
+"Menu.AddToReadingList.AlternateLabel.v99" = "Shtoje te Listë Leximesh";
+
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "Shtoje te Listë Leximesh";
 
@@ -57,6 +60,9 @@
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "Menu.RecentlySaved.Title" = "Ruajtur Së Fundi";
+
+/* Long label for the remove bookmark button displayed in the menu. Pressing this button remove the current page from the bookmarks. */
+"Menu.RemoveBookmark.AlternateLabel.v99" = "Hiqe Faqerojtësin";
 
 /* Label for the button, displayed in the menu, used to delete an existing bookmark for the current website. */
 "Menu.RemoveBookmarkAction.Title" = "Hiqe Faqerojtësin";
