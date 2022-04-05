@@ -35,7 +35,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         toggleEmptyState()
     }
     
-    private func performSearch(term: String) {
+    func performSearch(term: String) {
         viewModel.performSearch(term: term.lowercased()) { success in
             guard success else {
                 self.handleNoResults()

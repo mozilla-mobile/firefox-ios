@@ -673,6 +673,12 @@ extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
     // Happens WAY too often. We should consider fetching the next set when the user HITS the bottom instead.
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard !viewModel.isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }
+        
+        guard !viewModel.isSearchInProgress else {
+            viewModel.updateSearchOffset()
+            performSearch(term: searchbar.text ?? "")
+            return
+        }
 
         viewModel.reloadData()
         applySnapshot(animatingDifferences: false)
