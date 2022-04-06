@@ -20,6 +20,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchText = searchBar.text, !searchText.isEmpty else {
             viewModel.filterMockSites.removeAll()
+            applySearchSnapshot()
             return
         }
 
@@ -34,16 +35,15 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         toggleEmptyState()
     }
     
-    // Using mock query that returns history from today's section
-    // TODO: Replace with query in https://mozilla-hub.atlassian.net/browse/FXIOS-4000
-    private func performSearch(term: String) {
+    func performSearch(term: String) {
         viewModel.performSearch(term: term.lowercased()) { success in
-            guard success, !viewModel.filterMockSites.isEmpty else {
-                toggleEmptyState()
+            guard success else {
+                self.handleNoResults()
                 return
             }
             
-            applySearchSnapshot()
+            self.applySearchSnapshot()
+            self.toggleEmptyState()
         }
     }
     
@@ -51,8 +51,8 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         // Create search results snapshot and apply
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
         snapshot.appendSections([HistoryPanelSections.searchResults])
-        snapshot.appendItems(viewModel.filterMockSites)
-        diffableDatasource?.apply(snapshot, animatingDifferences: false)
+        snapshot.appendItems(self.viewModel.filterMockSites)
+        self.diffableDatasource?.apply(snapshot, animatingDifferences: false)
     }
     
     private func handleNoResults() {
@@ -64,10 +64,6 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
 // MARK: - KeyboardHelperDelegate
 extension HistoryPanelWithGroups: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        keyboardState = state
-    }
-    
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
         keyboardState = state
         updateLayoutForKeyboard()
         UIView.animate(withDuration: state.animationDuration, delay: 0,

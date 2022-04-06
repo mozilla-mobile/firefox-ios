@@ -56,7 +56,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     }
     
     lazy var searchbar: UISearchBar = .build { searchbar in
-        searchbar.setImage(UIImage(named: ImageIdentifiers.libraryPanelHistory), for: .search, state: .normal)
         searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
         searchbar.returnKeyType = .go
         searchbar.delegate = self
@@ -148,10 +147,9 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             
-            bottomStackView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
             bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
@@ -479,6 +477,10 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
         searchbar.backgroundColor = UIColor.theme.textField.backgroundInOverlay
+        let tintColor = UIColor.theme.textField.textAndTint
+        let searchBarImage = UIImage(named: ImageIdentifiers.libraryPanelHistory)?.withRenderingMode(.alwaysTemplate).tinted(withColor: tintColor)
+        searchbar.setImage(searchBarImage, for: .search, state: .normal)
+        searchbar.tintColor = UIColor.theme.textField.textAndTint
         
         tableView.reloadData()
     }
@@ -671,6 +673,12 @@ extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
     // Happens WAY too often. We should consider fetching the next set when the user HITS the bottom instead.
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard !viewModel.isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }
+        
+        guard !viewModel.isSearchInProgress else {
+            viewModel.updateSearchOffset()
+            performSearch(term: searchbar.text ?? "")
+            return
+        }
 
         viewModel.reloadData()
         applySnapshot(animatingDifferences: false)

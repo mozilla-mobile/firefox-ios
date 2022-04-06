@@ -610,6 +610,29 @@ extension SQLiteHistory: BrowserHistory {
     public func getFrecentHistory() -> FrecentHistory {
         return SQLiteFrecentHistory(db: db, prefs: prefs)
     }
+    
+    public func getHistory(matching searchTerm: String,
+                           limit: Int,
+                           offset: Int,
+                           completion: @escaping ([Site]) -> ()) {
+        let query = """
+            SELECT hist.* FROM history hist
+            INNER JOIN history_fts historyFTS ON
+                historyFTS.rowid = hist.rowid
+            WHERE historyFTS.title LIKE "%\(searchTerm)%" OR
+                historyFTS.url LIKE "%\(searchTerm)%"
+            LIMIT \(limit)
+            OFFSET \(offset);
+            """
+
+        db.runQueryConcurrently(query, args: nil, factory: SQLiteHistory.basicHistoryColumnFactory).uponQueue(.main) { result in
+            guard result.isSuccess else {
+                completion([Site]())
+                return
+            }
+            completion(result.successValue?.asArray() ?? [Site]())
+        }
+    }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return self.db.runQueryConcurrently(topSitesQuery, args: [limit], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)

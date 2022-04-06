@@ -12,6 +12,7 @@ import Shared
  * mock out parts of the history API
  */
 class MockableHistory: BrowserHistory, SyncableHistory, ResettableSyncStorage {
+    func getHistory(matching searchTerm: String, limit: Int, offset: Int, completion: @escaping ([Site]) -> ()) { fatalError() }
     func getFrecentHistory() -> FrecentHistory { fatalError() }
     func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func addLocalVisit(_ visit: SiteVisit) -> Success { fatalError() }
