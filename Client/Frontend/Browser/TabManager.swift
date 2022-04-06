@@ -509,6 +509,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
                                  didClearTabs: @escaping (_ urlsVal: [URL], _ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void) {
+        let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
         // moved closing of multiple tabs to background thread
         DispatchQueue.global(qos: .background).async { [unowned self] in
 
@@ -546,7 +547,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
             }
             
             DispatchQueue.main.async {
-                let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
                 didClearTabs(urls, tabsToRemove, isPrivate, previousSelectedTabUUID)
             }
         }
