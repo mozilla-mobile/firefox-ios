@@ -106,6 +106,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
         
+        if let _ = self as? LibraryPanelContextMenu {
+            table.dragDelegate = self
+        }
+        
         // Set an empty footer to prevent empty cells from appearing in the list.
         table.tableFooterView = UIView()
         
@@ -223,5 +227,27 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
             tableView.reloadRows(at: rows, with: .none)
             tableView.reloadSections(IndexSet(rows.map { $0.section }), with: .none)
         }
+    }
+}
+
+extension SiteTableViewController: UITableViewDragDelegate {
+
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let panelVC = self as? LibraryPanelContextMenu,
+              let site = panelVC.getSiteDetails(for: indexPath),
+              let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url)
+        else { return [] }
+
+        // Telemetry is being sent to legacy, need to add it to metrics.yml
+        // Value should be something else than .homePanel
+        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = site
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        presentedViewController?.dismiss(animated: true)
     }
 }
