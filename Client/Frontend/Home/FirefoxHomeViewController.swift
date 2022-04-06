@@ -27,7 +27,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
 
-    lazy var defaultBrowserCard: DefaultBrowserCard = .build { card in
+    lazy var homeTabBanner: HomeTabBanner = .build { card in
         card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
@@ -176,7 +176,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
     }
 
     func applyTheme() {
-        defaultBrowserCard.applyTheme()
+        homeTabBanner.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
@@ -231,6 +231,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
 
     // MARK: - Default browser card
     
+    /// The surface should only display if there's a message to display. Otherwise, by default we shouldn't.
+    /// How would I know if there's a message to display w/o invoking that giant set of logic?
     private var shouldDisplayDefaultBrowserCard: Bool {
         if #available(iOS 14.0, *) {
             return true
@@ -240,26 +242,26 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
     }
 
     private func showDefaultBrowserCard() {
-        self.view.addSubview(defaultBrowserCard)
+        self.view.addSubview(homeTabBanner)
         NSLayoutConstraint.activate([
-            defaultBrowserCard.topAnchor.constraint(equalTo: view.topAnchor),
-            defaultBrowserCard.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
-            defaultBrowserCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            defaultBrowserCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            defaultBrowserCard.heightAnchor.constraint(equalToConstant: 264),
+            homeTabBanner.topAnchor.constraint(equalTo: view.topAnchor),
+            homeTabBanner.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
+            homeTabBanner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            homeTabBanner.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            homeTabBanner.heightAnchor.constraint(equalToConstant: 264),
 
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
-        defaultBrowserCard.dismissClosure = {
+        homeTabBanner.dismissClosure = {
             self.dismissDefaultBrowserCard()
         }
     }
 
     public func dismissDefaultBrowserCard() {
-        self.defaultBrowserCard.removeFromSuperview()
+        self.homeTabBanner.removeFromSuperview()
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

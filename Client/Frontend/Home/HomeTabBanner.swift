@@ -6,7 +6,7 @@ import Storage
 import Shared
 import UIKit
 
-struct DefaultBrowserCardUX {
+struct HomeTabBannerUX {
     static let cardSize = CGSize(width: 360, height: 224)
     static let logoSize = CGSize(width: 64, height: 64)
     static let learnHowButtonSize: CGSize = CGSize(width: 304, height: 44)
@@ -14,7 +14,7 @@ struct DefaultBrowserCardUX {
 
 /// The DefaultBrowserCard is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 
-class DefaultBrowserCard: UIView, MessagingManagable {
+class HomeTabBanner: UIView, MessagingManagable {
     
     // MARK: - Properties
     
@@ -37,14 +37,14 @@ class DefaultBrowserCard: UIView, MessagingManagable {
         label.textColor = UIColor.theme.defaultBrowserCard.textColor
     }
 
-    private lazy var learnHowButton: UIButton = .build { [weak self] button in
+    private lazy var CTAButton: UIButton = .build { [weak self] button in
         button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.titleLabel?.textAlignment = .center
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
         button.accessibilityIdentifier = "Home.learnMoreDefaultBrowserbutton"
-        button.addTarget(self, action: #selector(self?.showOnboarding), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self?.handleCTAAction), for: .touchUpInside)
     }
 
     private lazy var image: UIImageView = .build { imageView in
@@ -52,7 +52,7 @@ class DefaultBrowserCard: UIView, MessagingManagable {
         imageView.contentMode = .scaleAspectFit
     }
 
-    private lazy var closeButton: UIButton = .build { [weak self] button in
+    private lazy var dismissButton: UIButton = .build { [weak self] button in
         button.setImage(UIImage(named: "nav-stop")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
@@ -89,7 +89,7 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     
     private func setupLayout() {
         
-        cardView.addSubviews(learnHowButton, image, title, descriptionText, closeButton)
+        cardView.addSubviews(CTAButton, image, title, descriptionText, dismissButton)
         containerView.addSubview(cardView)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
@@ -127,13 +127,13 @@ class DefaultBrowserCard: UIView, MessagingManagable {
             cardView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor, constant: 20),
             cardView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -20),
             cardView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            cardView.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.cardSize.width),
-            cardView.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.cardSize.height),
+            cardView.widthAnchor.constraint(equalToConstant: HomeTabBannerUX.cardSize.width),
+            cardView.heightAnchor.constraint(equalToConstant: HomeTabBannerUX.cardSize.height),
             
             image.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 48),
             image.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
-            image.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.logoSize.width),
-            image.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.logoSize.height),
+            image.widthAnchor.constraint(equalToConstant: HomeTabBannerUX.logoSize.width),
+            image.heightAnchor.constraint(equalToConstant: HomeTabBannerUX.logoSize.height),
 
             title.topAnchor.constraint(equalTo: image.topAnchor, constant: -16),
             title.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16),
@@ -142,17 +142,17 @@ class DefaultBrowserCard: UIView, MessagingManagable {
             descriptionText.topAnchor.constraint(equalTo: title.bottomAnchor),
             descriptionText.leadingAnchor.constraint(equalTo: title.leadingAnchor),
             descriptionText.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            descriptionText.bottomAnchor.constraint(greaterThanOrEqualTo: learnHowButton.topAnchor, constant: -16),
+            descriptionText.bottomAnchor.constraint(greaterThanOrEqualTo: CTAButton.topAnchor, constant: -16),
 
-            closeButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
-            closeButton.heightAnchor.constraint(equalToConstant: 16),
-            closeButton.widthAnchor.constraint(equalToConstant: 16),
+            dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16),
+            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
+            dismissButton.heightAnchor.constraint(equalToConstant: 16),
+            dismissButton.widthAnchor.constraint(equalToConstant: 16),
 
-            learnHowButton.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
-            learnHowButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16),
-            learnHowButton.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.learnHowButtonSize.width),
-            learnHowButton.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.learnHowButtonSize.height)
+            CTAButton.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
+            CTAButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16),
+            CTAButton.widthAnchor.constraint(equalToConstant: HomeTabBannerUX.learnHowButtonSize.width),
+            CTAButton.heightAnchor.constraint(equalToConstant: HomeTabBannerUX.learnHowButtonSize.height)
         ])
     }
     
@@ -161,14 +161,14 @@ class DefaultBrowserCard: UIView, MessagingManagable {
             /// No messages to display, so resort to this card's default behavior.
             title.text = String.DefaultBrowserCardTitle
             descriptionText.text = String.DefaultBrowserCardDescription
-            learnHowButton.setTitle(String.DefaultBrowserCardButton, for: .normal)
+            CTAButton.setTitle(String.DefaultBrowserCardButton, for: .normal)
             
             return
         }
         
         title.text = message.messageData.title ?? String.DefaultBrowserCardTitle
         descriptionText.text = message.messageData.text
-        learnHowButton.setTitle(message.messageData.buttonLabel ?? String.DefaultBrowserCardButton, for: .normal)
+        CTAButton.setTitle(message.messageData.buttonLabel ?? String.DefaultBrowserCardButton, for: .normal)
         
         /// Begin the process of updating message metadata.
         messagingManager.onMessageDisplayed(message: message)
@@ -184,7 +184,7 @@ class DefaultBrowserCard: UIView, MessagingManagable {
         messagingManager.onMessageDismissed(message: message)
     }
     
-    @objc private func showOnboarding() {
+    @objc private func handleCTAAction() {
         BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
         
@@ -194,15 +194,13 @@ class DefaultBrowserCard: UIView, MessagingManagable {
         /// Handle user CTA interaction.
         guard let message = message else { return }
         messagingManager.onMessagePressed(message: message)
-        
-        /// I think I'll have to refactor and skeletonize this surface right now. 
     }
     
     func applyTheme() {
         cardView.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
         title.textColor = UIColor.theme.defaultBrowserCard.textColor
         descriptionText.textColor = UIColor.theme.defaultBrowserCard.textColor
-        closeButton.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
+        dismissButton.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
         containerView.backgroundColor = .clear
         backgroundColor = .clear
     }

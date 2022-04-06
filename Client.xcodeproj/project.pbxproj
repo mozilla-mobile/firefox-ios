@@ -77,7 +77,7 @@
 		215B458027D7FD7D00E5E800 /* TabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* TabGroupData.swift */; };
 		215B458227DA420400E5E800 /* TabMetadataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458127DA420400E5E800 /* TabMetadataManager.swift */; };
 		215B458427DA87FC00E5E800 /* TabMetadataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */; };
-		2386E4E624F8358E0072EF17 /* DefaultBrowserCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2386E4E524F8358E0072EF17 /* DefaultBrowserCard.swift */; };
+		2386E4E624F8358E0072EF17 /* HomeTabBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2386E4E524F8358E0072EF17 /* HomeTabBanner.swift */; };
 		23A50958253F782E008FEBD9 /* NewTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A50957253F782E008FEBD9 /* NewTabButton.swift */; };
 		23AE36632475A0EF00ACB7BA /* ChronologicalTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AE36612475A0EF00ACB7BA /* ChronologicalTabsViewController.swift */; };
 		23B5B499254C955E009AE055 /* TabMoreMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B5B498254C955E009AE055 /* TabMoreMenuViewController.swift */; };
@@ -1746,7 +1746,7 @@
 		230E478DAFE5E352010F5A6D /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
 		232A46BAAA89E4AD19492352 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		235F4611A612DE8043F84B6E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
-		2386E4E524F8358E0072EF17 /* DefaultBrowserCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserCard.swift; sourceTree = "<group>"; };
+		2386E4E524F8358E0072EF17 /* HomeTabBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBanner.swift; sourceTree = "<group>"; };
 		23A50957253F782E008FEBD9 /* NewTabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabButton.swift; sourceTree = "<group>"; };
 		23AE36612475A0EF00ACB7BA /* ChronologicalTabsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChronologicalTabsViewController.swift; sourceTree = "<group>"; };
 		23AE4C7C9BB6BF18049F49B0 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
@@ -6935,7 +6935,7 @@
 			children = (
 				8AB8572F27D94CAD0075C173 /* FxHomeViewModelProtocol.swift */,
 				43AB6F9E25DC53D20016B015 /* ASHeaderView.swift */,
-				2386E4E524F8358E0072EF17 /* DefaultBrowserCard.swift */,
+				2386E4E524F8358E0072EF17 /* HomeTabBanner.swift */,
 				1DFE57FE27BAE3150025DE58 /* FirefoxHomeSectionType.swift */,
 				3BB50E1F1D627539004B33DF /* FirefoxHomeViewController.swift */,
 				1DFE57FC27BADD7C0025DE58 /* FirefoxHomeViewModel.swift */,
@@ -8900,7 +8900,7 @@
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
 				048B4C7924A53E7B001B56E8 /* TodayModel.swift in Sources */,
-				2386E4E624F8358E0072EF17 /* DefaultBrowserCard.swift in Sources */,
+				2386E4E624F8358E0072EF17 /* HomeTabBanner.swift in Sources */,
 				C8954A542729AD9D001C7283 /* CustomTheme.swift in Sources */,
 				43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncStatusResolver.swift in Sources */,
