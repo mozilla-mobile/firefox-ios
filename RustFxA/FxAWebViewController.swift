@@ -16,7 +16,7 @@ enum DismissType {
  Show the FxA web content for signing in, signing up, or showing FxA settings.
  Messaging from the website to native is with WKScriptMessageHandler.
  */
-class FxAWebViewController: UIViewController, WKNavigationDelegate {
+class FxAWebViewController: UIViewController {
     fileprivate let dismissType: DismissType
     fileprivate var webView: WKWebView
     /// Used to show a second WKWebView to browse help links.
@@ -94,23 +94,19 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
-        decisionHandler(decision)
-    }
-
     deinit {
         webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
     }
 }
 
-extension FxAWebViewController: WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        viewModel.handle(scriptMessage: message)
-    }
-}
+// MARK: - WKNavigationDelegate
+extension FxAWebViewController: WKNavigationDelegate {
 
-extension FxAWebViewController {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
+        decisionHandler(decision)
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
         webView.evaluateJavascriptInDefaultContentWorld(hideLongpress)
@@ -125,6 +121,14 @@ extension FxAWebViewController {
     }
 }
 
+// MARK: - WKScriptMessageHandler
+extension FxAWebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        viewModel.handle(scriptMessage: message)
+    }
+}
+
+// MARK: - WKUIDelegate
 extension FxAWebViewController: WKUIDelegate {
 
     /// Blank target links (support links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
@@ -158,6 +162,8 @@ extension FxAWebViewController: WKUIDelegate {
     }
 }
 
+// MARK: - WKScriptMessageHandleDelegate
+
 // WKScriptMessageHandleDelegate uses for holding weak `self` to prevent retain cycle.
 // self - webview - configuration
 //   \                    /
@@ -177,15 +183,14 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
     }
 }
 
+// MARK: - Observe value
 extension FxAWebViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?,
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
-            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
-                               severity: .error,
-                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            sendSentryObserveValueError(forKeyPath: keyPath)
             return
         }
 
@@ -195,9 +200,13 @@ extension FxAWebViewController {
                 viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
             }
         default:
-            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
-                               severity: .error,
-                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            sendSentryObserveValueError(forKeyPath: keyPath)
         }
+    }
+
+    private func sendSentryObserveValueError(forKeyPath keyPath: String?) {
+        Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
+                           severity: .error,
+                           description: "Unhandled KVO key: \(keyPath ?? "nil")")
     }
 }
