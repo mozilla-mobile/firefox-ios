@@ -1,5 +1,5 @@
 ---
-homescreenFeature:
+homescreen:
   description: The homescreen that the user goes to when they press home or new tab.
   hasExposure: true
   exposureDescription: ""
@@ -7,6 +7,32 @@ homescreenFeature:
     sections-enabled:
       type: json
       description: "This property provides a lookup table of whether or not the given section should be enabled. If the section is enabled, it should be toggleable in the settings screen, and on by default."
+messaging:
+  description: "Configuration for the messaging system.\n\nIn practice this is a set of growable lookup tables for the\nmessage controller to piece together.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    actions:
+      type: json
+      description: A growable map of action URLs.
+    message-under-experiment:
+      type: string
+      description: Id or prefix of the message under experiment.
+    messages:
+      type: json
+      description: A growable collection of messages
+    on-control:
+      type: string
+      description: What should be displayed when a control message is selected.
+      enum:
+        - show-next-message
+        - show-none
+    styles:
+      type: json
+      description: "A map of styles to configure message appearance.\n"
+    triggers:
+      type: json
+      description: "A collection of out the box trigger expressions. Each entry maps to a valid JEXL expression.\n"
 nimbus-validation:
   description: A feature that does not correspond to an application feature suitable for showing that Nimbus is working.
   hasExposure: true
