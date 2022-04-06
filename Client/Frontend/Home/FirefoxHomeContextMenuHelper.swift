@@ -29,8 +29,11 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         self.viewModel = viewModel
     }
 
-    func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType, completionHandler: @escaping () -> PhotonActionSheet?) {
-
+    func presentContextMenu(for site: Site,
+                            with sourceView: UIView?,
+                            sectionType: FirefoxHomeSectionType,
+                            completionHandler: @escaping () -> PhotonActionSheet?
+    ) {
         fetchBookmarkStatus(for: site) {
             guard let contextMenu = completionHandler() else { return }
             self.delegate?.present(contextMenu, animated: true, completion: nil)
