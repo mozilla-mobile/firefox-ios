@@ -10,6 +10,7 @@ import StoreKit
 import Intents
 import Glean
 import Combine
+import Onboarding
 
 class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
@@ -346,23 +347,7 @@ class BrowserViewController: UIViewController {
                         onboardingEventsHandler.send(.enterHome)
                     }
                     
-                    let controller: UIViewController
-                    var animated = true
-                    switch onboardingType {
-                    case .new:
-                        let newOnboardingViewController = OnboardingViewController()
-                        newOnboardingViewController.modalPresentationStyle = .formSheet
-                        newOnboardingViewController.isModalInPresentation = true
-                        newOnboardingViewController.dismissOnboardingScreen = dismissOnboarding
-                        controller = newOnboardingViewController
-                        
-                    case .old:
-                        let introViewController = IntroViewController()
-                        introViewController.modalPresentationStyle = .fullScreen
-                        introViewController.dismissOnboardingScreen = dismissOnboarding
-                        controller = introViewController
-                        animated = false
-                    }
+                    let (controller, animated) = OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding)
                     self.present(controller, animated: animated)
                     presentedController = controller
                     

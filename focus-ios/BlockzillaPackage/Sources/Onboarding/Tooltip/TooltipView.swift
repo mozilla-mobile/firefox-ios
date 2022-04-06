@@ -4,8 +4,9 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 import SnapKit
+import DesignSystem
 
-protocol TooltipViewDelegate: AnyObject {
+public protocol TooltipViewDelegate: AnyObject {
     func didTapTooltipDismissButton()
 }
 
@@ -45,7 +46,7 @@ class TooltipView: UIView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: .fontSize, weight: .bold)
+        label.font = .body16Bold
         label.textColor = .defaultFont
         label.numberOfLines = 0
         return label
@@ -54,7 +55,7 @@ class TooltipView: UIView {
     private lazy var bodyLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: .fontSize)
+        label.font = .body16
         label.textColor = .defaultFont
         label.numberOfLines = 0
         return label
@@ -116,7 +117,6 @@ class TooltipView: UIView {
 }
 
 fileprivate extension CGFloat {
-    static let fontSize: CGFloat = 16
     static let space: CGFloat = 12
     static let margin: CGFloat = 16
     static let cornerRadius: CGFloat = 12

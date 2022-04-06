@@ -7,7 +7,7 @@ import UIKit
 
 public extension UIColor {
     convenience init?(named name: String) {
-        self.init(named: name, in: Bundle.module, compatibleWith: nil)
+        self.init(named: name, in: Bundle.myModule, compatibleWith: nil)
     }
 }
 

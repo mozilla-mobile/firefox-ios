@@ -9,6 +9,7 @@ import Telemetry
 import Glean
 import Combine
 import UIHelpers
+import Onboarding
 
 enum SectionType: Int, Hashable {
     case tip

@@ -9,6 +9,7 @@ import Intents
 import IntentsUI
 import Glean
 import SwiftUI
+import Onboarding
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     

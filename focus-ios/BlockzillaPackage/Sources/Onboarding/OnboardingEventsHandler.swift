@@ -5,20 +5,20 @@
 import Foundation
 import Combine
 
-class OnboardingEventsHandler {
+public class OnboardingEventsHandler {
     
     private let alwaysShowOnboarding: () -> Bool
     private let setShownTips: (Set<ToolTipRoute>) -> Void
     public let shouldShowNewOnboarding: () -> Bool
     
-    enum Action {
+    public enum Action {
         case applicationDidLaunch
         case enterHome
         case startBrowsing
         case showTrackingProtection
     }
     
-    enum OnboardingType: Equatable, Hashable, Codable {
+    public enum OnboardingType: Equatable, Hashable, Codable {
         init(_ shouldShowNewOnboarding: Bool) {
             self = shouldShowNewOnboarding ? .new : .old
         }
@@ -26,7 +26,7 @@ class OnboardingEventsHandler {
         case old
     }
     
-    enum ToolTipRoute: Equatable, Hashable, Codable {
+    public enum ToolTipRoute: Equatable, Hashable, Codable {
         case onboarding(OnboardingType)
         case trackingProtection
         case trackingProtectionShield
@@ -34,7 +34,7 @@ class OnboardingEventsHandler {
         case menu
     }
     
-    @Published var route: ToolTipRoute?
+    @Published public var route: ToolTipRoute?
     
     private var visitedURLcounter = 0
     private var shownTips = Set<ToolTipRoute>() {
@@ -43,7 +43,7 @@ class OnboardingEventsHandler {
         }
     }
     
-    internal init(
+    public init(
         alwaysShowOnboarding: @escaping () -> Bool,
         shouldShowNewOnboarding: @escaping () -> Bool,
         visitedURLcounter: Int = 0,
@@ -57,7 +57,7 @@ class OnboardingEventsHandler {
         self.shownTips = getShownTips()
     }
     
-    func send(_ action: OnboardingEventsHandler.Action) {
+    public func send(_ action: OnboardingEventsHandler.Action) {
         switch action {
         case .applicationDidLaunch:
             let onboardingRoute = ToolTipRoute.onboarding(OnboardingType(shouldShowNewOnboarding()))

@@ -5,6 +5,7 @@
 import UIKit
 import Telemetry
 import SnapKit
+import Onboarding
 
 protocol HomeViewControllerDelegate: AnyObject {
     func homeViewControllerDidTapShareTrackers(_ controller: HomeViewController, sender: UIButton)

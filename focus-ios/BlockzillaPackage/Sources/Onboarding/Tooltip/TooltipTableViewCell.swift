@@ -1,19 +1,15 @@
-//
-//  TooltipTableViewCell.swift
-//  Blockzilla
-//
-//  Created by catalin.neculaide on 25.02.2022.
-//  Copyright © 2022 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 
-class TooltipTableViewCell: UITableViewCell {
+public class TooltipTableViewCell: UITableViewCell {
 
     private var tooltip = TooltipView()
-    weak var delegate: TooltipViewDelegate?
+    public weak var delegate: TooltipViewDelegate?
     
-    convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
+    public convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(tooltip)
         tooltip.set(title: title, body: body)
@@ -33,7 +29,7 @@ class TooltipTableViewCell: UITableViewCell {
 }
 
 extension TooltipTableViewCell: TooltipViewDelegate {
-    func didTapTooltipDismissButton() {
+    public func didTapTooltipDismissButton() {
         delegate?.didTapTooltipDismissButton()
     }
 }

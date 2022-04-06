@@ -12,7 +12,10 @@ let package = Package(
             targets: ["UIHelpers"]),
         .library(
             name: "DesignSystem",
-            targets: ["DesignSystem"])
+            targets: ["DesignSystem"]),
+        .library(
+            name: "Onboarding",
+            targets: ["Onboarding"])
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
@@ -26,6 +29,13 @@ let package = Package(
         ),
         .target(
             name: "DesignSystem"
+        ),
+        .target(
+            name: "Onboarding",
+            dependencies: [
+                "DesignSystem",
+                .product(name: "SnapKit", package: "SnapKit")
+            ]
         )
     ]
 )

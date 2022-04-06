@@ -5,13 +5,13 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import UIKit
 import SnapKit
 
-class TooltipViewController: UIViewController {
+public class TooltipViewController: UIViewController {
         
     private let tooltipView = TooltipView()
     
-    var dismiss: (()->Void)?
+    public var dismiss: (()->Void)?
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
         tooltipView.delegate = self
@@ -25,7 +25,7 @@ class TooltipViewController: UIViewController {
         }
     }
     
-    func configure(anchoredBy sourceView: UIView, sourceRect: CGRect) {
+    public func configure(anchoredBy sourceView: UIView, sourceRect: CGRect) {
         modalPresentationStyle = .popover
         popoverPresentationController?.sourceView = sourceView
         popoverPresentationController?.sourceRect = sourceRect
@@ -33,24 +33,24 @@ class TooltipViewController: UIViewController {
         popoverPresentationController?.delegate = self
     }
     
-    func set(title: String = "", body: String) {
+    public func set(title: String = "", body: String) {
         tooltipView.set(title: title, body: body, maxWidth: .maxWidth)
     }
 }
 
 // MARK: - Delegates
 extension TooltipViewController: UIPopoverPresentationControllerDelegate {
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         .none
     }
     
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         dismiss?()
     }
 }
 
 extension TooltipViewController: TooltipViewDelegate {
-    func didTapTooltipDismissButton() {
+    public func didTapTooltipDismissButton() {
         dismiss?()
     }
 }

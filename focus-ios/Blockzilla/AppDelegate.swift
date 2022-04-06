@@ -7,6 +7,7 @@ import Telemetry
 import Glean
 import Sentry
 import Combine
+import Onboarding
 
 enum AppPhase {
     case notRunning
