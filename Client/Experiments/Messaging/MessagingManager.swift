@@ -20,23 +20,29 @@ extension MessagingManagable {
 protocol MessagingManagerProvider {
     
     /// Does the bookkeeping and preparation of messages for their respective surfaces.
+    /// Deprecate.
     func onStartup()
     
     /// Finds the next message to be displayed out of all showable messages.
+    /// Surface calls.
     func getNextMessage(for surface: MessageSurfaceId) -> Message?
     
-    /// Track the impression display in Glean, and do the pass the bookeeping to increment the impression count and expire to `MessageStore`.
+    /// Report impressions in Glean, and then pass the bookkeeping to increment the impression count and expire to `MessageStore`.
+    /// Surface calls.
     func onMessageDisplayed(message: Message)
     
     /// Using the helper, this should get the message action string ready for use.
+    /// Surface calls.
     func onMessagePressed(message: Message)
     
     /// Handles what to do with a message when a user has dismissed it.
+    /// Surface calls.
     func onMessageDismissed(message: Message)
     
     /// If the message is malformed (missing key elements the surface expects), then
     /// report the malformed message.
-    func onMalformedMessage(message: Message)
+    /// Manager calls.
+    func onMalformedMessage(messageKey: String)
 }
 
 /// The `MessagingManager` is responsible for several things including:
@@ -46,7 +52,7 @@ protocol MessagingManagerProvider {
 ///     - user dismissal of a message
 ///     - expiration logic
 /// - reporting telemetry for `Message`s
-class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Loggable {
+class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, MessageStoreProvider, Loggable {
     
     // MARK: - Properties
     
@@ -72,6 +78,7 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Logga
     
     // MARK: - Messaging Protocol Conformance
     
+    /// Perform any startup setup if necessary.
     func onStartup() {
         // placeholder
     }
@@ -120,7 +127,7 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Logga
                        metadata: messageStore.getMessageMetadata(messageId: messageId))
     }
     
-    /// Returns the next well-formed, non-expired, triggered message in priority order.
+    /// Returns the next well-formed, non-expired, triggered message in descending priority order.
     func getNextMessage(for surface: MessageSurfaceId) -> Message? {
         let feature = FxNimbus.shared.features.messaging.value()
         let messageStore = MessageStore()
@@ -144,7 +151,7 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Logga
                 return message
             }
             
-            /// TODO: report message malformed to glean
+            onMalformedMessage(messageKey: key)
             
             return nil
         }.filter { message in
@@ -160,7 +167,6 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Logga
             do {
                 return try messagingHelper.isMessageEligible(message: message, messageHelper: helper)
             } catch {
-                /// TODO: report this as a malformed message.
                 return false
             }
         }) else {
@@ -194,10 +200,41 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Logga
         return message
     }
     
-    /// We report to Glean, and do give the rest to the MessageStore
     func onMessageDisplayed(message: Message) {
-        /// TODO: Report an impression event for Glean
         
+        /// TODO: Report message impression to Telemetry
+        
+        /// Forward bookkeeping responsibilities to the store.
+        messageStore.onMessageDisplayed(message: message)
+    }
+    
+    /// Handle when a user hits the CTA of the surface.
+    func onMessagePressed(message: Message) {
+        
+        /// TODO: Report telemetry on press event
+        
+        switch message.messageData.surface {
+        case .newTabCard:
+            messageStore.onMessagePressed(message: message)
+        default: break
+        }
+    }
+    
+    /// For now, we will assume all dismissed messages should become expired.
+    func onMessageDismissed(message: Message) {
+        
+        /// TODO: Telemetry for dismissal of the message.
+        
+        /// If a message is dismissed, we expire it right away. Forward that to the store.
+        messageStore.onMessageDismissed(message: message)
+    }
+    
+    /// A malformed message should be reported.
+    func onMalformedMessage(messageKey: String) {
+        
+        /// Telemetry event for malformed message.
+        ///
+        /// ASK: Should we save a malformed message key as expired..? I'd say no.
         
     }
     
@@ -246,59 +283,6 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Logga
 //
 //        return nil
 //    }
-    
-    /// Handle when a user hits the CTA of the surface.
-    func onMessagePressed(message: Message) {
-        /// TODO: Track in telemetry
-        /// handle substitutions
-        
-        var messageToOperateOn = message
-        let surface = messageToOperateOn.messageData.surface
-        let encoder = JSONEncoder()
-        
-        switch message.messageData.surface {
-        case .newTabCard:
-            messageToOperateOn.metadata.isExpired = true
-            
-            if let encoded = try? encoder.encode(messageToOperateOn.metadata) {
-                UserDefaults.standard.set(encoded, forKey: messageToOperateOn.messageId)
-            }
-            
-            /// Remove this message from showables.
-            showableMessagesForSurface[surface] = showableMessagesForSurface[surface]?.filter {
-                $0.messageId != messageToOperateOn.messageId
-            }
-            
-        default: break
-        }
-    }
-    
-    /// For now, we will assume all dismissed messages should become expired.
-    func onMessageDismissed(message: Message) {
-        var messageToOperateOn = message
-        let surface = message.messageData.surface
-        let encoder = JSONEncoder()
-   
-        /// TODO: Track the dismissal in telemetry
-
-        /// Expire the message and save.
-        messageToOperateOn.metadata.messageDismissed += 1
-        messageToOperateOn.metadata.isExpired = true
-        
-        if let encoded = try? encoder.encode(messageToOperateOn.metadata) {
-            UserDefaults.standard.set(encoded, forKey: messageToOperateOn.messageId)
-        }
-        
-        /// Remove this message from showables.
-        showableMessagesForSurface[surface] = showableMessagesForSurface[surface]?.filter {
-            $0.messageId != messageToOperateOn.messageId
-        }
-    }
-    
-    func onMalformedMessage(message: Message) {
-        // telemetry
-        // expiry of message
-    }
     
     // MARK: - Misc helpers
     

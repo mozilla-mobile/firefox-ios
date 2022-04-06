@@ -12,74 +12,114 @@ protocol MessageStoreProtocol {
     /// Return associated metadata for preexisting or new messages.
     func getMessageMetadata(messageId: String) -> MessageMeta
     
-    /// Do the bookkeeping to track and persist impression counts on that message.
+    /// Track and persist impression counts of the message.
     func onMessageDisplayed(message: Message)
     
-    /// TODO
-    func hasMessageExpired(message: Message)
+    /// Track and persist user interactions with the message.
+    func onMessagePressed(message: Message)
     
     /// Do the bookkeeping for message dismissed Counts and expiry.
     func onMessageDismissed(message: Message)
     
-    func saveMetaData()
+}
+
+protocol MessageStoreProvider { }
+
+extension MessageStoreProvider {
+    var messageStore: MessageStore {
+        return MessageStore.shared
+    }
 }
 
 class MessageStore: MessageStoreProtocol {
-    let decoder = JSONDecoder()
-    let encoder = JSONEncoder()
+    
+    // MARK: - Properties
+    
+    static let shared = MessageStore()
+    
+    private let decoder = JSONDecoder()
+    private let encoder = JSONEncoder()
+    
+    // MARK: - MessageStoreProtocol methods
     
     /// Returns the metadata that persists on system. If there's none, it returns default data.
     func getMessageMetadata(messageId: String) -> MessageMeta {
         
-        /// Handles returning preexisting Message Metadata.
-        if let decodableMessageMetadata = UserDefaults.standard.data(forKey: messageId),
-           let decodedData = try? decoder.decode(MessageMeta.self, from: decodableMessageMetadata) {
-            return decodedData
+        /// Return preexisting Message Metadata.
+        if let metadata = get(key: messageId) {
+            return metadata
         }
         
-        /// If we're here, we're encountered a new message. So, return the defaults.
         return MessageMeta(messageId: messageId,
                            messageImpressions: 0,
                            messageDismissed: 0,
                            isExpired: false)
     }
     
+    /// Update message metadata and persist that information.
     func onMessageDisplayed(message: Message) {
-//        saveMetadata(message.messageId, message.metadata.copy(metadata.impressions + 1))
-        
         var messageToTrack = message.metadata
+        let messageImpressions = message.metadata.messageImpressions
+        let messageMaxCount = message.styleData.maxDisplayCount
+        
         messageToTrack.messageImpressions += 1
         
-        if let encoded = try? encoder.encode(messageToTrack) {
-            UserDefaults.standard.set(encoded, forKey: message.messageId)
-            
+        /// Determine if it's expired.
+        if messageImpressions >= messageMaxCount || messageToTrack.isExpired {
+            messageToTrack.isExpired = true
         }
         
+        if let encoded = try? encoder.encode(messageToTrack) {
+            set(key: message.messageId, encoded: encoded)
+        }
     }
     
-    func hasMessageExpired(message: Message) {
-        // placeholder
+    /// For the MVP, we need to expire the message.
+    func onMessagePressed(message: Message) {
+        var messageToTrack = message.metadata
+        
+        messageToTrack.isExpired = true
+        
+        if let encoded = try? encoder.encode(messageToTrack) {
+            set(key: message.messageId, encoded: encoded)
+        }
     }
     
+    /// Depending on the surface, we may do different things with dismissal. But for the MVP,
+    /// dismissal expires the message.
     func onMessageDismissed(message: Message) {
-        // placehodler
+        var messageToTrack = message.metadata
+        
+        messageToTrack.isExpired = true
+        messageToTrack.messageDismissed += 1
+        
+        if let encoded = try? encoder.encode(messageToTrack) {
+            set(key: message.messageId, encoded: encoded)
+        }
     }
     
-    func saveMetaData() {
-        // placeholder
+    // MARK: - Private helpers
+    
+    /// Generate a key that's "treated" to prevent collisions.
+    private func generateKey(from key: String) -> String {
+        return "GleanPlumb.Messages.\(key)"
     }
     
-//    private func set(key: String, encoded: MessageMetadata) {
-//        UserDefaults.standard.set(encoded, for: treatKey(key))
-//    }
-//
-//    private treatKey(_ key: String) -> String {
-//        return "gleanplumb.messages.\(key)"
-//    }
-//
-//    private func get(key: String) -> MessageMetadata {
-//        return UserDefaults.standard.get(for: treatKey(key))
-//    }
+    /// Persist a message's metadata.
+    private func set(key: String, encoded: Data) {
+        UserDefaults.standard.set(encoded, forKey: generateKey(from: key))
+    }
     
+    /// Return persisted message metadata.
+    private func get(key: String) -> MessageMeta? {
+        
+        /// Return a persisted message's metadata.
+        if let decodableMessageMetaData = UserDefaults.standard.data(forKey: generateKey(from: key)),
+           let decodedData = try? decoder.decode(MessageMeta.self, from: decodableMessageMetaData) {
+            return decodedData
+        }
+        
+        return nil
+    }
     
 }

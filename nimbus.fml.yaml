@@ -204,7 +204,7 @@ features:
       - channel: developer
         value: {
           "messages": {
-            "my-viewpoint-survey-3": {
+            "my-viewpoint-survey-4": {
               "title": "Message title",
               "text": "Love Firefox? Fill in our survey!",
               "action": "https://surveyprovider.com/survey-id/{uuid}",

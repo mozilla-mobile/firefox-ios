@@ -157,11 +157,21 @@ class DefaultBrowserCard: UIView, MessagingManagable {
     }
     
     private func applyMessage() {
-        guard let message = message else { return }
+        guard let message = message else {
+            /// No messages to display, so resort to this card's default behavior.
+            title.text = String.DefaultBrowserCardTitle
+            descriptionText.text = String.DefaultBrowserCardDescription
+            learnHowButton.setTitle(String.DefaultBrowserCardButton, for: .normal)
+            
+            return
+        }
         
         title.text = message.messageData.title ?? String.DefaultBrowserCardTitle
         descriptionText.text = message.messageData.text
         learnHowButton.setTitle(message.messageData.buttonLabel ?? String.DefaultBrowserCardButton, for: .normal)
+        
+        /// Begin the process of updating message metadata.
+        messagingManager.onMessageDisplayed(message: message)
     }
     
     @objc private func dismissCard() {
@@ -184,6 +194,8 @@ class DefaultBrowserCard: UIView, MessagingManagable {
         /// Handle user CTA interaction.
         guard let message = message else { return }
         messagingManager.onMessagePressed(message: message)
+        
+        /// I think I'll have to refactor and skeletonize this surface right now. 
     }
     
     func applyTheme() {
