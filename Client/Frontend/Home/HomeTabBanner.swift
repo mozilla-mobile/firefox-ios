@@ -44,7 +44,7 @@ class HomeTabBanner: UIView, MessagingManagable {
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
         button.accessibilityIdentifier = "Home.learnMoreDefaultBrowserbutton"
-        button.addTarget(self, action: #selector(self?.handleCTAAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
     }
 
     private lazy var image: UIImageView = .build { imageView in
@@ -176,24 +176,29 @@ class HomeTabBanner: UIView, MessagingManagable {
     
     @objc private func dismissCard() {
         self.dismissClosure?()
-        UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard")
-        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
+        
         
         /// Handle user dismissal of message.
         guard let message = message else { return }
         messagingManager.onMessageDismissed(message: message)
+        
+        
+//        UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard")
+//        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
+        
     }
     
-    @objc private func handleCTAAction() {
-        BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
-        TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
-        
-        // Set default browser onboarding did show to true so it will not show again after user clicks this button
-        UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
-        
-        /// Handle user CTA interaction.
+    /// The surface needs to handle CTAs a certain way.
+    @objc private func handleCTA() {
         guard let message = message else { return }
+        
+        
+        
+        /// Substitute here before
+//        message.action
+        
         messagingManager.onMessagePressed(message: message)
+        
     }
     
     func applyTheme() {

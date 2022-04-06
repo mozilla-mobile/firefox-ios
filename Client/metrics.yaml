@@ -2206,3 +2206,93 @@ device:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-01"
+
+messaging:
+  message_shown:
+    type: event
+    description: |
+      A message was shown to the user.
+    extra_keys:
+      message_key:
+        description: The id of the message
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10393
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-10-17"
+  message_dismissed:
+    type: event
+    description: |
+      A message was dismissed by the user.
+    extra_keys:
+      message_key:
+        description: The id of the message
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10393
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-10-17"
+  message_clicked:
+    type: event
+    description: |
+      A message was clicked by the user.
+    extra_keys:
+      message_key:
+        description: The id of the message
+        type: string
+      action_uuid:
+        description: The uuid of the action
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10393
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-10-17"
+  message_expired:
+    type: event
+    description: |
+      A message maxDisplayCount has been surpassed.
+    extra_keys:
+      message_key:
+        description: The id of the message
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10393
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-10-17"
+  malformed:
+    type: event
+    description: |
+      A message was malformed.
+    extra_keys:
+      message_key:
+        description: The id of the message
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10393
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - technical
+    expires: "2023-10-17"

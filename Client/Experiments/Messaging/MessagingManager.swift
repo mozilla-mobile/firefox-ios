@@ -98,19 +98,21 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Messa
             lookupTables.triggers[trigger]
         }
         
-        /// Ensure the message contains everything the surface needs. Otherwise, it's malformed.
-        var surfaceMissingProperties: Bool
-        switch message.surface {
-        case .newTabCard:
-            surfaceMissingProperties = messagingHelper.evalNewTabCardNils(message: message)
-        case .unknown:
-            /// This case should never hit in the MVP. We've defaulted surfaceIDs to `NewTabCard`
-            return nil
-        }
-        
-        if surfaceMissingProperties {
-            return nil
-        }
+        /// TODO: If we're missing a Title, don't show the title on the surface. If we're missing a button-label, hide the whole surface.
+        /// So, remove the check below.
+//        /// Ensure the message contains everything the surface needs. Otherwise, it's malformed.
+//        var surfaceMissingProperties: Bool
+//        switch message.surface {
+//        case .newTabCard:
+//            surfaceMissingProperties = messagingHelper.evalNewTabCardNils(message: message)
+//        case .unknown:
+//            /// This case should never hit in the MVP. We've defaulted surfaceIDs to `NewTabCard`
+//            return nil
+//        }
+//
+//        if surfaceMissingProperties {
+//            return nil
+//        }
         
         /// Be sure the count on `triggers` and `message.triggers` are equal.
         /// If these mismatch, that means a message contains a trigger not in the triggers lookup table.
@@ -131,16 +133,7 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Messa
     func getNextMessage(for surface: MessageSurfaceId) -> Message? {
         let feature = FxNimbus.shared.features.messaging.value()
         let messageStore = MessageStore()
-        let helper: GleanPlumbMessageHelper
-        
-        /// Create our GleanPlumbMessageHelper, to evaluate triggers later.
-        do {
-            helper = try Experiments.shared.createMessageHelper(additionalContext: messagingHelper.createAdditionalContext())
-        } catch {
-            /// If we're here, then all of Messaging is in limbo! Report the error and let the surface handle this `nil`
-            Logger.browserLogger.error("GleanPlumbMessageHelper could not be created! With error \(error)")
-            return nil
-        }
+        guard let helper = messagingHelper.createHelper()else { return nil }
         
         /// All these are non-expired, well formed messages for a requested surface.
         let messages = feature.messages.compactMap { key, messageData -> Message? in
@@ -181,7 +174,7 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Messa
         if messagingHelper.isMessageUnderExperiment(experimentKey: feature.messageUnderExperiment, message: message) {
             /// TODO: Report via telemetry
             FxNimbus.shared.features.messaging.recordExposure()
-            let onControlActions = FxNimbus.shared.features.messaging.value().onControl
+            let onControlActions = feature.onControl
             
             if message.messageData.isControl {
                 switch onControlActions {
@@ -217,11 +210,32 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Messa
         
         /// TODO: Report telemetry on press event
         
-        switch message.messageData.surface {
-        case .newTabCard:
-            messageStore.onMessagePressed(message: message)
-        default: break
+        messageStore.onMessagePressed(message: message)
+        
+        guard let helper = messagingHelper.createHelper() else { return }
+        
+        /// Make substitutions where they're needed.
+        let template = message.action
+        let uuid = helper.getUuid(template: template)
+        let action = helper.stringFormat(template: template, uuid: uuid)
+        
+        /// Create the message action URL.
+        let urlString = action.hasPrefix("://") ? URL.mozInternalScheme + action : action
+        guard let url = URL(string: urlString) else {
+            self.onMalformedMessage(messageKey: message.messageId)
+            return
         }
+        
+        /// TODO: Clean up with delegation?
+        if url.isWebPage() {
+            /// We can open URL through here.
+            let bvc = BrowserViewController.foregroundBVC()
+            bvc.openURLInNewTab(url)
+        } else {
+            /// Deeplinks are handled by the NavigationRouter.
+            UIApplication.shared.open(url, options: [:])
+        }
+        
     }
     
     /// For now, we will assume all dismissed messages should become expired.
@@ -237,8 +251,6 @@ class MessagingManager: MessagingManagerProvider, MessagingHelperProtocol, Messa
     func onMalformedMessage(messageKey: String) {
         
         /// Telemetry event for malformed message.
-        ///
-        /// ASK: Should we save a malformed message key as expired..? I'd say no.
         
     }
     

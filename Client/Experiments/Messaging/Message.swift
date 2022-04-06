@@ -17,7 +17,7 @@ struct Message {
     /// The action to be done when a user positively engages with the message (CTA).
     let action: String
     
-    /// 
+    /// The conditions that need to be satisfied for a message to be considered eligible to present.
     let triggers: [String]
     
     /// The access point to StyleData from Nimbus Messaging.

@@ -23,11 +23,6 @@ class MessagingHelper: Loggable {
     
     static let shared = MessagingHelper()
     
-    /// Styles inform us of a message's priority and maximum display count. The ordering goes from
-    /// `DEFAULT` being the lowest to `URGENT` being the highest for priority. However, they CAN
-    /// be overriden to mean different things!
-    var styles: [String: Style] = [:]
-    
     init() {
         
     }
@@ -57,7 +52,7 @@ class MessagingHelper: Loggable {
     
     /// Check message expiration.
     func isMessageExpired(message: Message) -> Bool {
-        return message.metadata.isExpired && message.metadata.messageImpressions >= message.styleData.maxDisplayCount
+        return message.metadata.isExpired || message.metadata.messageImpressions >= message.styleData.maxDisplayCount
     }
     
     /// The NewTabCard (HomeTabBanner) expects certain things from a message. We need
@@ -89,6 +84,18 @@ class MessagingHelper: Loggable {
         }
         
         return message.messageId == key
+    }
+    
+    func createHelper() -> GleanPlumbMessageHelper? {
+        /// Create our GleanPlumbMessageHelper, to evaluate triggers later.
+        do {
+            return try Experiments.shared.createMessageHelper(additionalContext: createAdditionalContext())
+        } catch {
+            /// If we're here, then all of Messaging is in limbo! Report the error and let the surface handle this `nil`
+            Logger.browserLogger.error("GleanPlumbMessageHelper could not be created! With error \(error)")
+            return nil
+        }
+        
     }
     
 }

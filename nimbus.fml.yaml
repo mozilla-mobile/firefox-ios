@@ -205,12 +205,40 @@ features:
         value: {
           "messages": {
             "my-viewpoint-survey-4": {
-              "title": "Message title",
-              "text": "Love Firefox? Fill in our survey!",
-              "action": "https://surveyprovider.com/survey-id/{uuid}",
+              "title": "Check out our new wallpapers!",
+              "text": "See what our collaboration with Disney has cooked up!",
+              "action": "OPEN_SETTINGS_WALLPAPERS",
               "trigger": [ "ALWAYS" ],
               "style": "DEFAULT",
-              "button-label": "Go to the survey",
+              "button-label": "See Wallpapers",
+              "surface": "NewTabCard"
+            }
+          }
+        }
+      - channel: developer
+        value: {
+          "messages": {
+            "my-viewpoint-survey-5": {
+              "title": "Look at what we've done with history!",
+              "text": "View your History for groupings!",
+              "action": "VIEW_HISTORY",
+              "trigger": [ "ALWAYS" ],
+              "style": "URGENT",
+              "button-label": "View History",
+              "surface": "NewTabCard"
+            }
+          }
+        }
+      - channel: developer
+        value: {
+          "messages": {
+            "my-viewpoint-survey-6": {
+              "title": "Made for you, not profit.",
+              "text": "We're a non-profit organization with open sourced resources. Check them out!",
+              "action": "https://github.com/mozilla-mobile",
+              "trigger": [ "ALWAYS" ],
+              "style": "DEFAULT",
+              "button-label": "View our Resources",
               "surface": "NewTabCard"
             }
           }

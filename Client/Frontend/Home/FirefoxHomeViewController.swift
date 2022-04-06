@@ -86,9 +86,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, Messagin
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
 
-        if shouldDisplayDefaultBrowserCard {
-            showDefaultBrowserCard()
-        }
+        /// As long as there's a message, always show it.
+        showDefaultBrowserCard()
 
         NSLayoutConstraint.activate([
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
