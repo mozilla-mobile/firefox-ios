@@ -34,14 +34,14 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         viewModel.isSearchInProgress = false
         toggleEmptyState()
     }
-    
+
     func performSearch(term: String) {
         viewModel.performSearch(term: term.lowercased()) { success in
             guard success else {
                 self.handleNoResults()
                 return
             }
-            
+
             self.applySearchSnapshot()
             self.toggleEmptyState()
         }

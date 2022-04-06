@@ -149,7 +149,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            
+
             bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
@@ -481,7 +481,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         let searchBarImage = UIImage(named: ImageIdentifiers.libraryPanelHistory)?.withRenderingMode(.alwaysTemplate).tinted(withColor: tintColor)
         searchbar.setImage(searchBarImage, for: .search, state: .normal)
         searchbar.tintColor = UIColor.theme.textField.textAndTint
-        
+
         tableView.reloadData()
     }
 
@@ -673,7 +673,7 @@ extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
     // Happens WAY too often. We should consider fetching the next set when the user HITS the bottom instead.
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard !viewModel.isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }
-        
+
         guard !viewModel.isSearchInProgress else {
             viewModel.updateSearchOffset()
             performSearch(term: searchbar.text ?? "")

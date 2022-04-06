@@ -1130,7 +1130,7 @@ open class BrowserProfile: Profile {
             guard let fxa = RustFirefoxAccounts.shared.accountManager.peek(), let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
                 return nil
             }
-            
+
             return (profile, deviceID)
         }
 

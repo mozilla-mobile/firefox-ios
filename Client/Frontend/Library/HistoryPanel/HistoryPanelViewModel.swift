@@ -51,7 +51,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     private let searchQueryFetchLimit = 50
     private var searchCurrentFetchOffset = 0
     let historyActionables = HistoryActionablesModel.activeActionables
-    
+
     var visibleSections: [Sections] = []
     var searchTermGroups: [ASGroup<Site>] = []
     var isFetchInProgress = false
@@ -119,7 +119,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     // Add completion to reload on finish
     func performSearch(term: String, completion: @escaping (Bool) -> Void) {
         isFetchInProgress = true
-        
+
         profile.history.getHistory(matching: term,
                                    limit: searchQueryFetchLimit,
                                    offset: searchCurrentFetchOffset) { results in
@@ -127,17 +127,17 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
                 completion(false)
                 return
             }
-            
+
             self.isFetchInProgress = false
             self.filterMockSites = results
             completion(true)
         }
     }
-    
+
     func updateSearchOffset() {
         searchCurrentFetchOffset += searchQueryFetchLimit
     }
-    
+
     /// A helper for the reload function.
     private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
         isFetchInProgress = true
