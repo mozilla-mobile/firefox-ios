@@ -63,9 +63,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
     func addDelegate(_ delegate: TabManagerDelegate) {
-        DispatchQueue.main.async {
-            self.delegates.append(WeakTabManagerDelegate(value: delegate))
-        }
+        self.delegates.append(WeakTabManagerDelegate(value: delegate))
     }
 
     func removeDelegate(_ delegate: TabManagerDelegate) {
@@ -180,9 +178,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
-        DispatchQueue.main.async {
-            self.navDelegate.insert(delegate)
-        }
+        self.navDelegate.insert(delegate)
     }
 
     var count: Int {
@@ -517,7 +513,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         DispatchQueue.global(qos: .background).async { [unowned self] in
 
             let tabsToRemove = isPrivate ? self.privateTabs : self.normalTabs
-            let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
 
             if isPrivate && self.privateTabs.count < 1 {
                 //Bugzilla 1646756: close last private tab clears the WKWebViewConfiguration (#6827)
@@ -531,7 +526,9 @@ class TabManager: NSObject, FeatureFlagsProtocol {
             self.tabs = self.tabs.filter { !tabsToRemove.contains($0) }
 
             // update tab manager count
-            self.delegates.forEach { $0.get()?.tabManagerUpdateCount?() }
+            DispatchQueue.main.async { [unowned self] in
+                self.delegates.forEach { $0.get()?.tabManagerUpdateCount?() }
+            }
 
             var urls = [URL]()
             tabsToRemove.forEach { tab in
@@ -547,8 +544,11 @@ class TabManager: NSObject, FeatureFlagsProtocol {
                     storeChanges()
                 }
             }
-
-            didClearTabs(urls, tabsToRemove, isPrivate, previousSelectedTabUUID)
+            
+            DispatchQueue.main.async {
+                let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
+                didClearTabs(urls, tabsToRemove, isPrivate, previousSelectedTabUUID)
+            }
         }
     }
     
@@ -592,6 +592,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
             selectTab(tabToSelect, previous: nil)
         }
         delegates.forEach { $0.get()?.tabManagerUpdateCount?() }
+        storeChanges()
     }
 
     func cleanupClosedTabs(closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {

@@ -1152,11 +1152,12 @@ class BrowserViewController: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let webView = object as? WKWebView, let tab = tabManager[webView] else {
-            assert(false)
             return
         }
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
-            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
+            Sentry.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
+                               severity: .error,
+                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
 
