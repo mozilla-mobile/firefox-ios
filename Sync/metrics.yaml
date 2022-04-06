@@ -1,0 +1,419 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+sync:
+  sync_uuid:
+    type: uuid
+    description: >
+      Unique identifier for this sync, used to correlate together
+      individual pings for data types that were synchronized together
+      (history, bookmarks, logins).
+      If a data type is synchronized by itself via the legacy 'sync' API
+      (as opposed to the Sync Manager),
+      then this field will not be set on the corresponding ping.
+    send_in_pings:
+      - temp-sync
+      - temp-history-sync
+      - temp-bookmarks-sync
+      - temp-logins-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  failure_reason:
+    type: labeled_counter
+    labels:
+      - httperror
+      - unexpectederror
+      - sqlerror
+      - othererror
+    description: >
+      Records why sync failed.
+    send_in_pings:
+      - temp-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+
+# `history-sync`, `logins-sync`, `bookmarks-sync`, `creditcards-sync`,
+# `addresses-sync` and `tabs-sync` metrics
+# mostly use the same structure, with some minor variability,
+# but must be specified individually. We can't define them once and use
+# `send_in_pings` because the stores might be synced in parallel, and we can't
+# guarantee that a ping for one store would be sent before the others.
+history_sync:
+  uid:
+    type: string
+    description: >
+      The user's hashed Firefox Account ID.
+    send_in_pings:
+      - temp-history-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  incoming:
+    type: labeled_counter
+    labels:
+      - applied
+      - failed_to_apply
+      - reconciled
+    description: >
+      Records incoming history record counts. `applied` is the number of
+      incoming history pages that were successfully stored or updated in the
+      local database. `failed_to_apply` is the number of pages that were
+      ignored due to errors. `reconciled` is the number of pages with new visits
+      locally and remotely, and had their visits merged.
+    send_in_pings:
+      - temp-history-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  outgoing:
+    type: labeled_counter
+    labels:
+      - uploaded
+      - failed_to_upload
+    description: >
+      Records outgoing history record counts. `uploaded` is the number of
+      records that were successfully sent to the server. `failed_to_upload`
+      is the number of records that weren't uploaded, and will be retried
+      on the next sync.
+    send_in_pings:
+      - temp-history-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  failure_reason:
+    type: labeled_counter
+    labels:
+      - no_account
+      - offline
+      - backoff
+      - remotely_not_enabled
+      - format_outdated
+      - format_too_new
+      - storage_format_outdated
+      - storage_format_too_new
+      - state_machine_not_ready
+      - red_light
+      - unknown
+    description: >
+      Records why the history sync failed.
+    send_in_pings:
+      - temp-history-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+
+logins_sync:
+  uid:
+    type: string
+    description: >
+      The user's hashed Firefox Account ID.
+    send_in_pings:
+      - temp-logins-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  incoming:
+    type: labeled_counter
+    labels:
+      - applied
+      - failed_to_apply
+      - reconciled
+    description: >
+      Records incoming passwords record counts. `applied` is the number of
+      incoming passwords entries that were successfully stored or updated in the
+      local database. `failed_to_apply` is the number of entries that were
+      ignored due to errors. `reconciled` is the number of entries with changes
+      both locally and remotely that were merged.
+    send_in_pings:
+      - temp-logins-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  outgoing:
+    type: labeled_counter
+    labels:
+      - uploaded
+      - failed_to_upload
+    description: >
+      Records outgoing passwords record counts. `uploaded` is the number of
+      records that were successfully sent to the server. `failed_to_upload`
+      is the number of records that weren't uploaded, and will be retried
+      on the next sync.
+    send_in_pings:
+      - temp-logins-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  failure_reason:
+    type: labeled_counter
+    labels:
+      - no_account
+      - offline
+      - backoff
+      - remotely_not_enabled
+      - format_outdated
+      - format_too_new
+      - storage_format_outdated
+      - storage_format_too_new
+      - state_machine_not_ready
+      - red_light
+      - unknown
+    description: >
+      Records why the passwords sync failed.
+    send_in_pings:
+      - temp-logins-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+
+bookmarks_sync:
+  uid:
+    type: string
+    description: >
+      The user's hashed Firefox Account ID.
+    send_in_pings:
+      - temp-bookmarks-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  incoming:
+    type: labeled_counter
+    labels:
+      - applied
+      - failed_to_apply
+      - reconciled
+    description: >
+      Records incoming bookmark record counts.
+    send_in_pings:
+      - temp-bookmarks-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  outgoing:
+    type: labeled_counter
+    labels:
+      - uploaded
+      - failed_to_upload
+    description: >
+      Records outgoing bookmark record counts.
+    send_in_pings:
+      - temp-bookmarks-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  failure_reason:
+    type: labeled_counter
+    labels:
+      - no_account
+      - offline
+      - backoff
+      - remotely_not_enabled
+      - format_outdated
+      - format_too_new
+      - storage_format_outdated
+      - storage_format_too_new
+      - state_machine_not_ready
+      - red_light
+      - unknown
+    description: >
+      Records bookmark sync failure reasons.
+    send_in_pings:
+      - temp-bookmarks-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+
+tabs_sync:
+  uid:
+    type: string
+    description: >
+      The user's hashed Firefox Account ID.
+    send_in_pings:
+      - temp-tabs-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  incoming:
+    type: labeled_counter
+    labels:
+      - applied
+      - failed_to_apply
+      - reconciled
+    description: >
+      Records incoming tabs record counts. `applied` is the number of
+      incoming records that were successfully stored or updated in the
+      local database. `failed_to_apply` is the number of records that were
+      ignored due to errors. `reconciled` is the number of merged records.
+    send_in_pings:
+      - temp-tabs-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  outgoing:
+    type: labeled_counter
+    labels:
+      - uploaded
+      - failed_to_upload
+    description: >
+      Records outgoing tabs record counts. `uploaded` is the number of
+      records that were successfully sent to the server. `failed_to_upload`
+      is the number of records that weren't uploaded, and will be retried
+      on the next sync.
+    send_in_pings:
+      - temp-tabs-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
+  failure_reason:
+    type: labeled_counter
+    labels:
+      - no_account
+      - offline
+      - backoff
+      - remotely_not_enabled
+      - format_outdated
+      - format_too_new
+      - storage_format_outdated
+      - storage_format_too_new
+      - state_machine_not_ready
+      - red_light
+      - unknown
+    description: >
+      Records why the tabs sync failed.
+    send_in_pings:
+      - temp-tabs-sync
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - sync-core@mozilla.com
+    expires: 2023-01-01
+    lifetime: ping
