@@ -17,12 +17,7 @@ class FxHomePocketViewModel {
     private var hasSentPocketSectionEvent = false
 
     var onTapTileAction: ((URL) -> Void)? = nil
-    var onLongPressTileAction: ((IndexPath) -> Void)? = nil
-
-    // Need to save the parent's section for the long press action
-    // since it's currently handled in FirefoxHomeViewController
-    // TODO: https://github.com/mozilla-mobile/firefox-ios/issues/10241
-    var pocketShownInSection: Int = 0
+    var onLongPressTileAction: ((Site, UIView?) -> Void)? = nil
 
     init(profile: Profile, isZeroSearch: Bool) {
         self.profile = profile

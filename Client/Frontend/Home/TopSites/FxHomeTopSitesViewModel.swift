@@ -37,17 +37,12 @@ class FxHomeTopSitesViewModel {
     static var defaultDimension = SectionDimension(numberOfRows: 2, numberOfTilesPerRow: 6)
 
     var tilePressedHandler: ((Site, Bool) -> Void)?
-    var tileLongPressedHandler: ((IndexPath) -> Void)?
+    var tileLongPressedHandler: ((Site, UIView?) -> Void)?
     weak var delegate: FxHomeTopSitesViewModelDelegate?
 
     lazy var tileManager: FxHomeTopSitesManager = {
         return FxHomeTopSitesManager(profile: profile)
     }()
-
-    // Need to save the parent's section for the long press action
-    // since it's currently handled in FirefoxHomeViewController
-    // TODO: https://github.com/mozilla-mobile/firefox-ios/issues/10241
-    var topSitesShownInSection: Int = 0
 
     private lazy var homescreen = nimbus.features.homescreen.value()
 

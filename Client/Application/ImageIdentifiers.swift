@@ -33,6 +33,7 @@ public struct ImageIdentifiers {
     public static let libraryPanelHistory = "library-history"
     public static let libraryPanelSearch = "search"
     public static let menuChevron = "menu-Disclosure"
+    public static let newPrivateTab = "quick_action_new_private_tab"
     public static let newTab = "quick_action_new_tab"
     public static let nightMode = "menu-NightMode"
     public static let noImageMode = "menu-NoImageMode"
