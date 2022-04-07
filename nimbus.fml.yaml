@@ -70,6 +70,17 @@ features:
             "libraryShortcuts": true
           }
         }
+      - channel: beta
+        value: {
+          "sections-enabled": {
+            "topSites": true,
+            "jumpBackIn": true,
+            "recentlySaved": true,
+            "recentExplorations": true,
+            "pocket": true,
+            "libraryShortcuts": false
+          }
+        }
   tabTrayFeature:
     description: The tab tray screen that the user goes to when they open the tab tray.
     variables:
