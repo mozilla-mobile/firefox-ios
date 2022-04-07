@@ -118,7 +118,7 @@ extension Deferred {
 }
 
 extension Deferred {
-    public func both<U>(_ other: Deferred<U>) -> Deferred<(T,U)> {
+    public func both<U>(_ other: Deferred<U>) -> Deferred<(T, U)> {
         return self.bind { t in other.map { u in (t, u) } }
     }
 }
