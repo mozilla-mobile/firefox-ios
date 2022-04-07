@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import GCDWebServers
 
 /*s
  The Pocket class is used to fetch stories from the Pocked API.
@@ -35,8 +34,6 @@ struct PocketStory {
         })
     }
 }
-
-
 
 class Pocket: FeatureFlagsProtocol {
 
