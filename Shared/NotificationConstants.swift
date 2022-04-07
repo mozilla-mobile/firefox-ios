@@ -67,7 +67,7 @@ extension Notification.Name {
     public static let TabsPrivacyModeChanged = Notification.Name("TabsPrivacyModeChanged")
 
     public static let OpenClearRecentHistory = Notification.Name("OpenClearRecentHistory")
-    
+
     // MARK: Tab manager
 
     // Tab manager creates a toast for undo recently closed tabs and a notification is

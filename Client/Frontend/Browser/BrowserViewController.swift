@@ -2030,7 +2030,7 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
-    
+
     @objc func tabManagerUpdateCount() {
         updateTabCountUsingTabManager(self.tabManager)
     }
