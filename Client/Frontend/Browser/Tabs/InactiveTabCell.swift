@@ -37,7 +37,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
     var inactiveTabsViewModel: InactiveTabViewModel?
     var hasExpanded = false
     weak var delegate: InactiveTabsDelegate?
-    
+
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -56,7 +56,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    
+
     private var containerView: UIView = .build { view in
         view.layer.cornerRadius = 13
         view.layer.borderWidth = 1
@@ -89,7 +89,7 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
+
             tableView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -134,7 +134,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             cell.backgroundColor = .clear
             cell.accessoryView = nil
             cell.bottomSeparatorView.isHidden = false
-            
+
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
             cell.titleLabel.text = tab.displayTitle
             cell.leftImageView.setImageAndBackground(forIcon: tab.displayFavicon, website: getTabDomainUrl(tab: tab)) {}
@@ -163,7 +163,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return nil
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if !hasExpanded { return CGFloat.leastNormalMagnitude }
         switch InactiveTabSection(rawValue: section) {
@@ -171,7 +171,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return CGFloat.leastNormalMagnitude
         }
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let section = indexPath.section
@@ -200,12 +200,12 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             delegate?.setupCFR(with: headerView.titleLabel)
 
             return headerView
-            
+
         case .closeAllTabsButton:
             return nil
         }
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let section = indexPath.section
         switch InactiveTabSection(rawValue: section) {
@@ -215,7 +215,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return .none
         }
     }
-    
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let section = indexPath.section
         guard editingStyle == .delete else { return }
@@ -227,7 +227,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         case .closeAllTabsButton, .none: return
         }
     }
-    
+
     @objc func toggleInactiveTabSection() {
         hasExpanded = !hasExpanded
         tableView.reloadData()
@@ -235,7 +235,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
 
         if hasExpanded { delegate?.presentCFR() }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
@@ -253,7 +253,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             return CGFloat.leastNormalMagnitude
         }
     }
-    
+
     func getTabDomainUrl(tab: Tab) -> URL? {
         guard tab.url != nil else {
             return tab.sessionData?.urls.last?.domainURL

@@ -93,11 +93,11 @@ class WallpaperBackgroundView: UIView {
             let transition: CGFloat
             let end: CGFloat
         }
-        
+
         let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
         let contrastColour = isDarkTheme ? 0.0 : 1.0
         let gradientValue = isDarkTheme ? GradientValues(start: 0.37, transition: 0.35, end: 0.32) : GradientValues(start: 0.28, transition: 0.26, end: 0.24)
-        
+
         gradientView.configureGradient(
             colors: [UIColor(white: contrastColour, alpha: gradientValue.start),
                      UIColor(white: contrastColour, alpha: gradientValue.transition),

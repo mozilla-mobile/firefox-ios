@@ -103,14 +103,14 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var separator: UIColor { return defaultSeparator }
     override var border: UIColor { return UIColor.Photon.Grey60 }
     override var buttonContainerBorder: UIColor { return separator }
-    
+
     override var welcomeScreenText: UIColor { return UIColor.Photon.Grey30 }
     override var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }
     override var bookmarkFolderBackground: UIColor { return UIColor.Photon.Grey80 }
     override var bookmarkFolderText: UIColor { return UIColor.Photon.White100 }
     override var bookmarkCurrentFolderText: UIColor { return UIColor.Photon.White100 }
     override var bookmarkBackNavCellBackground: UIColor { return UIColor.Photon.Grey70 }
-    
+
     override var activityStreamHeaderText: UIColor { return UIColor.Photon.LightGrey05 }
     override var activityStreamHeaderButton: UIColor { return UIColor.Photon.Blue20 }
     override var activityStreamCellTitle: UIColor { return UIColor.Photon.LightGrey05 }
@@ -123,11 +123,11 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var shortcutBackground: UIColor { return UIColor.Photon.DarkGrey30 }
     override var shortcutShadowColor: CGColor { return UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.0).cgColor }
     override var shortcutShadowOpacity: Float { return 0.5 }
-    
+
     override var recentlySavedBookmarkCellBackground: UIColor { return UIColor.Photon.DarkGrey30 }
 
     override var recentlyVisitedCellGroupImage: UIColor { return .white }
-    
+
     override var downloadedFileIcon: UIColor { return UIColor.Photon.Grey30 }
 
     override var historyHeaderIconsBackground: UIColor { return UIColor.clear }
@@ -137,7 +137,7 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
 
     override var searchSuggestionPillBackground: UIColor { return UIColor.Photon.Grey70 }
     override var searchSuggestionPillForeground: UIColor { return defaultTextAndTint }
-    
+
     override var customizeHomepageButtonBackground: UIColor { return UIColor.Photon.DarkGrey50 }
     override var customizeHomepageButtonText: UIColor { return UIColor.Photon.LightGrey10 }
 }

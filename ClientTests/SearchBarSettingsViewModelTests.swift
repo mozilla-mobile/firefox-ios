@@ -88,7 +88,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         let expectation = expectation(description: "Delegate is called")
         let viewModel = createViewModel()
         callSetting(viewModel.bottomSetting)
-        
+
         delegate = SearchBarPreferenceDelegateMock(completion: {
             expectation.fulfill()
             XCTAssertEqual(viewModel.topSetting.isChecked(), true)

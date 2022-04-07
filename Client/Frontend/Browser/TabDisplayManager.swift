@@ -131,7 +131,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         tabDisplayOrder.regularTabUUID = uuids
         TabDisplayOrder.encode(tabDisplayOrder: tabDisplayOrder)
     }
-    
+
     var tabGroups: [ASGroup<Tab>]?
     var tabsInAllGroups: [Tab]? {
         (tabGroups?.map{$0.groupedItems}.flatMap{$0})
@@ -241,13 +241,13 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             completion(nil, allTabs)
             return
         }
-    
+
         guard tabDisplayType == .TabGrid else {
             tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
             completion(nil, allTabs)
             return
         }
-        
+
         // Inactive tabs - disabled
         if !shouldEnableInactiveTabs {
 
@@ -269,7 +269,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
 
             let activeTabs = inactiveViewModel.activeTabs
-            
+
             // keep inactive tabs collapsed
             self.isInactiveViewExpanded = false
 
@@ -369,7 +369,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             self.tabDisplayer?.focusSelectedTab()
         }
     }
-    
+
     func removeGroupTab(with tab: Tab) {
         let groupData = indexOfGroupTab(tab: tab)
         let groupIndexPath = IndexPath(row: 0, section: TabDisplaySection.groupedTabs.rawValue)
@@ -381,7 +381,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
               let groupedCell = self.collectionView.cellForItem(at: groupIndexPath) as? GroupedTabCell else {
             return
         }
-        
+
         // case: Group has less than 3 tabs (refresh all)
         if let count = tabGroups?[indexOfGroup].groupedItems.count, count < 3 {
             refreshStore()
@@ -479,7 +479,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
             return 0
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if let _ = tabGroups {
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier, for: indexPath) as! ASHeaderView
@@ -488,7 +488,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
             view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
             view.moreButton.isHidden = true
             view.titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.filteredTabs
-            
+
             return view
         }
         return UICollectionReusableView()
@@ -546,13 +546,13 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
 // MARK: - GroupedTabDelegate
 extension TabDisplayManager: GroupedTabDelegate {
-    
+
     func newSearchFromGroup(searchTerm: String) {
         let bvc = BrowserViewController.foregroundBVC()
         bvc.openSearchNewTab(searchTerm)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTabPerformSearch)
     }
-    
+
     func closeGroupTab(tab: Tab) {
         if self.isPrivate == false, filteredTabs.count + (tabsInAllGroups?.count ?? 0) == 1 {
             self.tabManager.removeTabs([tab])
@@ -574,12 +574,12 @@ extension TabDisplayManager: GroupedTabDelegate {
 
 // MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
-    
+
     // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
         // Remove inactive tabs from tab manager
         self.tabManager.removeTabs(tabs)
-        
+
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         self.inactiveViewModel?.updateInactiveTabs(with: self.tabManager.selectedTab, tabs: allTabs)
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
@@ -593,17 +593,17 @@ extension TabDisplayManager: InactiveTabsDelegate {
         collectionView.reloadItems(at: [indexPath])
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
     }
-    
+
     func shouldCloseInactiveTab(tab: Tab) {
         removeInactiveTabAndReloadView(tabs: [tab])
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
     }
-    
+
     func didTapCloseAllTabs() {
         // Haptic feedback for when a user closes all inactive tabs
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
-        
+
         // Close all inactive tabs
         if let inactiveTabs = inactiveViewModel?.inactiveTabs, inactiveTabs.count > 0 {
             removeInactiveTabAndReloadView(tabs: inactiveTabs)
@@ -742,7 +742,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         } else {
             filteredTabs = tabManager.normalTabs.filter { filteredTabs.contains($0) }
         }
-        
+
         recordEventAndBreadcrumb(object: .tab, method: .drop)
 
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
@@ -803,7 +803,7 @@ extension TabDisplayManager: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         updateCellFor(tab: tab, selectedTabChanged: false)
     }
-    
+
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         updateCellFor(tab: tab, selectedTabChanged: false)
     }

@@ -10,13 +10,13 @@ private struct WallpaperSettingsUX {
     static let collectionTitleFontMaxSize = 43.0
     static let switchTitleFontMaxSize = 53.0
     static let switchDescriptionFontMaxSize = 43.0
-    
+
     struct FractionalWidths {
         static let third: CGFloat = 1/3
         static let quarter: CGFloat = 1/4
         static let sixth: CGFloat = 1/6
     }
-    
+
     static let inset: CGFloat = 3.5
 }
 
@@ -50,7 +50,7 @@ class WallpaperSettingsViewController: UIViewController {
 
         return collectionView
     }()
-    
+
     // Switch
     private lazy var switchContainer: UIView = .build { _ in }
 
@@ -88,7 +88,7 @@ class WallpaperSettingsViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         notificationCenter.removeObserver(self)
     }
@@ -116,7 +116,7 @@ class WallpaperSettingsViewController: UIViewController {
     ) {
         reloadLayout()
     }
-    
+
     // MARK: - View setup
     private func setupView() {
         view.addSubview(collectionTitle)
@@ -167,7 +167,7 @@ class WallpaperSettingsViewController: UIViewController {
     private func setupCurrentState() {
         logoSwitch.isOn = viewModel.wallpaperManager.switchWallpaperFromLogoEnabled
     }
-    
+
     private func highlightCurrentlySelectedCell() {
         guard let rowIndex = viewModel.wallpaperManager.currentlySelectedWallpaperIndex else { return }
         let currentIndex = IndexPath(row: rowIndex, section: 0)
@@ -175,20 +175,20 @@ class WallpaperSettingsViewController: UIViewController {
                                   animated: false,
                                   scrollPosition: [])
     }
-    
+
     private func reloadLayout() {
         collectionView.collectionViewLayout = getCompositionalLayout()
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
         highlightCurrentlySelectedCell()
     }
-    
+
     private func getCompositionalLayout() -> UICollectionViewCompositionalLayout {
         typealias FractionalWidths = WallpaperSettingsUX.FractionalWidths
-        
+
         let deviceFractionalWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FractionalWidths.quarter : FractionalWidths.third
         let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? FractionalWidths.sixth : deviceFractionalWidth
-        
+
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(fractionalWidth),
             heightDimension: .fractionalHeight(1))
@@ -201,7 +201,7 @@ class WallpaperSettingsViewController: UIViewController {
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalWidth(fractionalWidth))
-        
+
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitems: [item])
 

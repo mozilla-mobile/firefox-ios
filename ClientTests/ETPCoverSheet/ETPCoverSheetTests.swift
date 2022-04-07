@@ -19,7 +19,7 @@ class ETPCoverSheetTests: XCTestCase {
         prefs.clearAll()
         super.tearDown()
     }
-    
+
     func testShouldNotShowCoverSheetCleanInstallSessionLessThan3() {
         let currentTestAppVersion = "18"
         let supportedVersion = ["18"]
@@ -32,7 +32,7 @@ class ETPCoverSheetTests: XCTestCase {
         XCTAssert(prefs.stringForKey(PrefsKeys.KeyETPCoverSheetShowType) == ETPCoverSheetShowType.CleanInstall.rawValue)
         XCTAssert(!shouldShow)
     }
-    
+
     func testShouldShowCoverSheetCleanInstallSessionEqualTo3() {
         let currentTestAppVersion = "18"
         let supportedVersion = ["18"]
@@ -52,7 +52,7 @@ class ETPCoverSheetTests: XCTestCase {
         // We also check that ETP Cover Sheet show type is do not show as shouldShow is true and next time we don't want to show
         XCTAssert(prefs.stringForKey(PrefsKeys.KeyETPCoverSheetShowType) == ETPCoverSheetShowType.DoNotShow.rawValue)
     }
-    
+
     func testShouldShowCoverSheetUpgradeFlow() {
         let currentTestAppVersion = "18"
         let supportedVersion = ["18"]

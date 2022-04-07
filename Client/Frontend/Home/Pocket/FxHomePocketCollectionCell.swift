@@ -108,7 +108,6 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
     }
 }
 
-
 // MARK: - UICollectionViewDataSource
 extension FxHomePocketCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -151,7 +150,6 @@ extension FxHomePocketCollectionCell: UICollectionViewDelegate {
     }
 }
 
-
 // MARK: - FxHomePocketDiscoverMoreCell
 /// A cell to be placed at the last position in the Pocket section
 class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
@@ -167,7 +165,7 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: .zero)

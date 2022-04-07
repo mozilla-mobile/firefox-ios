@@ -9,14 +9,14 @@ class UpdateViewModel {
     //  Internal vars
     var updateCoverSheetModel: UpdateCoverSheetModel?
     var startBrowsing: (() -> Void)?
-    
+
     // Constants
     let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(String.CoverSheetV22DarkModeTitle)\n\n\(String.CoverSheetV22DarkModeDescription)")]
-    
+
     // We only show coversheet for specific app updates and not all. The list below is for the version(s)
     // we would like to show the coversheet for.
     static let coverSheetSupportedAppVersion = ["22.0"]
-    
+
     init() {
         setupUpdateModel()
     }
@@ -24,14 +24,14 @@ class UpdateViewModel {
     private func setupUpdateModel() {
         updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"), titleText: .AppMenu.WhatsNewString, updates: updates)
     }
-    
+
     static func isCleanInstall(userPrefs: Prefs) -> Bool {
         if userPrefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first == nil {
-            return true 
+            return true
         }
         return false
     }
-    
+
     static func shouldShowUpdateSheet(userPrefs: Prefs, currentAppVersion: String = VersionSetting.appVersion, isCleanInstall: Bool, supportedAppVersions: [String] = []) -> Bool {
         var willShow = false
         if isCleanInstall {

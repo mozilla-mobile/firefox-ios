@@ -73,7 +73,7 @@ class TPStatsBlocklistChecker {
 // The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
 func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
     struct Memo { static var domains = [String: String]() }
-    
+
     if let memoized = Memo.domains[domain] {
         return memoized
     }
@@ -84,7 +84,7 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
         regex = "." + regex
     }
     regex = regex.replacingOccurrences(of: ".", with: "\\.")
-    
+
     Memo.domains[domain] = regex
     return regex
 }

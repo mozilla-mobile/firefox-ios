@@ -67,7 +67,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
-    
+
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
     private let searchEngineContainerView = UIView()
@@ -77,7 +77,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private lazy var bookmarkedBadge: UIImage = {
         return UIImage(named: "bookmark_results")!
     }()
-    
+
     private lazy var openAndSyncTabBadge: UIImage = {
         return UIImage(named: "sync_open_tab")!
     }()
@@ -92,7 +92,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         self.tabManager = tabManager
         self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
         super.init(profile: profile)
-        
+
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
@@ -132,7 +132,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         blur.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-    
+
         searchEngineContainerView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
         }
@@ -335,7 +335,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             self.view.layoutIfNeeded()
         })
     }
-    
+
     private func getCachedTabs() {
         assert(Thread.isMainThread)
         // Short circuit if the user is not logged in
@@ -354,7 +354,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             }
         }
     }
-    
+
     func searchTabs(for searchString: String) {
         let currentTabs = viewModel.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
 
@@ -391,7 +391,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return find(in: text)
         }
     }
-    
+
     func searchRemoteTabs(for searchString: String) {
         filteredRemoteClientTabs.removeAll()
         for remoteClientTab in remoteClientTabs {
@@ -415,7 +415,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return false
         }
     }
-    
+
     private func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
@@ -559,7 +559,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         attributedString.append(restOfSuggestion)
         return attributedString
     }
-    
+
     private func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell, oneLineCell: OneLineTableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
@@ -635,7 +635,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
         return cell
     }
-    
+
     @objc func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {

@@ -207,7 +207,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             cell.runLogoAnimation()
         })
     }
-    
+
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: ASHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
@@ -230,7 +230,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             contextualHintViewController.stopTimer()
             return
         }
-        
+
         present(contextualHintViewController, animated: true, completion: nil)
     }
 
@@ -704,11 +704,11 @@ extension FirefoxHomeViewController {
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
     }
-    
+
     @objc func contextualHintPresented() {
         homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
     }
-    
+
     @objc func openTabsSettings() {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
     }

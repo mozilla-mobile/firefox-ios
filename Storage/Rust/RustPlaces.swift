@@ -235,14 +235,12 @@ public class RustPlaces {
             return try connection.createFolder(parentGUID: parentGUID, title: title, position: position)
         }
     }
-    
 
     public func createSeparator(parentGUID: GUID, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createSeparator(parentGUID: parentGUID, position: position)
         }
     }
-
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
@@ -353,7 +351,7 @@ public class RustPlaces {
             return try connection.queryHistoryMetadata(query: query, limit: limit)
         }
     }
-    
+
     /**
         Title observations must be made first for any given url. Observe one fact at a time (e.g. just the viewTime, or just the documentType).
      */
