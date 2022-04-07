@@ -16,7 +16,7 @@ enum DismissType {
  Show the FxA web content for signing in, signing up, or showing FxA settings.
  Messaging from the website to native is with WKScriptMessageHandler.
  */
-class FxAWebViewController: UIViewController, WKNavigationDelegate {
+class FxAWebViewController: UIViewController {
     fileprivate let dismissType: DismissType
     fileprivate var webView: WKWebView
     /// Used to show a second WKWebView to browse help links.
@@ -24,6 +24,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     fileprivate let viewModel: FxAWebViewModel
     /// Closure for dismissing higher up FxA Sign in view controller
     var shouldDismissFxASignInViewController: (() -> Void)?
+
     /**
      init() FxAWebView.
 
@@ -72,10 +73,12 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
             if let method = telemetryEventMethod {
                 TelemetryWrapper.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
             }
-            self?.webView.load(request)
+
+            self?.loadRequest(request, isPairing: telemetryEventMethod == .qrPairing)
         }
 
         viewModel.onDismissController = { [weak self] in
+            self?.endPairingConnectionBackgroundTask()
             self?.dismiss(animated: true)
         }
     }
@@ -94,23 +97,47 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         }
     }
 
+    deinit {
+        webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
+        endPairingConnectionBackgroundTask()
+    }
+
+    // MARK: Background task
+
+    /// In case the application is set to background while pairing with a QR code, we need
+    /// to ensure the application can keep the connection alive a little longer so pairing can be completed
+    private let backgroundTaskName = "moz.org.sync.qrcode.auth"
+    private var backgroundTaskID = UIBackgroundTaskIdentifier(rawValue: 0)
+
+    private func loadRequest(_ request: URLRequest, isPairing: Bool) {
+        // Only start background task on pairing request
+        guard isPairing else {
+            webView.load(request)
+            return
+        }
+
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: backgroundTaskName) { [weak self] in
+            self?.webView.stopLoading()
+            self?.endPairingConnectionBackgroundTask()
+        }
+
+        webView.load(request)
+    }
+
+    private func endPairingConnectionBackgroundTask() {
+        UIApplication.shared.endBackgroundTask(backgroundTaskID)
+        backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+    }
+}
+
+// MARK: - WKNavigationDelegate
+extension FxAWebViewController: WKNavigationDelegate {
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
         decisionHandler(decision)
     }
 
-    deinit {
-        webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
-    }
-}
-
-extension FxAWebViewController: WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        viewModel.handle(scriptMessage: message)
-    }
-}
-
-extension FxAWebViewController {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
         webView.evaluateJavascriptInDefaultContentWorld(hideLongpress)
@@ -125,6 +152,14 @@ extension FxAWebViewController {
     }
 }
 
+// MARK: - WKScriptMessageHandler
+extension FxAWebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        viewModel.handle(scriptMessage: message)
+    }
+}
+
+// MARK: - WKUIDelegate
 extension FxAWebViewController: WKUIDelegate {
 
     /// Blank target links (support links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
@@ -158,6 +193,8 @@ extension FxAWebViewController: WKUIDelegate {
     }
 }
 
+// MARK: - WKScriptMessageHandleDelegate
+
 // WKScriptMessageHandleDelegate uses for holding weak `self` to prevent retain cycle.
 // self - webview - configuration
 //   \                    /
@@ -177,15 +214,14 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
     }
 }
 
+// MARK: - Observe value
 extension FxAWebViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?,
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
-            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
-                               severity: .error,
-                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            sendSentryObserveValueError(forKeyPath: keyPath)
             return
         }
 
@@ -195,9 +231,13 @@ extension FxAWebViewController {
                 viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
             }
         default:
-            Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
-                               severity: .error,
-                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            sendSentryObserveValueError(forKeyPath: keyPath)
         }
+    }
+
+    private func sendSentryObserveValueError(forKeyPath keyPath: String?) {
+        Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
+                           severity: .error,
+                           description: "Unhandled KVO key: \(keyPath ?? "nil")")
     }
 }
