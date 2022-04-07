@@ -24,6 +24,7 @@ class FxAWebViewController: UIViewController {
     fileprivate let viewModel: FxAWebViewModel
     /// Closure for dismissing higher up FxA Sign in view controller
     var shouldDismissFxASignInViewController: (() -> Void)?
+
     /**
      init() FxAWebView.
 
@@ -72,10 +73,12 @@ class FxAWebViewController: UIViewController {
             if let method = telemetryEventMethod {
                 TelemetryWrapper.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
             }
-            self?.webView.load(request)
+
+            self?.loadRequest(request, isPairing: telemetryEventMethod == .qrPairing)
         }
 
         viewModel.onDismissController = { [weak self] in
+            self?.endPairingConnectionBackgroundTask()
             self?.dismiss(animated: true)
         }
     }
@@ -96,6 +99,33 @@ class FxAWebViewController: UIViewController {
 
     deinit {
         webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
+    }
+
+    // MARK: Background task
+
+    /// In case the application is set to background while pairing with a QR code, we need
+    /// to ensure the application can keep the connection alive a little longer so pairing can be completed
+    private let backgroundTaskName = "moz.org.sync.qrcode.auth"
+    private var backgroundTaskID = UIBackgroundTaskIdentifier(rawValue: 0)
+
+    private func loadRequest(_ request: URLRequest, isPairing: Bool) {
+        // Only start background task on pairing request
+        guard isPairing else {
+            webView.load(request)
+            return
+        }
+
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: backgroundTaskName) {
+            self.webView.stopLoading()
+            self.endPairingConnectionBackgroundTask()
+        }
+
+        webView.load(request)
+    }
+
+    private func endPairingConnectionBackgroundTask() {
+        UIApplication.shared.endBackgroundTask(backgroundTaskID)
+        backgroundTaskID = UIBackgroundTaskIdentifier.invalid
     }
 }
 
