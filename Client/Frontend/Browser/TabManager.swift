@@ -161,7 +161,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     // MARK: - Initializer
     init(profile: Profile, imageStore: DiskImageStore?) {
 
-
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile.prefs)
@@ -210,7 +209,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func getTabFor(_ url: URL) -> Tab? {
-
 
         for tab in tabs {
             if let webViewUrl = tab.webView?.url,
@@ -299,7 +297,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func expireSnackbars() {
 
-
         for tab in tabs {
             tab.expireSnackbars()
         }
@@ -325,7 +322,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool) {
 
-
         if urls.isEmpty {
             return
         }
@@ -346,7 +342,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
     func addTab(_ request: URLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool = false) -> Tab {
 
-
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
@@ -357,7 +352,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
-
 
         let currentTabs = privateMode ? privateTabs : normalTabs
 
@@ -380,7 +374,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     }
 
     func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false) {
-
 
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
@@ -501,7 +494,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
             selectTab(selected, previous: selected)
         }
     }
-    
+
     // MARK: Tab Tray close all tabs
 
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
@@ -572,7 +565,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
             delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
         }
     }
-    
+
     func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {
         tabs.append(contentsOf: tabsToAdd)
         let tabToSelect = tabs.filter { $0.tabUUID == previousTabUUID }.first
@@ -614,7 +607,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     ///   - tab: the tab to remove
     ///   - flushToDisk: Will store changes if true, and update selected index
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
-
 
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
             Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")

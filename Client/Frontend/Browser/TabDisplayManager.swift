@@ -860,7 +860,7 @@ extension TabDisplayManager: TabEventHandler {
         let isSelected = tab == tabManager.selectedTab
         cell.configureWith(tab: tab, isSelected: isSelected)
     }
-    
+
     func removeAllTabs() {
         operations.removeAll()
         dataStore.removeAll()
