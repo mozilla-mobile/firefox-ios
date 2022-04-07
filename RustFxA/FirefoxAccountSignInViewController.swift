@@ -61,7 +61,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             }
         }
     }
-    let scanButton: UIButton = .build { button in
+    lazy var scanButton: UIButton = .build { button in
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
         button.setImage(UIImage(named: "qr-code-icon-white")?.tinted(withColor: .white), for: .normal)
@@ -71,9 +71,10 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.scanbuttonTapped), for: .touchUpInside)
     }
-    let emailButton: UIButton = .build { button in
+
+    lazy var emailButton: UIButton = .build { button in
         button.backgroundColor = .white
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.layer.borderColor = UIColor.Photon.Grey30.cgColor
@@ -81,7 +82,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.layer.cornerRadius = 8
         button.setTitle(.FxASignin_EmailSignin, for: .normal)
         button.accessibilityIdentifier = "EmailSignIn.button"
-        button.addTarget(self, action: #selector(emailLoginTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.emailLoginTapped), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
     }
 

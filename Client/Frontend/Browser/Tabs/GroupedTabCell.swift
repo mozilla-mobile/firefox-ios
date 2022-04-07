@@ -177,9 +177,9 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         return view
     }()
 
-    var searchButton: UIButton = .build { button in
+    lazy var searchButton: UIButton = .build { button in
         button.setImage(UIImage(named: "search")?.withTintColor(.label), for: [.normal])
-        button.addTarget(self, action: #selector(handleSearchButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.handleSearchButtonTapped), for: .touchUpInside)
         button.isAccessibilityElement = true
         button.accessibilityIdentifier = GroupedTabCellProperties.CellStrings.searchButtonAccessibilityId
     }
