@@ -17,7 +17,7 @@ class LoginOnboardingViewController: SettingsViewController {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -26,7 +26,7 @@ class LoginOnboardingViewController: SettingsViewController {
         button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
         return button
     }()
-    
+
     private lazy var continueButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false

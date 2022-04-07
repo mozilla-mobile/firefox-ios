@@ -17,7 +17,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false

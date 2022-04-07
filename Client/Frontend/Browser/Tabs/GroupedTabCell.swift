@@ -176,7 +176,7 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
         return view
     }()
-    
+
     lazy var searchButton: UIButton = .build { button in
         button.setImage(UIImage(named: "search")?.withTintColor(.label), for: [.normal])
         button.addTarget(self, action: #selector(self.handleSearchButtonTapped), for: .touchUpInside)
