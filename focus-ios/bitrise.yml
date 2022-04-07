@@ -238,6 +238,9 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
+    - swiftlint-extended@1:
+        inputs:
+        - linting_path: "$BITRISE_SOURCE_DIR"
     - script@1:
         title: Set Default Web Browser Entitlement
         inputs:
@@ -309,6 +312,9 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
+    - swiftlint-extended@1:
+        inputs:
+        - linting_path: "$BITRISE_SOURCE_DIR"
     - script@1:
         title: Set Default Web Browser Entitlement
         inputs:
