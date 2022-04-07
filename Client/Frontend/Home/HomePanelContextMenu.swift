@@ -7,23 +7,20 @@ import Foundation
 import Storage
 
 protocol HomePanelContextMenu {
-    func getSiteDetails(for indexPath: IndexPath) -> Site?
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]?
-    func presentContextMenu(for indexPath: IndexPath)
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
+    func getContextMenuActions(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType) -> [PhotonRowActions]?
+    func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType)
+    func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType, completionHandler: @escaping () -> PhotonActionSheet?)
 }
 
 extension HomePanelContextMenu {
-    func presentContextMenu(for indexPath: IndexPath) {
-        guard let site = getSiteDetails(for: indexPath) else { return }
-
-        presentContextMenu(for: site, with: indexPath, completionHandler: {
-            return self.contextMenu(for: site, with: indexPath)
+    func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType) {
+        presentContextMenu(for: site, with: sourceView, sectionType: sectionType, completionHandler: {
+            return self.contextMenu(for: site, with: sourceView, sectionType: sectionType)
         })
     }
 
-    func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
-        guard let actions = getContextMenuActions(for: site, with: indexPath) else { return nil }
+    func contextMenu(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType) -> PhotonActionSheet? {
+        guard let actions = getContextMenuActions(for: site, with: sourceView, sectionType: sectionType) else { return nil }
 
         let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
         let contextMenu = PhotonActionSheet(viewModel: viewModel)
@@ -35,12 +32,17 @@ extension HomePanelContextMenu {
         return contextMenu
     }
 
-    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?, isPocket: Bool, isZeroSearch: Bool) -> [PhotonRowActions]? {
+    func getDefaultContextMenuActions(for site: Site,
+                                      delegate: FirefoxHomeContextMenuHelperDelegate?,
+                                      sectionType: FirefoxHomeSectionType,
+                                      isZeroSearch: Bool) -> [PhotonRowActions]? {
+
         guard let siteURL = site.url.asURL else { return nil }
 
         let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
-            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-            if isPocket {
+            delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+
+            if sectionType == .pocket {
                 let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,
@@ -49,8 +51,8 @@ extension HomePanelContextMenu {
             }
         }.items
 
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _ in
-            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+            delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }.items
 
         return [openInNewTabAction, openInNewPrivateTabAction]

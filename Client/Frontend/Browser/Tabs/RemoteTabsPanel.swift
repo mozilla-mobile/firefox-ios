@@ -12,20 +12,6 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-private struct RemoteTabsPanelUX {
-    static let HeaderHeight = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
-    static let RowHeight = SiteTableViewControllerUX.RowHeight
-    static let EmptyStateInstructionsWidth = 170
-    static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
-    static let EmptyStateSignInButtonColor = UIColor.Photon.Blue40
-    static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
-    static let EmptyStateSignInButtonHeight = 44
-    static let EmptyStateSignInButtonWidth = 200
-    static let HistoryTableViewHeaderChevronInset: CGFloat = 10
-    static let HistoryTableViewHeaderChevronSize: CGFloat = 20
-    static let HistoryTableViewHeaderChevronLineWidth: CGFloat = 3.0
-}
-
 private let RemoteClientIdentifier = "RemoteClient"
 private let RemoteTabIdentifier = "RemoteTab"
 
@@ -36,7 +22,9 @@ protocol RemotePanelDelegate: AnyObject {
     func remotePanel(didSelectURL url: URL, visitType: VisitType)
 }
 
+// MARK: - RemoteTabsPanel
 class RemoteTabsPanel: UIViewController, NotificationThemeable {
+
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()
@@ -115,7 +103,13 @@ enum RemoteTabsError {
 protocol RemoteTabsPanelDataSource: UITableViewDataSource, UITableViewDelegate {
 }
 
+// MARK: - RemoteTabsPanelClientAndTabsDataSource
 class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
+
+    struct UX {
+        static let HeaderHeight = SiteTableViewControllerUX.RowHeight
+    }
+
     weak var remoteTabPanel: RemoteTabsPanel?
     fileprivate var clientAndTabs: [ClientAndTabs]
 
@@ -144,7 +138,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! SiteTableViewHeader
-        view.frame = CGRect(width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
+        view.frame = CGRect(width: tableView.frame.width, height: UX.HeaderHeight)
         view.titleLabel.text = client.name
         view.showBorder(for: .bottom, true)
         view.showBorder(for: .top, section != 0)
@@ -251,6 +245,12 @@ fileprivate let emptySyncImageName = "emptySync"
 // MARK: - RemoteTabsErrorCell
 
 class RemoteTabsErrorCell: UITableViewCell {
+
+    struct UX {
+        static let EmptyStateInstructionsWidth = 170
+        static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15
+    }
+
     static let Identifier = "RemoteTabsErrorCell"
 
     let titleLabel = UILabel()
@@ -285,14 +285,14 @@ class RemoteTabsErrorCell: UITableViewCell {
         containerView.addSubview(instructionsLabel)
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(emptyStateImageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+            make.top.equalTo(emptyStateImageView.snp.bottom).offset(UX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(emptyStateImageView)
         }
 
         instructionsLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems / 2)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UX.EmptyStateTopPaddingInBetweenItems / 2)
             make.centerX.equalTo(containerView)
-            make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
+            make.width.equalTo(UX.EmptyStateInstructionsWidth)
         }
 
         containerView.snp.makeConstraints { make in
@@ -330,6 +330,14 @@ class RemoteTabsErrorCell: UITableViewCell {
 // MARK: - RemoteTabsNotLoggedInCell
 
 class RemoteTabsNotLoggedInCell: UITableViewCell {
+
+    struct UX {
+        static let EmptyStateSignInButtonColor = UIColor.Photon.Blue40
+        static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
+        static let EmptyStateSignInButtonHeight = 44
+        static let EmptyStateSignInButtonWidth = 200
+    }
+
     static let Identifier = "RemoteTabsNotLoggedInCell"
     var remoteTabsPanel: RemoteTabsPanel?
     let instructionsLabel = UILabel()
@@ -361,7 +369,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.setTitle(.FxASignInToSync, for: [])
         signInButton.setTitleColor(UIColor.Photon.White100, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
+        signInButton.layer.cornerRadius = UX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
@@ -382,13 +390,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(emptyStateImageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+            make.top.equalTo(emptyStateImageView.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(emptyStateImageView)
         }
 
         createAnAccountButton.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(signInButton)
-            make.top.equalTo(signInButton.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+            make.top.equalTo(signInButton.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
         }
 
         applyTheme()
@@ -402,7 +410,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         emptyStateImageView.tintColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
-        signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
+        signInButton.backgroundColor = UX.EmptyStateSignInButtonColor
         backgroundColor = UIColor.theme.tabTray.background
     }
 
@@ -423,8 +431,8 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     override func updateConstraints() {
         if UIWindow.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
             instructionsLabel.snp.remakeConstraints { make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-                make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
+                make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                make.width.equalTo(RemoteTabsErrorCell.UX.EmptyStateInstructionsWidth)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
                 make.left.lessThanOrEqualTo(contentView.snp.left).offset(80).priority(100)
@@ -434,9 +442,9 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             }
 
             signInButton.snp.remakeConstraints { make in
-                make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
-                make.width.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonWidth)
-                make.centerY.equalTo(emptyStateImageView).offset(2*RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+                make.height.equalTo(UX.EmptyStateSignInButtonHeight)
+                make.width.equalTo(UX.EmptyStateSignInButtonWidth)
+                make.centerY.equalTo(emptyStateImageView).offset(2 * RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
                 make.right.greaterThanOrEqualTo(contentView.snp.right).offset(-70).priority(100)
@@ -446,23 +454,29 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             }
         } else {
             instructionsLabel.snp.remakeConstraints { make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+                make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
                 make.centerX.equalTo(contentView)
-                make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
+                make.width.equalTo(RemoteTabsErrorCell.UX.EmptyStateInstructionsWidth)
             }
 
             signInButton.snp.remakeConstraints { make in
                 make.centerX.equalTo(contentView)
-                make.top.equalTo(instructionsLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-                make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
-                make.width.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonWidth)
+                make.top.equalTo(instructionsLabel.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                make.height.equalTo(UX.EmptyStateSignInButtonHeight)
+                make.width.equalTo(UX.EmptyStateSignInButtonWidth)
             }
         }
         super.updateConstraints()
     }
 }
 
+// MARK: - RemoteTabsTableViewController
 fileprivate class RemoteTabsTableViewController: UITableViewController {
+
+    struct UX {
+        static let RowHeight = SiteTableViewControllerUX.RowHeight
+    }
+
     weak var remoteTabsPanel: RemoteTabsPanel?
     var profile: Profile!
     var tableViewDelegate: RemoteTabsPanelDataSource? {
@@ -482,7 +496,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
         tableView.register(SimpleTwoLineCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
-        tableView.rowHeight = RemoteTabsPanelUX.RowHeight
+        tableView.rowHeight = UX.RowHeight
         tableView.separatorInset = .zero
 
         tableView.tableFooterView = UIView() // prevent extra empty rows at end
@@ -514,7 +528,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         }
     }
 
-// MARK: - Refreshing TableView
+    // MARK: - Refreshing TableView
 
     func addRefreshControl() {
         let control = UIRefreshControl()
@@ -605,6 +619,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     }
 }
 
+// MARK: LibraryPanelContextMenu
 extension RemoteTabsTableViewController: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
