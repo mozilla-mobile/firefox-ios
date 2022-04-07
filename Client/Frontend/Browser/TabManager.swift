@@ -66,7 +66,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         self.delegates.append(WeakTabManagerDelegate(value: delegate))
     }
 
-    func removeDelegate(_ delegate: TabManagerDelegate) {
+    func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)? = nil) {
         DispatchQueue.main.async { [unowned self] in
             for i in 0 ..< self.delegates.count {
                 let del = self.delegates[i]
@@ -75,6 +75,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
                     return
                 }
             }
+            completion?()
         }
     }
 
@@ -456,11 +457,12 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return result
     }
 
-    func removeTab(_ tab: Tab) {
+    func removeTab(_ tab: Tab, completion: (() -> Void)? = nil) {
         guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
         DispatchQueue.main.async { [unowned self] in
             self.removeTab(tab, flushToDisk: true)
             self.updateIndexAfterRemovalOf(tab, deletedIndex: index)
+            completion?()
         }
 
         TelemetryWrapper.recordEvent(
@@ -703,7 +705,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
 
-    func undoCloseTabs() {
+    func undoCloseTabs(deleteTabCompletion: (() -> Void)? = nil) {
         guard let isPrivate = recentlyClosedForUndo.first?.isPrivate else {
             // No valid tabs
             return
@@ -718,7 +720,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
 
         // In non-private mode, delete all tabs will automatically create a tab
         if let tab = tabs.first, !tab.isPrivate {
-            removeTab(tab)
+            removeTab(tab, completion: deleteTabCompletion)
         }
 
         selectTab(selectedTab)
