@@ -6,17 +6,17 @@ import Foundation
 import Shared
 
 class ChronTabsUserResearch {
-    
+
     // MARK: - Properties
-    
+
     // Constants
     private let enrollmentKey = "chronTabsUserResearchEnrollmentKey"
     private let chronTabsUserResearchKey = "chronTabsUserResearchKey"
     private let abTestName = "Chronological Tabs AB Test Prod"
-    
+
     // Saving user defaults
     private let defaults = UserDefaults.standard
-    
+
     // New tab button state
     // True: Show new tab button
     // False: Hide new tab button
@@ -35,7 +35,7 @@ class ChronTabsUserResearch {
             return value
         }
     }
-    
+
     var hasEnrolled: Bool {
         set(value) {
             defaults.set(value, forKey: enrollmentKey)

@@ -36,7 +36,7 @@ enum QuickLink: Int {
             return String.ClosePrivateTabsLabelV2
         }
     }
-    
+
     public var smallWidgetUrl: URL {
         switch self {
         case .search:
@@ -49,7 +49,7 @@ enum QuickLink: Int {
             return linkToContainingApp(query: "widget-small-quicklink-close-private-tabs")
         }
     }
-    
+
     public var mediumWidgetUrl: URL {
         switch self {
         case .search:
@@ -68,11 +68,11 @@ enum QuickLink: Int {
         case .search:
             return [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]
         case .privateSearch:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+            return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
         case .copiedLink:
             return [Color("goToCopiedLinkSolid")]
         case .closePrivateTabs:
-            return [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+            return [Color("privateGradientThree"), Color("privateGradientTwo"), Color("privateGradientOne")]
         }
     }
 

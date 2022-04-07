@@ -5,10 +5,10 @@
 import UIKit
 import Storage
 
-extension HistoryPanelV2: LibraryPanelContextMenu {
+extension HistoryPanelWithGroups: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
-        
+
         present(contextMenu, animated: true, completion: nil)
     }
 
@@ -24,13 +24,13 @@ extension HistoryPanelV2: LibraryPanelContextMenu {
                                                  tapHandler: { _ in
             self.removeHistoryItem(at: indexPath)
         })
-        
+
         let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle,
                                                iconString: ImageIdentifiers.addShortcut,
                                                tapHandler: { _ in
             self.pinToTopSites(site)
         })
-        
+
         actions.append(PhotonRowActions(pinTopSite))
         actions.append(PhotonRowActions(removeAction))
         return actions

@@ -10,11 +10,11 @@ class ETPViewModel {
     var etpCoverSheetmodel: ETPCoverSheetModel?
     var startBrowsing: (() -> Void)?
     var goToSettings: (() -> Void)?
-    
+
     // We only show ETP coversheet for specific app updates and not all. The list below is for the version(s)
     // we would like to show the coversheet for.
     static let etpCoverSheetSupportedAppVersion = ["24.0"]
-    
+
     init() {
         setupUpdateModel()
     }
@@ -22,7 +22,7 @@ class ETPViewModel {
     private func setupUpdateModel() {
         etpCoverSheetmodel = ETPCoverSheetModel(titleImage: #imageLiteral(resourceName: "shield"), titleText: .CoverSheetETPTitle, descriptionText: .CoverSheetETPDescription)
     }
-    
+
     static func shouldShowETPCoverSheet(userPrefs: Prefs, currentAppVersion: String = VersionSetting.appVersion, isCleanInstall: Bool, supportedAppVersions: [String] = etpCoverSheetSupportedAppVersion) -> Bool {
         // 0,1,2 so we show on 3rd session as a requirement on Github #6012
         let maxSessionCount = 2
@@ -64,7 +64,7 @@ class ETPViewModel {
         case .Unknown:
             break
         }
-        
+
         return shouldShow
     }
 }

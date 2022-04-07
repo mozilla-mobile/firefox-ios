@@ -61,7 +61,7 @@ private func deferEmptyResponse(token batchToken: BatchToken? = nil, lastModifie
 }
 
 // Small helper operator for comparing query parameters below
-private func ==(param1: NSURLQueryItem, param2: NSURLQueryItem) -> Bool {
+private func == (param1: NSURLQueryItem, param2: NSURLQueryItem) -> Bool {
     return param1.name == param2.name && param1.value == param2.value
 }
 
@@ -70,7 +70,7 @@ private let miniConfig = InfoConfiguration(maxRequestBytes: 1_048_576, maxPostRe
 class Sync15BatchClientTests: XCTestCase {
 
     func testAddLargeRecordFails() {
-        let uploader: BatchUploadFunction = { _,_, _  in deferEmptyResponse(lastModified: 10_000) }
+        let uploader: BatchUploadFunction = { _, _, _  in deferEmptyResponse(lastModified: 10_000) }
         let serializeRecord = { massivify($0)?.stringify() }
 
         let batch = Sync15BatchClient(config: miniConfig,
@@ -86,7 +86,7 @@ class Sync15BatchClientTests: XCTestCase {
     }
 
     func testFailToSerializeRecord() {
-        let uploader: BatchUploadFunction = { _,_, _  in deferEmptyResponse(lastModified: 10_000) }
+        let uploader: BatchUploadFunction = { _, _, _  in deferEmptyResponse(lastModified: 10_000) }
         let batch = Sync15BatchClient(config: miniConfig,
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: { _ in nil },

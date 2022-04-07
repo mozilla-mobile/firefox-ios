@@ -74,6 +74,7 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
+    public static let KeyShowSponsoredShortcuts = "showSponsoredShortcuts"
 
     // Tabs Tray
     public static let KeyInactiveTabsModel = "KeyInactiveTabsModelKey"

@@ -12,7 +12,7 @@ import Foundation
 /// `.accessibilityIdentifier` identifiers from the client and the tests
 /// should be move here and updated throughout the app.
 public struct AccessibilityIdentifiers {
-    
+
     struct Toolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
@@ -49,7 +49,7 @@ public struct AccessibilityIdentifiers {
             static let itemCell = "TopSitesCell"
         }
     }
-    
+
     struct GeneralizedIdentifiers {
         public static let back = "Back"
     }
@@ -59,7 +59,7 @@ public struct AccessibilityIdentifiers {
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
     }
-    
+
     struct LibraryPanels {
         struct HistoryPanel {
             static let tableView = "History List"
@@ -67,7 +67,7 @@ public struct AccessibilityIdentifiers {
             static let recentlyClosedCell = "HistoryPanel.recentlyClosedCell"
             static let syncedHistoryCell = "HistoryPanel.syncedHistoryCell"
         }
-        
+
         struct GroupedList {
             static let tableView = "grouped-items-table-view"
         }

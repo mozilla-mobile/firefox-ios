@@ -94,7 +94,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     private var imageContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
-    
+
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
 

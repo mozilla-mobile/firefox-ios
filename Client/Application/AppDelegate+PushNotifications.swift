@@ -95,7 +95,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
         if profile?.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
             profile?.removeAccount()
-            
+
             // show the notification
             completionHandler([.alert, .sound])
         } else {

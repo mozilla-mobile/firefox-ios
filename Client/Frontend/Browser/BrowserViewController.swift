@@ -16,23 +16,6 @@ import SDWebImage
 import Telemetry
 import Sentry
 
-private let KVOs: [KVOConstants] = [
-    .estimatedProgress,
-    .loading,
-    .canGoBack,
-    .canGoForward,
-    .URL,
-    .title,
-]
-
-private let ActionSheetTitleMaxLength = 120
-
-private struct BrowserViewControllerUX {
-    fileprivate static let ShowHeaderTapAreaHeight: CGFloat = 32
-    fileprivate static let BookmarkStarAnimationDuration: Double = 0.5
-    fileprivate static let BookmarkStarAnimationOffset: CGFloat = 80
-}
-
 struct UrlToOpenModel {
     var url: URL?
     var isPrivate: Bool
@@ -48,6 +31,21 @@ enum ReferringPage {
 }
 
 class BrowserViewController: UIViewController {
+
+    private enum UX {
+        static let ShowHeaderTapAreaHeight: CGFloat = 32
+        static let ActionSheetTitleMaxLength = 120
+    }
+
+    private let KVOs: [KVOConstants] = [
+        .estimatedProgress,
+        .loading,
+        .canGoBack,
+        .canGoForward,
+        .URL,
+        .title,
+    ]
+
     var firefoxHomeViewController: FirefoxHomeViewController?
     var libraryViewController: LibraryViewController?
     var libraryDrawerViewController: DrawerViewController?
@@ -280,7 +278,7 @@ class BrowserViewController: UIViewController {
 
         } else if showTopTabs, topTabsViewController != nil {
             topTabsViewController?.applyTheme()
-            
+
         } else {
             if let topTabsView = topTabsViewController?.view {
                 header.removeArrangedView(topTabsView)
@@ -625,7 +623,7 @@ class BrowserViewController: UIViewController {
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
-            make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
+            make.height.equalTo(UX.ShowHeaderTapAreaHeight)
         }
 
         readerModeBar?.snp.remakeConstraints { make in
@@ -1396,10 +1394,10 @@ class BrowserViewController: UIViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
 
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = profile
-        settingsTableViewController.tabManager = tabManager
-        settingsTableViewController.settingsDelegate = self
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: self)
 
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
@@ -1481,11 +1479,11 @@ class BrowserViewController: UIViewController {
     }
 
     func showSettingsWithDeeplink(to destination: AppSettingsDeeplinkOption) {
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = self.profile
-        settingsTableViewController.tabManager = self.tabManager
-        settingsTableViewController.settingsDelegate = self
-        settingsTableViewController.deeplinkTo = destination
+        let settingsTableViewController = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            delegate: self,
+            deeplinkingTo: destination)
 
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
@@ -1804,7 +1802,7 @@ extension BrowserViewController: HomePanelDelegate {
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
-        
+
         let searchData = TabGroupData(searchTerm: searchTerm ?? "",
                                       searchUrl: url.absoluteString,
                                       nextReferralUrl: "")
@@ -2336,7 +2334,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
         if let dialogTitle = dialogTitle {
             if let _ = dialogTitle.asURL {
-                actionSheetController.title = dialogTitle.ellipsize(maxLength: ActionSheetTitleMaxLength)
+                actionSheetController.title = dialogTitle.ellipsize(maxLength: UX.ActionSheetTitleMaxLength)
             } else {
                 actionSheetController.title = dialogTitle
             }

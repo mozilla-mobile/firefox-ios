@@ -377,7 +377,6 @@ class HiddenSetting: Setting {
     }
 }
 
-
 class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
@@ -628,7 +627,6 @@ class ResetContextualHints: HiddenSetting {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
-
     override init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(settings: settings)
@@ -734,7 +732,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
 class AppStoreReviewSetting: Setting {
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .RatingsPrompt.Settings.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .Settings.About.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1322,7 +1320,6 @@ class SearchBarSetting: Setting {
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
-
 
 extension BrowserViewController {
     /// ⚠️ !! WARNING !! ⚠️

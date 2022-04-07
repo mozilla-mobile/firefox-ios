@@ -10,11 +10,11 @@ struct ASGroup<T>: Hashable {
     var groupedItems: [T]
     var timestamp: Timestamp
     let identifier = UUID()
-    
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
     }
-    
+
     static func == (lhs: ASGroup<T>, rhs: ASGroup<T>) -> Bool {
         lhs.identifier == rhs.identifier
     }

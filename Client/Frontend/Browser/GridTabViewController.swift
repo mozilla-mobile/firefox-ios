@@ -88,7 +88,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
                                                           with: profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
-        
+
         super.init(nibName: nil, bundle: nil)
         collectionViewSetup()
     }
@@ -227,7 +227,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
             let groupName = tabIndex.groupName
             let groupIndex: Int = tabGroups.firstIndex(where: { $0.searchTerm == groupName }) ?? 0
             let offSet = Int(GroupedTabCellProperties.CellUX.defaultCellHeight) * groupIndex
-            let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width:  self.collectionView.frame.width, height: self.collectionView.frame.height))
+            let rect = CGRect(origin: CGPoint(x: 0, y: offSet), size: CGSize(width: self.collectionView.frame.width, height: self.collectionView.frame.height))
             DispatchQueue.main.async {
                 self.collectionView.scrollRectToVisible(rect, animated: false)
             }
@@ -244,7 +244,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
                     self.collectionView.scrollRectToVisible(rect, animated: false)
                 }
             } else {
-                self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally] , animated: false)
+                self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally], animated: false)
             }
         }
     }
@@ -681,7 +681,6 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         return .zero
     }
 
-
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
@@ -710,7 +709,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             return CGSize(width: cellWidth, height: self.cellHeightForCurrentDevice())
         }
     }
-    
+
     private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
         guard !tabDisplayManager.isPrivate, let inactiveTabViewModel = tabDisplayManager.inactiveViewModel, inactiveTabViewModel.activeTabs.count > 0 else {
             return CGSize(width: 0, height: 0)

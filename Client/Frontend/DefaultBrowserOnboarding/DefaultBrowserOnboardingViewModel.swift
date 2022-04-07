@@ -9,7 +9,7 @@ enum InstallType: String, Codable {
     case fresh
     case upgrade
     case unknown
-    
+
     // Helper methods
     static func get() -> InstallType {
         guard let rawValue = UserDefaults.standard.string(forKey: PrefsKeys.InstallType), let type = InstallType(rawValue: rawValue) else {
@@ -17,18 +17,18 @@ enum InstallType: String, Codable {
         }
         return type
     }
-    
+
     static func set(type: InstallType) {
         UserDefaults.standard.set(type.rawValue, forKey: PrefsKeys.InstallType)
     }
-    
+
     static func persistedCurrentVersion() -> String {
         guard let currentVersion = UserDefaults.standard.string(forKey: PrefsKeys.KeyCurrentInstallVersion) else {
             return ""
         }
         return currentVersion
     }
-    
+
     static func updateCurrentVersion(version: String) {
         UserDefaults.standard.set(version, forKey: PrefsKeys.KeyCurrentInstallVersion)
     }
@@ -51,7 +51,7 @@ class DefaultBrowserOnboardingViewModel {
     init() {
         setupModel()
     }
-    
+
     private func setupModel() {
         model = DefaultBrowserOnboardingModel(
             titleText: String.DefaultBrowserCardTitle,
@@ -66,7 +66,7 @@ class DefaultBrowserOnboardingViewModel {
          String.DefaultBrowserOnboardingDescriptionStep2,
          String.DefaultBrowserOnboardingDescriptionStep3]
     }
-    
+
     static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
         // Only show on fresh install
         guard InstallType.get() == .fresh else { return false }
