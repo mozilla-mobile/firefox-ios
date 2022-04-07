@@ -99,6 +99,7 @@ class FxAWebViewController: UIViewController {
 
     deinit {
         webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
+        endPairingConnectionBackgroundTask()
     }
 
     // MARK: Background task
