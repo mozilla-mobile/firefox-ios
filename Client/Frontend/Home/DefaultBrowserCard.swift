@@ -13,11 +13,11 @@ struct DefaultBrowserCardUX {
 }
 
 class DefaultBrowserCard: UIView {
-    
+
     // MARK: - Properties
-    
+
     public var dismissClosure: (() -> Void)?
-    
+
     // UI
     private lazy var title: UILabel = .build { label in
         label.text = String.DefaultBrowserCardTitle
@@ -73,17 +73,17 @@ class DefaultBrowserCard: UIView {
     }
 
     // MARK: - Inits
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupLayout()
     }
-    
+
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupLayout() {
         cardView.addSubviews(learnHowButton, image, title, descriptionText, closeButton)
         containerView.addSubview(cardView)
@@ -92,7 +92,7 @@ class DefaultBrowserCard: UIView {
 
         let frameGuide = scrollView.frameLayoutGuide
         let contentGuide = scrollView.contentLayoutGuide
-        
+
         NSLayoutConstraint.activate([
             // Constraints that set the size and position of the scroll view relative to its superview
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -125,7 +125,7 @@ class DefaultBrowserCard: UIView {
             cardView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             cardView.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.cardSize.width),
             cardView.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.cardSize.height),
-            
+
             image.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 48),
             image.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
             image.widthAnchor.constraint(equalToConstant: DefaultBrowserCardUX.logoSize.width),
@@ -151,21 +151,21 @@ class DefaultBrowserCard: UIView {
             learnHowButton.heightAnchor.constraint(equalToConstant: DefaultBrowserCardUX.learnHowButtonSize.height)
         ])
     }
-    
+
     @objc private func dismissCard() {
         self.dismissClosure?()
         UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard")
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
     }
-    
+
     @objc private func showOnboarding() {
         BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
-        
+
         // Set default browser onboarding did show to true so it will not show again after user clicks this button
         UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
     }
-    
+
     func applyTheme() {
         cardView.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
         title.textColor = UIColor.theme.defaultBrowserCard.textColor

@@ -184,7 +184,7 @@ class TestBrowserDB: XCTestCase {
 
         waitForExpectations(timeout: 10, handler: nil)
     }
-    
+
     func testConcurrentQueriesDealloc() {
         let expectation = self.expectation(description: "Got all DB results")
 
@@ -215,12 +215,12 @@ class TestBrowserDB: XCTestCase {
 
             return deferMaybe(DatabaseError(description: "Unable to execute concurrent short-running query"))
         }
-        
+
         trackForMemoryLeaks(shortConcurrentQuery)
 
         waitForExpectations(timeout: 10, handler: nil)
     }
-    
+
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(instance, "Instance should have been deallocated, potential memory leak.", file: file, line: line)

@@ -64,15 +64,15 @@ enum Experiments {
             }
         }
     }
-    
+
     private static var studiesSetting: Bool? = nil;
     private static var telemetrySetting: Bool? = nil;
-    
+
     static func setStudiesSetting(_ setting: Bool) {
         studiesSetting = setting
         updateGlobalUserParticipation()
     }
-    
+
     static func setTelemetrySetting(_ setting: Bool) {
         telemetrySetting = setting
         if !setting {
@@ -80,7 +80,7 @@ enum Experiments {
         }
         updateGlobalUserParticipation()
     }
-    
+
     private static func updateGlobalUserParticipation() {
         // we only want to reset the globalUserParticipation flag if both settings have been
         // initialized.
@@ -142,7 +142,7 @@ enum Experiments {
     static func usePreviewCollection(storage: UserDefaults = .standard) -> Bool {
         storage.bool(forKey: NIMBUS_USE_PREVIEW_COLLECTION_KEY)
     }
-    
+
     static var customTargetingAttributes: [String: String] = [:]
 
     static var serverSettings: NimbusServerSettings? = {

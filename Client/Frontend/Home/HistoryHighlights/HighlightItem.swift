@@ -20,7 +20,7 @@ extension HistoryHighlight: HighlightItem {
     var type: HighlightItemType {
         return .item
     }
-    
+
     var displayTitle: String {
         return title ?? url
     }

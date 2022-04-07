@@ -9,13 +9,13 @@ class StartAtHomeHelper: FeatureFlagsProtocol {
     // Override only for unit test to test `shouldSkipStartHome` logic
     private var isRunningTest: Bool
     lazy var startAtHomeSetting: StartAtHomeSetting? = featureFlags.userPreferenceFor(.startAtHome)
-    
+
     init(isRestoringTabs: Bool,
          isRunnigTest: Bool = AppConstants.IsRunningTest) {
         self.isRestoringTabs = isRestoringTabs
         self.isRunningTest = isRunnigTest
     }
-    
+
     var shouldSkipStartHome: Bool {
         return isRunningTest ||
               DebugSettingsBundleOptions.skipSessionRestore ||

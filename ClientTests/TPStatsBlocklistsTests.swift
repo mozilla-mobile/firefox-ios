@@ -8,32 +8,32 @@ import XCTest
 
 class TPStatsBlocklistsTests: XCTestCase {
     var blocklists: TPStatsBlocklists!
-    
+
     override func setUp() {
         super.setUp()
-        
+
         blocklists = TPStatsBlocklists()
     }
-    
+
     override func tearDown() {
         super.tearDown()
         blocklists = nil
     }
-    
+
     func testLoadPerformance() {
         self.measureMetrics([.wallClockTime], automaticallyStartMeasuring: true) {
             blocklists.load()
             self.stopMeasuring()
         }
     }
-    
+
     func testURLInListPerformance() {
         blocklists.load()
-        
+
         let safelistedRegexs = ["*google.com"].compactMap { (domain) -> String? in
             return wildcardContentBlockerDomainToRegex(domain: domain)
         }
-        
+
         self.measureMetrics([.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0..<100 {
                 _ = blocklists.urlIsInList(URL(string: "https://www.firefox.com")!, mainDocumentURL: URL(string: "http://foo.com")!, safelistedDomains: safelistedRegexs)
@@ -41,10 +41,10 @@ class TPStatsBlocklistsTests: XCTestCase {
             self.stopMeasuring()
         }
     }
-    
+
     func testURLInList() {
         blocklists.load()
-        
+
         func blocklist(_ urlString: String, _ mainDoc: String = "https://foo.com", _ safelistedDomains: [String] = []) -> BlocklistCategory? {
             let safelistedRegexs = safelistedDomains.compactMap { (domain) -> String? in
                 return wildcardContentBlockerDomainToRegex(domain: domain)

@@ -37,7 +37,7 @@ extension TabManager: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         store.preserveTabs(tabs, selectedTab: selectedTab)
     }
-    
+
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard tab.screenshot != nil else {
             // Remove screenshot from image store so we can use favicon
@@ -156,7 +156,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         return eligibleTabs
     }
 
-
     var lastSessionWasPrivate: Bool {
         return UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
     }
@@ -243,7 +242,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         store.preserveScreenshot(forTab: tab)
         storeChanges()
     }
-    
+
     func removeScreenshot(tab: Tab) {
         store.removeScreenshot(forTab: tab)
         storeChanges()
@@ -680,20 +679,20 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         assert(Thread.isMainThread)
         configuration.processPool = WKProcessPool()
     }
-    
+
     /// When all history gets deleted, we use this special way to handle Tab History deletion. To make it appear like
     /// the currently open tab also has its history deleted, we close the tab and reload that URL in a new tab.
     /// We handle it this way because, as far as I can tell, clearing history REQUIRES we nil the webView. The backForwardList
     /// is not directly mutable. When niling out the webView, we should properly close it since it affects KVO.
     func clearAllTabsHistory() {
         guard let selectedTab = selectedTab, let url = selectedTab.url else { return }
-        
+
         for tab in tabs where tab !== selectedTab {
             tab.clearAndResetTabHistory()
         }
-        
+
         removeTab(selectedTab)
-        
+
         let tabToSelect: Tab
         if url.isFxHomeUrl {
             tabToSelect = addTab(PrivilegedRequest(url: url) as URLRequest, isPrivate: selectedTab.isPrivate)
@@ -701,10 +700,10 @@ class TabManager: NSObject, FeatureFlagsProtocol {
             let request = URLRequest(url: url)
             tabToSelect = addTab(request, isPrivate: selectedTab.isPrivate)
         }
-        
+
         selectTab(tabToSelect)
     }
-    
+
 }
 
 extension TabManager {
@@ -785,10 +784,10 @@ extension TabManager {
             BrowserViewController.foregroundBVC().openedUrlFromExternalSource = false
             return
         }
-        
+
         let startAtHomeManager = StartAtHomeHelper(isRestoringTabs: isRestoringTabs)
         guard !startAtHomeManager.shouldSkipStartHome else { return }
-        
+
         if startAtHomeManager.shouldStartAtHome() {
             let scannableTabs = lastSessionWasPrivate ? privateTabs : normalTabs
             let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,

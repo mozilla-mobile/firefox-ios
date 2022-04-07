@@ -17,7 +17,7 @@ class LoginOnboardingViewController: SettingsViewController {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -26,7 +26,7 @@ class LoginOnboardingViewController: SettingsViewController {
         button.titleLabel?.font = DynamicFontHelper().DeviceFontExtraLarge
         return button
     }()
-    
+
     private var continueButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +38,7 @@ class LoginOnboardingViewController: SettingsViewController {
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
         return button
     }()
-    
+
     var doneHandler: () -> Void = {}
     var proceedHandler: () -> Void = {}
 
@@ -50,27 +50,27 @@ class LoginOnboardingViewController: SettingsViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("not implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(doneButtonTapped))
         }
-        
+
         self.title = .LoginsAndPasswordsTitle
-        
+
         self.view.addSubviews(onboardingMessageLabel, learnMoreButton, continueButton)
-        
+
         NSLayoutConstraint.activate([
             onboardingMessageLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             onboardingMessageLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             onboardingMessageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             onboardingMessageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            
+
             learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             learnMoreButton.topAnchor.constraint(equalTo: onboardingMessageLabel.safeAreaLayoutGuide.bottomAnchor, constant: 20),
-            
+
             continueButton.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -20),
             continueButton.heightAnchor.constraint(equalToConstant: 44),
             continueButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
@@ -79,7 +79,7 @@ class LoginOnboardingViewController: SettingsViewController {
             continueButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
         ])
     }
-    
+
     @objc func doneButtonTapped(_ sender: UIButton) {
         self.doneHandler()
     }

@@ -13,12 +13,12 @@ struct SiteTableViewControllerUX {
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
-    
+
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         label.textColor = UIColor.theme.tableView.headerTextDark
     }
-    
+
     // Currently, historyPanel uses this WHEN STG is available in that section.
     let headerActionButton: UIButton = .build { button in
         button.setTitle("Show all", for: .normal)
@@ -34,19 +34,19 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        
+
         translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(titleLabel, headerActionButton)
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
-        
+
         backgroundView = UIView()
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            
+
             headerActionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             headerActionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
         ])
@@ -105,14 +105,14 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         table.cellLayoutMarginsFollowReadableWidth = false
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
-        
+
         if let _ = self as? HomePanelContextMenu {
             table.dragDelegate = self
         }
-        
+
         // Set an empty footer to prevent empty cells from appearing in the list.
         table.tableFooterView = UIView()
-        
+
         if #available(iOS 15.0, *) {
             table.sectionHeaderTopPadding = 0
         }
@@ -134,7 +134,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupView()
     }
 
@@ -162,7 +162,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private func setupView() {
         view.addSubview(tableView)
-        
+
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -170,7 +170,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
+
     func reloadData() {
         if data.status != .success {
             print("Err: \(data.statusMessage)", terminator: "\n")

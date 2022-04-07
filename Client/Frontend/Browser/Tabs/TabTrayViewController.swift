@@ -18,14 +18,14 @@ protocol TabTrayViewDelegate: UIViewController {
 }
 
 class TabTrayViewController: UIViewController {
-    
+
     // MARK: - Variables
     var viewModel: TabTrayViewModel
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)?
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)?
     var notificationCenter: NotificationCenter
     var nimbus: FxNimbus
-    
+
     // MARK: - UI Elements
     // Buttons & Menus
     lazy var deleteButton: UIBarButtonItem = {
@@ -56,19 +56,19 @@ class TabTrayViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapSyncTabs))
-        
+
         button.accessibilityIdentifier = "syncTabsButtonTabTray"
         return button
     }()
-    
+
     lazy var syncLoadingView: UIStackView = {
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
-        
+
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.color = .systemGray
         activityIndicator.startAnimating()
-        
+
         let stackView = UIStackView(arrangedSubviews: [syncingLabel, activityIndicator])
         stackView.spacing = 12
         return stackView
@@ -162,13 +162,13 @@ class TabTrayViewController: UIViewController {
                                           tabManager: tabManager)
 
         super.init(nibName: nil, bundle: nil)
-        
+
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged,
                                        .ProfileDidStartSyncing,
                                        .ProfileDidFinishSyncing,
                                        .TabClosed])
-        
+
     }
 
     required init?(coder: NSCoder) {
@@ -204,12 +204,12 @@ class TabTrayViewController: UIViewController {
 
     private func viewSetup() {
         viewModel.syncedTabsController.remotePanelDelegate = self
-        
+
         if let appWindow = (UIApplication.shared.delegate?.window),
            let window = appWindow as UIWindow? {
             window.backgroundColor = .black
         }
-        
+
         if shouldUseiPadSetup() {
             iPadViewSetup()
         } else {
@@ -218,7 +218,7 @@ class TabTrayViewController: UIViewController {
 
         showPanel(viewModel.tabTrayView)
     }
-    
+
     func updatePrivateUIState() {
         UserDefaults.standard.set(viewModel.tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
     }
@@ -235,7 +235,7 @@ class TabTrayViewController: UIViewController {
 
     fileprivate func iPhoneViewSetup() {
         navigationItem.rightBarButtonItem = doneButton
-        
+
         view.addSubview(navigationToolbar)
 
         navigationToolbar.snp.makeConstraints { make in
@@ -326,14 +326,14 @@ class TabTrayViewController: UIViewController {
             setToolbarItems(newToolbarItems, animated: true)
         }
     }
-    
+
     private func updateButtonTitle(_ notification: Notification) {
         switch notification.name {
         case .ProfileDidStartSyncing:
             // Update Sync Tab button
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                
+
                 self.syncTabButton.isEnabled = false
                 self.syncTabButton.customView = self.syncLoadingView
             }
@@ -341,7 +341,7 @@ class TabTrayViewController: UIViewController {
             // Update Sync Tab button
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                
+
                 self.syncTabButton.customView = nil
                 self.syncTabButton.title = .FxASyncNow
                 self.syncTabButton.isEnabled = true
@@ -450,7 +450,7 @@ extension TabTrayViewController: RemotePanelDelegate {
         self.didSelectUrl?(url, visitType)
         self.dismissVC()
     }
-    
+
     // Sign In and Create Account Helper
     func fxaSignInOrCreateAccountHelper() {
         let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])

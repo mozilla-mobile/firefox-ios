@@ -405,7 +405,7 @@ public class GleanSyncOperationHelper {
                 case .notStarted(let reason):
                     self.recordSyncEngineFailure(name, reason.telemetryId)
                 }
-                
+
                 self.submitSyncEnginePing(name)
             }
         } else if let failure = result.engineResults.failureValue {
@@ -418,10 +418,10 @@ public class GleanSyncOperationHelper {
 
             GleanMetrics.Sync.failureReason[errorName.rawValue].add()
         }
-        
+
         GleanMetrics.Pings.shared.tempSync.submit()
     }
-    
+
     private func recordSyncEngineStats(_ engineName: String, _ stats: SyncEngineStatsSession) {
         // Create maps on labels to stat value,
         // keeping only the values that are above zero.
@@ -437,7 +437,7 @@ public class GleanSyncOperationHelper {
             ("uploaded", stats.uploadStats.sent),
             ("failed_to_upload", stats.uploadStats.sentFailed)
         ].filter { (_, stat) in stat > 0 }
-        
+
         switch engineName {
         case "tabs":
             incomingLabelsToValue.forEach{ (l, v) in GleanMetrics.TabsSync.incoming[l].add(Int32(v))}
@@ -455,10 +455,10 @@ public class GleanSyncOperationHelper {
             break
         }
     }
-    
+
     private func recordSyncEngineFailure(_ engineName: String, _ reason: String) {
         let correctedReson = String(reason.dropFirst("sync.not_started.reason.".count))
-        
+
         switch engineName {
         case "tabs": GleanMetrics.TabsSync.failureReason[correctedReson].add()
         case "bookmarks": GleanMetrics.BookmarksSync.failureReason[correctedReson].add()
@@ -468,7 +468,7 @@ public class GleanSyncOperationHelper {
             break
         }
     }
-    
+
     private func submitSyncEnginePing(_ engineName: String) {
         switch engineName {
         case "tabs": GleanMetrics.Pings.shared.tempTabsSync.submit()

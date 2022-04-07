@@ -17,7 +17,7 @@ class ScreenshotHelper {
     init(controller: BrowserViewController) {
         self.controller = controller
     }
-    
+
     /// Takes a screenshot of the WebView to be displayed on the tab view page
     /**
      If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
@@ -41,7 +41,7 @@ class ScreenshotHelper {
             let configuration = WKSnapshotConfiguration()
             //This is for a bug in certain iOS 13 versions, snapshots cannot be taken correctly without this boolean being set
             configuration.afterScreenUpdates = false
-            
+
             webView.takeSnapshot(with: configuration) { image, error in
                 if let image = image {
                     tab.hasHomeScreenshot = false

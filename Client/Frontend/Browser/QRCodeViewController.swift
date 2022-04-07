@@ -100,7 +100,7 @@ class QRCodeViewController: UIViewController {
         isAnimationing = true
         startScanLineAnimation()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyShapeLayer()
@@ -116,7 +116,7 @@ class QRCodeViewController: UIViewController {
         super.viewWillLayoutSubviews()
         applyShapeLayer()
     }
-    
+
     private func applyShapeLayer() {
         view.layoutIfNeeded()
         shapeLayer.removeFromSuperlayer()
@@ -174,7 +174,6 @@ class QRCodeViewController: UIViewController {
             videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         }
     }
-
 
     @objc func startScanLineAnimation() {
         if !isAnimationing {

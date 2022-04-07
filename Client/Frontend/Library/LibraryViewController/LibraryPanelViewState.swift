@@ -12,7 +12,7 @@ enum LibraryPanelMainState: Equatable {
 
     // When comparing states, we must also ensure we're comparing substates,
     // in the cases where they are present.
-    static func ==(lhs: LibraryPanelMainState, rhs: LibraryPanelMainState) -> Bool {
+    static func == (lhs: LibraryPanelMainState, rhs: LibraryPanelMainState) -> Bool {
         switch (lhs, rhs) {
         case (let .bookmarks(subState1), let .bookmarks(subState2)),
              (let .history(subState1), let .history(subState2)):

@@ -72,7 +72,7 @@ class LibraryViewController: UIViewController {
         button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
         return button
     }()
-    
+
     private lazy var bottomCenterButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelSearch),
                                      style: .plain,
@@ -93,7 +93,7 @@ class LibraryViewController: UIViewController {
     private lazy var bottomToolbarItemsSingleButton: [UIBarButtonItem] = {
         return [flexibleSpace, bottomRightButton]
     }()
-    
+
     private lazy var bottomToolbarItemsCenterButton: [UIBarButtonItem] = {
         return [flexibleSpace, bottomCenterButton, flexibleSpace]
     }()
@@ -145,10 +145,10 @@ class LibraryViewController: UIViewController {
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
+
             librarySegmentControl.widthAnchor.constraint(equalToConstant: 343),
             librarySegmentControl.heightAnchor.constraint(equalToConstant: CGFloat(ChronologicalTabsControllerUX.navigationMenuHeight)),
-            
+
             controllerContainerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -201,7 +201,6 @@ class LibraryViewController: UIViewController {
             navigationController?.setToolbarHidden(true, animated: true)
         }
     }
-
 
     // MARK: - Panel
     var selectedPanel: LibraryPanelType? = nil {
@@ -483,20 +482,20 @@ class LibraryViewController: UIViewController {
             return
         }
     }
-    
+
     private func rightButtonHistoryActions(for state: LibraryPanelSubState) {
         guard let panel = children.first as? UINavigationController,
               let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
-        
+
         historyPanel.exitSearchState()
         viewModel.currentPanelState = .history(state: .mainView)
     }
-    
+
     @objc func bottomCenterButtonAction() {
         viewModel.currentPanelState = .history(state: .search)
         guard let panel = children.first as? UINavigationController,
               let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
-        
+
         historyPanel.startSearchState()
     }
 }
@@ -506,7 +505,7 @@ extension LibraryViewController: NotificationThemeable {
     @objc func applyTheme() {
         viewModel.panelDescriptors.forEach { item in
             (item.viewController as? NotificationThemeable)?.applyTheme()
-        }        
+        }
 
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to

@@ -40,7 +40,6 @@ fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
       }
   }
 
-
 class AdvancedAccountSettingViewController: SettingsTableViewController {
     fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
     fileprivate var customFxAContentURI: String?

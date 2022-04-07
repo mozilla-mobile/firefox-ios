@@ -40,19 +40,19 @@ class TabTrayV2ViewModel: NSObject {
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
     }
-    
+
     // Returns tabs for the mode the current view model is in
     func getTabs() -> [Tab] {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
-    
+
     func getTabDomainUrl(tab: Tab) -> URL? {
         guard tab.url != nil else {
             return tab.sessionData?.urls.last?.domainURL
         }
         return tab.url?.domainURL
     }
-    
+
     func countOfNormalTabs() -> Int {
         return tabManager.normalTabs.count
     }
@@ -69,7 +69,7 @@ class TabTrayV2ViewModel: NSObject {
             self.addTab()
         }
     }
-    
+
     func addPrivateTab() {
         guard isPrivate && getTabs().isEmpty else {
             return
@@ -77,14 +77,14 @@ class TabTrayV2ViewModel: NSObject {
         self.addTab()
         tabManager.selectTab(getTabs().last)
     }
-    
+
     func updateTabs() {
         let tabs = getTabs()
         tabs.forEach { tab in
             let section = timestampToSection(tab)
             dataStore[section]?.insert(tab, at: 0)
         }
-    
+
         for (section, list) in dataStore {
             let sorted = list.sorted {
                 let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? 0
@@ -95,7 +95,7 @@ class TabTrayV2ViewModel: NSObject {
         }
         viewController.tableView.reloadData()
     }
-    
+
     func resetDataStoreTabs() {
         dataStore.removeAll()
         dataStore = [ .today: Array<Tab>(),
@@ -103,7 +103,7 @@ class TabTrayV2ViewModel: NSObject {
         .lastWeek: Array<Tab>(),
         .older: Array<Tab>()]
     }
-    
+
     func timestampToSection(_ tab: Tab) -> TabSection {
         let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? Date.now())
         if tabDate.isToday() {
@@ -116,22 +116,22 @@ class TabTrayV2ViewModel: NSObject {
             return .older
         }
     }
-    
+
     func getSectionDateHeader(_ section: Int) -> String {
         let section = TabSection(rawValue: section)
         let sectionHeader: String
         let date: String
         let dateFormatter = DateFormatter()
         let dateIntervalFormatter = DateIntervalFormatter()
-        
+
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
         dateFormatter.locale = Locale(identifier: Locale.current.identifier)
-        
+
         dateIntervalFormatter.dateStyle = .medium
         dateIntervalFormatter.timeStyle = .none
         dateIntervalFormatter.locale = Locale(identifier: Locale.current.identifier)
-        
+
         switch section {
         case .today:
             sectionHeader = .TabTrayV2TodayHeader
@@ -149,10 +149,10 @@ class TabTrayV2ViewModel: NSObject {
             sectionHeader = ""
             date = ""
         }
-        
+
         return (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
     }
-    
+
     // The user has tapped the close button or has swiped away the cell
     func removeTab(forIndex index: IndexPath) {
         guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
@@ -177,14 +177,14 @@ class TabTrayV2ViewModel: NSObject {
             } else {
                 self.tabManager.removeTabsWithToast(tabs)
             }
-            
+
             if self.getTabs().count == 1, let tab = self.getTabs().first {
             self.tabManager.selectTab(tab)
                 self.viewController.dismissTabTray()
             }
         }
     }
-    
+
     func didSelectRowAt (index: IndexPath) {
         guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
             return
@@ -192,15 +192,15 @@ class TabTrayV2ViewModel: NSObject {
         tab.lastExecutedTime = Date.now()
         selectTab(tab)
     }
-    
+
     func selectTab(_ tab: Tab) {
         tabManager.selectTab(tab)
     }
-    
+
     func addTab(_ request: URLRequest! = nil) {
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
-    
+
     func numberOfSections() -> Int {
         return TabSection.allCases.count
     }
@@ -211,18 +211,18 @@ class TabTrayV2ViewModel: NSObject {
         }
         return tab
     }
-    
+
     func numberOfRowsInSection(section: Int) -> Int {
         return dataStore[TabSection(rawValue: section) ?? .today]?.count ?? 0
     }
-    
+
     func configure(cell: TabTableViewCell, for index: IndexPath) {
         guard let section = TabSection(rawValue: index.section),
               let tab = dataStore[section]?[index.row] else { return }
 
         let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
         let urlLabel = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
-        
+
         // Setting default white image as screenshot
         cell.screenshotView?.image = UIColor.white.image()
         if let tabScreenshot = tab.screenshot {
@@ -232,7 +232,7 @@ class TabTrayV2ViewModel: NSObject {
             // Set Favicon from domain url when screenshot from tab is empty
             cell.screenshotView?.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
         }
-        
+
         cell.websiteTitle?.text = tab.displayTitle
         cell.urlLabel?.text = urlLabel
         cell.accessoryView = cell.closeButton
@@ -241,7 +241,7 @@ class TabTrayV2ViewModel: NSObject {
 
 extension TabTrayV2ViewModel: TabEventHandler {
     private func updateCellFor(tab: Tab, selectedTabChanged: Bool) {
-        
+
     }
 
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
@@ -257,7 +257,7 @@ extension TabTrayV2ViewModel: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) { }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) { }
-    
+
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         for (section, tabs) in dataStore {
             if let removalIndex = tabs.firstIndex(where: { $0 === tab }) {
@@ -268,14 +268,14 @@ extension TabTrayV2ViewModel: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-       
+
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
-       
+
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        
+
     }
 }

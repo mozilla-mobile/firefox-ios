@@ -8,11 +8,11 @@ import Storage
 
 class TabMoreMenuViewModel: NSObject {
     typealias PresentableVC = UIViewController & UIPopoverPresentationControllerDelegate
-    
+
     fileprivate let tabManager: TabManager
     fileprivate let viewController: TabMoreMenuViewController
     fileprivate let profile: Profile
-    
+
     init(viewController: TabMoreMenuViewController, profile: Profile) {
         self.viewController = viewController
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
@@ -20,7 +20,7 @@ class TabMoreMenuViewModel: NSObject {
         super.init()
         tabManager.addDelegate(self)
     }
-    
+
     func pin(_ tab: Tab) {
         guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
@@ -32,7 +32,7 @@ class TabMoreMenuViewModel: NSObject {
         }.uponQueue(.main) { result in
         }
     }
-    
+
     func sendToDevice() {
         let bvc = BrowserViewController.foregroundBVC()
         if !self.profile.hasAccount() {
@@ -56,26 +56,26 @@ class TabMoreMenuViewModel: NSObject {
 
 extension TabMoreMenuViewModel: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
-        
+
     }
-    
+
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
 
     }
-    
+
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        
+
     }
-    
+
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        
+
     }
-    
+
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
-        
+
     }
-    
+
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        
+
     }
 }
