@@ -56,6 +56,10 @@ class Pocket: FeatureFlagsProtocol {
 
     lazy private var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
+    private lazy var pocketKey: String? = {
+        return Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String
+    }()
+
     private func findCachedResponse(for request: URLRequest) -> [String: Any]? {
         let cachedResponse = URLCache.shared.cachedResponse(for: request)
         guard let cachedAtTime = cachedResponse?.userInfo?["cache-time"] as? Timestamp, (Date.now() - cachedAtTime) < MaxCacheAge else {
@@ -81,7 +85,7 @@ class Pocket: FeatureFlagsProtocol {
 
     // Fetch items from the global pocket feed
     func globalFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {
-        if featureFlags.isFeatureActiveForBuild(.useMockData) {
+        if shouldUseMockData {
             return getMockDataFeed(items: items)
         } else {
             return getGlobalFeed(items: items)
@@ -132,7 +136,7 @@ class Pocket: FeatureFlagsProtocol {
         let locale = Locale.current.identifier
         let pocketLocale = locale.replacingOccurrences(of: "_", with: "-")
         var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale), URLQueryItem(name: "version", value: "3")]
-        if let pocketKey = Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String {
+        if let pocketKey = pocketKey {
             params.append(URLQueryItem(name: "consumer_key", value: pocketKey))
         }
 
@@ -141,6 +145,10 @@ class Pocket: FeatureFlagsProtocol {
         }
 
         return URLRequest(url: feedURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5)
+    }
+
+    private var shouldUseMockData: Bool {
+        return featureFlags.isFeatureActiveForBuild(.useMockData) && pocketKey == nil
     }
 
     private func getMockDataFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {
