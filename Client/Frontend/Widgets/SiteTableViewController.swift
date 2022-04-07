@@ -105,7 +105,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         table.cellLayoutMarginsFollowReadableWidth = false
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
-        
+
         if let _ = self as? LibraryPanelContextMenu {
             table.dragDelegate = self
         }
