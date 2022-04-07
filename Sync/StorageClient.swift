@@ -760,7 +760,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
             deferred.fill(Maybe(failure: RecordParseError()))
         }
-        
+
         return deferred
     }
 

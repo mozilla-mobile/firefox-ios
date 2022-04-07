@@ -12,10 +12,10 @@ class VersionSettingTests: XCTestCase {
         let settingsTable = SettingsTableViewController(style: .grouped)
         let navigationController = UINavigationController(rootViewController: settingsTable)
         let versionSetting = VersionSetting(settings: settingsTable)
-        
+
         // MARK: - when
         versionSetting.onLongPress(navigationController)
-        
+
         // MARK: - then
         let appVersionString = UIPasteboard.general.string
         let appVersionPredicate = (appVersionString?.contains("Firefox Daylight") ?? false) == true

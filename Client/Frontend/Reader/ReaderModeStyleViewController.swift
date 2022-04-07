@@ -7,9 +7,9 @@ import Shared
 
 // MARK: - ReaderModeStyleViewControllerDelegate
 
-protocol ReaderModeStyleViewControllerDelegate {    
+protocol ReaderModeStyleViewControllerDelegate {
     // isUsingUserDefinedColor should be false by default unless we need to override the default color 
-    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, 
+    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController,
                                        didConfigureStyle style: ReaderModeStyle,
                                        isUsingUserDefinedColor: Bool)
 }
@@ -24,11 +24,11 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
     fileprivate var fontSizeButtons: [FontSizeButton]!
     fileprivate var themeButtons: [ThemeButton]!
     fileprivate var separatorLines = [UIView(), UIView(), UIView()]
-    
+
     fileprivate var fontTypeRow: UIView!
     fileprivate var fontSizeRow: UIView!
     fileprivate var brightnessRow: UIView!
-    
+
     // Keeps user-defined reader color until reader mode is closed or reloaded
     fileprivate var isUsingUserDefinedColor = false
 
@@ -40,7 +40,7 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
 
         return readerModeController
     }
-    
+
     override func viewDidLoad() {
         // Our preferred content size has a fixed width and height based on the rows + padding
         super.viewDidLoad()
@@ -67,7 +67,7 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
 
         view.addSubview(separatorLines[0])
         makeSeparatorView(fromView: separatorLines[0], topConstraint: fontTypeRow)
-        
+
         // Font size row
 
         fontSizeRow = UIView()
@@ -97,7 +97,7 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
 
         view.addSubview(separatorLines[1])
         makeSeparatorView(fromView: separatorLines[1], topConstraint: fontSizeRow)
-        
+
         // Theme row
 
         let themeRow = UIView()
@@ -116,10 +116,10 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
         ]
 
         setupButtons(themeButtons, inRow: themeRow, action: #selector(changeTheme))
-        
+
         view.addSubview(separatorLines[2])
         makeSeparatorView(fromView: separatorLines[2], topConstraint: themeRow)
-        
+
         // Brightness row
 
         brightnessRow = UIView()
@@ -163,11 +163,10 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
         updateFontSizeButtons()
         selectTheme(viewModel.readerModeStyle.theme)
         slider.value = Float(UIScreen.main.brightness)
-        
+
         applyTheme()
     }
-    
-    
+
     // MARK: - Applying Theme
     func applyTheme() {
         fontTypeRow.backgroundColor = UIColor.theme.tableView.rowBackground
@@ -186,12 +185,12 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
             line.backgroundColor = UIColor.theme.tableView.separator
         }
     }
-    
-    func applyTheme(_ preferences: Prefs, contentScript: TabContentScript) {        
+
+    func applyTheme(_ preferences: Prefs, contentScript: TabContentScript) {
         guard let readerPreferences = preferences.dictionaryForKey(ReaderModeProfileKeyStyle),
               let readerMode = contentScript as? ReaderMode,
               var style = ReaderModeStyle(dict: readerPreferences) else { return }
-        
+
         style.ensurePreferredColorThemeIfNeeded()
         readerMode.style = style
     }
@@ -203,7 +202,7 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
             make.height.equalTo(ReaderModeStyleViewModel.SeparatorLineThickness)
         }
     }
-    
+
     /// Setup constraints for a row of buttons. Left to right. They are all given the same width.
     fileprivate func setupButtons(_ buttons: [UIButton], inRow row: UIView, action: Selector) {
         for (idx, button) in buttons.enumerated() {
@@ -224,7 +223,7 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
 
     @objc func changeFontType(_ button: FontTypeButton) {
         selectFontType(button.fontType)
-        delegate?.readerModeStyleViewController(self, 
+        delegate?.readerModeStyleViewController(self,
                                                 didConfigureStyle: viewModel.readerModeStyle,
                                                 isUsingUserDefinedColor: isUsingUserDefinedColor)
     }
@@ -251,7 +250,7 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
         }
         updateFontSizeButtons()
 
-        delegate?.readerModeStyleViewController(self, 
+        delegate?.readerModeStyleViewController(self,
                                                 didConfigureStyle: viewModel.readerModeStyle,
                                                 isUsingUserDefinedColor: isUsingUserDefinedColor)
     }
@@ -274,7 +273,7 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
     @objc func changeTheme(_ button: ThemeButton) {
         selectTheme(button.theme)
         isUsingUserDefinedColor = true
-        delegate?.readerModeStyleViewController(self, 
+        delegate?.readerModeStyleViewController(self,
                                                 didConfigureStyle: viewModel.readerModeStyle,
                                                 isUsingUserDefinedColor: true)
     }

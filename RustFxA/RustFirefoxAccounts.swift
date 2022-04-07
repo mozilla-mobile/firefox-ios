@@ -171,7 +171,7 @@ open class RustFirefoxAccounts {
 
             self?.update()
         }
-        
+
         NotificationCenter.default.addObserver(forName: .accountProfileUpdate, object: nil, queue: .main) { [weak self] notification in
             self?.update()
         }

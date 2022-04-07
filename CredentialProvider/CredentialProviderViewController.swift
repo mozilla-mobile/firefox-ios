@@ -19,12 +19,12 @@ protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView {
 
 class CredentialProviderViewController: ASCredentialProviderViewController {
     private var presenter: CredentialProviderPresenter?
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.presenter = CredentialProviderPresenter(view: self)
     }
-    
+
     var currentViewController: UIViewController? {
         didSet {
             if let currentViewController = self.currentViewController {
@@ -33,7 +33,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
                 self.view.addSubview(currentViewController.view)
                 currentViewController.didMove(toParent: self)
             }
-            
+
             guard let oldViewController = oldValue else {
                 return
             }
@@ -42,7 +42,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
             oldViewController.removeFromParent()
         }
     }
-    
+
     override func prepareInterfaceForExtensionConfiguration() {
         if AppAuthenticator.canAuthenticateDeviceOwner() {
             self.presenter?.extensionConfigurationRequested()
@@ -50,13 +50,13 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
             self.presenter?.showPasscodeRequirement()
         }
     }
-    
+
     /*
      Prepare your UI to list available credentials for the user to choose from. The items in
      'serviceIdentifiers' describe the service the user is logging in to, so your extension can
      prioritize the most relevant credentials in the list.
      */
-    
+
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         if AppAuthenticator.canAuthenticateDeviceOwner() {
             self.presenter?.credentialList(for: serviceIdentifiers)
@@ -64,7 +64,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
             self.presenter?.showPasscodeRequirement()
         }
     }
-    
+
     /*
      Implement this method if your extension supports showing credentials in the QuickType bar.
      When the user selects a credential from your app, this method will be called with the
@@ -73,7 +73,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      If using the credential would require showing custom UI for authenticating the user, cancel
      the request with error code ASExtensionError.userInteractionRequired.
      */
-    
+
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
         if AppAuthenticator.canAuthenticateDeviceOwner() {
             self.presenter?.credentialProvisionRequested(for: credentialIdentity)
@@ -81,7 +81,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
             self.extensionContext.cancelRequest(withError: ASExtensionError(.userInteractionRequired))
         }
     }
-    
+
     /*! @abstract Prepare the view controller to show user interface for providing the user-requested credential.
      @param credentialIdentity the credential identity for which a credential should be provided.
      @discussion The system calls this method when your extension cannot provide the requested credential without user interaction.
@@ -93,7 +93,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      ASExtensionErrorDomain and an appropriate error code from ASExtensionErrorCode. For example, if the credential identity cannot
      be found in the database, pass an error with code ASExtensionErrorCodeCredentialIdentityNotFound.
      */
-    
+
     override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
         self.presenter?.showPasscodeRequirement()
     }
@@ -105,7 +105,7 @@ extension CredentialProviderViewController: CredentialProviderViewProtocol {
         welcomeVC.delegate = self
         self.currentViewController = welcomeVC
     }
-    
+
     func showPasscodeRequirement() {
         let vc = CredentialPasscodeRequirementViewController()
         vc.delegate = self
@@ -125,7 +125,7 @@ extension CredentialProviderViewController: CredentialWelcomeViewControllerDeleg
             self.extensionContext.cancelRequest(withError: ASExtensionError(.userCanceled)) // This does not actually work - the extension is still selected, file a bug with Apple?
         }
     }
-    
+
     func credentialWelcomeViewControllerDidProceed() {
         self.currentViewController?.dismiss(animated: false) {
             if self.presenter?.profile.logins.reopenIfClosed() != nil {

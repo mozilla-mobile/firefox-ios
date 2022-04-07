@@ -102,13 +102,13 @@ open class MockProfile: Client.Profile {
     init(databasePrefix: String = "mock") {
         files = MockFiles()
         syncManager = MockSyncManager()
-        
+
         let oldLoginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
         try? files.remove("\(databasePrefix)_logins.db")
-        
+
         let newLoginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_loginsPerField.db").path
         try? files.remove("\(databasePrefix)_loginsPerField.db")
-        
+
         logins = RustLogins(sqlCipherDatabasePath: oldLoginsDatabasePath, databasePath: newLoginsDatabasePath)
         _ = logins.reopenIfClosed()
         db = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
@@ -226,6 +226,6 @@ open class MockProfile: Client.Profile {
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         return succeed()
     }
-    
+
     public func sendQueuedSyncEvents() {}
 }

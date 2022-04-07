@@ -60,7 +60,7 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
 
     // Container child view controller
     var containerViewController: UIViewController?
-    
+
     // Views
     private var overlay: UIView = {
         let view = UIView()
@@ -71,7 +71,7 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
         let view = UIView()
         return view
     }()
-    
+
     // MARK: Initializers
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -80,14 +80,14 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         roundViews()
         initialViewSetup()
         applyTheme()
     }
-    
+
     // MARK: View setup
     private func initialViewSetup() {
         self.view.backgroundColor = .clear
@@ -96,7 +96,7 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
             make.edges.equalToSuperview()
             make.centerX.equalToSuperview()
         }
-        
+
         self.view.addSubview(panView)
         panView.snp.makeConstraints { make in
             make.bottom.equalTo(self.view.safeArea.bottom)
@@ -104,17 +104,17 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
             make.left.right.equalToSuperview()
             make.height.equalTo(fullHeight)
         }
-        
+
         let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
         panView.addGestureRecognizer(gesture)
         panView.translatesAutoresizingMaskIntoConstraints = true
-        
+
         let overlayTapGesture = UITapGestureRecognizer(target: self, action: #selector(self.hideViewWithAnimation))
         overlay.addGestureRecognizer(overlayTapGesture)
-        
+
         hideView(shouldAnimate: false)
     }
-    
+
     private func roundViews() {
         panView.layer.cornerRadius = 10
         view.clipsToBounds = true
@@ -127,7 +127,7 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
         let yVal = state == .full ? navHeight : state == .partial ? maxY : minY
         panView.frame = CGRect(x: 0, y: yVal, width: view.frame.width, height: fullHeight)
     }
-    
+
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: view)
         let yVal: CGFloat = translation.y
@@ -140,10 +140,10 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
             endedTranslationYVal = 0
             return
         }
-        
+
         // move the frame according to pan gesture
         panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: fullHeight)
-        
+
         if recognizer.state == .ended {
             self.endedTranslationYVal = 0
             // moving down
@@ -160,7 +160,7 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
             }
         }
     }
-    
+
     @objc func hideView(shouldAnimate: Bool) {
         let closure = {
             self.moveView(state: .none)
@@ -196,7 +196,7 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
             self.view.isHidden = false
         })
     }
-    
+
     func showFullView(shouldAnimate: Bool) {
         let closure = {
             self.moveView(state: .full)
@@ -215,11 +215,11 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
     }
-    
+
     @objc private func hideViewWithAnimation() {
         hideView(shouldAnimate: true)
     }
-    
+
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .normal {
             panView.backgroundColor = UIColor.Photon.Grey10
@@ -227,7 +227,7 @@ class BottomSheetViewController: UIViewController, NotificationThemeable {
             panView.backgroundColor = UIColor.Photon.Grey90
         }
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) -> Void in

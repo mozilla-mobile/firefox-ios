@@ -35,7 +35,7 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
         if !isUsingUserDefinedColor {
             newStyle.ensurePreferredColorThemeIfNeeded()
         }
-        
+
         // Persist the new style to the profile
         let encodedStyle: [String: Any] = style.encodeAsDictionary()
         profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
@@ -165,7 +165,7 @@ extension BrowserViewController {
                                       didConfigureStyle: readerModeStyle,
                                       isUsingUserDefinedColor: false)
     }
-    
+
     func appyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {
         ReaderModeStyleViewController().applyTheme(preferences, contentScript: contentScript)
     }

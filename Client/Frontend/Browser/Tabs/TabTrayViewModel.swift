@@ -49,7 +49,7 @@ class TabTrayViewModel {
         }
         return nil
     }
-    
+
     func reloadRemoteTabs() {
         syncedTabsController.forceRefreshTabs()
     }

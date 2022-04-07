@@ -49,7 +49,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
     }
-    
+
     lazy var smallFaviconView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
@@ -113,7 +113,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
         setupConstraint()
     }
-    
+
     func setupConstraint() {
         NSLayoutConstraint.activate([
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -156,7 +156,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
             smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
         ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

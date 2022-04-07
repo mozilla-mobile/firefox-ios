@@ -83,11 +83,11 @@ class TopTabsViewController: UIViewController {
         delegate.tabSelectionDelegate = topTabDisplayManager
         return delegate
     }()
-    
+
     private lazy var topTabFader: TopTabFader = {
         let fader = TopTabFader()
         fader.semanticContentAttribute = .forceLeftToRight
-        
+
         return fader
     }()
 
@@ -132,7 +132,7 @@ class TopTabsViewController: UIViewController {
 
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
-  
+
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
         view.addSubview(tabsButton)
@@ -171,13 +171,13 @@ class TopTabsViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(topTabFader)
         }
-        
+
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
@@ -235,19 +235,19 @@ class TopTabsViewController: UIViewController {
             }
         }
     }
-    
+
     private func handleFadeOutAfterTabSelection() {
         guard let currentTab = tabManager.selectedTab, let index = topTabDisplayManager.dataStore.index(of: currentTab), !collectionView.frame.isEmpty else {
             return
         }
-        
+
         // Check wether first or last tab is being selected.
         if index == 0 {
             topTabFader.setFader(forSides: .right)
-            
+
         } else if index == topTabDisplayManager.dataStore.count - 1 {
             topTabFader.setFader(forSides: .left)
-            
+
         } else if collectionView.contentSize.width <= collectionView.frame.size.width { // all tabs are visible
             topTabFader.setFader(forSides: .none)
         }
@@ -309,16 +309,16 @@ extension TopTabsViewController: TopTabsScrollDelegate {
         let offsetX = scrollView.contentOffset.x
         let scrollViewWidth = scrollView.frame.size.width
         let scrollViewContentSize = scrollView.contentSize.width
-        
+
         let reachedLeftEnd = offsetX == 0
         let reachedRightEnd = (scrollViewContentSize - offsetX) == scrollViewWidth
-        
+
         if reachedLeftEnd {
             topTabFader.setFader(forSides: .right)
-            
+
         } else if reachedRightEnd {
             topTabFader.setFader(forSides: .left)
-            
+
         } else {
             topTabFader.setFader(forSides: .both)
         }

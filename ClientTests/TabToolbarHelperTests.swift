@@ -16,7 +16,7 @@ class TabToolbarHelperTests: XCTestCase {
     let searchButtonImage = UIImage.templateImageNamed("search")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
     let ImageHome = UIImage.templateImageNamed("menu-Home")
-    
+
     override func setUp() {
         super.setUp()
         mockToolbar = MockTabToolbar()
@@ -32,7 +32,7 @@ class TabToolbarHelperTests: XCTestCase {
         subject.setMiddleButtonState(.search)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), searchButtonImage)
     }
-    
+
     func testTapHome() {
         subject.setMiddleButtonState(.home)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), ImageHome)
@@ -72,13 +72,13 @@ class MockTabToolbar: TabToolbarProtocol {
 
     var _bookmarksButton = MockToolbarButton()
     var bookmarksButton: ToolbarButton { get { _bookmarksButton } }
-    
+
     var _addNewTabButton = MockToolbarButton()
     var addNewTabButton: ToolbarButton { get { _addNewTabButton } }
-    
+
     var _homeButton = MockToolbarButton()
     var homeButton: ToolbarButton { get { _homeButton } }
-    
+
     var _appMenuButton = MockToolbarButton()
     var appMenuButton: ToolbarButton { get { _appMenuButton } }
 
@@ -106,7 +106,7 @@ class MockTabToolbar: TabToolbarProtocol {
     }
 
     func updateMiddleButtonState(_ state: MiddleButtonState) {
-        
+
     }
 
     func updateReloadStatus(_ isLoading: Bool) {

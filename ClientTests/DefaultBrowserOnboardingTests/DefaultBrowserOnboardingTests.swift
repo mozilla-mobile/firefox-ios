@@ -30,7 +30,7 @@ class DefaultBrowserOnboardingTests: XCTestCase {
         setTestData(installType: .unknown, sessionCount: 3, didShowOnboarding: false)
         verify(expectedShouldShow: false)
     }
-    
+
     func testInstallTypeFresh_alreadyShownOnboarding() {
         setTestData(installType: .fresh, sessionCount: 3, didShowOnboarding: true)
         verify(expectedShouldShow: false)

@@ -95,7 +95,7 @@ class DynamicFontHelper: NSObject {
         let size = max(deviceFontSize, 16.5)
         return UIFont.systemFont(ofSize: size)
     }
-    
+
     var MediumSizeRegularWeightAS: UIFont {
         let size = max(deviceFontSize, 18)
         return UIFont.systemFont(ofSize: size)
@@ -119,7 +119,7 @@ class DynamicFontHelper: NSObject {
         let size = max(deviceFontSize, 18)
         return UIFont.boldSystemFont(ofSize: size)
     }
-    
+
     var LargeSizeHeavyFontAS: UIFont {
         let size = max(deviceFontSize + 2, 20)
         return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.heavy)
@@ -209,7 +209,7 @@ class DynamicFontHelper: NSObject {
         let notification = Notification(name: .DynamicFontChanged, object: nil)
         NotificationCenter.default.post(notification)
     }
-    
+
     /// Return a font that will dynamically scale up to a certain size
     /// - Parameters:
     ///   - textStyle: The desired textStyle for the font

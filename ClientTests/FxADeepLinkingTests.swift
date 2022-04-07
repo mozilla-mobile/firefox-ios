@@ -8,5 +8,5 @@ import XCTest
 import Shared
 
 class FxADeepLinkingTests: XCTestCase {
-  
+
 }

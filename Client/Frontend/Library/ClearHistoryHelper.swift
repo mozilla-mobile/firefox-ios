@@ -9,7 +9,7 @@ class ClearHistoryHelper {
 
     private let profile: Profile
     private let tabManager: TabManager
-    
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager

@@ -35,7 +35,7 @@ class DisconnectSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
     }
-    
+
     init(settings: SettingsTableViewController) {
         self.settingsVC = settings
         self.profile = settings.profile
@@ -116,7 +116,6 @@ class DeviceNameSetting: StringSetting {
         }
     }
 }
-
 
 class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()

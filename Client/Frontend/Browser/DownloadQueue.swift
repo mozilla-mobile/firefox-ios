@@ -80,7 +80,7 @@ class HTTPDownload: Download {
         self.cookieStore = cookieStore
         self.preflightResponse = preflightResponse
         self.request = request
-        
+
         // Verify scheme is a secure http or https scheme before moving forward with HTTPDownload initialization
         guard let scheme = request.url?.scheme, (scheme == "http" || scheme == "https") else {
             return nil
@@ -97,7 +97,7 @@ class HTTPDownload: Download {
         }
 
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
-        
+
         self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .main)
         self.task = session?.downloadTask(with: request)
     }

@@ -42,7 +42,6 @@ class LibraryShortcutView: UIView {
         addSubview(button)
         addSubview(titleLabel)
 
-
         NSLayoutConstraint.activate([
             widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
             heightAnchor.constraint(equalToConstant: UX.viewHeight),

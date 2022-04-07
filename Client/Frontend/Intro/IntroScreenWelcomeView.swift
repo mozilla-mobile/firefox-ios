@@ -97,19 +97,19 @@ class IntroScreenWelcomeView: UIView, CardTheme {
     var signInClosure: (() -> Void)?
     // Basic variables
     private var currentPage: Int32 = 0
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         initialViewSetup()
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .welcomeScreenView)
     }
-    
+
     // MARK: View setup
     private func initialViewSetup() {
         // Background colour setup
@@ -117,39 +117,39 @@ class IntroScreenWelcomeView: UIView, CardTheme {
         // View setup
         main2panel.axis = .vertical
         main2panel.distribution = .fillEqually
-    
+
         addSubview(main2panel)
         main2panel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalTo(safeArea.top)
             make.bottom.equalTo(safeArea.bottom)
         }
-        
+
         main2panel.addArrangedSubview(imageHolder)
         imageHolder.addSubview(titleImageViewPage1)
         titleImageViewPage1.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
         main2panel.addArrangedSubview(bottomHolder)
         [titleLabel, subTitleLabelPage1, signUpButton, signInButton, nextButton].forEach {
              bottomHolder.addSubview($0)
         }
-        
+
         titleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(10)
             make.top.equalToSuperview()
         }
-        
+
         subTitleLabelPage1.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(35)
             make.top.equalTo(titleLabel.snp.bottom)
         }
-        
+
         let buttonEdgeInset = 15
         let buttonHeight = 46
         let buttonSpacing = 16
-        
+
         signUpButton.addTarget(self, action: #selector(showSignUpFlow), for: .touchUpInside)
         signUpButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(buttonEdgeInset)
@@ -179,7 +179,7 @@ class IntroScreenWelcomeView: UIView, CardTheme {
 
         closeButton.tintColor = .secondaryLabel
     }
-    
+
     // MARK: Button Actions
     @objc func handleCloseButtonTapped() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": currentPage])
@@ -198,12 +198,12 @@ class IntroScreenWelcomeView: UIView, CardTheme {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .welcomeScreenSignUp)
         signUpClosure?()
     }
-    
+
     @objc private func nextAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .welcomeScreenNext)
         nextClosure?()
     }
-    
+
     @objc private func dismissAnimated() {
         closeClosure?()
     }

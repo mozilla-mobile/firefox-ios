@@ -11,7 +11,7 @@ struct SiteArchiver {
     static func tabsToRestore(tabsStateArchivePath: String?) -> ([SavedTab], [String: SimpleTab]) {
         // Get simple tabs for widgetkit
         let simpleTabsDict = SimpleTab.getSimpleTabs()
-        
+
         guard let tabStateArchivePath = tabsStateArchivePath,
               FileManager.default.fileExists(atPath: tabStateArchivePath),
               let tabData = try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath)) else {
@@ -27,7 +27,7 @@ struct SiteArchiver {
             SimpleTab.saveSimpleTab(tabs: nil)
             return ([SavedTab](), simpleTabsDict)
         }
-        
+
         return (tabs, simpleTabsDict)
     }
 }

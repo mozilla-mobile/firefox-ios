@@ -107,7 +107,7 @@ class IntroScreenSyncView: UIView, CardTheme {
         topContainerViewSetup()
         bottomViewSetup()
     }
-    
+
     // MARK: Initializer
     private func initialViewSetup() {
         combinedView.addSubview(titleLabel)
@@ -118,7 +118,7 @@ class IntroScreenSyncView: UIView, CardTheme {
         addSubview(signUpButton)
         addSubview(startBrowsingButton)
     }
-    
+
     // MARK: View setup
     private func topContainerViewSetup() {
         // Background colour setup
@@ -158,14 +158,14 @@ class IntroScreenSyncView: UIView, CardTheme {
             make.left.right.equalToSuperview()
         }
     }
-    
+
     private func bottomViewSetup() {
         // Sign-up button constraints
         signUpButton.snp.makeConstraints { make in
             make.bottom.equalTo(startBrowsingButton.snp.top).offset(-20)
             make.left.right.equalToSuperview().inset(24)
             make.height.equalTo(46)
-            
+
         }
         // Start browsing button constraints
         startBrowsingButton.snp.makeConstraints { make in
@@ -177,14 +177,14 @@ class IntroScreenSyncView: UIView, CardTheme {
         signUpButton.addTarget(self, action: #selector(signUpAction), for: .touchUpInside)
         startBrowsingButton.addTarget(self, action: #selector(startBrowsingAction), for: .touchUpInside)
     }
-    
+
     // MARK: Button Actions
     @objc private func signUpAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": 1])
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .syncScreenSignUp)
         signUp?()
     }
-    
+
     @objc private func startBrowsingAction() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": 1])
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .syncScreenStartBrowse)

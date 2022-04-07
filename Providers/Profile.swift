@@ -148,14 +148,14 @@ protocol Profile: AnyObject {
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
 
     var syncManager: SyncManager! { get }
-    
+
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>>
     func clearCredentialStore() -> Deferred<Result<Void, Error>>
 }
 
 extension Profile {
-    
+
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
         self.clearCredentialStore().upon { clearResult in
@@ -180,7 +180,7 @@ extension Profile {
             case let .failure(error):
                 deferred.fill(.failure(error))
             case let .success(logins):
-                
+
                 self.populateCredentialStore(
                         identities: logins.map(\.passwordCredentialIdentity)
                 ).upon(deferred.fill)
@@ -199,12 +199,12 @@ extension Profile {
             }
         }
         return deferred
-        
+
     }
 
     func clearCredentialStore() -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
-        
+
         ASCredentialIdentityStore.shared.removeAllCredentialIdentities { (success, error) in
             if success {
                 deferred.fill(.success(()))
@@ -212,7 +212,7 @@ extension Profile {
                 deferred.fill(.failure(err))
             }
         }
-        
+
         return deferred
     }
 }
@@ -592,25 +592,25 @@ open class BrowserProfile: Profile {
 
         // remove Account Metadata
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        
+
         // Save the keys that will be restored
         let rustLoginsKeys = RustLoginEncryptionKeys()
         let perFieldKey = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
         let sqlCipherKey = keychain.string(forKey: rustLoginsKeys.loginsUnlockKeychainKey)
         let sqlCipherSalt = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
-        
+
         // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something), simply restore what is needed.
         keychain.removeAllKeys()
-        
+
         // Restore the keys that are still needed
         if let sqlCipherKey = sqlCipherKey {
             keychain.set(sqlCipherKey, forKey: rustLoginsKeys.loginsUnlockKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
         }
-        
+
         if let sqlCipherSalt = sqlCipherSalt {
             keychain.set(sqlCipherSalt, forKey: rustLoginsKeys.loginsSaltKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
         }
-        
+
         if let perFieldKey = perFieldKey {
             keychain.set(perFieldKey, forKey: rustLoginsKeys.loginPerFieldKeychainKey, withAccessibility: .afterFirstUnlock)
         }
@@ -1010,11 +1010,11 @@ open class BrowserProfile: Profile {
         public class ScopedKeyError: MaybeErrorType {
             public var description = "No key data found for scope."
         }
-        
+
         public class SyncUnlockGetURLError: MaybeErrorType {
             public var description = "Failed to get token server endpoint url."
         }
-        
+
         public class EncryptionKeyError: MaybeErrorType {
             public var description = "Failed to get stored key."
         }
@@ -1033,7 +1033,7 @@ open class BrowserProfile: Profile {
                             d.fill(Maybe(failure: SyncUnlockGetURLError()))
                             return
                         }
-                        
+
                         guard let encryptionKey = try? self.profile.logins.getStoredKey() else {
                             Sentry.shared.sendWithStacktrace(message: "Stored logins encryption could not be retrieved", tag: SentryTag.rustLogins, severity: .warning)
                             d.fill(Maybe(failure: EncryptionKeyError()))
@@ -1130,7 +1130,7 @@ open class BrowserProfile: Profile {
             guard let fxa = RustFirefoxAccounts.shared.accountManager.peek(), let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
                 return nil
             }
-            
+
             return (profile, deviceID)
         }
 

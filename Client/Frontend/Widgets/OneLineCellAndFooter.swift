@@ -17,7 +17,7 @@ enum OneLineTableViewCustomization {
 
 class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell {
     // Tableview cell items
-    
+
     override var indentationLevel: Int {
         didSet {
             containerView.snp.remakeConstraints { make in
@@ -28,13 +28,13 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
             }
         }
     }
-    
+
     var selectedView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
         return view
     }()
-    
+
     var leftImageView: UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFit
@@ -42,7 +42,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         imgView.clipsToBounds = true
         return imgView
     }()
-    
+
     var leftOverlayImageView: UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFit
@@ -64,16 +64,16 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
         separatorLine.isHidden = true
         separatorLine.backgroundColor = UIColor.Photon.Grey40
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     let containerView = UIView()
     let midView = UIView()
     var shouldLeftAlignTitle = false
@@ -88,14 +88,14 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
 
         contentView.addSubview(containerView)
         bringSubviewToFront(containerView)
-        
+
         containerView.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
         }
-        
+
         leftImageView.snp.makeConstraints { make in
             make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
@@ -119,18 +119,18 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
             make.leading.equalTo(midView.snp.leading)
             make.trailing.equalTo(midView.snp.trailing)
         }
-        
+
         bottomSeparatorView.snp.makeConstraints { make in
             make.height.equalTo(0.7)
             make.bottom.equalTo(containerView.snp.bottom)
             make.leading.equalTo(titleLabel.snp.leading)
             make.trailing.equalTo(containerView.snp.trailing)
         }
-        
+
         selectedBackgroundView = selectedView
         applyTheme()
     }
-    
+
     func updateMidConstraint() {
         leftImageView.snp.updateConstraints { update in
             let leadingLeft = customization == .regular ? 15 : customization == .inactiveCell ? 16 : 15
@@ -148,7 +148,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
             make.trailing.equalTo(containerView.snp.trailing).offset(-7)
         }
     }
-    
+
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
@@ -160,7 +160,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
             self.titleLabel.textColor = .black
         }
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
@@ -189,11 +189,11 @@ class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     let containerView = UIView()
     var shortheight: Bool = false
     private var shortHeight = 32
-    
+
     private func initialViewSetup() {
         bordersHelper.initBorders(view: containerView)
         setDefaultBordersValues()
@@ -201,14 +201,14 @@ class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
 
         containerView.addSubview(titleLabel)
         addSubview(containerView)
-        
+
         containerView.snp.makeConstraints { make in
             make.height.equalTo(shortheight ? 32 : 58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
-        
+
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(16)
             make.bottom.equalToSuperview().offset(-14)
@@ -218,7 +218,7 @@ class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
 
         applyTheme()
     }
-    
+
     func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {
         bordersHelper.showBorder(for: location, show)
     }
@@ -234,7 +234,7 @@ class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
         self.titleLabel.textColor =  theme == .dark ? .white : .black
         bordersHelper.applyTheme()
     }
-    
+
     func setupHeaderConstraint() {
         containerView.snp.remakeConstraints { make in
             make.height.equalTo(shortheight ? 32 : 58)
@@ -243,7 +243,7 @@ class OneLineFooterView: UITableViewHeaderFooterView, NotificationThemeable {
             make.trailing.equalToSuperview()
         }
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         setupHeaderConstraint()

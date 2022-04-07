@@ -7,8 +7,6 @@ import Storage
 import Shared
 import XCTest
 
-
-
 class LoginsListViewModelTests: XCTestCase {
     var viewModel: LoginListViewModel!
     var dataSource: LoginDataSource!

@@ -7,7 +7,7 @@ import Foundation
 protocol WallpaperFilePathProtocol: Loggable {}
 
 extension WallpaperFilePathProtocol {
-    
+
     /// Given a key, creates a URL pointing to the
     /// `.../wallpaper/key-as-folder/key-as-filePath` of the application's document directory.
     ///
@@ -18,10 +18,10 @@ extension WallpaperFilePathProtocol {
             browserLog.debug("WallpaperFilePathProtocol - error fetching keyed directory path for application")
             return nil
         }
-        
+
         return keyDirectoryPath.appendingPathComponent(key)
     }
-    
+
     /// Given a key, creates a URL pointing to the `wallpaper/key` folder of the
     /// application's document directory.
     ///
@@ -36,16 +36,16 @@ extension WallpaperFilePathProtocol {
             browserLog.debug("WallpaperFilePathProtocol - error fetching basePath for application")
             return nil
         }
-        
+
         let wallpaperDirectoryPath = basePath.appendingPathComponent("wallpapers")
         createFolderAt(path: wallpaperDirectoryPath)
-        
+
         let keyDirectoryPath = wallpaperDirectoryPath.appendingPathComponent(key)
         createFolderAt(path: keyDirectoryPath)
-        
+
         return keyDirectoryPath
     }
-    
+
     private func createFolderAt(path directoryPath: URL,
                                 with fileManager: FileManager = FileManager.default
     ) {

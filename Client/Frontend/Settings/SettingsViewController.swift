@@ -6,10 +6,10 @@ import UIKit
 
 class SettingsViewController: UIViewController {
     weak var settingsDelegate: SettingsDelegate? = nil
-    
+
     var profile: Profile!
     var tabManager: TabManager!
-    
+
     let theme = LegacyThemeManager.instance
 
     init(profile: Profile? = nil, tabManager: TabManager? = nil) {
@@ -27,11 +27,11 @@ class SettingsViewController: UIViewController {
         updateTheme()
         NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .DisplayThemeChanged, object: nil)
     }
-    
+
     @objc func updateTheme() {
         view.backgroundColor = theme.current.tableView.headerBackground
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

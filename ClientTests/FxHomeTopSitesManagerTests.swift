@@ -102,7 +102,6 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         }
     }
 
-
     func testCalculateTopSitesData_hasGoogleTopSiteWithPinnedCount_googlePrefsNi() {
         let manager = createManager(addPinnedSiteCount: 3)
 

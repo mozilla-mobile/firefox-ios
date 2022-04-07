@@ -25,12 +25,12 @@ public protocol SentryProtocol {
 }
 
 public class Sentry: SentryProtocol {
-    
+
     enum Environment: String {
         case nightly = "Nightly"
         case production = "Production"
     }
-    
+
     public static let shared = Sentry()
 
     private let SentryDSNKey = "SentryCloudDSN"
@@ -41,7 +41,7 @@ public class Sentry: SentryProtocol {
     private var enabled = false
 
     private var attributes: [String: Any] = [:]
-    
+
     public var crashedLastLaunch: Bool {
         return SentrySDK.crashedLastRun
     }
@@ -79,19 +79,19 @@ public class Sentry: SentryProtocol {
                 let attributes = event.extra ?? [:]
                 self.attributes = attributes.merge(with: self.attributes)
                 event.extra = attributes
-                
+
                 return event
             }
         }
         enabled = true
-        
+
         let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: self.SentryDeviceAppHashKey)
         SentrySDK.configureScope { scope in
             scope.setContext(value: [
                 "device_app_hash": deviceAppHash ?? self.DefaultDeviceAppHash
             ], key: "appContext")
         }
-        
+
         // If we have not already for this install, generate a completely random identifier
         // for this device. It is stored in the app group so that the same value will
         // be used for both the main application and the app extensions.
@@ -107,23 +107,23 @@ public class Sentry: SentryProtocol {
     public func crash() {
         // Send crash if Sentry is enabled
         guard enabled else { return }
-        
+
         SentrySDK.crash()
     }
-    
+
     public func captureEvent(event: Event) {
         // Capture event if Sentry is enabled and a message is available
         guard let message = event.message?.formatted, enabled else { return }
-        
+
         SentrySDK.capture(message: message) { (scope) in
             scope.setEnvironment(event.environment)
             scope.setExtras(event.extra)
         }
     }
-    
+
     public func captureError(error: NSError) {
         guard enabled else { return }
-        
+
         SentrySDK.capture(error: error)
     }
 
@@ -163,7 +163,7 @@ public class Sentry: SentryProtocol {
             completion?(nil)
             return
         }
-        
+
         let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
         captureEvent(event: event)
     }
@@ -171,14 +171,14 @@ public class Sentry: SentryProtocol {
     public func addAttributes(_ attributes: [String: Any]) {
         self.attributes = self.attributes.merge(with: attributes)
     }
-    
+
     // Add manual breadcrumb
     public func addBreadcrumb(category: String, message: String) {
         let breadcrumb = Breadcrumb(level: .info, category: category)
         breadcrumb.message = message
         SentrySDK.addBreadcrumb(crumb: breadcrumb)
     }
-    
+
     // MARK: - Private
     /*
          This is the behaviour we want for Sentry logging
@@ -190,10 +190,10 @@ public class Sentry: SentryProtocol {
     private func shouldSendEventFor(_ severity: SentryLevel) -> Bool {
         let shouldSendRelease = AppConstants.BuildChannel == .release && severity.rawValue >= SentryLevel.error.rawValue
         let shouldSendBeta = AppConstants.BuildChannel == .beta && severity.rawValue >= SentryLevel.info.rawValue
-        
+
         return shouldSendBeta || shouldSendRelease
     }
-    
+
     private func makeEvent(message: String, tag: String, severity: SentryLevel, extra: [String: Any]?) -> Event {
         let event = Event(level: severity)
         event.message = SentryMessage(formatted: message)

@@ -12,7 +12,7 @@ enum WallpaperType {
 }
 
 extension WallpaperType: Equatable {
-    static func ==(lhs: WallpaperType, rhs: WallpaperType) -> Bool {
+    static func == (lhs: WallpaperType, rhs: WallpaperType) -> Bool {
         switch (lhs, rhs) {
         case (.defaultBackground, .defaultBackground):
             return true
@@ -132,5 +132,4 @@ struct Wallpaper: Codable, Equatable {
         }
     }
 }
-
 

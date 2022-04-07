@@ -122,7 +122,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     @objc func systemThemeSwitchValueChanged(control: UISwitch) {
         LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-    
+
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
             UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified

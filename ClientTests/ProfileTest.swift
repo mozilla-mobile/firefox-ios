@@ -15,17 +15,17 @@ import XCTest
  */
 
 class ProfileTest: XCTestCase {
-    
+
     var profile: MockProfile?
-    
+
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        
+
         // Setup mock profile 
         profile = MockProfile(databasePrefix: "profile-test")
     }
-    
+
    func withTestProfile(_ callback: (_ profile: Client.Profile) -> Void) {
         guard let mockProfile = profile else {
             return
@@ -34,5 +34,5 @@ class ProfileTest: XCTestCase {
         callback(mockProfile)
         mockProfile._shutdown()
     }
-    
+
 }

@@ -17,13 +17,13 @@ class NewTabButton: UIButton {
         super.init(frame: frame)
         viewSetup()
     }
-    
+
     convenience init(target: Any, selector: Selector) {
         self.init()
         addTarget(target, action: selector, for: .touchUpInside)
         viewSetup()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         viewSetup()

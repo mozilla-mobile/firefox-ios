@@ -111,7 +111,7 @@ extension UIAlertController {
         alert.addAction(noOption)
         return alert
     }
-    
+
     class func clearSelectedWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",

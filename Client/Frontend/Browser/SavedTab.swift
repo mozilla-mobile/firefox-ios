@@ -24,7 +24,7 @@ class SavedTab: NSObject, NSCoding {
         let title: String = self.title ?? "null"
         let faviconURL: String = self.faviconURL ?? "null"
         let uuid: String = self.screenshotUUID?.uuidString ?? "null"
-        
+
         var json: [String: AnyObject] = [
             "title": title as AnyObject,
             "isPrivate": String(self.isPrivate) as AnyObject,
@@ -37,14 +37,14 @@ class SavedTab: NSObject, NSCoding {
             "createdAt": self.createdAt as AnyObject,
             "hasHomeScreenshot": String(self.hasHomeScreenshot) as AnyObject
         ]
-        
+
         if let sessionDataInfo = self.sessionData?.jsonDictionary {
             json["sessionData"] = sessionDataInfo as AnyObject?
         }
-        
+
         return json
     }
-    
+
     init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String, tabGroupData: TabGroupData?, createdAt: Timestamp?, hasHomeScreenshot: Bool) {
 
         self.screenshotUUID = screenshotUUID
@@ -61,7 +61,7 @@ class SavedTab: NSObject, NSCoding {
 
         super.init()
     }
-    
+
     required init?(coder: NSCoder) {
         self.sessionData = coder.decodeObject(forKey: "sessionData") as? SessionData
         self.screenshotUUID = coder.decodeObject(forKey: "screenshotUUID") as? UUID
@@ -75,7 +75,7 @@ class SavedTab: NSObject, NSCoding {
         self.createdAt = coder.decodeObject(forKey: "createdAt") as? Timestamp
         self.hasHomeScreenshot = coder.decodeBool(forKey: "hasHomeScreenshot")
     }
-    
+
     func encode(with coder: NSCoder) {
         coder.encode(sessionData, forKey: "sessionData")
         coder.encode(screenshotUUID, forKey: "screenshotUUID")

@@ -96,7 +96,7 @@ open class DiskImageStore {
             return succeed()
         }
     }
-    
+
     /// Remove image with provided key
     open func removeImage(_ key: String) -> Success {
         return deferDispatchAsync(queue) { () -> Success in

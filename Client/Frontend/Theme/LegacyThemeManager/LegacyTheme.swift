@@ -165,14 +165,14 @@ class HomePanelColor {
     var separator: UIColor { return defaultSeparator }
     var border: UIColor { return UIColor.Photon.Grey60 }
     var buttonContainerBorder: UIColor { return separator }
-    
+
     var welcomeScreenText: UIColor { return UIColor.Photon.Grey50 }
     var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }
-    var bookmarkFolderBackground: UIColor { return UIColor.Photon.Grey10.withAlphaComponent(0.3) } 
-    var bookmarkFolderText: UIColor { return UIColor.Photon.Grey80 } 
+    var bookmarkFolderBackground: UIColor { return UIColor.Photon.Grey10.withAlphaComponent(0.3) }
+    var bookmarkFolderText: UIColor { return UIColor.Photon.Grey80 }
     var bookmarkCurrentFolderText: UIColor { return UIColor.Photon.Blue40 }
     var bookmarkBackNavCellBackground: UIColor { return UIColor.clear }
-    
+
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
     var topSiteDomain: UIColor { return UIColor.Photon.DarkGrey90 }
@@ -182,9 +182,9 @@ class HomePanelColor {
     var shortcutBackground: UIColor { return .white }
     var shortcutShadowColor: CGColor { return UIColor(red: 0.23, green: 0.22, blue: 0.27, alpha: 1.0).cgColor }
     var shortcutShadowOpacity: Float { return 0.2 }
-    
+
     var recentlySavedBookmarkCellBackground: UIColor { return .white}
-    
+
     var recentlyVisitedCellGroupImage: UIColor { return UIColor.Photon.DarkGrey90 }
     var recentlyVisitedCellBottomLine: UIColor { return UIColor.Photon.LightGrey40 }
 
@@ -195,14 +195,14 @@ class HomePanelColor {
 
     var readingListActive: UIColor { return defaultTextAndTint }
     var readingListDimmed: UIColor { return UIColor.Photon.Grey40 }
-    
+
     var downloadedFileIcon: UIColor { return UIColor.Photon.Grey60 }
-    
+
     var historyHeaderIconsBackground: UIColor { return UIColor.Photon.White100 }
 
     var searchSuggestionPillBackground: UIColor { return UIColor.Photon.White100 }
     var searchSuggestionPillForeground: UIColor { return UIColor.Photon.Blue40 }
-    
+
     var customizeHomepageButtonBackground: UIColor { return UIColor.Photon.LightGrey30 }
     var customizeHomepageButtonText: UIColor { return UIColor.Photon.DarkGrey90 }
 }

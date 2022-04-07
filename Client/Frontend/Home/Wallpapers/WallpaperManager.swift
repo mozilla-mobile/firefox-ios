@@ -16,7 +16,7 @@ struct WallpaperManager {
     var numberOfWallpapers: Int {
         return dataManager.availableWallpapers.count
     }
-    
+
     var currentWallpaperImage: UIImage? {
         return storageManager.getCurrentWallpaperImage()
     }
@@ -80,16 +80,16 @@ struct WallpaperManager {
                                           and: dataManager.availableWallpapers)
         updateSelectedWallpaperIndex(to: newIndex)
     }
-    
+
     public func getImageAt(index: Int, inLandscape: Bool) -> UIImage? {
         let image = dataManager.getImageSet(at: index)
         return inLandscape ? image.landscape : image.portrait
     }
-    
+
     public func getAccessibilityLabelForWallpaper(at index: Int) -> String {
         return dataManager.availableWallpapers[index].accessibilityLabel
     }
-    
+
     public func runResourceVerification() {
         dataManager.verifyResources()
     }
@@ -99,7 +99,7 @@ struct WallpaperManager {
         using currentIndex: Int?,
         and wallpaperArray: [Wallpaper]
     ) -> Int {
-        
+
         guard let currentIndex = currentIndex else { return 0 }
 
         let newIndex = currentIndex + 1
@@ -108,7 +108,7 @@ struct WallpaperManager {
         if newIndex > maxIndex {
             return 0
         }
-        
+
         return newIndex
     }
 }

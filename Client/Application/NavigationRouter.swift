@@ -44,13 +44,13 @@ enum DeepLink {
     case settings(SettingsPage)
     case homePanel(HomePanelPath)
     case defaultBrowser(DefaultBrowserPath)
-    
+
     init?(urlString: String) {
         let paths = urlString.split(separator: "/")
         guard let component = paths[safe: 0],
               let componentPath = paths[safe: 1]
         else { return nil }
-        
+
         if component == "settings", let link = SettingsPage(rawValue: String(componentPath)) {
             self = .settings(link)
         } else if component == "homepanel", let link = HomePanelPath(rawValue: String(componentPath)) {
@@ -129,14 +129,14 @@ enum NavigationPath {
             } else {
                 return nil
             }
-            
+
         } else if ["http", "https"].contains(scheme) {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
-            
+
         } else {
             return nil
         }
@@ -159,10 +159,10 @@ enum NavigationPath {
         switch link {
         case .homePanel(let panelPath):
             NavigationPath.handleHomePanel(panel: panelPath, with: bvc)
-            
+
         case .settings(let settingsPath):
             guard let rootVC = bvc.navigationController else { return }
-            
+
             let settingsTableViewController = AppSettingsTableViewController(
                 with: bvc.profile,
                 and: bvc.tabManager,
@@ -172,7 +172,7 @@ enum NavigationPath {
                                           with: rootVC,
                                           baseSettingsVC: settingsTableViewController,
                                           and: bvc)
-            
+
         case .defaultBrowser(let path):
             NavigationPath.handleDefaultBrowser(path: path)
         }
@@ -333,7 +333,7 @@ enum NavigationPath {
             controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)
-            
+
         case .wallpaper:
             let viewModel = WallpaperSettingsViewModel(with: tabManager,
                                                        and: WallpaperManager())

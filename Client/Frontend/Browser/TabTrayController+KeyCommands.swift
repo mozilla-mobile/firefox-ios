@@ -11,7 +11,7 @@ extension GridTabViewController {
         let commands = [
             UIKeyCommand(action: #selector(didTogglePrivateModeKeyCommand), input: "`", modifierFlags: .command, discoverabilityTitle: toggleText),
             UIKeyCommand(input: "w", modifierFlags: .command, action: #selector(didCloseTabKeyCommand)),
-            
+
             UIKeyCommand(action: #selector(didCloseAllTabsKeyCommand), input: "w", modifierFlags: [.command, .shift], discoverabilityTitle: .KeyboardShortcuts.CloseAllTabsInTabTray),
             UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(didEnterTabKeyCommand)),

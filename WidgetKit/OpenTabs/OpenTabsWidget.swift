@@ -22,9 +22,9 @@ struct OpenTabsWidget: Widget {
 
 struct OpenTabsView: View {
     let entry: OpenTabsEntry
-        
+
     @Environment(\.widgetFamily) var widgetFamily
-    
+
     @ViewBuilder
     func lineItemForTab(_ tab: SimpleTab) -> some View {
         let query = widgetFamily == .systemMedium ? "widget-tabs-medium-open-url" : "widget-tabs-large-open-url"
@@ -38,7 +38,7 @@ struct OpenTabsView: View {
                             .foregroundColor(Color.white)
                             .frame(width: 16, height: 16)
                     }
-                    
+
                     Text(tab.title!)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.leading)
@@ -46,14 +46,14 @@ struct OpenTabsView: View {
                         .font(.system(size: 15, weight: .regular, design: .default))
                 }.padding(.horizontal)
             }
-            
+
             Rectangle()
                 .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
                 .frame(height: 0.5)
                 .padding(.leading, 45)
         }
     }
-    
+
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
             Image("openFirefox").foregroundColor(Color.white)
@@ -61,7 +61,7 @@ struct OpenTabsView: View {
             Spacer()
         }.padding([.horizontal])
     }
-    
+
     var numberOfTabsToDisplay: Int {
         if widgetFamily == .systemMedium {
             return 3
@@ -69,7 +69,7 @@ struct OpenTabsView: View {
             return 8
         }
     }
-    
+
     var body: some View {
         Group {
             if entry.tabs.isEmpty {
@@ -87,7 +87,7 @@ struct OpenTabsView: View {
                     ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
                         lineItemForTab(tab)
                     }
-                    
+
                     if (entry.tabs.count > numberOfTabsToDisplay) {
                         HStack(alignment: .center, spacing: 15) {
                             Image("openFirefox").foregroundColor(Color.white).frame(width: 16, height: 16)
@@ -98,7 +98,7 @@ struct OpenTabsView: View {
                     } else {
                         openFirefoxButton
                     }
-                    
+
                     Spacer()
                 }.padding(.top, 14)
             }
@@ -106,7 +106,7 @@ struct OpenTabsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background((Color(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00))))
     }
-    
+
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
         return URL(string: urlString)!

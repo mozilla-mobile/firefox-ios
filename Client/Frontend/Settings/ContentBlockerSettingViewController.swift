@@ -170,7 +170,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
                               TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
                 TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
-                
+
                 if option == .strict {
                     let alert = UIAlertController(title: .TrackerProtectionAlertTitle, message: .TrackerProtectionAlertDescription, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: .TrackerProtectionAlertButton, style: .default, handler: nil))

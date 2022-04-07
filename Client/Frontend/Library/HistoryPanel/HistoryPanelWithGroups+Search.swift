@@ -27,26 +27,26 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         // Do cancelable search
         performSearch(term: searchText)
     }
-    
+
     func exitSearchState() {
         applySnapshot()
         self.searchbar.resignFirstResponder()
         viewModel.isSearchInProgress = false
         toggleEmptyState()
     }
-    
+
     func performSearch(term: String) {
         viewModel.performSearch(term: term.lowercased()) { success in
             guard success else {
                 self.handleNoResults()
                 return
             }
-            
+
             self.applySearchSnapshot()
             self.toggleEmptyState()
         }
     }
-    
+
     private func applySearchSnapshot() {
         // Create search results snapshot and apply
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
@@ -54,7 +54,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         snapshot.appendItems(self.viewModel.filterMockSites)
         self.diffableDatasource?.apply(snapshot, animatingDifferences: false)
     }
-    
+
     private func handleNoResults() {
         applySearchSnapshot()
         toggleEmptyState()

@@ -49,11 +49,11 @@ class TabToolbar: UIView {
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - View Setup
 
     override func updateConstraints() {

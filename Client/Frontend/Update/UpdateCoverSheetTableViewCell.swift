@@ -11,7 +11,7 @@ struct UpdateCoverSheetTableViewCellUX {
         static let paddingLeft = 18
         static let height = 30
     }
-    
+
     struct DescriptionLabel {
         static let paddingTop = 2
         static let paddingTrailing = 18
@@ -19,7 +19,7 @@ struct UpdateCoverSheetTableViewCellUX {
         static let leading = 10
     }
 }
-    
+
 class UpdateCoverSheetTableViewCell: UITableViewCell {
     // Tableview cell items
     var updateCoverSheetCellImageView: UIImageView = {
@@ -37,16 +37,16 @@ class UpdateCoverSheetTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         return label
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func initialViewSetup() {
         self.selectionStyle = .none
         addSubview(updateCoverSheetCellImageView)
@@ -56,7 +56,7 @@ class UpdateCoverSheetTableViewCell: UITableViewCell {
             make.height.width.equalTo(UpdateCoverSheetTableViewCellUX.ImageView.height)
             make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.ImageView.paddingTop)
         }
-        
+
         updateCoverSheetCellDescriptionLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTop)
             make.trailing.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTrailing)
@@ -65,7 +65,7 @@ class UpdateCoverSheetTableViewCell: UITableViewCell {
         }
         fxThemeSupport()
     }
-    
+
     func fxThemeSupport() {
         if UpdateViewController.theme == .dark {
             self.updateCoverSheetCellImageView.setImageColor(color: .white)

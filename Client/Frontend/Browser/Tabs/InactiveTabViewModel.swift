@@ -74,9 +74,9 @@ class InactiveTabViewModel {
         self.allTabs = tabs
         self.selectedTab = selectedTab
         clearAll()
-        
+
         inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
-        
+
         let bvc = BrowserViewController.foregroundBVC()
         //First time starting up with this feature we'll have cold start as update state
         //after updating model we can mark tabs that needs to become inactive
@@ -85,7 +85,7 @@ class InactiveTabViewModel {
 
         updateFilteredTabs()
     }
-    
+
     private func updateModelState(state: TabUpdateState) {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
@@ -96,27 +96,27 @@ class InactiveTabViewModel {
         // TODO: Add a switch in the debug menu to switch between debug or regular
 //        let min_Old = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date() // testing only
 //        let defaultOldDay = min_Old
-        
+
         let hasRunInactiveTabFeatureBefore = InactiveTabModel.hasRunInactiveTabFeatureBefore
         if hasRunInactiveTabFeatureBefore == false { InactiveTabModel.hasRunInactiveTabFeatureBefore = true }
-        
+
         for tab in self.allTabs {
             //Append selected tab to normal tab as we don't want to remove that
             let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
-            
+
             // 1. Initializing and assigning an empty inactive tab state to the inactiveTabModel mode
             if inactiveTabModel.tabWithStatus[tab.tabUUID] == nil {
                 inactiveTabModel.tabWithStatus[tab.tabUUID] = InactiveTabStates()
             }
-            
+
             // 2. Current tab type from inactive tab model
             // Note:
             //  a) newly assigned inactive tab model will have empty `tabWithStatus`
             //     with nil current and next states
             //  b) an older inactive tab model will have a proper `tabWithStatus`
             let tabType = inactiveTabModel.tabWithStatus[tab.tabUUID]
-            
+
             // 3. All tabs should start with a normal current state if they don't have any current state
             if tabType?.currentState == nil { inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .normal }
 
@@ -137,10 +137,10 @@ class InactiveTabViewModel {
                 }
             }
         }
-        
+
         InactiveTabModel.save(tabModel: inactiveTabModel)
     }
-    
+
     private func updateFilteredTabs() {
         inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
         clearAll()
@@ -153,7 +153,7 @@ class InactiveTabViewModel {
             }
         }
     }
-    
+
     private func addTab(state: InactiveTabStatus?, tab: Tab) {
         switch state {
         case .inactive:
@@ -163,7 +163,7 @@ class InactiveTabViewModel {
         case .shouldBecomeInactive: break
         }
     }
-    
+
     private func clearAll() {
         activeTabs.removeAll()
         inactiveTabs.removeAll()
@@ -184,7 +184,7 @@ extension InactiveTabViewModel {
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
         let day14_Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
         let defaultOldDay = day14_Old
-        
+
         for tab in tabs {
             let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)

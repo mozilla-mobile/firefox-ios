@@ -27,9 +27,9 @@ private class FetchInProgressError: MaybeErrorType {
 
 @objcMembers
 class HistoryPanel: SiteTableViewController, LibraryPanel {
-    
+
     typealias HistoryPanelStrings = String.LibraryPanel.History
-    
+
     enum Section: Int {
         // Showing recently closed, and clearing recent history are action rows of this type.
         case additionalHistoryActions

@@ -50,7 +50,7 @@ final class DefaultSearchPrefs {
             }
             .compactMap { localDict -> [String]? in
                 let visibleDefaultEngines = "visibleDefaultEngines"
-                
+
                 if let inner = localDict[region] as? [String: Any],
                    let array = inner[visibleDefaultEngines] as? [String] {
                     return array

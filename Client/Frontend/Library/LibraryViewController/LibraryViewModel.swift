@@ -21,7 +21,7 @@ class LibraryViewModel: FeatureFlagsProtocol {
         self.tabManager = tabManager
         self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
     }
-    
+
     var isHistoryPanelWithGroups: Bool {
         return self.featureFlags.isFeatureActiveForBuild(.historyGroups)
     }

@@ -1561,7 +1561,6 @@ class TestSQLiteHistory: XCTestCase {
         site2.guid = "abc\(2)def"
         addVisitForSite(site2, intoHistory: history, from: .local, atTime: Date.now())
 
-
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
             expectation.fulfill()

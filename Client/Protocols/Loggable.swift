@@ -16,11 +16,11 @@ extension Loggable {
     var browserLog: RollingFileLogger {
         return Logger.browserLogger
     }
-    
+
     var keychainLog: XCGLogger {
         return Logger.keychainLogger
     }
-    
+
     var syncLog: RollingFileLogger {
         return Logger.syncLogger
     }

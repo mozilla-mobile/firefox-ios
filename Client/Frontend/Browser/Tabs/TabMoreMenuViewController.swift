@@ -42,12 +42,12 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
         tableView.isScrollEnabled = UIDevice.current.orientation.isLandscape ? true : false
         return tableView
     }()
-    
+
     lazy var tabMoreMenuHeader: TabMoreMenuHeader = {
         let header = TabMoreMenuHeader()
         return header
     }()
-    
+
     lazy var handleView: UIView = {
         let handleView = UIView()
         handleView.backgroundColor = .black
@@ -61,7 +61,7 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
         divider.backgroundColor = UIColor.Photon.Grey30
         return divider
     }()
-    
+
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .normal {
             tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey10
@@ -69,12 +69,12 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
             tabMoreMenuHeader.backgroundColor = UIColor.Photon.Grey90
         }
     }
-    
+
     @objc func displayThemeChanged() {
         applyTheme()
         tableView.reloadData()
     }
-    
+
     init(tabTrayDelegate: TabTrayDelegate? = nil, tab: Tab? = nil, index: IndexPath, profile: Profile) {
         self.delegate = tabTrayDelegate
         self.tab = tab
@@ -82,11 +82,11 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
         self.tabIndex = index
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(handleView)
@@ -95,19 +95,19 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
         view.addSubview(divider)
         view.layer.cornerRadius = 8
         navigationController?.navigationBar.isHidden = true
-        
+
         configure(headerView: tabMoreMenuHeader, tab: tab)
         setupConstraints()
         applyTheme()
         NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged), name: .DisplayThemeChanged, object: nil)
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.reloadData()
         tableView.isScrollEnabled = UIDevice.current.orientation.isLandscape ? true : false
     }
-    
+
     func setupConstraints() {
         handleView.snp.makeConstraints{ make in
             make.width.equalTo(DrawerViewControllerUX.HandleWidth)
@@ -132,7 +132,7 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
             make.bottom.equalTo(self.view.safeArea.bottom).inset(40)
         }
     }
-    
+
     func configure(headerView: TabMoreMenuHeader, tab: Tab? = nil) {
         guard  let tab = tab else { return }
         let baseDomain = tab.url?.baseDomain
@@ -141,11 +141,11 @@ class TabMoreMenuViewController: UIViewController, NotificationThemeable {
         headerView.imageView.image = tab.screenshot ?? UIImage()
         headerView.backgroundColor = UIColor.Photon.Grey10
     }
-    
+
     func dismissMenu() {
         bottomSheetDelegate?.closeBottomSheet()
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -160,7 +160,7 @@ extension TabMoreMenuViewController: UITableViewDataSource {
         else if section == 1 { return 3 }
         else { return 1 }
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreMenuCell", for: indexPath)
         let lightColor = UIColor.theme.tableView.rowBackground
@@ -169,7 +169,7 @@ extension TabMoreMenuViewController: UITableViewDataSource {
         cell.textLabel?.text = titles[indexPath.section]?[indexPath.row]
         cell.accessoryView = imageViews[indexPath.section]?[indexPath.row]
         cell.accessoryView?.tintColor = UIColor.theme.textField.textAndTint
-        
+
         return cell
     }
 }
@@ -182,14 +182,14 @@ extension TabMoreMenuViewController: UITableViewDelegate {
         headerView.applyTheme()
         return headerView
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let tab = tab, let url = self.tab?.sessionData?.urls.last ?? self.tab?.url else { return }
-        
+
         switch indexPath.section {
         case 0:
             switch indexPath.row {

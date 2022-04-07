@@ -36,12 +36,12 @@ class GleanTelemetryTests: XCTestCase {
     override func setUpWithError() throws {
         Glean.shared.resetGlean(clearStores: true)
     }
-    
+
     let profile = MockBrowserProfile(localName: "GleanTelemetryTests")
 
     func testSyncPingIsSentOnSyncOperation() throws {
         let syncManager = MockBrowserSyncManager(profile: profile)
-        
+
         let syncPingWasSent = expectation(description: "The tempSync ping was sent")
         GleanMetrics.Pings.shared.tempSync.testBeforeNextSubmit { _ in
             XCTAssert(GleanMetrics.Sync.syncUuid.testHasValue())
@@ -52,7 +52,7 @@ class GleanTelemetryTests: XCTestCase {
             why: SyncReason.didLogin,
             names: ["tabs", "logins", "bookmarks", "history"]
         )
-        
+
         waitForExpectations(timeout: 5.0)
     }
 }

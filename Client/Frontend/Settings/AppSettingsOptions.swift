@@ -377,7 +377,6 @@ class HiddenSetting: Setting {
     }
 }
 
-
 class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
@@ -627,7 +626,6 @@ class ResetContextualHints: HiddenSetting {
             string: "Reset all contextual hints",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
-
 
     override init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -1322,7 +1320,6 @@ class SearchBarSetting: Setting {
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
-
 
 extension BrowserViewController {
     /// ⚠️ !! WARNING !! ⚠️

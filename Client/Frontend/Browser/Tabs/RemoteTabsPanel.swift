@@ -40,7 +40,7 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable {
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()
-    
+
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -64,7 +64,7 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable {
         }
 
         tableViewController.didMove(toParent: self)
-        
+
         applyTheme()
     }
 
@@ -79,7 +79,7 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable {
     func forceRefreshTabs() {
         tableViewController.refreshTabs(updateCache: true)
     }
-    
+
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
@@ -135,7 +135,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension //RemoteTabsPanelUX.HeaderHeight
     }
@@ -497,7 +497,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (navigationController as? ThemedNavigationController)?.applyTheme()
-        
+
         // Add a refresh control if the user is logged in and the control was not added before. If the user is not
         // logged in, remove any existing control.
         if profile.hasSyncableAccount() && refreshControl == nil {
@@ -506,7 +506,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
         refreshTabs(updateCache: true)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if refreshControl != nil {

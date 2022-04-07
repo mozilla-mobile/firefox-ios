@@ -57,7 +57,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
     var shadowViewLayer: CAShapeLayer?
-    
+
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
@@ -104,7 +104,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
-    
+
     // MARK: - Inits
 
     override init(frame: CGRect) {
@@ -135,15 +135,15 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         if let corners = options.corners {
             contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
         }
-        
+
         if options.shouldAddShadow {
             addShadowLayer(cornersToRound: options.corners ?? UIRectCorner())
         }
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
-        
+
         shadowViewLayer?.removeFromSuperlayer()
     }
 
@@ -169,16 +169,16 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             bottomLine.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
+
     private func addShadowLayer(cornersToRound: UIRectCorner) {
         let shadowLayer = CAShapeLayer()
-        
+
         shadowLayer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         shadowLayer.shadowOffset = CGSize(width: 0,
                                           height: RecentlyVisitedCellUX.shadowOffset)
         shadowLayer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
         shadowLayer.shadowRadius = RecentlyVisitedCellUX.shadowRadius
-        
+
         let radiusSize = CGSize(width: RecentlyVisitedCellUX.generalCornerRadius,
                                 height: RecentlyVisitedCellUX.generalCornerRadius)
         shadowLayer.shadowPath = UIBezierPath(roundedRect: bounds,

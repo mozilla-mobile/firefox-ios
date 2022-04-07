@@ -29,7 +29,7 @@ class ClearableError: MaybeErrorType {
 class HistoryClearable: Clearable {
     let profile: Profile
     let tabManager: TabManager
-    
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -49,9 +49,9 @@ class HistoryClearable: Clearable {
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
-            
+
             self.tabManager.clearAllTabsHistory()
-            
+
             return Deferred(value: success)
         }
     }

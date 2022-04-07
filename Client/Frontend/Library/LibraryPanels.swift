@@ -27,7 +27,7 @@ enum LibraryPanelType: Int, CaseIterable {
     case history = 1
     case downloads = 2
     case readingList = 3
-    
+
     var title: String {
         switch self {
         case .bookmarks:
@@ -98,14 +98,14 @@ class LibraryPanels: FeatureFlagsProtocol {
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
-                
+
                 // NOTE: Switch to HistoryPanelV2 from v100 onwards.
                 if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
                     return HistoryPanelWithGroups(profile: profile, tabManager: tabManager)
                 } else {
                     return HistoryPanel(profile: profile, tabManager: tabManager)
                 }
-                
+
             },
             profile: profile,
             tabManager: tabManager,

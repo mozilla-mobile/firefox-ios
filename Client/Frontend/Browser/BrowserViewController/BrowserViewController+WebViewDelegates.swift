@@ -17,13 +17,13 @@ extension BrowserViewController: WKUIDelegate {
         guard let parentTab = tabManager[webView] else { return nil }
         guard !navigationAction.isInternalUnprivileged, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
             print("Denying popup from request: \(navigationAction.request)")
-            
+
             guard let url = navigationAction.request.url else { return nil }
-            
+
             if url.scheme == "whatsapp" && UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:])
             }
-            
+
             return nil
         }
 
@@ -141,7 +141,7 @@ extension BrowserViewController: WKUIDelegate {
                 } else if !currentTab.adsProviderName.isEmpty {
                     setAddTabAdSearchParam = true
                 }
-                
+
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
 
                 if setAddTabAdSearchParam {
@@ -149,7 +149,7 @@ extension BrowserViewController: WKUIDelegate {
                     tab.adsTelemetryUrlList = currentTab.adsTelemetryUrlList
                     tab.adsTelemetryRedirectUrlList = currentTab.adsTelemetryRedirectUrlList
                 }
-                
+
                 // Record Observation for Search Term Groups
                 let searchTerm = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchTerm ?? ""
                 let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
@@ -159,12 +159,12 @@ extension BrowserViewController: WKUIDelegate {
                                                   nextReferralUrl: tab.url?.absoluteString ?? "")
                     tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData)
                 }
-                
+
                 guard !self.topTabsVisible else {
                     return
                 }
                 var toastLabelText: String
-                
+
                 if isPrivate {
                     toastLabelText = .ContextMenuButtonToastNewPrivateTabOpenedLabelText
                 } else {
@@ -270,7 +270,7 @@ extension BrowserViewController: WKUIDelegate {
             return UIMenu(title: url.absoluteString, children: actions)
         }))
     }
-    
+
     func writeToPhotoAlbum(image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveError), nil)
     }
@@ -315,7 +315,7 @@ extension BrowserViewController: WKNavigationDelegate {
             tab.adsTelemetryRedirectUrlList.append(webUrl)
         }
     }
-    
+
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         if tabManager.selectedTab?.webView !== webView {
             return
@@ -333,7 +333,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
         }
     }
-    
+
     // Handle Universal link for Firefox wallpaper setting
     private func isFirefoxUniversalWallpaperSetting(_ url: URL) -> Bool {
         guard let scheme = url.scheme, [URL.mozPublicScheme,
@@ -346,7 +346,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
         return false
     }
-    
+
     // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
     // it could just be a visit to a regular page on maps.apple.com.
     fileprivate func isAppleMapsURL(_ url: URL) -> Bool {
@@ -396,7 +396,7 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-        
+
         if tab == tabManager.selectedTab, navigationAction.navigationType == .linkActivated, tab.adsTelemetryUrlList.count > 0 {
             let adUrl = url.absoluteString
             if tab.adsTelemetryUrlList.contains(adUrl) {
@@ -406,7 +406,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 tab.adsProviderName = ""
             }
         }
-        
+
         if InternalURL.isValid(url: url) {
             if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
                 log.warning("Denying unprivileged request: \(navigationAction.request)")
@@ -536,7 +536,7 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
-            
+
             decisionHandler(.allow)
             return
         }
@@ -709,17 +709,17 @@ extension BrowserViewController: WKNavigationDelegate {
             }
         }
     }
-        
+
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = tabManager[webView],
               let metadataManager = tab.metadataManager else { return }
-        
+
         searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
         tab.url = webView.url
 
         // Only update search term data with valid search term data
         if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
-            
+
             if tab.adsTelemetryRedirectUrlList.count > 0,
                !tab.adsProviderName.isEmpty,
                 tab.adsTelemetryUrlList.count > 0,
@@ -727,13 +727,13 @@ extension BrowserViewController: WKNavigationDelegate {
                 let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
                 let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
                 lastRedirectHost != startingRedirectHost {
-                
+
                 AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
                 tab.adsTelemetryUrlList.removeAll()
                 tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""
             }
-            
+
             updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString)
         }
 
@@ -777,13 +777,13 @@ extension BrowserViewController: WKNavigationDelegate {
             }
         }
     }
-    
+
     private func updateObservationReferral(metadataManager: TabMetadataManager, url: String?) {
         let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
                                       searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
                                       nextReferralUrl: url ?? "")
         metadataManager.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
                                                 searchData: searchData)
-        
+
     }
 }

@@ -23,7 +23,7 @@ extension UILabel {
         }
         attributedText = attributed
     }
-    
+
     func heightForLabel(_ label: UILabel, width: CGFloat, text: String?) -> CGFloat {
         guard let text = text else { return 0 }
 

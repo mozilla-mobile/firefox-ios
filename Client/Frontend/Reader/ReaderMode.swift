@@ -62,11 +62,11 @@ enum ReaderModeFontType: String {
     case serifBold = "serif-bold"
     case sansSerif = "sans-serif"
     case sansSerifBold = "sans-serif-bold"
-    
+
     init(type: String) {
         let font = ReaderModeFontType(rawValue: type)
         let isBoldFontEnabled = UIAccessibility.isBoldTextEnabled
-        
+
         switch font {
         case .serif,
              .serifBold:
@@ -76,11 +76,11 @@ enum ReaderModeFontType: String {
             self = isBoldFontEnabled ? .sansSerifBold : .sansSerif
         case .none:
             self = .sansSerif
-        } 
+        }
     }
-    
-    func isSameFamily(_ font: ReaderModeFontType) -> Bool {        
-        return !FontFamily.families.filter { $0.contains(font) && $0.contains(self) }.isEmpty        
+
+    func isSameFamily(_ font: ReaderModeFontType) -> Bool {
+        return !FontFamily.families.filter { $0.contains(font) && $0.contains(self) }.isEmpty
     }
 }
 
@@ -186,7 +186,7 @@ struct ReaderModeStyle {
         self.fontType = fontType
         self.fontSize = fontSize!
     }
-    
+
     mutating func ensurePreferredColorThemeIfNeeded() {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme)
     }
@@ -238,7 +238,7 @@ struct ReadabilityResult {
     init?(string: String) {
         guard let data = string.data(using: .utf8),
               let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: String] else { return nil }
-        
+
         let domain = object["domain"]
         let url = object["url"]
         let content = object["content"]
@@ -328,7 +328,7 @@ class ReaderMode: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let msg = message.body as? [String: Any], let type = msg["Type"] as? String, let messageType = ReaderModeMessageType(rawValue: type) else { return }
-        
+
         switch messageType {
             case .pageEvent:
                 if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] as? String ?? "Invalid") {

@@ -70,7 +70,7 @@ class TabManagerStore: FeatureFlagsProtocol {
             imageStore?.put(uuidString, image: screenshot)
         }
     }
-    
+
     func removeScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshotUUID = tab.screenshotUUID {
             _ = imageStore?.removeImage(screenshotUUID.uuidString)
@@ -123,7 +123,7 @@ class TabManagerStore: FeatureFlagsProtocol {
         guard !lockedForReading, savedTabs.count > 0 else { return nil }
         lockedForReading = true
         defer { lockedForReading = false }
-        
+
         var savedTabs = savedTabs
         // Make sure to wipe the private tabs if the user has the pref turned on
         if clearPrivateTabs {

@@ -91,7 +91,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
         return descriptionText.size(withAttributes: attributes)
     }
-    
+
     var placeholder: String? {
         get { descriptionLabel.placeholder }
         set { descriptionLabel.placeholder = newValue }
@@ -217,7 +217,7 @@ extension LoginDetailTableViewCell: UITextFieldDelegate {
         }
         delegate?.textFieldDidEndEditing(self)
     }
-    
+
     @objc func textFieldDidChange(_ textField: UITextField) {
         delegate?.textFieldDidChange(self)
     }

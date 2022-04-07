@@ -22,7 +22,7 @@ class TopSiteCollectionCell: UICollectionViewCell, ReusableCell {
         collectionView.isScrollEnabled = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.layer.masksToBounds = false
-        
+
         return collectionView
     }()
 

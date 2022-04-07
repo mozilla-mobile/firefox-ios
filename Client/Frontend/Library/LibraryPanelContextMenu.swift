@@ -33,7 +33,7 @@ extension LibraryPanelContextMenu {
 
         return contextMenu
     }
-    
+
     func getRecentlyClosedTabContexMenuActions(for site: Site, recentlyClosedPanelDelegate: RecentlyClosedPanelDelegate?) ->  [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
@@ -47,7 +47,7 @@ extension LibraryPanelContextMenu {
 
         return [PhotonRowActions(openInNewTabAction), PhotonRowActions(openInNewPrivateTabAction)]
     }
-    
+
     func getRemoteTabContexMenuActions(for site: Site, remotePanelDelegate: RemotePanelDelegate?) ->  [PhotonRowActions]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
@@ -69,12 +69,12 @@ extension LibraryPanelContextMenu {
                                                        iconString: ImageIdentifiers.newTab) { _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }.items
-        
+
         let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle,
                                                               iconString: "quick_action_new_private_tab") { _ in
             libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }.items
-        
+
         return [openInNewTabAction, openInNewPrivateTabAction]
     }
 }

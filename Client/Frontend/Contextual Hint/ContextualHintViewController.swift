@@ -200,7 +200,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         topContainerConstraint?.isActive = true
         bottomContainerConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         bottomContainerConstraint?.isActive = true
-        
+
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
     }
 

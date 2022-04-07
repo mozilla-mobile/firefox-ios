@@ -7,7 +7,7 @@ import Foundation
 // TODO: will move more things in there from the view during the next ticket.
 
 class WallpaperSettingsViewModel {
-    
+
     // MARK: - Internal definitions
     struct Constants {
         struct Strings {
@@ -17,11 +17,11 @@ class WallpaperSettingsViewModel {
             }
         }
     }
-    
+
     // MARK: - Variables
     var tabManager: TabManager
     var wallpaperManager: WallpaperManager
-    
+
     init(with tabManager: TabManager,
          and wallpaperManager: WallpaperManager
     ) {

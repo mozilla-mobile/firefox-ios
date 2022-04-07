@@ -8,11 +8,11 @@ import Storage
 
 enum SiteImageType: Int {
     case heroImage = 0, favicon
-    
+
     func peek() -> Self? {
         return SiteImageType(rawValue: rawValue + 1)
     }
-    
+
     mutating func next() -> Self? {
         return SiteImageType(rawValue: rawValue + 1)
     }
@@ -20,15 +20,15 @@ enum SiteImageType: Int {
 
 /// A helper that'll fetch an image, and fallback to other image options if specified.
 class SiteImageHelper {
-    
+
     private static let cache = NSCache<NSString, UIImage>()
     private let throttler = Throttler(seconds: 0.5, on: .main)
     private let profile: Profile
-    
+
     init(profile: Profile) {
         self.profile = profile
     }
-    
+
     /// Given a `Site`, this will fetch the type of image you're looking for while allowing you to fallback to the next `SiteImageType`.
     /// - Parameters:
     ///   - url: The site to fetch an image from.
@@ -39,7 +39,7 @@ class SiteImageHelper {
     func fetchImageFor(site: Site, imageType: SiteImageType, shouldFallback: Bool, completion: @escaping (UIImage?) -> ()) {
         var didCompleteFetch = false
         var imageType = imageType
-        
+
         switch imageType {
         case .heroImage:
             fetchHeroImage(for: site) { image, result in
@@ -60,7 +60,7 @@ class SiteImageHelper {
                 }
             }
         }
-        
+
         throttler.throttle { [weak self] in
             if !didCompleteFetch && imageType.peek() != nil,
                let updatedImageType = imageType.next(), shouldFallback {
@@ -73,7 +73,7 @@ class SiteImageHelper {
     }
 
     // MARK: - Private
-    
+
     private func fetchHeroImage(for site: Site, completion: @escaping (UIImage?, Bool?) -> ()) {
         let heroImageCacheKey = NSString(string: "\(site.url)\(SiteImageType.heroImage.rawValue)")
 
@@ -110,7 +110,7 @@ class SiteImageHelper {
             }
         }
     }
-    
+
     private func fetchFavicon(for site: Site, completion: @escaping (UIImage?, Bool?) -> ()) {
         let faviconCacheKey = NSString(string: "\(site.url)\(SiteImageType.favicon.rawValue)")
 

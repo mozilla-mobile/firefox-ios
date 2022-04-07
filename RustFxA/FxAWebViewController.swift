@@ -34,12 +34,12 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
      */
     init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, deepLinkParams: FxALaunchParams?) {
         self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile, deepLinkParams: deepLinkParams)
-        
+
         self.dismissType = dismissalStyle
 
         let contentController = WKUserContentController()
         viewModel.setupUserScript(for: contentController)
- 
+
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         webView = WKWebView(frame: .zero, configuration: config)
@@ -63,7 +63,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         super.viewDidLoad()
         setup()
     }
-    
+
     private func setup() {
         webView.navigationDelegate = self
         view = webView
@@ -74,7 +74,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
             }
             self?.webView.load(request)
         }
-        
+
         viewModel.onDismissController = { [weak self] in
             self?.dismiss(animated: true)
         }
@@ -126,7 +126,7 @@ extension FxAWebViewController {
 }
 
 extension FxAWebViewController: WKUIDelegate {
-    
+
     /// Blank target links (support links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard helpBrowser == nil else {
@@ -139,7 +139,7 @@ extension FxAWebViewController: WKUIDelegate {
         helpBrowser = wv
         helpBrowser?.navigationDelegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: AccessibilityIdentifiers.GeneralizedIdentifiers.back, style: .plain, target: self, action: #selector(closeHelpBrowser)) 
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: AccessibilityIdentifiers.GeneralizedIdentifiers.back, style: .plain, target: self, action: #selector(closeHelpBrowser))
 
         return helpBrowser
     }
@@ -188,7 +188,7 @@ extension FxAWebViewController {
                                description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
-        
+
         switch path {
         case .URL:
             if let flow = viewModel.fxAWebViewTelemetry.getFlowFromUrl(fxaUrl: webView.url) {

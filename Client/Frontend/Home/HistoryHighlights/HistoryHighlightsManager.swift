@@ -95,7 +95,6 @@ class HistoryHighlightsManager {
         }
     }
 
-
     /// Collate `HistoryHighlight` groups and individual `HistoryHighlight` items, such that
     /// the resulting array alternates between them, starting with individual highlights.
     /// Because groups could be nil, the `HighlightItem` array gets initialized with the 

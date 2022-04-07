@@ -137,7 +137,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.homeButton.accessibilityLabel = .AppMenu.Toolbar.HomeMenuButtonAccessibilityLabel
         toolbar.homeButton.addTarget(self, action: #selector(didClickHome), for: .touchUpInside)
         toolbar.homeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.homeButton
-        
+
         toolbar.bookmarksButton.contentMode = .center
         toolbar.bookmarksButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.bookmarks), for: .normal)
         toolbar.bookmarksButton.accessibilityLabel = .AppMenu.Toolbar.BookmarksButtonAccessibilityLabel

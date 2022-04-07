@@ -16,22 +16,22 @@ enum FxASignInParentType {
 
 /// ViewController handling Sign In through QR Code or Email address
 class FirefoxAccountSignInViewController: UIViewController {
-    
+
     // MARK: - Properties
-    
+
     var shouldReload: (() -> Void)?
-    
+
     private let profile: Profile
     private var deepLinkParams: FxALaunchParams?
-    
+
     /// This variable is used to track parent page that launched this sign in VC.
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
     private let telemetryObject: TelemetryWrapper.EventObject
-    
+
     /// Dismissal style for FxAWebViewController
     /// Changes based on whether or not this VC is launched from the app menu or settings
     private let fxaDismissStyle: DismissType
-    
+
     // UI
     let qrSignInLabel: UILabel = .build { label in
         label.textAlignment = .center
@@ -50,7 +50,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textColor = .label
-        
+
         let placeholder = "firefox.com/pair"
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { manager in
             manager.getPairingAuthorityURL { result in
@@ -86,7 +86,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     }
 
     // MARK: - Inits
-    
+
     /// - Parameters:
     ///   - profile: User Profile info
     ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
@@ -111,55 +111,55 @@ class FirefoxAccountSignInViewController: UIViewController {
         }
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("Must init FirefoxAccountSignInVC with custom initializer including Profile and ParentType parameters")
     }
-    
+
     // MARK: - Lifecycle methods
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = .systemBackground
         title = .FxASignin_Title
         accessibilityLabel = "FxASingin.navBar"
-        
+
         setupLayout()
     }
-    
+
     // MARK: - Helpers
-    
+
     private func setupLayout() {
         view.addSubviews(qrSignInLabel, pairImageView, instructionsLabel, scanButton, emailButton)
-        
+
         NSLayoutConstraint.activate([
             qrSignInLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             qrSignInLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
+
             pairImageView.topAnchor.constraint(equalTo: qrSignInLabel.bottomAnchor),
             pairImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pairImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
             pairImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            
+
             instructionsLabel.topAnchor.constraint(equalTo: pairImageView.bottomAnchor),
             instructionsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             instructionsLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
-            
+
             scanButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 30),
             scanButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scanButton.widthAnchor.constraint(equalToConstant: 328),
             scanButton.heightAnchor.constraint(equalToConstant: 44),
-            
+
             emailButton.topAnchor.constraint(equalTo: scanButton.bottomAnchor, constant: 10),
             emailButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emailButton.widthAnchor.constraint(equalToConstant: 328),
             emailButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
-    
+
     // MARK: Button Tap Functions
-    
+
     /// Scan QR code button tapped
     @objc func scanbuttonTapped(_ sender: UIButton) {
         let qrCodeVC = QRCodeViewController()
@@ -167,7 +167,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: telemetryObject, extras: ["flow_type": "pairing"])
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: qrCodeVC, topTabsVisible: true)
     }
-    
+
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
@@ -194,7 +194,7 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
 
 // MARK: - FxA SignIn Flow
 extension FirefoxAccountSignInViewController {
-    
+
     /// This function is called to determine if FxA sign in flow or settings page should be shown
     /// - Parameters:
     ///     - deepLinkParams: FxALaunchParams from deeplink query

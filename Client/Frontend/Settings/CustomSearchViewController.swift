@@ -118,7 +118,7 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         return nil
     }
-    
+
     func updateSaveButton() {
         let isEnabled = !self.engineTitle.isEmptyOrWhitespace() && !(self.urlString?.isEmptyOrWhitespace() ?? true)
         self.navigationItem.rightBarButtonItem?.isEnabled = isEnabled
@@ -165,7 +165,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
-        
+
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         return settings
     }

@@ -22,7 +22,7 @@ class ReaderModeButton: UIButton {
     }
 
     // MARK: - Variables
-    
+
     var selectedTintColor: UIColor?
     var unselectedTintColor: UIColor?
 

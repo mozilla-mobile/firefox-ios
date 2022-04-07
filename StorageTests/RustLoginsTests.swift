@@ -11,14 +11,14 @@ class RustLoginsTests: XCTestCase {
     var files: FileAccessor!
     var logins: RustLogins!
     var encryptionKey: String!
-    
+
     override func setUp() {
         files = MockFiles()
-        
+
         if let rootDirectory = try? files.getAndEnsureDirectory() {
             let sqlCipherDatabasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testlogins.db").path
             try? files.remove("testlogins.db")
-            
+
             let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true).appendingPathComponent("testLoginsPerField.db").path
             try? files.remove("testLoginsPerField.db")
 
@@ -27,10 +27,10 @@ class RustLoginsTests: XCTestCase {
             } else {
                 XCTFail("Encryption key wasn't created")
             }
-            
+
             logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
             _ = logins.reopenIfClosed()
-            
+
         } else {
             XCTFail("Could not retrieve root directory")
         }
@@ -79,7 +79,7 @@ class RustLoginsTests: XCTestCase {
         XCTAssertNotNil(getResult1.successValue!)
         let login = getResult1.successValue!
         XCTAssertEqual(login!.id, addResult.successValue!)
-        
+
         let updatedLogin = LoginEntry(
             fromLoginEntryFlattened: LoginEntryFlattened(
                 id: "",
@@ -92,7 +92,7 @@ class RustLoginsTests: XCTestCase {
                 passwordField: login!.passwordField
             )
         )
-        
+
         let updateResult = logins.updateLogin(id: login!.id, login: updatedLogin).value
         XCTAssertTrue(updateResult.isSuccess)
         let getResult2 = logins.getLogin(id: login!.id).value

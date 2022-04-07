@@ -137,7 +137,7 @@ class FeatureFlagsManager {
                                                and: profile,
                                                enabledFor: [.release, .beta, .developer])
         features[.bottomSearchBar] = bottomSearchBar
-        
+
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
                                          and: profile,
                                          enabledFor: [])
@@ -175,7 +175,6 @@ class FeatureFlagsManager {
                                       enabledFor: [.release, .beta, .developer])
         features[.pocket] = pocket
 
-
         let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
                                              and: profile,
                                              enabledFor: [.release, .beta, .developer])
@@ -206,7 +205,7 @@ class FeatureFlagsManager {
                                            and: profile,
                                            enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
-        
+
         let tabTrayGroups = FlaggableFeature(withID: .tabTrayGroups,
                                            and: profile,
                                            enabledFor: [.developer])

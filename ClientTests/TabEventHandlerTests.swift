@@ -24,7 +24,6 @@ class TabEventHandlerTests: XCTestCase {
         XCTAssertFalse(handler.isFocused!)
     }
 
-
     func testBlankPopupURL() {
         let manager = BrowserViewController.foregroundBVC().tabManager
         let prefs = BrowserViewController.foregroundBVC().profile.prefs
@@ -71,7 +70,6 @@ class TabEventHandlerTests: XCTestCase {
         waitForExpectations(timeout: 20, handler: nil)
     }
 }
-
 
 class DummyHandler: TabEventHandler {
     // This is not how this should be written in production — the handler shouldn't be keeping track

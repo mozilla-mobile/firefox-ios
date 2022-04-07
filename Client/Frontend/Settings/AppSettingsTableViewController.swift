@@ -74,10 +74,10 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         case .customizeHomepage:
             viewController = HomePageSettingViewController(prefs: profile.prefs)
-            
+
         case .customizeTabs:
             viewController = TabsSettingsViewController()
-            
+
         case .customizeToolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
             viewController = SearchBarSettingsViewController(viewModel: viewModel)

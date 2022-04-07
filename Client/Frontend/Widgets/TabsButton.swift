@@ -116,7 +116,7 @@ class TabsButton: UIButton {
 
         button.labelBackground.backgroundColor = labelBackground.backgroundColor
         button.labelBackground.layer.cornerRadius = labelBackground.layer.cornerRadius
-        
+
         return button
     }
 

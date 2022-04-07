@@ -6,11 +6,11 @@ import Foundation
 
 struct LoginOnboarding {
     static let HasSeenLoginOnboardingKey = "HasSeenLoginOnboarding"
-    
+
     static func shouldShow() -> Bool {
         return UserDefaults.standard.bool(forKey: HasSeenLoginOnboardingKey) == false
     }
-    
+
     static func setShown() {
         UserDefaults.standard.set(true, forKey: HasSeenLoginOnboardingKey)
     }

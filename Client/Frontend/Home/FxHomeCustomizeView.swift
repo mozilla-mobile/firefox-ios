@@ -19,7 +19,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = a11y.customizeHome
     }
-    
+
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
@@ -28,7 +28,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
         super.init(frame: frame)
         setupView()
         applyTheme()
-        
+
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
     }
@@ -36,7 +36,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         notificationCenter.removeObserver(self)
     }

@@ -34,7 +34,7 @@ class FxHomeHistoryHightlightsViewModel {
 
         return count < HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn ? count : HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
     }
-    
+
     /// Group weight used to create collection view compositional layout
     /// Case 1: For compact and a single column use 0.9 to ocuppy must of the width of the parent
     /// Case 2: For compact and multiple columns 0.8 to show part of the next column

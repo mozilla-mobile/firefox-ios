@@ -4,7 +4,6 @@
 
 import Foundation
 
-
 /// Class to wrap ecec which does the encryption, decryption and key generation with OpenSSL.
 /// This supports aesgcm and the newer aes128gcm.
 /// For each standard of decryption, two methods are supplied: one with Data parameters and return value,

@@ -11,7 +11,7 @@ class SensitiveViewController: UIViewController {
     private var isAuthenticated = false
     private var willEnterForegroundNotificationObserver: NSObjectProtocol?
     private var didEnterBackgroundNotificationObserver: NSObjectProtocol?
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -36,14 +36,14 @@ class SensitiveViewController: UIViewController {
             installBlurredOverlay()
         }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+
         if let observer = willEnterForegroundNotificationObserver {
             NotificationCenter.default.removeObserver(observer)
         }
-        
+
         if let observer = didEnterBackgroundNotificationObserver {
             NotificationCenter.default.removeObserver(observer)
         }

@@ -610,7 +610,7 @@ extension SQLiteHistory: BrowserHistory {
     public func getFrecentHistory() -> FrecentHistory {
         return SQLiteFrecentHistory(db: db, prefs: prefs)
     }
-    
+
     public func getHistory(matching searchTerm: String,
                            limit: Int,
                            offset: Int,

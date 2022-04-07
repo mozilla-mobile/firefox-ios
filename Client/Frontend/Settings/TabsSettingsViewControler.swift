@@ -25,13 +25,11 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
 
         var sectionItems = [Setting]()
 
-
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                               titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
 
         let tabGroupsSetting = BoolSetting(with: .tabTrayGroups,
                                            titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
-
 
         if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
            let isNimbusEnabled = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],

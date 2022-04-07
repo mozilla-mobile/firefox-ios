@@ -23,7 +23,7 @@ public struct Fetched<T: Equatable>: Equatable {
     let timestamp: Timestamp
 }
 
-public func ==<T>(lhs: Fetched<T>, rhs: Fetched<T>) -> Bool {
+public func ==<T> (lhs: Fetched<T>, rhs: Fetched<T>) -> Bool {
     return lhs.timestamp == rhs.timestamp &&
            lhs.value == rhs.value
 }
@@ -110,7 +110,7 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     }
 }
 
-public func ==(lhs: LocalCommand, rhs: LocalCommand) -> Bool {
+public func == (lhs: LocalCommand, rhs: LocalCommand) -> Bool {
     switch (lhs, rhs) {
     case (let .resetAllEngines(exceptL), let .resetAllEngines(exceptR)):
         return exceptL == exceptR

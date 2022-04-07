@@ -12,19 +12,19 @@ class WebsiteDataManagementViewModel {
         case displayInitial
         case displayAll
     }
-    
+
     private(set) var state: State = .loading
     private(set) var siteRecords: [WKWebsiteDataRecord] = []
     private(set) var selectedRecords: Set<WKWebsiteDataRecord> = []
     var onViewModelChanged: () -> Void = {}
-    
+
     var clearButtonTitle: String {
         switch selectedRecords.count {
         case 0: return .SettingsClearAllWebsiteDataButton
         default: return String(format: .SettingsClearSelectedWebsiteDataButton, "\(selectedRecords.count)")
         }
     }
-    
+
     func loadAllWebsiteData() {
         state = .loading
 
@@ -34,20 +34,20 @@ class WebsiteDataManagementViewModel {
             self?.state = .displayInitial
             self?.onViewModelChanged()
         }
-        
+
         self.onViewModelChanged()
     }
-    
+
     func selectItem(_ item: WKWebsiteDataRecord) {
         selectedRecords.insert(item)
         onViewModelChanged()
     }
-    
+
     func deselectItem(_ item: WKWebsiteDataRecord) {
         selectedRecords.remove(item)
         onViewModelChanged()
     }
-    
+
     func createAlertToRemove() -> UIAlertController {
         if selectedRecords.isEmpty {
             return UIAlertController.clearAllWebsiteDataAlert { _ in self.removeAllRecords() }
@@ -55,12 +55,12 @@ class WebsiteDataManagementViewModel {
             return UIAlertController.clearSelectedWebsiteDataAlert { _ in self.removeSelectedRecords() }
         }
     }
-    
+
     private func removeSelectedRecords() {
         let previousState = state
         state = .loading
         onViewModelChanged()
-    
+
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
         WKWebsiteDataStore.default().removeData(ofTypes: types, for: Array(selectedRecords)) { [weak self] in
             self?.state = previousState
@@ -69,12 +69,12 @@ class WebsiteDataManagementViewModel {
             self?.onViewModelChanged()
         }
     }
-    
+
     private func removeAllRecords() {
         let previousState = state
         state = .loading
         onViewModelChanged()
-        
+
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
         WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) { [weak self] in
             self?.siteRecords = []
@@ -90,16 +90,16 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         case sites = 0
         case showMore = 1
         case clearButton = 2
-        
+
         static let count = 3
     }
 
     private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
-    
+
     fileprivate let loadingView = SettingsLoadingView()
 
     fileprivate var showMoreButton: ThemedTableViewCell?
-    
+
     private let viewModel = WebsiteDataManagementViewModel()
 
     var tableView: UITableView!
@@ -138,7 +138,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         loadingView.snp.makeConstraints { make in
             make.edges.equalTo(tableView)
         }
-        
+
         viewModel.onViewModelChanged = { [weak self] in
             guard let self = self else { return }
             self.loadingView.isHidden = self.viewModel.state != .loading
@@ -196,7 +196,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
-            showMoreButton = cell 
+            showMoreButton = cell
         case .clearButton:
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
@@ -245,7 +245,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             present(alert, animated: true, completion: nil)
         }
     }
-    
+
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let section = Section(rawValue: indexPath.section)!
         switch section {
@@ -276,7 +276,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
         // top section: no top border (this is a plain table)
         guard let section = Section(rawValue: section) else { return headerView }
-        
+
         if section == .sites {
             headerView?.showBorder(for: .top, false)
 
@@ -289,7 +289,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             headerView?.showBorder(for: .top, false)
             headerView?.showBorder(for: .bottom, true)
         }
-        
+
         return headerView
     }
 
@@ -316,8 +316,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         return 0
     }
 
-    
-    
     private func unfoldSearchbar() {
         guard let searchBarHeight = navigationItem.searchController?.searchBar.intrinsicContentSize.height else { return }
         tableView.setContentOffset(CGPoint(x: 0, y: -searchBarHeight + tableView.contentOffset.y), animated: true)

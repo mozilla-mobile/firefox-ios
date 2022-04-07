@@ -49,7 +49,7 @@ public struct SyncCommand: Equatable {
     }
 }
 
-public func ==(lhs: SyncCommand, rhs: SyncCommand) -> Bool {
+public func == (lhs: SyncCommand, rhs: SyncCommand) -> Bool {
     return lhs.value == rhs.value
 }
 

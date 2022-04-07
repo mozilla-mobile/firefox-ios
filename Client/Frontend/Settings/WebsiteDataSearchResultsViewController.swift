@@ -11,22 +11,22 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     private enum Section: Int {
         case sites = 0
         case clearButton = 1
-        
+
         static let count = 2
     }
-    
+
     private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
     let viewModel: WebsiteDataManagementViewModel
     private var tableView: UITableView!
 
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
     private var currentSearchText = ""
-    
+
     init(viewModel: WebsiteDataManagementViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("Not Implemented")
     }
@@ -54,17 +54,17 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         }
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
-    
+
     func reloadData() {
         guard let _ = tableView else { return }
         // to update filteredSiteRecords before reloading the tableView
         filterContentForSearchText(currentSearchText)
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let section = Section(rawValue: section)!
         switch section {
@@ -95,7 +95,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         }
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = Section(rawValue: indexPath.section)!
         switch section {
@@ -110,7 +110,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
             present(alert, animated: true, completion: nil)
         }
     }
-    
+
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let section = Section(rawValue: indexPath.section)!
         switch section {
@@ -121,7 +121,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         default: break;
         }
     }
-    
+
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let section = Section(rawValue: indexPath.section)!
         switch section {

@@ -85,7 +85,7 @@ class InitialViewController: UIViewController {
     override func viewDidLoad() {
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         super.viewDidLoad()
-    
+
         view.backgroundColor = .clear
 
         // iPad drop shadow removal hack!

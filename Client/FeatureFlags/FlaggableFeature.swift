@@ -47,7 +47,6 @@ struct FlaggableFeature {
         return baseKey + "UserPreferences"
     }
 
-
     // MARK: - Initializers
 
     init(withID featureID: FeatureFlagName,

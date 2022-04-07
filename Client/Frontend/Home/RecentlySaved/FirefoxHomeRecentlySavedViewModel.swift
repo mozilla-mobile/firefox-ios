@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 class FirefoxHomeRecentlySavedViewModel {
-    
+
     // MARK: - Properties
 
     var isZeroSearch: Bool

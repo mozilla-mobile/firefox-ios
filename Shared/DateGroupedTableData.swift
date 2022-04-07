@@ -83,12 +83,12 @@ public struct DateGroupedTableData<T: Equatable> {
         default: return []
         }
     }
-    
+
     /// Returns all currently fetched items in a single array: `[T.item]`.
     public func allItems() -> [T] {
         let allItems = (today + yesterday + lastWeek + lastMonth + older)
             .map { $0.item }
-        
+
         return allItems
     }
 }
