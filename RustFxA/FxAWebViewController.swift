@@ -116,9 +116,9 @@ class FxAWebViewController: UIViewController {
             return
         }
 
-        backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: backgroundTaskName) {
-            self.webView.stopLoading()
-            self.endPairingConnectionBackgroundTask()
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: backgroundTaskName) { [weak self] in
+            self?.webView.stopLoading()
+            self?.endPairingConnectionBackgroundTask()
         }
 
         webView.load(request)
