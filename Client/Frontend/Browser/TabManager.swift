@@ -505,7 +505,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     // MARK: Tab Tray close all tabs
 
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
-                                 didClearTabs: @escaping (_ urlsVal: [URL], _ tabsToRemove: [Tab],
+                                 didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void) {
         let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
@@ -530,13 +530,6 @@ class TabManager: NSObject, FeatureFlagsProtocol {
                 self.delegates.forEach { $0.get()?.tabManagerUpdateCount?() }
             }
 
-            var urls = [URL]()
-            tabsToRemove.forEach { tab in
-                if let url = tab.lastKnownUrl {
-                    return urls.append(url)
-                }
-            }
-
             DispatchQueue.main.async { [unowned self] in
                 // after closing all normal tabs we should add a normal tab
                 if self.normalTabs.isEmpty {
@@ -544,17 +537,17 @@ class TabManager: NSObject, FeatureFlagsProtocol {
                     storeChanges()
                 }
             }
-            
+
             DispatchQueue.main.async {
-                didClearTabs(urls, tabsToRemove, isPrivate, previousSelectedTabUUID)
+                didClearTabs(tabsToRemove, isPrivate, previousSelectedTabUUID)
             }
         }
     }
-    
-    func makeToastFromRecentlyClosedUrls(_ urls: [URL], recentlyClosedTabs: [Tab], isPrivate: Bool,
+
+    func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab], isPrivate: Bool,
                                          previousTabUUID: String) {
         var toast: ButtonToast?
-        let numberOfTabs = urls.count
+        let numberOfTabs = recentlyClosedTabs.count
         if numberOfTabs > 0 {
             var didPressButton = false
             toast = ButtonToast(labelText:
@@ -569,7 +562,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
                 guard !didPressButton else { return }
                 DispatchQueue.global(qos: .background).async { [unowned self] in
                     let previousTab = tabs.filter { $0.tabUUID == previousTabUUID }.first
-                    self.cleanupClosedTabs(closedTabs: recentlyClosedTabs, previous: previousTab,
+                    self.cleanupClosedTabs(recentlyClosedTabs, previous: previousTab,
                                            isPrivate: isPrivate)
                 }
             }
@@ -594,7 +587,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         storeChanges()
     }
 
-    func cleanupClosedTabs(closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {
+    func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {
 
         DispatchQueue.main.async { [unowned self] in
             // select normal tab if there are no private tabs, we need to do this
