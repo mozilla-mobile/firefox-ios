@@ -557,8 +557,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
                 guard !didPressButton else { return }
                 DispatchQueue.global(qos: .background).async { [unowned self] in
                     let previousTab = tabs.filter { $0.tabUUID == previousTabUUID }.first
-                    self.cleanupClosedTabs(recentlyClosedTabs, previous: previousTab,
-                                           isPrivate: isPrivate)
+                    self.cleanupClosedTabs(recentlyClosedTabs, previous: previousTab, isPrivate: isPrivate)
                 }
             }
         }

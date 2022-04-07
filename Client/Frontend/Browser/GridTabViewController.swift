@@ -383,7 +383,8 @@ extension GridTabViewController {
     }
 
     func closeTabsTrayBackground() {
-        tabDisplayManager.removeAllTabs()
+        tabDisplayManager.removeAllTabsFromView()
+
         tabManager.backgroundRemoveAllTabs(isPrivate: tabDisplayManager.isPrivate) {
             recentlyClosedTabs, isPrivateState, previousTabUUID in
 
