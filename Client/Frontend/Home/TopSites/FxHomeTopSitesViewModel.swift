@@ -49,7 +49,7 @@ class FxHomeTopSitesViewModel {
     // TODO: https://github.com/mozilla-mobile/firefox-ios/issues/10241
     var topSitesShownInSection: Int = 0
 
-    private lazy var homescreen = nimbus.features.homescreenFeature.value()
+    private lazy var homescreen = nimbus.features.homescreen.value()
 
     init(profile: Profile, isZeroSearch: Bool, nimbus: FxNimbus) {
         self.profile = profile
@@ -124,7 +124,7 @@ class FxHomeTopSitesViewModel {
         let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
         let isPinnedAndGoogle = site.isPinned && site.isGoogleGUID
         let type = isPinnedAndGoogle ? "google" : site.isPinned ? "user-added" : site.isSuggested ? "suggested" : "history-based"
-        let topSiteExtra = [topSitePositionKey : "\(position)", topSiteTileTypeKey: type]
+        let topSiteExtra = [topSitePositionKey: "\(position)", topSiteTileTypeKey: type]
 
         // Origin extra
         let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
@@ -220,7 +220,7 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol
     }
 
     func updateData(completion: @escaping () -> Void) {
-        tileManager.loadTopSitesData(completion: completion)
+        tileManager.loadTopSitesData(dataLoadingCompletion: completion)
     }
 }
 

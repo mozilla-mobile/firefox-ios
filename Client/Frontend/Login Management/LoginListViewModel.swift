@@ -145,7 +145,7 @@ final class LoginListViewModel {
             }
         }
     }
-    
+
     public func save(loginRecord: LoginEntry) -> Deferred<Maybe<String>> {
         return profile.logins.addLogin(login: loginRecord)
     }

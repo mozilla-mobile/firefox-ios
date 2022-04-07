@@ -48,7 +48,7 @@ import SwiftUI
 //+-------------------------------------------------------+
 
 struct ImageButtonWithLabel: View {
-    var isSmall : Bool
+    var isSmall: Bool
     var link: QuickLink
 
     var paddingValue: CGFloat {
@@ -66,7 +66,7 @@ struct ImageButtonWithLabel: View {
                     ContainerRelativeShape()
                         .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
                 }
-                
+
                 VStack (alignment: .center, spacing: 50.0){
                     HStack(alignment: .top) {
                         VStack(alignment: .leading){
@@ -81,7 +81,7 @@ struct ImageButtonWithLabel: View {
                                     .minimumScaleFactor(0.75)
                                     .layoutPriority(1000)
                             }
-                                
+
                         }
                         Spacer()
                         if link == .search && isSmall {
@@ -104,7 +104,7 @@ struct ImageButtonWithLabel: View {
                     }
                 }
                 .foregroundColor(Color("widgetLabelColors"))
-                .padding([.horizontal,.vertical], paddingValue)
+                .padding([.horizontal, .vertical], paddingValue)
             }
         }
     }

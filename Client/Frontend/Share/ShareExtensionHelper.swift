@@ -75,7 +75,7 @@ class ShareExtensionHelper: NSObject {
 
             completionHandler(completed, activityType)
         }
-        
+
         return activityViewController
     }
 }
@@ -86,7 +86,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        
+
         if isPasswordManager(activityType: activityType) {
             return onePasswordExtensionItem
         } else if isOpenByCopy(activityType: activityType) {

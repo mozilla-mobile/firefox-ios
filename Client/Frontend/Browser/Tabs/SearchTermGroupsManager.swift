@@ -17,7 +17,7 @@ class SearchTermGroupsManager {
     ) {
         getGroups(with: profile, from: highlights, using: ordering, completion: completion)
     }
-    
+
     public static func getSiteGroups(
         with profile: Profile,
         from sites: [Site],
@@ -80,7 +80,7 @@ class SearchTermGroupsManager {
     private static func buildMetadataGroups(from ASMetadata: [HistoryMetadata]) -> [String: [HistoryMetadata]] {
 
         let searchTerms = Set(ASMetadata.map({ return $0.searchTerm }))
-        var searchTermMetaDataGroup : [String: [HistoryMetadata]] = [:]
+        var searchTermMetaDataGroup: [String: [HistoryMetadata]] = [:]
 
         for term in searchTerms {
             if let term = term {
@@ -187,7 +187,6 @@ class SearchTermGroupsManager {
         return (filteredGroupData, itemsInGroups)
     }
 
-
     /// Removes duplicate items from the original item list; specifically, any items in
     /// groups are removed.
     ///
@@ -263,7 +262,6 @@ class SearchTermGroupsManager {
         }
     }
 }
-
 
 class StopWatchTimer {
     private var timer: Timer?

@@ -11,7 +11,7 @@ protocol CredentialListViewProtocol: AnyObject {
 }
 
 class CredentialListViewController: UIViewController, CredentialListViewProtocol, UISearchControllerDelegate {
-    
+
     fileprivate let cellIdentifier = "cellidentifier"
     lazy private var tableView: UITableView = {
         let tableView = UITableView()
@@ -24,7 +24,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         tableView.tableFooterView = UIView()
         return tableView
     }()
-    
+
     lazy private var cancelButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle(.LoginsListSearchCancel, for: .normal)
@@ -34,41 +34,41 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         button.addTarget(self, action: #selector(self.cancelAction), for: .touchUpInside)
         return button
     }()
-    
+
     var dataSource = [(ASPasswordCredentialIdentity, ASPasswordCredential)]() {
         didSet {
             presenter?.loginsData = dataSource
             tableView.reloadData()
         }
     }
-    
+
     private var presenter: CredentialListPresenter?
     private var searchController: UISearchController?
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
-    
+
     var searchIsActive: Bool {
         guard let searchCtr = searchController, searchCtr.isActive && searchCtr.searchBar.text != ""  else {
             return false
         }
         return true
     }
-    
+
     var credentialExtensionContext: ASCredentialProviderExtensionContext? {
         return (navigationController?.parent as? CredentialProviderViewController)?.extensionContext
     }
-    
+
     init() {
         super.init(nibName: nil, bundle: nil)
         self.presenter = CredentialListPresenter(view: self)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setNeedsStatusBarAppearanceUpdate()
@@ -76,7 +76,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         addViewConstraints()
         registerCells()
     }
-    
+
     private func styleNavigationBar() {
         navigationItem.title = "Firefox"
         navigationItem.largeTitleDisplayMode = .never
@@ -94,7 +94,7 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
-    
+
     private func getStyledSearchController() -> UISearchController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
@@ -107,12 +107,12 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         self.navigationItem.searchController = searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.definesPresentationContext = true
-        
+
         let searchIcon = UIImage(named: "search-icon")?.withRenderingMode(.alwaysTemplate).tinted(UIColor.systemBlue)
         let clearIcon = UIImage(named: "clear-icon")?.withRenderingMode(.alwaysTemplate).tinted(UIColor.systemBlue)
         searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
         searchController.searchBar.setImage(clearIcon, for: UISearchBar.Icon.clear, state: .normal)
-        
+
         searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 5.0, vertical: 0) // calling setSearchFieldBackgroundImage removes the spacing between the search icon and text
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
             if let backgroundview = searchField.subviews.first {
@@ -122,12 +122,12 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         }
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: .LoginsListSearchPlaceholderCredential, attributes: [:]) // Set the placeholder text and color
         return searchController
-        
+
     }
-    
+
     private func addViewConstraints() {
         view.addSubview(tableView)
-        
+
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
@@ -136,35 +136,35 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
 
             cancelButton.widthAnchor.constraint(equalToConstant: 60)
         ])
-                
+
     }
-    
+
     private func registerCells() {
         tableView.register(ItemListCell.self, forCellReuseIdentifier: ItemListCell.identifier)
         tableView.register(SelectPasswordCell.self, forCellReuseIdentifier: SelectPasswordCell.identifier)
         tableView.register(NoSearchResultCell.self, forCellReuseIdentifier: NoSearchResultCell.identifier)
         tableView.register(EmptyPlaceholderCell.self, forCellReuseIdentifier: EmptyPlaceholderCell.identifier)
     }
-    
+
     @objc func cancelAction() {
         presenter?.cancelRequest()
     }
 }
 
 extension CredentialListViewController: UITableViewDataSource {
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let presenter = presenter else { return 1 }
         return presenter.numberOfSections()
-        
+
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let presenter = presenter else { return 1 }
         return presenter.numberOfRows(for: section)
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         switch presenter?.getItemsType(in: indexPath.section, for: indexPath.row) {
         case .emptyCredentialList:
             let cell = tableView.dequeueReusableCell(withIdentifier: EmptyPlaceholderCell.identifier, for: indexPath) as? EmptyPlaceholderCell
@@ -209,14 +209,13 @@ extension CredentialListViewController: UITableViewDelegate {
             return 44
         }
     }
-    
+
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if  let searchBar = searchController?.searchBar, searchBar.isFirstResponder {
             searchBar.resignFirstResponder()
         }
     }
 }
-
 
 extension CredentialListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {

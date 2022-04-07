@@ -30,6 +30,7 @@ enum FeatureFlagName: String, CaseIterable {
     case recentlySaved
     case reportSiteIssue
     case shakeToRestore
+    case sponsoredTiles
     case startAtHome
     case tabTrayGroups
     case wallpapers
@@ -105,7 +106,7 @@ class FeatureFlagsManager {
 
     /// Main interface for setting a feature's state and options. Options are enums of
     /// `FlaggableFeatureOptions` type and also conform to Int.
-    public func setUserPreferenceFor<T:FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to option: T) {
+    public func setUserPreferenceFor<T: FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to option: T) {
 
         switch featureID {
         case .startAtHome:
@@ -136,7 +137,7 @@ class FeatureFlagsManager {
                                                and: profile,
                                                enabledFor: [.release, .beta, .developer])
         features[.bottomSearchBar] = bottomSearchBar
-        
+
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
                                          and: profile,
                                          enabledFor: [])
@@ -148,8 +149,8 @@ class FeatureFlagsManager {
         features[.historyHighlights] = historyHighlights
 
         let historyGroups = FlaggableFeature(withID: .historyGroups,
-                                                 and: profile,
-                                                 enabledFor: [])
+                                             and: profile,
+                                             enabledFor: [])
         features[.historyGroups] = historyGroups
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
@@ -174,10 +175,9 @@ class FeatureFlagsManager {
                                       enabledFor: [.release, .beta, .developer])
         features[.pocket] = pocket
 
-
         let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
                                              and: profile,
-                                             enabledFor: [.release ,.beta, .developer])
+                                             enabledFor: [.release, .beta, .developer])
         features[.pullToRefresh] = pullToRefresh
 
         let recentlySaved = FlaggableFeature(withID: .recentlySaved,
@@ -196,11 +196,16 @@ class FeatureFlagsManager {
                                               enabledFor: [.beta, .developer, .other])
         features[.shakeToRestore] = shakeToRestore
 
+        let sponsoredTiles = FlaggableFeature(withID: .sponsoredTiles,
+                                              and: profile,
+                                              enabledFor: [.developer])
+        features[.sponsoredTiles] = sponsoredTiles
+
         let startAtHome = FlaggableFeature(withID: .startAtHome,
                                            and: profile,
                                            enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
-        
+
         let tabTrayGroups = FlaggableFeature(withID: .tabTrayGroups,
                                            and: profile,
                                            enabledFor: [.developer])

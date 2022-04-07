@@ -12,7 +12,7 @@ class TabTableViewCell: UITableViewCell, NotificationThemeable {
     var screenshotView: UIImageView?
     var websiteTitle: UILabel?
     var urlLabel: UILabel?
-    
+
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
@@ -21,35 +21,35 @@ class TabTableViewCell: UITableViewCell, NotificationThemeable {
         button.sizeToFit()
         return button
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         guard let imageView = imageView, let title = textLabel, let label = detailTextLabel else { return }
-        
+
         self.screenshotView = imageView
         self.websiteTitle = title
         self.urlLabel = label
-        
+
         viewSetup()
         applyTheme()
     }
-    
+
     private func viewSetup() {
         guard let websiteTitle = websiteTitle, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
-        
+
         screenshotView.contentMode = .scaleAspectFill
         screenshotView.clipsToBounds = true
         screenshotView.layer.cornerRadius = ChronologicalTabsControllerUX.cornerRadius
         screenshotView.layer.borderWidth = 1
         screenshotView.layer.borderColor = UIColor.Photon.Grey30.cgColor
-        
+
         screenshotView.snp.makeConstraints { make in
             make.height.width.equalTo(100)
             make.leading.equalToSuperview().offset(ChronologicalTabsControllerUX.screenshotMarginLeftRight)
             make.top.equalToSuperview().offset(ChronologicalTabsControllerUX.screenshotMarginTopBottom)
             make.bottom.equalToSuperview().offset(-ChronologicalTabsControllerUX.screenshotMarginTopBottom)
         }
-        
+
         websiteTitle.numberOfLines = 2
         websiteTitle.snp.makeConstraints { make in
             make.leading.equalTo(screenshotView.snp.trailing).offset(ChronologicalTabsControllerUX.screenshotMarginLeftRight)
@@ -65,7 +65,7 @@ class TabTableViewCell: UITableViewCell, NotificationThemeable {
             make.bottom.equalToSuperview().offset(-ChronologicalTabsControllerUX.textMarginTopBottom * CGFloat(websiteTitle.numberOfLines))
         }
     }
-    
+
     // Helper method to remake title constraint
     func remakeTitleConstraint() {
         guard let websiteTitle = websiteTitle, let text = websiteTitle.text, !text.isEmpty, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
@@ -77,7 +77,7 @@ class TabTableViewCell: UITableViewCell, NotificationThemeable {
             make.trailing.equalToSuperview().offset(-16)
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

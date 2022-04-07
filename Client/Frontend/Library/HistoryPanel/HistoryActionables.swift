@@ -7,36 +7,36 @@ import Foundation
 /// The history panel has a fixed first section and cells. In this case, we'll only need some properties of that to serve as our model.
 
 struct HistoryActionablesModel: Hashable {
-    
+
     // MARK: - Properties
-    
+
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
     typealias History = String.LibraryPanel.History
-    
+
     let itemImage: UIImage?
     let itemTitle: String
     let itemA11yId: String
     let itemIdentity: ActionableItem
     let identifier = UUID()
-    
+
     enum ActionableItem {
         case clearHistory, recentlyClosed, syncHistory
     }
-    
+
     // MARK: - Init
-    
+
     init(imageName: String?, title: String, a11yId: String, itemIdentity: ActionableItem) {
         self.itemTitle = title
         self.itemA11yId = a11yId
         self.itemIdentity = itemIdentity
-        
+
         if let imageName = imageName {
             self.itemImage = UIImage(named: imageName)?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
         } else {
             self.itemImage = nil
         }
     }
-    
+
     // As this section evolves (or we experiment with it), we may need to replace items within.
     // Let's keep separate stashes of ALL and ACTIVE items.
     static let allActionables = [
@@ -53,7 +53,7 @@ struct HistoryActionablesModel: Hashable {
                                 a11yId: a11y.syncedHistoryCell,
                                 itemIdentity: .syncHistory)
     ]
-    
+
     static let activeActionables = [
         HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon,
                                 title: History.HistoryPanelClearHistoryButtonTitle,
@@ -64,5 +64,5 @@ struct HistoryActionablesModel: Hashable {
                                 a11yId: a11y.recentlyClosedCell,
                                 itemIdentity: .recentlyClosed)
     ]
-    
+
 }

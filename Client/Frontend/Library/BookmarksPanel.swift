@@ -33,7 +33,7 @@ fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
     }
 }
 
-class BookmarksPanel: SiteTableViewController, LibraryPanel {
+class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
         case recent
@@ -84,7 +84,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.allowsSelectionDuringEditing = true
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
     }
-    
+
     func addNewBookmarkItemAction() {
         let newBookmark = SingleActionViewModel(title: .BookmarksNewBookmark, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
             guard let bookmarkFolder = self.bookmarkFolder else {
@@ -134,7 +134,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if tableView.isEditing {
             disableEditMode()
@@ -190,7 +190,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     func enableEditMode() {
         self.tableView.setEditing(true, animated: true)
     }
-    
+
     func disableEditMode() {
         self.tableView.setEditing(false, animated: true)
     }
@@ -228,6 +228,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             }
             tableView.deleteRows(at: [indexPath], with: .left)
             tableView.endUpdates()
+            removeBookmarkShortcut()
         }
 
         // If this node is a folder and it is not empty, we need
@@ -359,7 +360,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkNodeCellIdentifier, for: indexPath) as! OneLineTableViewCell
-        
+
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolderData:
             if bookmarkFolder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[bookmarkFolder.guid] {

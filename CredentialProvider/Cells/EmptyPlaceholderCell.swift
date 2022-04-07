@@ -5,9 +5,9 @@
 import UIKit
 
 class EmptyPlaceholderCell: UITableViewCell {
-    
+
     static let identifier = "emptyPlaceholderCell"
-    
+
     lazy private var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.CredentialProvider.titleColor
@@ -15,7 +15,7 @@ class EmptyPlaceholderCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 15)
         return label
     }()
-    
+
     lazy private var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = .LoginsListNoLoginsFoundDescription
@@ -25,13 +25,12 @@ class EmptyPlaceholderCell: UITableViewCell {
         label.numberOfLines = 0
         return label
     }()
-    
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
-        
+
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

@@ -24,12 +24,12 @@ class FaviconFetcherErrorType: MaybeErrorType {
  */
 open class FaviconFetcher: NSObject, XMLParserDelegate {
     internal let queue = DispatchQueue(label: "FaviconFetcher", attributes: DispatchQueue.Attributes.concurrent)
-    
+
     static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
     public static var userAgent: String = ""
     static let ExpirationTime = TimeInterval(60*60*24*7) // Only check for icons once a week
-    
+
     private static var characterToFaviconCache = [String: UIImage]()
     static var defaultFavicon: UIImage = {
         return UIImage(named: "defaultFavicon")!
@@ -68,7 +68,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     // Default favicons and background colors provided via mozilla/tippy-top-sites
     private class func getBundledIcons() -> [String: BundledIconType] {
-        
+
         // Alows us to access bundle from extensions
         // Also found in `SentryIntegration`. Taken from: https://stackoverflow.com/questions/26189060/get-the-main-app-bundle-from-within-extension
         var bundle = Bundle.main
@@ -79,7 +79,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                 bundle = otherBundle
             }
         }
-        
+
         let filePath = bundle.path(forResource: "top_sites", ofType: "json")
         let file = try! Data(contentsOf: URL(fileURLWithPath: filePath!))
         let decoder = JSONDecoder()
@@ -157,7 +157,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
         return UIColor(colorString: colorHex)
     }
-    
+
     class func downloadFaviconAndCache(imageURL: URL?, imageKey: String) {
         guard let imageURL = imageURL, !imageURL.absoluteString.starts(with: "internal://"), !imageKey.isEmpty else { return }
         // cache found, don't download
@@ -176,7 +176,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             }
         }
     }
-    
+
     class func checkImageCache(imageKey: String) -> Bool {
         let fileManager = FileManager.default
         guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) else {
@@ -185,7 +185,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         let imageKeyDirectoryUrl = container.appendingPathComponent("Library/Caches/fxfavicon/\(imageKey)")
         return fileManager.fileExists(atPath: imageKeyDirectoryUrl.path)
     }
-    
+
     class func createWebImageCacheDirectory() {
         // check existence of cache directory
         let fileManager = FileManager.default
@@ -211,7 +211,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             Sentry.shared.send(message: "Favicon cache directory creation failed", tag: .general, severity: .error, description: error.description)
         }
     }
-        
+
     class func getFaviconFromDiskCache(imageKey: String) -> UIImage? {
         guard checkImageCache(imageKey: imageKey) else { return nil }
         // image cache found now we retrive image

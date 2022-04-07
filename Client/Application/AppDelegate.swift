@@ -121,7 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        
+
         setupRootViewController()
 
         // Add restoration class, the factory that will return the ViewController we
@@ -250,7 +250,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
             }
         }
-
 
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
             guard self.profile?.hasSyncableAccount() ?? false else {
@@ -609,7 +608,7 @@ extension AppDelegate {
             }
         }
 
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation: UIInterfaceOrientation) {
             self.lockOrientation(orientation)
             UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
         }

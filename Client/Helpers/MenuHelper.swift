@@ -38,7 +38,7 @@ open class MenuHelper: NSObject {
         let openAndFillItem = UIMenuItem(title: .MenuHelperOpenAndFill, action: MenuHelper.SelectorOpenAndFill)
         let findInPageItem = UIMenuItem(title: .MenuHelperFindInPage, action: MenuHelper.SelectorFindInPage)
         let searchItem = UIMenuItem(title: .MenuHelperSearchWithFirefox, action: MenuHelper.SelectorSearchWithFirefox)
-      
+
         UIMenuController.shared.menuItems = [pasteAndGoItem, copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem, searchItem]
     }
 }

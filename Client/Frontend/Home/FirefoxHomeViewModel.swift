@@ -26,7 +26,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     }
 
     // MARK: - Properties
-    
+
     // Privacy of home page is controlled throught notifications since tab manager selected tab
     // isn't always the proper privacy mode that should be reflected on the home page
     var isPrivate: Bool {
@@ -52,7 +52,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
 
-    lazy var homescreen = nimbus.features.homescreenFeature.value()
+    lazy var homescreen = nimbus.features.homescreen.value()
 
     // MARK: - Section availability variables
 
@@ -100,7 +100,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
 
         topSiteViewModel.delegate = self
     }
-    
+
     // MARK: - Interfaces
 
     func updateData() {
@@ -109,7 +109,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
             self.update(section: section)
         }
     }
-    
+
     func updateEnabledSections() {
         enabledSections.removeAll()
 

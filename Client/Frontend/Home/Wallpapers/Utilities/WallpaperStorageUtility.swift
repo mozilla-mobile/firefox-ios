@@ -40,15 +40,15 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
                        completionHandler: @escaping (Result<Void, Error>) -> Void
     ) {
         if let portrait = imageSet.portrait, let landscape = imageSet.landscape {
-            
+
             do {
                 try store(image: portrait,
                           forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage)
                 try store(image: landscape,
                           forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape)
-                
+
                 completionHandler(.success(()))
-                
+
             } catch let error {
                 completionHandler(.failure(error))
             }
@@ -57,7 +57,7 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
             guard let portraitPath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage),
                   let landscapePath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape)
             else { return }
-            
+
             // If we're passing in `nil` for the image, we need to remove the currently
             // stored image so that it's not showing up.
             do {
@@ -69,7 +69,7 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
             }
         }
     }
-    
+
     /// Stores an image on disk as a png data representation, for the given key.
     /// The key should be the image's name unless saving a user seleceted
     /// wallpaper, in which case, the key should be the appropriate PrefsKey.
@@ -83,14 +83,14 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
         guard let pngRepresentation = image.pngData(),
               let saveFilePath = filePath(forKey: key)
         else { return }
-        
+
         do {
             if FileManager.default.fileExists(atPath: saveFilePath.path) {
                 try FileManager.default.removeItem(at: saveFilePath)
             }
-            
+
             try pngRepresentation.write(to: saveFilePath, options: .atomic)
-            
+
         } catch let error {
             browserLog.debug("Wallpaper - error writing file to disk: \(error)")
             throw error
@@ -110,16 +110,16 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
         let key = UIDevice.current.orientation.isLandscape ? PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape : PrefsKeys.WallpaperManagerCurrentWallpaperImage
         return getImageResource(for: key)
     }
-    
+
     func getImageResource(for key: String) -> UIImage? {
         guard let filePath = filePath(forKey: key),
            let fileData = FileManager.default.contents(atPath: filePath.path),
            let image = UIImage(data: fileData)
         else { return nil }
-        
+
         return image
     }
-    
+
     // MARK: - Deletion
     func deleteImageResource(named key: String) {
         let fileManager = FileManager.default

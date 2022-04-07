@@ -15,7 +15,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
 
-    lazy var homescreen = nimbus.features.homescreenFeature.value()
+    lazy var homescreen = nimbus.features.homescreen.value()
 
     var isJumpBackInSectionEnabled: Bool {
         let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.jumpBackIn)
@@ -214,7 +214,7 @@ extension HomePageSettingViewController {
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
             let num = self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
-            return NSAttributedString(string: String(format: .TopSitesRowCount, num))
+            return NSAttributedString(string: String(format: .Settings.Homepage.Shortcuts.RowCount, num))
         }
 
         override var accessibilityIdentifier: String? { return "TopSitesRows" }

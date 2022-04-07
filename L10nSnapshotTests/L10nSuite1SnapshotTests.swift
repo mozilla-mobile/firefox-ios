@@ -32,7 +32,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
             num += 1
         }
     }
-    
+
     func testWebViewContextMenu () throws {
         throw XCTSkip ("Failing a lot and now new strings here")
         // Drag the context menu up to show all the options
@@ -75,7 +75,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        
+
         navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
         snapshot("ContextMenuReloadButton-01")
