@@ -67,6 +67,7 @@ enum WallpaperCollectionType: String, Codable {
     case firefox
     case firefoxOverlay
     case projectHouse
+    case v100Celebration
 }
 
 // MARK: - Wallpaper

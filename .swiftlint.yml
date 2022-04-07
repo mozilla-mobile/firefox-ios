@@ -115,19 +115,19 @@ opt_in_rules: # some rules are only opt-in
   # swiftlint rules
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
-  - Source/ExcludedFolder
-  - Source/ExcludedFile.swift
-  - ThirdParty
-  - FxA
-  - FxAClient
   - build
-  - Storage/ThirdParty/SwiftData.swift
-  - UITests/
-  - XCUITests/
-  - fastlane/
   - Client/Assets/Search/get_supported_locales.swift
   - Client/Generated
-  - Carthage
+  - fastlane/
+  - FxA
+  - FxAClient
+  - Source/ExcludedFolder
+  - Source/ExcludedFile.swift
+  - Storage/ThirdParty/SwiftData.swift
+  - Sync/Generated/Metrics.swift
+  - ThirdParty
+  - UITests/
+  - XCUITests/
 
 # reporter: "json" # reporter type (xcode, json, csv, checkstyle)
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
