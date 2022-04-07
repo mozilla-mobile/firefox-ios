@@ -24,6 +24,7 @@ enum FeatureFlagName: String, CaseIterable {
     case historyGroups
     case inactiveTabs
     case jumpBackIn
+    case useMockData
     case nimbus
     case pocket
     case pullToRefresh
@@ -162,6 +163,11 @@ class FeatureFlagsManager {
                                           and: profile,
                                           enabledFor: [.release, .beta, .developer])
         features[.jumpBackIn] = jumpBackIn
+
+        let useMockData = FlaggableFeature(withID: .useMockData,
+                                           and: profile,
+                                           enabledFor: [.developer])
+        features[.useMockData] = useMockData
 
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
