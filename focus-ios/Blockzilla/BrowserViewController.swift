@@ -501,11 +501,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    public func exitFullScreenVideo() {
-        let js = "document.getElementsByTagName('video')[0].webkitExitFullScreen()"
-        webViewController.evaluate(js, completion: nil)
-    }
-
     private func createHomeView() {
         homeViewController = HomeViewController(tipManager: tipManager)
         homeViewController.delegate = self

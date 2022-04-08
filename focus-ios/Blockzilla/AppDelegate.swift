@@ -302,7 +302,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
 
     func applicationWillResignActive(_ application: UIApplication) {
         appPhase = .willResignActive
-        browserViewController.exitFullScreenVideo()
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
     }
