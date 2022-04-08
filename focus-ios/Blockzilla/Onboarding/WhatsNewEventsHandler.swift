@@ -5,39 +5,22 @@
 import Foundation
 
 
-struct WhatsNewEventsHandler {
+class WhatsNewEventsHandler {
     
-    //TODO: check which should be the logic of implementation
-    var shouldShowWhatsNewButton: Bool {
-        UserDefaults.standard.integer(forKey: OnboardingConstants.whatsNewCounter) != 0
-    }
+    @Published public var shouldShowWhatsNew: Bool = false
     
-    func didShowWhatsNewButton() {
+    func didShowWhatsNew() {
         UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
-        UserDefaults.standard.removeObject(forKey: OnboardingConstants.whatsNewCounter)
+        shouldShowWhatsNew = false
     }
     
     func highlightWhatsNewButton() {
-        let onboardingDidAppear = UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
         
-        // Don't highlight whats new on a fresh install (onboardingDidAppear == false on a fresh install)
-        if let lastShownWhatsNew = UserDefaults.standard.string(forKey: OnboardingConstants.whatsNewVersion)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
-            if onboardingDidAppear && lastShownWhatsNew != currentMajorRelease {
-                setupWhatsNewFeature()
-            }
-        }
-    }
-    
-    private func setupWhatsNewFeature () {
-        let counter = UserDefaults.standard.integer(forKey: OnboardingConstants.whatsNewCounter)
-        switch counter {
-        case 4:
-            // Shown three times, remove counter
+        // Don't highlight whats new on a fresh install, highlight on every release of the app
+        if let lastShownWhatsNew = UserDefaults.standard.string(forKey: OnboardingConstants.whatsNewVersion) {
+            shouldShowWhatsNew = (lastShownWhatsNew != AppInfo.shortVersion)
+        } else {
             UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
-            UserDefaults.standard.removeObject(forKey: OnboardingConstants.whatsNewCounter)
-        default:
-            // Show highlight
-            UserDefaults.standard.set(counter+1, forKey: OnboardingConstants.whatsNewCounter)
         }
     }
 }

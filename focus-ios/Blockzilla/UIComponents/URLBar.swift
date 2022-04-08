@@ -445,6 +445,10 @@ class URLBar: UIView {
         urlText.isUserInteractionEnabled = false
         urlText.endEditing(true)
     }
+    
+    public func setHighlightWhatsNew(shouldHighlight: Bool) {
+        toolset.setHighlightWhatsNew(shouldHighlight: shouldHighlight)
+    }
 
     @objc func addCustomURL() {
         guard let url = self.url else { return }

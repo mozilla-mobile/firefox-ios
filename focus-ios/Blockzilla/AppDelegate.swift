@@ -45,7 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     
     private lazy var browserViewController = BrowserViewController(
         authenticationManager: authenticationManager,
-        onboardingEventsHandler: onboardingEventsHandler
+        onboardingEventsHandler: onboardingEventsHandler,
+        whatsNewEventsHandler: whatsNewEventsHandler
     )
     
     private let nimbus = NimbusWrapper.shared

@@ -16,8 +16,7 @@ protocol BrowserToolsetDelegate: AnyObject {
 
 class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
-    
-    var whatsNewEventsHandler = WhatsNewEventsHandler()
+    var shouldShowWhatsNew: Bool = false
     let backButton = InsetButton()
     let forwardButton = InsetButton()
     let stopReloadButton = InsetButton()
@@ -61,7 +60,7 @@ class BrowserToolset {
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
         
-        setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
+       setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew)
     }
 
     var canGoBack: Bool = false {
@@ -124,20 +123,6 @@ class BrowserToolset {
     }
 
     func setHighlightWhatsNew(shouldHighlight: Bool) {
-        if shouldHighlight {
-            contextMenuButton.setImage(UIImage(named: "preferences_updated"), for: .normal)
-        } else {
-            contextMenuButton.setImage(UIImage(named: "icon_hamburger_menu"), for: .normal)
-        }
-    }
-}
-
-extension BrowserToolset: WhatsNewDelegate {
-    func shouldShowWhatsNew() -> Bool {
-        whatsNewEventsHandler.shouldShowWhatsNewButton
-    }
-
-    func didShowWhatsNew() {
-        whatsNewEventsHandler.didShowWhatsNewButton()
+        contextMenuButton.setImage(UIImage(named: shouldHighlight ? "preferences_updated" : "icon_hamburger_menu"), for: .normal)
     }
 }

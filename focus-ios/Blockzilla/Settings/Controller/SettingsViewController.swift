@@ -48,15 +48,30 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.estimatedRowHeight = UITableView.automaticDimension
         return tableView
     }()
+    
+    private lazy var highlightsButton: UIBarButtonItem = {
+        let barButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
+        barButton.image = UIImage(named: "highlight")
+        barButton.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
+        barButton.tintColor = whatsNewButtonColor
+        return barButton
+    }()
+    
+    private lazy var doneButton: UIBarButtonItem = {
+        let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(dismissSettings))
+        doneButton.tintColor = .accent
+        doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
+        return doneButton
+    }()
+    
     private var onboardingEventsHandler: OnboardingEventsHandler
+    private var whatsNewEventsHandler: WhatsNewEventsHandler
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector()
     private let authenticationManager: AuthenticationManager
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
-    private var highlightsButton = UIBarButtonItem()
-    private let whatsNew: WhatsNewDelegate
     private lazy var sections = {
         Section.getSections()
     }()
@@ -76,6 +91,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             break
         }
         return themeName
+    }
+    
+    private var whatsNewButtonColor: UIColor {
+        let barButtonDisabledColor: UIColor = UserDefaults.standard.theme == .device ? (traitCollection.userInterfaceStyle == .light ? .systemGray2 : .white) : (UserDefaults.standard.theme == .light ? .systemGray2 : .white)
+        return whatsNewEventsHandler.shouldShowWhatsNew ? .accent : barButtonDisabledColor
     }
 
     private func getSectionIndex(_ section: Section) -> Int? {
@@ -118,18 +138,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     private var shouldScrollToSiri: Bool
+    
     init(
         searchEngineManager: SearchEngineManager,
-        whatsNew: WhatsNewDelegate,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
+        whatsNewEventsHandler: WhatsNewEventsHandler,
         shouldScrollToSiri: Bool = false
     ) {
         self.searchEngineManager = searchEngineManager
-        self.whatsNew = whatsNew
         self.shouldScrollToSiri = shouldScrollToSiri
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
+        self.whatsNewEventsHandler = whatsNewEventsHandler
         super.init(nibName: nil, bundle: nil)
         
         tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
@@ -149,21 +170,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationBar.shadowImage = UIImage()
         navigationBar.layoutIfNeeded()
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
-
-        highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
-        highlightsButton.image = UIImage(named: "highlight")
-        highlightsButton.tintColor = .accent
-        highlightsButton.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
-        
-        let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(dismissSettings))
-        doneButton.tintColor = .accent
-        doneButton.accessibilityIdentifier = "SettingsViewController.doneButton"
-
         navigationItem.rightBarButtonItems = [doneButton, highlightsButton]
-
-        if whatsNew.shouldShowWhatsNew() {
-            highlightsButton.tintColor = .accent
-        }
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -492,9 +499,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func whatsNewClicked() {
-        highlightsButton.tintColor = UserDefaults.standard.theme == .light ? .systemGray2 : .white
         navigationController?.pushViewController(SettingsContentViewController(url: URL(forSupportTopic: .whatsNew)), animated: true)
-        whatsNew.didShowWhatsNew()
+        whatsNewEventsHandler.didShowWhatsNew()
+        highlightsButton.tintColor = whatsNewButtonColor
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {

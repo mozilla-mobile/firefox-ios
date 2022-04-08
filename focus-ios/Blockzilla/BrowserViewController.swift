@@ -48,6 +48,7 @@ class BrowserViewController: UIViewController {
     private var background = UIImageView()
     private var cancellables = Set<AnyCancellable>()
     private var onboardingEventsHandler: OnboardingEventsHandler
+    private var whatsNewEventsHandler: WhatsNewEventsHandler
 
     private enum URLBarScrollState {
         case collapsed
@@ -87,12 +88,14 @@ class BrowserViewController: UIViewController {
         tipManager: TipManager = TipManager.shared,
         shortcutManager: ShortcutsManager = ShortcutsManager.shared,
         authenticationManager: AuthenticationManager,
-        onboardingEventsHandler: OnboardingEventsHandler
+        onboardingEventsHandler: OnboardingEventsHandler,
+        whatsNewEventsHandler: WhatsNewEventsHandler
     ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
+        self.whatsNewEventsHandler = whatsNewEventsHandler
         super.init(nibName: nil, bundle: nil)
         shortcutManager.delegate = self
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -267,6 +270,15 @@ class BrowserViewController: UIViewController {
                 updateLockIcon(trackingProtectionStatus: status)
             }
             .store(in: &cancellables)
+        
+        whatsNewEventsHandler
+            .$shouldShowWhatsNew
+            .sink { [unowned self] shouldShow in
+                homeViewController.toolbar.toolset.setHighlightWhatsNew(shouldHighlight: shouldShow)
+                browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: shouldShow)
+                urlBar.setHighlightWhatsNew(shouldHighlight: shouldShow)
+            }
+            .store(in: &cancellables)
 
         
         guard shouldEnsureBrowsingMode else { return }
@@ -279,10 +291,7 @@ class BrowserViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        let homeViewToolset = homeViewController.toolbar.toolset
-        homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
         homeViewController.toolbar.layoutIfNeeded()
-        browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
     }
     
@@ -341,7 +350,6 @@ class BrowserViewController: UIViewController {
                                 value: "finish"
                             )
                         UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
-                        UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
                         urlBar.activateTextField()
                         onboardingEventsHandler.route = nil
                         onboardingEventsHandler.send(.enterHome)
@@ -1831,11 +1839,6 @@ extension BrowserViewController {
     }
 }
 
-protocol WhatsNewDelegate {
-    func shouldShowWhatsNew() -> Bool
-    func didShowWhatsNew()
-}
-
 extension BrowserViewController: MenuActionable {
     
     func openInFirefox(url: URL) {
@@ -1931,9 +1934,9 @@ extension BrowserViewController: MenuActionable {
 
         let settingsViewController = SettingsViewController(
             searchEngineManager: searchEngineManager,
-            whatsNew: browserToolbar.toolset,
             authenticationManager: authenticationManager,
             onboardingEventsHandler: onboardingEventsHandler,
+            whatsNewEventsHandler: whatsNewEventsHandler,
             shouldScrollToSiri: shouldScrollToSiri
         )
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)

@@ -27,11 +27,14 @@ class BrowserViewControllerTests: XCTestCase {
             
         }
     )
+    
+    private lazy var whatsNewEventsHandler = WhatsNewEventsHandler()
 
     func testRequestReviewThreshold() {
         let bvc = BrowserViewController(
             authenticationManager: AuthenticationManager(),
-            onboardingEventsHandler: onboardingEventsHandler
+            onboardingEventsHandler: onboardingEventsHandler,
+            whatsNewEventsHandler: whatsNewEventsHandler
         )
         mockUserDefaults.clear()
 
