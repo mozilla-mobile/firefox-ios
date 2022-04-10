@@ -38,15 +38,6 @@
         }
       },
       {
-        "package": "SnapKit",
-        "repositoryURL": "https://github.com/SnapKit/SnapKit",
-        "state": {
-          "branch": null,
-          "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
-          "version": "5.0.1"
-        }
-      },
-      {
         "package": "Telemetry",
         "repositoryURL": "https://github.com/mozilla-mobile/telemetry-ios",
         "state": {
