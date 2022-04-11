@@ -479,6 +479,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
             guard let vm = inactiveViewModel, vm.inactiveTabs.count > 0 else { return 0 }
             return shouldEnableInactiveTabs ? (isPrivate ? 0 : 1) : 0
         case .groupedTabs:
+            // Hide grouped tab section if there are no grouped tabs
+            guard let groups = tabGroups, groups.count > 0 else { return 0 }
             return shouldEnableGroupedTabs ? (isPrivate ? 0 : 1) : 0
         case .regularTabs:
             return dataStore.count
