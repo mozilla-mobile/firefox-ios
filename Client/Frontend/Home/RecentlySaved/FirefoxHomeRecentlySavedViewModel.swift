@@ -25,7 +25,7 @@ class FirefoxHomeRecentlySavedViewModel {
         self.nimbus = nimbus
     }
 
-    private lazy var homescreen = nimbus.features.homescreen.value()
+    private lazy var homescreen = nimbus.features.homescreenFeature.value()
 
     var recentItems: [RecentlySavedItem] {
         var items = [RecentlySavedItem]()
