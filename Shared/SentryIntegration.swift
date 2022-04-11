@@ -25,12 +25,12 @@ public protocol SentryProtocol {
 }
 
 public class SentryIntegration: SentryProtocol {
-    
+
     enum Environment: String {
         case nightly = "Nightly"
         case production = "Production"
     }
-    
+
     public static let shared = SentryIntegration()
 
     private let SentryDSNKey = "SentryCloudDSN"
@@ -46,8 +46,13 @@ public class SentryIntegration: SentryProtocol {
         return SentrySDK.crashedLastRun
     }
 
+    private var releaseName: String {
+        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)+(\(AppInfo.buildNumber))"
+    }
+
     public func setup(sendUsageData: Bool) {
-        assert(!enabled, "Sentry.setup() should only be called once")
+        // Setup should only be called once
+        guard !enabled else { return }
 
         if DeviceInfo.isSimulator() {
             Logger.browserLogger.debug("Not enabling Sentry; Running in Simulator")
@@ -75,6 +80,7 @@ public class SentryIntegration: SentryProtocol {
         SentrySDK.start { options in
             options.dsn = dsn
             options.environment = environment.rawValue
+            options.releaseName = self.releaseName
             options.beforeSend = { event in
                 let attributes = event.extra ?? [:]
                 self.attributes = attributes.merge(with: self.attributes)

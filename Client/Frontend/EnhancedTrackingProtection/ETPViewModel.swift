@@ -23,7 +23,7 @@ class ETPViewModel {
         etpCoverSheetmodel = ETPCoverSheetModel(titleImage: #imageLiteral(resourceName: "shield"), titleText: .CoverSheetETPTitle, descriptionText: .CoverSheetETPDescription)
     }
 
-    static func shouldShowETPCoverSheet(userPrefs: Prefs, currentAppVersion: String = VersionSetting.appVersion, isCleanInstall: Bool, supportedAppVersions: [String] = etpCoverSheetSupportedAppVersion) -> Bool {
+    static func shouldShowETPCoverSheet(userPrefs: Prefs, currentAppVersion: String = AppInfo.appVersion, isCleanInstall: Bool, supportedAppVersions: [String] = etpCoverSheetSupportedAppVersion) -> Bool {
         // 0,1,2 so we show on 3rd session as a requirement on Github #6012
         let maxSessionCount = 2
         var shouldShow = false

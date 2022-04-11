@@ -1153,7 +1153,7 @@ class BrowserViewController: UIViewController {
             return
         }
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
-            Sentry.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
+            SentryIntegration.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
                                severity: .error,
                                description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
