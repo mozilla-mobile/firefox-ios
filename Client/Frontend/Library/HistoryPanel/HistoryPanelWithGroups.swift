@@ -43,7 +43,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     private let clearHistoryHelper: ClearHistoryHelper
     var keyboardState: KeyboardState?
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
-    
+
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
 
