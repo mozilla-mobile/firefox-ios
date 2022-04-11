@@ -753,7 +753,11 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
             return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
 
-        default:
+        case .groupedTabs:
+            guard tabDisplayManager.shouldEnableGroupedTabs,
+                  tabDisplayManager.tabGroups?.count ?? 0 > 0
+            else { return .zero }
+
             return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
         }
     }
