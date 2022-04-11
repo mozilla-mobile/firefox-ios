@@ -10,7 +10,7 @@ private struct WallpaperID {
     let name: String
     let accessibilityLabel: String
 }
-    
+
 /// A internal model for projects with wallpapers that are timed.
 private struct WallpaperCollection {
     /// The base file names of the wallpaper assets to be included in the collection.
@@ -50,9 +50,9 @@ private struct WallpaperCollection {
 
 struct WallpaperDataManager {
     typealias accessibilityIDs = String.Settings.Homepage.Wallpaper.AccessibilityLabels
-    
+
     private var resourceManager: WallpaperResourceManager
-    
+
     init(with resourceManager: WallpaperResourceManager = WallpaperResourceManager()) {
         self.resourceManager = resourceManager
     }
@@ -65,20 +65,20 @@ struct WallpaperDataManager {
         wallpapers.append(Wallpaper(named: "defaultBackground",
                                     ofType: .defaultBackground,
                                     withAccessibiltyLabel: accessibilityIDs.DefaultWallpaper))
-        
+
         if let themedWallpapers = getWallpapers(from: allWallpaperCollections()) {
             wallpapers.append(contentsOf: themedWallpapers)
         }
 
         return wallpapers
     }
-    
+
     public func getImageSet(at index: Int) -> WallpaperImageSet {
         return resourceManager.getImageSet(for: availableWallpapers[index])
     }
-    
+
     // MARK: - Wallpaper data
-    
+
     /// This function will, given an array of collections, return an array of individual
     /// `Wallpaper` objects if those objects meet date and locale criteria and if
     /// those objects currently have resources (images) available to be presented
@@ -87,7 +87,7 @@ struct WallpaperDataManager {
         from collection: [WallpaperCollection]?,
         ignoringEligibility shouldIgnoreEligibility: Bool = false
     ) -> [Wallpaper]? {
-        
+
         guard let collection = collection else { return nil }
 
         var wallpapers = [Wallpaper]()
@@ -114,14 +114,14 @@ struct WallpaperDataManager {
     private func allWallpaperCollections() -> [WallpaperCollection] {
 
         var allCollections = firefoxDefaultCollection()
-        
+
         if let specialCollections = allSpecialCollections() {
             allCollections.append(contentsOf: specialCollections)
         }
-        
+
         return allCollections
     }
-    
+
     private func firefoxDefaultCollection() -> [WallpaperCollection] {
         return [WallpaperCollection(
             wallpaperFileNames: [WallpaperID(name: "fxSunrise",
@@ -134,7 +134,7 @@ struct WallpaperDataManager {
                                              accessibilityLabel: accessibilityIDs.FxAmethystWallpaper)],
             ofType: .themed(type: .firefoxOverlay))]
     }
-    
+
     private func allSpecialCollections() -> [WallpaperCollection]? {
         var specialCollections = [WallpaperCollection]()
 
@@ -148,18 +148,18 @@ struct WallpaperDataManager {
             ofType: .themed(type: .projectHouse),
             expiringOn: houseExpiryDate,
             limitedToLocales: ["en_US", "es_US"])
-        
+
         specialCollections.append(projectHouse)
-        
+
         return specialCollections.isEmpty ? nil : specialCollections
     }
-    
+
     // MARK: - Resource verification
     public func verifyResources() {
         guard let specialCollections = getWallpapers(from: allSpecialCollections(),
                                                      ignoringEligibility: true)
         else { return }
-        
+
         resourceManager.verifyResources(for: specialCollections)
     }
 }

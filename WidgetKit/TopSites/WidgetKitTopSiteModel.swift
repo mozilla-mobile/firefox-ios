@@ -10,9 +10,9 @@ struct WidgetKitTopSiteModel: Codable {
     var faviconUrl: String
     var url: URL
     var imageKey: String
-    
+
     static let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-    
+
     static func save(widgetKitTopSites: [WidgetKitTopSiteModel]) {
         userDefaults.removeObject(forKey: PrefsKeys.WidgetKitSimpleTopTab)
         let encoder = JSONEncoder()
@@ -20,7 +20,7 @@ struct WidgetKitTopSiteModel: Codable {
             userDefaults.set(encoded, forKey: PrefsKeys.WidgetKitSimpleTopTab)
         }
     }
-    
+
     static func get() -> [WidgetKitTopSiteModel] {
         if let topSites = userDefaults.object(forKey: PrefsKeys.WidgetKitSimpleTopTab) as? Data {
             do {

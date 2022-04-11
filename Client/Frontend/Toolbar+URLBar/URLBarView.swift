@@ -160,7 +160,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         searchIconImageView.clipsToBounds = true
         return searchIconImageView
     }()
-    
+
     var appMenuButton = ToolbarButton()
     var bookmarksButton = ToolbarButton()
     var homeButton = ToolbarButton()
@@ -195,7 +195,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
     private var isBottomSearchBar: Bool {
         BrowserViewController.foregroundBVC().isBottomSearchBar
     }
-    
+
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
@@ -219,7 +219,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
 
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
-        
+
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
          homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton,
          multiStateButton, locationContainer, searchIconImageView].forEach {
@@ -227,7 +227,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
 
         updateSearchEngineImage()
-        
+
         privateModeBadge.add(toParent: self)
         appMenuBadge.add(toParent: self)
         warningMenuBadge.add(toParent: self)
@@ -267,7 +267,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         searchIconImageView.snp.remakeConstraints { make in
             let heightMin = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
             make.height.greaterThanOrEqualTo(heightMin)
@@ -299,7 +299,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         addNewTabButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.tabsButton.snp.leading)
             make.centerY.equalTo(self)
@@ -317,7 +317,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         privateModeBadge.layout(onButton: tabsButton)
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
@@ -606,7 +606,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             $0.badge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
             $0.backdrop.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : BadgeWithBackdrop.backdropAlpha
         }
-        
+
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
@@ -730,7 +730,7 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
         let state = locationView.reloadButton.isHidden ? .reload : locationView.reloadButton.reloadButtonState
-        
+
         switch state {
         case .reload:
             delegate?.urlBarDidPressReload(self)
@@ -841,7 +841,7 @@ extension URLBarView: PrivateModeUI {
         if UIDevice.current.userInterfaceIdiom != .pad {
             privateModeBadge.show(isPrivate)
         }
-        
+
         locationActiveBorderColor = UIColor.theme.urlbar.activeBorder(isPrivate)
         progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start(isPrivate), endColor: UIColor.theme.loadingBar.end(isPrivate))
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)

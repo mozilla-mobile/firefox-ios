@@ -60,22 +60,22 @@ extension String {
 // MARK: - Bookmarks Menu
 extension String {
     public struct Bookmarks {
-        
+
         public struct Actions {
             public static let Add = MZLocalizedString("Bookmarks.Actions.Add", value: "Add", comment: "A label indicating the action of adding a web page as a bookmark.", lastUpdated: .v96)
             public static let BookmarkAllTabs = MZLocalizedString("Bookmarks.Actions.BookmarkAllTabs", value: "Bookmark All Tabs", comment: "A label indicating the action of bookmarking all currently open non private tabs.", lastUpdated: .v96)
             public static let BookmarkCurrentTab = MZLocalizedString("Bookmarks.Actions.BookmarkCurrentTab", value: "Bookmark Current Tab", comment: "A label indicating the action of bookmarking the current tab.", lastUpdated: .v96)
         }
-        
+
         public struct Menu {
             public static let DesktopBookmarks = MZLocalizedString("Bookmarks.Menu.DesktopBookmarks", value: "Desktop Bookmarks", comment: "A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'.", lastUpdated: .v96)
             public static let RecentlyBookmarked = MZLocalizedString("Bookmarks.Menu.RecentlyBookmarked", value: "Recently Bookmarked", comment: "A label indicating all bookmarks that were recently added.", lastUpdated: .v96)
         }
-        
+
         public struct Search {
             public static let SearchBookmarks = MZLocalizedString("Bookmarks.Search.SearchBookmarks", value: "Search Bookmarks", comment: "A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks.", lastUpdated: .v96)
         }
-        
+
     }
 }
 
@@ -105,26 +105,26 @@ extension String {
 // MARK: - Contextual Hints
 extension String {
     public struct ContextualHints {
-        
+
         public struct FirefoxHomepage {
             public struct JumpBackIn {
                 public static let PersonalizedHome = MZLocalizedString("ContextualHints.Homepage.PersonalizedHome", value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.", lastUpdated: .v39)
             }
         }
-        
+
         public struct TabsTray {
             public struct InactiveTabs {
                 public static let Action = MZLocalizedString("ContextualHints.TabTray.InactiveTabs.CallToAction", value: "Turn off in settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.", lastUpdated: .v39)
                 public static let Body = MZLocalizedString("ContextualHints.TabTray.InactiveTabs", value: "Tabs you haven’t viewed for two weeks get moved here.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.", lastUpdated: .v39)
             }
         }
-        
+
         public struct Toolbar {
             public static let SearchBarPlacementForNewUsers = MZLocalizedString("ContextualHint.SearchBarPlacement.NewUsers", value: "To make entering info easier, the toolbar is now at the bottom by default.", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device.", lastUpdated: .v98)
             public static let SearchBarPlacementForExistingUsers = MZLocalizedString("ContextualHint.SearchBarPlacement.ExistingUsers", value: "Now you can move the toolbar to the bottom, so it’s easier to enter info", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen.", lastUpdated: .v98)
             public static let SearchBarPlacementButtonText = MZLocalizedString("ContextualHints.SearchBarPlacement.CallToAction", value: "Toolbar Settings", comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar.", lastUpdated: .v98)
         }
-        
+
     }
 }
 
@@ -213,7 +213,7 @@ extension String {
         public static let UndoCloseTab = MZLocalizedString("Keyboard.Shortcuts.UndoCloseTab", value: "Undo Close Tab", comment: "A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v97)
         public static let ZoomIn = MZLocalizedString("Keyboard.Shortcuts.ZoomIn", value: "Zoom In", comment: "A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
         public static let ZoomOut = MZLocalizedString("Keyboard.Shortcuts.ZoomOut", value: "Zoom Out", comment: "A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
-        
+
         public struct Sections {
             public static let Bookmarks = MZLocalizedString("Keyboard.Shortcuts.Section.Bookmark", value: "Bookmarks", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
             public static let Edit = MZLocalizedString("Keyboard.Shortcuts.Section.Edit", value: "Edit", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
@@ -223,7 +223,7 @@ extension String {
             public static let View = MZLocalizedString("Keyboard.Shortcuts.Section.View", value: "View", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
             public static let Window = MZLocalizedString("Keyboard.Shortcuts.Section.Window", value: "Window", comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.", lastUpdated: .v96)
         }
-        
+
     }
 }
 
@@ -231,7 +231,7 @@ extension String {
 extension String {
     /// Identifiers of all new strings should begin with `LibraryPanel.{PanelName}.`
     public struct LibraryPanel {
-        
+
         public struct Sections {
             public static let Today = MZLocalizedString("Today", value: "Today", comment: "This label is meant to signify the section containing a group of items from the current day.", lastUpdated: .unknown)
             public static let Yesterday = MZLocalizedString("Yesterday", value: "Yesterday", comment: "This label is meant to signify the section containing a group of items from the past 24 hours.", lastUpdated: .unknown)
@@ -289,13 +289,13 @@ extension String {
         public struct About {
             public static let RateOnAppStore = MZLocalizedString("Ratings.Settings.RateOnAppStore", value: "Rate on App Store", comment: "A label indicating the action that a user can rate the Firefox app in the App store.", lastUpdated: .v96)
         }
-        
+
         public struct SectionTitles {
             public static let TabsTitle = MZLocalizedString("Settings.Tabs.Title", value: "Tabs", comment: "In the settings menu, this is the title for the Tabs customization section option", lastUpdated: .v39)
         }
-        
+
         public struct Homepage {
-            
+
             public struct CustomizeFirefoxHome {
                 public static let JumpBackIn = MZLocalizedString("Settings.Home.Option.JumpBackIn", value: "Jump Back In", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off", lastUpdated: .v39)
                 public static let RecentlyVisited = MZLocalizedString("Settings.Home.Option.RecentlyVisited", value: "Recently Visited", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off", lastUpdated: .v39)
@@ -317,7 +317,7 @@ extension String {
                 public static let Rows = MZLocalizedString("Settings.Homepage.Shortcuts.Rows.v100", value: "Rows", comment: "This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section", lastUpdated: .v100)
                 public static let RowsPageTitle = MZLocalizedString("Settings.Homepage.Shortcuts.RowsPageTitle.v100", value: "Rows", comment: "This string is the title of the page to customize the number of rows in the shortcuts section", lastUpdated: .v100)
             }
-            
+
             public struct StartAtHome {
                 public static let SectionTitle = MZLocalizedString("Settings.Home.Option.StartAtHome.Title", value: "Opening screen", comment: "Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage.", lastUpdated: .v39)
                 public static let SectionDescription = MZLocalizedString("Settings.Home.Option.StartAtHome.Description", value: "Choose what you see when you return to Firefox.", comment: "In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do.", lastUpdated: .v39)
@@ -325,14 +325,14 @@ extension String {
                 public static let Always = MZLocalizedString("Settings.Home.Option.StartAtHome.Always", value: "Homepage", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox", lastUpdated: .v39)
                 public static let Never = MZLocalizedString("Settings.Home.Option.StartAtHome.Never", value: "Last tab", comment: "In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox", lastUpdated: .v39)
             }
-            
+
             public struct Wallpaper {
                 public static let PageTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.Title", value: "Wallpaper", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application.", lastUpdated: .v98)
                 public static let CollectionTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.CollectionTitle", value: "OPENING SCREEN", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application.", lastUpdated: .v98)
                 public static let SwitchTitle = MZLocalizedString("Settings.Home.Option.Wallpaper.SwitchTitle.v99", value: "Change wallpaper by tapping Firefox homepage logo", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off.", lastUpdated: .v99)
                 public static let WallpaperUpdatedToastLabel = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToast", value: "Wallpaper Updated!", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated.", lastUpdated: .v98)
                 public static let WallpaperUpdatedToastButton = MZLocalizedString("Settings.Home.Option.Wallpaper.UpdatedToastButton", value: "View", comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper.", lastUpdated: .v98)
-                
+
                 // Accessibility
                 public struct AccessibilityLabels {
                     public static let FxHomepageWallpaperButton = MZLocalizedString("FxHomepage.Wallpaper.ButtonLabel.v99", value: "Firefox logo, change the wallpaper.", comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper", lastUpdated: .v99)
@@ -344,19 +344,19 @@ extension String {
                 }
             }
         }
-        
+
         public struct Tabs {
             public static let TabsSectionTitle = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.Title", value: "Customize Tab Tray", comment: "In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage", lastUpdated: .v39)
             public static let InactiveTabs = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.InactiveTabs", value: "Inactive Tabs", comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off", lastUpdated: .v39)
             public static let TabGroups = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.TabGroups", value: "Tab Groups", comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off", lastUpdated: .v39)
         }
-        
+
         public struct Toolbar {
             public static let Toolbar = MZLocalizedString("Settings.Toolbar.SettingsTitle", value: "Toolbar", comment: "In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance.", lastUpdated: .v98)
             public static let Top = MZLocalizedString("Settings.Toolbar.Top", value: "Top", comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen.", lastUpdated: .v98)
             public static let Bottom = MZLocalizedString("Settings.Toolbar.Bottom", value: "Bottom", comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.", lastUpdated: .v98)
         }
-        
+
         public struct Toggle {
             public static let NoImageMode = MZLocalizedString("Settings.NoImageModeBlockImages.Label.v99", value: "Block Images", comment: "Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits.", lastUpdated: .v99)
         }
@@ -369,7 +369,6 @@ extension String {
 
     }
 }
-
 
 // MARK: - Switch Default Browser Screen
 extension String {
@@ -419,14 +418,12 @@ extension String {
     }
 }
 
-
 // MARK: - Strings: unorganized & unchecked for use
 // Here we have the original strings. What follows below is unorganized. As
 // the team continues to work on new updates to strings, or to work on a view,
 // these strings should be checked if in use, still. If not, they should be
 // removed; if used, they should be added to the organized section of this
 // file, for easier classification and use.
-
 
 // MARK: - General
 extension String {
@@ -1356,7 +1353,6 @@ extension String {
     public static let OpenFirefoxLabel = MZLocalizedString("TodayWidget.OpenFirefoxLabel", tableName: "Today", value: "Open Firefox", comment: "Open Firefox when there are no tabs opened in tab tray i.e. Empty State", lastUpdated: .unknown)
     public static let NoOpenTabsLabel = MZLocalizedString("TodayWidget.NoOpenTabsLabel", tableName: "Today", value: "No open tabs.", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State", lastUpdated: .unknown)
     public static let NoOpenTabsLabelV2 = MZLocalizedString("TodayWidget.NoOpenTabsLabelV2", tableName: "Today", value: "No Open Tabs", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State", lastUpdated: .unknown)
-
 
     // Quick View Open Tabs - Medium Size - Gallery View
     public static let QuickViewGalleryTitle = MZLocalizedString("TodayWidget.QuickViewGalleryTitle", tableName: "Today", value: "Quick View", comment: "Title for Quick View widget in Gallery View where user can add it to home screen", lastUpdated: .unknown)

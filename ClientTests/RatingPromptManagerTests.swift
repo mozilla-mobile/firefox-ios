@@ -285,7 +285,7 @@ class CumulativeDaysOfUseCounterMock: CumulativeDaysOfUseCounter {
 // MARK: - CrashingMockSentryClient
 class CrashingMockSentryClient: SentryProtocol {
     var enableCrashOnLastLaunch = false
-    
+
     var crashedLastLaunch: Bool {
         return enableCrashOnLastLaunch
     }

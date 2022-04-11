@@ -24,7 +24,7 @@ class HistoryHighlightsTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        
+
         profile._shutdown()
         profile = nil
         tabManager = nil
@@ -206,7 +206,6 @@ class HistoryHighlightsTests: XCTestCase {
 
         waitForExpectations(timeout: 5, handler: nil)
     }
-
 
     // MARK: - Helper functions
 

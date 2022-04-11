@@ -19,17 +19,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
     }
-    
+
     func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.reload()
     }
-    
+
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard let tab = tabManager.selectedTab else { return }
-        
+
         let urlActions = self.getRefreshLongPressMenu(for: tab)
         guard !urlActions.isEmpty else { return }
-        
+
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
@@ -38,11 +38,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let viewModel = PhotonActionSheetViewModel(actions: [urlActions], closeButtonTitle: .CloseButtonTitle, modalStyle: style)
         presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
-    
+
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.stop()
     }
-    
+
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.goBack()
     }
@@ -70,7 +70,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             showLibrary(panel: .bookmarks)
         }
     }
-    
+
     func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))

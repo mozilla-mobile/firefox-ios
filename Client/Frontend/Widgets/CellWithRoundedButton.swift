@@ -4,7 +4,6 @@
 
 import Foundation
 
-
 struct CellWithRoundedButtonUX {
     static let ImageSize: CGFloat = 29
     static let ImageCornerRadius: CGFloat = 6
@@ -24,7 +23,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
     private let selectedView: UIView = .build { view in
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
     }
-    
+
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
@@ -48,7 +47,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -56,10 +55,10 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
     func initialViewSetup() {
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         self.selectionStyle = .default
-        
+
         contentView.addSubview(roundedButton)
         roundedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
-        
+
         let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
         let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
 
@@ -74,19 +73,19 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
         selectedBackgroundView = selectedView
         applyTheme()
     }
-    
+
     func applyTheme() {
         selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         self.backgroundColor = .clear
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         applyTheme()
     }
-    
+
     @objc func buttonPressed() {
         self.buttonClosure?()
     }

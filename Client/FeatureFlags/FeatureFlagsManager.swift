@@ -24,6 +24,7 @@ enum FeatureFlagName: String, CaseIterable {
     case historyGroups
     case inactiveTabs
     case jumpBackIn
+    case useMockData
     case nimbus
     case pocket
     case pullToRefresh
@@ -137,7 +138,7 @@ class FeatureFlagsManager {
                                                and: profile,
                                                enabledFor: [.release, .beta, .developer])
         features[.bottomSearchBar] = bottomSearchBar
-        
+
         let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
                                          and: profile,
                                          enabledFor: [])
@@ -163,6 +164,11 @@ class FeatureFlagsManager {
                                           enabledFor: [.release, .beta, .developer])
         features[.jumpBackIn] = jumpBackIn
 
+        let useMockData = FlaggableFeature(withID: .useMockData,
+                                           and: profile,
+                                           enabledFor: [.developer])
+        features[.useMockData] = useMockData
+
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
         let nimbus = FlaggableFeature(withID: .nimbus,
@@ -174,7 +180,6 @@ class FeatureFlagsManager {
                                       and: profile,
                                       enabledFor: [.release, .beta, .developer])
         features[.pocket] = pocket
-
 
         let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
                                              and: profile,
@@ -206,7 +211,7 @@ class FeatureFlagsManager {
                                            and: profile,
                                            enabledFor: [.release, .beta, .developer])
         features[.startAtHome] = startAtHome
-        
+
         let tabTrayGroups = FlaggableFeature(withID: .tabTrayGroups,
                                            and: profile,
                                            enabledFor: [.developer])

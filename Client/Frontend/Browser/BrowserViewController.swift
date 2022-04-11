@@ -278,7 +278,7 @@ class BrowserViewController: UIViewController {
 
         } else if showTopTabs, topTabsViewController != nil {
             topTabsViewController?.applyTheme()
-            
+
         } else {
             if let topTabsView = topTabsViewController?.view {
                 header.removeArrangedView(topTabsView)
@@ -1484,7 +1484,7 @@ class BrowserViewController: UIViewController {
             and: tabManager,
             delegate: self,
             deeplinkingTo: destination)
-        
+
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.presentingModalViewControllerDelegate = self
         presentWithModalDismissIfNeeded(controller, animated: true)
@@ -1802,7 +1802,7 @@ extension BrowserViewController: HomePanelDelegate {
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
-        
+
         let searchData = TabGroupData(searchTerm: searchTerm ?? "",
                                       searchUrl: url.absoluteString,
                                       nextReferralUrl: "")

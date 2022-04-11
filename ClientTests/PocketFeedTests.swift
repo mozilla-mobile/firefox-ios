@@ -40,19 +40,20 @@ class PocketStoriesTests: XCTestCase {
     func testPocketStoriesCaching() {
         let expect = expectation(description: "Pocket")
         let PocketFeed = Pocket(endPoint: pocketAPI)
+        let feedNumber = 11
 
-        PocketFeed.globalFeed(items: 4).upon { result in
+        PocketFeed.globalFeed(items: feedNumber).upon { result in
             let items = result
-            XCTAssertEqual(items.count, 2, "We are fetching a static feed. There are only 2 items in it")
+            XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
             self.webServer.stop() // Stop the webserver so we can check caching
 
             // Try again now that the webserver is down
-            PocketFeed.globalFeed(items: 4).upon { result in
+            PocketFeed.globalFeed(items: feedNumber).upon { result in
                 let items = result
-                XCTAssertEqual(items.count, 2, "We are fetching a static feed. There are only 2 items in it")
+                XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
                 let item = items.first
-                //These are all not optional so they should never be nil.
-                //But lets check in case someone decides to change something
+                // These are all not optional so they should never be nil.
+                // But lets check in case someone decides to change something
                 XCTAssertNotNil(item?.domain, "Why")
                 XCTAssertNotNil(item?.imageURL, "You")
                 XCTAssertNotNil(item?.storyDescription, "Do")

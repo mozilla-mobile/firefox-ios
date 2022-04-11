@@ -8,25 +8,22 @@ import Foundation
 import Storage
 
 class GroupedHistoryItemsViewModel {
-    
+
     // MARK: - Properties
-    
+
     var asGroup: ASGroup<Site>
-    
+
     // UI
     let notifications = [Notification.Name.DisplayThemeChanged]
-    
-    
+
     // MARK: - Inits
-    
+
     init(asGroup: ASGroup<Site>) {
         self.asGroup = asGroup
     }
-    
-    
+
     // MARK: - Lifecycles
-    
-    
+
     // MARK: - Misc helpers
-    
+
 }

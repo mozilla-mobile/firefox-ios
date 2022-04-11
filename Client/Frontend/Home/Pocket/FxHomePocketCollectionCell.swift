@@ -102,11 +102,11 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
               let viewModel = viewModel, let onLongPressTileAction = viewModel.onLongPressTileAction
         else { return }
 
-        let parentIndexPath = IndexPath(row: indexPath.row, section: viewModel.pocketShownInSection)
-        onLongPressTileAction(parentIndexPath)
+        let site = viewModel.getSitesDetail(for: indexPath.row)
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        onLongPressTileAction(site, sourceView)
     }
 }
-
 
 // MARK: - UICollectionViewDataSource
 extension FxHomePocketCollectionCell: UICollectionViewDataSource {
@@ -150,7 +150,6 @@ extension FxHomePocketCollectionCell: UICollectionViewDelegate {
     }
 }
 
-
 // MARK: - FxHomePocketDiscoverMoreCell
 /// A cell to be placed at the last position in the Pocket section
 class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
@@ -166,7 +165,7 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: .zero)

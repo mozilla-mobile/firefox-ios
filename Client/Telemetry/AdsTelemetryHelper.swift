@@ -23,7 +23,7 @@ public struct SearchProviderModel {
     let codePrefixes: [String]
     let followOnParams: [String]
     let extraAdServersRegexps: [String]
-    
+
     public static let searchProviderList = [
         SearchProviderModel(
             name: BasicSearchProvider.google.rawValue,
@@ -91,13 +91,13 @@ extension SearchProviderModel {
                 adUrls.append(url)
             }
         }
-        
+
         return adUrls
     }
 }
 
 class AdsTelemetryHelper: TabContentScript {
-    
+
     fileprivate weak var tab: Tab?
 
     class func name() -> String {
@@ -125,23 +125,23 @@ class AdsTelemetryHelper: TabContentScript {
             tab?.adsTelemetryRedirectUrlList.removeAll()
         }
     }
-    
+
     private func getProviderForMessage(message: WKScriptMessage) -> SearchProviderModel? {
         guard let body = message.body as? [String: Any], let url = body["url"] as? String else { return nil }
         for provider in SearchProviderModel.searchProviderList {
             guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
             return provider
         }
-        
+
         return nil
     }
-    
+
     // Tracking
-    
+
     public static func trackAdsFoundOnPage(providerName: String) {
         GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
     }
-    
+
     public static func trackAdsClickedOnPage(providerName: String) {
         GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
     }

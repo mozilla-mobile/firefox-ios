@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 public extension String {
-    
+
     //Returns hostname from URL
     var titleFromHostname: String {
         guard let displayName = self.asURL?.host  else { return self }
@@ -15,7 +15,7 @@ public extension String {
             .replacingOccurrences(of: "^https://", with: "", options: .regularExpression)
             .replacingOccurrences(of: "^www\\d*\\.", with: "", options: .regularExpression)
     }
-    
+
     func escape() -> String? {
         // We can't guaruntee that strings have a valid string encoding, as this is an entry point for tainted data,
         // we should be very careful about forcefully dereferencing optional types.
@@ -109,7 +109,7 @@ public extension String {
 
         return self.replacingCharacters(in: range, with: replacement)
     }
-    
+
     func isEmptyOrWhitespace() -> Bool {
         // Check empty string
         if self.isEmpty {
@@ -118,7 +118,7 @@ public extension String {
         // Trim and check empty string
         return (self.trimmingCharacters(in: .whitespaces) == "")
     }
-    
+
     /// Handles logic to make part of string bold
     /// - Parameters:
     ///     - boldString: the portion of the string that should be bold. Current string must already include this string.
