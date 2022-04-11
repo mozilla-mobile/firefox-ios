@@ -69,6 +69,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     var isInactiveViewExpanded: Bool = false
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
+    var refreshStoreOperation: (() -> Void)?
     weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
     var tabDisplayType: TabDisplayType = .TabGrid
     fileprivate let tabManager: TabManager
@@ -79,6 +80,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     var profile: Profile
     var cfrDelegate: InactiveTabsCFRProtocol?
     private var nimbus: FxNimbus?
+    var notificationCenter: NotificationCenter
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
@@ -185,9 +187,10 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
         self.profile = profile
         self.cfrDelegate = cfrDelegate
         self.nimbus = nimbus
+        self.notificationCenter = NotificationCenter.default
 
         super.init()
-
+        setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
         self.inactiveViewModel = InactiveTabViewModel()
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL, .didSetScreenshot)
@@ -457,6 +460,10 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
             ]
             TelemetryWrapper.recordEvent(category: .action, method: .view, object: .tabTray, value: .tabGroupWithExtras, extras: groupTabExtras)
         }
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 }
 
@@ -854,6 +861,12 @@ extension TabDisplayManager: TabEventHandler {
         let isSelected = tab == tabManager.selectedTab
         cell.configureWith(tab: tab, isSelected: isSelected)
     }
+
+    func removeAllTabsFromView() {
+        operations.removeAll()
+        dataStore.removeAll()
+        collectionView.reloadData()
+    }
 }
 
 extension TabDisplayManager: TabManagerDelegate {
@@ -977,6 +990,20 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         cancelDragAndGestures()
+    }
+}
+
+extension TabDisplayManager: Notifiable {
+
+    // MARK: - Notifiable protocol
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DidTapUndoCloseAllTabToast:
+            refreshStore()
+            collectionView.reloadData()
+        default:
+            break
+        }
     }
 }
 

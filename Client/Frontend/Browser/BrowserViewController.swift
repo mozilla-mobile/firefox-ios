@@ -1150,11 +1150,12 @@ class BrowserViewController: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let webView = object as? WKWebView, let tab = tabManager[webView] else {
-            assert(false)
             return
         }
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
-            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
+            Sentry.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
+                               severity: .error,
+                               description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
 
@@ -1636,12 +1637,14 @@ extension BrowserViewController: TabDelegate {
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
-        tab.cancelQueuedAlerts()
-        KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
-        webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
-        webView.uiDelegate = nil
-        webView.scrollView.delegate = nil
-        webView.removeFromSuperview()
+        DispatchQueue.main.async { [unowned self] in
+            tab.cancelQueuedAlerts()
+            KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
+            webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
+            webView.uiDelegate = nil
+            webView.scrollView.delegate = nil
+            webView.removeFromSuperview()
+        }
     }
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
@@ -2026,6 +2029,10 @@ extension BrowserViewController: TabManagerDelegate {
             urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
             topTabsViewController?.updateTabCount(count, animated: animated)
         }
+    }
+
+    @objc func tabManagerUpdateCount() {
+        updateTabCountUsingTabManager(self.tabManager)
     }
 }
 

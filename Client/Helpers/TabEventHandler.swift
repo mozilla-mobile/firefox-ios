@@ -158,7 +158,6 @@ extension TabEvent {
 
     /// Use this method to post notifications to any concerned listeners.
     static func post(_ event: TabEvent, for tab: Tab) {
-        assert(Thread.isMainThread)
         center.post(event.notification(for: tab))
     }
 }

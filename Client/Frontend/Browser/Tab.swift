@@ -470,6 +470,10 @@ class Tab: NSObject {
     }
 
     deinit {
+        webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
+        webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
+        webView?.navigationDelegate = nil
+
         debugTabCount -= 1
 
         #if DEBUG
