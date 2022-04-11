@@ -42,6 +42,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistoryHelper
     var keyboardState: KeyboardState?
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -323,12 +324,19 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         cell.descriptionLabel.isHidden = false
         cell.leftImageView.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
         cell.leftImageView.layer.borderWidth = HistoryPanelUX.IconBorderWidth
-        cell.leftImageView.contentMode = .center
-        cell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-            cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+        cell.leftImageView.contentMode = .scaleAspectFit
+        getFavIcon(for: site) { [weak cell] image in
+            cell?.leftImageView.image = image
+            cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
         }
 
         return cell
+    }
+
+    private func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
+        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
+            completion(image)
+        }
     }
 
     private func configureASGroupCell(_ asGroup: ASGroup<Site>, _ cell: TwoLineImageOverlayCell) -> TwoLineImageOverlayCell {
