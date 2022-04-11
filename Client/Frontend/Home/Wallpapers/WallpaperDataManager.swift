@@ -151,6 +151,15 @@ struct WallpaperDataManager {
 
         specialCollections.append(projectHouse)
 
+        let v100Celebration = WallpaperCollection(
+            wallpaperFileNames: [WallpaperID(name: "beachVibes",
+                                             accessibilityLabel: accessibilityIDs.FxBeachHillsWallpaper),
+                                 WallpaperID(name: "twilightHills",
+                                             accessibilityLabel: accessibilityIDs.FxTwilightHillsWallpaper)],
+            ofType: .themed(type: .v100Celebration))
+
+        specialCollections.append(v100Celebration)
+
         return specialCollections.isEmpty ? nil : specialCollections
     }
 

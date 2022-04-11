@@ -56,6 +56,7 @@ class WallpaperResourceManager {
         case .themed(type: .firefox): return verify(.bundled, for: wallpaper)
         case .themed(type: .firefoxOverlay): return verify(.bundled, for: wallpaper)
         case .themed(type: .projectHouse): return verify(.downloaded, for: wallpaper)
+        case .themed(type: .v100Celebration): return verify(.downloaded, for: wallpaper)
         }
     }
 
@@ -67,7 +68,8 @@ class WallpaperResourceManager {
                 .themed(type: .firefox),
                 .themed(type: .firefoxOverlay):
             return getResourceOf(type: .bundled, for: wallpaper)
-        case .themed(type: .projectHouse):
+        case .themed(type: .projectHouse),
+                .themed(type: .v100Celebration):
             return getResourceOf(type: .downloaded, for: wallpaper)
         }
     }
