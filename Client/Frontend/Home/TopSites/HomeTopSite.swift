@@ -49,7 +49,7 @@ final class HomeTopSite {
                                   shouldFallback: false) { image in
 
             self.image = image
-            self.imageLoaded?(self.image)
+            self.imageLoaded?(image)
         }
     }
 }

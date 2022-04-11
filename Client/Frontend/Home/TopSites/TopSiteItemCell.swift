@@ -141,10 +141,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             // Checks to assign image to correct cell when reusing a cell
             guard topSite.identifier == self.homeTopSite?.identifier else { return }
 
-            DispatchQueue.main.async {
-                self.imageView.image = image
-                self.applyTheme()
-            }
+            self.imageView.image = image
+            self.applyTheme()
         }
 
         configurePinnedSite(topSite)
