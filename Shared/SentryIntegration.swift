@@ -24,14 +24,14 @@ public protocol SentryProtocol {
     var crashedLastLaunch: Bool { get }
 }
 
-public class Sentry: SentryProtocol {
-
+public class SentryIntegration: SentryProtocol {
+    
     enum Environment: String {
         case nightly = "Nightly"
         case production = "Production"
     }
-
-    public static let shared = Sentry()
+    
+    public static let shared = SentryIntegration()
 
     private let SentryDSNKey = "SentryCloudDSN"
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
@@ -127,28 +127,21 @@ public class Sentry: SentryProtocol {
         SentrySDK.capture(error: error)
     }
 
-    public func send(message: String, tag: SentryTag = .general, severity: SentryLevel = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
-        // Build the dictionary
-        var extraEvents: [String: Any] = [:]
-        if let paramEvents = extra {
-            extraEvents = extraEvents.merge(with: paramEvents)
-        }
-        if let extraString = description {
-            extraEvents = extraEvents.merge(with: ["errorDescription": extraString])
-        }
-        printMessage(message: message, extra: extraEvents)
-
-        // Only report fatal - errors on release
-        guard shouldSendEventFor(severity) else {
-            completion?(nil)
-            return
-        }
-
-        let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
-        captureEvent(event: event)
+    public func send(message: String,
+                     tag: SentryTag = .general,
+                     severity: SentryLevel = .info,
+                     extra: [String: Any]? = nil,
+                     description: String? = nil,
+                     completion: SentryRequestFinished? = nil) {
+        sendWithStacktrace(message: message, tag: tag, severity: severity, extra: extra, description: description, completion: completion)
     }
 
-    public func sendWithStacktrace(message: String, tag: SentryTag = .general, severity: SentryLevel = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
+    public func sendWithStacktrace(message: String,
+                                   tag: SentryTag = .general,
+                                   severity: SentryLevel = .info,
+                                   extra: [String: Any]? = nil,
+                                   description: String? = nil,
+                                   completion: SentryRequestFinished? = nil) {
         var extraEvents: [String: Any] = [:]
         if let paramEvents = extra {
             extraEvents = extraEvents.merge(with: paramEvents)
@@ -185,10 +178,10 @@ public class Sentry: SentryProtocol {
                    .info .error .severe
          Debug      n      n       n
          Beta       y      y       y
-         Release    n      y       y
+         Release    n      n       y
      */
     private func shouldSendEventFor(_ severity: SentryLevel) -> Bool {
-        let shouldSendRelease = AppConstants.BuildChannel == .release && severity.rawValue >= SentryLevel.error.rawValue
+        let shouldSendRelease = AppConstants.BuildChannel == .release && severity.rawValue >= SentryLevel.fatal.rawValue
         let shouldSendBeta = AppConstants.BuildChannel == .beta && severity.rawValue >= SentryLevel.info.rawValue
 
         return shouldSendBeta || shouldSendRelease
