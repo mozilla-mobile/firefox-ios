@@ -1,5 +1,5 @@
 ---
-homescreen:
+homescreenFeature:
   description: The homescreen that the user goes to when they press home or new tab.
   hasExposure: true
   exposureDescription: ""
@@ -25,8 +25,8 @@ messaging:
       type: string
       description: What should be displayed when a control message is selected.
       enum:
-        - show-next-message
         - show-none
+        - show-next-message
     styles:
       type: json
       description: "A map of styles to configure message appearance.\n"
