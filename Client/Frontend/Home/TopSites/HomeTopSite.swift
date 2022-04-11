@@ -47,7 +47,6 @@ final class HomeTopSite {
         imageHelper.fetchImageFor(site: site,
                                   imageType: .favicon,
                                   shouldFallback: false) { image in
-
             self.image = image
             self.imageLoaded?(image)
         }

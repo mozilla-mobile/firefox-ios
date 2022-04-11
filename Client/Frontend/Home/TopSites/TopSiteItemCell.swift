@@ -140,9 +140,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         topSite.imageLoaded = { image in
             // Checks to assign image to correct cell when reusing a cell
             guard topSite.identifier == self.homeTopSite?.identifier else { return }
-
             self.imageView.image = image
-            self.applyTheme()
         }
 
         configurePinnedSite(topSite)
