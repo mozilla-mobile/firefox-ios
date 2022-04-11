@@ -131,4 +131,14 @@ public extension String {
         attributedString.addAttributes(boldFontAttribute, range: range)
         return attributedString
     }
+
+    // Capitalize first letter of a string
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    // Capitalize first letter of a string in place
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
 }
