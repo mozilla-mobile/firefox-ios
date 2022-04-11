@@ -57,7 +57,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     var isFetchInProgress = false
     var isSearchInProgress = false
     var groupedSites = DateGroupedTableData<Site>()
-    var filterMockSites = [Site]()
+    var searchResultSites = [Site]()
     var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
 
     private var hasRecentlyClosed: Bool {
@@ -69,7 +69,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
 
     var shouldShowEmptyState: Bool {
-        return isSearchInProgress ? filterMockSites.isEmpty : groupedSites.isEmpty
+        return isSearchInProgress ? searchResultSites.isEmpty : groupedSites.isEmpty
     }
 
     let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
@@ -123,14 +123,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         profile.history.getHistory(matching: term,
                                    limit: searchQueryFetchLimit,
                                    offset: searchCurrentFetchOffset) { results in
-            guard !results.isEmpty else {
-                completion(false)
-                return
-            }
-
             self.isFetchInProgress = false
-            self.filterMockSites = results
-            completion(true)
+            self.searchResultSites = results
+            completion(!results.isEmpty)
         }
     }
 

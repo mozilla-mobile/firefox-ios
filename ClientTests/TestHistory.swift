@@ -76,6 +76,104 @@ class TestHistory: ProfileTest {
         }
     }
 
+    func testSearchHistory_WithResults() {
+        let expectation = self.expectation(description: "Wait for search history")
+        let mockProfile = MockProfile()
+        mockProfile._reopen()
+        let history = mockProfile.history
+
+        let clearTest = {
+            self.clear(history)
+            mockProfile._shutdown()
+        }
+
+        self.addSite(history, url: "http://amazon.com/", title: "Amazon")
+        self.addSite(history, url: "http://mozilla.org/", title: "Mozilla")
+        self.addSite(history, url: "https://apple.com/", title: "Apple")
+        self.addSite(history, url: "https://apple.developer.com/", title: "Apple Developer")
+
+        history.getHistory(matching: "App", limit: 25, offset: 0) { results in
+            XCTAssertEqual(results.count, 2)
+            expectation.fulfill()
+            clearTest()
+        }
+
+        self.waitForExpectations(timeout: 100, handler: nil)
+    }
+
+    func testSearchHistory_WithResultsByTitle() {
+        let expectation = self.expectation(description: "Wait for search history")
+        let mockProfile = MockProfile()
+        mockProfile._reopen()
+        let history = mockProfile.history
+
+        let clearTest = {
+            self.clear(history)
+            mockProfile._shutdown()
+        }
+
+        self.addSite(history, url: "http://amazon.com/", title: "Amazon")
+        self.addSite(history, url: "http://mozilla.org/", title: "Mozilla internet")
+        self.addSite(history, url: "http://mozilla.dev.org/", title: "Internet dev")
+        self.addSite(history, url: "https://apple.com/", title: "Apple")
+
+        history.getHistory(matching: "int", limit: 25, offset: 0) { results in
+            XCTAssertEqual(results.count, 2)
+            expectation.fulfill()
+            clearTest()
+        }
+
+        self.waitForExpectations(timeout: 100, handler: nil)
+    }
+
+    func testSearchHistory_WithResultsByUrl() {
+        let expectation = self.expectation(description: "Wait for search history")
+        let mockProfile = MockProfile()
+        mockProfile._reopen()
+        let history = mockProfile.history
+
+        let clearTest = {
+            self.clear(history)
+            mockProfile._shutdown()
+        }
+
+        self.addSite(history, url: "http://amazon.com/", title: "Amazon")
+        self.addSite(history, url: "http://mozilla.developer.org/", title: "Mozilla")
+        self.addSite(history, url: "https://apple.developer.com/", title: "Apple")
+
+        history.getHistory(matching: "dev", limit: 25, offset: 0) { results in
+            XCTAssertEqual(results.count, 2)
+            expectation.fulfill()
+            clearTest()
+        }
+
+        self.waitForExpectations(timeout: 100, handler: nil)
+    }
+
+    func testSearchHistory_NoResults() {
+        let expectation = self.expectation(description: "Wait for search history")
+        let mockProfile = MockProfile()
+        mockProfile._reopen()
+        let history = mockProfile.history
+
+        let clearTest = {
+            self.clear(history)
+            mockProfile._shutdown()
+        }
+
+        self.addSite(history, url: "http://amazon.com/", title: "Amazon")
+        self.addSite(history, url: "http://mozilla.org/", title: "Mozilla internet")
+        self.addSite(history, url: "https://apple.com/", title: "Apple")
+
+        history.getHistory(matching: "red", limit: 25, offset: 0) { results in
+            XCTAssertEqual(results.count, 0)
+            expectation.fulfill()
+            clearTest()
+        }
+
+        self.waitForExpectations(timeout: 100, handler: nil)
+    }
+
     func testAboutUrls() {
         withTestProfile { (profile) -> Void in
             let h = profile.history

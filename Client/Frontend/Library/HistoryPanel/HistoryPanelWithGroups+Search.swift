@@ -19,7 +19,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchText = searchBar.text, !searchText.isEmpty else {
-            viewModel.filterMockSites.removeAll()
+            viewModel.searchResultSites.removeAll()
             applySearchSnapshot()
             return
         }
@@ -36,8 +36,8 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
     }
 
     func performSearch(term: String) {
-        viewModel.performSearch(term: term.lowercased()) { success in
-            guard success else {
+        viewModel.performSearch(term: term.lowercased()) { hasResults in
+            guard hasResults else {
                 self.handleNoResults()
                 return
             }
@@ -51,7 +51,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         // Create search results snapshot and apply
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
         snapshot.appendSections([HistoryPanelSections.searchResults])
-        snapshot.appendItems(self.viewModel.filterMockSites)
+        snapshot.appendItems(self.viewModel.searchResultSites)
         self.diffableDatasource?.apply(snapshot, animatingDifferences: false)
     }
 
