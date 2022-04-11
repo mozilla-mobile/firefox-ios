@@ -45,7 +45,7 @@ extension GridTabViewController {
 
     @objc func didCloseAllTabsKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-all-tabs"])
-        closeTabsForCurrentTray()
+        closeTabsTrayBackground()
     }
 
     @objc func didEnterTabKeyCommand() {

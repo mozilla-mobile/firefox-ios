@@ -11,7 +11,6 @@ import Shared
 extension SavedTab {
     convenience init?(tab: Tab, isSelected: Bool) {
         assert(Thread.isMainThread)
-
         var sessionData = tab.sessionData
         if sessionData == nil {
             let currentItem: WKBackForwardListItem! = tab.webView?.backForwardList.currentItem
