@@ -72,4 +72,8 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         attributes?.zIndex = SeparatorZIndex
         return attributes
     }
+    
+    override var flipsHorizontallyInOppositeLayoutDirection: Bool {
+        return true
+    }
 }

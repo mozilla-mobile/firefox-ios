@@ -48,7 +48,6 @@ class TopTabsViewController: UIViewController {
         collectionView.bounces = false
         collectionView.clipsToBounds = true
         collectionView.accessibilityIdentifier = "Top Tabs View"
-        collectionView.semanticContentAttribute = .forceLeftToRight
         return collectionView
     }()
 
