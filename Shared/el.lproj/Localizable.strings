@@ -1521,7 +1521,7 @@
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Αντικατάσταση ερωτήματος με %s)";
 
 /* Button in Data Management that clears private data for the selected items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "Απαλοιφή δεδομένων ιστοσελίδων";
+"Settings.ClearAllWebsiteData.Clear.Button" = "Απαλοιφή όλων των δεδομένων ιστοτόπων";
 
 /* Button in settings that clears private data for the selected items. */
 "Settings.ClearPrivateData.Clear.Button" = "Απαλοιφή ιδιωτικών δεδομένων";

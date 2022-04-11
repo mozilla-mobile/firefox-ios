@@ -805,6 +805,9 @@
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Të fshihen krejt sajtet te %@?";
 
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Heq historikun (përfshi historik të njëkohësuar prej pajisjesh të tjera), cookie-t dhe të tjera të dhëna shfletimi.";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "S’u gjet historik";
 
@@ -1361,6 +1364,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Ju lutemi, lejojeni Firefox-in të hyjë te kamera e pajisjes tuaj, që nga ‘Rregullime’ -> ‘Privatësi’ -> ‘Kamera’.";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Kaloni te ‘Rregullime’ pajisjeje > ‘Firefox’. Lejoni Firefox-in të përdorë kamerën.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Skanonin Kodin QR";
 
@@ -1668,8 +1674,17 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Sfond parazgjedhje i qëruar.";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Sfond Firefox-i, mostër agu.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Aktivizim/Çaktivizim cikli sfondesh faqeje hyrëse";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "SKENA HYRËSE";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Ndryshoni sfond duke prekur stemë faqeje hyrëse Firefox";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Sfond";

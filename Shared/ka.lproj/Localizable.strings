@@ -457,6 +457,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "მოცილება";
 
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "დაფინანსებული";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "მომდევნო";
 
@@ -793,6 +796,18 @@
 /* History tableview section header */
 "Last week" = "ბოლო კვირა";
 
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "გაუქმება";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "წაშლა";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "წაიშალოს ყველა, რომელთაც შეიცავს %@?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "წაიშლება ისტორია (მათ შორის, სხვა მოწყობილობიდან დასინქრონებული), ფუნთუშები და მონახულებული გვერდების მონაცემები.";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "ისტორია არაა";
 
@@ -804,6 +819,9 @@
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
 "LibraryPanel.History.SyncedFromOtherDevices.v99" = "სხვა მოწყობილობიდან დასინქრონებული";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "დასინქრონებული ისტორია";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "უფრო ძველი";
@@ -1346,6 +1364,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "გთხოვთ, დართოთ Firefox-ს კამერასთან წვდომის ნება ‘პარამეტრებიდან’-> ‘პირადულობა’ -> ‘კამერა’.";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "გადადით მოწყობილობის „პარამეტრებში“ > „Firefox“. დართეთ Firefox-ს კამერასთან წვდომის ნება.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR კოდის წაკითხვა";
 
@@ -1680,6 +1701,27 @@
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "საწყისი გვერდი";
 
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "რიგი";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "რიგი";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "მალსახმობები";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "მალსახმობები";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "დაფინანსებული მალსახმობები";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "გამორთ.";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "ჩართ.";
+
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "საწყისი გვერდის პარამეტრები";
 
@@ -1696,7 +1738,7 @@
 "Settings.HomePage.UseCurrent.Button" = "მიმდინარე გვერდის გამოყენება";
 
 /* Button in settings to use the default home page. If no default is set, then this button isn't shown. */
-"Settings.HomePage.UseDefault.Button" = "ნაგულისხმების გამოყენება";
+"Settings.HomePage.UseDefault.Button" = "ნაგულისხმევის გამოყენება";
 
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "ანგარიშები და პაროლები";
