@@ -11,7 +11,6 @@ final class HomeTopSite {
     var site: Site
     var title: String
     var image: UIImage?
-    var darkModeBackgroundColor: UIColor = .clear
 
     var isPinned: Bool {
         return (site as? PinnedSite) != nil
@@ -48,14 +47,6 @@ final class HomeTopSite {
         imageHelper.fetchImageFor(site: site,
                                   imageType: .favicon,
                                   shouldFallback: false) { image in
-
-            image?.averageColor() { color in
-                // If a color is perceived as too dark, we put a white background when we're in dark mode
-                guard let color = color, color.luma < 0.2 else { return }
-
-                self.darkModeBackgroundColor = .white
-                self.imageLoaded?(self.image)
-            }
 
             self.image = image
             self.imageLoaded?(self.image)
