@@ -42,7 +42,7 @@ features:
         description: The drawable displayed in the app menu for Settings
         type: String
         default: "menu-Settings"
-  homescreen:
+  homescreenFeature:
     description: The homescreen that the user goes to when they press home or new tab.
     variables:
       sections-enabled:
@@ -51,23 +51,23 @@ features:
         type: Map<HomeScreenSection, Boolean>
         default:
           {
-            "topSites": true,
-            "jumpBackIn": false,
-            "recentlySaved": false,
-            "recentExplorations": false,
+            "top-sites": true,
+            "jump-back-in": true,
+            "recently-saved": true,
+            "recent-explorations": true,
             "pocket": true,
-            "libraryShortcuts": true
+            "library-shortcuts": false
           }
     defaults:
       - channel: developer
         value: {
           "sections-enabled": {
-            "topSites": true,
-            "jumpBackIn": true,
-            "recentlySaved": true,
-            "recentExplorations": true,
+            "top-sites": true,
+            "jump-back-in": true,
+            "recently-saved": true,
+            "recent-explorations": true,
             "pocket": true,
-            "libraryShortcuts": true
+            "library-shortcuts": true
           }
         }
   tabTrayFeature:
@@ -353,20 +353,17 @@ types:
     HomeScreenSection:
       description: The identifiers for the sections of the homescreen.
       variants:
- # These values were updated to camelCase in order to match the currently
- # running experiment. Once that experiment is over in v100, these values
- # should be returned to kebab-case.
-        topSites:
+        top-sites:
           description: The frecency and pinned sites.
-        recentlySaved:
+        recently-saved:
           description: The sites the user has bookmarked recently.
-        jumpBackIn:
+        jump-back-in:
           description: The tabs the user was looking immediately before being interrupted.
-        recentExplorations:
+        recent-explorations:
           description: The tab groups
         pocket:
           description: The pocket section. This should only be available in the US.
-        libraryShortcuts:
+        library-shortcuts:
           description: Library shortcuts section
     TabTraySection:
       description: The identifiers for the sections of the tab tray.
