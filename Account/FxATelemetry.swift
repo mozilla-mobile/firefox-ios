@@ -10,16 +10,16 @@ open class FxATelemetry {
     /// included in the next Sync ping. Ignores malformed and unknown events.
     public static func parseTelemetry(fromJSONString string: String) -> [Event] {
         guard let data = string.data(using: .utf8) else { return [] }
-
+        
         var telemetry: Telemetry?
         do {
             telemetry = try JSONDecoder().decode(Telemetry.self, from: data)
         } catch {
             print("Unable to decode telemetry: \(error)")
         }
-
+        
         guard let telemetry = telemetry else { return [] }
-
+        
         return telemetry.commandsReceived + telemetry.commandsSent
     }
 }
