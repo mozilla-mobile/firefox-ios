@@ -231,7 +231,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
             XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
             XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
             XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.title, ContileProviderMock.defaultSuccessData[0].name.lowercased())
+            XCTAssertEqual(manager.getSite(index: 1)?.title, ContileProviderMock.defaultSuccessData[0].name)
             XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
         }
     }
