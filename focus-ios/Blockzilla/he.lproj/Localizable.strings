@@ -112,11 +112,17 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "האתרים שלי";
 
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "יש להפעיל כדי ש־%@ ישלים אוטומטית את כתובות האתרים המועדפות עליך.";
+
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "אתרים מובילים";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "הפעלה חדשה";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "יש לבטל את הנעילה של %@ בעת פתיחה מחדש כדי למנוע גישה לא מורשית.";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "אחורה";
@@ -240,6 +246,24 @@
 
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "סגירה";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "התחלת גלישה";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "למחוק את היסטוריית הגלישה, הססמאות והעוגיות שלך ולמנוע מפרסומות לא רצויות לעקוב אחריך בלחיצה אחת!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "ההיסטוריה שלך לא עוקבת אחריך";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "‏%@ הוא דפדפן פרטיות ייעודי הכולל הגנת מעקב וחסימת תוכן.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "יותר מסתם גלישה בסתר";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "ברוכים הבאים אל Firefox %@!";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ביטול";
@@ -409,6 +433,9 @@
 /* Label for the checkbox to toggle Advertising trackers */
 "Settings.toggleBlockAds2" = "פרסום";
 
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "ניתוח";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "חסימת גופני רשת";
 
@@ -547,6 +574,12 @@
 /* Text for a label that indicates the description for biometric Touch ID tip. */
 "Tip.BiometricTouchId.Description" = "הפעלת Touch ID";
 
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "מידע נוסף על העדכון הזה ואחרים עבור %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "ובכן כן, התחדשנו במראה חדש!";
+
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "פעולות דף > בקשת אתר למחשבים";
 
@@ -573,6 +606,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "חסר תוכן כלשהו באתר או שהאתר לא פועל כצפוי?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "ניתן לעבור להגדרות כדי לנהל אפשרויות פרטיות ואבטחה.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "הגדרות ברירת המחדל האלו מציעות הגנה חזקה, אבל קל לשנות את ההגדרות כדי לענות על הצרכים הספציפיים שלך.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "‏%@ מנע מאתר זה לרגל אחריך. יש ללחוץ על סמל המגן לקבלת מידע על מה שחסמנו.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "ניתן להקיש על סמל האשפה בכל עת כדי להסיר את כל העקבות של ההפעלה הנוכחית שלך.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "אתה מוגן!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "יש להשתמש ב־Touch ID כדי לחזור אל %@";

@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Loka";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Byrjaðu að vafra";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Eyddu vafraferli þínum, lykilorðum, vafrakökum og komdu í veg fyrir að óæskilegar auglýsingar fylgi þér, allt með einum smelli!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Sagan þín fylgir þér ekki";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ er sérstakur persónuverndarvafri með rakningarvörn og útilokun efnis.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Meira en huliðshjálmur";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Aðlagaðu stillingar svo þú getir ákveðið hversu miklu eða litlu þú deilir.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Vernd eftir þínum eigin geðþótta";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Taktu einkavafur þitt upp á næsta stig.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Velkomin í Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Hætta við";
 
@@ -600,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Vantar efni á vefsvæðið eða hegðar það sér undarlega?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Farðu í Stillingar til að stjórna tilteknum persónuverndar- og öryggisvalkostum.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Þessar sjálfgefnu stillingar bjóða upp á öfluga vernd. En það er auðvelt að laga til stillingarnar til að mæta sérþörfum þínum.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ kom í veg fyrir að þetta vefsvæði njósnaði um þig. Ýttu á skjöldinn til að fá upplýsingar um það sem við lokuðum á.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Pikkaðu á ruslið hvenær sem er til að fjarlægja öll ummerki um núverandi lotu.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Þú ert varin/n!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Nota fingrafara auðkenningu til að fara aftur í %@";

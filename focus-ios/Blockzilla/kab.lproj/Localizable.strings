@@ -247,6 +247,18 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Mdel";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Bdu tunigin";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Azray-ik·im ur ak·akem-iṭṭafar ara";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Qqim kan deg tunigin-ik·im tusligt ɣer uswir i d-iteddun.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Anṣuf ɣer Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Sefsex";
 
@@ -600,6 +612,12 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Asmel ixuṣṣ agbur neɣ ur iteddu ara akken yella uqbel?";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Iɣewwaren-a s wudem amezwer ttmuddun ammesten iǧehden. Maca yeshel ad ttubeddlen, ad ten-terreḍ akken i tebɣiḍ.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Tettummestneḍ!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Seqdec Touch ID akken ad tuɣaleḍ ar %@";

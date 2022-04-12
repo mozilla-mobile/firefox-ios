@@ -247,6 +247,24 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Začinić";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Přehladowanje započeć";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Waša historija wam njeslěduje";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Wjace hač jenož njespóznaty";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Škit po swójskim dobrozdaću";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Zběhńće swój priwatny modus na přichodnu runinu.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Witajće k Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Přetorhnyć";
 
@@ -600,6 +618,12 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Sydło so dźiwnje zadźeržuje abo wobsah faluje?";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Tute standardne nastajenja mócny škit poskićeja. Ale je lochko, nastajenja wašim specifiskim potrjebam přměrić.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Sće škitany!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Wužiwajće Touch ID, zo byšće so k %@ wróćił";

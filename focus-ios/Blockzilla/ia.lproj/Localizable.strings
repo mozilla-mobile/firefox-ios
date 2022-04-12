@@ -247,6 +247,15 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Clauder";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Initia a navigar";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Porta le navigation private al proxime nivello.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Benvenite a Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Cancellar";
 
@@ -600,6 +609,15 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Le sito ha contento mancante o se comporta estraniemente?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Va a Parametros, pro gerer optiones specific de confidentialitate e de securitate.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Iste parametros predefinite offere forte protection. Ma il es facile adjustar le parametros pro satisfacer tu specific besonios.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Tu es protegite!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Usa Touch ID pro retornar a %@";

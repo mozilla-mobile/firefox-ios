@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Cerrar";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Empieza a navegar";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "¡Borra tu historial de navegación, contraseñas, cookies y evita que los anuncios no deseados te sigan con un simple clic!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Tu historial no te sigue";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ es un navegador dedicado a la privacidad con protección de rastreo y bloqueo de contenido.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Más que solo incógnito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Configura los ajustes para que puedas decidir cuánto o qué tan poco quieres compartir.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Protección a tu propia discreción";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Lleva tu navegación privada al siguiente nivel.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "¡Bienvenido a Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Cancelar";
 
@@ -600,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "¿Falta contenido en el sitio o se comporta de forma extraña?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ve a los ajustes para administrar opciones específicas de privacidad y seguridad.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Esta configuración predeterminada ofrece una protección fuerte. Pero es fácil ajustar la configuración para satisfacer tus necesidades específicas.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ impidió que este sitio te espiara. Presiona el escudo para obtener información sobre lo que bloqueamos.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Presiona la papelera en cualquier momento para eliminar todos los rastros de tu sesión actual.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "¡Estás protegido!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Usar Touch ID para regresar a %@";

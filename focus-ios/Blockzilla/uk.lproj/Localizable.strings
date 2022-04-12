@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Закрити";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Почати перегляд";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Зітріть історію перегляду, паролі, куки, щоб запобігти стеженню за вами небажаною рекламою, одним натиском!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Ваша історія не стежить за вами";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ зосереджений на вашій приватності та з захистом від стеження й блокуванням вмісту.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Більше, ніж просто інкогніто";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Сконфігуруйте налаштування, щоб вирішувати, якими даними ділитися.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Захищайтеся на власний розсуд";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Піднесіть свій приватний перегляд на новий рівень.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Вітаємо у Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Скасувати";
 
@@ -600,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "На сайті відсутній вміст або він дивно поводиться?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Перейдіть до Налаштувань, щоб керувати певними опціями приватності та безпеки.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Ці типові налаштування забезпечують надійний захист. Але їх можна легко змінити відповідно до ваших особистих потреб.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ запобіг стеженню за вами цим сайтом. Торкніться щита, щоб отримати інформацію про те, що ми заблокували.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Торкніться кошика будь-коли, щоб вилучити всі сліди поточного сеансу.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Ви захищені!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Використовуйте Touch ID для повернення до %@";
