@@ -62,4 +62,17 @@ extension UIImage {
         }
         return result
     }
+
+    /// Get the image with a new background color set on it
+    public func getNewImage(backgroundColor: UIColor) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        backgroundColor.setFill()
+        let rect = CGRect(origin: .zero, size: size)
+        let path = UIBezierPath(rect: rect)
+        path.fill()
+        draw(at: .zero)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
 }

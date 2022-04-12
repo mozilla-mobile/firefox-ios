@@ -120,6 +120,18 @@ class SiteImageHelper {
         } else {
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
                 guard let image = result.successValue else { return }
+
+                image.averageColor() { color in
+                    // If a color is perceived as too dark, we put a white background
+                    guard let color = color, color.luma < 0.2 else { return }
+                    let coloredBackgroundImage = image.getNewImage(backgroundColor: .white)
+
+                    SiteImageHelper.cache.setObject(coloredBackgroundImage ?? image, forKey: faviconCacheKey)
+                    DispatchQueue.main.async {
+                        completion(coloredBackgroundImage, true)
+                    }
+                }
+
                 SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
                 completion(image, true)
             })
