@@ -341,7 +341,7 @@ private extension AppBuildChannel {
         switch self {
         case .release: return "release"
         case .beta: return "beta"
-        case .developer: return "nightly"
+        case .developer: return "developer"
         case .other: return "other"
         }
     }

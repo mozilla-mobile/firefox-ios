@@ -146,7 +146,7 @@ extension FlaggableFeature {
         from nimbus: FxNimbus = FxNimbus.shared
     ) -> UserFeaturePreference {
         guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
-
+        soakNimbus(featureId: "tab-tray-feature", in: #file, at: #line) { TabTrayFeature($0) }
         let nimbusTabTrayConfig = nimbus.features.tabTrayFeature.value()
 
         if let sectionIsEnabled = nimbusTabTrayConfig.sectionsEnabled[sectionID],
@@ -162,7 +162,7 @@ extension FlaggableFeature {
         from nimbus: FxNimbus = FxNimbus.shared
     ) -> UserFeaturePreference {
         guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
-
+        soakNimbus(featureId: "homescreen", in: #file, at: #line) { Homescreen($0) }
         let nimbusHomepageConfig = nimbus.features.homescreen.value()
 
         if let sectionIsEnabled = nimbusHomepageConfig.sectionsEnabled[sectionID],
@@ -202,4 +202,16 @@ extension FlaggableFeature {
             return nil
         }
     }
+}
+
+func soakNimbus<T>(featureId: String, iterations: Int = 100_000, in file: String = #file, at lineno: Int = #line, creator: @escaping (Variables) -> T) {
+    print("Start soaking \(featureId)")
+    let getNimbus = { Experiments.shared }
+    for _ in 1..<iterations {
+        let holder = FeatureHolder<T>(getNimbus, featureId, creator)
+        _ = holder.value()
+    }
+    let lastSlash = file.lastIndex(of: "/") ?? file.startIndex
+    let filename = file.suffix(from: lastSlash)
+    print("Finish soaking \(featureId) for \(iterations) iterations at \(filename):\(lineno)")
 }
