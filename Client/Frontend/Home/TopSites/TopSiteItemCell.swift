@@ -182,10 +182,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
         NSLayoutConstraint.activate([
             descriptionWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.Spacing),
-            descriptionWrapper.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-            descriptionWrapper.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            descriptionWrapper.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.width),
-            descriptionWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: contentView.frame.width - UX.widthSafeSpace),
+            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.widthSafeSpace),
+            descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
             faviconBG.topAnchor.constraint(equalTo: contentView.topAnchor),
             faviconBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -211,8 +210,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: titlePinWrapper.bottomAnchor)
         ])
 
-        titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
-        titlePinWrapper.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
+        titlePinWrapper.setContentHuggingPriority(UILayoutPriority(250), for: .vertical)
         titleLabelLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: titlePinWrapper.leadingAnchor)
         titleLabelLeadingConstraint?.isActive = true
     }
@@ -251,11 +249,7 @@ extension TopSiteItemCell: NotificationThemeable {
         faviconBG.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
 
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            sponsoredLabel.textColor = UIColor.Photon.LightGrey40
-        } else {
-            sponsoredLabel.textColor = UIColor.Photon.DarkGrey05
-        }
+        sponsoredLabel.textColor = theme == .dark ? UIColor.Photon.LightGrey40 : UIColor.Photon.DarkGrey05
     }
 }
 
