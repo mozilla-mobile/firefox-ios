@@ -509,6 +509,7 @@
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
 		8AD3271527E3B45D00EAF033 /* SponsoredTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */; };
 		8AD3271727E3D12300EAF033 /* ContileProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271627E3D12300EAF033 /* ContileProviderMock.swift */; };
+		8AD3E43B28062C3700EAB4DC /* FirefoxHomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3E43A28062C3700EAB4DC /* FirefoxHomeViewControllerTests.swift */; };
 		8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */; };
 		8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC627BADC3400672675 /* ToolbarTextField.swift */; };
 		8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC827BADC4B00672675 /* ReaderModeButton.swift */; };
@@ -2814,6 +2815,7 @@
 		8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetViewModel.swift; sourceTree = "<group>"; };
 		8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTile.swift; sourceTree = "<group>"; };
 		8AD3271627E3D12300EAF033 /* ContileProviderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContileProviderMock.swift; sourceTree = "<group>"; };
+		8AD3E43A28062C3700EAB4DC /* FirefoxHomeViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxHomeViewControllerTests.swift; sourceTree = "<group>"; };
 		8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarHelper.swift; sourceTree = "<group>"; };
 		8AD40FC627BADC3400672675 /* ToolbarTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTextField.swift; sourceTree = "<group>"; };
 		8AD40FC827BADC4B00672675 /* ReaderModeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeButton.swift; sourceTree = "<group>"; };
@@ -6837,6 +6839,7 @@
 				8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */,
 				8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */,
 				5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */,
+				8AD3E43A28062C3700EAB4DC /* FirefoxHomeViewControllerTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -9298,6 +9301,7 @@
 				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
 				DFA51484276103A000266AA0 /* HistoryHighlightsManagerTests.swift in Sources */,
 				3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */,
+				8AD3E43B28062C3700EAB4DC /* FirefoxHomeViewControllerTests.swift in Sources */,
 				8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */,
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,

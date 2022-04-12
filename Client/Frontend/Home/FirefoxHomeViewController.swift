@@ -56,7 +56,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         super.init(collectionViewLayout: flowLayout)
 
         contextMenuHelper.delegate = self
-        contextMenuHelper.getPopoverSourceRect = getPopoverSourceRect
+        contextMenuHelper.getPopoverSourceRect = { [weak self] popoverView in
+            guard let self = self else { return CGRect() }
+            return self.getPopoverSourceRect(sourceView: popoverView)
+        }
 
         viewModel.delegate = self
         collectionView?.delegate = self
