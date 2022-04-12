@@ -175,6 +175,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         }
     }
 
+    private func updateJumpBackIn() {
+        if let jumpBackIndex = viewModel.enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn) {
+            let indexSet = IndexSet([jumpBackIndex])
+            collectionView.reloadSections(indexSet)
+        }
+    }
+
     func applyTheme() {
         defaultBrowserCard.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
@@ -879,6 +886,8 @@ extension FirefoxHomeViewController: Notifiable {
         switch notification.name {
         case .TabsPrivacyModeChanged:
             adjustPrivacySensitiveSections(notification: notification)
+        case  .TabClosed:
+            updateJumpBackIn()
         default:
             reloadAll()
         }
