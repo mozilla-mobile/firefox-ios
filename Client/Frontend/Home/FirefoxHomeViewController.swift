@@ -179,7 +179,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             reloadAll()
         }
     }
-    
+
     private func updateJumpBackIn() {
         if let jumpBackIndex = viewModel.enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn) {
             let indexSet = IndexSet([jumpBackIndex])
