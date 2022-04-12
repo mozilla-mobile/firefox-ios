@@ -64,7 +64,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                         maxSize: 18)
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 1
         titleLabel.backgroundColor = UIColor.clear
     }
 
@@ -136,7 +136,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         imageView.image = nil
         imageView.backgroundColor = UIColor.clear
 
-        titleLabel.numberOfLines = 2
         titleLabel.text = nil
         titleLabelLeadingConstraint?.isActive = true
         sponsoredLabel.isHidden = true
@@ -238,7 +237,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private func configureSponsoredSite(_ topSite: HomeTopSite) {
         guard topSite.isSponsoredTile else { return }
 
-        titleLabel.numberOfLines = 1
         sponsoredLabel.text = topSite.sponsoredText
         sponsoredLabel.isHidden = false
     }

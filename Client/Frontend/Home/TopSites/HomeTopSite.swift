@@ -47,11 +47,10 @@ final class HomeTopSite {
     init(site: Site, profile: Profile) {
         self.site = site
         if let provider = site.metadata?.providerName {
-            title = provider.lowercased()
+            title = provider.lowercased().capitalized
         } else {
-            title = site.tileURL.shortDisplayString
+            title = site.title
         }
-        title.capitalizeFirstLetter()
 
         let imageHelper = SiteImageHelper(profile: profile)
         imageHelper.fetchImageFor(site: site,
