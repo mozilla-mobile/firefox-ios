@@ -127,7 +127,9 @@ class SiteImageHelper {
                     let coloredBackgroundImage = image.getNewImage(backgroundColor: .white)
 
                     SiteImageHelper.cache.setObject(coloredBackgroundImage ?? image, forKey: faviconCacheKey)
-                    completion(coloredBackgroundImage, true)
+                    DispatchQueue.main.async {
+                        completion(coloredBackgroundImage, true)
+                    }
                 }
 
                 SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
