@@ -9,6 +9,7 @@ import Storage
 protocol FirefoxHomeContextMenuHelperDelegate: UIViewController {
     func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
+    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
 }
 
 extension FirefoxHomeContextMenuHelperDelegate {
@@ -55,7 +56,9 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
                                     shareAction])
 
         if sectionType == .topSites {
-            actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
+            let sponsoredTileActions = [getSettingsAction(), getSponsoredContentAction()]
+            let topSitesAction = viewModel.topSiteViewModel.buildTopSitesAction(site: site, sponsoredTileActions: sponsoredTileActions)
+            actions.append(contentsOf: topSitesAction)
         }
 
         return actions
@@ -80,6 +83,20 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
 
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
         })
+    }
+
+    private func getSettingsAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, tapHandler: { _ in
+            self.delegate?.homePanelDidRequestToOpenSettings(at: .customizeTopSites)
+        }).items
+    }
+
+    private func getSponsoredContentAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
+            // TODO: SUMO page here is a placeholder, real page needs to be replaced
+            guard let url = URL(string: "https://support.mozilla.org/") else { return }
+            self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
+        }).items
     }
 
     private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {

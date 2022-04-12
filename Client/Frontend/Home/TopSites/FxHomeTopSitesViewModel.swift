@@ -134,7 +134,12 @@ class FxHomeTopSitesViewModel {
 
     // MARK: Context actions
 
-    func getTopSitesAction(site: Site) -> [PhotonRowActions]{
+    /// Build top sites related actions for context menu depending on the type of site
+    /// - Parameters:
+    ///   - site: The site the user long pressed on
+    ///   - sponsoredTileActions: The sponsored tile specific action dependent on the home panel delegate
+    /// - Returns: The contextual menu actions for a top site
+    func buildTopSitesAction(site: Site, sponsoredTileActions: [PhotonRowActions]) -> [PhotonRowActions] {
         let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle,
                                                         iconString: ImageIdentifiers.actionRemove,
                                                         tapHandler: { _ in
@@ -156,6 +161,8 @@ class FxHomeTopSitesViewModel {
         let topSiteActions: [PhotonRowActions]
         if let _ = site as? PinnedSite {
             topSiteActions = [removePinTopSite]
+        } else if let _ = site as? SponsoredTile {
+            topSiteActions = sponsoredTileActions
         } else {
             topSiteActions = [pinTopSite, removeTopSiteAction]
         }
