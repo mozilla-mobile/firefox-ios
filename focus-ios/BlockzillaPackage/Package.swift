@@ -28,14 +28,16 @@ let package = Package(
             ]
         ),
         .target(
-            name: "DesignSystem"
+            name: "DesignSystem",
+            exclude: ["Preview Files"]
         ),
         .target(
             name: "Onboarding",
             dependencies: [
                 "DesignSystem",
                 .product(name: "SnapKit", package: "SnapKit")
-            ]
+            ],
+            exclude: ["Preview Files"]
         )
     ]
 )

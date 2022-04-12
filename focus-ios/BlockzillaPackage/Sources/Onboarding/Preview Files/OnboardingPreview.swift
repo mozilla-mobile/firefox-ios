@@ -37,7 +37,6 @@ struct ViewControllerContainerView<Controller: UIViewController>: UIViewControll
     }
 }
 
-#if DEBUG
 fileprivate extension OnboardingText {
     static let demo = OnboardingText.init(
         onboardingTitle: "Welcome to Firefox",
@@ -53,4 +52,3 @@ fileprivate extension OnboardingText {
         onboardingButtonTitle: "start"
     )
 }
-#endif
