@@ -90,7 +90,7 @@ class SyncDataDisplay {
         self.contentHandler = contentHandler
         self.notificationContent = content
         self.tabQueue = tabQueue
-        Sentry.shared.setup(sendUsageData: true)
+        SentryIntegration.shared.setup(sendUsageData: true)
     }
 
     func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
@@ -139,7 +139,7 @@ extension SyncDataDisplay {
     }
 
     func displayAccountVerifiedNotification() {
-        Sentry.shared.send(message: "SentTab error: account not verified")
+        SentryIntegration.shared.send(message: "SentTab error: account not verified")
         #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
             return
@@ -149,7 +149,7 @@ extension SyncDataDisplay {
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
-        Sentry.shared.send(message: "SentTab error: \(debugInfo)")
+        SentryIntegration.shared.send(message: "SentTab error: \(debugInfo)")
         #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
             return
@@ -192,7 +192,7 @@ extension SyncDataDisplay {
             #else
                 body = .SentTab_NoTabArrivingNotification_body
             #endif
-            Sentry.shared.send(message: "SentTab error: no tab")
+            SentryIntegration.shared.send(message: "SentTab error: no tab")
         } else {
             let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {

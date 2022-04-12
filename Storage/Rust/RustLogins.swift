@@ -358,7 +358,7 @@ public class RustLoginEncryptionKeys {
 
             return secret
         } catch let err as NSError {
-            Sentry.shared.sendWithStacktrace(message: "Error creating logins encryption key", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+            SentryIntegration.shared.sendWithStacktrace(message: "Error creating logins encryption key", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
             throw LoginEncryptionKeyError.noKeyCreated
         }
     }
@@ -371,7 +371,7 @@ public class RustLoginEncryptionKeys {
         do {
             return try decryptLogin(login: login, encryptionKey: key)
         } catch let err as NSError {
-            Sentry.shared.sendWithStacktrace(message: "Error decrypting login", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+            SentryIntegration.shared.sendWithStacktrace(message: "Error decrypting login", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
             return nil
         }
     }
@@ -384,7 +384,7 @@ public class RustLoginEncryptionKeys {
         do {
             return try encryptLogin(login: login, encryptionKey: key)
         } catch let err as NSError {
-            Sentry.shared.sendWithStacktrace(message: "Error encrypting login", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+            SentryIntegration.shared.sendWithStacktrace(message: "Error encrypting login", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
             return nil
         }
     }
@@ -428,9 +428,9 @@ public class RustLogins {
                 // This is an unrecoverable
                 // state unless we can move the existing file to a backup
                 // location and start over.
-                Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
             } else {
-                Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
             }
 
             if !didAttemptToMoveToBackup {
@@ -490,9 +490,9 @@ public class RustLogins {
                 if let loginsStoreError = err as? LoginsStoreError {
                     switch loginsStoreError {
                     case let .SyncAuthInvalid(message):
-                        Sentry.shared.sendWithStacktrace(message: "Panicked when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
+                        SentryIntegration.shared.sendWithStacktrace(message: "Panicked when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
                     default:
-                        Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
+                        SentryIntegration.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
                     }
                 }
 
@@ -779,17 +779,17 @@ public class RustLogins {
                     if canaryIsValid {
                         return key!
                     } else {
-                        Sentry.shared.sendWithStacktrace(message: "Logins key was corrupted, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                        SentryIntegration.shared.sendWithStacktrace(message: "Logins key was corrupted, new one generated", tag: SentryTag.rustLogins, severity: .warning)
                         _ = self.wipeLocalEngine()
                         return try rustKeys.createAndStoreKey()
                     }
                 } catch let err as NSError {
-                    Sentry.shared.sendWithStacktrace(message: "Error retrieving logins encryption key", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+                    SentryIntegration.shared.sendWithStacktrace(message: "Error retrieving logins encryption key", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
                 }
             case (.some(key), .none):
                 // The key is present, but we didn't expect it to be there.
                 do {
-                    Sentry.shared.sendWithStacktrace(message: "Logins key lost due to storage malfunction, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                    SentryIntegration.shared.sendWithStacktrace(message: "Logins key lost due to storage malfunction, new one generated", tag: SentryTag.rustLogins, severity: .warning)
                     _ = self.wipeLocalEngine()
                     return try rustKeys.createAndStoreKey()
                 } catch let err as NSError {
@@ -798,7 +798,7 @@ public class RustLogins {
             case (.none, .some(encryptedCanaryPhrase)):
                 // We expected the key to be present, but it's gone missing on us.
                 do {
-                    Sentry.shared.sendWithStacktrace(message: "Logins key lost, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                    SentryIntegration.shared.sendWithStacktrace(message: "Logins key lost, new one generated", tag: SentryTag.rustLogins, severity: .warning)
                     _ = self.wipeLocalEngine()
                     return try rustKeys.createAndStoreKey()
                 } catch let err as NSError {

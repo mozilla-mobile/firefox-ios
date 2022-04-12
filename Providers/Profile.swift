@@ -309,7 +309,7 @@ open class BrowserProfile: Profile {
             case .warn:
                 log.warning(logString)
             case .error:
-                Sentry.shared.sendWithStacktrace(message: logString, tag: .rustLog, severity: .error)
+                SentryIntegration.shared.sendWithStacktrace(message: logString, tag: .rustLog, severity: .error)
                 log.error(logString)
             }
 
@@ -1035,7 +1035,7 @@ open class BrowserProfile: Profile {
                         }
 
                         guard let encryptionKey = try? self.profile.logins.getStoredKey() else {
-                            Sentry.shared.sendWithStacktrace(message: "Stored logins encryption could not be retrieved", tag: SentryTag.rustLogins, severity: .warning)
+                            SentryIntegration.shared.sendWithStacktrace(message: "Stored logins encryption could not be retrieved", tag: SentryTag.rustLogins, severity: .warning)
                             d.fill(Maybe(failure: EncryptionKeyError()))
                             return
                         }

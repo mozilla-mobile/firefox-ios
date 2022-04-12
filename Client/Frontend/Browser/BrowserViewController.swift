@@ -786,7 +786,7 @@ class BrowserViewController: UIViewController {
     var displayedRestoreTabsAlert = false
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return Sentry.shared.crashedLastLaunch
+        return SentryIntegration.shared.crashedLastLaunch
     }
 
     fileprivate func cleanlyBackgrounded() -> Bool {
@@ -1153,7 +1153,7 @@ class BrowserViewController: UIViewController {
             return
         }
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
-            Sentry.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
+            SentryIntegration.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
                                severity: .error,
                                description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return

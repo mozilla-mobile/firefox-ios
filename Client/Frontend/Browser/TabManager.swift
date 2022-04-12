@@ -618,7 +618,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
 
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
-            Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
             return
         }
 

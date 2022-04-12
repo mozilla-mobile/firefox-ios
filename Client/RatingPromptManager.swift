@@ -33,7 +33,7 @@ final class RatingPromptManager {
     ///   - sentry: Sentry protocol to override in Unit test
     init(profile: Profile,
          daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
-         sentry: SentryProtocol = Sentry.shared) {
+         sentry: SentryProtocol = SentryIntegration.shared) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
         self.sentry = sentry

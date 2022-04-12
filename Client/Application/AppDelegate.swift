@@ -82,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        Sentry.shared.setup(sendUsageData: sendUsageData)
+        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
 
         // Set the Firefox UA for browsing.
         setUserAgent()

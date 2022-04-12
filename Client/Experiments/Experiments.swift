@@ -185,7 +185,7 @@ enum Experiments {
         )
 
         let errorReporter: NimbusErrorReporter = { err in
-            Sentry.shared.sendWithStacktrace(
+            SentryIntegration.shared.sendWithStacktrace(
                 message: "Error in Nimbus SDK",
                 tag: SentryTag.nimbus,
                 severity: .error,

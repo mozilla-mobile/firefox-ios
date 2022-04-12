@@ -30,7 +30,7 @@ extension UIScrollView {
         let validBounds = [bounds.size.width, bounds.size.height].every({ $0 >= 0 })
 
         guard validBounds && validSize && !bounds.isInfinite else {
-            Sentry.shared.send(message: "Bad scrollview bounds detected [negative size].")
+            SentryIntegration.shared.send(message: "Bad scrollview bounds detected [negative size].")
             return
         }
         self.swizzle_setBounds(bounds: bounds)
