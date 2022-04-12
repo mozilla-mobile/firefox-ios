@@ -924,7 +924,7 @@ extension TelemetryWrapper {
         extras: [String: Any]?
     ) {
         let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))"
-        SentryIntegration.shared.send(message: msg, severity: .debug)
+        SentryIntegration.shared.send(message: msg, severity: .info)
     }
 }
 
