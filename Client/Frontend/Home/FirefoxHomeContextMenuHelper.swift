@@ -42,26 +42,49 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType) -> [PhotonRowActions]? {
-        guard let siteURL = URL(string: site.url) else { return nil }
-
-        guard var actions = getDefaultContextMenuActions(for: site,
-                                                         delegate: delegate,
-                                                         sectionType: sectionType,
-                                                         isZeroSearch: viewModel.isZeroSearch)
-        else { return nil }
-
-        let bookmarkAction = getBookmarkAction(site: site)
-        let shareAction = getShareAction(siteURL: siteURL, sourceView: sourceView)
-        actions.append(contentsOf: [bookmarkAction,
-                                    shareAction])
-
-        if sectionType == .topSites {
-            let sponsoredTileActions = [getSettingsAction(), getSponsoredContentAction()]
-            let topSitesAction = viewModel.topSiteViewModel.buildTopSitesAction(site: site, sponsoredTileActions: sponsoredTileActions)
-            actions.append(contentsOf: topSitesAction)
+        var actions = [PhotonRowActions]()
+        if sectionType == .topSites, let topSitesActions = getTopSitesActions(site: site) {
+            actions = topSitesActions
+        } else if sectionType == .pocket, let pocketActions = getPocketActions(site: site, with: sourceView) {
+            actions = pocketActions
         }
 
         return actions
+    }
+
+    // MARK: - Default actions
+
+    func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
+        return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+            self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }.items
+    }
+
+    // MARK: - Pocket
+
+    private func getPocketActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
+        guard let siteURL = site.url.asURL else { return nil }
+
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .pocket)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
+        let shareAction = getShareAction(siteURL: siteURL, sourceView: sourceView)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
+    }
+
+    private func getOpenInNewTabAction(siteURL: URL, sectionType: FirefoxHomeSectionType) -> PhotonRowActions {
+        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
+            self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+
+            if sectionType == .pocket {
+                let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: self.viewModel.isZeroSearch)
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .pocketStory,
+                                             extras: originExtras)
+            }
+        }.items
     }
 
     private func getBookmarkAction(site: Site) -> PhotonRowActions {
@@ -83,20 +106,6 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
 
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
         })
-    }
-
-    private func getSettingsAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, tapHandler: { _ in
-            self.delegate?.homePanelDidRequestToOpenSettings(at: .customizeTopSites)
-        }).items
-    }
-
-    private func getSponsoredContentAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
-            // TODO: SUMO page here is a placeholder, real page needs to be replaced
-            guard let url = URL(string: "https://support.mozilla.org/") else { return }
-            self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
-        }).items
     }
 
     private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
@@ -132,6 +141,68 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
             }
 
             self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
+        }).items
+    }
+
+    // MARK: - Top sites
+
+    func getTopSitesActions(site: Site) -> [PhotonRowActions]? {
+        guard let siteURL = site.url.asURL else { return nil }
+
+        let topSiteActions: [PhotonRowActions]
+        if let _ = site as? PinnedSite {
+            topSiteActions = [getRemovePinTopSiteAction(site: site),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getRemoveTopSiteAction(site: site)]
+
+        } else if let _ = site as? SponsoredTile {
+            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getSettingsAction(),
+                              getSponsoredContentAction()]
+
+        } else {
+            topSiteActions = [getPinTopSiteAction(site: site),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getRemoveTopSiteAction(site: site)]
+        }
+        return topSiteActions
+    }
+
+    private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
+        return SingleActionViewModel(title: .RemoveContextMenuTitle,
+                                     iconString: ImageIdentifiers.actionRemove,
+                                     tapHandler: { _ in
+            self.viewModel.topSiteViewModel.hideURLFromTopSites(site)
+        }).items
+    }
+
+    private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
+        return SingleActionViewModel(title: .AddToShortcutsActionTitle,
+                                     iconString: ImageIdentifiers.addShortcut,
+                                     tapHandler: { _ in
+            self.viewModel.topSiteViewModel.pinTopSite(site)
+        }).items
+    }
+
+    private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
+        return SingleActionViewModel(title: .RemoveFromShortcutsActionTitle,
+                                     iconString: ImageIdentifiers.removeFromShortcut,
+                                     tapHandler: { _ in
+            self.viewModel.topSiteViewModel.removePinTopSite(site)
+        }).items
+    }
+
+    private func getSettingsAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, tapHandler: { _ in
+            self.delegate?.homePanelDidRequestToOpenSettings(at: .customizeTopSites)
+        }).items
+    }
+
+    private func getSponsoredContentAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
+            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3469 SUMO page here is a placeholder, real page needs to be replaced
+            guard let url = URL(string: "https://support.mozilla.org/") else { return }
+            self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
         }).items
     }
 

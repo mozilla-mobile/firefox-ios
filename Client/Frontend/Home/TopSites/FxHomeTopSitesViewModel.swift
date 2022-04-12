@@ -134,41 +134,6 @@ class FxHomeTopSitesViewModel {
 
     // MARK: Context actions
 
-    /// Build top sites related actions for context menu depending on the type of site
-    /// - Parameters:
-    ///   - site: The site the user long pressed on
-    ///   - sponsoredTileActions: The sponsored tile specific action dependent on the home panel delegate
-    /// - Returns: The contextual menu actions for a top site
-    func buildTopSitesAction(site: Site, sponsoredTileActions: [PhotonRowActions]) -> [PhotonRowActions] {
-        let removeTopSiteAction = SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                                        iconString: ImageIdentifiers.actionRemove,
-                                                        tapHandler: { _ in
-            self.hideURLFromTopSites(site)
-        }).items
-
-        let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle,
-                                               iconString: ImageIdentifiers.addShortcut,
-                                               tapHandler: { _ in
-            self.pinTopSite(site)
-        }).items
-
-        let removePinTopSite = SingleActionViewModel(title: .RemoveFromShortcutsActionTitle,
-                                                     iconString: ImageIdentifiers.removeFromShortcut,
-                                                     tapHandler: { _ in
-            self.removePinTopSite(site)
-        }).items
-
-        let topSiteActions: [PhotonRowActions]
-        if let _ = site as? PinnedSite {
-            topSiteActions = [removePinTopSite]
-        } else if let _ = site as? SponsoredTile {
-            topSiteActions = sponsoredTileActions
-        } else {
-            topSiteActions = [pinTopSite, removeTopSiteAction]
-        }
-        return topSiteActions
-    }
-
     func hideURLFromTopSites(_ site: Site) {
         guard let host = site.tileURL.normalizedHost else { return }
 
@@ -184,11 +149,11 @@ class FxHomeTopSitesViewModel {
         }
     }
 
-    private func removePinTopSite(_ site: Site) {
+    func removePinTopSite(_ site: Site) {
         tileManager.removePinTopSite(site: site)
     }
 
-    private func pinTopSite(_ site: Site) {
+    func pinTopSite(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.tileManager.refreshIfNeeded(forceTopSites: true)
