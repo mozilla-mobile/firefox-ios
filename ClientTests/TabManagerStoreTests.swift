@@ -115,12 +115,6 @@ private extension TabManagerStoreTests {
         wait(for: [predicate], timeout: 20)
     }
 
-    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Instance should have been deallocated, potential memory leak.", file: file, line: line)
-        }
-    }
-
     func addNumberOfTabs(manager: TabManager, configuration: WKWebViewConfiguration, tabNumber: Int, isPrivate: Bool = false) {
         for _ in 0..<tabNumber {
             addTabWithSessionData(manager: manager, configuration: configuration, isPrivate: isPrivate)
