@@ -264,6 +264,9 @@
                   Identifier = "ETPCoverSheetTests">
                </Test>
                <Test
+                  Identifier = "GleanTelemetryTests/testSyncPingIsSentOnSyncOperation()">
+               </Test>
+               <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">
                </Test>
             </SkippedTests>
