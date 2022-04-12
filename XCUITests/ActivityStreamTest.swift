@@ -11,7 +11,7 @@ let allDefaultTopSites = ["facebook", "youtube", "amazon", "wikipedia", "twitter
 class ActivityStreamTest: BaseTestCase {
     let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section]
 
-    let testWithDB = ["testActivityStreamPages","testTopSites2Add", "testTopSites4OpenInNewTab", "testTopSitesOpenInNewPrivateTab", "testTopSitesBookmarkNewTopSite", "testTopSitesShareNewTopSite", "testContextMenuInLandscape"]
+    let testWithDB = ["testActivityStreamPages","testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
     let pagesVisitediPad = "browserActivityStreamPagesiPad.db"
@@ -80,18 +80,10 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
-        XCTSkip("Skipped due to issue #7611, but it was closed. Investigate if this can be added back?")
-        navigator.goto(BrowserTab)
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        // Workaround to have visited website in top sites
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
         waitForExistence(app.cells.staticTexts["mozilla"])
         XCTAssertTrue(app.cells.staticTexts["mozilla"].exists)
         // A new site has been added to the top sites
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
 
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
