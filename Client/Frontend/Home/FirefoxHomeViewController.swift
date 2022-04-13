@@ -117,7 +117,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        viewModel.nimbus.features.homescreen.recordExposure()
+        viewModel.nimbus.features.homescreenFeature.recordExposure()
         animateFirefoxLogo()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
@@ -177,6 +177,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             collectionView.reloadSections(indexSet)
         } else {
             reloadAll()
+        }
+    }
+
+    private func updateJumpBackIn() {
+        if let jumpBackIndex = viewModel.enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn) {
+            let indexSet = IndexSet([jumpBackIndex])
+            collectionView.reloadSections(indexSet)
         }
     }
 
@@ -775,6 +782,8 @@ extension FirefoxHomeViewController: Notifiable {
         switch notification.name {
         case .TabsPrivacyModeChanged:
             adjustPrivacySensitiveSections(notification: notification)
+        case  .TabClosed:
+            updateJumpBackIn()
         default:
             reloadAll()
         }

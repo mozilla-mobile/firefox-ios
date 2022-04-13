@@ -41,7 +41,7 @@ class TelemetryWrapper {
     }
 
     init(profile: Profile) {
-        crashedLastLaunch = Sentry.shared.crashedLastLaunch
+        crashedLastLaunch = SentryIntegration.shared.crashedLastLaunch
 
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
@@ -254,7 +254,7 @@ class TelemetryWrapper {
 
     @objc func uploadError(notification: NSNotification) {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
-        Sentry.shared.send(message: "Upload Error", tag: SentryTag.unifiedTelemetry, severity: .info, description: error.debugDescription)
+        SentryIntegration.shared.send(message: "Upload Error", tag: SentryTag.unifiedTelemetry, severity: .info, description: error.debugDescription)
     }
 }
 
@@ -924,7 +924,7 @@ extension TelemetryWrapper {
         extras: [String: Any]?
     ) {
         let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))"
-        Sentry.shared.send(message: msg, severity: .debug)
+        SentryIntegration.shared.send(message: msg, severity: .info)
     }
 }
 

@@ -236,8 +236,8 @@ extension FxAWebViewController {
     }
 
     private func sendSentryObserveValueError(forKeyPath keyPath: String?) {
-        Sentry.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
-                           severity: .error,
-                           description: "Unhandled KVO key: \(keyPath ?? "nil")")
+        SentryIntegration.shared.send(message: "FxA webpage unhandled KVO", tag: .rustLog,
+                                      severity: .error,
+                                      description: "Unhandled KVO key: \(keyPath ?? "nil")")
     }
 }

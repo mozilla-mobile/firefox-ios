@@ -44,7 +44,7 @@ class FxHomeTopSitesViewModel {
         return FxHomeTopSitesManager(profile: profile)
     }()
 
-    private lazy var homescreen = nimbus.features.homescreen.value()
+    private lazy var homescreen = nimbus.features.homescreenFeature.value()
 
     init(profile: Profile, isZeroSearch: Bool, nimbus: FxNimbus) {
         self.profile = profile
