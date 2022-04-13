@@ -890,7 +890,7 @@
 "LoginsHelper.PromptSavePassword.Title" = "Salvar le contrasigno pro %@?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Actualisar le credentiales pro %2$@?";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Actualisar le credentiales pro %@?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
 "LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Actualisar le credential %1$@ pro %2$@?";
