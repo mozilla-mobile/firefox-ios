@@ -436,9 +436,6 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Buksan sa Firefox";
 
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Ibahagi ang Pahina Sa...";
-
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Magdagdag";
 

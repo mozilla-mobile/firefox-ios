@@ -247,6 +247,15 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Lukk";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Begynn å surfe";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Slett nettleserhistorikken, passordene, infokapslene og hindre uønskede annonser fra å følge deg med et enkelt klikk!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Historikken din følger deg ikke";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Avbryt";
 
@@ -507,9 +516,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Åpne i Firefox";
-
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Del side med…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Fjern fra snarveier";

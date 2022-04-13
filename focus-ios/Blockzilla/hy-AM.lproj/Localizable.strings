@@ -71,7 +71,7 @@
 "Autocomplete.customUrlAdded" = "Նոր հարմարեցված URL է ավելացվել:";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "Միացրեք՝ ունենալու համար %1$s ինքնալրացում աեվլի քան 450 հանրահայտ URL-ների համար:";
+"Autocomplete.defaultDescriptoin" = "Միացրեք՝ ունենալու համար %@ ինքնալրացում աեվլի քան 450 հանրահայտ URL-ների համար:";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "Ինքնալրացում";
@@ -137,13 +137,13 @@
 "ExternalAppLink.cancelTitle" = "Չեղարկել";
 
 /* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
-"ExternalAppLink.messageTitle" = "%@-ը  ցանկանում է բացել այլ հավելված";
+"ExternalAppLink.messageTitle" = "%@-ը ցանկանում է բացել այլ հավելված";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Բացել";
 
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1%@-ը ցանկանում է բացել %2%@-ը";
+"externalAppLinkWithAppName.messageTitle" = "%1$@-ը ցանկանում է բացել %2$@-ը";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Զանգ";
@@ -155,7 +155,7 @@
 "ExternalLink.emailButton" = "Էլ. փոստ";
 
 /* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Դուք հետևում եք %S-ին։";
+"ExternalLink.messageTitleWithPlaceholder" = "Դուք հետևում եք %@-ին։";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Բացել App Store-ը";
@@ -227,7 +227,7 @@
 "Settings.blockOtherMessage" = "Բովանդակության այլ հետագծումների արգելափակումը կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր:";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %1$s-ը լավարկելու համար:";
+"Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %@-ը լավարկելու համար";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Իմանալ ավելին";
@@ -332,7 +332,7 @@
 "URL.placeholderText" = "Մուտքագրեք կայքի հասցե կամ որոնում";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Որոնել %@-ը ";
+"URL.searchLabel" = "Որոնել %@-ը";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Արգելել հետագծումները";

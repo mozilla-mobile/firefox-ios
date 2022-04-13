@@ -329,7 +329,7 @@
 "SearchSuggestions.promptEnable" = "Já";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Til að fá tillögur, þarf% @ að senda það sem þú skrifar í slóðina til leitarvélarinnar.";
+"SearchSuggestions.promptMessage" = "Til að fá tillögur, þarf %@ að senda það sem þú skrifar í slóðina til leitarvélarinnar.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Sýna leitar tillögur?";
@@ -350,7 +350,7 @@
 "Settings.darkTheme" = "Dökkt";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "% @ mun senda það sem þú skrifar í slóðina yfir á leitarvélina þína.";
+"Settings.detailTextSearchSuggestion" = "%@ mun senda það sem þú skrifar í slóðina yfir á leitarvélina þína.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla safnar eingöngu því sem nauðsynlegt er til að betrumbæta %@ fyrir alla.";
@@ -534,9 +534,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Opna í Firefox";
-
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Deila síðu með…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Fjarlægja úr flýtileiðum";

@@ -247,6 +247,21 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Cerrar";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Empezar a navegar";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Más que solo incógnito";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Protección a tu propia discreción";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Lleva tu navegación privada al siguiente nivel.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "¡Te damos la bienvenida a Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Cancelar";
 
@@ -507,9 +522,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Abrir en Firefox";
-
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Compartir la página con…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Eliminar de los atajos";

@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "關閉";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "開始上網";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "只要輕鬆一點，就可以清除您的上網紀錄、網頁密碼、Cookie，並防止被不想要的廣告追蹤！";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "瀏覽紀錄，不用隨身帶著走";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ 是專門的隱私保護瀏覽器，內建追蹤保護與內容封鎖功能。";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "不只是隱私保護模式";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "可依您需求自行調整要分享多少資料。";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "由您自行決定保護程度";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "更高一級的隱私保護模式。";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "歡迎使用 Firefox %@！";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "取消";
 
@@ -508,9 +535,6 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "使用 Firefox 開啟";
 
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "分享頁面…";
-
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "刪除捷徑";
 
@@ -600,6 +624,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "網站的內容不見了，或功能變得怪怪的嗎？";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "前往「設定」管理各種隱私與安全性選項。";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "下列預設設定就已經提供了強大保護，但如果您有特殊需求，也很簡單就能調整。";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ 已防止此網站追蹤您。點擊盾牌即可了解已封鎖哪些內容。";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "隨時點擊垃圾桶，即可清除目前的瀏覽階段，不留下一絲一毫痕跡。";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "讓我們保護您！";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "使用 Touch ID 返回 %@";

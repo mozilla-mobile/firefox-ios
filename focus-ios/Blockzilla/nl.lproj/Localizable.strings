@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Sluiten";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Beginnen met browsen";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Wis uw navigatiegeschiedenis, wachtwoorden, cookies en voorkom dat ongewenste advertenties u volgen met een simpele klik!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Uw geschiedenis volgt u niet";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ is een speciale privacybrowser met beveiliging tegen volgen en inhoudsblokkering.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Meer dan alleen incognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Configureer instellingen zodat u kunt beslissen hoeveel of hoe weinig u deelt.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Bescherming naar eigen inzicht";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Breng uw privénavigatie naar een hoger niveau.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Welkom bij Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Annuleren";
 
@@ -508,9 +535,6 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Openen in Firefox";
 
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Pagina delen met…";
-
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Verwijderen uit Snelkoppelingen";
 
@@ -600,6 +624,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Mist een website inhoud of gedraagt deze zich vreemd?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ga naar Instellingen om specifieke privacy- en beveiligingsopties te beheren.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Deze standaardinstellingen bieden een sterke bescherming. Maar het is eenvoudig om de instellingen aan uw specifieke behoeften aan te passen.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ heeft ervoor gezorgd dat deze website u niet meer bespioneert. Tik op het schild voor informatie over wat we hebben geblokkeerd.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Tik op elk gewenst moment op de prullenbak om alle sporen van uw huidige sessie te verwijderen.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "U bent beschermd!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Gebruik Touch ID om naar %@ terug te keren";

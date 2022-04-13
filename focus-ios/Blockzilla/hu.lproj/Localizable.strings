@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Bezárás";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Böngészés megkezdése";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Egyetlen kattintással törölheti böngészési előzményeit, jelszavait, sütijeit, és megakadályozhatja, hogy a nem kívánt hirdetések kövessék.";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Az előzményei nem követik Önt";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "A %@ egy dedikált adatvédelmi böngésző automatikus követés elleni védelemmel és reklámblokkolással.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Több, mint az inkognitómód";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfigurálja a beállításokat, így eldöntheti, hogy milyen sokat vagy keveset oszt meg.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Védelem saját belátása szerint";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Emelje a privát böngészését a következő szintre.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Üdvözli a Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Mégse";
 
@@ -508,9 +535,6 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Megnyitás a Firefoxban";
 
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Lap megosztása…";
-
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Eltávolítás a Parancsokból";
 
@@ -600,6 +624,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Hiányzik a webhely tartalma, vagy furcsán viselkedik?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ugorjon a Beállításokhoz az adatvédelmi és biztonsági beállítások kezeléséhez.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Ezek az alapértelmezett beállítások erős védelmet nyújtanak. De könnyű a beállításokat az Ön egyedi igényei szerint módosítani.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "A %@ megakadályozta, hogy ez a webhely kémkedjen Ön után. Koppintson a pajzsra, hogy tájékozódjon arról, hogy mit blokkoltunk.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Koppintson bármikor a kukára, hogy eltávolítsa az aktuális munkamenet összes nyomát.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Védve van!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Használja a Touch ID-t a %@ böngészőbe visszatéréshez";

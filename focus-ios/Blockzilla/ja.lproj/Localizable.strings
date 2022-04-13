@@ -247,6 +247,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "閉じる";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "ブラウジングを始める";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "キャンセル";
 
@@ -507,9 +510,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox で開く";
-
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "ページを共有...";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "ショートカットから削除";

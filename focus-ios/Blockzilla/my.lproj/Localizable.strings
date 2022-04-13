@@ -76,9 +76,6 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "အသစ် စီမံထားသော URL ပေါင်းထည့်ခဲ့သည်";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "လိပ်စာဘားတွင် အသုံးများသော URLs 450 ကျော်ကို အလိုအလျောက်ဖြည့်စွက်မှု ဖွင့်ထားမည်";
-
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "အလိုအလျောက် ဖြည့်စွက်မှု";
 
@@ -426,9 +423,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox တွင် ဖွင့်ပါ";
-
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "၎င်းနှင့်အတူ မျှဝေရန် ...";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "ထည့်ရန်";

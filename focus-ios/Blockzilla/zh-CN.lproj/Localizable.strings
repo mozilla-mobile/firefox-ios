@@ -247,6 +247,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "关闭";
 
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "欢迎使用 Firefox %@！";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "取消";
 
@@ -507,9 +510,6 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "在 Firefox 中打开";
-
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "分享页面…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "移除快捷方式";

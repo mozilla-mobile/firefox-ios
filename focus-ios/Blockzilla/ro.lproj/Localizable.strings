@@ -430,9 +430,6 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Deschide în Firefox";
 
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Partajează pagina cu...";
-
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Adaugă";
 
@@ -509,7 +506,7 @@
 "URL.placeholderText" = "Caută sau introdu adresa";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "Caută &@";
+"URL.searchLabel" = "Caută %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Elemente de urmărire blocate";

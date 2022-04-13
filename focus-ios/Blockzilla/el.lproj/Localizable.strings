@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Κλείσιμο";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Έναρξη περιήγησης";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Διαγράψτε το ιστορικό περιήγησης, τους κωδικούς πρόσβασης, τα cookies σας και αποτρέψτε την καταγραφή από ανεπιθύμητες διαφημίσεις με ένα μόνο πάτημα!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Το ιστορικό σας δεν σας ακολουθεί";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "Το %@ είναι ένα ιδιωτικό πρόγραμμα περιήγησης με προστασία από καταγραφή και φραγή περιεχομένου.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Κάτι παραπάνω από απλή ανωνυμία";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Διαμορφώστε τις ρυθμίσεις ώστε να αποφασίσετε για το τι θα μοιράζεστε.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Προστασία κατά την κρίση σας";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Μεταβείτε στο επόμενο επίπεδο ιδιωτικής περιήγησης.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Καλώς ορίσατε στο Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Ακύρωση";
 
@@ -508,9 +535,6 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Άνοιγμα σε Firefox";
 
-/* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Κοινή χρήση σελίδας με...";
-
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Αφαίρεση από συντομεύσεις";
 
@@ -600,6 +624,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Απώλεια περιεχομένου ή περίεργη συμπεριφορά;";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Μεταβείτε στις ρυθμίσεις για να διαχειριστείτε συγκεκριμένες επιλογές απορρήτου και ασφάλειας.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Αυτές οι προεπιλεγμένες ρυθμίσεις προσφέρουν ισχυρή προστασία. Αλλά μπορείτε εύκολα να τις προσαρμόσετε για να ταιριάξουν με τις δικές σας ανάγκες.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "Το %@ εμπόδισε την παρακολούθησή σας από αυτόν τον ιστότοπο. Πατήστε την ασπίδα για πληροφορίες σχετικά με το τι αποκλείσαμε.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Πατήστε τον κάδο απορριμμάτων ανά πάσα στιγμή για να αφαιρέσετε όλα τα ίχνη της τρέχουσας συνεδρίας σας.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Προστατεύεστε!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Χρήση Touch ID για επιστροφή στο %@";
