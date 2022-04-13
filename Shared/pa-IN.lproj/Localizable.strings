@@ -830,7 +830,7 @@
 "Load original page" = "ਮੂਲ ਸਫ਼ੇ ਨੂੰ ਲੋਡ ਕਰੋ";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "ਸਮੱਗਰੀ ਨੂੰ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...";
+"Loading content…" = "ਸਮੱਗਰੀ ਨੂੰ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ…";
 
 /* Authentication prompt log in button */
 "Log in" = "ਲਾਗਇਨ";
