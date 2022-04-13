@@ -8,7 +8,7 @@
 "A username and password are being requested by %@." = "%@ zahtjeva korisničko ime i lozinku.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "%1&@ zahtjeva korisničko ime i lozinku. Stranica kaže: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "%1$@ zahtjeva korisničko ime i lozinku. Stranica kaže: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Aa";

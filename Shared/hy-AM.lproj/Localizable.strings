@@ -797,7 +797,7 @@
 "Load original page" = "Բեռնել սկզբնական էջը";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "Բովանդակության բեռնում...";
+"Loading content…" = "Բովանդակության բեռնում…";
 
 /* Authentication prompt log in button */
 "Log in" = "Մուտք գորխել";
@@ -854,7 +854,7 @@
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Թարմացնե՞լ մուտքագրումը %@-ի համար:";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Թարմացնե՞լ %1$@ մուտքագրումը %@-ի համար:";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Թարմացնե՞լ %1$@ մուտքագրումը %2$@-ի համար:";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Պահպանել մուտքագրումը";
@@ -1003,7 +1003,7 @@
 "Menu.TrackingProtection.BlockedTitle" = "Արգելափակված է";
 
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"Menu.TrackingProtection.Details.Verifier" = "Հաստատել է %S-ի կողմից";
+"Menu.TrackingProtection.Details.Verifier" = "Հաստատել է %@-ի կողմից";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox-ը այս էջում հայտնի հետագծիչներ չի հայտնաբերել։";
@@ -1952,7 +1952,7 @@
 "Sync.Syncing.Label" = "Համաժամեցում";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "Համաժամեցում...";
+"Sync.SyncingEllipsis.Label" = "Համաժամեցում…";
 
 /* Panel accessibility label */
 "Synced Tabs" = "Համաժամեցված ներդիրներ";
