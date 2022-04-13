@@ -43,19 +43,17 @@ class SiteImageHelper {
         switch imageType {
         case .heroImage:
             fetchHeroImage(for: site) { image, result in
-                guard let heroImage = image else { return }
-                didCompleteFetch = result ?? false
+                didCompleteFetch = result
                 DispatchQueue.main.async {
-                    completion(heroImage)
+                    completion(image)
                     return
                 }
             }
         case .favicon:
             fetchFavicon(for: site) { image, result in
-                guard let favicon = image else { return }
-                didCompleteFetch = result ?? false
+                didCompleteFetch = result
                 DispatchQueue.main.async {
-                    completion(favicon)
+                    completion(image)
                     return
                 }
             }
@@ -74,7 +72,7 @@ class SiteImageHelper {
 
     // MARK: - Private
 
-    private func fetchHeroImage(for site: Site, completion: @escaping (UIImage?, Bool?) -> ()) {
+    private func fetchHeroImage(for site: Site, completion: @escaping (UIImage?, Bool) -> ()) {
         let heroImageCacheKey = NSString(string: "\(site.url)\(SiteImageType.heroImage.rawValue)")
 
         // Fetch from cache, if not then fetch with LPMetadataProvider
@@ -91,7 +89,7 @@ class SiteImageHelper {
         }
     }
 
-    private func fetchFromMetaDataProvider(heroImageCacheKey: NSString, url: URL, completion: @escaping (UIImage?, Bool?) -> ()) {
+    private func fetchFromMetaDataProvider(heroImageCacheKey: NSString, url: URL, completion: @escaping (UIImage?, Bool) -> ()) {
         let linkPresentationProvider = LPMetadataProvider()
         linkPresentationProvider.startFetchingMetadata(for: url) { metadata, error in
             guard let metadata = metadata, let imageProvider = metadata.imageProvider, error == nil else {
@@ -111,7 +109,7 @@ class SiteImageHelper {
         }
     }
 
-    private func fetchFavicon(for site: Site, completion: @escaping (UIImage?, Bool?) -> ()) {
+    private func fetchFavicon(for site: Site, completion: @escaping (UIImage?, Bool) -> ()) {
         let faviconCacheKey = NSString(string: "\(site.url)\(SiteImageType.favicon.rawValue)")
 
         // Fetch from cache, if not then fetch from profile
@@ -119,21 +117,23 @@ class SiteImageHelper {
             completion(cachedImage, true)
         } else {
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
-                guard let image = result.successValue else { return }
-
-                image.averageColor() { color in
-                    // If a color is perceived as too dark, we put a white background
-                    guard let color = color, color.luma < 0.2 else { return }
-                    let coloredBackgroundImage = image.getNewImage(backgroundColor: .white)
-
-                    SiteImageHelper.cache.setObject(coloredBackgroundImage ?? image, forKey: faviconCacheKey)
-                    DispatchQueue.main.async {
-                        completion(coloredBackgroundImage, true)
-                    }
+                guard let image = result.successValue else {
+                    completion(nil, false)
+                    return
                 }
 
                 SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
-                completion(image, true)
+                image.averageColor() { color in
+                    // If a color is perceived as too dark, we put a white background
+                    guard let color = color, color.luma < 0.2 else {
+                        completion(image, true)
+                        return
+                    }
+                    let coloredBackgroundImage = image.getNewImage(backgroundColor: .white)
+
+                    SiteImageHelper.cache.setObject(coloredBackgroundImage ?? image, forKey: faviconCacheKey)
+                    completion(coloredBackgroundImage, true)
+                }
             })
         }
     }
