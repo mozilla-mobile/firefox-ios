@@ -633,7 +633,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         tab.close()
 
         // Notify of tab removal
-        DispatchQueue.main.async { [unowned self]
+        ensureMainThread { [unowned self] in
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
             TabEvent.post(.didClose, for: tab)
         }

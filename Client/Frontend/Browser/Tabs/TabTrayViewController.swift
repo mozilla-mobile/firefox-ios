@@ -355,7 +355,7 @@ class TabTrayViewController: UIViewController {
 // MARK: - Notifiable protocol
 extension TabTrayViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        DispatchQueue.main.async { [weak self] in
+        ensureMainThread { [weak self] in
             switch notification.name {
             case .DisplayThemeChanged:
                 self?.applyTheme()

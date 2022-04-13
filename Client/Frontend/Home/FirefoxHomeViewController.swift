@@ -782,7 +782,7 @@ extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
 // MARK: - Notifiable
 extension FirefoxHomeViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        DispatchQueue.main.async { [weak self] in
+        ensureMainThread { [weak self] in
             switch notification.name {
             case .TabsPrivacyModeChanged:
                 self?.adjustPrivacySensitiveSections(notification: notification)
