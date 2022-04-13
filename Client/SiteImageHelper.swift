@@ -25,6 +25,10 @@ class SiteImageHelper {
     private let throttler = Throttler(seconds: 0.5, on: .main)
     private let profile: Profile
 
+    lazy var metadataProvider: LPMetadataProvider = {
+        return LPMetadataProvider()
+    }()
+
     init(profile: Profile) {
         self.profile = profile
     }
@@ -36,13 +40,14 @@ class SiteImageHelper {
     ///   - shouldFallback: Allow a fallback image to be given in the case where the `SiteImageType` you specify is not available.
     ///   - completion: Work to be done after fetching an image, ideally done on the main thread.
     /// - Returns: A UIImage.
-    func fetchImageFor(site: Site, imageType: SiteImageType, shouldFallback: Bool, completion: @escaping (UIImage?) -> ()) {
+    func fetchImageFor(site: Site, imageType: SiteImageType, shouldFallback: Bool, completion: @escaping (UIImage?) -> Void) {
         var didCompleteFetch = false
         var imageType = imageType
 
         switch imageType {
         case .heroImage:
-            fetchHeroImage(for: site) { image, result in
+            fetchHeroImage(for: site) { [weak self] image, result in
+                guard let _ = self else { return }
                 didCompleteFetch = result
                 DispatchQueue.main.async {
                     completion(image)
@@ -50,7 +55,8 @@ class SiteImageHelper {
                 }
             }
         case .favicon:
-            fetchFavicon(for: site) { image, result in
+            fetchFavicon(for: site) { [weak self] image, result in
+                guard let _ = self else { return }
                 didCompleteFetch = result
                 DispatchQueue.main.async {
                     completion(image)
@@ -90,8 +96,8 @@ class SiteImageHelper {
     }
 
     private func fetchFromMetaDataProvider(heroImageCacheKey: NSString, url: URL, completion: @escaping (UIImage?, Bool) -> ()) {
-        let linkPresentationProvider = LPMetadataProvider()
-        linkPresentationProvider.startFetchingMetadata(for: url) { metadata, error in
+
+        metadataProvider.startFetchingMetadata(for: url) { metadata, error in
             guard let metadata = metadata, let imageProvider = metadata.imageProvider, error == nil else {
                 completion(nil, false)
                 return
@@ -118,14 +124,15 @@ class SiteImageHelper {
         } else {
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
                 guard let image = result.successValue else {
+                    // Should not happen since we have fallback of letter favicon
                     completion(nil, false)
                     return
                 }
 
-                SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
                 image.averageColor() { color in
                     // If a color is perceived as too dark, we put a white background
                     guard let color = color, color.luma < 0.2 else {
+                        SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
                         completion(image, true)
                         return
                     }
