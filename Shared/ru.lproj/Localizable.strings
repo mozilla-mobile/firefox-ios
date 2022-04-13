@@ -126,7 +126,7 @@
 "Authentication required" = "Требуется аутентификация";
 
 /* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "Искать в { $engine } прямо из адресной строки";
+"Awesomebar.SearchWithEngine.Description" = "Искать в %@ прямо из адресной строки";
 
 /* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
 "Awesomebar.SearchWithEngine.Title" = "Поиск через %@";

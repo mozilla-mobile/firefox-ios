@@ -208,7 +208,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             }
           }
         } catch let error as NSError {
-            Sentry.shared.send(message: "Favicon cache directory creation failed", tag: .general, severity: .error, description: error.description)
+            SentryIntegration.shared.send(message: "Favicon cache directory creation failed", tag: .general, severity: .error, description: error.description)
         }
     }
 

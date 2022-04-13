@@ -805,6 +805,9 @@
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Wšykne sedła w %@ lašowaś?";
 
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Wótwónoźijo historiju (mjazy njeju historiju, kótaraž jo se synchronizěrowała z drugich rědow), cookieje a druge pśeglědowańske daty.";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Žedna historija namakana";
 
