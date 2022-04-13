@@ -11,31 +11,13 @@ import SyncTelemetry
 
 class FxHomeTopSitesViewModelTests: XCTestCase {
 
-    var profile: MockProfile!
-    var nimbusMock: NimbusMock!
-
-    override func setUp() {
-        super.setUp()
-        self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
-        self.nimbusMock = NimbusMock()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        self.profile._shutdown()
-        self.nimbusMock = nil
-        self.profile = nil
-    }
-
     func testDeletionOfSingleSuggestedSite() {
-        let viewModel = FxHomeTopSitesViewModel(profile: self.profile,
-                                                isZeroSearch: false,
-                                                nimbus: nimbusMock)
+        let sut = createViewModelAndProfile(useManager: false)
 
-        let siteToDelete = TopSitesHelper.defaultTopSites(profile)[0]
+        let siteToDelete = TopSitesHelper.defaultTopSites(sut.1)[0]
 
-        viewModel.hideURLFromTopSites(siteToDelete)
-        let newSites = TopSitesHelper.defaultTopSites(profile)
+        sut.0.hideURLFromTopSites(siteToDelete)
+        let newSites = TopSitesHelper.defaultTopSites(sut.1)
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
             return a.url == b.url
@@ -43,16 +25,14 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testDeletionOfAllDefaultSites() {
-        let viewModel = FxHomeTopSitesViewModel(profile: self.profile,
-                                                isZeroSearch: false,
-                                                nimbus: nimbusMock)
+        let sut = createViewModelAndProfile(useManager: false)
 
-        let defaultSites = TopSitesHelper.defaultTopSites(profile)
+        let defaultSites = TopSitesHelper.defaultTopSites(sut.1)
         defaultSites.forEach({
-            viewModel.hideURLFromTopSites($0)
+            sut.0.hideURLFromTopSites($0)
         })
 
-        let newSites = TopSitesHelper.defaultTopSites(profile)
+        let newSites = TopSitesHelper.defaultTopSites(sut.1)
         XCTAssertTrue(newSites.isEmpty)
     }
 
@@ -176,22 +156,43 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
 // MARK: Helper methods
 extension FxHomeTopSitesViewModelTests {
 
-    func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> FxHomeTopSitesViewModel {
-        let viewModel = FxHomeTopSitesViewModel(profile: self.profile,
+    func createViewModel(useManager: Bool = true,
+                         overridenSiteCount: Int = 40,
+                         overridenNumberOfRows: Int = 2,
+                         file: StaticString = #file,
+                         line: UInt = #line) -> FxHomeTopSitesViewModel {
+        return createViewModelAndProfile(useManager: useManager,
+                                         overridenSiteCount: overridenSiteCount,
+                                         overridenNumberOfRows: overridenNumberOfRows,
+                                         file: file, line: line).0
+    }
+
+    func createViewModelAndProfile(useManager: Bool = true,
+                                   overridenSiteCount: Int = 40,
+                                   overridenNumberOfRows: Int = 2,
+                                   file: StaticString = #file,
+                                   line: UInt = #line) -> (FxHomeTopSitesViewModel, MockProfile) {
+        let profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
+        let nimbusMock = NimbusMock()
+
+        let viewModel = FxHomeTopSitesViewModel(profile: profile,
                                                 isZeroSearch: false,
                                                 nimbus: nimbusMock)
 
-        let managerStub = FxHomeTopSitesManagerStub(profile: profile)
-        managerStub.overridenSiteCount = overridenSiteCount
-        managerStub.overridenNumberOfRows = overridenNumberOfRows
-        viewModel.tileManager = managerStub
+        if useManager {
+            let managerStub = FxHomeTopSitesManagerStub(profile: profile)
+            managerStub.overridenSiteCount = overridenSiteCount
+            managerStub.overridenNumberOfRows = overridenNumberOfRows
+            viewModel.tileManager = managerStub
 
-        trackForMemoryLeaks(viewModel)
-        trackForMemoryLeaks(managerStub)
-        trackForMemoryLeaks(managerStub.googleTopSiteManager)
-        trackForMemoryLeaks(managerStub.topSiteHistoryManager)
+            trackForMemoryLeaks(managerStub)
+            trackForMemoryLeaks(managerStub.googleTopSiteManager)
+            trackForMemoryLeaks(managerStub.topSiteHistoryManager)
+        }
 
-        return viewModel
+        trackForMemoryLeaks(viewModel, file: file, line: line)
+
+        return (viewModel, profile)
     }
 }
 
