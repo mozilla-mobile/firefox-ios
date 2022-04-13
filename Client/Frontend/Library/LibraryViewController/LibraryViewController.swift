@@ -73,12 +73,22 @@ class LibraryViewController: UIViewController {
         return button
     }()
 
-    private lazy var bottomCenterButton: UIBarButtonItem = {
+    private lazy var bottomSearchButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelSearch),
                                      style: .plain,
                                      target: self,
-                                     action: #selector(bottomCenterButtonAction))
+                                     action: #selector(bottomSearchButtonAction))
         button.accessibilityIdentifier = "historyPanelBottomCenterButton"
+        return button
+    }()
+
+    lazy var bottomDeleteButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.libraryPanelDelete),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(bottomDeleteButtonAction))
+        button.accessibilityIdentifier = "deleteHistory"
+//        button.accessibilityLabel = .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel
         return button
     }()
 
@@ -94,8 +104,8 @@ class LibraryViewController: UIViewController {
         return [flexibleSpace, bottomRightButton]
     }()
 
-    private lazy var bottomToolbarItemsCenterButton: [UIBarButtonItem] = {
-        return [flexibleSpace, bottomCenterButton, flexibleSpace]
+    private lazy var bottomToolbarHistoryItemsButton: [UIBarButtonItem] = {
+        return [bottomDeleteButton, flexibleSpace, bottomSearchButton, flexibleSpace]
     }()
 
     // MARK: - Initializers
@@ -189,13 +199,9 @@ class LibraryViewController: UIViewController {
     fileprivate func shouldShowBottomToolbar() {
         switch viewModel.currentPanelState {
         case .bookmarks(state: let subState):
-            if subState == .mainView {
-                navigationController?.setToolbarHidden(true, animated: true)
-            } else {
-                navigationController?.setToolbarHidden(false, animated: true)
-            }
+            navigationController?.setToolbarHidden(subState == .mainView, animated: true)
         case .history:
-            let shouldShowSearch = viewModel.isHistoryPanelWithGroups
+            let shouldShowSearch = viewModel.shouldShowSearch
             navigationController?.setToolbarHidden(!shouldShowSearch, animated: true)
         default:
             navigationController?.setToolbarHidden(true, animated: true)
@@ -365,9 +371,9 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolderEditMode):
             setToolbarItems(bottomToolbarItemsBothButtons, animated: true)
-        case .history:
-            if viewModel.isHistoryPanelWithGroups {
-                setToolbarItems(bottomToolbarItemsCenterButton, animated: true)
+        case .history(state: .mainView):
+            if viewModel.shouldShowSearch {
+                setToolbarItems(bottomToolbarHistoryItemsButton, animated: true)
             }
         default:
             setToolbarItems(bottomToolbarItemsSingleButton, animated: false)
@@ -491,12 +497,16 @@ class LibraryViewController: UIViewController {
         viewModel.currentPanelState = .history(state: .mainView)
     }
 
-    @objc func bottomCenterButtonAction() {
+    @objc func bottomSearchButtonAction() {
         viewModel.currentPanelState = .history(state: .search)
         guard let panel = children.first as? UINavigationController,
               let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
 
         historyPanel.startSearchState()
+    }
+
+    @objc func bottomDeleteButtonAction() {
+        NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }
 }
 
@@ -526,10 +536,12 @@ extension LibraryViewController: NotificationThemeable {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            bottomCenterButton.tintColor = .white
+            bottomSearchButton.tintColor = .white
+            bottomDeleteButton.tintColor = .white
         } else {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-            bottomCenterButton.tintColor = .black
+            bottomSearchButton.tintColor = .black
+            bottomDeleteButton.tintColor = .black
         }
         setNeedsStatusBarAppearanceUpdate()
     }

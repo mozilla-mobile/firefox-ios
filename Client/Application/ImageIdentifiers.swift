@@ -32,6 +32,7 @@ public struct ImageIdentifiers {
     public static let key = "key"
     public static let libraryPanelHistory = "library-history"
     public static let libraryPanelSearch = "search"
+    public static let libraryPanelDelete = "action_delete"
     public static let menuChevron = "menu-Disclosure"
     public static let newPrivateTab = "quick_action_new_private_tab"
     public static let newTab = "quick_action_new_tab"
