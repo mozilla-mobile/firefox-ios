@@ -955,6 +955,7 @@ class BrowserViewController: UIViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
 
+        // We should not set libraryViewController to nil because the library panel losses the currentStat
         let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile, tabManager: tabManager)
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
@@ -967,11 +968,9 @@ class BrowserViewController: UIViewController {
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
         controller.onViewWillDisappear = {
             self.firefoxHomeViewController?.reloadAll()
-            self.libraryViewController = nil
         }
         controller.onViewDismissed = {
             self.firefoxHomeViewController?.reloadAll()
-            self.libraryViewController = nil
         }
         self.present(controller, animated: true, completion: nil)
     }

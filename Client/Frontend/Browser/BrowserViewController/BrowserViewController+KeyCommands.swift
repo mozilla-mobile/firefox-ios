@@ -26,12 +26,7 @@ extension BrowserViewController {
     }
 
     private func showPanel(_ panel: LibraryPanelType) {
-        guard let libraryViewController = self.libraryViewController else {
-            showLibrary(panel: panel)
-            return
-        }
-
-        libraryViewController.selectedPanel = panel
+        showLibrary(panel: panel)
     }
 
     @objc private func openClearHistoryPanelKeyCommand() {
