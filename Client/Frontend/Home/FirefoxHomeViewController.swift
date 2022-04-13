@@ -268,8 +268,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
-        defaultBrowserCard.dismissClosure = {
-            self.dismissDefaultBrowserCard()
+        defaultBrowserCard.dismissClosure = { [weak self] in
+            self?.dismissDefaultBrowserCard()
         }
     }
 
