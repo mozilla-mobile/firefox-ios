@@ -755,7 +755,7 @@
 "Load original page" = "मूल पृष्ठ लोड करें";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "सामग्री लोड हो रही है ...";
+"Loading content…" = "सामग्री लोड हो रही है…";
 
 /* Authentication prompt log in button */
 "Log in" = "लॉग इन";

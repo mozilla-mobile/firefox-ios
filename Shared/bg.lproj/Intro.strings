@@ -2,7 +2,7 @@
 "Intro.Slides.Mail.Description" = "С Firefox използвате всяко приложение за ел. поща, не само Mail.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Настройки на ел. поща";
+"Intro.Slides.Mail.Title" = "Настройки на ел… поща";
 
 /* Description for the 'Private Browsing' panel in the First Run tour. */
 "Intro.Slides.Private.Description" = "Докоснете пиктограмата с маска, за да включите режима на поверително разглеждане.";
