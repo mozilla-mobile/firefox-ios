@@ -887,7 +887,7 @@ class BrowserViewController: UIViewController {
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
-    private func hideFirefoxHome() {
+    func hideFirefoxHome(completion: (() -> Void)? = nil) {
         guard let firefoxHomeViewController = self.firefoxHomeViewController else {
             return
         }
@@ -906,6 +906,7 @@ class BrowserViewController: UIViewController {
             if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
                 self.showReaderModeBar(animated: false)
             }
+            completion?()
         })
     }
 
