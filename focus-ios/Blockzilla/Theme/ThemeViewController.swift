@@ -41,12 +41,19 @@ class ThemeViewController: UIViewController {
     }()
     
     private var sections: [ThemeSection] {
-        let tableSections: [ThemeSection] = currentTheme == .unspecified ? [.systemTheme] : [.systemTheme, .themePicker]
+        let tableSections: [ThemeSection] = themeManager.selectedTheme == .unspecified ? [.systemTheme] : [.systemTheme, .themePicker]
         return tableSections
     }
     
-    private var currentTheme: UIUserInterfaceStyle {
-        return UserDefaults.standard.theme.userInterfaceStyle
+    var themeManager: ThemeManager
+    
+    init(themeManager: ThemeManager) {
+        self.themeManager = themeManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -65,7 +72,7 @@ class ThemeViewController: UIViewController {
         }
     }
     
-    private func configureStyle(for theme: Theme) {
+    private func configureStyle(for theme: ThemeManager.Theme) {
         view.window?.overrideUserInterfaceStyle = theme.userInterfaceStyle
     }
     
@@ -75,15 +82,16 @@ class ThemeViewController: UIViewController {
             let themeCell = ThemeTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell")
             themeCell.accessibilityIdentifier = "themeViewController.themetoogleCell"
             (themeCell as ThemeTableViewToggleCell).delegate =  self
+            (themeCell as ThemeTableViewToggleCell).toggle.isOn = themeManager.selectedTheme == .unspecified
             cell = themeCell
         } else {
             let themeCell = ThemeTableViewAccessoryCell(style: .value1, reuseIdentifier: "themeCell")
             themeCell.labelText = indexPath.row == 0 ? UIConstants.strings.light : UIConstants.strings.dark
             themeCell.accessibilityIdentifier = "themeViewController.themeCell"
             let checkmarkImageView = UIImageView(image: UIImage(named: "custom_checkmark"))
-            if currentTheme == .light {
+            if themeManager.selectedTheme == .light {
                 themeCell.accessoryView = indexPath.row == 0 ? checkmarkImageView : .none
-            } else if currentTheme == .dark {
+            } else if themeManager.selectedTheme == .dark {
                 themeCell.accessoryView = indexPath.row == 1 ? checkmarkImageView : .none
             }
             cell = themeCell
@@ -128,13 +136,8 @@ extension ThemeViewController: UITableViewDelegate {
         
         switch indexPath.section {
         case 1:
-            if indexPath.row == 0 {
-                configureStyle(for: .light)
-                UserDefaults.standard.theme = .light
-            } else {
-                configureStyle(for: .dark)
-                UserDefaults.standard.theme = .dark
-            }
+            configureStyle(for: indexPath.row == 0 ? .light : .dark)
+            themeManager.set(indexPath.row == 0 ? .light : .dark)
         default:
             break
         }
@@ -146,7 +149,7 @@ extension ThemeViewController: UITableViewDelegate {
 extension ThemeViewController: SystemThemeDelegate {
     func didEnableSystemTheme(_ isEnabled: Bool) {
         configureStyle(for: isEnabled ? .device : .light)
-        UserDefaults.standard.theme = isEnabled ? .device : .light
+        themeManager.set(isEnabled ? .device : .light)
         tableView.beginUpdates()
         isEnabled ? tableView.deleteSections([1], with: .fade) :  tableView.insertSections([1], with: .fade)
         tableView.endUpdates()

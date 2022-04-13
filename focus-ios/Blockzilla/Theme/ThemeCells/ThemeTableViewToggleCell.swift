@@ -19,7 +19,6 @@ class ThemeTableViewToggleCell: UITableViewCell {
         toggle.onTintColor = .accent
         toggle.tintColor = .darkGray
         toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
-        toggle.isOn = UserDefaults.standard.theme.userInterfaceStyle == .unspecified
         accessoryView = PaddedSwitch(switchView: toggle)
         selectionStyle = .none
     }

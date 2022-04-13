@@ -46,13 +46,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     private lazy var browserViewController = BrowserViewController(
         authenticationManager: authenticationManager,
         onboardingEventsHandler: onboardingEventsHandler,
-        whatsNewEventsHandler: whatsNewEventsHandler
+        whatsNewEventsHandler: whatsNewEventsHandler,
+        themeManager: themeManager
     )
     
     private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
     private var queuedString: String?
     private let whatsNewEventsHandler = WhatsNewEventsHandler()
+    private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
     
     private lazy var onboardingEventsHandler = OnboardingEventsHandler(
@@ -169,7 +171,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         browserViewController.modalDelegate = self
         window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
-        window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
+        window?.overrideUserInterfaceStyle = themeManager.selectedTheme
         
         WebCacheUtils.reset()
         

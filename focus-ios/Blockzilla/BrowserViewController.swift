@@ -49,6 +49,7 @@ class BrowserViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     private var onboardingEventsHandler: OnboardingEventsHandler
     private var whatsNewEventsHandler: WhatsNewEventsHandler
+    private var themeManager: ThemeManager
 
     private enum URLBarScrollState {
         case collapsed
@@ -89,13 +90,15 @@ class BrowserViewController: UIViewController {
         shortcutManager: ShortcutsManager = ShortcutsManager.shared,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
-        whatsNewEventsHandler: WhatsNewEventsHandler
+        whatsNewEventsHandler: WhatsNewEventsHandler,
+        themeManager: ThemeManager
     ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
         self.whatsNewEventsHandler = whatsNewEventsHandler
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
         shortcutManager.delegate = self
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -1937,6 +1940,7 @@ extension BrowserViewController: MenuActionable {
             authenticationManager: authenticationManager,
             onboardingEventsHandler: onboardingEventsHandler,
             whatsNewEventsHandler: whatsNewEventsHandler,
+            themeManager: themeManager,
             shouldScrollToSiri: shouldScrollToSiri
         )
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)

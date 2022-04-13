@@ -10,6 +10,7 @@ import IntentsUI
 import Glean
 import SwiftUI
 import Onboarding
+import Combine
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -66,6 +67,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     private var onboardingEventsHandler: OnboardingEventsHandler
     private var whatsNewEventsHandler: WhatsNewEventsHandler
+    private var themeManager: ThemeManager
+    private var cancellable: AnyCancellable?
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
     private let detector = BlockerEnabledDetector()
@@ -80,7 +83,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     private var labelTextForCurrentTheme: String {
         var themeName = ""
-        switch UserDefaults.standard.theme.userInterfaceStyle {
+        switch themeManager.selectedTheme {
         case .unspecified:
             themeName = UIConstants.strings.systemTheme
         case .light:
@@ -93,8 +96,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return themeName
     }
     
-    private var whatsNewButtonColor: UIColor {
-        let barButtonDisabledColor: UIColor = UserDefaults.standard.theme == .device ? (traitCollection.userInterfaceStyle == .light ? .systemGray2 : .white) : (UserDefaults.standard.theme == .light ? .systemGray2 : .white)
+    var whatsNewButtonColor: UIColor {
+        let barButtonDisabledColor: UIColor = themeManager.selectedTheme == .unspecified ? (traitCollection.userInterfaceStyle == .light ? .systemGray2 : .white) : (themeManager.selectedTheme == .light ? .systemGray2 : .white)
         return whatsNewEventsHandler.shouldShowWhatsNew ? .accent : barButtonDisabledColor
     }
 
@@ -144,6 +147,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
         whatsNewEventsHandler: WhatsNewEventsHandler,
+        themeManager: ThemeManager,
         shouldScrollToSiri: Bool = false
     ) {
         self.searchEngineManager = searchEngineManager
@@ -151,6 +155,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
         self.whatsNewEventsHandler = whatsNewEventsHandler
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
         
         tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
@@ -176,7 +181,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
+        
         initializeToggles()
         for (sectionIndex, toggleArray) in toggles {
             for (cellIndex, blockerToggle) in toggleArray {
@@ -205,6 +210,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             tableView.scrollToRow(at: siriIndexPath, at: .none, animated: false)
             shouldScrollToSiri = false
         }
+        
+        cancellable = themeManager
+            .$selectedTheme
+            .sink { [unowned self] selectedTheme in
+                highlightsButton.tintColor = whatsNewButtonColor
+            }
+
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -220,6 +232,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if isViewLoaded && view.window != nil {
             updateSafariEnabledState()
         }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard themeManager.selectedTheme == .unspecified  else { return }
+        themeManager.set(.device)
     }
 
     private func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
@@ -408,7 +426,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.deselectRow(at: indexPath, animated: true)
         switch sections[indexPath.section] {
         case .general:
-            let themeVC = ThemeViewController()
+            let themeVC = ThemeViewController(themeManager: themeManager)
             navigationController?.pushViewController(themeVC, animated: true)
         case .privacy:
             if indexPath.row == 0 {

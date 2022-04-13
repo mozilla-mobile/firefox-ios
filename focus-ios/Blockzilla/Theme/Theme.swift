@@ -4,43 +4,49 @@
 
 import UIKit
 
-enum Theme: Int {
-    case device
-    case light
-    case dark
-}
+class ThemeManager {
+    
+    enum Theme: Int {
 
-extension Theme {
-    var userInterfaceStyle: UIUserInterfaceStyle {
-        switch self {
-        case .device:
-            return .unspecified
-        case .light:
-            return .light
-        case .dark:
-            return .dark
+        case device
+        case light
+        case dark
+        
+        var userInterfaceStyle: UIUserInterfaceStyle {
+            switch self {
+            case .device:
+                return .unspecified
+            case .light:
+                return .light
+            case .dark:
+                return .dark
+            }
+        }
+        var telemetryValue: String {
+            switch self {
+            case .device:
+                return "Follow device"
+            case .light:
+                return "Light"
+            case .dark:
+                return "Dark"
+            }
         }
     }
-}
-
-extension Theme {
-    var telemetryValue: String {
-        switch self {
-        case .device:
-            return "Follow device"
-        case .light:
-            return "Light"
-        case .dark:
-            return "Dark"
-        }
+    
+    @Published public var selectedTheme: UIUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
+    
+    public func set(_ theme: ThemeManager.Theme) {
+        UserDefaults.standard.theme = theme
+        selectedTheme = theme.userInterfaceStyle
     }
 }
 
 extension UserDefaults {
-    var theme: Theme {
+    var theme: ThemeManager.Theme {
         get {
-            register(defaults: [#function: Theme.device.rawValue])
-            return Theme(rawValue: integer(forKey: #function)) ?? .device
+            register(defaults: [#function: ThemeManager.Theme.device.rawValue])
+            return ThemeManager.Theme(rawValue: integer(forKey: #function)) ?? .device
         }
         set {
             set(newValue.rawValue, forKey: #function)
