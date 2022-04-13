@@ -4,9 +4,9 @@
 
 import XCTest
 
-let defaultTopSite = ["topSiteLabel": "wikipedia", "bookmarkLabel": "Wikipedia"]
+let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "mozilla", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
-let allDefaultTopSites = ["facebook", "youtube", "amazon", "wikipedia", "twitter"]
+let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter"]
 
 class ActivityStreamTest: BaseTestCase {
     let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section]
@@ -54,11 +54,11 @@ class ActivityStreamTest: BaseTestCase {
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         // Check their names so that test is added to Smoketest
-        XCTAssertTrue(TopSiteCellgroup.cells["twitter"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["amazon"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["wikipedia"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["youtube"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["facebook"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["Twitter"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["Amazon"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["Wikipedia"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["YouTube"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["Facebook"].exists)
     }
 
     func testTopSites2Add() {
@@ -155,8 +155,8 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSites4OpenInNewTab() {
         navigator.goto(HomePanelsScreen)
-        waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 5)
-        TopSiteCellgroup.cells["apple"].press(forDuration: 1)
+        waitForExistence(TopSiteCellgroup.cells["Apple"], timeout: 5)
+        TopSiteCellgroup.cells["Apple"].press(forDuration: 1)
         app.tables["Context Menu"].otherElements["Open in New Tab"].tap()
         // The new tab is open but curren screen is still Homescreen
         XCTAssert(TopSiteCellgroup.exists)
@@ -165,7 +165,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts["Homepage"].firstMatch, timeout: 5)
         app.cells.staticTexts["Homepage"].firstMatch.tap()
-        waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 10)
+        waitForExistence(TopSiteCellgroup.cells["Apple"], timeout: 10)
         navigator.nowAt(HomePanelsScreen)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -211,12 +211,12 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on apple top site, second cell
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["apple"], timeout: 3)
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["apple"].press(forDuration:1)
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["Apple"], timeout: 3)
+        app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["Apple"].press(forDuration:1)
         app.tables["Context Menu"].cells.otherElements["Open in New Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
-        XCTAssertFalse(app.staticTexts["Apple"].exists)
+        XCTAssertFalse(app.staticTexts["apple"].exists)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
@@ -298,8 +298,8 @@ class ActivityStreamTest: BaseTestCase {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
             navigator.performAction(Action.CloseURLBarOpen)
 
-            waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 5)
-            TopSiteCellgroup.cells["apple"].press(forDuration: 1)
+            waitForExistence(TopSiteCellgroup.cells["Apple"], timeout: 5)
+            TopSiteCellgroup.cells["Apple"].press(forDuration: 1)
 
             let contextMenuHeight = app.tables["Context Menu"].frame.size.height
             let parentViewHeight = app.otherElements["Action Sheet"].frame.size.height

@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Shared
 
 // Top site UI class, used in the home top site section
 final class HomeTopSite {
@@ -11,6 +12,14 @@ final class HomeTopSite {
     var site: Site
     var title: String
     var image: UIImage?
+
+    var sponsoredText: String {
+        return .FirefoxHomepage.Shortcuts.Sponsored
+    }
+
+    var accessibilityLabel: String? {
+        return isSponsoredTile ? "\(title), \(sponsoredText)" : title
+    }
 
     var isPinned: Bool {
         return (site as? PinnedSite) != nil
@@ -38,9 +47,9 @@ final class HomeTopSite {
     init(site: Site, profile: Profile) {
         self.site = site
         if let provider = site.metadata?.providerName {
-            title = provider.lowercased()
+            title = provider.lowercased().capitalized
         } else {
-            title = site.tileURL.shortDisplayString
+            title = site.title
         }
 
         let imageHelper = SiteImageHelper(profile: profile)
