@@ -24,6 +24,7 @@ enum FeatureFlagName: String, CaseIterable {
     case historyGroups
     case inactiveTabs
     case jumpBackIn
+    case librarySection
     case nimbus
     case pocket
     case pullToRefresh
@@ -32,6 +33,7 @@ enum FeatureFlagName: String, CaseIterable {
     case shakeToRestore
     case startAtHome
     case tabTrayGroups
+    case topSites
     case wallpapers
 }
 
@@ -59,6 +61,7 @@ class FeatureFlagsManager {
 
     private var profile: Profile!
     private var features: [FeatureFlagName: FlaggableFeature] = [:]
+    private var nimbusLayer = NimbusFeatureFlagLayer()
 
     // MARK: - Public methods
 
@@ -67,6 +70,11 @@ class FeatureFlagsManager {
     public func isFeatureActiveForBuild(_ featureID: FeatureFlagName) -> Bool {
         guard let feature = features[featureID] else { return false }
         return feature.isActiveForBuild()
+    }
+
+    public func isFeatureActiveForNimbus(_ featureID: FeatureFlagName) -> Bool {
+        guard let feature = features[featureID] else { return false }
+        return feature.isNimbusActive(using: nimbusLayer)
     }
 
     /// A convenient way to check both `isFeatureActiveForBuild` and `userPreferenceFor`
@@ -94,7 +102,7 @@ class FeatureFlagsManager {
     /// it's appropriate type in the switch statement.
     public func userPreferenceFor<T>(_ featureID: FeatureFlagName) -> T? {
         guard let feature = features[featureID],
-              let userSetting = feature.getUserPreference()
+              let userSetting = feature.getUserPreference(using: nimbusLayer)
         else { return nil }
 
         switch featureID {
@@ -154,7 +162,7 @@ class FeatureFlagsManager {
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
                                             and: profile,
-                                            enabledFor: [.developer, .beta])
+                                            enabledFor: [.developer, .beta, .release])
         features[.inactiveTabs] = inactiveTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
@@ -215,5 +223,8 @@ class FeatureFlagsManager {
                                           and: profile,
                                           enabledFor: [.release, .beta, .developer])
         features[.wallpapers] = wallpapers
+
+        nimbusLayer = NimbusFeatureFlagLayer()
+        nimbusLayer.updateData()
     }
 }
