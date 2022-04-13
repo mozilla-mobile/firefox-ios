@@ -488,7 +488,7 @@
 "Load original page" = "Ielādē oriģinālo lapu";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "Ielādē saturu...";
+"Loading content…" = "Ielādē saturu…";
 
 /* Authentication prompt log in button */
 "Log in" = "Pieslēgties";
@@ -1123,7 +1123,7 @@
 "Sync.Syncing.Label" = "Sinhronizē";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "Sinhronizē...";
+"Sync.SyncingEllipsis.Label" = "Sinhronizē…";
 
 /* The Bookmark sync component, used in SyncState.Partial.Title */
 "SyncState.Bookmark.Title" = "Grāmatzīmes";

@@ -569,7 +569,7 @@
 "History" = "Jujutan";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "Hapus Jujutan...";
+"HistoryPanel.ClearHistoryButtonTitle" = "Hapus Jujutan…";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "Sagalana";
@@ -791,7 +791,7 @@
 "Last month" = "Bulan Kamari";
 
 /* Remote tabs last synced time. Argument is the relative date string. */
-"Last synced: %@" = "Singkronan Panungtung";
+"Last synced: %@" = "Singkronan Panungtung: %@";
 
 /* History tableview section header */
 "Last week" = "Minggu Kamari";

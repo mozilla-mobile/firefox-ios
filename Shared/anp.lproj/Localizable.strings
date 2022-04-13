@@ -422,7 +422,7 @@
 "History" = "इतिहास";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "हाल रो इतिहास मिटाबो...";
+"HistoryPanel.ClearHistoryButtonTitle" = "हाल रो इतिहास मिटाबो…";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "सबचीज";
@@ -912,7 +912,7 @@
 "Settings.TrackingProtection.LearnMore" = "बेसी जानकारी";
 
 /* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "अधिकोॅ जानकारी...";
+"Settings.TrackingProtection.MoreInfo" = "अधिकोॅ जानकारी…";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "ट्रैकिंग सुरक्षा";

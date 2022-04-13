@@ -257,7 +257,7 @@
 "LoginsHelper.DontSave.Button" = "Moenie stoor nie";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Stoor aanmelding %1$@ vir %1$@?";
+"LoginsHelper.PromptSaveLogin.Title" = "Stoor aanmelding %1$@ vir %2$@?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "Stoor wagwoord vir %@?";

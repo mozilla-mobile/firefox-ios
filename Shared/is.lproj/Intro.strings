@@ -29,7 +29,7 @@
 "Intro.Slides.Mail.Description" = "Nota hvaða tölvupóstforrit sem er - ekki aðeins Mail - í Firefox.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Þú hefur fengið póst... valkostir";
+"Intro.Slides.Mail.Title" = "Þú hefur fengið póst… valkostir";
 
 /* Description for the 'Private Browsing' panel in the First Run tour. */
 "Intro.Slides.Private.Description" = "Ýttu á grímutáknið til að fara í huliðsvöfrun.";

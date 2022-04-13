@@ -620,7 +620,7 @@
 "LoginsHelper.PromptSavePassword.Title" = "%@ အတွက် စကားဝှက်ကို သိမ်းမည်လား။";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "% @ အတွက် login အသစ်ပြောင်းမလား။";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ အတွက် login အသစ်ပြောင်းမလား။";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
 "LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ အတွက် ဝင်ရောက်မှု %1$@ ကို ပြောင်းလဲသိမ်းမည်လား။";

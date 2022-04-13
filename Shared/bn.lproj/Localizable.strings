@@ -761,7 +761,7 @@
 "Load original page" = "আসল পেজ লোড করুন";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "কন্টেন্ট লোড হচ্ছে...";
+"Loading content…" = "কন্টেন্ট লোড হচ্ছে…";
 
 /* Authentication prompt log in button */
 "Log in" = "লগ ইন";

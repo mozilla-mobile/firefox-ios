@@ -554,7 +554,7 @@
 "Load original page" = "I-load ang original page";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "Niloload ang nilalaman...";
+"Loading content…" = "Niloload ang nilalaman…";
 
 /* Authentication prompt log in button */
 "Log in" = "Mag-login";

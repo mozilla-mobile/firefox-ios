@@ -32,7 +32,7 @@
 "Menu.ScanQRCodeAction.Title" = "Examinar código QR";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
-"Menu.SharePageAction.Title" = "Compartir a páxina con...";
+"Menu.SharePageAction.Title" = "Compartir a páxina con…";
 
 /* Label for the button, displayed in the menu, used to open the tabs tray */
 "Menu.ShowTabs.Title" = "Amosar lapelas";

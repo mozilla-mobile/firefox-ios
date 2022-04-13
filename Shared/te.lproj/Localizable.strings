@@ -584,7 +584,7 @@
 "LoginsHelper.DontUpdate.Button" = "తాజాకరించవద్దు";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "లాగిన్ %2$@ కోసం %2$@ సేవ్ చేయండి?";
+"LoginsHelper.PromptSaveLogin.Title" = "లాగిన్ %1$@ కోసం %2$@ సేవ్ చేయండి?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "%@ కోసం పాస్వర్డ్ ను సేవ్ చేయండి?";

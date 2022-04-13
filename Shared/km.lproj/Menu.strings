@@ -56,7 +56,7 @@
 "Menu.SeeAllAction.Title" = "មើល​ទាំងអស់";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
-"Menu.SharePageAction.Title" = "ចែករំលែកទំព័រជាមួយ...";
+"Menu.SharePageAction.Title" = "ចែករំលែកទំព័រជាមួយ…";
 
 /* Label for the button, displayed in the menu, used to open the tabs tray */
 "Menu.ShowTabs.Title" = "បង្ហាញ​ផ្ទាំង";

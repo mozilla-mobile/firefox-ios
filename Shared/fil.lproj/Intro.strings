@@ -14,7 +14,7 @@
 "Intro.Slides.Mail.Description" = "Gamitin ang anumang email app - hindi lamang Mail - may Firefox.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Nakakuha ka ng mga mail... opsyon";
+"Intro.Slides.Mail.Title" = "Nakakuha ka ng mga mail… opsyon";
 
 /* Description for the 'Private Browsing' panel in the First Run tour. */
 "Intro.Slides.Private.Description" = "Tapikin ang icon ng mask upang mawala sa pribadong pagba-browse mode.";
@@ -47,5 +47,5 @@
 "Start Browsing" = "Simulang mag-Browse";
 
 /* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
-"Turn on Sync…" = "i-On ang Sync...";
+"Turn on Sync…" = "i-On ang Sync…";
 

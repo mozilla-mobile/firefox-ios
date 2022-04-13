@@ -38,7 +38,7 @@
 "TodayWidget.GoToCopiedLinkLabelV4" = "Prejsť na skopírovaný odkaz";
 
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
-"TodayWidget.MoreTabsLabel" = "+ ďalšie (%d)";
+"TodayWidget.MoreTabsLabel" = "+%d ďalšie…";
 
 /* Open New Private Tab button label for medium size action */
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Hľadať v súkromnej karte";
