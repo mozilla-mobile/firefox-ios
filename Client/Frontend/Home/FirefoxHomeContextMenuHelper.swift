@@ -168,10 +168,13 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         return topSiteActions
     }
 
+    // Removes it out of the top sites
     private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .RemoveContextMenuTitle,
                                      iconString: ImageIdentifiers.actionRemove,
                                      tapHandler: { _ in
+            // TODO: Laurie - This doesnt work. Removing when stuff is pinned - How can we do that ??
+            self.viewModel.topSiteViewModel.removePinTopSite(site)
             self.viewModel.topSiteViewModel.hideURLFromTopSites(site)
             self.sendTopSiteContextualTelemetry(type: .remove)
         }).items
@@ -186,6 +189,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         }).items
     }
 
+    // Unpin removes it from the location it's in
     private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .RemoveFromShortcutsActionTitle,
                                      iconString: ImageIdentifiers.removeFromShortcut,
