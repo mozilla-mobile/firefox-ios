@@ -369,6 +369,7 @@ extension TelemetryWrapper {
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case topSiteTile = "top-site-tile"
         case topSiteImpression = "top-site-impression"
+        case topSiteContextualMenu = "top-site-contextual-menu"
         case pocketStory = "pocket-story"
         case pocketSectionImpression = "pocket-section-impression"
         case library = "library"
@@ -486,6 +487,7 @@ extension TelemetryWrapper {
         case topSitePosition = "tilePosition"
         case topSiteTileType = "tileType"
         case topSiteUrl = "topSiteUrl"
+        case contextualMenuType = "contextualMenuType"
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
         case tabsQuantity = "tabsQuantity"
@@ -559,6 +561,13 @@ extension TelemetryWrapper {
         case (.information, .view, .topSiteImpression, _, let extras):
             if let url = extras?[EventExtraKey.topSiteUrl.rawValue] as? String {
                 GleanMetrics.TopSite.sponsoredTileImpressions.record(GleanMetrics.TopSite.SponsoredTileImpressionsExtra(tileUrl: url))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        case (.action, .view, .topSiteContextualMenu, _, let extras):
+            if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
+                GleanMetrics.TopSite.contextualMenu.record(GleanMetrics.TopSite.ContextualMenuExtra(type: type))
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }

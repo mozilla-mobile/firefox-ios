@@ -43,6 +43,18 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertFalse(GleanMetrics.TopSite.sponsoredTileImpressions.testHasValue())
     }
 
+    func test_topSiteContextualMenu_GleanIsCalled() {
+        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: FirefoxHomeContextMenuHelper.ContextualActionType.settings.rawValue]
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSite.contextualMenu)
+    }
+
+    func test_topSiteContextualMenuWithoutExtra_GleanIsNotCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: nil)
+        XCTAssertFalse(GleanMetrics.TopSite.contextualMenu.testHasValue())
+    }
+
     // MARK: - Preferences
 
     func test_preferencesWithExtras_GleanIsCalled() {

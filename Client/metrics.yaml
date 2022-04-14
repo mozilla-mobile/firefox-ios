@@ -509,6 +509,23 @@ top_site:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-10-14"
+  contextual_menu:
+    type: event
+    description: |
+        Records when a user clicks on a contextual
+        menu option on top site
+    extra_keys:
+      type:
+        type: string
+        description: |
+          Type of contextual action
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3834
+    data_reviews:
+      - TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-10-14"
 
 # HomePage
 firefox_home_page:

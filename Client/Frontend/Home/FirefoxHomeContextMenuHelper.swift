@@ -173,6 +173,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
                                      iconString: ImageIdentifiers.actionRemove,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.hideURLFromTopSites(site)
+            self.sendTopSiteContextualTelemetry(type: .remove)
         }).items
     }
 
@@ -181,6 +182,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
                                      iconString: ImageIdentifiers.addShortcut,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.pinTopSite(site)
+            self.sendTopSiteContextualTelemetry(type: .pin)
         }).items
     }
 
@@ -189,12 +191,14 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
                                      iconString: ImageIdentifiers.removeFromShortcut,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.removePinTopSite(site)
+            self.sendTopSiteContextualTelemetry(type: .unpin)
         }).items
     }
 
     private func getSettingsAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, tapHandler: { _ in
             self.delegate?.homePanelDidRequestToOpenSettings(at: .customizeTopSites)
+            self.sendTopSiteContextualTelemetry(type: .settings)
         }).items
     }
 
@@ -203,6 +207,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
             // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3469 SUMO page here is a placeholder, real page needs to be replaced
             guard let url = URL(string: "https://support.mozilla.org/") else { return }
             self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
+            self.sendTopSiteContextualTelemetry(type: .sponsoredSupport)
         }).items
     }
 
@@ -212,5 +217,16 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
             site.setBookmarked(isBookmarked)
             completionHandler()
         }
+    }
+
+    // MARK: Telemetry
+
+    enum ContextualActionType: String {
+        case remove, unpin, pin, settings, sponsoredSupport
+    }
+
+    private func sendTopSiteContextualTelemetry(type: ContextualActionType) {
+        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
     }
 }
