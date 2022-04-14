@@ -21,6 +21,9 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         case main
     }
 
+    // TODO: Check FxHomeViewController sometimes doesn't reload JumpBackIn and RecentlyVisited
+    // TODO: Add flag to show/hide title and done button
+    // TODO: check if we can remove profile
     let profile: Profile
     let viewModel: GroupedHistoryItemsViewModel
     var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
@@ -37,6 +40,12 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
             tableView.sectionHeaderTopPadding = 0
         }
     }
+
+    fileprivate lazy var doneButton: UIBarButtonItem =  {
+        let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(doneButtonAction))
+        button.accessibilityIdentifier = "ShowGroupDoneButton"
+        return button
+    }()
 
     private var diffableDatasource: UITableViewDiffableDataSource<Sections, AnyHashable>?
 
@@ -81,6 +90,11 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
     // MARK: - Misc. helpers
 
     private func setupLayout() {
+        navigationItem.rightBarButtonItem = doneButton
+        // TODO: Pass the disply title
+        title = "Fun 2"
+
+        // Adding subviews and constraints
         view.addSubviews(tableView)
 
         NSLayoutConstraint.activate([
@@ -149,6 +163,9 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         }
     }
 
+    @objc private func doneButtonAction() {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 extension GroupedHistoryItemsViewController: UITableViewDelegate {

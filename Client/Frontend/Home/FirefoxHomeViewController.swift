@@ -621,10 +621,18 @@ extension FirefoxHomeViewController {
 
         let asGroupListViewModel = GroupedHistoryItemsViewModel(asGroup: groupSite)
         let asGroupListVC = GroupedHistoryItemsViewController(profile: viewModel.profile, viewModel: asGroupListViewModel)
-        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
-        asGroupListVC.title = item.displayTitle
 
-        navigationController?.present(asGroupListVC, animated: true, completion: nil)
+        let dismissableController: DismissableNavigationViewController
+        dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)
+        dismissableController.onViewWillDisappear = {
+            print("Hey I'm dismiss")
+        }
+        dismissableController.onViewDismissed = {
+            print("Hey I'm dismiss")
+        }
+        self.present(dismissableController, animated: true, completion: nil)
+
+        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
     }
 
     private func buildSite(from highlight: HighlightItem) -> Site {

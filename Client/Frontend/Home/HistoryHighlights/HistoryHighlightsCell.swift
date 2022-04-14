@@ -139,12 +139,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         if options.shouldAddShadow {
             addShadowLayer(cornersToRound: options.corners ?? UIRectCorner())
         }
+        heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
         shadowViewLayer?.removeFromSuperlayer()
+        heroImage.image = nil
     }
 
     // MARK: - Setup Helper methods
