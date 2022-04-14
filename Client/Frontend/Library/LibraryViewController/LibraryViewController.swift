@@ -184,7 +184,7 @@ class LibraryViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
     }
 
-    fileprivate func updateViewWithState() {
+    func updateViewWithState() {
         updatePanelState()
         shouldShowBottomToolbar()
         setupButtons()
@@ -415,98 +415,6 @@ class LibraryViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         }
         updateViewWithState()
-    }
-
-    // MARK: - Toolbar Button Actions
-    @objc func bottomLeftButtonAction() {
-        guard let panel = children.first as? UINavigationController else { return }
-        switch viewModel.currentPanelState {
-        case .bookmarks(state: let state):
-            leftButtonBookmarkActions(for: state, onPanel: panel)
-        default:
-            return
-        }
-        updateViewWithState()
-    }
-
-    fileprivate func leftButtonBookmarkActions(for state: LibraryPanelSubState, onPanel panel: UINavigationController) {
-
-        switch state {
-        case .inFolder:
-            if panel.viewControllers.count > 1 {
-                viewModel.currentPanelState = .bookmarks(state: .mainView)
-                panel.popViewController(animated: true)
-            }
-
-        case .inFolderEditMode:
-            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-            bookmarksPanel.addNewBookmarkItemAction()
-
-        case .itemEditMode:
-            viewModel.currentPanelState = .bookmarks(state: .inFolderEditMode)
-            panel.popViewController(animated: true)
-
-        default:
-            return
-        }
-    }
-
-    @objc func bottomRightButtonAction() {
-        switch viewModel.currentPanelState {
-        case .bookmarks(state: let state):
-            rightButtonBookmarkActions(for: state)
-        default:
-            return
-        }
-        updateViewWithState()
-    }
-
-    private func rightButtonBookmarkActions(for state: LibraryPanelSubState) {
-        guard let panel = children.first as? UINavigationController else { return }
-        switch state {
-        case .inFolder:
-            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-            viewModel.currentPanelState = .bookmarks(state: .inFolderEditMode)
-            bookmarksPanel.enableEditMode()
-
-        case .inFolderEditMode:
-            guard let bookmarksPanel = panel.viewControllers.last as? BookmarksPanel else { return }
-            viewModel.currentPanelState = .bookmarks(state: .inFolder)
-            bookmarksPanel.disableEditMode()
-
-        case .itemEditMode:
-            guard let bookmarkEditView = panel.viewControllers.last as? BookmarkDetailPanel else { return }
-            bookmarkEditView.save().uponQueue(.main) { _ in
-                self.viewModel.currentPanelState = .bookmarks(state: .inFolderEditMode)
-                panel.popViewController(animated: true)
-                if bookmarkEditView.isNew,
-                   let bookmarksPanel = panel.navigationController?.visibleViewController as? BookmarksPanel {
-                    bookmarksPanel.didAddBookmarkNode()
-                }
-            }
-        default:
-            return
-        }
-    }
-
-    private func rightButtonHistoryActions(for state: LibraryPanelSubState) {
-        guard let panel = children.first as? UINavigationController,
-              let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
-
-        historyPanel.exitSearchState()
-        viewModel.currentPanelState = .history(state: .mainView)
-    }
-
-    @objc func bottomSearchButtonAction() {
-        viewModel.currentPanelState = .history(state: .search)
-        guard let panel = children.first as? UINavigationController,
-              let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
-
-        historyPanel.startSearchState()
-    }
-
-    @objc func bottomDeleteButtonAction() {
-        NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }
 }
 

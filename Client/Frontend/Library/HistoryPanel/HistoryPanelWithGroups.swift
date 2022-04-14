@@ -483,7 +483,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         toggleEmptyState()
 
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        tableView.separatorColor = UIColor.theme.tableView.separator
         searchbar.backgroundColor = UIColor.theme.textField.backgroundInOverlay
         let tintColor = UIColor.theme.textField.textAndTint
         let searchBarImage = UIImage(named: ImageIdentifiers.libraryPanelHistory)?.withRenderingMode(.alwaysTemplate).tinted(withColor: tintColor)
