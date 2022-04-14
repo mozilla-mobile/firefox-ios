@@ -37,7 +37,6 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         }
     }
 
-    let nimbus: FxNimbus
     let profile: Profile
     var isZeroSearch: Bool
     var enabledSections = [FirefoxHomeSectionType]()
@@ -61,25 +60,21 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     // MARK: - Initializers
     init(profile: Profile,
          isZeroSearch: Bool = false,
-         isPrivate: Bool,
-         nimbus: FxNimbus = FxNimbus.shared) {
+         isPrivate: Bool) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
 
         self.headerViewModel = FxHomeLogoHeaderViewModel(profile: profile)
         self.topSiteViewModel = FxHomeTopSitesViewModel(
             profile: profile,
-            isZeroSearch: isZeroSearch,
-            nimbus: nimbus)
+            isZeroSearch: isZeroSearch)
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(
             isZeroSearch: isZeroSearch,
             profile: profile,
-            isPrivate: isPrivate,
-            nimbus: nimbus)
+            isPrivate: isPrivate)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(
             isZeroSearch: isZeroSearch,
-            profile: profile,
-            nimbus: nimbus)
+            profile: profile)
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(
             with: profile,
             isPrivate: isPrivate)
@@ -92,7 +87,6 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
                                 recentlySavedViewModel,
                                 historyHighlightsViewModel,
                                 pocketViewModel]
-        self.nimbus = nimbus
         self.isPrivate = isPrivate
 
         topSiteViewModel.delegate = self

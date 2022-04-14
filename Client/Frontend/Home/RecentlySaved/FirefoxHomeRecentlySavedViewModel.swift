@@ -11,7 +11,6 @@ class FirefoxHomeRecentlySavedViewModel {
 
     var isZeroSearch: Bool
     private let profile: Profile
-    private let nimbus: FxNimbus
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var readingListItems = [ReadingListItem]()
@@ -19,10 +18,9 @@ class FirefoxHomeRecentlySavedViewModel {
     private let recentItemsHelper = RecentItemsHelper()
     private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
 
-    init(isZeroSearch: Bool, profile: Profile, nimbus: FxNimbus) {
+    init(isZeroSearch: Bool, profile: Profile) {
         self.isZeroSearch = isZeroSearch
         self.profile = profile
-        self.nimbus = nimbus
     }
 
     var recentItems: [RecentlySavedItem] {

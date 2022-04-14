@@ -32,7 +32,6 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     private var recentGroups: [ASGroup<Tab>]?
     private let isZeroSearch: Bool
     private let profile: Profile
-    private let nimbus: FxNimbus
     private let tabManager: TabManager
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var isPrivate: Bool
@@ -40,11 +39,9 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     init(isZeroSearch: Bool = false,
          profile: Profile,
          isPrivate: Bool,
-         nimbus: FxNimbus,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
     ) {
         self.profile = profile
-        self.nimbus = nimbus
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
         self.tabManager = tabManager

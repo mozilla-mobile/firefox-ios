@@ -10,7 +10,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
-    var nimbus: FxNimbus
     var currentNewTabChoice: NewTabPage!
     var currentStartAtHomeSetting: StartAtHomeSetting!
     var hasHomePage = false
@@ -41,10 +40,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     // MARK: - Initializers
-    init(prefs: Prefs,
-         nimbus: FxNimbus = FxNimbus.shared) {
+    init(prefs: Prefs) {
         self.prefs = prefs
-        self.nimbus = nimbus
         super.init(style: .grouped)
 
         self.title = .SettingsHomePageSectionName
