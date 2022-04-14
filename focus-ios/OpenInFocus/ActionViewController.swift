@@ -101,10 +101,7 @@ class ActionViewController: SLComposeServiceViewController {
 
             responder = responder!.next
         }
-
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))) {
-            self.cancel()
-        }
+        finish()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -117,5 +114,15 @@ class ActionViewController: SLComposeServiceViewController {
 
     override func willMove(toParent parent: UIViewController?) {
         view.alpha = 0
+    }
+}
+
+extension ActionViewController {
+    func finish(afterDelay: TimeInterval = 0) {
+        UIView.animate(withDuration: 0.2, delay: afterDelay, options: [], animations: {
+            self.view.alpha = 0
+        }, completion: { _ in
+            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+        })
     }
 }

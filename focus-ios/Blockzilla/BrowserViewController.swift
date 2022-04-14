@@ -785,6 +785,8 @@ class BrowserViewController: UIViewController {
         onboardingEventsHandler.route = nil
         onboardingEventsHandler.send(.startBrowsing)
         
+        urlBar.canDelete = true
+        browserToolbar.canDelete = true
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
@@ -1606,8 +1608,6 @@ extension BrowserViewController: WebControllerDelegate {
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
-        urlBar.canDelete = true
-        browserToolbar.canDelete = true
         toggleURLBarBackground(isBright: false)
         updateURLBar()
     }
