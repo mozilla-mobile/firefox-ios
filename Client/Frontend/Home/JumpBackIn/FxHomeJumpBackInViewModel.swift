@@ -37,8 +37,6 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var isPrivate: Bool
 
-    private lazy var homescreen = nimbus.features.homescreen.value()
-
     init(isZeroSearch: Bool = false,
          profile: Profile,
          isPrivate: Bool,
@@ -181,7 +179,7 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
 
     var isEnabled: Bool {
         guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
-              homescreen.sectionsEnabled[.jumpBackIn] == true,
+              featureFlags.isFeatureActiveForNimbus(.jumpBackIn),
               featureFlags.userPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
         else { return false }
 

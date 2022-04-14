@@ -24,6 +24,7 @@ enum FeatureFlagName: String, CaseIterable {
     case historyGroups
     case inactiveTabs
     case jumpBackIn
+    case librarySection
     case nimbus
     case pocket
     case pullToRefresh
@@ -32,6 +33,7 @@ enum FeatureFlagName: String, CaseIterable {
     case shakeToRestore
     case startAtHome
     case tabTrayGroups
+    case topSites
     case wallpapers
 }
 
@@ -59,6 +61,7 @@ class FeatureFlagsManager {
 
     private var profile: Profile!
     private var features: [FeatureFlagName: FlaggableFeature] = [:]
+    private var nimbusLayer = NimbusFeatureFlagLayer()
 
     // MARK: - Public methods
 
@@ -67,6 +70,11 @@ class FeatureFlagsManager {
     public func isFeatureActiveForBuild(_ featureID: FeatureFlagName) -> Bool {
         guard let feature = features[featureID] else { return false }
         return feature.isActiveForBuild()
+    }
+
+    public func isFeatureActiveForNimbus(_ featureID: FeatureFlagName) -> Bool {
+        guard let feature = features[featureID] else { return false }
+        return feature.isNimbusActive(using: nimbusLayer)
     }
 
     /// A convenient way to check both `isFeatureActiveForBuild` and `userPreferenceFor`
@@ -94,7 +102,7 @@ class FeatureFlagsManager {
     /// it's appropriate type in the switch statement.
     public func userPreferenceFor<T>(_ featureID: FeatureFlagName) -> T? {
         guard let feature = features[featureID],
-              let userSetting = feature.getUserPreference()
+              let userSetting = feature.getUserPreference(using: nimbusLayer)
         else { return nil }
 
         switch featureID {
@@ -147,20 +155,25 @@ class FeatureFlagsManager {
                                                  enabledFor: [.developer])
         features[.historyHighlights] = historyHighlights
 
-        let historyGroups = FlaggableFeature(withID: .historyGroups,
-                                                 and: profile,
-                                                 enabledFor: [])
-        features[.historyGroups] = historyGroups
+        let historySearchTermGroups = FlaggableFeature(withID: .historyGroups,
+                                                       and: profile,
+                                                       enabledFor: [.developer])
+        features[.historyGroups] = historySearchTermGroups
 
         let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
                                             and: profile,
-                                            enabledFor: [.developer, .beta])
+                                            enabledFor: [.developer, .beta, .release])
         features[.inactiveTabs] = inactiveTabs
 
         let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
                                           and: profile,
                                           enabledFor: [.release, .beta, .developer])
         features[.jumpBackIn] = jumpBackIn
+
+        let librarySection = FlaggableFeature(withID: .librarySection,
+                                              and: profile,
+                                              enabledFor: [.release, .beta, .developer])
+        features[.librarySection] = librarySection
 
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
@@ -173,7 +186,6 @@ class FeatureFlagsManager {
                                       and: profile,
                                       enabledFor: [.release, .beta, .developer])
         features[.pocket] = pocket
-
 
         let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
                                              and: profile,
@@ -191,11 +203,6 @@ class FeatureFlagsManager {
 
         features[.reportSiteIssue] = reportSiteIssue
 
-        let historySearchTermGroups = FlaggableFeature(withID: .historyGroups,
-                                                       and: profile,
-                                                       enabledFor: [.developer])
-        features[.historyGroups] = historySearchTermGroups
-
         let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
                                               and: profile,
                                               enabledFor: [.beta, .developer, .other])
@@ -207,13 +214,22 @@ class FeatureFlagsManager {
         features[.startAtHome] = startAtHome
         
         let tabTrayGroups = FlaggableFeature(withID: .tabTrayGroups,
-                                           and: profile,
-                                           enabledFor: [.developer])
+                                             and: profile,
+                                             enabledFor: [.developer])
         features[.tabTrayGroups] = tabTrayGroups
+
+        let topsites = FlaggableFeature(withID: .topSites,
+                                        and: profile,
+                                        enabledFor: [.release, .beta, .developer])
+        features[.topSites] = topsites
 
         let wallpapers = FlaggableFeature(withID: .wallpapers,
                                           and: profile,
                                           enabledFor: [.release, .beta, .developer])
         features[.wallpapers] = wallpapers
+
+        // This will force the nimbus layer to update its values to the latest Nimbus values
+        nimbusLayer = NimbusFeatureFlagLayer()
+        nimbusLayer.updateData()
     }
 }
