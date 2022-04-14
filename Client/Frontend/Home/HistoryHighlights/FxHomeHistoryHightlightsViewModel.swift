@@ -94,7 +94,9 @@ class FxHomeHistoryHightlightsViewModel {
     // MARK: - Private Methods
 
     private func loadItems(completion: @escaping () -> Void) {
-        HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
+        HistoryHighlightsManager.getHighlightsData(with: profile,
+                                                   and: tabManager.tabs,
+                                                   shouldGroupHighlights: true) { [weak self] highlights in
             self?.historyItems = highlights
             completion()
         }

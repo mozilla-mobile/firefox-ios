@@ -595,7 +595,7 @@ extension FirefoxHomeViewController {
         guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else { return UICollectionViewCell() }
         viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
             guard let url = highlight.siteUrl else {
-                self?.openHistory(UIButton())
+                self?.openHistoryHighligtsSearchGroup(item: highlight)
                 return
             }
 
@@ -608,6 +608,28 @@ extension FirefoxHomeViewController {
         historyCell.setNeedsLayout()
 
         return historyCell
+    }
+
+    private func openHistoryHighligtsSearchGroup(item: HighlightItem) {
+        guard let groupItem = item.group else { return }
+
+        var groupedSites = [Site]()
+        for item in groupItem {
+            groupedSites.append(buildSite(from: item))
+        }
+        let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
+
+        let asGroupListViewModel = GroupedHistoryItemsViewModel(asGroup: groupSite)
+        let asGroupListVC = GroupedHistoryItemsViewController(profile: viewModel.profile, viewModel: asGroupListViewModel)
+        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
+        asGroupListVC.title = item.displayTitle
+
+        navigationController?.present(asGroupListVC, animated: true, completion: nil)
+    }
+
+    private func buildSite(from highlight: HighlightItem) -> Site {
+        let itemURL = highlight.siteUrl?.absoluteString ?? ""
+        return Site(url: itemURL, title: highlight.displayTitle)
     }
 
     private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
