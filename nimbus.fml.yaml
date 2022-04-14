@@ -52,11 +52,11 @@ features:
         default:
           {
             "topSites": true,
-            "jumpBackIn": false,
-            "recentlySaved": false,
+            "jumpBackIn": true,
+            "recentlySaved": true,
             "recentExplorations": false,
             "pocket": true,
-            "libraryShortcuts": true
+            "libraryShortcuts": false
           }
     defaults:
       - channel: Fennec
