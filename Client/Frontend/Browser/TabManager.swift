@@ -633,8 +633,10 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         tab.close()
 
         // Notify of tab removal
-        delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
-        TabEvent.post(.didClose, for: tab)
+        ensureMainThread { [unowned self] in
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
+            TabEvent.post(.didClose, for: tab)
+        }
 
         if flushToDisk {
             storeChanges()

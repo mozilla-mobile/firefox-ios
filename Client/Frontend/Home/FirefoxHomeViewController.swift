@@ -782,13 +782,16 @@ extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
 // MARK: - Notifiable
 extension FirefoxHomeViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .TabsPrivacyModeChanged:
-            adjustPrivacySensitiveSections(notification: notification)
-        case  .TabClosed:
-            updateJumpBackIn()
-        default:
-            reloadAll()
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .TabsPrivacyModeChanged:
+                self?.adjustPrivacySensitiveSections(notification: notification)
+            case  .TabClosed:
+                    self?.updateJumpBackIn()
+            case .HomePanelPrefsChanged:
+                self?.reloadAll()
+            default: break
+            }
         }
     }
 }
