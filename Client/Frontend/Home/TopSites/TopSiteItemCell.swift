@@ -145,6 +145,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
         configurePinnedSite(topSite)
         applyTheme()
+
+        topSite.impressionTracking()
     }
 
     // MARK: - Setup Helper methods

@@ -109,17 +109,17 @@ class FxHomeTopSitesViewModel {
     }
 
     func tilePressed(site: HomeTopSite, position: Int) {
-        topSiteTracking(site: site, position: position)
+        topSitePressTracking(site: site, position: position)
         tilePressedHandler?(site.site, site.isGoogleURL)
     }
 
-    func topSiteTracking(site: HomeTopSite, position: Int) {
+    // MARK: - Telemetry
+
+    private func topSitePressTracking(site: HomeTopSite, position: Int) {
         // Top site extra
-        let topSitePositionKey = TelemetryWrapper.EventExtraKey.topSitePosition.rawValue
-        let topSiteTileTypeKey = TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue
-        let isPinnedAndGoogle = site.isPinned && site.isGoogleGUID
-        let type = isPinnedAndGoogle ? "google" : site.isPinned ? "user-added" : site.isSuggested ? "suggested" : "history-based"
-        let topSiteExtra = [topSitePositionKey: "\(position)", topSiteTileTypeKey: type]
+        let type = site.getTelemetrySiteType()
+        let topSiteExtra = [TelemetryWrapper.EventExtraKey.topSitePosition.rawValue: "\(position)",
+                            TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue: type]
 
         // Origin extra
         let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
@@ -132,7 +132,7 @@ class FxHomeTopSitesViewModel {
                                      extras: extras)
     }
 
-    // MARK: Context actions
+    // MARK: - Context actions
 
     func hideURLFromTopSites(_ site: Site) {
         guard let host = site.tileURL.normalizedHost else { return }
