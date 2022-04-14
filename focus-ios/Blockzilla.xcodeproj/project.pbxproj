@@ -3514,7 +3514,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.FocusIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.Klar.FocusIntentExtension 21-0812";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Klar.FocusIntentExtension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -3584,7 +3584,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.FocusIntentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.Focus.FocusIntentExtension 21-0812";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Focus.FocusIntentExtension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -3901,7 +3901,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ShareExtension;
 				PRODUCT_NAME = ShareExtension;
 				PROVISIONING_PROFILE = "19a73a45-cb96-420d-96d5-2b7b2954781e";
-				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.Klar.ShareExtension 2021-08-12";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Klar.ShareExtension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -3962,7 +3962,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ShareExtension;
 				PRODUCT_NAME = ShareExtension;
 				PROVISIONING_PROFILE = "2c2c3eef-8a98-49d6-a31f-754ddff5867b";
-				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.Focus.ShareExtension 2021-08-12";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Focus.ShareExtension";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -4526,7 +4526,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
 				PRODUCT_NAME = "Firefox Focus";
 				PROVISIONING_PROFILE = "a0e006fd-308f-466b-8037-c39e3e78188e";
-				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.Focus 2021-08-12";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Focus";
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -4549,7 +4549,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ContentBlocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "c9ecd7a2-c454-4991-a6d0-fcea18c3a475";
-				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.Focus.ContentBlocker 2021-08-12";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Focus.ContentBlocker";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
@@ -5444,7 +5444,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
 				PROVISIONING_PROFILE = "3d0198ab-c4fb-4dd9-8140-927873f44e85";
-				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.Klar 2021-08-12";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Klar";
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -5487,7 +5487,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ContentBlocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "2255b2ac-3bcf-4a39-99f9-fd5ccf21c3c9";
-				PROVISIONING_PROFILE_SPECIFIER = "org.mozilla.ios.Klar.ContentBlocker 2021-08-12";
+				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Klar.ContentBlocker";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
