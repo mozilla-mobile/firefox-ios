@@ -7,11 +7,7 @@ import Shared
 
 class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProtocol {
 
-    var nimbus: FxNimbus
-
-    init(nimbus: FxNimbus = FxNimbus.shared) {
-        self.nimbus = nimbus
-
+    init() {
         super.init(style: .grouped)
 
         self.title = .Settings.SectionTitles.TabsTitle
@@ -34,8 +30,7 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
 
 
         if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
-           let isNimbusEnabled = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
-           isNimbusEnabled {
+           featureFlags.isFeatureActiveForNimbus(.inactiveTabs) {
             sectionItems.append(inactiveTabsSetting)
         }
 
