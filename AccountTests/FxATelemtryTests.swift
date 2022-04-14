@@ -45,7 +45,7 @@ class FxATelemetryTests: XCTestCase {
         }
         """
         )
-        
+
         XCTAssertEqual(events.count, 5)
     }
 }

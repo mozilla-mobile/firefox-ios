@@ -22,10 +22,10 @@ public struct Event: Decodable {
     let category: IdentifierString
     let method: IdentifierString
     let object: IdentifierString
-    
+
     let value: String?
     let extra: [String: String]?
-    
+
     public init(
         category: IdentifierString,
         method: IdentifierString,
@@ -42,19 +42,19 @@ public struct Event: Decodable {
             extra: extra
         )
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case timestamp, category, method, object,
              flowId = "flow_id",
              streamId = "stream_id",
              reason = "reason"
     }
-    
+
     public init(from decoder: Decoder) throws {
         timestamp = .uptimeInMilliseconds()
         method = "open-uri"
         category = "sync"
-        
+
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let flowId = try values.decode(String.self, forKey: .flowId)
         let streamId = try values.decode(String.self, forKey: .streamId)
@@ -71,7 +71,7 @@ public struct Event: Decodable {
         extra = extraDictionary
         value = nil
     }
-    
+
     init(
         timestamp: Timestamp,
         category: IdentifierString,
@@ -87,25 +87,25 @@ public struct Event: Decodable {
         self.value = value
         self.extra = extra
     }
-    
+
     public static func hasQueuedEvents(inPrefs prefs: Prefs) -> Bool {
         let pickledEvents = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
         return !pickledEvents.isEmpty
     }
-    
+
     public static func takeAll(fromPrefs prefs: Prefs) -> [Event] {
         let pickledEvents = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
         let events = pickledEvents.compactMap(Event.unpickle)
         prefs.setObject(nil, forKey: PrefKeySyncEvents)
         return events
     }
-    
+
     public func validate() -> Bool {
         let results = [category, method, object].map { $0.validate() }
         // Fold down the results into false if any of the results is false.
         return results.reduce(true) { $0 ? $1 :$0 }
     }
-    
+
     public func pickle() -> Data? {
         do {
             return try JSONSerialization.data(withJSONObject: toArray(), options: [])
@@ -114,7 +114,7 @@ public struct Event: Decodable {
             return nil
         }
     }
-    
+
     public static func unpickle(_ data: Data) -> Event? {
         do {
             let array = try JSONSerialization.jsonObject(with: data, options: []) as! [Any]
@@ -131,14 +131,14 @@ public struct Event: Decodable {
             return nil
         }
     }
-    
+
     public func toArray() -> [Any] {
         return [timestamp, category, method, object, value ?? NSNull(), extra ?? NSNull()]
     }
-    
+
     public func record(intoPrefs prefs: Prefs) {
         var events = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
-        
+
         if let data = self.pickle(), self.validate() {
             events.append(data)
             prefs.setObject(events, forKey: PrefKeySyncEvents)
