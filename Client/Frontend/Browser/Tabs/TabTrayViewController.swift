@@ -355,16 +355,18 @@ class TabTrayViewController: UIViewController {
 // MARK: - Notifiable protocol
 extension TabTrayViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
-            updateButtonTitle(notification)
-        case .TabClosed:
-            countLabel.text = viewModel.normalTabsCount
-            iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), forSegmentAt: 0)
-        default:
-            break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
+                self?.updateButtonTitle(notification)
+            case .TabClosed:
+                guard let label = self?.countLabel else { return }
+                self?.countLabel.text = self?.viewModel.normalTabsCount
+                self?.iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: label), forSegmentAt: 0)
+            default: break
+            }
         }
     }
 }
