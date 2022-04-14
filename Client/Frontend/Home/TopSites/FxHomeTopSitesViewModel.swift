@@ -30,7 +30,6 @@ class FxHomeTopSitesViewModel {
     }
 
     private let profile: Profile
-    private let nimbus: FxNimbus
     private let isZeroSearch: Bool
 
     var sectionDimension: SectionDimension = FxHomeTopSitesViewModel.defaultDimension
@@ -49,9 +48,8 @@ class FxHomeTopSitesViewModel {
     // TODO: https://github.com/mozilla-mobile/firefox-ios/issues/10241
     var topSitesShownInSection: Int = 0
 
-    init(profile: Profile, isZeroSearch: Bool, nimbus: FxNimbus) {
+    init(profile: Profile, isZeroSearch: Bool) {
         self.profile = profile
-        self.nimbus = nimbus
         self.isZeroSearch = isZeroSearch
         tileManager.delegate = self
     }
