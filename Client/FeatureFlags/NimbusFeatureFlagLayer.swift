@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
 
 class NimbusFeatureFlagLayer {
 
@@ -14,11 +15,11 @@ class NimbusFeatureFlagLayer {
         private let topSites: Bool
         private let librarySection: Bool
 
-        init(jumpBackIn: Bool = false,
-             pocket: Bool = false,
-             recentlySaved: Bool = false,
+        init(jumpBackIn: Bool = true,
+             pocket: Bool = true,
+             recentlySaved: Bool = true,
              historyHighlights: Bool = false,
-             topSites: Bool = false,
+             topSites: Bool = true,
              librarySection: Bool = false) {
 
             self.jumpBackIn = jumpBackIn
@@ -58,19 +59,23 @@ class NimbusFeatureFlagLayer {
     }
 
     // MARK: - Properties
-    var homescreen: HomescreenFeatures
-    var tabTray: TabTrayFeatures
-    private var nimbus: FxNimbus
+    private var nimbusFeatures: Features
+    private var homescreen: HomescreenFeatures
+    private var tabTray: TabTrayFeatures
 
     // MARK: - Initializer
-    init(with nimbus: FxNimbus = FxNimbus.shared) {
-        self.nimbus = nimbus
+    init(with nimbusFeatures: Features = FxNimbus.shared.features) {
+        self.nimbusFeatures = nimbusFeatures
         self.homescreen = HomescreenFeatures()
         self.tabTray = TabTrayFeatures()
-        updateData()
     }
 
     // MARK: - Public methods
+    public func updateData() {
+        fetchHomescreenFeatures()
+        fetchTabTrayFeatures()
+    }
+
     public func checkNimbusConfigFor(_ featureID: FeatureFlagName) -> Bool {
         switch featureID {
         case .jumpBackIn,
@@ -89,13 +94,8 @@ class NimbusFeatureFlagLayer {
     }
 
     // MARK: - Public methods
-    private func updateData() {
-        fetchHomescreenFeatures()
-        fetchTabTrayFeatures()
-    }
-
     private func fetchHomescreenFeatures() {
-        let config = nimbus.features.homescreen.value()
+        let config = nimbusFeatures.homescreen.value()
 
         guard let jumpBackIn = config.sectionsEnabled[HomeScreenSection.jumpBackIn],
               let pocket = config.sectionsEnabled[HomeScreenSection.pocket],
@@ -118,7 +118,7 @@ class NimbusFeatureFlagLayer {
     }
 
     private func fetchTabTrayFeatures() {
-        let config = nimbus.features.tabTrayFeature.value()
+        let config = nimbusFeatures.tabTrayFeature.value()
 
         guard let inactiveTabs = config.sectionsEnabled[TabTraySection.inactiveTabs]
         else {

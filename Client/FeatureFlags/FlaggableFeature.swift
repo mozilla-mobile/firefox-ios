@@ -108,9 +108,9 @@ struct FlaggableFeature {
 
         // Nimbus default options
         case .jumpBackIn, .pocket, .recentlySaved:
-            return checkNimbusHomepageFeatures(for: featureID, from: nimbusLayer).rawValue
+            return checkNimbusHomepageFeatures(from: nimbusLayer).rawValue
         case .inactiveTabs:
-            return checkNimbusTabTrayFeatures(for: featureID, from: nimbusLayer).rawValue
+            return checkNimbusTabTrayFeatures(from: nimbusLayer).rawValue
         default:
             return UserFeaturePreference.disabled.rawValue
         }
@@ -146,11 +146,10 @@ struct FlaggableFeature {
 // MARK: - Nimbus related methods
 extension FlaggableFeature {
     private func checkNimbusTabTrayFeatures(
-        for sectionID: FeatureFlagName,
         from nimbusLayer: NimbusFeatureFlagLayer
     ) -> UserFeaturePreference {
 
-        if nimbusLayer.tabTray.getValue(for: featureID) {
+        if nimbusLayer.checkNimbusConfigFor(featureID) {
             return UserFeaturePreference.enabled
         }
 
@@ -158,15 +157,14 @@ extension FlaggableFeature {
     }
 
     private func checkNimbusHomepageFeatures(
-        for sectionID: FeatureFlagName,
         from nimbusLayer: NimbusFeatureFlagLayer
     ) -> UserFeaturePreference {
 
-        if nimbusLayer.homescreen.getValue(for: sectionID) {
+        if nimbusLayer.checkNimbusConfigFor(featureID) {
             // For pocket's default value, we also need to check the locale being supported.
             // Here, we want to make sure the section is enabled && locale is supported before
             // we would return that pocket is enabled
-            if sectionID == .pocket && !Pocket.IslocaleSupported(Locale.current.identifier) {
+            if featureID == .pocket && !Pocket.IslocaleSupported(Locale.current.identifier) {
                 return UserFeaturePreference.disabled
             }
             return UserFeaturePreference.enabled

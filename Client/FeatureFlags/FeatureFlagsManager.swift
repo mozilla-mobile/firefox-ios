@@ -230,5 +230,6 @@ class FeatureFlagsManager {
 
         // This will force the nimbus layer to update its values to the latest Nimbus values
         nimbusLayer = NimbusFeatureFlagLayer()
+        nimbusLayer.updateData()
     }
 }
