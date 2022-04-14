@@ -170,7 +170,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
               keyboardHeight > 0 else {
             bottomStackView.removeKeyboardSpacer()
-            bottomStackView.isHidden = true
             return
         }
 
