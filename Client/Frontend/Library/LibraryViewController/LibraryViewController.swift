@@ -88,7 +88,6 @@ class LibraryViewController: UIViewController {
                                      target: self,
                                      action: #selector(bottomDeleteButtonAction))
         button.accessibilityIdentifier = "deleteHistory"
-//        button.accessibilityLabel = .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel
         return button
     }()
 
