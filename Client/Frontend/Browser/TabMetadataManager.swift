@@ -95,6 +95,8 @@ class TabMetadataManager {
                                          completion: (() -> ())?) {
         guard let profile = profile else { return }
 
+        guard !key.url.isEmpty else { return }
+
         profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in
             completion?()
         }

@@ -786,7 +786,7 @@ class BrowserViewController: UIViewController {
     var displayedRestoreTabsAlert = false
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return Sentry.shared.crashedLastLaunch
+        return SentryIntegration.shared.crashedLastLaunch
     }
 
     fileprivate func cleanlyBackgrounded() -> Bool {
@@ -887,7 +887,7 @@ class BrowserViewController: UIViewController {
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
-    private func hideFirefoxHome() {
+    func hideFirefoxHome(completion: (() -> Void)? = nil) {
         guard let firefoxHomeViewController = self.firefoxHomeViewController else {
             return
         }
@@ -906,6 +906,7 @@ class BrowserViewController: UIViewController {
             if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
                 self.showReaderModeBar(animated: false)
             }
+            completion?()
         })
     }
 
@@ -955,6 +956,7 @@ class BrowserViewController: UIViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
 
+        // We should not set libraryViewController to nil because the library panel losses the currentStat
         let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile, tabManager: tabManager)
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
@@ -967,11 +969,9 @@ class BrowserViewController: UIViewController {
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
         controller.onViewWillDisappear = {
             self.firefoxHomeViewController?.reloadAll()
-            self.libraryViewController = nil
         }
         controller.onViewDismissed = {
             self.firefoxHomeViewController?.reloadAll()
-            self.libraryViewController = nil
         }
         self.present(controller, animated: true, completion: nil)
     }
@@ -1153,7 +1153,7 @@ class BrowserViewController: UIViewController {
             return
         }
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
-            Sentry.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
+            SentryIntegration.shared.send(message: "BVC observeValue webpage unhandled KVO", tag: .general,
                                severity: .error,
                                description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return

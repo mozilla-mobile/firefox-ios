@@ -29,7 +29,7 @@
 "Intro.Slides.Mail.Description" = "Utiliza qualsiquier aplicación de correu - no nomás Mail - con Firefox.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Tiens nuevas... opcions de correu";
+"Intro.Slides.Mail.Title" = "Tiens nuevas… opcions de correu";
 
 /* Description for the 'Private Browsing' panel in the First Run tour. */
 "Intro.Slides.Private.Description" = "Preta l'icono d'a mascareta pa cambiar a lo modo de navegación privada.";

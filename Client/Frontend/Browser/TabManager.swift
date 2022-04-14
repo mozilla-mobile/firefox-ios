@@ -618,7 +618,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
 
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
-            Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
             return
         }
 
@@ -633,8 +633,10 @@ class TabManager: NSObject, FeatureFlagsProtocol {
         tab.close()
 
         // Notify of tab removal
-        delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
-        TabEvent.post(.didClose, for: tab)
+        ensureMainThread { [unowned self] in
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
+            TabEvent.post(.didClose, for: tab)
+        }
 
         if flushToDisk {
             storeChanges()

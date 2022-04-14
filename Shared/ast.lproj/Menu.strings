@@ -62,7 +62,7 @@
 "Menu.SeeAllAction.Title" = "Ver too";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
-"Menu.SharePageAction.Title" = "Compartir la páxina con...";
+"Menu.SharePageAction.Title" = "Compartir la páxina con…";
 
 /* Label for the button, displayed in the menu, used to open the tabs tray */
 "Menu.ShowTabs.Title" = "Amosar les llingüetes";

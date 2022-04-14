@@ -25,7 +25,7 @@ class ScreenshotHelper {
      */
     func takeScreenshot(_ tab: Tab) {
         guard let webView = tab.webView, let url = tab.url else {
-            Sentry.shared.send(message: "Tab Snapshot Error", tag: .tabManager, severity: .debug, description: "Tab webView or url is nil")
+            SentryIntegration.shared.send(message: "Tab Snapshot Error", tag: .tabManager, severity: .debug, description: "Tab webView or url is nil")
             return
         }
         //Handle home page snapshots, can not use Apple API snapshot function for this
@@ -48,9 +48,9 @@ class ScreenshotHelper {
                     tab.setScreenshot(image)
                     TabEvent.post(.didSetScreenshot(isHome: false), for: tab)
                 } else if let error = error {
-                    Sentry.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: error.localizedDescription)
+                    SentryIntegration.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: error.localizedDescription)
                 } else {
-                    Sentry.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: "No error description")
+                    SentryIntegration.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: "No error description")
                 }
             }
         }

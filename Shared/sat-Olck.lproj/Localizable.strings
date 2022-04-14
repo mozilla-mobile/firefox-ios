@@ -569,7 +569,7 @@
 "History" = "ᱦᱤᱛᱟᱹᱞ";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "ᱱᱤᱛᱚᱠᱟ ᱱᱟᱜᱟᱢ ᱯᱷᱟᱨᱪᱟᱭ ᱢᱮ...";
+"HistoryPanel.ClearHistoryButtonTitle" = "ᱱᱤᱛᱚᱠᱟ ᱱᱟᱜᱟᱢ ᱯᱷᱟᱨᱪᱟᱭ ᱢᱮ…";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "ᱡᱚᱛᱚᱣᱟᱠ";
@@ -734,7 +734,7 @@
 "Keyboard.Shortcuts.OpenLinkInNewTab" = "ᱱᱟᱶᱟ ᱴᱮᱵ ᱨᱮ ᱡᱷᱤᱡᱽ ᱢᱮ";
 
 /* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.SavePageAs" = "ᱞᱮᱠᱟ ᱥᱟᱦᱴᱟ ᱥᱟᱺᱪᱟᱣ...";
+"Keyboard.Shortcuts.SavePageAs" = "ᱞᱮᱠᱟ ᱥᱟᱦᱴᱟ ᱥᱟᱺᱪᱟᱣ…";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ";
@@ -833,7 +833,7 @@
 "Load original page" = "ᱢᱩᱞ ᱥᱟᱦᱟᱴᱟ ᱞᱟᱫᱮ";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "ᱵᱤᱥᱳᱭ ᱞᱟᱫᱮ ᱦᱩᱭᱩ ᱠᱟᱱᱟ...";
+"Loading content…" = "ᱵᱤᱥᱳᱭ ᱞᱟᱫᱮ ᱦᱩᱭᱩ ᱠᱟᱱᱟ…";
 
 /* Authentication prompt log in button */
 "Log in" = "ᱵᱚᱞᱚ ᱢᱮ";
@@ -1924,7 +1924,7 @@
 "Settings.TrackingProtection.LearnMore" = "ᱰᱷᱮᱨ ᱥᱮᱲᱟᱭ ᱢᱮ";
 
 /* 'More Info' link on the Tracking Protection settings screen. */
-"Settings.TrackingProtection.MoreInfo" = "ᱵᱚᱲᱛᱤ ᱞᱚᱭ ᱥᱚᱫᱚᱨ...";
+"Settings.TrackingProtection.MoreInfo" = "ᱵᱚᱲᱛᱤ ᱞᱚᱭ ᱥᱚᱫᱚᱨ…";
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ᱴᱟᱨᱜᱮᱴ ᱰᱷᱟᱣᱨᱟᱹ ᱠᱚᱢ ᱟᱭ ᱟᱨ ᱰᱷᱟᱣᱨᱟᱸ ᱠᱚ ᱜᱷᱮᱨ ᱮᱥᱮᱫ ᱠᱷᱚᱱ ᱵᱚᱸᱫᱚ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱮᱢᱟᱭ ᱾";
@@ -2072,7 +2072,7 @@
 "Sync.Syncing.Label" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ...";
+"Sync.SyncingEllipsis.Label" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ…";
 
 /* Panel accessibility label */
 "Synced Tabs" = "ᱛᱷᱟᱨ ᱦᱚᱪᱚ ᱴᱮᱵ";

@@ -56,7 +56,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         super.init(collectionViewLayout: flowLayout)
 
         contextMenuHelper.delegate = self
-        contextMenuHelper.getPopoverSourceRect = getPopoverSourceRect
+        contextMenuHelper.getPopoverSourceRect = { [weak self] popoverView in
+            guard let self = self else { return CGRect() }
+            return self.getPopoverSourceRect(sourceView: popoverView)
+        }
 
         viewModel.delegate = self
         collectionView?.delegate = self
@@ -180,6 +183,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         }
     }
 
+    private func updateJumpBackIn() {
+        if let jumpBackIndex = viewModel.enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn) {
+            let indexSet = IndexSet([jumpBackIndex])
+            collectionView.reloadSections(indexSet)
+        }
+    }
+
     func applyTheme() {
         defaultBrowserCard.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
@@ -258,8 +268,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
-        defaultBrowserCard.dismissClosure = {
-            self.dismissDefaultBrowserCard()
+        defaultBrowserCard.dismissClosure = { [weak self] in
+            self?.dismissDefaultBrowserCard()
         }
     }
 
@@ -776,11 +786,16 @@ extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
 // MARK: - Notifiable
 extension FirefoxHomeViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .TabsPrivacyModeChanged:
-            adjustPrivacySensitiveSections(notification: notification)
-        default:
-            reloadAll()
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .TabsPrivacyModeChanged:
+                self?.adjustPrivacySensitiveSections(notification: notification)
+            case  .TabClosed:
+                    self?.updateJumpBackIn()
+            case .HomePanelPrefsChanged:
+                self?.reloadAll()
+            default: break
+            }
         }
     }
 }
