@@ -52,13 +52,10 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
 
-    lazy var homescreen = nimbus.features.homescreen.value()
-
     // MARK: - Section availability variables
 
     var isYourLibrarySectionEnabled: Bool {
-        UIDevice.current.userInterfaceIdiom != .pad &&
-            homescreen.sectionsEnabled[.libraryShortcuts] == true
+        UIDevice.current.userInterfaceIdiom != .pad && featureFlags.isFeatureActiveForNimbus(.librarySection)
     }
 
     // MARK: - Initializers

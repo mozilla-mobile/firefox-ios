@@ -34,8 +34,7 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
 
 
         if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
-           let isNimbusEnabled = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
-           isNimbusEnabled {
+           featureFlags.isFeatureActiveForNimbus(.inactiveTabs) {
             sectionItems.append(inactiveTabsSetting)
         }
 

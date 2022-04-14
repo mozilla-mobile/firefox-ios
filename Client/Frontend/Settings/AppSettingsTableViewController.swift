@@ -118,8 +118,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         let tabTrayGroupsAreBuildActive = featureFlags.isFeatureActiveForBuild(.tabTrayGroups)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
-        if let inactiveTabsAreNimbusActive = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
-           tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
+        let inactiveTabsAreNimbusActive = featureFlags.isFeatureActiveForNimbus(.inactiveTabs)
+        if tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 

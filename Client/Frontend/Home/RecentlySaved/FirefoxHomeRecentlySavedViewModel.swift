@@ -25,8 +25,6 @@ class FirefoxHomeRecentlySavedViewModel {
         self.nimbus = nimbus
     }
 
-    private lazy var homescreen = nimbus.features.homescreen.value()
-
     var recentItems: [RecentlySavedItem] {
         var items = [RecentlySavedItem]()
         items.append(contentsOf: recentBookmarks)
@@ -97,7 +95,7 @@ extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFla
 
     var isEnabled: Bool {
         return featureFlags.isFeatureActiveForBuild(.recentlySaved)
-        && homescreen.sectionsEnabled[.recentlySaved] == true
+        && featureFlags.isFeatureActiveForNimbus(.recentlySaved)
         && featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
     }
 

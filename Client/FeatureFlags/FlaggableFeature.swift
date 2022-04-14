@@ -139,18 +139,7 @@ struct FlaggableFeature {
     }
 
     public func isNimbusActive(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
-        switch featureID {
-        case .jumpBackIn,
-                .pocket,
-                .recentlySaved,
-                .historyHighlights,
-                .topSites,
-                .librarySection:
-            return nimbusLayer.homescreen.getValue(for: featureID)
-        case .inactiveTabs:
-            return nimbusLayer.tabTray.getValue(for: featureID)
-        default: return false
-        }
+        return nimbusLayer.checkNimbusConfigFor(featureID)
     }
 }
 
@@ -161,7 +150,7 @@ extension FlaggableFeature {
         from nimbusLayer: NimbusFeatureFlagLayer
     ) -> UserFeaturePreference {
 
-        if nimbusLayer.tabTray.getValue(for: featureID)
+        if nimbusLayer.tabTray.getValue(for: featureID) {
             return UserFeaturePreference.enabled
         }
 
@@ -185,5 +174,4 @@ extension FlaggableFeature {
 
         return UserFeaturePreference.disabled
     }
-
 }

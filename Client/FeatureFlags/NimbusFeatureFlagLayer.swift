@@ -8,14 +8,35 @@ class NimbusFeatureFlagLayer {
 
     struct HomescreenFeatures {
         private let jumpBackIn: Bool
+        private let pocket: Bool
+        private let recentlySaved: Bool
+        private let historyHighlights: Bool
+        private let topSites: Bool
+        private let librarySection: Bool
 
-        init(jumpBackIn: Bool = false) {
+        init(jumpBackIn: Bool = false,
+             pocket: Bool = false,
+             recentlySaved: Bool = false,
+             historyHighlights: Bool = false,
+             topSites: Bool = false,
+             librarySection: Bool = false) {
+
             self.jumpBackIn = jumpBackIn
+            self.pocket = pocket
+            self.recentlySaved = recentlySaved
+            self.historyHighlights = historyHighlights
+            self.topSites = topSites
+            self.librarySection = librarySection
         }
 
-        func getValue(for: FeatureFlagName) -> Bool {
-            switch FeatureFlagName {
+        func getValue(for featureID: FeatureFlagName) -> Bool {
+            switch featureID {
             case .jumpBackIn: return jumpBackIn
+            case .pocket: return pocket
+            case .recentlySaved: return recentlySaved
+            case .historyHighlights: return historyHighlights
+            case .topSites: return topSites
+            case .librarySection: return librarySection
             default: return false
             }
         }
@@ -28,8 +49,8 @@ class NimbusFeatureFlagLayer {
             self.inactiveTabs = inactiveTabs
         }
 
-        func getValue(for: FeatureFlagName) -> Bool {
-            switch FeatureFlagName {
+        func getValue(for featureID: FeatureFlagName) -> Bool {
+            switch featureID {
             case .inactiveTabs: return inactiveTabs
             default: return false
             }
@@ -46,32 +67,60 @@ class NimbusFeatureFlagLayer {
         self.nimbus = nimbus
         self.homescreen = HomescreenFeatures()
         self.tabTray = TabTrayFeatures()
+        updateData()
     }
 
     // MARK: - Public methods
-    public func updateData() {
+    public func checkNimbusConfigFor(_ featureID: FeatureFlagName) -> Bool {
+        switch featureID {
+        case .jumpBackIn,
+                .pocket,
+                .recentlySaved,
+                .historyHighlights,
+                .topSites,
+                .librarySection:
+            return homescreen.getValue(for: featureID)
+
+        case .inactiveTabs:
+            return tabTray.getValue(for: featureID)
+
+        default: return false
+        }
+    }
+
+    // MARK: - Public methods
+    private func updateData() {
         fetchHomescreenFeatures()
         fetchTabTrayFeatures()
     }
 
-    // MARK: - Public methods
     private func fetchHomescreenFeatures() {
-        let nimbusHomescreenConfig = nimbus.features.homescreen.value()
+        let config = nimbus.features.homescreen.value()
 
-        guard let jumpBackIn = nimbusHomescreenConfig.sectionsEnabled[HomeScreenSection.jumpBackIn]
+        guard let jumpBackIn = config.sectionsEnabled[HomeScreenSection.jumpBackIn],
+              let pocket = config.sectionsEnabled[HomeScreenSection.pocket],
+              let recentlySaved = config.sectionsEnabled[HomeScreenSection.recentlySaved],
+              let historyHighlights = config.sectionsEnabled[HomeScreenSection.recentExplorations],
+              let topSites = config.sectionsEnabled[HomeScreenSection.topSites],
+              let librarySection = config.sectionsEnabled[HomeScreenSection.libraryShortcuts]
         else {
             homescreen = HomescreenFeatures()
             return
         }
 
-        let homescreenfeatures = HomescreenFeatures(jumpBackIn: jumpBackIn)
+        let homescreenfeatures = HomescreenFeatures(jumpBackIn: jumpBackIn,
+                                                    pocket: pocket,
+                                                    recentlySaved: recentlySaved,
+                                                    historyHighlights: historyHighlights,
+                                                    topSites: topSites,
+                                                    librarySection: librarySection)
         homescreen = homescreenfeatures
     }
 
     private func fetchTabTrayFeatures() {
-        let nimbusHomescreenConfig = nimbus.features.tabTrayFeature.value()
+        let config = nimbus.features.tabTrayFeature.value()
 
-        guard let inactiveTabs = nimbusHomescreenConfig.sectionsEnabled[TabTraySection.inactiveTabs]
+        guard let inactiveTabs = config.sectionsEnabled[TabTraySection.inactiveTabs]
         else {
             tabTray = TabTrayFeatures()
             return
