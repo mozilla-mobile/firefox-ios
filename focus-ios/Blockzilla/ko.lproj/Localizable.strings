@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "닫기";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "브라우징 시작";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "클릭 한 번으로 인터넷 사용 기록, 비밀번호, 쿠키를 지우고 원치 않는 광고가 나를 따라오는 것을 방지할 수 있습니다!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "내 탐색 기록이 나를 따라다니지 않습니다.";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@는 추적 보호 및 콘텐츠 차단 기능을 갖춘 전용 개인 정보 보호 브라우저입니다.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "시크릿 그 이상";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "설정을 통해 얼마나 많이 또는 적게 공유할지 결정할 수 있습니다.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "내가 정하는 보호 기능";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "개인 브라우징을 한 단계 업그레이드하세요.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Firefox %@에 오신 것을 환영합니다!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "취소";
 
@@ -508,6 +535,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox에서 열기";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "페이지 공유…";
+
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "바로가기에서 제거";
 
@@ -597,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "사이트에 콘텐츠가 없거나 이상하게 작동합니까?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "특정 개인 정보 및 보안 옵션을 관리하려면 설정으로 이동하십시오.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "이러한 기본 설정은 강력한 보호 기능을 제공합니다. 하지만 특정 요구 사항에 맞게 설정을 쉽게 수정할 수도 있습니다.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@가 사용자를 감시하는 이 사이트를 중지했습니다. 차단된 항목에 대한 정보를 보려면 방패를 탭하세요.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "현재 세션의 모든 흔적을 제거하려면 언제든지 휴지통을 탭하세요.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "보호되고 있습니다!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Touch ID를 사용하여 %@로 돌아옴";

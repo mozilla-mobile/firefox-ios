@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Zavrieť";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Poďme prehliadať";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Vymažte svoju históriu prehliadania, heslá, súbory cookie a zabráňte tomu, aby vás prenasledovali nechcené reklamy, a to jednoduchým kliknutím!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Vaša história vás nenasleduje";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ je prehliadač špecializovaný na ochranu súkromia s automatickou ochranou pred sledovaním a blokovaním reklám.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Viac ako len inkognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Nakonfigurujte nastavenia, aby ste sa mohli rozhodnúť, koľko alebo ako málo budete zdieľať.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Ochrana podľa vlastného uváženia";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Posuňte svoje súkromné prehliadanie na vyššiu úroveň.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Víta vás Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Zrušiť";
 
@@ -508,6 +535,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Otvoriť vo Firefoxe";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Zdieľať stránku s…";
+
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Odstrániť zo Skratiek";
 
@@ -597,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Chýba na stránke obsah alebo sa správa zvláštne?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ak chcete spravovať konkrétne možnosti ochrany súkromia a zabezpečenia, prejdite do časti Nastavenia.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Tieto predvolené nastavenia ponúkajú silnú ochranu. Je však ľahké vyladiť nastavenia tak, aby vyhovovali vašim špecifickým potrebám.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ zabránil tejto stránke, aby vás špehovala. Ťuknutím na štít získate informácie o tom, čo sme zablokovali.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Ťuknutím na kôš kedykoľvek odstránite všetky stopy vašej aktuálnej relácie.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Ste chránení!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Pre návrat do aplikácie %@ použite Touch ID";

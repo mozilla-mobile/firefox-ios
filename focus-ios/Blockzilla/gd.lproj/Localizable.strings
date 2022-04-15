@@ -427,6 +427,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Fosgail ann am Firefox";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Co-roinn an duilleag le…";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Cuir ris";
 

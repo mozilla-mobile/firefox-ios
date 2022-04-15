@@ -256,6 +256,24 @@
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "Historikken din følger deg ikke";
 
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ er en dedikert personvernnettleser med sporingsbeskyttelse og innholdsblokkering.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Mer enn bare inkognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfigurer innstillinger slik at du kan bestemme hvor mye eller lite du deler.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Beskyttelse etter eget skjønn";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Ta din private surfing til neste nivå.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Velkommen til Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Avbryt";
 
@@ -517,6 +535,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Åpne i Firefox";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Del side med…";
+
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Fjern fra snarveier";
 
@@ -606,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Mangler nettstedet innhold eller oppfører den seg rart?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Gå til Innstillinger for å behandle spesifikke personvern- og sikkerhetsalternativer.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Disse standardinnstillingene gir sterk beskyttelse. Men det er enkelt å tilpasse innstillingene for å møte dine spesifikke behov.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ stoppet denne siden fra å spionere på deg. Trykk på skjoldet for informasjon om hva vi blokkerte.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Trykk på papirkurven når som helst for å fjerne alle spor etter gjeldende økt.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Du er beskyttet!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Bruk «Touch ID» for å gå tilbake til %@";

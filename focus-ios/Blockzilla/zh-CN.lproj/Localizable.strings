@@ -259,6 +259,12 @@
 /* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Incognito.Description" = "%@ 是隐私专用浏览器，内置自动跟踪保护和内容拦截功能。";
 
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "不止于隐身";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "调整设置，随心掌控共享数据的多寡。";
+
 /* Text for a label that indicates the title of protection section from onboarding screen. */
 "Onboarding.Protection.Title" = "由您自行决定保护程度";
 
@@ -528,6 +534,9 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "在 Firefox 中打开";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "分享页面…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "移除快捷方式";

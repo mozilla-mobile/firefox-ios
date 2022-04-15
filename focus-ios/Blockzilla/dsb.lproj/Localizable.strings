@@ -247,6 +247,24 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Zacyniś";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Pśeglědowanje zachopiś";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Waša historija wam njeslědujo";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Wěcej ako jano njepóznaty";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Šćit pó swójskim dobrozdaśu";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Zwigniśo swój priwatny modus na pśiducu rowninu.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Witajśo k Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Pśetergnuś";
 
@@ -508,6 +526,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "We Firefox wócyniś";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Bok źěliś z…";
+
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Ze zwězanjow wótwónoźeś";
 
@@ -597,6 +618,12 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Sedło se źiwnje zaźaržujo abo wopśimjeśe felujo?";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Toś te standardne nastajenja mócny šćit póbituju. Ale jo lažko, nastajenja wašym specifiskim pótrjebam pśiměriś.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Sćo šćitany!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Wužywajśo Touch ID, aby se k %@ wrośił";

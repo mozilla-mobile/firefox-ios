@@ -514,6 +514,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Ouvrir dans Firefox";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Partager la page avec…";
+
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Supprimer des raccourcis";
 
@@ -603,6 +606,9 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Un site se comporte bizarrement ou du contenu manque ?";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Ces paramètres par défaut offrent une protection renforcée. Mais il est facile de modifier les paramètres pour répondre à vos besoins spécifiques.";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Utilisez Touch ID pour revenir sur %@";

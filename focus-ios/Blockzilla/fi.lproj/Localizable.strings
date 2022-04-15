@@ -427,6 +427,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Avaa Firefoxissa";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Jaa sivu…";
+
 /* Text for the rename shortcut alert primary action. */
 "ShortcutView.RenameShortcutAlertPrimaryAction" = "Tallenna";
 

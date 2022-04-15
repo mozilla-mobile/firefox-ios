@@ -250,6 +250,24 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Initia a navigar";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Per un simple clic, cancella chronologia de navigation, contrasignos, cookies, e impedi al avisos publicitari indesiderate de sequer te!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Tu chronologia non te seque plus";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ es un navigator dedicate al confidentialitate con protection contra traciamento e blocada del contentos.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Plus del sol navigation incognite";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Configura le parametros e decide assi que informationes compartir.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Protection a tu proprie discretion";
+
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Porta le navigation private al proxime nivello.";
 
@@ -517,6 +535,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Aperir in Firefox";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Compartir le pagina con…";
+
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Remover del accessos directe";
 
@@ -612,6 +633,12 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Iste parametros predefinite offere forte protection. Ma il es facile adjustar le parametros pro satisfacer tu specific besonios.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ impediva a iste sito de spiar te. Tocca le schermo pro info re lo que nos ha blocate.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Quandocunque tu vole, tocca le immunditia pro remover tote le tracias de tu actual session.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Tu es protegite!";
