@@ -256,7 +256,7 @@ struct UIConstants {
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
         static let pageActionsTitle = NSLocalizedString("ShareMenu.PageActions", value: "Page Actions", comment: "Title for the share menu where users can take actions for the current website they are on.")
-        static let sharePage = NSLocalizedString("ShareMenu.SharePage", value: "Share Page With...", comment: "Text for the share menu option when a user wants to share the current website they are on through another app.")
+        static let sharePage = NSLocalizedString("ShareMenu.SharePage", value: "Share Page With…", comment: "Text for the share menu option when a user wants to share the current website they are on through another app.")
         static let shareOpenInFirefox = NSLocalizedString("ShareMenu.ShareOpenFirefox", value: "Open in Firefox", comment: "Text for the share menu option when a user wants to open the current website in the Firefox app.")
         static let shareOpenInChrome = NSLocalizedString("ShareMenu.ShareOpenChrome", value: "Open in Chrome", comment: "Text for the share menu option when a user wants to open the current website in the Chrome app.")
         static let shareOpenInDefaultBrowser = NSLocalizedString("ShareMenu.ShareOpenDefaultBrowser", value: "Open in Default Browser", comment: "Text for the share menu option when a user wants to open the current website in the default browser.")
