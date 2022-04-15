@@ -337,19 +337,18 @@ class URLBar: UIView {
         textAndLockContainer.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().priority(999)
+            make.trailing.equalToSuperview()
             
             showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
 
             hideLeftBarViewConstraints.append(make.leading.equalToSuperview().offset(UIConstants.layout.urlBarTextInset).constraint)
-            
             centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
-            fullWidthURLConstraints.append(make.trailing.equalToSuperview().constraint)
         }
 
         toolset.stopReloadButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalTo(urlBarBorderView).priority(.required)
-            make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
+            make.trailing.equalTo(urlBarBorderView)
+            make.leading.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize)
+            make.center.equalToSuperview()
         }
 
         urlText.snp.makeConstraints { make in
@@ -359,7 +358,7 @@ class URLBar: UIView {
             showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
             
             hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
-            showPageActionsConstraints.append(make.trailing.equalTo(toolset.stopReloadButton.snp.leading).constraint)
+            showPageActionsConstraints.append(make.trailing.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize).constraint)
         }
 
         progressBar.snp.makeConstraints { make in
