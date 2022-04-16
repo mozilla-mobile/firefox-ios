@@ -247,6 +247,18 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Lat att";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Start surfinga";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Historikken din følgjer deg ikkje";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Meir enn berre inkognito";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Velkomen til Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Avbryt";
 
@@ -600,6 +612,9 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Manglar nettstaden innhald eller oppfører han seg rart?";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Du er verna!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Bruk «Touch ID» for å gå tilbake til %@";

@@ -247,6 +247,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Закрыть";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Начать веб-сёрфинг";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Добро пожаловать в Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Отмена";
 
@@ -600,6 +606,9 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "На сайте отсутствует контент или он ведёт себя странно?";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Вы защищены!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Используйте Touch ID для возврата в %@";
