@@ -586,7 +586,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
             // Certain files are too large to download before the preview presents, block and use a temporary document instead
             if let tab = tabManager[webView] {
-                if navigationResponse.isForMainFrame, response.mimeType != MIMEType.HTML, let request = request {
+                if response.mimeType != MIMEType.HTML, let request = request {
                     tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
                     previewHelper.url = tab.temporaryDocument!.getURL().value as NSURL
 
