@@ -63,6 +63,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                            observing: [.HomePanelPrefsChanged,
                                        .TopTabsTabClosed,
                                        .TabsTrayDidClose,
+                                       .TabsTrayDidSelectHomeTab,
                                        .TabsPrivacyModeChanged])
     }
 
@@ -622,10 +623,11 @@ extension FirefoxHomeViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
     func reloadAll() {
-        self.collectionView.reloadData()
-
         DispatchQueue.global(qos: .userInteractive).async {
             self.viewModel.updateData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
 }
@@ -883,7 +885,9 @@ extension FirefoxHomeViewController: Notifiable {
             switch notification.name {
             case .TabsPrivacyModeChanged:
                 self?.adjustPrivacySensitiveSections(notification: notification)
-            case .TabsTrayDidClose, .TopTabsTabClosed:
+            case .TabsTrayDidClose,
+                    .TopTabsTabClosed,
+                    .TabsTrayDidSelectHomeTab:
                 self?.reloadAll()
             case .HomePanelPrefsChanged:
                 self?.reloadAll()
