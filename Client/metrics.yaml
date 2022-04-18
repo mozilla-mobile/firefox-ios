@@ -505,7 +505,7 @@ top_site:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3834
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10514
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-10-14"
@@ -522,7 +522,7 @@ top_site:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3834
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10514
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-10-14"
