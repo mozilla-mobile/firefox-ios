@@ -167,7 +167,7 @@ class TabTrayViewController: UIViewController {
                            observing: [.DisplayThemeChanged,
                                        .ProfileDidStartSyncing,
                                        .ProfileDidFinishSyncing,
-                                       .TabClosed])
+                                       .UpdateLabelOnTabClosed])
 
     }
 
@@ -361,7 +361,7 @@ extension TabTrayViewController: Notifiable {
                 self?.applyTheme()
             case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
                 self?.updateButtonTitle(notification)
-            case .TabClosed:
+            case .UpdateLabelOnTabClosed:
                 guard let label = self?.countLabel else { return }
                 self?.countLabel.text = self?.viewModel.normalTabsCount
                 self?.iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: label), forSegmentAt: 0)
@@ -408,6 +408,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        notificationCenter.post(name: .TabsTrayDidClose, object: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 }
@@ -427,6 +428,7 @@ extension TabTrayViewController {
     }
 
     @objc func didTapDone() {
+        notificationCenter.post(name: .TabsTrayDidClose, object: nil)
         self.dismiss(animated: true, completion: nil)
     }
 }
