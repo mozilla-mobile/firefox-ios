@@ -55,10 +55,6 @@ struct HistoryActionablesModel: Hashable {
     ]
 
     static let activeActionables = [
-        HistoryActionablesModel(imageName: ImageIdentifiers.trashIcon,
-                                title: History.HistoryPanelClearHistoryButtonTitle,
-                                a11yId: a11y.clearHistoryCell,
-                                itemIdentity: .clearHistory),
         HistoryActionablesModel(imageName: ImageIdentifiers.stackedTabsIcon,
                                 title: History.RecentlyClosedTabsButtonTitle,
                                 a11yId: a11y.recentlyClosedCell,

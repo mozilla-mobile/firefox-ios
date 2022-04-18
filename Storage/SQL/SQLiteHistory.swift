@@ -621,6 +621,7 @@ extension SQLiteHistory: BrowserHistory {
                 historyFTS.rowid = hist.rowid
             WHERE historyFTS.title LIKE "%\(searchTerm)%" OR
                 historyFTS.url LIKE "%\(searchTerm)%"
+            ORDER BY local_modified DESC
             LIMIT \(limit)
             OFFSET \(offset);
             """

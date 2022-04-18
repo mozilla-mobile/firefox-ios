@@ -387,6 +387,8 @@ extension TelemetryWrapper {
         case libraryPanel = "library-panel"
         case navigateToGroupHistory = "navigate-to-group-history"
         case selectedHistoryItem = "selected-history-item"
+        case searchHistory = "search-history"
+        case deleteHistory = "delete-history"
         case sharePageWith = "share-page-with"
         case sendToDevice = "send-to-device"
         case copyAddress = "copy-address"
@@ -693,6 +695,10 @@ extension TelemetryWrapper {
             GleanMetrics.History.groupList.add()
         case (.action, .tap, .selectedHistoryItem, let type?, _):
             GleanMetrics.History.selectedItem[type.rawValue].add()
+        case (.action, .tap, .searchHistory, _, _):
+            GleanMetrics.History.searchTap.record()
+        case (.action, .tap, .deleteHistory, _, _):
+            GleanMetrics.History.deleteTap.record()
         // MARK: Sync
         case (.action, .open, .syncTab, _, _):
             GleanMetrics.Sync.openTab.add()

@@ -170,7 +170,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
               keyboardHeight > 0 else {
             bottomStackView.removeKeyboardSpacer()
-            bottomStackView.isHidden = true
             return
         }
 
@@ -483,7 +482,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         toggleEmptyState()
 
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        tableView.separatorColor = UIColor.theme.tableView.separator
         searchbar.backgroundColor = UIColor.theme.textField.backgroundInOverlay
         let tintColor = UIColor.theme.textField.textAndTint
         let searchBarImage = UIImage(named: ImageIdentifiers.libraryPanelHistory)?.withRenderingMode(.alwaysTemplate).tinted(withColor: tintColor)

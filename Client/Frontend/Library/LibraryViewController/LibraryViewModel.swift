@@ -22,7 +22,7 @@ class LibraryViewModel: FeatureFlagsProtocol {
         self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
     }
 
-    var isHistoryPanelWithGroups: Bool {
-        return self.featureFlags.isFeatureActiveForBuild(.historyGroups)
+    var shouldShowSearch: Bool {
+        return self.featureFlags.isFeatureActiveForBuild(.historyGroups) && currentPanelState == .history(state: .mainView)
     }
 }
