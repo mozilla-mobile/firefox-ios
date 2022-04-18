@@ -1684,7 +1684,7 @@
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Přepinak za cyklus pozadkowych wobrazow startoweje strony";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Pozadkowy wobraz Firefox, muster směrkowych hórkow.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Pozadkowy wobraz Firefox, muster z hórkami w směrkach.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "WOTEWRJENSKA WOBRAZOWKA";
