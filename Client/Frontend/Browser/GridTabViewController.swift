@@ -341,7 +341,7 @@ extension GridTabViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        NotificationCenter.default.post(name: .TabClosed, object: nil)
+        NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
     }
     func tabManagerDidAddTabs(_ tabManager: TabManager) {}
 
@@ -540,7 +540,7 @@ extension GridTabViewController: TabPeekDelegate {
             let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
 
             cell.close()
-            NotificationCenter.default.post(name: .TabClosed, object: nil)
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
         }
     }
 

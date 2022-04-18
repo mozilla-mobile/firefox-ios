@@ -200,9 +200,7 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
         }
     }
 
-    var shouldReloadSection: Bool {
-        return true
-    }
+    var shouldReloadSection: Bool { return true }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
         self.isPrivate = isPrivate
