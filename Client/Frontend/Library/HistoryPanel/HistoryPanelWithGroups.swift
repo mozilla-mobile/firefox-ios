@@ -111,31 +111,20 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         super.viewDidLoad()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
-        viewModel.reloadData()
         viewModel.historyPanelNotifications.forEach {
             NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: $0, object: nil)
         }
 
+        handleRefreshControl()
         setupLayout()
         configureDatasource()
+        fetchDataAndUpdateLayout()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
-        // logged in, remove any existing control.
-        handleRefreshControl()
-        applySnapshot()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        // Since the reload operation to fetch STG completes LATE, we need to apply snapshot again here :(
-        // Especially in the case where you navigate to the history panel from another panel.
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-            self.applySnapshot(animatingDifferences: true)
-        }
-
+        bottomStackView.isHidden = !viewModel.isSearchInProgress
     }
 
     // MARK: - Private helpers
@@ -155,15 +144,18 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
-
-        bottomStackView.isHidden = true
     }
 
-    func startSearchState() {
-        bottomStackView.isHidden = false
-        searchbar.text = ""
-        searchbar.becomeFirstResponder()
-        viewModel.isSearchInProgress = true
+    // Reload viewModel data and update layout
+    private func fetchDataAndUpdateLayout(animating: Bool = false) {
+        // Avoid refresing if search is in progress
+        guard !viewModel.isSearchInProgress else { return }
+
+        viewModel.reloadData() { [weak self] success in
+            guard success else { return }
+
+            self?.applySnapshot(animatingDifferences: animating)
+        }
     }
 
     func updateLayoutForKeyboard() {
@@ -216,8 +208,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
                 self?.viewModel.visibleSections = []
             }
 
-            self?.viewModel.reloadData()
-            self?.applySnapshot(animatingDifferences: true)
+            self?.fetchDataAndUpdateLayout(animating: true)
 
             if let cell = self?.clearHistoryCell {
                 self?.setTappableStateAndStyle(
@@ -231,9 +222,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             viewModel.groupedSites = DateGroupedTableData<Site>()
-
-            viewModel.reloadData()
-            applySnapshot(animatingDifferences: true)
+            fetchDataAndUpdateLayout(animating: true)
 
             if profile.hasSyncableAccount() {
                 resyncHistory()
@@ -248,8 +237,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             break
         case .DatabaseWasReopened:
             if let dbName = notification.object as? String, dbName == "browser.db" {
-                viewModel.reloadData()
-                applySnapshot(animatingDifferences: true)
+                fetchDataAndUpdateLayout(animating: true)
             }
         case .OpenClearRecentHistory:
             showClearRecentHistory()
@@ -628,8 +616,7 @@ extension HistoryPanelWithGroups {
             self.endRefreshing()
 
             if syncResult.isSuccess {
-                self.viewModel.reloadData()
-                self.applySnapshot(animatingDifferences: true)
+                self.fetchDataAndUpdateLayout(animating: true)
             }
         }
     }
@@ -687,8 +674,7 @@ extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
             return
         }
 
-        viewModel.reloadData()
-        applySnapshot(animatingDifferences: false)
+        fetchDataAndUpdateLayout(animating: false)
     }
 
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {

@@ -91,10 +91,11 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     // MARK: - Private helpers
 
     /// Begin the process of fetching history data, and creating ASGroups from them. A prefetch also triggers this.
-    func reloadData() {
+    func reloadData(completion: @escaping (Bool) -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         guard !profile.isShutdown, !isFetchInProgress else {
             browserLog.debug("HistoryPanel tableView data could NOT be reloaded! Either the profile wasn't shut down, or there's a fetch in progress.")
+            completion(false)
             return
         }
 
@@ -112,6 +113,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
                     self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
                     || !self.groupsForSection(section: section).isEmpty
                 }
+                completion(true)
+            } else {
+                completion(false)
             }
         }
     }
