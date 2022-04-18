@@ -250,8 +250,17 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Bdu tunigin";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Sfeḍ azray-ik•im n Tunigin, awalen-ik•im uffir, inagan-ik•im n tuqqna, tesweḥleḍ adellel akken ur ak•akem-iṭṭafar ara s yiwen kan usiti!";
+
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "Azray-ik·im ur ak·akem-iṭṭafar ara";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ d iminig n tbaḍnit yettwagen i ummesten mgal aḍfar akked usewḥel n ugbur.";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Swel iɣewwaren akken ara tferneḍ acḥal i terniḍ tebḍiḍ-t neɣ tesneqdeḍ.";
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Qqim kan deg tunigin-ik·im tusligt ɣer uswir i d-iteddun.";
@@ -613,8 +622,14 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Asmel ixuṣṣ agbur neɣ ur iteddu ara akken yella uqbel?";
 
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ddu ɣer yiɣewwaren i wakken ad tesferkeḍ tixtiṛiyin tufrinin n tbaḍnit & tɣellist.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Iɣewwaren-a s wudem amezwer ttmuddun ammesten iǧehden. Maca yeshel ad ttubeddlen, ad ten-terreḍ akken i tebɣiḍ.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Sit ɣef tqecwalt yal tikkelt i tukksa n lǧeṛṛa n tɣimit-ik•im tamirant.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Tettummestneḍ!";

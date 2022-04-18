@@ -247,6 +247,18 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Zavřít";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Začít prohlížet";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ se zaměřuje na zajištění soukromí s ochranou proti sledování a blokováním obsahu.";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Posuňte anonymní prohlížení na vyšší úroveň.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Vítá vás Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Zrušit";
 
@@ -600,6 +612,12 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Chybí na stránce obsah nebo se chová podivně?";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Tato výchozí nastavení poskytují silnou ochranu. Můžete je ale jednoduše nastavit podle vlastních potřeb.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Jste chráněni!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Pro návrat do aplikace %@ použijte Touch ID";

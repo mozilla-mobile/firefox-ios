@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Đóng";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Bắt đầu duyệt web";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Xóa lịch sử duyệt web, mật khẩu, cookie và ngăn các quảng cáo không mong muốn theo dõi bạn chỉ bằng một lần nhấn đơn giản!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Lịch sử của bạn không theo dõi bạn";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ là một trình duyệt riêng tư chuyên dụng với tính năng chống theo dõi và chặn nội dung.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Không chỉ là ẩn danh";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Định cấu hình cài đặt để bạn có thể quyết định lượng chia sẻ nhiều hay ít.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Bảo vệ theo quyết định của riêng bạn";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Đưa trình duyệt riêng tư của bạn lên cấp độ cao hơn.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Chào mừng đến với Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Hủy bỏ";
 
@@ -600,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Trang web thiếu nội dung hoặc hoạt động không đúng?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Đi đến Cài đặt để quản lý các tùy chọn quyền riêng tư và bảo mật cụ thể.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Các cài đặt mặc định này cung cấp khả năng bảo vệ mạnh mẽ. Tuy nhiên, thật dễ dàng để điều chỉnh cài đặt để đáp ứng các nhu cầu cụ thể của bạn.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ đã ngăn trang web này theo dõi bạn. Nhấn vào lá chắn để biết thông tin về những gì chúng tôi đã chặn.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Nhấn vào thùng rác bất cứ lúc nào để xóa tất cả dấu vết của phiên hiện tại của bạn.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Bạn đã được bảo vệ!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Sử dụng Touch ID để quay lại %@";
