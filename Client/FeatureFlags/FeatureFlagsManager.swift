@@ -227,7 +227,9 @@ class FeatureFlagsManager {
                                           and: profile,
                                           enabledFor: [.release, .beta, .developer])
         features[.wallpapers] = wallpapers
+    }
 
+    func updateNimbusLayer() {
         // This will force the nimbus layer to update its values to the latest Nimbus values
         nimbusLayer = NimbusFeatureFlagLayer()
         nimbusLayer.updateData()

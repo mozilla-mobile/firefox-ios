@@ -59,21 +59,19 @@ class NimbusFeatureFlagLayer {
     }
 
     // MARK: - Properties
-    private var nimbusFeatures: Features
     private var homescreen: HomescreenFeatures
     private var tabTray: TabTrayFeatures
 
     // MARK: - Initializer
-    init(with nimbusFeatures: Features = FxNimbus.shared.features) {
-        self.nimbusFeatures = nimbusFeatures
+    init() {
         self.homescreen = HomescreenFeatures()
         self.tabTray = TabTrayFeatures()
     }
 
     // MARK: - Public methods
-    public func updateData() {
-        fetchHomescreenFeatures()
-        fetchTabTrayFeatures()
+    public func updateData(from nimbus: FxNimbus = FxNimbus.shared) {
+        fetchHomescreenFeatures(from: nimbus)
+        fetchTabTrayFeatures(from: nimbus)
     }
 
     public func checkNimbusConfigFor(_ featureID: FeatureFlagName) -> Bool {
@@ -94,8 +92,8 @@ class NimbusFeatureFlagLayer {
     }
 
     // MARK: - Public methods
-    private func fetchHomescreenFeatures() {
-        let config = nimbusFeatures.homescreen.value()
+    private func fetchHomescreenFeatures(from nimbus: FxNimbus) {
+        let config = nimbus.features.homescreen.value()
 
         guard let jumpBackIn = config.sectionsEnabled[HomeScreenSection.jumpBackIn],
               let pocket = config.sectionsEnabled[HomeScreenSection.pocket],
@@ -117,8 +115,8 @@ class NimbusFeatureFlagLayer {
         homescreen = homescreenfeatures
     }
 
-    private func fetchTabTrayFeatures() {
-        let config = nimbusFeatures.tabTrayFeature.value()
+    private func fetchTabTrayFeatures(from nimbus: FxNimbus) {
+        let config = nimbus.features.tabTrayFeature.value()
 
         guard let inactiveTabs = config.sectionsEnabled[TabTraySection.inactiveTabs]
         else {

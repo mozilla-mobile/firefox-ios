@@ -103,6 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
+        FeatureFlagsManager.shared.initializeFeatures(with: profile)
         ThemeManager.shared.updateProfile(with: profile)
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
@@ -120,7 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        FeatureFlagsManager.shared.initializeFeatures(with: profile)
+        FeatureFlagsManager.shared.updateNimbusLayer()
 
         setupRootViewController()
 
