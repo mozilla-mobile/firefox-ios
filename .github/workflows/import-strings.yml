@@ -1,7 +1,7 @@
 name: Create a PR with changes after importing strings
 on:
   schedule:
-    - cron: '0 11 * * *'
+    - cron: '0 11 * * 1-5'
 
 jobs:
   build:
@@ -36,6 +36,6 @@ jobs:
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: string-import-${{ env.current_date }}
-        title: "string-import-${{ env.current_date }}"
+        title: "Localize [version] String import ${{ env.current_date }}"
         branch: string-import-${{ env.current_date }}
         body: "This (automated) PR import string changes"
