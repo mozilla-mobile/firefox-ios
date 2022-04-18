@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /**
-This ViewController is meant to show a tableView of history items with NO section headers.
+This ViewController is meant to show a tableView of STG items in a flat list with NO section headers.
  When we have coordinators, where the coordinator provides the VM to the VC, we can
  generalize this.
  */
@@ -11,7 +11,7 @@ This ViewController is meant to show a tableView of history items with NO sectio
 import UIKit
 import Storage
 
-class GroupedHistoryItemsViewController: UIViewController, Loggable {
+class SearchGroupedItemsViewController: UIViewController, Loggable {
 
     // MARK: - Properties
 
@@ -21,11 +21,7 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         case main
     }
 
-    // TODO: Check FxHomeViewController sometimes doesn't reload JumpBackIn and RecentlyVisited
-    // TODO: Add flag to show/hide title and done button
-    // TODO: check if we can remove profile
-    let profile: Profile
-    let viewModel: GroupedHistoryItemsViewModel
+    let viewModel: SearchGroupedItemsViewModel
     var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
 
     lazy private var tableView: UITableView = .build { [weak self] tableView in
@@ -51,8 +47,7 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
 
     // MARK: - Inits
 
-    init(profile: Profile, viewModel: GroupedHistoryItemsViewModel) {
-        self.profile = profile
+    init(viewModel: SearchGroupedItemsViewModel) {
         self.viewModel = viewModel
 
         super.init(nibName: nil, bundle: nil)
@@ -83,16 +78,16 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         applySnapshot()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .navigateToGroupHistory, value: nil, extras: nil)
-    }
-
     // MARK: - Misc. helpers
 
     private func setupLayout() {
-        navigationItem.rightBarButtonItem = doneButton
-        // TODO: Pass the disply title
-        title = "Fun 2"
+        /// This View needs to be configured a certain way based on who's presenting it.
+        switch viewModel.presenter {
+        case .recentlyVisited:
+            title = viewModel.asGroup.displayTitle
+            navigationItem.rightBarButtonItem = doneButton
+        default: break
+        }
 
         // Adding subviews and constraints
         view.addSubviews(tableView)
@@ -168,7 +163,7 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
     }
 }
 
-extension GroupedHistoryItemsViewController: UITableViewDelegate {
+extension SearchGroupedItemsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
 
@@ -194,7 +189,7 @@ extension GroupedHistoryItemsViewController: UITableViewDelegate {
     }
 }
 
-extension GroupedHistoryItemsViewController: NotificationThemeable {
+extension SearchGroupedItemsViewController: NotificationThemeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {

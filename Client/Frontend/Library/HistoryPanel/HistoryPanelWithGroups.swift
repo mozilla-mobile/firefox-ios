@@ -552,11 +552,13 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
     }
 
     private func handleASGroupItemTapped(asGroupItem: ASGroup<Site>) {
-        let asGroupListViewModel = GroupedHistoryItemsViewModel(asGroup: asGroupItem)
-        let asGroupListVC = GroupedHistoryItemsViewController(profile: profile, viewModel: asGroupListViewModel)
+        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
+        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel)
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
         asGroupListVC.title = asGroupItem.displayTitle
 
+        TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .navigateToGroupHistory, value: nil, extras: nil)
+        
         navigationController?.pushViewController(asGroupListVC, animated: true)
     }
 

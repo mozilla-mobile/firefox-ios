@@ -840,7 +840,7 @@ firefox_home_page:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
   history_highlights_item_opened:
-    type: counter
+    type: event
     description: |
       Counts the number of times a user taps to open an
       existing tab from the History Highlights section
@@ -851,7 +851,19 @@ firefox_home_page:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
+    expires: "2022-12-01"
+  history_highlights_group_open:
+    type: event
+    description: |
+      Records the event where a user taps on a group item
+      within the History Highlights (Recently Visited) section.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2912
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-12-01"
 
 # Library
 library:

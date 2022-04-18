@@ -619,18 +619,19 @@ extension FirefoxHomeViewController {
         }
         let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
 
-        let asGroupListViewModel = GroupedHistoryItemsViewModel(asGroup: groupSite)
-        let asGroupListVC = GroupedHistoryItemsViewController(profile: viewModel.profile, viewModel: asGroupListViewModel)
+        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
+        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel)
 
         let dismissableController: DismissableNavigationViewController
         dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)
-        dismissableController.onViewWillDisappear = {
-            print("Hey I'm dismiss")
-        }
-        dismissableController.onViewDismissed = {
-            print("Hey I'm dismiss")
-        }
+
         self.present(dismissableController, animated: true, completion: nil)
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .historyHighlightsGroupOpen,
+                                     extras: nil)
 
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
     }
