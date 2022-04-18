@@ -18,16 +18,13 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption?
-    var nimbus: FxNimbus
 
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
          delegate: SettingsDelegate?,
-         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil,
-         with nimbus: FxNimbus = FxNimbus.shared) {
+         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil) {
         self.deeplinkTo = destination
-        self.nimbus = nimbus
 
         super.init()
         self.profile = profile
@@ -118,8 +115,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         let tabTrayGroupsAreBuildActive = featureFlags.isFeatureActiveForBuild(.tabTrayGroups)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
-        if let inactiveTabsAreNimbusActive = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
-           tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
+        let inactiveTabsAreNimbusActive = featureFlags.isFeatureActiveForNimbus(.inactiveTabs)
+        if tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 

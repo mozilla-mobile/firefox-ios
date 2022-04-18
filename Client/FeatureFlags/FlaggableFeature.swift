@@ -91,7 +91,7 @@ struct FlaggableFeature {
 
     /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
     /// convert it to the appropriate type.
-    public func getUserPreference() -> String? {
+    public func getUserPreference(using nimbusLayer: NimbusFeatureFlagLayer) -> String? {
         if let optionsKey = featureOptionsKey, let existingOption = profile.prefs.stringForKey(optionsKey) {
             return existingOption
         }
@@ -107,9 +107,9 @@ struct FlaggableFeature {
 
         // Nimbus default options
         case .jumpBackIn, .pocket, .recentlySaved:
-            return checkNimbusHomepageFeatures(for: sectionID(from: featureID)).rawValue
+            return checkNimbusHomepageFeatures(from: nimbusLayer).rawValue
         case .inactiveTabs:
-            return checkNimbusTabTrayFeatures(for: sectionID(from: featureID)).rawValue
+            return checkNimbusTabTrayFeatures(from: nimbusLayer).rawValue
         default:
             return UserFeaturePreference.disabled.rawValue
         }
@@ -136,20 +136,19 @@ struct FlaggableFeature {
         guard let featureKey = featureKey else { return }
         profile.prefs.setBool(!isActiveForBuild(), forKey: featureKey)
     }
+
+    public func isNimbusActive(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
+        return nimbusLayer.checkNimbusConfigFor(featureID)
+    }
 }
 
 // MARK: - Nimbus related methods
 extension FlaggableFeature {
     private func checkNimbusTabTrayFeatures(
-        for sectionID: TabTraySection?,
-        from nimbus: FxNimbus = FxNimbus.shared
+        from nimbusLayer: NimbusFeatureFlagLayer
     ) -> UserFeaturePreference {
-        guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
 
-        let nimbusTabTrayConfig = nimbus.features.tabTrayFeature.value()
-
-        if let sectionIsEnabled = nimbusTabTrayConfig.sectionsEnabled[sectionID],
-           sectionIsEnabled {
+        if nimbusLayer.checkNimbusConfigFor(featureID) {
             return UserFeaturePreference.enabled
         }
 
@@ -157,48 +156,19 @@ extension FlaggableFeature {
     }
 
     private func checkNimbusHomepageFeatures(
-        for sectionID: HomeScreenSection?,
-        from nimbus: FxNimbus = FxNimbus.shared
+        from nimbusLayer: NimbusFeatureFlagLayer
     ) -> UserFeaturePreference {
-        guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
 
-        let nimbusHomepageConfig = nimbus.features.homescreenFeature.value()
-
-        if let sectionIsEnabled = nimbusHomepageConfig.sectionsEnabled[sectionID],
-           sectionIsEnabled {
+        if nimbusLayer.checkNimbusConfigFor(featureID) {
             // For pocket's default value, we also need to check the locale being supported.
             // Here, we want to make sure the section is enabled && locale is supported before
             // we would return that pocket is enabled
-            if sectionID == .pocket && !Pocket.IslocaleSupported(Locale.current.identifier) {
+            if featureID == .pocket && !Pocket.IslocaleSupported(Locale.current.identifier) {
                 return UserFeaturePreference.disabled
             }
             return UserFeaturePreference.enabled
         }
 
         return UserFeaturePreference.disabled
-    }
-
-    // Here we encapsulate translation from internal featureIDs to Nimbus' related
-    // feature ids, whose definition can be found in the `nimbus.fml.yaml` file.
-    private func sectionID(from featureID: FeatureFlagName) -> HomeScreenSection? {
-        switch featureID {
-        case .jumpBackIn:
-            return .jumpBackIn
-        case .recentlySaved:
-            return .recentlySaved
-        case .pocket:
-            return .pocket
-        default:
-            return nil
-        }
-    }
-
-    private func sectionID(from featureID: FeatureFlagName) -> TabTraySection? {
-        switch featureID {
-        case .inactiveTabs:
-            return .inactiveTabs
-        default:
-            return nil
-        }
     }
 }

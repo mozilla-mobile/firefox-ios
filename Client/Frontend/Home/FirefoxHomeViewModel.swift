@@ -52,13 +52,10 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
 
-    lazy var homescreen = nimbus.features.homescreenFeature.value()
-
     // MARK: - Section availability variables
 
     var isYourLibrarySectionEnabled: Bool {
-        UIDevice.current.userInterfaceIdiom != .pad &&
-            homescreen.sectionsEnabled[.libraryShortcuts] == true
+        UIDevice.current.userInterfaceIdiom != .pad && featureFlags.isFeatureActiveForNimbus(.librarySection)
     }
 
     // MARK: - Initializers
@@ -72,17 +69,14 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
         self.headerViewModel = FxHomeLogoHeaderViewModel(profile: profile)
         self.topSiteViewModel = FxHomeTopSitesViewModel(
             profile: profile,
-            isZeroSearch: isZeroSearch,
-            nimbus: nimbus)
+            isZeroSearch: isZeroSearch)
         self.jumpBackInViewModel = FirefoxHomeJumpBackInViewModel(
             isZeroSearch: isZeroSearch,
             profile: profile,
-            isPrivate: isPrivate,
-            nimbus: nimbus)
+            isPrivate: isPrivate)
         self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(
             isZeroSearch: isZeroSearch,
-            profile: profile,
-            nimbus: nimbus)
+            profile: profile)
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(
             with: profile,
             isPrivate: isPrivate)
@@ -95,9 +89,9 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
                                 recentlySavedViewModel,
                                 historyHighlightsViewModel,
                                 pocketViewModel]
-        self.nimbus = nimbus
         self.isPrivate = isPrivate
 
+        self.nimbus = nimbus
         topSiteViewModel.delegate = self
     }
 

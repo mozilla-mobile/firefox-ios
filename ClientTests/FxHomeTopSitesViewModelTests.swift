@@ -12,21 +12,17 @@ import SyncTelemetry
 class FxHomeTopSitesViewModelTests: XCTestCase {
     var profile: MockProfile!
     var viewModel: FxHomeTopSitesViewModel!
-    var nimbusMock: NimbusMock!
 
     override func setUp() {
         super.setUp()
         self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
-        self.nimbusMock = NimbusMock()
         self.viewModel = FxHomeTopSitesViewModel(profile: self.profile,
-                                                 isZeroSearch: false,
-                                                 nimbus: nimbusMock)
+                                                 isZeroSearch: false)
     }
 
     override func tearDown() {
         super.tearDown()
         self.profile._shutdown()
-        self.nimbusMock = nil
         self.viewModel = nil
         self.profile = nil
     }
