@@ -21,7 +21,7 @@ class InsetButton: UIButton {
         return CGSize(width: size.width + titleEdgeInsets.left + titleEdgeInsets.right,
                       height: size.height + titleEdgeInsets.top + titleEdgeInsets.bottom)
     }
-    
+
     var highlightedBackgroundColor: UIColor?
     var savedBackgroundColor: UIColor?
 

@@ -74,36 +74,36 @@ class SiriFavoriteViewController: UIViewController {
         }
 
         addConstraintsForLandscape()
-        
+
         inputDescription.snp.remakeConstraints { make in
             make.top.equalTo(textInput.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
             make.leading.equalTo(inputLabel)
         }
-        
+
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
         self.navigationItem.leftBarButtonItem?.tintColor = .accent
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         addConstraintsForLandscape()
     }
-    
+
     private func addConstraintsForLandscape() {
-        
+
         textInput.snp.remakeConstraints { make in
             make.height.equalTo(UIConstants.layout.settingsSectionHeight)
             make.top.equalTo(inputLabel.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
-            
+
             switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
             case (.phone, .landscapeRight), (.phone, .landscapeLeft):
                 make.leading.trailing.equalTo(inputLabel).offset(-UIConstants.layout.settingsTextPadding)
             default:
                 make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
-                
+
             }
         }
     }
-    
+
     private func setUpEditUI() {
         editView.backgroundColor = .systemGroupedBackground
         view.addSubview(editView)

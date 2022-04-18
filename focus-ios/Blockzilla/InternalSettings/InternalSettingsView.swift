@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct InternalSettingsView: View {
-    
+
     var body: some View {
         Form {
         #if DEBUG

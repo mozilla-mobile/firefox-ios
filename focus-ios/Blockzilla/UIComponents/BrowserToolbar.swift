@@ -11,7 +11,7 @@ class BrowserToolbar: UIView {
     private let backgroundDark = UIView()
     private let backgroundBright = UIView()
     private let stackView = UIStackView()
-    
+
     public var contextMenuButton: InsetButton { toolset.contextMenuButton }
     public var deleteButton: InsetButton { toolset.deleteButton }
 
@@ -62,7 +62,7 @@ class BrowserToolbar: UIView {
             toolset.canGoForward = canGoForward
         }
     }
-    
+
     var canDelete: Bool = false {
         didSet {
             toolset.canDelete = canDelete

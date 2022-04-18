@@ -6,18 +6,18 @@ import UIKit
 import DesignSystem
 
 class SplashView: UIView {
-    
+
     enum State {
         case needsAuth
         case `default`
     }
-    
+
     var state = State.default {
         didSet {
             self.updateUI()
         }
     }
-    
+
     var authenticationManager: AuthenticationManager! {
         didSet {
             authButton.setImage(
@@ -26,9 +26,9 @@ class SplashView: UIView {
             )
         }
     }
-    
+
     private let logoImage = UIImageView(image: AppInfo.config.wordmark)
-    
+
     private lazy var authButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .black
@@ -38,45 +38,45 @@ class SplashView: UIView {
         button.addTarget(self, action:#selector(self.showAuth), for: .touchUpInside)
         return button
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
     }
-    
+
     private func commonInit() {
         backgroundColor = .launchScreenBackground
         addSubview(logoImage)
         logoImage.snp.makeConstraints { make in
             make.center.equalTo(self)
         }
-        
+
         addSubview(authButton)
         authButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(logoImage).inset(100)
             make.height.width.equalTo(CGFloat.authButtonSize)
         }
-        
+
         updateUI()
     }
-    
+
     private func updateUI() {
         authButton.isHidden = state == .default
     }
-    
+
     @objc private func showAuth() {
         state = .default
         Task {
             await authenticationManager.authenticateWithBiometrics()
         }
     }
-    
+
     func animateDissapear(_ duration: Double = 0.25) {
         UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
             self.logoImage.layer.transform = .start

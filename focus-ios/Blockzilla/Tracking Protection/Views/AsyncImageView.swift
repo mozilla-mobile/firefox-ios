@@ -6,27 +6,27 @@ import UIKit
 import Combine
 
 class AsyncImageView: UIView {
-    
+
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-    
+
     private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
-    
+
     private lazy var loader = ImageLoader()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     func commonInit() {
         addSubview(imageView)
         addSubview(activityIndicator)
@@ -38,7 +38,7 @@ class AsyncImageView: UIView {
             make.centerY.centerY.equalToSuperview()
         }
     }
-    
+
     func load(imageURL: URL, defaultImage: UIImage) {
         activityIndicator.startAnimating()
         loader.loadImage(imageURL) { [weak self] result in
@@ -47,7 +47,7 @@ class AsyncImageView: UIView {
                 case .success(let image):
                     self?.activityIndicator.stopAnimating()
                     self?.imageView.image = image
-                    
+
                 case .failure:
                     self?.imageView.image = defaultImage
                     self?.activityIndicator.stopAnimating()
@@ -55,9 +55,9 @@ class AsyncImageView: UIView {
             }
         }
     }
-    
+
     var cancellable: AnyCancellable?
-    
+
     func load(from publisher: AnyPublisher<UIImage, Never>) {
         activityIndicator.startAnimating()
         cancellable = publisher

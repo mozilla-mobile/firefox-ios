@@ -46,7 +46,7 @@ protocol WebControllerDelegate: AnyObject {
 
 class TrackingProtectionManager {
     @Published var trackingProtectionStatus: TrackingProtectionStatus
-    
+
     init(isTrackingEnabled: () -> Bool) {
         let isTrackingEnabled = isTrackingEnabled()
         self.trackingProtectionStatus = isTrackingEnabled ? .on(TPPageStats()) : .off
@@ -78,11 +78,11 @@ class WebViewController: UIViewController, WebController {
     var pageTitle: String? {
         return browserView.title
     }
-    
+
     private var currentContentMode: WKWebpagePreferences.ContentMode?
     private var contentModeForHost: [String: WKWebpagePreferences.ContentMode] = [:]
 
-    var requestMobileSite: Bool { currentContentMode == .desktop }    
+    var requestMobileSite: Bool { currentContentMode == .desktop }
     var connectionIsSecure: Bool {
         return browserView.hasOnlySecureContent
     }
@@ -96,11 +96,11 @@ class WebViewController: UIViewController, WebController {
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func reset() {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
@@ -119,7 +119,7 @@ class WebViewController: UIViewController, WebController {
         if let hostName = browserView.url?.host {
             contentModeForHost[hostName] = requestMobileSite ? .mobile : .desktop
         }
-        
+
         self.browserView.reloadFromOrigin()
     }
 
@@ -129,19 +129,19 @@ class WebViewController: UIViewController, WebController {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         configuration.allowsInlineMediaPlayback = true
-        
+
         // For consistency we set our user agent similar to Firefox iOS.
         //
         // Important to note that this UA change only applies when the webview is created initially or
         // when people hit the erase session button. The UA is not changed when you change the width of
         // Focus on iPad, which means there could be some edge cases right now.
-        
+
         if UIDevice.current.userInterfaceIdiom == .pad {
             configuration.applicationNameForUserAgent = "Version/13.1 Safari/605.1.15"
         } else {
             configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.majorVersion) Mobile/15E148 Version/15.0"
         }
-                
+
         if #available(iOS 15.0, *) {
             configuration.upgradeKnownHostsToHTTPS = true
         }
@@ -157,7 +157,7 @@ class WebViewController: UIViewController, WebController {
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
-        
+
         if case .on(_) = trackingProtectionManager.trackingProtectionStatus {
             setupBlockLists()
             setupTrackingProtectionScripts()
@@ -204,12 +204,12 @@ class WebViewController: UIViewController, WebController {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.findInPageHandler.rawValue)
         addScript(forResource: "FindInPage", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
-    
+
     private func setupMetadataScripts() {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.metadata.rawValue)
         addScript(forResource: "MetadataHelper", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
-    
+
     private func setupFullScreen() {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.fullScreen.rawValue)
         addScript(forResource: "FullScreen", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
@@ -238,7 +238,7 @@ class WebViewController: UIViewController, WebController {
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
-    
+
     enum MetadataError: Swift.Error {
         case missingMetadata
         case missingURL
@@ -251,7 +251,7 @@ class WebViewController: UIViewController, WebController {
             let metadata = result
                 .flatMap { try? JSONSerialization.data(withJSONObject: $0) }
                 .flatMap { try? JSONDecoder().decode(Metadata.self, from: $0) }
-            
+
             if let metadata = metadata {
                 completion(.success(metadata))
             } else if let error = error {
@@ -261,7 +261,7 @@ class WebViewController: UIViewController, WebController {
             }
         }
     }
-    
+
     func getMetadata()  -> Future<Metadata, Error> {
         Future { promise in
             self.getMetadata { result in
@@ -273,7 +273,7 @@ class WebViewController: UIViewController, WebController {
     func focus() {
         browserView.becomeFirstResponder()
     }
-    
+
     func resetZoom() {
         browserView.scrollView.setZoomScale(1.0, animated: true)
     }
@@ -341,13 +341,13 @@ extension WebViewController: WKNavigationDelegate {
         let errorPageData = ErrorPage(error: error).data
         webView.load(errorPageData, mimeType: "", characterEncodingName: UIConstants.strings.encodingNameUTF8, baseURL: errorUrl)
     }
-    
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
         // If the user has asked for a specific content mode for this host, use that.
         if let hostName = navigationAction.request.url?.host, let preferredContentMode = contentModeForHost[hostName] {
             preferences.preferredContentMode = preferredContentMode
         }
-        
+
         let present: (UIViewController) -> Void = {
             self.present($0, animated: true) {
                 self.delegate?.webController(self, didUpdateEstimatedProgress: 1.0)
@@ -379,7 +379,7 @@ extension WebViewController: WKNavigationDelegate {
         if navigationAction.navigationType == .linkActivated && browserView.url != navigationAction.request.url {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.websiteLink)
         }
-        
+
         decisionHandler(decision, preferences)
     }
 

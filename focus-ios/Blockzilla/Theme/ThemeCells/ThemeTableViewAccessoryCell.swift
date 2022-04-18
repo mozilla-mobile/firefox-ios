@@ -13,7 +13,7 @@ class ThemeTableViewAccessoryCell: UITableViewCell {
             textLabel?.text = newValue
         }
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let backgroundColorView = UIView()
@@ -26,7 +26,7 @@ class ThemeTableViewAccessoryCell: UITableViewCell {
         selectionStyle = .none
         tintColor = .secondaryText.withAlphaComponent(0.3)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

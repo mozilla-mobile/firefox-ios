@@ -7,7 +7,7 @@ import Foundation
 enum TrackingProtectionStatus {
     case on(TPPageStats)
     case off
-    
+
     var trackingInformation: TPPageStats? {
         get {
             guard case let .on(value) = self else { return nil }

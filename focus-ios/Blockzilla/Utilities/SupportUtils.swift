@@ -31,7 +31,7 @@ public enum SupportTopic: CaseIterable {
             return "add-search-engine-ios"
         }
     }
-    
+
     static let fallbackURL = "https://support.mozilla.org"
 }
 

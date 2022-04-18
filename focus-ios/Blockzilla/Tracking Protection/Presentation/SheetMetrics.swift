@@ -14,6 +14,5 @@ public struct SheetMetrics {
     public let closeButtonSize: CGFloat = 30
     public let closeButtonInset: CGFloat = 16
 
-
     public var maximumContainerHeight: CGFloat { UIScreen.main.bounds.height }
 }

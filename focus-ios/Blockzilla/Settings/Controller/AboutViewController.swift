@@ -6,11 +6,11 @@ import Foundation
 import UIKit
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
-    
+
     enum AboutSection: CaseIterable {
         case aboutHeader
         case aboutCategories
-        
+
         var numberOfRows: Int {
             switch self {
             case .aboutHeader:
@@ -19,7 +19,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
                 return 3
             }
         }
-        
+
         func configureCell(cell: UITableViewCell, with headerView: UIView, for row: Int) {
             switch self {
             case .aboutHeader:
@@ -40,9 +40,8 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             cell.selectionStyle = .gray
             cell.textLabel?.textColor = .primaryText
             cell.layoutMargins = UIEdgeInsets.zero
-            
         }
-        
+
         func categoryUrl(for row: Int) -> URL? {
             switch self {
             case .aboutHeader:
@@ -94,7 +93,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             make.edges.equalToSuperview()
         }
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         sections.count
     }
@@ -272,7 +271,7 @@ private class AboutHeaderView: UIView {
             make.bottom.equalTo(self).inset(50).priority(.low)
         }
     }
-    
+
     private func setupSecretMenuActivation() {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleSecretMenuActivation(sender:)))
         gestureRecognizer.numberOfTapsRequired = 5

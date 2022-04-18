@@ -46,7 +46,7 @@ final class InternalSettings: ObservableObject {
             objectWillChange.send()
         }
     }
-    
+
     @UserDefault(key: OnboardingConstants.alwaysShowOnboarding, defaultValue: false)
     var alwaysShowOnboarding: Bool {
         willSet {
@@ -60,7 +60,7 @@ final class InternalSettings: ObservableObject {
             objectWillChange.send()
         }
     }
-    
+
     @UserDefault(key: OnboardingConstants.ignoreOnboardingExperiment, defaultValue: false)
     var ignoreOnboardingExperiment: Bool {
         willSet {

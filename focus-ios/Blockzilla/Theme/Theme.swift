@@ -5,13 +5,13 @@
 import UIKit
 
 class ThemeManager {
-    
+
     enum Theme: Int {
 
         case device
         case light
         case dark
-        
+
         var userInterfaceStyle: UIUserInterfaceStyle {
             switch self {
             case .device:
@@ -33,9 +33,9 @@ class ThemeManager {
             }
         }
     }
-    
+
     @Published public var selectedTheme: UIUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
-    
+
     public func set(_ theme: ThemeManager.Theme) {
         UserDefaults.standard.theme = theme
         selectedTheme = theme.userInterfaceStyle

@@ -15,11 +15,11 @@ public extension UIButton {
             backgroundView.layer.masksToBounds = true
         }
         self.insertSubview(backgroundView, at: 0)
-        
+
         backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(-padding)
         }
-        
+
         if let imageView = self.imageView {
             imageView.backgroundColor = .clear
             self.bringSubviewToFront(imageView)

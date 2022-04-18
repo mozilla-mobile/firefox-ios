@@ -26,7 +26,7 @@ class Toast {
         label.text = text
         label.textColor = .primaryText
         label.font = .footnote12Semibold
-        
+
         label.numberOfLines = 0
         label.accessibilityIdentifier = "Toast.label"
         toast.addSubview(label)

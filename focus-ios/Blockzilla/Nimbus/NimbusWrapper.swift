@@ -8,10 +8,8 @@ import RustLog
 import Viaduct
 import Nimbus
 
-
 let NimbusUseStagingServerDefault = "NimbusUseStagingServer"
 let NimbusUsePreviewCollectionDefault = "NimbusUsePreviewCollection"
-
 
 /// An application specific enum of app features that we are configuring with experiments.
 /// This is expected to grow and shrink across releases of the app.
@@ -21,12 +19,12 @@ enum FeatureId: String {
 
 class NimbusWrapper {
     static let shared = NimbusWrapper()
-    
+
     private init() {
     }
-    
+
     var nimbus: NimbusApi?
-    
+
     func initialize(enabled: Bool) throws {
         let rustLogCallback: LogCallback = { level, tag, message in
             let log = OSLog(subsystem: "org.mozilla.nimbus", category: tag ?? "default")
@@ -44,7 +42,7 @@ class NimbusWrapper {
             }
             return true
         }
-        
+
         if !RustLog.shared.tryEnable(rustLogCallback) {
             throw "Failed to initialize Rustlog"
         }
@@ -53,7 +51,7 @@ class NimbusWrapper {
 
         let useStagingServer = UserDefaults.standard.bool(forKey: NimbusUseStagingServerDefault)
         let usePreviewCollection = UserDefaults.standard.bool(forKey: NimbusUsePreviewCollectionDefault)
-        
+
         guard let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(useStagingServer: useStagingServer, usePreviewCollection: usePreviewCollection),
               let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
             throw "Failed to load Nimbus settings from Info.plist"
@@ -76,7 +74,7 @@ extension NimbusWrapper {
     func getAvailableExperiments() -> [AvailableExperiment] {
         return self.nimbus?.getAvailableExperiments() ?? []
     }
-    
+
     func getEnrolledBranchSlug(forExperiment experiment: AvailableExperiment) -> String? {
         return self.nimbus?.getExperimentBranch(experimentId: experiment.slug)
     }
@@ -84,7 +82,7 @@ extension NimbusWrapper {
     func optIn(toExperiment experiment: AvailableExperiment, withBranch branch: ExperimentBranch) {
         self.nimbus?.optIn(experiment.slug, branch: branch.slug)
     }
-    
+
     func optOut(ofExperiment experiment: AvailableExperiment) {
         self.nimbus?.optOut(experiment.slug)
     }

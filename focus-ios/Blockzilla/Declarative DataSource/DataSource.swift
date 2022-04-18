@@ -5,7 +5,7 @@
 import UIKit
 
 class DataSource: UITableViewDiffableDataSource<SectionType, SectionItem> {
-    
+
     init(
         tableView: UITableView,
         cellProvider: @escaping UITableViewDiffableDataSource<SectionType, SectionItem>.CellProvider,
@@ -16,15 +16,15 @@ class DataSource: UITableViewDiffableDataSource<SectionType, SectionItem> {
         self.footerForSection = footerForSection
         super.init(tableView: tableView, cellProvider: cellProvider)
     }
-    
+
     private var headerForSection: (SectionType) -> String?
     private var footerForSection: (SectionType) -> String?
-    
+
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let sectionType = self.snapshot().sectionIdentifiers[section]
         return headerForSection(sectionType)
     }
-    
+
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         let sectionType = self.snapshot().sectionIdentifiers[section]
         return footerForSection(sectionType)

@@ -38,18 +38,18 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
 
         navigationItem.title = UIConstants.strings.settingsSearchLabel
         navigationController?.navigationBar.tintColor = .accent
-        
+
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
         tableView.tableFooterView = UIView()
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Edit, style: .plain, target: self, action: #selector(SearchSettingsViewController.toggleEditing))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "edit"
     }
-    
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
             return UIConstants.strings.InstalledSearchEngines
@@ -190,7 +190,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         let engine = engines[indexPath.row]
         return engine != searchEngineManager.activeEngine
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return indexPath.section == 1 ? .none : .delete
     }

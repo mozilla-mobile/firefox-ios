@@ -37,7 +37,7 @@ enum AppImage: String, CaseIterable {
     case renameShortcut
     case faceid
     case touchid
-    
+
     var image: UIImage {
         switch self {
         case .trackingProtectionOff:

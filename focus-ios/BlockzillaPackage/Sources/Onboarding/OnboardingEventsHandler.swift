@@ -6,18 +6,18 @@ import Foundation
 import Combine
 
 public class OnboardingEventsHandler {
-    
+
     private let alwaysShowOnboarding: () -> Bool
     private let setShownTips: (Set<ToolTipRoute>) -> Void
     public let shouldShowNewOnboarding: () -> Bool
-    
+
     public enum Action {
         case applicationDidLaunch
         case enterHome
         case startBrowsing
         case showTrackingProtection
     }
-    
+
     public enum OnboardingType: Equatable, Hashable, Codable {
         init(_ shouldShowNewOnboarding: Bool) {
             self = shouldShowNewOnboarding ? .new : .old
@@ -25,7 +25,7 @@ public class OnboardingEventsHandler {
         case new
         case old
     }
-    
+
     public enum ToolTipRoute: Equatable, Hashable, Codable {
         case onboarding(OnboardingType)
         case trackingProtection
@@ -33,16 +33,16 @@ public class OnboardingEventsHandler {
         case trash
         case menu
     }
-    
+
     @Published public var route: ToolTipRoute?
-    
+
     private var visitedURLcounter = 0
     private var shownTips = Set<ToolTipRoute>() {
         didSet {
             setShownTips(shownTips)
         }
     }
-    
+
     public init(
         alwaysShowOnboarding: @escaping () -> Bool,
         shouldShowNewOnboarding: @escaping () -> Bool,
@@ -56,7 +56,7 @@ public class OnboardingEventsHandler {
         self.setShownTips = setShownTips
         self.shownTips = getShownTips()
     }
-    
+
     public func send(_ action: OnboardingEventsHandler.Action) {
         switch action {
         case .applicationDidLaunch:
@@ -66,36 +66,36 @@ public class OnboardingEventsHandler {
             } else {
                 show(route: onboardingRoute)
             }
-            
+
         case .enterHome:
             guard shouldShowNewOnboarding() else { return }
             show(route: .menu)
-            
+
         case .startBrowsing:
             visitedURLcounter += 1
             guard shouldShowNewOnboarding() else { return }
-            
+
             if visitedURLcounter == 1 {
                 show(route: .trackingProtectionShield)
             }
-            
+
             if visitedURLcounter == 3 {
                 show(route: .trash)
             }
-            
+
         case .showTrackingProtection:
             guard shouldShowNewOnboarding() else { return }
             show(route: .trackingProtection)
         }
     }
-    
+
     private func show(route: ToolTipRoute) {
         #if DEBUG
         if alwaysShowOnboarding() {
             shownTips.remove(route)
         }
         #endif
-        
+
         if !shownTips.contains(route) {
             self.route = route
             shownTips.insert(route)

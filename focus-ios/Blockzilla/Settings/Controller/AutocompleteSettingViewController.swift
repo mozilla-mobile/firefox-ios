@@ -32,7 +32,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
 
         title = UIConstants.strings.settingsAutocompleteSection
         navigationController?.navigationBar.tintColor = .accent
-        
+
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -105,7 +105,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreDefaultTapped))
             footer.detailTextButton.addGestureRecognizer(tapGesture)
             return footer
-            
+
         case 1:
             let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteManageSitesDesc, AppInfo.productName), attributes: [.foregroundColor: UIColor.secondaryLabel])
             let footer = ActionFooterView(frame: .zero)
@@ -115,7 +115,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreCustomapped))
             footer.detailTextButton.addGestureRecognizer(tapGesture)
             return footer
-            
+
         default: return nil
         }
     }

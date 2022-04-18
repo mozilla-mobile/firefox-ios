@@ -8,7 +8,7 @@ class ToggleItem {
     let title: String
     let subtitle: String?
     let settingsKey: SettingsToggle
-    
+
     init(label: String, settingsKey: SettingsToggle, subtitle: String? = nil) {
         self.title = label
         self.settingsKey = settingsKey

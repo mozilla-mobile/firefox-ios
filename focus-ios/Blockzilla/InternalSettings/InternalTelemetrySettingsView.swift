@@ -16,23 +16,23 @@ extension InternalTelemetrySettingsView {
     func sendPendingEventPings() {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=events")!)
     }
-    
+
     func sendPendingBaselinePings() {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=baseline")!)
     }
-    
+
     func sendPendingMetricsPings() {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=metrics")!)
     }
-    
+
     func sendPendingDeletionRequestPings() {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=deletion-request")!)
     }
-    
+
     func changeLogPingsToConsole(_ value: Bool) {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=\(value)")!)
     }
-    
+
     func changeDebugViewTag(_ tag: String) {
         if let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
             Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)")!)
@@ -51,7 +51,7 @@ extension InternalTelemetrySettingsView: View {
                         }
                     }.onChange(of: internalSettings.gleanLogPingsToConsole, perform: changeLogPingsToConsole)
                 }
-                
+
                 SwiftUI.Section(header: Text(verbatim: "Debug View")) {
                     Toggle(isOn: $internalSettings.gleanEnableDebugView) {
                         VStack(alignment: .leading) {
@@ -59,12 +59,12 @@ extension InternalTelemetrySettingsView: View {
                             Text(verbatim: "Requires app restart").font(.caption)
                         }
                     }.disabled(internalSettings.gleanDebugViewTag.isEmpty)
-                    
+
                     VStack(alignment: .leading) {
                         TextField("Debug View Tag", text: $internalSettings.gleanDebugViewTag)
                             .onChange(of: internalSettings.gleanDebugViewTag, perform: changeDebugViewTag)
                     }
-                    
+
                     Button(action: { UIApplication.shared.open(GleanDebugViewURL) }) {
                         Text(verbatim: "Open Debug View (In Default Browser)")
                     }
@@ -78,15 +78,15 @@ extension InternalTelemetrySettingsView: View {
                     Button(action: { sendPendingEventPings() }) {
                         Text(verbatim: "Send Pending Event Pings")
                     }
-                    
+
                     Button(action: { sendPendingBaselinePings() }) {
                         Text(verbatim: "Send Baseline Event Pings")
                     }
-                    
+
                     Button(action: { sendPendingMetricsPings() }) {
                         Text(verbatim: "Send Metrics Event Pings")
                     }
-                    
+
                     Button(action: { sendPendingDeletionRequestPings() }) {
                         Text(verbatim: "Send Deletion Request Event Pings")
                     }

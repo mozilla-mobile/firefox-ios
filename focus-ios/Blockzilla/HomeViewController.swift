@@ -14,26 +14,26 @@ protocol HomeViewControllerDelegate: AnyObject {
 }
 
 class HomeViewController: UIViewController {
-    
+
     weak var delegate: HomeViewControllerDelegate?
     private let tipView = UIView()
-    
+
     private lazy var textLogo: UIImageView = {
         let textLogo = UIImageView()
         textLogo.image = AppInfo.isKlar ? #imageLiteral(resourceName: "img_klar_wordmark") : #imageLiteral(resourceName: "img_focus_wordmark")
         textLogo.contentMode = .scaleAspectFit
         return textLogo
     }()
-    
+
     private let tipManager: TipManager
     private lazy var tipsViewController = TipsPageViewController(
         tipManager: tipManager,
         tipTapped: didTap(tip:),
         tapOutsideAction: dismissKeyboard
     )
-     
+
     public var tipViewTop: ConstraintItem { tipView.snp.top }
-    
+
     var onboardingEventsHandler: OnboardingEventsHandler!
     let toolbar = HomeViewToolbar()
 
@@ -45,10 +45,10 @@ class HomeViewController: UIViewController {
         self.tipManager = tipManager
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         rotated()
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
 
@@ -77,11 +77,11 @@ class HomeViewController: UIViewController {
         refreshTipsDisplay()
         install(tipsViewController, on: tipView)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func refreshTipsDisplay() {
         if let tip = tipManager.fetchFirstTip(), !onboardingEventsHandler.shouldShowNewOnboarding() {
             logTelemetry(for: tip)
@@ -117,7 +117,7 @@ class HomeViewController: UIViewController {
             showTips()
         }
     }
-    
+
     private func hideTextLogo() {
         textLogo.isHidden = true
     }
@@ -151,7 +151,7 @@ class HomeViewController: UIViewController {
             break
         }
     }
-    
+
     func updateUI(urlBarIsActive: Bool, isBrowsing: Bool = false) {
         toolbar.isHidden = urlBarIsActive
 
@@ -180,7 +180,7 @@ class HomeViewController: UIViewController {
     private func didTap(tip: TipManager.Tip) {
         delegate?.homeViewControllerDidTapTip(self, tip : tip)
     }
-    
+
     private func dismissKeyboard() {
         delegate?.homeViewControllerDidTouchEmptyArea(self)
     }

@@ -21,9 +21,9 @@ enum SectionType: Int, Hashable {
 
 class TrackingProtectionViewController: UIViewController {
     var tooltipHeight: Constraint?
-    
+
     //MARK: - Data source
-    
+
     lazy var dataSource = DataSource(
         tableView: self.tableView,
         cellProvider: { tableView, indexPath, itemIdentifier in
@@ -46,7 +46,6 @@ class TrackingProtectionViewController: UIViewController {
             }
         })
 
-    
     //MARK: - Toggles items
     private lazy var trackingProtectionItem = ToggleItem(
         label: UIConstants.strings.trackingProtectionToggleLabel,
@@ -58,7 +57,7 @@ class TrackingProtectionViewController: UIViewController {
         ToggleItem(label: UIConstants.strings.labelBlockSocial, settingsKey: .blockSocial),
     ]
     private let blockOtherItem = ToggleItem(label: UIConstants.strings.labelBlockOther, settingsKey: .blockOther)
-    
+
     //MARK: - Sections
     func secureConnectionSectionItems(title: String, image: UIImage) -> [SectionItem] {
         [
@@ -67,7 +66,7 @@ class TrackingProtectionViewController: UIViewController {
             })
         ]
     }
-    
+
     lazy var tooltipSectionItems = [
         SectionItem(configureCell: { [unowned self] tableView, indexPath in
             let cell = TooltipTableViewCell(title: UIConstants.strings.tooltipTitleTextForPrivacy, body: UIConstants.strings.tooltipBodyTextForPrivacy)
@@ -75,7 +74,7 @@ class TrackingProtectionViewController: UIViewController {
             return cell
         })
     ]
-    
+
     lazy var enableTrackersSectionItems = [
         SectionItem(
             configureCell: { [unowned self] tableView, indexPath in
@@ -106,7 +105,7 @@ class TrackingProtectionViewController: UIViewController {
             }
         )
     ]
-    
+
     lazy var trackersSectionItems = toggleItems.map { toggleItem in
         SectionItem(
             configureCell: { [unowned self] _, _ in
@@ -114,7 +113,7 @@ class TrackingProtectionViewController: UIViewController {
                 cell.valueChanged.sink { isOn in
                     toggleItem.settingsValue = isOn
                     self.updateTelemetry(toggleItem.settingsKey, isOn)
-                    
+
                     GleanMetrics
                         .TrackingProtection
                         .trackerSettingChanged
@@ -182,7 +181,7 @@ class TrackingProtectionViewController: UIViewController {
             }
         )
     ]
-    
+
     lazy var statsSectionItems = [
         SectionItem(
             configureCell: { [unowned self] _, _ in
@@ -193,12 +192,12 @@ class TrackingProtectionViewController: UIViewController {
             }
         )
     ]
-    
+
     //MARK: - Views
     private var headerHeight: Constraint?
-    
+
     private lazy var header = TrackingHeaderView()
-    
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.separatorStyle = .singleLine
@@ -206,9 +205,9 @@ class TrackingProtectionViewController: UIViewController {
         tableView.register(SwitchTableViewCell.self)
         return tableView
     }()
-    
+
     weak var delegate: TrackingProtectionDelegate?
-    
+
     private var modalDelegate: ModalDelegate?
     private var sourceOfChange: String {
         if case .settings = state { return "Settings" }  else { return "Panel" }
@@ -224,18 +223,18 @@ class TrackingProtectionViewController: UIViewController {
     let favIconPublisher: AnyPublisher<UIImage, Never>?
     private let onboardingEventsHandler: OnboardingEventsHandler
     private var cancellable: AnyCancellable?
-    
+
     //MARK: - VC Lifecycle
     init(state: TrackingProtectionState, onboardingEventsHandler: OnboardingEventsHandler, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
         self.state = state
         self.onboardingEventsHandler = onboardingEventsHandler
         self.favIconPublisher = favIconPublisher
         super.init(nibName: nil, bundle: nil)
-        
+
         dataSource.defaultRowAnimation = .middle
-        
+
         var snapshot = NSDiffableDataSourceSnapshot<SectionType, SectionItem>()
-        
+
         if case let .browsing(browsingStatus) = state {
             let title = browsingStatus.isSecureConnection ? UIConstants.strings.connectionSecure : UIConstants.strings.connectionNotSecure
             let image = browsingStatus.isSecureConnection ? UIImage.connectionSecure : .connectionNotSecure
@@ -243,32 +242,32 @@ class TrackingProtectionViewController: UIViewController {
             snapshot.appendSections([.secure])
             snapshot.appendItems(secureSectionItems, toSection: .secure)
         }
-        
+
         snapshot.appendSections([.enableTrackers])
         snapshot.appendItems(enableTrackersSectionItems, toSection: .enableTrackers)
-        
+
         if self.trackingProtectionItem.settingsValue {
             snapshot.appendSections([.trackers])
             snapshot.appendItems(trackersSectionItems, toSection: .trackers)
         }
-        
+
         snapshot.appendSections([.stats])
         snapshot.appendItems(statsSectionItems, toSection: .stats)
-    
+
         dataSource.apply(snapshot, animatingDifferences: false)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         title = UIConstants.strings.trackingProtectionLabel
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
         navigationController?.navigationBar.tintColor = .accent
-        
+
         if case .settings = state {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
             doneButton.tintColor = .accent
@@ -277,7 +276,7 @@ class TrackingProtectionViewController: UIViewController {
             self.navigationController?.navigationBar.shadowImage = UIImage()
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.navigationController?.navigationBar.isTranslucent = false
-            
+
             onboardingEventsHandler.send(.showTrackingProtection)
             cancellable = onboardingEventsHandler
                 .$route
@@ -287,19 +286,19 @@ class TrackingProtectionViewController: UIViewController {
                         var snapshot = dataSource.snapshot()
                         snapshot.deleteSections([.tip])
                         dataSource.apply(snapshot, animatingDifferences: true)
-                        
+
                     case .trackingProtection:
                         var snapshot = dataSource.snapshot()
                         snapshot.insertSections([.tip], beforeSection: .enableTrackers)
                         snapshot.appendItems(tooltipSectionItems, toSection: .tip)
                         dataSource.apply(snapshot)
-                        
+
                     default:
                         break
                     }
                 }
         }
-        
+
         if case let .browsing(browsingStatus) = state,
            let baseDomain = browsingStatus.url.baseDomain {
             view.addSubview(header)
@@ -311,7 +310,7 @@ class TrackingProtectionViewController: UIViewController {
                 header.configure(domain: baseDomain, publisher: publisher)
             }
         }
-        
+
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             if case .browsing = state {
@@ -323,10 +322,10 @@ class TrackingProtectionViewController: UIViewController {
             make.bottom.equalTo(self.view)
         }
     }
-    
+
     private func calculatePreferredSize() {
         guard state != .settings else { return }
-        
+
         preferredContentSize = CGSize(
             width: tableView.contentSize.width,
             height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
@@ -338,26 +337,26 @@ class TrackingProtectionViewController: UIViewController {
             )
         }
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         calculatePreferredSize()
     }
-    
+
     @objc private func doneTapped() {
         onboardingEventsHandler.route = nil
         self.dismiss(animated: true, completion: nil)
     }
-    
+
     fileprivate func updateTelemetry(_ settingsKey: SettingsToggle, _ isOn: Bool) {
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: settingsKey.rawValue)
         telemetryEvent.addExtra(key: "to", value: isOn)
         Telemetry.default.recordEvent(telemetryEvent)
-        
+
         Settings.set(isOn, forToggle: settingsKey)
         ContentBlockerHelper.shared.reload()
     }
-    
+
     private func getAppInstallDate() -> String {
         let urlToDocumentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
         let dateFormatter = DateFormatter()
@@ -368,14 +367,14 @@ class TrackingProtectionViewController: UIViewController {
         }
         return dateFormatter.string(from: Date())
     }
-    
+
     private func getNumberOfTrackersBlocked() -> String {
         let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter.string(from: numberOfTrackersBlocked) ?? "0"
     }
-    
+
     private func toggleProtection(isOn: Bool) {
         let telemetryEvent = TelemetryEvent(
             category: TelemetryEventCategory.action,
@@ -385,10 +384,10 @@ class TrackingProtectionViewController: UIViewController {
         )
         telemetryEvent.addExtra(key: "to", value: isOn)
         Telemetry.default.recordEvent(telemetryEvent)
-        
+
         GleanMetrics.TrackingProtection.trackingProtectionChanged.record(.init(isEnabled: isOn))
         GleanMetrics.TrackingProtection.hasEverChangedEtp.set(true)
-        
+
         delegate?.trackingProtectionDidToggleProtection(enabled: isOn)
     }
 }

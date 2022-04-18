@@ -11,17 +11,17 @@ class SwitchTableViewCell: UITableViewCell {
         toggle.onTintColor = .accent
         toggle.tintColor = .darkGray
         toggle.addTarget(self, action: #selector(toggle(sender:)), for: .valueChanged)
-        
+
         return toggle
     }()
-    
+
     private var cancellable: AnyCancellable?
     private var subject = PassthroughSubject<Bool, Never>()
     public var valueChanged: AnyPublisher<Bool, Never> { subject.eraseToAnyPublisher() }
     public var isOn: Bool = false {
         didSet { toggle.isOn = isOn }
     }
-    
+
     convenience init(item: ToggleItem, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String?) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
         toggle.isOn = Settings.getToggle(item.settingsKey)
@@ -33,15 +33,15 @@ class SwitchTableViewCell: UITableViewCell {
         backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     @objc private func toggle(sender: UISwitch) {
         subject.send(sender.isOn)
     }

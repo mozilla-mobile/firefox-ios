@@ -7,11 +7,11 @@ import UIKit
 protocol MenuActionable: AnyObject {
     func addToShortcuts(url: URL)
     func removeShortcut(url: URL)
-    
+
     func findInPage()
     func requestDesktopBrowsing()
     func requestMobileBrowsing()
-    
+
     func showCopy()
     func showSharePage(for utils: OpenUtils, sender: UIView)
     func openInFirefox(url: URL)
@@ -19,8 +19,7 @@ protocol MenuActionable: AnyObject {
     func openInDefaultBrowser(url: URL)
     var canOpenInFirefox: Bool { get }
     var canOpenInChrome: Bool { get }
-    
-    
+
     func showSettings(shouldScrollToSiri: Bool)
     func showHelp()
 }

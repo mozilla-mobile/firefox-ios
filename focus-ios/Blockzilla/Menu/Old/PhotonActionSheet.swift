@@ -90,7 +90,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         view.accessibilityIdentifier = "Action Sheet"
         view.isOpaque = false
         tableView.isOpaque = false
-        
+
         let width = UIDevice.current.userInterfaceIdiom == .pad ? 400 : 250
 
         tableView.snp.makeConstraints { make in

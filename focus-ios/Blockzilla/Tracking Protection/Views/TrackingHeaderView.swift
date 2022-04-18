@@ -10,7 +10,7 @@ class TrackingHeaderView: UIView {
         let image = AsyncImageView()
         return image
     }()
-    
+
     private lazy var domainLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .callout)
@@ -20,7 +20,7 @@ class TrackingHeaderView: UIView {
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }()
-    
+
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [faviImageView, domainLabel])
         stackView.spacing = 8
@@ -28,28 +28,28 @@ class TrackingHeaderView: UIView {
         stackView.axis = .horizontal
         return stackView
     }()
-    
+
     private lazy var separator: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray
         return view
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         addSubview(separator)
         addSubview(stackView)
         backgroundColor = .systemGroupedBackground
-        
+
         faviImageView.snp.makeConstraints { make in
             make.width.height.equalTo(40)
         }
@@ -62,7 +62,7 @@ class TrackingHeaderView: UIView {
             make.leading.bottom.equalToSuperview().inset(16)
         }
     }
-    
+
     func configure(domain: String, publisher: AnyPublisher<UIImage, Never>) {
         self.domainLabel.text = domain
         self.faviImageView.load(from: publisher)

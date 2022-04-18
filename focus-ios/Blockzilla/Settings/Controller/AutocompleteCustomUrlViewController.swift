@@ -70,7 +70,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
         } else {
             tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
         }
-        
+
         navigationItem.setHidesBackButton(tableView.isEditing, animated: true)
         updateEmptyStateView()
         navigationItem.rightBarButtonItem?.isEnabled = tableView.isEditing || domains.count > 0
@@ -84,13 +84,12 @@ class AutocompleteCustomUrlViewController: UIViewController {
             tableView.backgroundView?.animateHidden(true, duration: UIConstants.layout.autocompleteAnimationDuration)
         }
     }
-    
+
     enum Section: Int, CaseIterable {
         case add
         case list
     }
 }
-
 
 extension AutocompleteCustomUrlViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -121,7 +120,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
                     cell.accessoryType = .disclosureIndicator
                     cell.accessibilityIdentifier = "addCustomDomainCell"
                     cell.selectionStyle = .gray
-                    
+
                 case .list:
                     cell = UITableViewCell(style: .subtitle, reuseIdentifier: "domainCell")
                     cell.selectionStyle = .none
@@ -137,7 +136,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         Section(rawValue: indexPath.section) != .add
     }
-    
+
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         Section(rawValue: indexPath.section) != .add
     }
@@ -151,7 +150,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         tableView.isEditing ? .delete : .none
     }
@@ -180,7 +179,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         _ = customAutocompleteSource.add(suggestion: itemToMove, atIndex: destinationIndexPath.row)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainReordered, object: TelemetryEventObject.customDomain)
     }
-    
+
     /// Disable moving rows between sections.
     ///
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {

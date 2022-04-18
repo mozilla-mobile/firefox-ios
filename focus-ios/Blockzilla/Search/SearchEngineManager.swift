@@ -135,7 +135,7 @@ class SearchEngineManager {
         let hasDefaultSearchEngine = prefs.string(forKey: SearchEngineManager.prefKeyEngine)
         let versionNumberList = AppInfo.shortVersion.components(separatedBy: ".")
         let versionNum = Int(versionNumberList[0]) ?? 0
-        
+
         // Ref Bug: #1653822
         // Set default search engine pref
         if hasDefaultSearchEngine == nil || (searchEnginePrefV98 == nil && versionNum >= 98) {

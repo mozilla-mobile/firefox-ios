@@ -12,7 +12,7 @@ struct InternalExperimentDetailView {
     let experiment: AvailableExperiment
     @State private var selectedBranchSlug: String
     let pickerBranches: [String]
-    
+
     init(experiment: AvailableExperiment) {
         self.experiment = experiment
         self.selectedBranchSlug = NimbusWrapper.shared.getEnrolledBranchSlug(forExperiment: experiment) ?? notEnrolledBranchSlug

@@ -54,7 +54,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.leading.trailing.top.bottom.equalToSuperview()
         }
         scrollView.showsVerticalScrollIndicator = false
-        
+
         let nameLabel = SmartLabel()
         nameLabel.text = UIConstants.strings.NameToDisplay
         nameLabel.textColor = .primaryText
@@ -169,11 +169,11 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.trailing.equalToSuperview().offset(-leftMargin)
         }
     }
-    
+
     override func viewSafeAreaInsetsDidChange() {
         updateContainerConstraints()
     }
-    
+
     private func updateContainerConstraints() {
         scrollView.snp.updateConstraints { make in
             switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
@@ -189,10 +189,10 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
                 make.leading.trailing.equalTo(view)
                 scrollView.isScrollEnabled = false
             }
-            
+
         }
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         updateContainerConstraints()
     }
@@ -315,7 +315,7 @@ extension AddSearchEngineViewController: UITextFieldDelegate {
 }
 
 extension AddSearchEngineViewController: KeyboardHelperDelegate {
-    
+
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
@@ -325,7 +325,7 @@ extension AddSearchEngineViewController: KeyboardHelperDelegate {
             self.view.layoutIfNeeded()
         }
     }
-    
+
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
@@ -335,9 +335,9 @@ extension AddSearchEngineViewController: KeyboardHelperDelegate {
             }
         }
     }
-    
+
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) { }
-    
+
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
-    
+
 }

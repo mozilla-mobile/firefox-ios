@@ -7,7 +7,7 @@ import UIKit
 class ScrollViewController: UIPageViewController, PageControlDelegate {
 
     private  let cardSlides = ["onboarding_1", "onboarding_2", "onboarding_3"]
-    
+
     @objc func incrementPage(_ pageControl: PageControl) {
         changePage(isIncrement: true)
     }

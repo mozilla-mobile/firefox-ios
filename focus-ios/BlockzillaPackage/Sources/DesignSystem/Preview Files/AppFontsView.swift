@@ -46,8 +46,7 @@ internal enum AppFont: String, CaseIterable {
     case body18Medium
     case title20
     case title20Bold
-    
-    
+
     var font: UIFont {
         switch self {
         case .footnote12:

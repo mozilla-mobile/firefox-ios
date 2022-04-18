@@ -71,7 +71,7 @@ internal enum AppColor: String, CaseIterable {
     case secondaryButton
     case primaryButton
     case searchSuggestionButtonHighlight
-    
+
     var color: UIColor {
         switch self {
         case .above:

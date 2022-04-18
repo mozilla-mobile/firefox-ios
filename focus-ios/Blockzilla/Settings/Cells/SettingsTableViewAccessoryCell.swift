@@ -11,7 +11,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
             textLabel?.text = newValue
         }
     }
-    
+
     var accessoryLabelText: String? {
         get { return detailTextLabel?.text }
         set {

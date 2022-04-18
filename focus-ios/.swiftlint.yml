@@ -118,7 +118,6 @@ disabled_rules: # rule identifiers to exclude from running
   - joined_default_parameter
   - large_tuple
   - last_where
-  - leading_whitespace
   - legacy_cggeometry_functions
   - legacy_constant
   - legacy_constructor
@@ -154,7 +153,6 @@ disabled_rules: # rule identifiers to exclude from running
   - object_literal
   - opening_brace
   - operator_usage_whitespace
-  - operator_whitespace
   - optional_enum_case_matching
   - orphaned_doc_comment
   - overridden_super_call
@@ -209,7 +207,6 @@ disabled_rules: # rule identifiers to exclude from running
   - trailing_comma
   - trailing_newline
   - trailing_semicolon
-  - trailing_whitespace
   - type_body_length
   - type_contents_order
   - type_name
@@ -229,10 +226,6 @@ disabled_rules: # rule identifiers to exclude from running
   - valid_ibinspectable
   - vertical_parameter_alignment
   - vertical_parameter_alignment_on_call
-  - vertical_whitespace
-  - vertical_whitespace_between_cases
-  - vertical_whitespace_closing_braces
-  - vertical_whitespace_opening_braces
   - void_return
   - weak_delegate
   - xct_specific_matcher
@@ -259,6 +252,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Search/
   - Client/Assets/Search/get_supported_locales.swift
   - tools/
+  - rust-components-swift/
+  - Blockzilla/Generated/Metrics.swift
 
 # configurable rules can be customized from this configuration file
 # binary rules can set their severity level

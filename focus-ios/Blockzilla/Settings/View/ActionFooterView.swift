@@ -13,7 +13,7 @@ class ActionFooterView: UIView {
         label.numberOfLines = 0
         return label
     }()
-    
+
     lazy var detailTextButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitleColor(.accent, for: .normal)
@@ -22,7 +22,7 @@ class ActionFooterView: UIView {
         button.titleLabel?.numberOfLines = 0
         return button
     }()
-    
+
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [textLabel, detailTextButton])
         stackView.spacing = 0
@@ -30,7 +30,7 @@ class ActionFooterView: UIView {
         stackView.axis = .vertical
         return stackView
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
@@ -39,7 +39,7 @@ class ActionFooterView: UIView {
             make.top.bottom.equalToSuperview().inset(8)
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

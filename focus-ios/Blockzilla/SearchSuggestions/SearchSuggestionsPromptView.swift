@@ -19,7 +19,7 @@ class SearchSuggestionsPromptView: UIView {
     private let promptContainer = UIView()
     private let promptMessage = UILabel()
     private let promptTitle = UILabel()
-    
+
     var isIpadView: Bool = false {
         didSet {
             updateUI(isIpadView)
@@ -30,7 +30,7 @@ class SearchSuggestionsPromptView: UIView {
         super.init(frame: CGRect.zero)
         addSubview(promptContainer)
         updateUI(isIpadView)
-        
+
         promptTitle.text = UIConstants.strings.searchSuggestionsPromptTitle
         promptTitle.textColor = .primaryText
         promptTitle.font = .title20Bold
@@ -97,7 +97,7 @@ class SearchSuggestionsPromptView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func updateUI(_ isIpadView: Bool) {
         promptContainer.backgroundColor = isIpadView ? .secondarySystemBackground.withAlphaComponent(0.95) : .foundation
         if isIpadView {
@@ -120,7 +120,7 @@ class SearchSuggestionsPromptView: UIView {
             }
         }
     }
-    
+
     @objc private func didPressDisable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: false)
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionsOff)

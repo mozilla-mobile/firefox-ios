@@ -7,7 +7,6 @@ import UIKit
 class HomeViewToolbar: UIView {
     let toolset = BrowserToolset()
     private let stackView = UIStackView()
-    
 
     init() {
         super.init(frame: CGRect.zero)

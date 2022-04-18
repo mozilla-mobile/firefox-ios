@@ -4,18 +4,17 @@
 
 import Foundation
 
-
 class WhatsNewEventsHandler {
-    
+
     @Published public var shouldShowWhatsNew: Bool = false
-    
+
     func didShowWhatsNew() {
         UserDefaults.standard.set(AppInfo.shortVersion, forKey: OnboardingConstants.whatsNewVersion)
         shouldShowWhatsNew = false
     }
-    
+
     func highlightWhatsNewButton() {
-        
+
         // Don't highlight whats new on a fresh install, highlight on every release of the app
         if let lastShownWhatsNew = UserDefaults.standard.string(forKey: OnboardingConstants.whatsNewVersion) {
             shouldShowWhatsNew = (lastShownWhatsNew != AppInfo.shortVersion)

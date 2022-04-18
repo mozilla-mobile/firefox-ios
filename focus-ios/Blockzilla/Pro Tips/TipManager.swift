@@ -6,31 +6,30 @@ import Foundation
 import LocalAuthentication
 
 class TipManager {
-    
+
     @UserDefault(key: TipKey.releaseTip, defaultValue: true)
     static var releaseTip: Bool
-    
+
     @UserDefault(key: TipKey.shortcutsTip, defaultValue: true)
     static var shortcutsTip: Bool
-    
+
     @UserDefault(key: TipKey.sitesNotWorkingTip, defaultValue: true)
     static var sitesNotWorkingTip: Bool
-    
+
     @UserDefault(key: TipKey.siriFavoriteTip, defaultValue: true)
     static var siriFavoriteTip: Bool
-    
+
     @UserDefault(key: TipKey.biometricTip, defaultValue: true)
     static var biometricTip: Bool
-    
+
     @UserDefault(key: TipKey.shareTrackersTip, defaultValue: true)
     static var shareTrackersTip: Bool
-    
+
     @UserDefault(key: TipKey.siriEraseTip, defaultValue: true)
     static var siriEraseTip: Bool
-    
+
     @UserDefault(key: TipKey.requestDesktopTip, defaultValue: true)
     static var requestDesktopTip: Bool
-    
 
     struct Tip: Equatable {
         enum ScrollDestination {
@@ -38,12 +37,12 @@ class TipManager {
             case biometric
             case siriFavorite
         }
-        
+
         enum Action {
             case visit(topic: SupportTopic)
             case showSettings(destination: ScrollDestination)
         }
-        
+
         let title: String
         let description: String?
         let identifier: String
@@ -96,12 +95,12 @@ class TipManager {
         }
         return tips
     }
-    
+
     private var availableTips: [Tip] {
         guard Settings.getToggle(.showHomeScreenTips) else { return [] }
         return tips.filter { $0.canShow() }
     }
-    
+
     private let laContext = LAContext()
 
     private init() { }
@@ -113,7 +112,7 @@ class TipManager {
         action: .visit(topic: .whatsNew),
         canShow: { TipManager.releaseTip }
     )
-    
+
     private lazy var shortcutsTip = Tip(
         title: .shortcutsTipTitle,
         description: String(format: .shortcutsTipDescription, AppInfo.config.productName),
@@ -132,7 +131,7 @@ class TipManager {
         let description: String = laContext.biometryType == .faceID
             ? .biometricTipFaceIdDescription
             : .biometricTipTouchIdDescription
-        
+
         return Tip(
             title: String(format: .biometricTipTitle, AppInfo.productName),
             description: description,
@@ -172,7 +171,7 @@ class TipManager {
         formatter.numberStyle = .decimal
         return String(format: .shareTrackersTipDescription, formatter.string(from: numberOfTrackersBlocked) ?? "0")
     }
-    
+
     private var shareTrackersTip: Tip {
         Tip(
             title: String(format: .shareTrackersTipTitle, AppInfo.productName),
@@ -183,7 +182,7 @@ class TipManager {
     }
 
     func fetchFirstTip() -> Tip? { availableTips.first }
-    
+
     func getTip(after: Tip) -> Tip? {
         if let index = availableTips.firstIndex(where: { $0.identifier == after.identifier }) {
                 let after = index == availableTips.count - 1 ? availableTips[0] : availableTips[index + 1]
@@ -191,7 +190,7 @@ class TipManager {
             }
         return nil
     }
-    
+
     func getTip(before: Tip) -> Tip? {
         if let index = availableTips.firstIndex(where: { $0.identifier == before.identifier }) {
             let before = index == 0 ? availableTips.last : availableTips[index - 1]
@@ -199,15 +198,15 @@ class TipManager {
         }
         return nil
     }
-    
+
     var numberOfTips: Int { availableTips.count }
-    
+
 }
 
 // MARK: - Home Screen Tips Strings
 
 fileprivate extension String {
-    
+
     static let releaseTipTitle = NSLocalizedString("Tip.Release.Title", value: "Why yes, we do have a fresh new look!", comment: "Text for a label that indicates the title for release tip.")
     static let releaseTipDescription = NSLocalizedString("Tip.Release.Description", value: "Read more about this and other updates to %@.", comment: "Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar).")
     static let shortcutsTipTitle = NSLocalizedString("Tip.Shortcuts.Title", value: "Create shortcuts to the sites you visit most:", comment: "Text for a label that indicates the title for shortcuts tip.")

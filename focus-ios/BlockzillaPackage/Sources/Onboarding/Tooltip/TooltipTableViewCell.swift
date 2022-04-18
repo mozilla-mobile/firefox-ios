@@ -8,7 +8,7 @@ public class TooltipTableViewCell: UITableViewCell {
 
     private var tooltip = TooltipView()
     public weak var delegate: TooltipViewDelegate?
-    
+
     public convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(tooltip)
@@ -18,11 +18,11 @@ public class TooltipTableViewCell: UITableViewCell {
             make.edges.equalToSuperview()
         }
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -25,7 +25,7 @@ class OnboardingFactory {
             newOnboardingViewController.modalPresentationStyle = .formSheet
             newOnboardingViewController.isModalInPresentation = true
             return (newOnboardingViewController, true)
-            
+
         case .old:
             let introViewController = IntroViewController()
             introViewController.modalPresentationStyle = .fullScreen

@@ -6,25 +6,25 @@ import UIKit
 import SnapKit
 
 public class TooltipViewController: UIViewController {
-        
+
     private let tooltipView = TooltipView()
-    
+
     public var dismiss: (()->Void)?
-    
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
         tooltipView.delegate = self
         preferredContentSize = tooltipView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
-            
+
     private func setupLayout() {
         view.addSubview(tooltipView)
         tooltipView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
-    
+
     public func configure(anchoredBy sourceView: UIView, sourceRect: CGRect) {
         modalPresentationStyle = .popover
         popoverPresentationController?.sourceView = sourceView
@@ -32,7 +32,7 @@ public class TooltipViewController: UIViewController {
         popoverPresentationController?.permittedArrowDirections = [.up, .down]
         popoverPresentationController?.delegate = self
     }
-    
+
     public func set(title: String = "", body: String) {
         tooltipView.set(title: title, body: body, maxWidth: .maxWidth)
     }
@@ -43,7 +43,7 @@ extension TooltipViewController: UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         .none
     }
-    
+
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         dismiss?()
     }

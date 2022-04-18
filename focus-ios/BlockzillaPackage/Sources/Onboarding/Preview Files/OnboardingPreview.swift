@@ -23,17 +23,17 @@ struct OnboardingPreview_Previews: PreviewProvider {
 
 struct ViewControllerContainerView<Controller: UIViewController>: UIViewControllerRepresentable {
     let controller: Controller
-    
+
     init(controller: Controller) {
         self.controller = controller
     }
-    
+
     func makeUIViewController(context: Context) -> Controller {
         return controller
     }
-    
+
     func updateUIViewController(_ uiViewController: Controller, context: Context) {
-        
+
     }
 }
 
@@ -47,7 +47,6 @@ fileprivate extension OnboardingText {
                 .init(title: "More than just incognito", subtitle: "Focus is a dedicated privacy browser with tracking protection and content blocking.", image: .privateMode),
                 .init(title: "More than just incognito", subtitle: "Focus is a dedicated privacy browser with tracking protection and content blocking.", image: .privateMode),
                 .init(title: "More than just incognito", subtitle: "Focus is a dedicated privacy browser with tracking protection and content blocking.", image: .privateMode),
-                
             ],
         onboardingButtonTitle: "start"
     )

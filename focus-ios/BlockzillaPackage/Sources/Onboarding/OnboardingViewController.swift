@@ -7,7 +7,7 @@ import SnapKit
 import DesignSystem
 
 public class OnboardingViewController: UIViewController {
-    
+
     public init(
         config: OnboardingText,
         dismissOnboardingScreen: @escaping (() -> Void)
@@ -16,14 +16,14 @@ public class OnboardingViewController: UIViewController {
         self.dismissOnboardingScreen = dismissOnboardingScreen
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("OnboardingViewController hasn't implemented init?(coder:)")
     }
-    
+
     private let dismissOnboardingScreen: (() -> Void)
     private let config: OnboardingText
-    
+
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +31,7 @@ public class OnboardingViewController: UIViewController {
     }()
 
     //MARK: Mozilla Icon
-    
+
     private lazy var mozillaIconImageView: UIImageView = {
         let imageView = UIImageView(image: .mozilla)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -39,9 +39,9 @@ public class OnboardingViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
+
     //MARK: Title Labels
-    
+
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +51,7 @@ public class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.welcomeLabel"
         return label
     }()
-    
+
     private lazy var subWelcomeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -62,9 +62,9 @@ public class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.subWelcomeLabel"
         return label
     }()
-    
+
     //MARK: Instruction
-    
+
     private func titleLabel(title: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +75,7 @@ public class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.instruction.titleLabel"
         return label
     }
-    
+
     private func descriptionLabel(description: String) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +86,7 @@ public class OnboardingViewController: UIViewController {
         label.accessibilityIdentifier = "OnboardingViewController.instruction.descriptionLabel"
         return label
     }
-    
+
     private func imageView(image: UIImage) -> UIImageView {
         let imageView = UIImageView(image: image)
         imageView.snp.makeConstraints { $0.width.height.equalTo(CGFloat.iconsWidthHeight) }
@@ -95,9 +95,9 @@ public class OnboardingViewController: UIViewController {
         imageView.accessibilityIdentifier = "OnboardingViewController.instruction.imageView"
         return imageView
     }
-    
+
     //MARK: Start Browsing Button
-    
+
     private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +112,6 @@ public class OnboardingViewController: UIViewController {
     }()
 
     // MARK: - StackViews
-    
     private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [topStackView, middleStackView])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -130,7 +129,7 @@ public class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.mainStackView"
         return stackView
     }()
-    
+
     private lazy var topStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [mozillaIconImageView, welcomeLabel, subWelcomeLabel])
         stackView.axis = .vertical
@@ -139,7 +138,7 @@ public class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.topStackView"
         return stackView
     }()
-    
+
     private lazy var middleStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -149,7 +148,7 @@ public class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.middleStackView"
         return stackView
     }()
-    
+
     private func instructionTextStackView(with labels: [UILabel]) -> UIStackView {
         let stackView = UIStackView(arrangedSubviews: labels)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -158,7 +157,7 @@ public class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.instruction.textStackView"
         return stackView
     }
-    
+
     private func instructionStackView(with views: [UIView]) -> UIStackView {
         let stackView = UIStackView(arrangedSubviews: views)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -168,15 +167,15 @@ public class OnboardingViewController: UIViewController {
         stackView.accessibilityIdentifier = "OnboardingViewController.instruction.stackView"
         return stackView
     }
-    
+
     private lazy var contentView: UIView = {
         let view = UIView()
         return view
     }()
-    
+
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        
+
         if UIDevice.current.userInterfaceIdiom == .phone {
             mainStackView.layoutMargins = .init(top: size.height / .layoutMarginTopDivider, left: size.width / .layoutMarginLeadingTrailingDivider, bottom: .layoutMarginBottom, right: size.width / .layoutMarginLeadingTrailingDivider)
             mainStackView.spacing = size.height / .spacingDividerPhone
@@ -184,31 +183,31 @@ public class OnboardingViewController: UIViewController {
             mainStackView.layoutMargins = .init(top: .layoutMarginTop, left: size.width / .layoutMarginLeadingTrailingDivider, bottom: .layoutMarginBottom, right: size.width / .layoutMarginLeadingTrailingDivider)
             mainStackView.spacing = size.height / .spacingDividerPad
         }
-        
+
         startBrowsingButton.snp.updateConstraints { make in
             make.bottom.equalToSuperview().inset(size.height / .buttonButtomInsetDivider)
             make.leading.trailing.equalToSuperview().inset(size.width / .buttonLeadingTrailingInsetDivider)
         }
     }
-    
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
     }
-    
+
     func addSubViews() {
         view.backgroundColor = .systemBackground
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        
+
         scrollView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
             make.width.equalTo(view)
         }
-        
+
         config
             .instructions
             .map { instruction -> UIStackView in
@@ -229,7 +228,7 @@ public class OnboardingViewController: UIViewController {
             }
 
         mozillaIconImageView.snp.makeConstraints { $0.width.height.equalTo(60) }
-        
+
         view.addSubview(startBrowsingButton)
         startBrowsingButton.snp.makeConstraints { make in
             make.height.equalTo(CGFloat.buttonHeight)
@@ -273,7 +272,7 @@ public struct OnboardingText {
     let onboardingSubtitle: String
     let instructions: [Instruction]
     let onboardingButtonTitle: String
-    
+
     public init(
         onboardingTitle: String,
         onboardingSubtitle: String,
@@ -285,14 +284,14 @@ public struct OnboardingText {
         self.instructions = instructions
         self.onboardingButtonTitle = onboardingButtonTitle
     }
-    
+
 }
 
 public class Instruction {
     let title: String
     let subtitle: String
     let image: UIImage
-    
+
     public init(title: String, subtitle: String, image: UIImage) {
         self.title = title
         self.subtitle = subtitle
