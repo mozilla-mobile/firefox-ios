@@ -849,6 +849,7 @@ firefox_home_page:
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9563
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-12-01"
@@ -860,7 +861,7 @@ firefox_home_page:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-2912
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-12-01"
