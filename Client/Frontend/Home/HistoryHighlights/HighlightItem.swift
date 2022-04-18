@@ -18,11 +18,11 @@ protocol HighlightItem {
 }
 
 extension HistoryHighlight: HighlightItem {
-    
+
     var group: [HighlightItem]? {
         return nil
     }
-    
+
     var type: HighlightItemType {
         return .item
     }

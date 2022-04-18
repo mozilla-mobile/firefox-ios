@@ -558,7 +558,7 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
         asGroupListVC.title = asGroupItem.displayTitle
 
         TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .navigateToGroupHistory, value: nil, extras: nil)
-        
+
         navigationController?.pushViewController(asGroupListVC, animated: true)
     }
 
