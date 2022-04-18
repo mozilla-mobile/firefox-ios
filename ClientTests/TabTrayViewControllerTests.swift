@@ -43,7 +43,7 @@ class TabTrayViewControllerTests: XCTestCase {
 
         // Wait for notification of .TabClosed when tab is removed
         weak var expectation = self.expectation(description: "notificationReceived")
-        NotificationCenter.default.addObserver(forName: .TabClosed, object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: .UpdateLabelOnTabClosed, object: nil, queue: nil) { notification in
             expectation?.fulfill()
         }
         manager.removeTab(tabToRemove)
