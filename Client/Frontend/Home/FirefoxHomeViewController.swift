@@ -60,7 +60,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
 
         // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
         setupNotifications(forObserver: self,
-                           observing: [.HomePanelPrefsChanged, .TabClosed, .TabsPrivacyModeChanged])
+                           observing: [.HomePanelPrefsChanged,
+                                       .TopTabsTabClosed,
+                                       .TabsTrayDidClose,
+                                       .TabsPrivacyModeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -172,13 +175,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             collectionView.reloadSections(indexSet)
         } else {
             reloadAll()
-        }
-    }
-
-    private func updateJumpBackIn() {
-        if let jumpBackIndex = viewModel.enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn) {
-            let indexSet = IndexSet([jumpBackIndex])
-            collectionView.reloadSections(indexSet)
         }
     }
 
@@ -887,8 +883,8 @@ extension FirefoxHomeViewController: Notifiable {
             switch notification.name {
             case .TabsPrivacyModeChanged:
                 self?.adjustPrivacySensitiveSections(notification: notification)
-            case  .TabClosed:
-                    self?.updateJumpBackIn()
+            case .TabsTrayDidClose, .TopTabsTabClosed:
+                self?.reloadAll()
             case .HomePanelPrefsChanged:
                 self?.reloadAll()
             default: break
