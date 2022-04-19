@@ -8,16 +8,14 @@ import Shared
 import Storage
 
 // The `RatingPromptManager` handles app store review requests and the internal logic of when they can be presented to a user.
-class RatingPromptManager {
+final class RatingPromptManager {
 
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter
 
-    private var hasMinimumBookmarksCount = false
-    private let minimumBookmarksCount = 5
-
-    private var hasMinimumPinnedShortcutsCount = false
-    private let minimumPinnedShortcutsCount = 2
+    private var hasMinimumMobileBookmarksCount = false
+    private let minimumMobileBookmarksCount = 5
+    private let sentry: SentryProtocol?
 
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
 
@@ -32,10 +30,13 @@ class RatingPromptManager {
     /// - Parameters:
     ///   - profile: User's profile data
     ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
+    ///   - sentry: Sentry protocol to override in Unit test
     init(profile: Profile,
-         daysOfUseCounter: CumulativeDaysOfUseCounter) {
+         daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
+         sentry: SentryProtocol = SentryIntegration.shared) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
+        self.sentry = sentry
     }
 
     /// Show the in-app rating prompt if needed
@@ -46,12 +47,13 @@ class RatingPromptManager {
         }
     }
 
-    /// Updates bookmark and pinned site data asynchronously.
+    /// Update rating prompt data. Bookmarks and pinned sites data is loaded asynchronously.
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done - Used in unit tests
     func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
+        daysOfUseCounter.updateCounter()
+
         let group = DispatchGroup()
         updateBookmarksCount(group: group)
-        updateUserPinnedSitesCount(group: group)
 
         group.notify(queue: dataQueue) {
             dataLoadingCompletion?()
@@ -99,18 +101,13 @@ class RatingPromptManager {
         guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
 
         // Required: has not crashed in the last session
-        guard !Sentry.shared.crashedLastLaunch else { return false }
+        guard let sentry = sentry, !sentry.crashedLastLaunch else { return false }
 
         // One of the following
         let isBrowserDefault = RatingPromptManager.isBrowserDefault
-        let hasSyncAccount = profile.hasSyncableAccount()
-        let engineIsGoogle = profile.searchEngines.defaultEngine.shortName == "Google"
         let hasTPStrict = profile.prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) == .strict
         guard isBrowserDefault
-                || hasSyncAccount
-                || hasMinimumBookmarksCount
-                || hasMinimumPinnedShortcutsCount
-                || !engineIsGoogle
+                || hasMinimumMobileBookmarksCount
                 || hasTPStrict
         else { return false }
 
@@ -135,18 +132,17 @@ class RatingPromptManager {
 
     private func updateBookmarksCount(group: DispatchGroup) {
         group.enter()
-        profile.places.getRecentBookmarks(limit: UInt(minimumBookmarksCount)).uponQueue(dataQueue, block: { [weak self] result in
-            guard let strongSelf = self, let bookmarks = result.successValue else { return }
-            strongSelf.hasMinimumBookmarksCount = bookmarks.count >= strongSelf.minimumBookmarksCount
-            group.leave()
-        })
-    }
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { [weak self] result in
+            guard let strongSelf = self,
+                  let mobileFolder = result.successValue as? BookmarkFolderData,
+                  let children = mobileFolder.children
+            else {
+                group.leave()
+                return
+            }
 
-    private func updateUserPinnedSitesCount(group: DispatchGroup) {
-        group.enter()
-        profile.history.getPinnedTopSites().uponQueue(dataQueue) { [weak self] result in
-            guard let strongSelf = self, let userPinnedTopSites = result.successValue else { return }
-            strongSelf.hasMinimumPinnedShortcutsCount = userPinnedTopSites.count >= strongSelf.minimumPinnedShortcutsCount
+            let bookmarksCounts = children.filter { $0.type == .bookmark }.count
+            strongSelf.hasMinimumMobileBookmarksCount = bookmarksCounts >= strongSelf.minimumMobileBookmarksCount
             group.leave()
         }
     }

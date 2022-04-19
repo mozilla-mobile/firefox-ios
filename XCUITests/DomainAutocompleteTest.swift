@@ -22,14 +22,21 @@ class DomainAutocompleteTest: BaseTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB, LaunchArguments.SkipContextualHintJumpBackIn]
+            launchArguments = [LaunchArguments.SkipIntro,
+                               LaunchArguments.SkipWhatsNew,
+                               LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.LoadDatabasePrefix + historyDB,
+                               LaunchArguments.SkipContextualHints]
         }
         super.setUp()
     }
 
     func test1Autocomplete() {
         // Basic autocompletion cases
-        navigator.goto(URLBarOpen)
+            // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
+        navigator.openURL("www.mozilla.org")
+        waitUntilPageLoad()
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         app.textFields["address"].typeText("w")
 
         waitForValueContains(app.textFields["address"], value: website["value"]!)
@@ -45,6 +52,10 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Test that deleting characters works correctly with autocomplete
     func test3AutocompleteDeletingChars() {
+        // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
+        navigator.openURL("www.mozilla.org")
+        waitUntilPageLoad()
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         app.textFields["address"].typeText("www.moz")
 
         // First delete the autocompleted part
@@ -69,7 +80,7 @@ class DomainAutocompleteTest: BaseTestCase {
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
 
-        waitForExistence(app.cells["TopSitesCell"])
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
     }
 
     // Ensure that the scheme is included in the autocompletion.

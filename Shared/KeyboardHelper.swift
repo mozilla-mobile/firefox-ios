@@ -44,6 +44,14 @@ public protocol KeyboardHelperDelegate: AnyObject {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState)
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState)
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState)
+}
+
+public extension KeyboardHelperDelegate {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {}
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {}
 }
 
 /**
@@ -68,6 +76,8 @@ open class KeyboardHelper: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChange), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
 
     deinit {
@@ -88,7 +98,7 @@ open class KeyboardHelper: NSObject {
         delegates.append(WeakKeyboardDelegate(delegate))
     }
 
-    @objc func keyboardWillShow(_ notification: Notification) {
+    @objc private func keyboardWillShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -97,25 +107,45 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc func keyboardDidShow(_ notification: Notification) {
+    @objc private func keyboardDidShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardDidShowWithState: currentState!)
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardDidShowWithState: KeyboardState(userInfo))
             }
         }
     }
 
-    @objc func keyboardWillHide(_ notification: Notification) {
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        if let userInfo = notification.userInfo {
+            for weakDelegate in delegates {
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardWillHideWithState: KeyboardState(userInfo))
+            }
+        }
+    }
+
+    @objc private func keyboardWillChange(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardWillHideWithState: currentState!)
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardWillChangeWithState: KeyboardState(userInfo))
+            }
+        }
+    }
+
+    @objc private func keyboardDidChange(_ notification: Notification) {
+        if let userInfo = notification.userInfo {
+            for weakDelegate in delegates {
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardDidChangeWithState: KeyboardState(userInfo))
             }
         }
     }
 }
 
+// MARK: - WeakKeyboardDelegate
 private class WeakKeyboardDelegate {
     weak var delegate: KeyboardHelperDelegate?
 

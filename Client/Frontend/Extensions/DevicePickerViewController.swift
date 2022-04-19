@@ -1,4 +1,3 @@
-
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
@@ -64,8 +63,7 @@ class DevicePickerViewController: UITableViewController {
 
         tableView.allowsSelection = true
 
-        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate
-        , object: nil, queue: .main) { [weak self ] _ in
+        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: .main) { [weak self ] _ in
             self?.loadList()
             self?.refreshControl?.endRefreshing()
         }

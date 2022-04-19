@@ -12,14 +12,18 @@ struct TwoLineCellUX {
 
 // TODO: Add support for accessibility for when text size changes
 
-class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
+class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableCell {
+
+    /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
+    static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
+
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.theme.tableView.selectedBackground
         return view
     }()
-    
+
     var leftImageView: UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFit
@@ -27,13 +31,20 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
         imgView.clipsToBounds = true
         return imgView
     }()
-    
+
     var leftOverlayImageView: UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
         return imgView
     }()
+
+    lazy var chevronAccessoryView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: "goBack")?.withHorizontallyFlippedOrientation()
+        imageView.image?.imageFlippedForRightToLeftLayoutDirection()
+        imageView.image?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
+        imageView.isHidden = true
+    }
 
     var titleLabel: UILabel = {
         let label = UILabel()
@@ -43,7 +54,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
         label.numberOfLines = 1
         return label
     }()
-    
+
     var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.Photon.Grey40
@@ -52,19 +63,19 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
         label.numberOfLines = 1
         return label
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     let containerView = UIView()
     let midView = UIView()
-    
+
     private func initialViewSetup() {
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         self.selectionStyle = .default
@@ -72,6 +83,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
         midView.addSubview(descriptionLabel)
 
         containerView.addSubview(leftImageView)
+        containerView.addSubview(chevronAccessoryView)
         containerView.addSubview(midView)
 
         containerView.addSubview(leftOverlayImageView)
@@ -83,13 +95,24 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
             make.height.equalTo(58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
-            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
+            if let accessoryView = accessoryView {
+                make.trailing.equalTo(accessoryView.snp.leading)
+            } else {
+                make.trailing.equalToSuperview()
+            }
         }
 
         leftImageView.snp.makeConstraints { make in
             make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
+        }
+
+        // Only shown when we need a chevron, and is made visible at call site
+        chevronAccessoryView.snp.makeConstraints { make in
+            make.height.width.equalTo(28)
+            make.centerY.equalTo(containerView.snp.centerY)
+            make.trailing.equalTo(containerView.snp.trailing).offset(-8)
         }
 
         leftOverlayImageView.snp.makeConstraints { make in
@@ -118,42 +141,47 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable {
             make.leading.equalTo(midView.snp.leading)
             make.trailing.equalTo(midView.snp.trailing)
         }
-        
+
         selectedBackgroundView = selectedView
         applyTheme()
     }
-    
+
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
+            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
             self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
+            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         }
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         applyTheme()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         containerView.snp.remakeConstraints { make in
             make.height.equalTo(58)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
-            make.trailing.equalTo(accessoryView?.snp.leading ?? snp.trailing)
+            if let accessoryView = accessoryView {
+                make.trailing.equalTo(accessoryView.snp.leading)
+            } else {
+                make.trailing.equalToSuperview()
+            }
         }
     }
 }
-
 
 class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
@@ -171,7 +199,7 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         label.numberOfLines = 1
         return label
     }()
-    
+
     var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.Photon.Grey40
@@ -180,16 +208,16 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         label.numberOfLines = 1
         return label
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func initialViewSetup() {
         separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         self.selectionStyle = .default
@@ -199,28 +227,28 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         let containerView = UIView()
         containerView.addSubview(midView)
         contentView.addSubview(containerView)
-        
+
         containerView.snp.makeConstraints { make in
             make.height.equalTo(65)
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
-        
+
         midView.snp.makeConstraints { make in
             make.height.equalTo(46)
             make.centerY.equalToSuperview()
             make.leading.equalTo(containerView.snp.leading)
             make.trailing.equalTo(containerView.snp.trailing)
         }
-        
+
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(midView.snp.top).offset(4)
             make.height.equalTo(18)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().inset(16)
         }
-        
+
         descriptionLabel.snp.makeConstraints { make in
             make.height.equalTo(14)
             make.bottom.equalTo(midView.snp.bottom).offset(-4)
@@ -231,7 +259,7 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         selectedBackgroundView = selectedView
         applyTheme()
     }
-    
+
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
@@ -244,7 +272,7 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
             self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
         }
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
@@ -263,7 +291,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeabl
         imgView.clipsToBounds = true
         return imgView
     }()
-    
+
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -272,7 +300,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeabl
         label.numberOfLines = 1
         return label
     }()
-    
+
     var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12.5, weight: .regular)
@@ -280,7 +308,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeabl
         label.numberOfLines = 1
         return label
     }()
-    
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         initialViewSetup()
@@ -319,7 +347,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeabl
 
         applyTheme()
     }
-    
+
     func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {
         bordersHelper.showBorder(for: location, show)
     }

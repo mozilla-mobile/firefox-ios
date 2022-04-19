@@ -1,0 +1,77 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+
+$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
+
+temp-sync:
+  description: >
+    A summary ping, sent every time a sync is performed.
+    During each Sync one or more data types could be synchronized,
+    depending on which data types user configured to sync.
+    Alongside with 'sync' ping one or more individual data type specific
+    pings will be sent.
+    For example, if history and bookmarks data types
+    are configured to be synchronized, the following pings will be sent:
+    'sync', 'history-sync' and 'bookmarks-sync'.
+    Alternatively, if only history is configured to be synchronized
+    then 'sync' and 'history-sync' pings will be sent.
+    In case of a "global failure" where none of the data type syncs
+    could even start, e.g. device is offline,
+    only the 'sync' ping will be sent.
+    This ping doesn't include the `client_id`
+    because it reports a hashed version of the user's Firefox Account ID.
+  include_client_id: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+  notification_emails:
+    - sync-core@mozilla.com
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+temp-history-sync:
+  description: >
+    A ping sent for every history sync. It doesn't include the `client_id`
+    because it reports a hashed version of the user's Firefox Account ID.
+  include_client_id: false
+  bugs:
+    - https://github.com/mozilla-mobile/android-components/pull/3092
+  notification_emails:
+    - sync-core@mozilla.com
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+temp-bookmarks-sync:
+  description: >
+    A ping sent for every bookmarks sync. It doesn't include the `client_id`
+    because it reports a hashed version of the user's Firefox Account ID.
+  include_client_id: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+  notification_emails:
+    - sync-core@mozilla.com
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+temp-logins-sync:
+  description: >
+    A ping sent for every logins/passwords sync.
+    It doesn't include the `client_id` because it reports
+    a hashed version of the user's Firefox Account ID.
+  include_client_id: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+  notification_emails:
+    - sync-core@mozilla.com
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698
+temp-tabs-sync:
+  description: >
+    A ping sent for every Tabs engine sync.
+    It doesn't include the `client_id` because it reports
+    a hashed version of the user's Firefox Account ID.
+  include_client_id: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/SYNC-3008
+  notification_emails:
+    - sync-core@mozilla.com
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10353#issuecomment-1087532698

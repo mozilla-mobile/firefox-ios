@@ -13,7 +13,7 @@ private let tabOpenInDesktop = "http://example.com/"
 
 class IntegrationTests: BaseTestCase {
 
-    let testWithDB = ["testFxASyncHistory", "testFxASyncBookmark"]
+    let testWithDB = ["testFxASyncHistory"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
     // This DB contains 1 entry example.com
@@ -25,9 +25,19 @@ class IntegrationTests: BaseTestCase {
      let key = String(parts[1])
      if testWithDB.contains(key) {
      // for the current test name, add the db fixture used
-     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB, LaunchArguments.SkipContextualHintJumpBackIn]
+     launchArguments = [LaunchArguments.SkipIntro,
+                        LaunchArguments.StageServer,
+                        LaunchArguments.SkipWhatsNew,
+                        LaunchArguments.SkipETPCoverSheet,
+                        LaunchArguments.LoadDatabasePrefix + historyDB,
+                        LaunchArguments.SkipContextualHints]
+         
      } else if testFxAChinaServer.contains(key) {
-        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.FxAChinaServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.SkipContextualHintJumpBackIn]
+        launchArguments = [LaunchArguments.SkipIntro,
+                           LaunchArguments.FxAChinaServer,
+                           LaunchArguments.SkipWhatsNew,
+                           LaunchArguments.SkipETPCoverSheet,
+                           LaunchArguments.SkipContextualHints]
      }
      super.setUp()
      }
@@ -91,6 +101,12 @@ class IntegrationTests: BaseTestCase {
         // Bookmark is added by the DB
         // Sign into Firefox Accounts
         app.buttons["urlBar-cancel"].tap()
+        navigator.openURL("example.com")
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: 15)
+        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
+        navigator.nowAt(BrowserTab)
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -118,6 +134,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
+        waitForExistence(app.tables.cells.element(boundBy: 1), timeout: 10)
         app.tables.cells.element(boundBy: 1).tap()
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
         XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (administrator) on iOS")

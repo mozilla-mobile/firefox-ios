@@ -8,7 +8,7 @@ import Sync
 import XCGLogger
 import UserNotifications
 import Account
-import FxAClient
+import MozillaAppServices
 
 private let log = Logger.browserLogger
 
@@ -95,7 +95,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
         if profile?.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
             profile?.removeAccount()
-            
+
             // show the notification
             completionHandler([.alert, .sound])
         } else {
@@ -111,6 +111,6 @@ extension AppDelegate {
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("failed to register. \(error)")
-        Sentry.shared.send(message: "Failed to register for APNS")
+        SentryIntegration.shared.send(message: "Failed to register for APNS")
     }
 }

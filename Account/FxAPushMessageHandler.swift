@@ -7,7 +7,7 @@ import SwiftyJSON
 import SyncTelemetry
 import Account
 import os.log
-import FxAClient
+import MozillaAppServices
 
 private let log = Logger.syncLogger
 
@@ -144,7 +144,7 @@ enum PushMessageType: String {
 }
 
 enum PushMessage: Equatable {
-    case commandReceived(tab: [String : String])
+    case commandReceived(tab: [String: String])
     case deviceConnected(String)
     case deviceDisconnected(String?)
     case profileUpdated
@@ -173,7 +173,7 @@ enum PushMessage: Equatable {
         }
     }
 
-    public static func ==(lhs: PushMessage, rhs: PushMessage) -> Bool {
+    public static func == (lhs: PushMessage, rhs: PushMessage) -> Bool {
         guard lhs.messageType == rhs.messageType else {
             return false
         }

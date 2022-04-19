@@ -25,22 +25,24 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
-        navigator.goto(BrowserTab)
+//        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
-        navigator.goto(BrowserTab)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+//        navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(BrowserTab)
+//        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.goto(SettingsScreen)
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
@@ -53,7 +55,7 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     private func checkTrackingProtectionDisabledForSite() {
-        waitForNoExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        waitForNoExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
     }
 
     private func checkTrackingProtectionEnabledForSite() {
@@ -72,7 +74,7 @@ class TrackingProtectionTests: BaseTestCase {
     func testETPLockMenu() {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         navigator.goto(TrackingProtectionContextMenuDetails)
         waitForExistence(app.staticTexts["Connection is not secure"], timeout: 5)
         let switchValue = app.switches.firstMatch.value!

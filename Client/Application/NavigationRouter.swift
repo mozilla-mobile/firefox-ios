@@ -26,6 +26,7 @@ enum SettingsPage: String {
     case general = "general"
     case newtab = "newtab"
     case homepage = "homepage"
+    case wallpaper = "wallpaper"
     case mailto = "mailto"
     case search = "search"
     case clearPrivateData = "clear-private-data"
@@ -43,11 +44,13 @@ enum DeepLink {
     case settings(SettingsPage)
     case homePanel(HomePanelPath)
     case defaultBrowser(DefaultBrowserPath)
+
     init?(urlString: String) {
         let paths = urlString.split(separator: "/")
-        guard let component = paths[safe: 0], let componentPath = paths[safe: 1] else {
-            return nil
-        }
+        guard let component = paths[safe: 0],
+              let componentPath = paths[safe: 1]
+        else { return nil }
+
         if component == "settings", let link = SettingsPage(rawValue: String(componentPath)) {
             self = .settings(link)
         } else if component == "homepanel", let link = HomePanelPath(rawValue: String(componentPath)) {
@@ -126,25 +129,27 @@ enum NavigationPath {
             } else {
                 return nil
             }
+
         } else if ["http", "https"].contains(scheme) {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
+
         } else {
             return nil
         }
     }
 
-    static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray: GridTabViewController) {
+    static func handle(nav: NavigationPath, with bvc: BrowserViewController) {
         switch nav {
         case .fxa(let params): NavigationPath.handleFxA(params: params, with: bvc)
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
-        case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
+        case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc)
         case .widgetUrl(webURL: let webURL, uuid: let uuid):
             NavigationPath.handleWidgetURL(url: webURL, uuid: uuid, with: bvc)
         }
@@ -154,15 +159,20 @@ enum NavigationPath {
         switch link {
         case .homePanel(let panelPath):
             NavigationPath.handleHomePanel(panel: panelPath, with: bvc)
+
         case .settings(let settingsPath):
-            guard let rootVC = bvc.navigationController else {
-                return
-            }
-            let settingsTableViewController = AppSettingsTableViewController()
-            settingsTableViewController.profile = bvc.profile
-            settingsTableViewController.tabManager = bvc.tabManager
-            settingsTableViewController.settingsDelegate = bvc
-            NavigationPath.handleSettings(settings: settingsPath, with: rootVC, baseSettingsVC: settingsTableViewController, and: bvc)
+            guard let rootVC = bvc.navigationController else { return }
+
+            let settingsTableViewController = AppSettingsTableViewController(
+                with: bvc.profile,
+                and: bvc.tabManager,
+                delegate: bvc)
+
+            NavigationPath.handleSettings(settings: settingsPath,
+                                          with: rootVC,
+                                          baseSettingsVC: settingsTableViewController,
+                                          and: bvc)
+
         case .defaultBrowser(let path):
             NavigationPath.handleDefaultBrowser(path: path)
         }
@@ -238,7 +248,7 @@ enum NavigationPath {
         bvc.presentSignInViewController(params)
     }
 
-    private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: GridTabViewController) {
+    private static func handleClosePrivateTabs(with bvc: BrowserViewController) {
         bvc.tabManager.removeTabs(bvc.tabManager.privateTabs)
         guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
             bvc.tabManager.selectTab(bvc.tabManager.addTab())
@@ -285,9 +295,9 @@ enum NavigationPath {
 
     private static func handleSettings(settings: SettingsPage, with rootNav: UINavigationController, baseSettingsVC: AppSettingsTableViewController, and bvc: BrowserViewController) {
 
-        guard let profile = baseSettingsVC.profile, let tabManager = baseSettingsVC.tabManager else {
-            return
-        }
+        guard let profile = baseSettingsVC.profile,
+              let tabManager = baseSettingsVC.tabManager
+        else { return }
 
         let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
         controller.presentingModalViewControllerDelegate = bvc
@@ -323,6 +333,12 @@ enum NavigationPath {
             controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)
+
+        case .wallpaper:
+            let viewModel = WallpaperSettingsViewModel(with: tabManager,
+                                                       and: WallpaperManager())
+            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            controller.pushViewController(wallpaperVC, animated: true)
         }
     }
 

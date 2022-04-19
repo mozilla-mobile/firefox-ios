@@ -64,7 +64,7 @@ class QRCodeViewController: UIViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: QRCodeViewControllerUX.navigationBarTitleColor]
 
         // Setup the NavigationItem
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack"), style: .plain, target: self, action: #selector(goBack))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack")?.imageFlippedForRightToLeftLayoutDirection(), style: .plain, target: self, action: #selector(goBack))
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.Photon.White100
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-light"), style: .plain, target: self, action: #selector(openLight))
@@ -100,7 +100,7 @@ class QRCodeViewController: UIViewController {
         isAnimationing = true
         startScanLineAnimation()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyShapeLayer()
@@ -116,7 +116,7 @@ class QRCodeViewController: UIViewController {
         super.viewWillLayoutSubviews()
         applyShapeLayer()
     }
-    
+
     private func applyShapeLayer() {
         view.layoutIfNeeded()
         shapeLayer.removeFromSuperlayer()
@@ -174,7 +174,6 @@ class QRCodeViewController: UIViewController {
             videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         }
     }
-
 
     @objc func startScanLineAnimation() {
         if !isAnimationing {
@@ -285,7 +284,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             stopScanLineAnimation()
             self.dismiss(animated: true, completion: {
                 guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject, let qrCodeDelegate = self.qrCodeDelegate, let text = metaData.stringValue else {
-                        Sentry.shared.sendWithStacktrace(message: "Unable to scan QR code", tag: .general)
+                        SentryIntegration.shared.sendWithStacktrace(message: "Unable to scan QR code", tag: .general)
                         return
                 }
 

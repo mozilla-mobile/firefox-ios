@@ -33,15 +33,13 @@ private struct ReadingListTableViewCellUX {
 
 private struct ReadingListPanelUX {
     // Welcome Screen
-    static let WelcomeScreenTopPadding: CGFloat = 16
     static let WelcomeScreenPadding: CGFloat = 15
+    static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
 
-    static let WelcomeScreenItemWidth = 220
-    static let WelcomeScreenItemOffset = -20
+    static let WelcomeScreenMaxWidth: CGFloat = 400
+    static let WelcomeScreenItemImageWidth: CGFloat = 20
 
-    static let WelcomeScreenCircleWidth = 40
-    static let WelcomeScreenCircleOffset = 20
-    static let WelcomeScreenCircleSpacer = 10
+    static let WelcomeScreenTopPadding: CGFloat = 120
 }
 
 class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
@@ -71,7 +69,7 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
     let readStatusImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
     }
-    let titleLabel: UILabel = .build { label in 
+    let titleLabel: UILabel = .build { label in
         label.numberOfLines = 2
         label.font = DynamicFontHelper.defaultHelper.DeviceFont
     }
@@ -85,7 +83,7 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
 
         setupLayout()
     }
-    
+
     private func setupLayout() {
         backgroundColor = UIColor.clear
         separatorInset = UIEdgeInsets(top: 0, left: 48, bottom: 0, right: 0)
@@ -98,12 +96,12 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
             readStatusImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             readStatusImageView.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorWidth)),
             readStatusImageView.heightAnchor.constraint(equalToConstant: CGFloat(ReadingListTableViewCellUX.ReadIndicatorHeight)),
-            
+
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelTopOffset)),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelLeftOffset)),
             titleLabel.bottomAnchor.constraint(equalTo: hostnameLabel.topAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CGFloat(ReadingListTableViewCellUX.TitleLabelRightOffset)),
-            
+
             hostnameLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: CGFloat(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)),
             hostnameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
@@ -140,7 +138,7 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
 
     fileprivate func updateAccessibilityLabel() {
         if let hostname = hostnameLabel.text,
-                  let title = titleLabel.text {
+           let title = titleLabel.text {
             let unreadStatus: String = unread ? .ReaderPanelUnreadAccessibilityLabel : .ReaderPanelReadAccessibilityLabel
             let string = "\(title), \(unreadStatus), \(hostname)"
             var label: AnyObject
@@ -232,7 +230,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
-                tableView.tableHeaderView = emptyStateView
+                DispatchQueue.main.async { self.tableView.backgroundView = self.emptyStateView }
             } else {
                 if prevNumberOfRecords == 0 {
                     tableView.isScrollEnabled = true
@@ -241,8 +239,10 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             self.tableView.reloadData()
         }
     }
-    
-    private lazy var emptyStateView: UIView = .build { view in
+
+    private lazy var emptyStateView: UIView = {
+        let view = UIView()
+
         let welcomeLabel: UILabel = .build { label in
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
@@ -257,6 +257,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             label.textColor = .label
         }
         let readerModeImageView: UIImageView = .build { imageView in
+            imageView.contentMode = .scaleAspectFit
             imageView.image = UIImage(named: "ReaderModeCircle")
         }
         let readingListLabel: UILabel = .build { label in
@@ -266,31 +267,52 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             label.textColor = .label
         }
         let readingListImageView: UIImageView = .build { imageView in
+            imageView.contentMode = .scaleAspectFit
             imageView.image = UIImage(named: "AddToReadingListCircle")
         }
-        
-        view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
-        
+        let emptyStateViewWrapper: UIView = .build { view in
+            view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
+        }
+
+        view.addSubview(emptyStateViewWrapper)
+
         NSLayoutConstraint.activate([
-            welcomeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(UIDevice.current.userInterfaceIdiom == .pad ? 212 : 48)),
-            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: CGFloat(UIDevice.current.orientation.isLandscape ? 16 : 150)),
-            welcomeLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)),
-            
-            readerModeLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: CGFloat(ReadingListPanelUX.WelcomeScreenPadding)),
+            // title
+            welcomeLabel.topAnchor.constraint(equalTo: emptyStateViewWrapper.topAnchor),
+            welcomeLabel.leadingAnchor.constraint(equalTo: emptyStateViewWrapper.leadingAnchor),
+            welcomeLabel.trailingAnchor.constraint(equalTo: emptyStateViewWrapper.trailingAnchor),
+
+            // first row
+            readerModeLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: ReadingListPanelUX.WelcomeScreenPadding),
             readerModeLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            readerModeLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth)),
-            
+            readerModeLabel.trailingAnchor.constraint(equalTo: readerModeImageView.leadingAnchor, constant: -ReadingListPanelUX.WelcomeScreenPadding),
+
             readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
             readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
-            
-            readingListLabel.topAnchor.constraint(equalTo: readerModeLabel.bottomAnchor, constant: CGFloat(ReadingListPanelUX.WelcomeScreenPadding)),
+            readerModeImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
+
+            // second row
+            readingListLabel.topAnchor.constraint(equalTo: readerModeLabel.bottomAnchor, constant: ReadingListPanelUX.WelcomeScreenPadding),
             readingListLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
-            readingListLabel.widthAnchor.constraint(equalToConstant: CGFloat(ReadingListPanelUX.WelcomeScreenItemWidth)),
-            
+            readingListLabel.trailingAnchor.constraint(equalTo: readingListImageView.leadingAnchor, constant: -ReadingListPanelUX.WelcomeScreenPadding),
+
             readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
-            readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor)
+            readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+            readingListImageView.widthAnchor.constraint(equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth),
+
+            readingListLabel.bottomAnchor.constraint(equalTo: emptyStateViewWrapper.bottomAnchor),
+
+            // overall positioning of emptyStateViewWrapper
+            emptyStateViewWrapper.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
+            emptyStateViewWrapper.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding),
+            emptyStateViewWrapper.widthAnchor.constraint(lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth),
+
+            emptyStateViewWrapper.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyStateViewWrapper.topAnchor.constraint(equalTo: view.topAnchor, constant: ReadingListPanelUX.WelcomeScreenTopPadding)
         ])
-    }
+
+        return view
+    }()
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
@@ -394,12 +416,14 @@ extension ReadingListPanel: LibraryPanelContextMenu {
         return Site(url: record.url, title: record.title)
     }
 
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
-        let removeAction = PhotonActionSheetItem(title: .RemoveContextMenuTitle, iconString: "action_remove", handler: { _, _ in
+        let removeAction = SingleActionViewModel(title: .RemoveContextMenuTitle,
+                                                 iconString: ImageIdentifiers.actionRemove,
+                                                 tapHandler: { _ in
             self.deleteItem(atIndex: indexPath)
-        })
+        }).items
 
         actions.append(removeAction)
         return actions

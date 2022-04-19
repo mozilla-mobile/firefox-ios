@@ -147,7 +147,7 @@ extension ChronologicalTabsViewController {
 
     func didTapToolbarDelete(_ sender: UIBarButtonItem) {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .AppMenuCloseAllTabsTitleString,
+        controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
                                            handler: { _ in self.viewModel.closeTabsForCurrentTray() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
@@ -283,7 +283,7 @@ extension ChronologicalTabsViewController: UIPopoverPresentationControllerDelega
     func presentActivityViewController(_ url: URL, tab: Tab? = nil) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
 
-        let controller = helper.createActivityViewController({ _,_ in })
+        let controller = helper.createActivityViewController({ _, _ in })
 
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = view

@@ -10,7 +10,7 @@ import Shared
 class RustPlacesTests: XCTestCase {
     var files: FileAccessor!
     var places: RustPlaces!
-    
+
     override func setUp() {
         files = MockFiles()
 
@@ -33,7 +33,7 @@ class RustPlacesTests: XCTestCase {
         XCTAssertTrue(emptyRead.isSuccess)
         XCTAssertNotNil(emptyRead.successValue)
         XCTAssertEqual(emptyRead.successValue!.count, 0)
-        
+
         // Observing facts one-by-one.
         let metadataKey1 = HistoryMetadataKey(url: "https://www.mozilla.org", searchTerm: nil, referrerUrl: nil)
         XCTAssertTrue(places.noteHistoryMetadataObservation(
@@ -45,7 +45,7 @@ class RustPlacesTests: XCTestCase {
                 title: "Mozilla Test"
             )
         ).value.isSuccess)
-        
+
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
@@ -55,7 +55,7 @@ class RustPlacesTests: XCTestCase {
                 title: nil
             )
         ).value.isSuccess)
-        
+
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
@@ -65,7 +65,7 @@ class RustPlacesTests: XCTestCase {
                 title: nil
             )
         ).value.isSuccess)
-        
+
         var singleItemRead = places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(singleItemRead.isSuccess)
         XCTAssertNotNil(singleItemRead.successValue)
@@ -73,7 +73,7 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(singleItemRead.successValue![0].title, "Mozilla Test")
         XCTAssertEqual(singleItemRead.successValue![0].documentType, DocumentType.regular)
         XCTAssertEqual(singleItemRead.successValue![0].totalViewTime, 1)
-        
+
         // Able to aggregate total view time.
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
@@ -84,11 +84,11 @@ class RustPlacesTests: XCTestCase {
                 title: nil
             )
         ).value.isSuccess)
-        
+
         singleItemRead = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(singleItemRead.successValue!.count, 1)
         XCTAssertEqual(singleItemRead.successValue![0].totalViewTime, 12)
-        
+
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
             observation: HistoryMetadataObservation(
@@ -98,11 +98,11 @@ class RustPlacesTests: XCTestCase {
                 title: nil
             )
         ).value.isSuccess)
-        
+
         singleItemRead = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(singleItemRead.successValue!.count, 1)
         XCTAssertEqual(singleItemRead.successValue![0].totalViewTime, 15)
-        
+
         // Able to change document type.
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
@@ -113,11 +113,11 @@ class RustPlacesTests: XCTestCase {
                 title: nil
             )
         ).value.isSuccess)
-        
+
         singleItemRead = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(singleItemRead.successValue!.count, 1)
         XCTAssertEqual(singleItemRead.successValue![0].documentType, DocumentType.media)
-        
+
         // Unable to change title.
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey1,
@@ -131,7 +131,7 @@ class RustPlacesTests: XCTestCase {
         singleItemRead = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(singleItemRead.successValue!.count, 1)
         XCTAssertEqual(singleItemRead.successValue![0].title, "Mozilla Test")
-    
+
         // Able to observe facts for multiple keys.
         let metadataKey2 = HistoryMetadataKey(url: "https://www.mozilla.org/another", searchTerm: nil, referrerUrl: "https://www.mozilla.org")
         XCTAssertTrue(places.noteHistoryMetadataObservation(
@@ -153,10 +153,10 @@ class RustPlacesTests: XCTestCase {
                 title: nil
             )
         ).value.isSuccess)
-        
+
         var multipleItemsRead = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(multipleItemsRead.successValue!.count, 2)
-        
+
         // Observations for a different key unaffected.
         XCTAssertEqual(multipleItemsRead.successValue![0].documentType, DocumentType.regular)
         XCTAssertEqual(multipleItemsRead.successValue![0].title, "Another Mozilla")
@@ -164,7 +164,7 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(multipleItemsRead.successValue![1].documentType, DocumentType.media)
         XCTAssertEqual(multipleItemsRead.successValue![1].title, "Mozilla Test")
         XCTAssertEqual(multipleItemsRead.successValue![1].totalViewTime, 15)
-        
+
         XCTAssertTrue(places.noteHistoryMetadataObservation(
             key: metadataKey2,
             observation: HistoryMetadataObservation(
@@ -182,7 +182,7 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(multipleItemsRead.successValue![1].documentType, DocumentType.media)
         XCTAssertEqual(multipleItemsRead.successValue![1].title, "Mozilla Test")
         XCTAssertEqual(multipleItemsRead.successValue![1].totalViewTime, 15)
-        
+
         // Able to query by title.
         var queryResults = places.queryHistoryMetadata(query: "another", limit: 0).value
         XCTAssertEqual(queryResults.successValue!.count, 0)
@@ -190,7 +190,7 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(queryResults.successValue!.count, 1)
         queryResults = places.queryHistoryMetadata(query: "mozilla", limit: 10).value
         XCTAssertEqual(queryResults.successValue!.count, 2)
-        
+
         // Able to query by url.
         let metadataKey3 = HistoryMetadataKey(url: "https://www.firefox.ru/download", searchTerm: nil, referrerUrl: "https://www.mozilla.org")
         XCTAssertTrue(places.noteHistoryMetadataObservation(
@@ -206,7 +206,7 @@ class RustPlacesTests: XCTestCase {
         XCTAssertEqual(queryResults.successValue!.count, 1)
         XCTAssertEqual(queryResults.successValue![0].url, "https://www.firefox.ru/download")
         XCTAssertEqual(queryResults.successValue![0].title, "Скачать Фаерфокс")
-        
+
         // Able to query by search term.
         let metadataKey4 = HistoryMetadataKey(url: "https://www.example.com", searchTerm: "Sample webpage", referrerUrl: nil)
         XCTAssertTrue(places.noteHistoryMetadataObservation(
@@ -221,7 +221,7 @@ class RustPlacesTests: XCTestCase {
         queryResults = places.queryHistoryMetadata(query: "sample", limit: 10).value
         XCTAssertEqual(queryResults.successValue!.count, 1)
         XCTAssertEqual(queryResults.successValue![0].url, "https://www.example.com/")
-        
+
         // Able to query highlights.
         let highlights = places.getHighlights(weights: HistoryHighlightWeights(viewTime: 1.0, frequency: 1.0), limit: 10).value
         XCTAssertEqual(highlights.successValue!.count, 4)

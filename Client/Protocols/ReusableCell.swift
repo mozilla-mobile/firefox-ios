@@ -23,3 +23,23 @@ extension ReusableCell where Self: UICollectionViewCell {
 extension ReusableCell where Self: UITableViewCell {
     static var cellIdentifier: String { return String(describing: self) }
 }
+
+extension ReusableCell where Self: UITableViewHeaderFooterView {
+    static var cellIdentifier: String { return String(describing: self) }
+}
+
+extension UICollectionView: Loggable {
+
+    func dequeueReusableCell<T: ReusableCell>(cellType: T.Type, for indexPath: IndexPath) -> T? {
+        guard let cell = dequeueReusableCell(withReuseIdentifier: T.cellIdentifier, for: indexPath) as? T else {
+            browserLog.warning("Cannot dequeue cell at index path \(indexPath)")
+            return nil
+        }
+
+        return cell
+    }
+
+    func register<T: ReusableCell>(cellType: T.Type) {
+        register(T.self, forCellWithReuseIdentifier: T.cellIdentifier)
+    }
+}

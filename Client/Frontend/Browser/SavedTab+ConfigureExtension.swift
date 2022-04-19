@@ -11,7 +11,6 @@ import Shared
 extension SavedTab {
     convenience init?(tab: Tab, isSelected: Bool) {
         assert(Thread.isMainThread)
-        
         var sessionData = tab.sessionData
         if sessionData == nil {
             let currentItem: WKBackForwardListItem! = tab.webView?.backForwardList.currentItem
@@ -27,10 +26,20 @@ extension SavedTab {
                 sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now())
             }
         }
-        
-        self.init(screenshotUUID: tab.screenshotUUID, isSelected: isSelected, title: tab.title ?? tab.lastTitle, isPrivate: tab.isPrivate, faviconURL: tab.displayFavicon?.url, url: tab.url, sessionData: sessionData, uuid: tab.tabUUID, tabGroupData: tab.tabGroupData, createdAt: tab.firstCreatedTime, hasHomeScreenshot: tab.hasHomeScreenshot)
+
+        self.init(screenshotUUID: tab.screenshotUUID,
+                  isSelected: isSelected,
+                  title: tab.title ?? tab.lastTitle,
+                  isPrivate: tab.isPrivate,
+                  faviconURL: tab.displayFavicon?.url,
+                  url: tab.url,
+                  sessionData: sessionData,
+                  uuid: tab.tabUUID,
+                  tabGroupData: tab.metadataManager?.tabGroupData,
+                  createdAt: tab.firstCreatedTime,
+                  hasHomeScreenshot: tab.hasHomeScreenshot)
     }
-    
+
     func configureSavedTabUsing(_ tab: Tab, imageStore: DiskImageStore? = nil) -> Tab {
         // Since this is a restored tab, reset the URL to be loaded as that will be handled by the SessionRestoreHandler
         tab.url = nil
@@ -55,7 +64,7 @@ extension SavedTab {
         tab.sessionData = sessionData
         tab.lastTitle = title
         tab.tabUUID = UUID ?? ""
-        tab.tabGroupData = tabGroupData ?? tab.tabGroupData
+        tab.metadataManager?.tabGroupData = tabGroupData ?? TabGroupData()
         tab.screenshotUUID = screenshotUUID
         tab.firstCreatedTime = createdAt ?? sessionData?.lastUsedTime ?? Date.now()
         tab.hasHomeScreenshot = hasHomeScreenshot

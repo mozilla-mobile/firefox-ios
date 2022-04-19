@@ -62,7 +62,7 @@ class LoginListViewController: SensitiveViewController {
                 deferred.fill(nil)
             }
         }
-        
+
         AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
             switch result {
                 case .success():
@@ -89,6 +89,7 @@ class LoginListViewController: SensitiveViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = .LoginsAndPasswordsTitle
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
 
@@ -126,8 +127,8 @@ class LoginListViewController: SensitiveViewController {
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: selectionButton.topAnchor),
 
             selectionButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -170,7 +171,7 @@ class LoginListViewController: SensitiveViewController {
 
         let isDarkTheme = LegacyThemeManager.instance.currentName == .dark
         let searchTextField = searchController.searchBar.searchTextField
-        
+
         // Theme the search text field (Dark / Light)
         if isDarkTheme {
             searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
@@ -199,7 +200,7 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate func setupDefaultNavButtons() {
          navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
-        
+
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
         } else {
@@ -268,7 +269,7 @@ private extension LoginListViewController {
         tableView.setEditing(true, animated: true)
         tableView.reloadData()
     }
-    
+
     @objc func presentAddCredential() {
         let addController = AddCredentialViewController() { [weak self] record in
             let result = self?.viewModel.save(loginRecord: record)
@@ -281,7 +282,7 @@ private extension LoginListViewController {
                 }
             }
         }
-        
+
         let controller = UINavigationController(
             rootViewController: addController
         )
@@ -414,9 +415,6 @@ extension LoginListViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
-    }
-
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {

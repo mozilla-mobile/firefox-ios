@@ -7,7 +7,7 @@ import XCTest
 class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testLoadReaderContent() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.goto(BrowserTab)
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         waitForExistence(app.buttons["Reader View"], timeout: 5)
@@ -26,7 +26,7 @@ class ReaderViewTest: BaseTestCase {
     private func addContentToReaderView() {
         updateScreenGraph()
         userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         waitForExistence(app.buttons["Reader View"], timeout: 5)
         app.buttons["Reader View"].tap()
@@ -149,9 +149,9 @@ class ReaderViewTest: BaseTestCase {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
-        navigator.goto(LibraryPanel_ReadingList)
 
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        waitForExistence(savedToReadingList)
         savedToReadingList.swipeLeft()
         waitForExistence(app.buttons["Remove"])
 
@@ -163,7 +163,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
-    func testAddToReadingListFromPageOptionsMenu() {
+    func testAddToReadingListFromBrowserTabMenu() {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
@@ -171,12 +171,10 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
         app.buttons["Done"].tap()
         // Add item to Reading List from Page Options Menu
-        userState.url = path(forTestPage: "test-mozilla-book.html")
         updateScreenGraph()
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        navigator.browserPerformAction(.addReadingListOption)
-
+        navigator.performAction(Action.AddToReadingListBrowserTabMenu)
         // Now there should be an item on the list
         navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_ReadingList)
@@ -193,11 +191,12 @@ class ReaderViewTest: BaseTestCase {
 
         // Long tap on the item just saved
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        waitForExistence(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
 
         // Select to open in New Tab
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["quick_action_new_tab"].tap()
+        app.tables.otherElements[ImageIdentifiers.newTab].tap()
         app.buttons["Done"].tap()
         updateScreenGraph()
         // Now there should be two tabs open
@@ -213,9 +212,10 @@ class ReaderViewTest: BaseTestCase {
 
         // Long tap on the item just saved and choose remove
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        waitForExistence(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["action_remove"].tap()
+        app.tables.otherElements[ImageIdentifiers.actionRemove].tap()
 
         // Verify the item has been removed
         waitForNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])

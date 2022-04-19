@@ -11,7 +11,7 @@ protocol LibraryPanel: NotificationThemeable {
 }
 
 struct LibraryPanelUX {
-    static let EmptyTabContentOffset = -180
+    static let EmptyTabContentOffset: CGFloat = -180
 }
 
 protocol LibraryPanelDelegate: AnyObject {
@@ -27,17 +27,17 @@ enum LibraryPanelType: Int, CaseIterable {
     case history = 1
     case downloads = 2
     case readingList = 3
-    
+
     var title: String {
         switch self {
         case .bookmarks:
-            return .AppMenuBookmarksTitleString
+            return .AppMenu.AppMenuBookmarksTitleString
         case .history:
-            return .AppMenuHistoryTitleString
+            return .AppMenu.AppMenuHistoryTitleString
         case .downloads:
-            return .AppMenuDownloadsTitleString
+            return .AppMenu.AppMenuDownloadsTitleString
         case .readingList:
-            return .AppMenuReadingListTitleString
+            return .AppMenu.AppMenuReadingListTitleString
         }
     }
 }
@@ -49,17 +49,19 @@ class LibraryPanelDescriptor {
     var viewController: UIViewController?
     var navigationController: UINavigationController?
 
-    fileprivate let makeViewController: (_ profile: Profile) -> UIViewController
+    fileprivate let makeViewController: (_ profile: Profile, _ tabManager: TabManager) -> UIViewController
     fileprivate let profile: Profile
+    fileprivate let tabManager: TabManager
 
     let imageName: String
     let activeImageName: String
     let accessibilityLabel: String
     let accessibilityIdentifier: String
 
-    init(makeViewController: @escaping ((_ profile: Profile) -> UIViewController), profile: Profile, imageName: String, accessibilityLabel: String, accessibilityIdentifier: String) {
+    init(makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController), profile: Profile, tabManager: TabManager, imageName: String, accessibilityLabel: String, accessibilityIdentifier: String) {
         self.makeViewController = makeViewController
         self.profile = profile
+        self.tabManager = tabManager
         self.imageName = "panelIcon" + imageName
         self.activeImageName = self.imageName + "-active"
         self.accessibilityLabel = accessibilityLabel
@@ -68,52 +70,65 @@ class LibraryPanelDescriptor {
 
     func setup() {
         guard viewController == nil else { return }
-        let viewController = makeViewController(profile)
+        let viewController = makeViewController(profile, tabManager)
         self.viewController = viewController
         navigationController = ThemedNavigationController(rootViewController: viewController)
     }
 }
 
-class LibraryPanels {
+class LibraryPanels: FeatureFlagsProtocol {
     fileprivate let profile: Profile
+    fileprivate let tabManager: TabManager
 
-    init(profile: Profile) {
+    init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
+        self.tabManager = tabManager
     }
 
     lazy var enabledPanels = [
         LibraryPanelDescriptor(
-            makeViewController: { profile in
+            makeViewController: { profile, tabManager  in
                 return BookmarksPanel(profile: profile)
             },
             profile: profile,
+            tabManager: tabManager,
             imageName: "Bookmarks",
             accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.Bookmarks"),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile in
-                return HistoryPanel(profile: profile)
+            makeViewController: { profile, tabManager in
+
+                // NOTE: Switch to HistoryPanelV2 from v100 onwards.
+                if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
+                    return HistoryPanelWithGroups(profile: profile, tabManager: tabManager)
+                } else {
+                    return HistoryPanel(profile: profile, tabManager: tabManager)
+                }
+
             },
             profile: profile,
+            tabManager: tabManager,
             imageName: "History",
             accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.History"),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile in
+            makeViewController: { profile, tabManager in
                 return DownloadsPanel(profile: profile)
             },
             profile: profile,
+            tabManager: tabManager,
             imageName: "Downloads",
             accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.Downloads"),
 
         LibraryPanelDescriptor(
-            makeViewController: { profile in
+            makeViewController: { profile, tabManager in
                 return ReadingListPanel(profile: profile)
             },
             profile: profile,
+            tabManager: tabManager,
             imageName: "ReadingList",
             accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.ReadingList")

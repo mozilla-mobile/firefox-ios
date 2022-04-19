@@ -96,7 +96,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         // Check tracking protection is enabled on private tabs only in Settings
 
         if BrowserUtils.iPad() {
-            tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.BottomToolbar.settingsMenuButton)
+            tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
         } else {
             tester().tapView(withAccessibilityLabel: "Menu")
         }

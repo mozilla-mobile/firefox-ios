@@ -191,7 +191,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 v.backgroundColor = UIColor.clear
             }
         }
-        
+
         // Change re-order control tint color to match app theme
         for subViewA in cell.subviews where subViewA.classForCoder.description() == "UITableViewCellReorderControl" {
             for subViewB in subViewA.subviews {

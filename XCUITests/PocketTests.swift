@@ -13,7 +13,7 @@ class PocketTest: BaseTestCase {
 //        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label, "Trending on Pocket")
 //
 //        // There should be two stories on iPhone and three on iPad
-//        let numPocketStories = app.collectionViews.containing(.cell, identifier:"TopSitesCell").children(matching: .cell).count-1
+//        let numPocketStories = app.collectionViews.containing(.cell, identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.section).children(matching: .cell).count-1
 //        if iPad() {
 //            XCTAssertEqual(numPocketStories, 9)
 //        } else {
@@ -30,7 +30,7 @@ class PocketTest: BaseTestCase {
 //        waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
 //
 //        // Tap on the first Pocket element
-//        app.collectionViews.containing(.cell, identifier:"TopSitesCell").children(matching: .cell).element(boundBy: 1).tap()
+//        app.collectionViews.containing(.cell, identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.section).children(matching: .cell).element(boundBy: 1).tap()
 //        waitUntilPageLoad()
 //        // The url textField is not empty
 //        XCTAssertNotEqual(app.textFields["url"].value as! String, "", "The url textField is empty")

@@ -10,7 +10,7 @@ import XCTest
 
 class TabDisplayManagerTests: XCTestCase {
 
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.Identifier
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
 
     var mockDataStore = WeakListMock<Tab>()
     var dataStore = WeakList<Tab>()
@@ -193,11 +193,10 @@ class TabDisplayManagerTests: XCTestCase {
         let selectedTab = manager.addTab()
         manager.selectTab(selectedTab)
 
-        // Remove selected tab
-        manager.removeTab(selectedTab)
-
-        // Should be selected tab is index 2, and no other one is selected
-        testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 2)
+        removeTabAndAssert(tab: selectedTab) {
+            // Should be selected tab is index 2, and no other one is selected
+            self.testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 2)
+        }
     }
 
     func testSelectedCell_secondToLastTabSelectedAndRemoved() {
@@ -211,10 +210,10 @@ class TabDisplayManagerTests: XCTestCase {
         manager.selectTab(selectedTab)
 
         // Remove selected
-        manager.removeTab(selectedTab)
-
-        // Should be selected tab is index 2, and no other one is selected
-        testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 2)
+        removeTabAndAssert(tab: selectedTab) {
+            // Should be selected tab is index 1, and no other one is selected
+            self.testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 2)
+        }
     }
 
     func testSelectedCell_secondToLastTabSelectedAndTabBeforeRemoved() {
@@ -228,21 +227,30 @@ class TabDisplayManagerTests: XCTestCase {
         manager.selectTab(selectedTab)
 
         // Remove second tab
-        manager.removeTab(tabToRemove)
-
-        // Should be selected tab is index 1, and no other one is selected
-        testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 1)
+        removeTabAndAssert(tab: tabToRemove) {
+            // Should be selected tab is index 1, and no other one is selected
+            self.testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 1)
+        }
     }
 }
 
 // Helper methods
 extension TabDisplayManagerTests {
 
+    func removeTabAndAssert(tab: Tab, completion: @escaping () -> Void) {
+        let expectation = self.expectation(description: "Tab is removed")
+        manager.removeTab(tab) {
+            completion()
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
     func createTabDisplayManager(useMockDataStore: Bool = true) -> TabDisplayManager {
         let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
                                                   tabManager: manager,
                                                   tabDisplayer: self,
-                                                  reuseID: TopTabCell.Identifier,
+                                                  reuseID: TopTabCell.cellIdentifier,
                                                   tabDisplayType: .TopTabTray,
                                                   profile: profile)
         collectionView.dataSource = tabDisplayManager
@@ -250,14 +258,14 @@ extension TabDisplayManagerTests {
         return tabDisplayManager
     }
 
-    func testSelectedCells(tabDisplayManager: TabDisplayManager, numberOfCells: Int, selectedIndex: Int) {
-        XCTAssertEqual(tabDisplayManager.dataStore.count, numberOfCells)
+    func testSelectedCells(tabDisplayManager: TabDisplayManager, numberOfCells: Int, selectedIndex: Int, file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertEqual(tabDisplayManager.dataStore.count, numberOfCells, file: file, line: line)
         for index in 0..<numberOfCells {
             let cell = tabDisplayManager.collectionView(collectionView, cellForItemAt: IndexPath(row: index, section: 0)) as! TabTrayCell
             if index == selectedIndex {
-                XCTAssertTrue(cell.isSelectedTab)
+                XCTAssertTrue(cell.isSelectedTab, file: file, line: line)
             } else {
-                XCTAssertFalse(cell.isSelectedTab)
+                XCTAssertFalse(cell.isSelectedTab, file: file, line: line)
             }
         }
     }
@@ -288,8 +296,8 @@ class MockCollectionView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: collectionViewLayout)
 
-        register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
-        register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
+        register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.cellIdentifier)
+        register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.cellIdentifier)
     }
 
     required init?(coder: NSCoder) {

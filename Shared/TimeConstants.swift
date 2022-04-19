@@ -29,6 +29,10 @@ extension TimeInterval {
     public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> TimeInterval {
         return Double(microsecondTimestamp) / 1000000
     }
+
+    public static func timeIntervalSince1970ToDate(timeInterval: TimeInterval) -> Date {
+        Date(timeIntervalSince1970: timeInterval)
+    }
 }
 
 extension Timestamp {
@@ -57,7 +61,7 @@ extension Date {
     public static func fromTimestamp(_ timestamp: Timestamp) -> Date {
         return Date(timeIntervalSince1970: Double(timestamp) / 1000)
     }
-    
+
     public func toTimestamp() -> Timestamp {
         return UInt64(1000 * timeIntervalSince1970)
     }
@@ -109,7 +113,7 @@ extension Date {
     public func toRFC822String() -> String {
         return rfc822DateFormatter.string(from: self)
     }
-    
+
     public static func difference(recent: Date, previous: Date) -> (month: Int?, day: Int?, hour: Int?, minute: Int?, second: Int?) {
         let day = Calendar.current.dateComponents([.day], from: previous, to: recent).day
         let month = Calendar.current.dateComponents([.month], from: previous, to: recent).month
@@ -119,7 +123,7 @@ extension Date {
 
         return (month: month, day: day, hour: hour, minute: minute, second: second)
     }
-    
+
     static func - (lhs: Date, rhs: Date) -> TimeInterval {
         return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
     }
@@ -146,17 +150,21 @@ extension Date {
     public var noon: Date {
         return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self) ?? Date()
     }
-    
+
     public func isToday() -> Bool {
         return Calendar.current.isDateInToday(self)
     }
-    
+
     public func isYesterday() -> Bool {
         return Calendar.current.isDateInYesterday(self)
     }
-    
+
     public func isWithinLast7Days() -> Bool {
         return (Date().lastWeek ... Date()).contains(self)
+    }
+
+    public func isWithinLast14Days() -> Bool {
+        return (Date().lastTwoWeek ... Date()).contains(self)
     }
 }
 

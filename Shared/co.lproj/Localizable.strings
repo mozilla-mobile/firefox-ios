@@ -113,6 +113,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Ricerca o indirizzu";
 
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Barra d’indirizzu";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "Mandà sempre";
 
@@ -234,7 +237,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "Apre";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "Apre u liame cupiatu ?";
+"ClipboardToast.GoToCopiedLink.Title" = "Apre u liame cupiatu ?";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "Chjode";
@@ -287,8 +290,17 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Sparte u liame";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Avà pudete dispiazzà a barra d’attrezzi inghjò ciò chì rende a stampittera d’infurmazione più faciule";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "Per facilità a stampittera d’infurmazione, a pusizione predefinita di a barra d’attrezzi hè inghjò.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "A vostra pagina d’accolta Firefox persunalizata vi permette avà di rivene d’una manera faciule induve vo avete lasciatu. Ci truverete l’unghjette, l’indette, è i risultati di ricerca recente.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Preferenze di a barra d’attrezzi";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "L’unghjette chì vo ùn avete micca viste dapoi duie settimane sò dispiazzate quì.";
@@ -300,13 +312,13 @@
 "Could not add page to Reading list" = "Ùn si pò micca aghjunghje a pagina à a lista di lettura";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Ùn si pò micca aghjunghje a pagina à a lista di lettura. Forse si ci trovà dighjà ?";
+"Could not add page to Reading List. Maybe it’s already there?" = "Ùn si pò micca aghjunghje a pagina à a lista di lettura. Forse si ci trovà dighjà ?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Ùn si pò micca caricà a pagina.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Per l’utilizatori d’iOS 13, Firefox cambia autumaticamente ver di un tema scuru quandu u telefonu hè definitu cù u tema scuru. Per cambià stu cumpurtamentu, andate in Preferenze > Tema.";
+"CoverSheet.v22.DarkMode.Description" = "Per l’utilizatori d’iOS 13, Firefox cambia autumaticamente versu un tema scuru quandu u telefonu hè definitu cù u tema scuru. Per cambià stu cumpurtamentu, andate in Preferenze > Tema.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "U tema scuru include avà una tastera scura è un screnu iniziale scuru.";
@@ -353,7 +365,7 @@
 "Downloads.CancelDialog.Cancel" = "Abbandunà";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "Site sicuru di vulè abbandunà stu scaricamentu ?";
+"Downloads.CancelDialog.Message" = "Vulete veramente abbandunà stu scaricamentu ?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Ripiglià";
@@ -433,11 +445,26 @@
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Persunalizà a pagina d’accolta";
 
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Scoprene di più";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d min";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Storie chì facenu riflette";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Caccià";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Finanziatu";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Pagina seguente";
 
 /* Label stating how to disconnect account */
-"FxA.AccountVerificationDetails" = "Indirizzu elettronicu gattivu ? Disghjunghjiteci quì sottu per riprincipià.";
+"FxA.AccountVerificationDetails" = "Indirizzu elettronicu gattivu ? Disghjunghjiteci quì sottu per riprincipià.";
 
 /* Label stating your account is not verified */
 "FxA.AccountVerificationRequired" = "Verificazione di contu richiesta";
@@ -529,6 +556,9 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparechju hè statu disghjuntu da Firefox Sync";
 
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, cambià u sfondu di screnu.";
+
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Ritruvate e vostre unghjette aperte, l’indette è e parolle d'entrata da i vostri altri apparechji.";
 
@@ -569,7 +599,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "U vostru contu deve esse verificatu.";
 
 /* Description for the empty synced tabs 'single device Sync' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Vulete vede quì e vostre unghjette di l’altri apparechji ?";
+"HistoryPanel.EmptySyncedTabsPanelSingleDeviceSyncState.Description" = "Vulete vede quì e vostre unghjette di l’altri apparechji ?";
 
 /* Description for the empty synced tabs 'tab sync disabled' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelTabSyncDisabledState.Description" = "Attivate a sincrunizazione di l’unghjette per affissà a lista di l’unghjette di i vostri altri apparechji.";
@@ -602,7 +632,7 @@
 "HomePage.Set.Dialog.OK" = "Definisce cum’è pagina d’accolta";
 
 /* Alert dialog title when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Title" = "Vulete impiegà stu situ web cum’è pagina d’accolta ?";
+"HomePage.Set.Dialog.Title" = "Vulete impiegà stu situ web cum’è pagina d’accolta ?";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Indittà sta pagina";
@@ -694,6 +724,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Circà torna";
 
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "Nova unghjetta nurmale";
+
 /* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.OpenLinkInBackground" = "Apre u liame in tacca di fondu";
 
@@ -745,6 +778,9 @@
 /* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowTabNumber" = "Affissa l’unghjetta nᵘ 1-9";
 
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Riapre l’unghjetta chjosa";
+
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Ingrandamentu";
 
@@ -759,6 +795,27 @@
 
 /* History tableview section header */
 "Last week" = "A settimana scorsa";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Abbandunà";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Squassà";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Nisunu elementu trovu in a cronolugia";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Unghjette chjose pocu fà";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Stampittate i termini à ricercà";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Sincrunizati nant’à d’altri apparechji";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Più vechju";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Licenze";
@@ -818,16 +875,16 @@
 "LoginsHelper.DontUpdate.Button" = "Ùn mudificà micca";
 
 /* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Arregistrà l’identificazione di cunnessione %1$@ per %2$@ ?";
+"LoginsHelper.PromptSaveLogin.Title" = "Arregistrà l’identificazione di cunnessione %1$@ per %2$@ ?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Arregistrà a parolla d’intesa per %@ ?";
+"LoginsHelper.PromptSavePassword.Title" = "Arregistrà a parolla d’intesa per %@ ?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Mudificà l’identificazione di cunnessione per %@ ?";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Mudificà l’identificazione di cunnessione per %@ ?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Mudificà l’identificazione di cunnessione %1$@ per %2$@ ?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Mudificà l’identificazione di cunnessione %1$@ per %2$@ ?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Arregistrà l’identificazione di cunnessione";
@@ -872,7 +929,7 @@
 "LoginsList.Title" = "IDENTIFICAZIONI DI CUNNESSIONE ARREGISTRATE";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Pare chì Firefox s’hè lampatu. Vulete risturà e vostre unghjette ?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Pare chì Firefox s’hè lampatu. Vulete risturà e vostre unghjette ?";
 
 /* Name for Mark as read button in reader mode
    Title for the button that marks a reading list item as read */
@@ -882,8 +939,14 @@
    Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Marcà cum’è micca lettu";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "Aghjunghje un’indetta";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Indetta aghjunta";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Aghjunghje";
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Aghjuntu à i siti principale";
@@ -891,11 +954,14 @@
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "Aghjuntu à l’accurtatoghji";
 
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Aghjunghje";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Aghjuntu à a lista di lettura";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "Salvà è sincrunizà i dati";
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Aghjunghje à l’accurtatoghji";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Indette";
@@ -905,6 +971,9 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Indirizzu cupiatu in u preme’papei";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Persunalizà a pagina d’accolta";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Scaricamenti";
@@ -921,6 +990,9 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox bluccheghja i perseguitatori intersiti, quelli di rete suciale, i minatori di crittomuneta, i detettori d’impronta numerica è u cuntenutu impiegatu per u spiunagiu.";
 
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Aiutu";
+
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Cronolugia";
 
@@ -929,6 +1001,9 @@
 
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
 "Menu.ManageAccount.Label" = "Ghjestione di u contu %@";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Nova unghjetta";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "Disattivà u modu nutturnu";
@@ -969,14 +1044,41 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Indetta cacciata";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "Caccià";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "Caccià da l’accurtatoghji";
+
 /* Toast displayed to the user after removing the item from the Top Sites. */
-"Menu.RemovePin.Confirm" = "Caccià da i siti principale";
+"Menu.RemovePin.Confirm" = "Cacciatu da i siti principale";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "Cacciatu da l’accurtatoghji";
+"Menu.RemovePin.Confirm2.v99" = "Cacciatu da l’accurtatoghji";
+
+/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
+"Menu.RemoveReadingList.AlternateLabel.v99" = "Caccià da a lista di lettura";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "Cacciatu da a lista di lettura";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Caccià";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Sparte";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.SignInToSync.Label.v99" = "Cunnettesi à Sync";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Unghjetta mandata";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Indette";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Accolta";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Bluccati";
@@ -985,7 +1087,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "Verificatu da %@";
 
 /* Message in menu when no trackers blocked. */
-"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Alcunu perseguitatore cunnisciutu da Firefox ùn hè statu abbentatu nant’à sta pagina.";
+"Menu.TrackingProtection.NoTrackersBlockedTitle" = "Alcunu perseguitatore cunnisciutu da Firefox ùn hè statu avventatu nant’à sta pagina.";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Preferenze di prutezzione";
@@ -1063,7 +1165,7 @@
 "Menu.TrackingProtectionMoreInfo.Description" = "Scopre cumu a prutezzione contr’à u spiunagiu blocca i perseguitatori in linea chì cullettanu i vostri dati di navigazione da parechji siti web.";
 
 /* The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled. */
-"Menu.TrackingProtectionNoBlocking.Description" = "Alcunu elementu di spiunagiu abbentatu nant’à sta pagina.";
+"Menu.TrackingProtectionNoBlocking.Description" = "Alcunu elementu di spiunagiu avventatu nant’à sta pagina.";
 
 /* label for the menu item to show when the website is whitelisted from blocking trackers. */
 "Menu.TrackingProtectionOption.WhiteListOnDescription" = "Stu situ cuntene elementi chì ponu spiunà a vostra navigazione. Avete disattivatu a prutezzione.";
@@ -1274,7 +1376,7 @@
 "Search.ThirdPartyEngines.AddSuccess" = "U mutore di ricerca hè statu aghjuntu.";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Aghjunghje u mutore di ricerca ?";
+"Search.ThirdPartyEngines.AddTitle" = "Aghjunghje u mutore di ricerca ?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Abbandunà";
@@ -1307,7 +1409,7 @@
 "Secure connection" = "Cunnessione assicurizata";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu di u penseru per chì Mozilla possa currege u penseru ?";
+"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu di u penseru per chì Mozilla possa currege u penseru ?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Dà u mo avisu";
@@ -1446,7 +1548,7 @@
 "Settings.Disconnect.DestructiveButton" = "Disghjunghje";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Disghjunghjessi di Sync ?";
+"Settings.Disconnect.Title" = "Disghjunghjessi di Sync ?";
 
 /* Section header for brightness slider. */
 "Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Sogliu";
@@ -1527,9 +1629,6 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "Visitati pocu fà";
 
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "Ricerche recente";
-
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Accurtatoghji";
 
@@ -1551,11 +1650,59 @@
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
 "Settings.Home.Option.Title" = "Pagina d’accolta di Firefox";
 
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Sfondulu di screnu";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Sfondulu di screnu Firefox, mudellu amatista.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Sfondulu di screnu Firefox, mudellu turchinu azuratu.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Sfondulu chjaru predefinitu.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Sfondulu di screnu Firefox, mudellu assulanatu.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Cummutatore di u ciclu di sfondulu di screnu di a pagina d’accolta";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "SCRENU À L’APERTURA";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Cambià u sfondulu di screnu picchichjendu u logo di a pagina d’accolta";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Sfondulu di screnu";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Sfondulu di screnu mudificatu !";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Affissà";
+
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Squassà";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Pagina d’accolta";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Linee";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Linee";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Accurtatoghji";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Accurtatoghji";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Accurtatoghji finanziati";
 
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "Preferenze di a pagina d’accolta";
@@ -1643,6 +1790,9 @@
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "Sciglite ciò chì s’affissa à l’apertura d’una nova unghjetta";
+
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Bluccà e fiure";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "À l’apertura di Firefox";
@@ -1734,6 +1884,15 @@
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "Unghjette";
 
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "Inghjò";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Barra d’attrezzi";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Insù";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Iè, aghju capitu";
 
@@ -1801,7 +1960,7 @@
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Prutezzione rinfurzata contr’à u spiunagiu";
 
 /* Translation settings footer describing how language detection and translation happens. */
-"Settings.TranslateSnackBar.SectionFooter" = "A lingua di a pagina web hè abbentata nant’à l’apparechju è una traduzzione hè pruposta da un serviziu alluntanatu.";
+"Settings.TranslateSnackBar.SectionFooter" = "A lingua di a pagina web hè avventata nant’à l’apparechju è una traduzzione hè pruposta da un serviziu alluntanatu.";
 
 /* Translation settings section title */
 "Settings.TranslateSnackBar.SectionHeader" = "Servizii";
@@ -2075,7 +2234,7 @@
 "TranslationToastHandler.PromptTranslate.OK" = "Iè";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "Sta pagina pare esse in %1$@. Traducella in %2$@ cù %3$@ ?";
+"TranslationToastHandler.PromptTranslate.Title" = "Sta pagina pare esse in %1$@. Traducella in %2$@ cù %3$@ ?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";

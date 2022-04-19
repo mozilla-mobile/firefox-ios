@@ -33,12 +33,12 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     }
 
     lazy private var faviconBG: UIView = .build { view in
-        view.layer.cornerRadius = TopSiteCellUX.cellCornerRadius
-        view.layer.borderWidth = TopSiteCellUX.borderWidth
+        view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
+        view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = TopSiteCellUX.shadowRadius
+        view.layer.shadowRadius = TopSiteItemCell.UX.shadowRadius
         view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        view.layer.borderColor = TopSiteCellUX.borderColor.cgColor
+        view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
         view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
     }
@@ -49,13 +49,13 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.theme.tabTray.screenshotBackground
     }
-    
+
     lazy var smallFaviconView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.clear
-        view.layer.cornerRadius = TopSiteCellUX.iconCornerRadius
+        view.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
         view.layer.masksToBounds = true
     }
 
@@ -113,7 +113,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
         setupConstraint()
     }
-    
+
     func setupConstraint() {
         NSLayoutConstraint.activate([
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -127,14 +127,14 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
             title.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.TextBoxHeight),
 
             favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: 6),
-            favicon.topAnchor.constraint(equalTo: title.topAnchor , constant: (GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2),
+            favicon.topAnchor.constraint(equalTo: title.topAnchor, constant: (GridTabTrayControllerUX.TextBoxHeight - GridTabTrayControllerUX.FaviconSize) / 2),
             favicon.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
             favicon.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.FaviconSize),
 
             closeButton.heightAnchor.constraint(equalToConstant: GridTabTrayControllerUX.CloseButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: GridTabTrayControllerUX.CloseButtonSize),
             closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
-            closeButton.rightAnchor.constraint(equalTo: title.rightAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
 
             titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: 6),
             titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: 6),
@@ -147,16 +147,16 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 
             faviconBG.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 10),
             faviconBG.centerXAnchor.constraint(equalTo: centerXAnchor),
-            faviconBG.heightAnchor.constraint(equalToConstant: TopSiteCellUX.backgroundSize.height),
-            faviconBG.widthAnchor.constraint(equalToConstant: TopSiteCellUX.backgroundSize.width),
+            faviconBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height),
+            faviconBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.width),
 
-            smallFaviconView.heightAnchor.constraint(equalToConstant: TopSiteCellUX.iconSize.height),
-            smallFaviconView.widthAnchor.constraint(equalToConstant: TopSiteCellUX.iconSize.width),
+            smallFaviconView.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.iconSize.height),
+            smallFaviconView.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.iconSize.width),
             smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
             smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
         ])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -272,7 +272,7 @@ extension TabTrayCell {
         let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
         var backUpName: String = "" // In case display title is empty
         if let baseDomain = baseDomain {
-            backUpName = baseDomain.contains("local") ? .AppMenuOpenHomePageTitleString : baseDomain
+            backUpName = baseDomain.contains("local") ? .AppMenu.AppMenuOpenHomePageTitleString : baseDomain
         } else if let url = tab.url, let about = InternalURL(url)?.aboutComponent {
             backUpName = about
         }

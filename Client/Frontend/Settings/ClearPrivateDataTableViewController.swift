@@ -30,7 +30,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     // Bug 1445687 -- https://bugzilla.mozilla.org/show_bug.cgi?id=1445687
     fileprivate lazy var clearables: [(clearable: Clearable, checked: DefaultCheckedState)] = {
         var items: [(clearable: Clearable, checked: DefaultCheckedState)] = [
-            (HistoryClearable(profile: self.profile), true),
+            (HistoryClearable(profile: self.profile, tabManager: tabManager), true),
             (CacheClearable(tabManager: self.tabManager), true),
             (CookiesClearable(tabManager: self.tabManager), true),
             (SiteDataClearable(tabManager: self.tabManager), true),
@@ -183,7 +183,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         var sectionTitle: String?
         if section == SectionToggles {
-            sectionTitle = .SettingsClearPrivateDataTitle
+            sectionTitle = .SettingsClearPrivateDataSectionName
         } else {
             sectionTitle = nil
         }

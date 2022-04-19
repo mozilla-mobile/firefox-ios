@@ -79,19 +79,15 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = UIColor.clear
-        imageView.layer.cornerRadius = TopSiteCellUX.iconCornerRadius
+        imageView.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
     private var fallbackFaviconBackground: UIView = .build { view in
-        view.layer.cornerRadius = TopSiteCellUX.cellCornerRadius
-        view.layer.borderWidth = TopSiteCellUX.borderWidth
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = TopSiteCellUX.shadowRadius
+        view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
+        view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
         view.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        view.layer.borderColor = TopSiteCellUX.borderColor.cgColor
-        view.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        view.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
     }
 
     // Contains the hero image and fallback favicons
@@ -99,13 +95,17 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         view.backgroundColor = .clear
     }
 
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+
     // MARK: - Inits
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
         applyTheme()
-        setupObservers()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
@@ -114,7 +114,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -147,10 +147,6 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     func setFallBackFaviconVisibility(isHidden: Bool) {
         fallbackFaviconBackground.isHidden = isHidden
         fallbackFaviconImage.isHidden = isHidden
-    }
-
-    private func setupObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: .DisplayThemeChanged, object: nil)
     }
 
     private func setupLayout() {
@@ -205,16 +201,9 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
         ])
     }
-
-    @objc private func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
 }
 
+// MARK: - Theme
 extension FxHomeHorizontalCell: NotificationThemeable {
     func applyTheme() {
         if LegacyThemeManager.instance.currentName == .dark {
@@ -228,9 +217,18 @@ extension FxHomeHorizontalCell: NotificationThemeable {
         }
 
         fallbackFaviconBackground.backgroundColor = UIColor.theme.homePanel.shortcutBackground
-        fallbackFaviconBackground.layer.borderColor = TopSiteCellUX.borderColor.cgColor
-        fallbackFaviconBackground.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        fallbackFaviconBackground.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        fallbackFaviconBackground.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+    }
+}
+
+// MARK: - Notifiable
+extension FxHomeHorizontalCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 }

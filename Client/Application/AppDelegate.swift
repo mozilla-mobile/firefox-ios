@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var tabTrayController: GridTabViewController!
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
@@ -83,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        Sentry.shared.setup(sendUsageData: sendUsageData)
+        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
 
         // Set the Firefox UA for browsing.
         setUserAgent()
@@ -122,12 +121,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        self.tabTrayController = GridTabViewController(tabManager: self.tabManager, profile: profile)
+        FeatureFlagsManager.shared.updateNimbusLayer()
+
+        setupRootViewController()
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
-
-        setupRootViewController()
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
@@ -170,6 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
+        browserViewController.updateState = .coldStart
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -224,11 +224,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             shouldPerformAdditionalDelegateHandling = false
         }
 
-        // Force the ToolbarTextField in LTR mode - without this change the UITextField's clear
-        // button will be in the incorrect position and overlap with the input text. Not clear if
-        // that is an iOS bug or not.
-        AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
-
         pushNotificationSetup()
 
         // user research variable setup for Chron tabs user research
@@ -256,7 +251,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
             }
         }
-
 
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
             guard self.profile?.hasSyncableAccount() ?? false else {
@@ -321,7 +315,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC(), tray: self.tabTrayController)
+            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC())
         }
         return true
     }
@@ -410,6 +404,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BrowserViewController.foregroundBVC().downloadQueue.pauseAll()
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.
@@ -431,7 +426,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
             guard let profile = profile else { return }
-            TopSitesHandler.writeWidgetKitTopSites(profile: profile)
+            TopSitesHelper.writeWidgetKitTopSites(profile: profile)
         }
     }
 
@@ -614,7 +609,7 @@ extension AppDelegate {
             }
         }
 
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation: UIInterfaceOrientation) {
             self.lockOrientation(orientation)
             UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
         }

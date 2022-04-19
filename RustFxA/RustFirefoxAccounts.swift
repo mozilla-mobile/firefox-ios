@@ -4,8 +4,7 @@
 
 import UIKit
 import Shared
-import FxAClient
-import Viaduct
+import MozillaAppServices
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
@@ -172,7 +171,7 @@ open class RustFirefoxAccounts {
 
             self?.update()
         }
-        
+
         NotificationCenter.default.addObserver(forName: .accountProfileUpdate, object: nil, queue: .main) { [weak self] notification in
             self?.update()
         }
@@ -182,7 +181,7 @@ open class RustFirefoxAccounts {
             if let error = notification.userInfo?["error"] as? Error {
                 info = error.localizedDescription
             }
-            Sentry.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
+            SentryIntegration.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
             self?.accountMigrationFailed = true
             NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
         }
@@ -311,7 +310,7 @@ public struct FxAUserProfile: Codable, Equatable {
     public let avatarUrl: String?
     public let displayName: String?
 
-    init(profile: FxAClient.Profile) {
+    init(profile: Profile) {
         uid = profile.uid
         email = profile.email
         avatarUrl = profile.avatar

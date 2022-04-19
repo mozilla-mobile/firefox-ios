@@ -12,13 +12,13 @@ import Foundation
 /// `.accessibilityIdentifier` identifiers from the client and the tests
 /// should be move here and updated throughout the app.
 public struct AccessibilityIdentifiers {
-    
-    struct BottomToolbar {
+
+    struct Toolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
-    }
-    
-    struct TabToolbar {
         static let homeButton = "TabToolbar.homeButton"
+        static let trackingProtection = "TabLocationView.trackingProtectionButton"
+        static let readerModeButton = "TabLocationView.readerModeButton"
+        static let reloadButton = "TabLocationView.reloadButton"
     }
 
     struct FirefoxHomepage {
@@ -43,8 +43,13 @@ public struct AccessibilityIdentifiers {
             static let library = "libraryTitle"
             static let topSites = "topSitesTitle"
         }
+
+        struct TopSites {
+            static let section = "TopSitesSection"
+            static let itemCell = "TopSitesCell"
+        }
     }
-    
+
     struct GeneralizedIdentifiers {
         public static let back = "Back"
     }
@@ -53,6 +58,19 @@ public struct AccessibilityIdentifiers {
         static let filteredTabs = "filteredTabs"
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
+    }
+
+    struct LibraryPanels {
+        struct HistoryPanel {
+            static let tableView = "History List"
+            static let clearHistoryCell = "HistoryPanel.clearHistory"
+            static let recentlyClosedCell = "HistoryPanel.recentlyClosedCell"
+            static let syncedHistoryCell = "HistoryPanel.syncedHistoryCell"
+        }
+
+        struct GroupedList {
+            static let tableView = "grouped-items-table-view"
+        }
     }
 
     struct Settings {
@@ -72,7 +90,7 @@ public struct AccessibilityIdentifiers {
                 static let shortcuts = ""
                 static let jumpBackIn = "Jump Back In"
                 static let recentlySaved = "Recently Saved"
-                static let recentSearches = "Recent Searches"
+                static let recentVisited = "Recently Visited"
                 static let recommendedByPocket = "Recommended by Pocket"
             }
         }
@@ -94,6 +112,12 @@ public struct AccessibilityIdentifiers {
 
         struct ClearData {
             static let clearPrivatedata = "ClearPrivateData"
+        }
+
+        struct SearchBar {
+            static let searchBarSetting = "SearchBarSetting"
+            static let topSetting = "TopSearchBar"
+            static let bottomSetting = "BottomSearchBar"
         }
     }
 }

@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
-import Nimbus
+import MozillaAppServices
 import UIKit
 
 struct FlaggableFeature {
@@ -14,27 +14,30 @@ struct FlaggableFeature {
     private var featureID: FeatureFlagName
 
     private var featureKey: String? {
+        typealias FlagKeys = PrefsKeys.FeatureFlags
         switch featureID {
         case .chronologicalTabs:
-            return PrefsKeys.ChronTabsPrefKey
-        case .customWallpaper:
-            return PrefsKeys.CustomWallpaperPrefKey
-        case .inactiveTabs:
-            return PrefsKeys.KeyEnableInactiveTabs
-        case .groupedTabs:
-            return PrefsKeys.KeyEnableGroupedTabs
+            return FlagKeys.ChronologicalTabs
         case .historyHighlights:
-            return PrefsKeys.HistoryHighlightsSectionEnabled
+            return FlagKeys.HistoryHighlightsSection
+        case .historyGroups:
+            return FlagKeys.HistoryGroups
+        case .inactiveTabs:
+            return FlagKeys.InactiveTabs
         case .jumpBackIn:
-            return PrefsKeys.JumpBackInSectionEnabled
+            return FlagKeys.JumpBackInSection
         case .pocket:
-            return PrefsKeys.ASPocketStoriesVisible
+            return FlagKeys.ASPocketStories
         case .pullToRefresh:
-            return PrefsKeys.PullToRefresh
+            return FlagKeys.PullToRefresh
         case .recentlySaved:
-            return PrefsKeys.RecentlySavedSectionEnabled
+            return FlagKeys.RecentlySavedSection
         case .startAtHome:
-            return PrefsKeys.StartAtHome
+            return FlagKeys.StartAtHome
+        case .tabTrayGroups:
+            return FlagKeys.TabTrayGroups
+        case .wallpapers:
+            return FlagKeys.CustomWallpaper
         default: return nil
         }
     }
@@ -44,10 +47,12 @@ struct FlaggableFeature {
         return baseKey + "UserPreferences"
     }
 
-
     // MARK: - Initializers
 
-    init(withID featureID: FeatureFlagName, and profile: Profile, enabledFor channels: [AppBuildChannel]) {
+    init(withID featureID: FeatureFlagName,
+         and profile: Profile,
+         enabledFor channels: [AppBuildChannel]
+    ) {
         self.featureID = featureID
         self.profile = profile
         self.buildChannels = channels
@@ -86,7 +91,7 @@ struct FlaggableFeature {
 
     /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
     /// convert it to the appropriate type.
-    public func getUserPreference() -> String? {
+    public func getUserPreference(using nimbusLayer: NimbusFeatureFlagLayer) -> String? {
         if let optionsKey = featureOptionsKey, let existingOption = profile.prefs.stringForKey(optionsKey) {
             return existingOption
         }
@@ -95,14 +100,16 @@ struct FlaggableFeature {
         switch featureID {
         case .startAtHome:
             return StartAtHomeSetting.afterFourHours.rawValue
-        case .customWallpaper:
+        case .wallpapers:
             // In this case, we want to enable the tap banner to cycle through
             // wallpapers behaviour by default.
             return UserFeaturePreference.enabled.rawValue
 
         // Nimbus default options
         case .jumpBackIn, .pocket, .recentlySaved:
-            return checkNimbusHomepageFeatures(for: sectionID(from: featureID)).rawValue
+            return checkNimbusHomepageFeatures(from: nimbusLayer).rawValue
+        case .inactiveTabs:
+            return checkNimbusTabTrayFeatures(from: nimbusLayer).rawValue
         default:
             return UserFeaturePreference.disabled.rawValue
         }
@@ -130,39 +137,38 @@ struct FlaggableFeature {
         profile.prefs.setBool(!isActiveForBuild(), forKey: featureKey)
     }
 
-    // MARK: - Private helper functions
+    public func isNimbusActive(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
+        return nimbusLayer.checkNimbusConfigFor(featureID)
+    }
+}
 
-    private func checkNimbusHomepageFeatures(for sectionID: Homescreen.SectionId?, from experiments: NimbusApi = Experiments.shared) -> UserFeaturePreference {
-        guard let sectionID = sectionID else { return UserFeaturePreference.disabled }
+// MARK: - Nimbus related methods
+extension FlaggableFeature {
+    private func checkNimbusTabTrayFeatures(
+        from nimbusLayer: NimbusFeatureFlagLayer
+    ) -> UserFeaturePreference {
 
-        var homePageExperiments = experiments.withVariables(featureId: .homescreen,
-                                                            sendExposureEvent: false) {
-            Homescreen(variables: $0)
-        }
-
-        if let sectionIsEnabled = homePageExperiments.sectionsEnabled[sectionID], sectionIsEnabled {
-            // For pocket's default value, we also need to check the locale being supported.
-            // Here, we want to make sure the section is enabled && locale is supported before
-            // we would return that pocket is enabled
-            if sectionID == .pocket && !Pocket.IslocaleSupported(Locale.current.identifier) {
-                return UserFeaturePreference.disabled
-            }
+        if nimbusLayer.checkNimbusConfigFor(featureID) {
             return UserFeaturePreference.enabled
         }
 
         return UserFeaturePreference.disabled
     }
 
-    private func sectionID(from featureID: FeatureFlagName) -> Homescreen.SectionId? {
-        switch featureID {
-        case .jumpBackIn:
-            return .jumpBackIn
-        case .recentlySaved:
-            return .recentlySaved
-        case .pocket:
-            return .pocket
-        default:
-            return nil
+    private func checkNimbusHomepageFeatures(
+        from nimbusLayer: NimbusFeatureFlagLayer
+    ) -> UserFeaturePreference {
+
+        if nimbusLayer.checkNimbusConfigFor(featureID) {
+            // For pocket's default value, we also need to check the locale being supported.
+            // Here, we want to make sure the section is enabled && locale is supported before
+            // we would return that pocket is enabled
+            if featureID == .pocket && !Pocket.IslocaleSupported(Locale.current.identifier) {
+                return UserFeaturePreference.disabled
+            }
+            return UserFeaturePreference.enabled
         }
+
+        return UserFeaturePreference.disabled
     }
 }

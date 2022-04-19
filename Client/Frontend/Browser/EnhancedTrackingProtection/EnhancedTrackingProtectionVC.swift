@@ -258,8 +258,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
             connectionDetailArrow.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             connectionDetailArrow.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
-            connectionDetailArrow.heightAnchor.constraint(equalToConstant: 12),
-            connectionDetailArrow.widthAnchor.constraint(equalToConstant: 7),
+            connectionDetailArrow.heightAnchor.constraint(equalToConstant: 20),
+            connectionDetailArrow.widthAnchor.constraint(equalToConstant: 20),
 
             connectionButton.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor),
             connectionButton.topAnchor.constraint(equalTo: connectionView.topAnchor),
@@ -365,7 +365,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     @objc func connectionDetailsTapped() {
-        let detailsVC = EnhancedTrackingProtectionDetailsVC(viewModel: viewModel.getDetailsViewModel(withCachedImage: heroImage.image))
+        let detailsVC = EnhancedTrackingProtectionDetailsVC(with: viewModel.getDetailsViewModel(withCachedImage: heroImage.image))
         detailsVC.modalPresentationStyle = .pageSheet
         self.present(detailsVC, animated: true)
     }

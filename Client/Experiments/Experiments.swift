@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Nimbus
+import MozillaAppServices
 import Shared
 import XCGLogger
 
@@ -65,6 +65,32 @@ enum Experiments {
         }
     }
 
+    private static var studiesSetting: Bool? = nil;
+    private static var telemetrySetting: Bool? = nil;
+
+    static func setStudiesSetting(_ setting: Bool) {
+        studiesSetting = setting
+        updateGlobalUserParticipation()
+    }
+
+    static func setTelemetrySetting(_ setting: Bool) {
+        telemetrySetting = setting
+        if !setting {
+            shared.resetTelemetryIdentifiers()
+        }
+        updateGlobalUserParticipation()
+    }
+
+    private static func updateGlobalUserParticipation() {
+        // we only want to reset the globalUserParticipation flag if both settings have been
+        // initialized.
+        if let studiesSetting = studiesSetting, let telemetrySetting = telemetrySetting {
+            // we only enable experiments if users are opting in BOTH
+            // telemetry and studies. If either is opted-out, we make
+            // sure users are not enrolled in any experiments
+            shared.globalUserParticipation = studiesSetting && telemetrySetting
+        }
+    }
     static func setLocalExperimentData(payload: String?, storage: UserDefaults = .standard) {
         guard let payload = payload else {
             storage.removeObject(forKey: NIMBUS_LOCAL_DATA_KEY)
@@ -116,7 +142,7 @@ enum Experiments {
     static func usePreviewCollection(storage: UserDefaults = .standard) -> Bool {
         storage.bool(forKey: NIMBUS_USE_PREVIEW_COLLECTION_KEY)
     }
-    
+
     static var customTargetingAttributes: [String: String] = [:]
 
     static var serverSettings: NimbusServerSettings? = {
@@ -159,7 +185,7 @@ enum Experiments {
         )
 
         let errorReporter: NimbusErrorReporter = { err in
-            Sentry.shared.sendWithStacktrace(
+            SentryIntegration.shared.sendWithStacktrace(
                 message: "Error in Nimbus SDK",
                 tag: SentryTag.nimbus,
                 severity: .error,

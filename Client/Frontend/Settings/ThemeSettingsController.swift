@@ -122,7 +122,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     @objc func systemThemeSwitchValueChanged(control: UISwitch) {
         LegacyThemeManager.instance.systemThemeIsOn = control.isOn
-    
+
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
             UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
@@ -150,7 +150,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     private func makeSlider(parent: UIView) -> UISlider {
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
-        let images = ["menu-NightMode", "themeBrightness"].map { name in
+        let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
             UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: UIColor.theme.browser.tint)
         }
 

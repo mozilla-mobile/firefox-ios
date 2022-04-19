@@ -136,8 +136,8 @@ class TestBrowserDB: XCTestCase {
             }
         }
 
-        func fooBarFactory(_ row: SDRow) -> [String : Any] {
-            var result: [String : Any] = [:]
+        func fooBarFactory(_ row: SDRow) -> [String: Any] {
+            var result: [String: Any] = [:]
             result["id"] = row["id"]
             result["bar"] = row["bar"]
             return result
@@ -153,7 +153,7 @@ class TestBrowserDB: XCTestCase {
         var shortConcurrentQueryRuntimeDuration: Timestamp = 0
 
         let longQueryStartTimestamp = Date.now()
-        let longQueryResult = longQuery.bind { result -> Deferred<Maybe<[[String : Any]]>> in
+        let longQueryResult = longQuery.bind { result -> Deferred<Maybe<[[String: Any]]>> in
             if let results = result.successValue?.asArray() {
                 isLongQueryDone = true
                 longQueryRuntimeDuration = Date.now() - longQueryStartTimestamp
@@ -165,7 +165,7 @@ class TestBrowserDB: XCTestCase {
         }
 
         let shortConcurrentQueryStartTimestamp = Date.now()
-        let shortConcurrentQueryResult = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String : Any]]>> in
+        let shortConcurrentQueryResult = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String: Any]]>> in
             if let results = result.successValue?.asArray() {
                 isShortConcurrentQueryDone = true
                 shortConcurrentQueryRuntimeDuration = Date.now() - shortConcurrentQueryStartTimestamp
@@ -183,5 +183,47 @@ class TestBrowserDB: XCTestCase {
         }
 
         waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func testConcurrentQueriesDealloc() {
+        let expectation = self.expectation(description: "Got all DB results")
+
+        let db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
+        db.run("CREATE TABLE foo (id INTEGER PRIMARY KEY AUTOINCREMENT, bar TEXT)").succeeded()
+
+        _ = db.withConnection { connection -> Void in
+            for i in 0..<1000 {
+                let args: Args = ["bar \(i)"]
+                try connection.executeChange("INSERT INTO foo (bar) VALUES (?)", withArgs: args)
+            }
+        }
+
+        func fooBarFactory(_ row: SDRow) -> [String: Any] {
+            var result: [String: Any] = [:]
+            result["id"] = row["id"]
+            result["bar"] = row["bar"]
+            return result
+        }
+
+        let shortConcurrentQuery = db.runQueryConcurrently("SELECT * FROM foo LIMIT 1", args: nil, factory: fooBarFactory)
+
+        _ = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String: Any]]>> in
+            if let results = result.successValue?.asArray() {
+                expectation.fulfill()
+                return deferMaybe(results)
+            }
+
+            return deferMaybe(DatabaseError(description: "Unable to execute concurrent short-running query"))
+        }
+
+        trackForMemoryLeaks(shortConcurrentQuery)
+
+        waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated, potential memory leak.", file: file, line: line)
+        }
     }
 }

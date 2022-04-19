@@ -20,24 +20,25 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
         button.accessibilityIdentifier = a11y.customizeHome
     }
 
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         applyTheme()
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleNotifications(_:)),
-                                               name: .DisplayThemeChanged,
-                                               object: nil)
+
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - UI Setup
@@ -52,21 +53,23 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
             goToSettingsButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
-    
-    // MARK: - Notifications
-    
-    @objc private func handleNotifications(_ notification: Notification) {
+}
+
+// MARK: - Theme
+extension FxHomeCustomizeHomeView: NotificationThemeable {
+    func applyTheme() {
+        goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
+        goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
+    }
+}
+
+// MARK: - Notifiable
+extension FxHomeCustomizeHomeView: Notifiable {
+    func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
         default: break
         }
-    }
-}
-
-extension FxHomeCustomizeHomeView: NotificationThemeable {
-    func applyTheme() {
-        goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
-        goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
     }
 }

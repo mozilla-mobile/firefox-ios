@@ -21,19 +21,18 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
 
         var sectionItems = [Setting]()
 
-
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                               titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
 
-        let tabGroupsSetting = BoolSetting(with: .groupedTabs,
+        let tabGroupsSetting = BoolSetting(with: .tabTrayGroups,
                                            titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
 
-
-        if featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+        if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
+           featureFlags.isFeatureActiveForNimbus(.inactiveTabs) {
             sectionItems.append(inactiveTabsSetting)
         }
 
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs) {
+        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) {
             sectionItems.append(tabGroupsSetting)
         }
 

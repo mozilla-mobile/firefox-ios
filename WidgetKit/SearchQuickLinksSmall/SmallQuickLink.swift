@@ -31,7 +31,7 @@ struct QuickLinkEntry: TimelineEntry {
     let link: QuickLink
 }
 
-struct SmallQuickLinkView : View {
+struct SmallQuickLinkView: View {
     var entry: IntentProvider.Entry
 
     @ViewBuilder

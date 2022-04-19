@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/nbhasin2/GCDWebServer.git",
         "state": {
           "branch": "master",
-          "revision": "14f9eedb296c5b71fec971d8256ef3bfc20a2245",
+          "revision": "7674c93e79ee5aac17681acace324761325e7346",
           "version": null
         }
       },
@@ -66,11 +66,11 @@
       },
       {
         "package": "MozillaRustComponentsSwift",
-        "repositoryURL": "https://github.com/skhamis/rust-components-swift",
+        "repositoryURL": "https://github.com/mozilla/rust-components-swift.git",
         "state": {
-          "branch": "update-for-fxios",
-          "revision": "1f1aba21157b0da730a5f3c7029bfca448cbec5e",
-          "version": null
+          "branch": null,
+          "revision": "29772c84fd7dd17c9f2981c51ea4ccc04e353b32",
+          "version": "91.1.0"
         }
       },
       {
@@ -78,8 +78,8 @@
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
         "state": {
           "branch": null,
-          "revision": "7ef9a314b12c1a31edb0d09d41fcba93143fe772",
-          "version": "5.4.0"
+          "revision": "d6367439527663d2038ca445a3c3c4e4bac40d60",
+          "version": "5.12.0"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa.git",
         "state": {
           "branch": null,
-          "revision": "bb3c1d852980432907cd314e4fa984fc9a78c9f3",
-          "version": "4.4.3"
+          "revision": "967f04b3cd6989df3f9ced3060481a21646c146d",
+          "version": "7.9.0"
         }
       },
       {

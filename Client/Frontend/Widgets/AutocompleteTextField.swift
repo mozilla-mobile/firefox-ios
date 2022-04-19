@@ -247,8 +247,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.textAlignment = .left
 
         let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
-        frame.origin.x = (enteredTextSize?.width.rounded() ?? 0)
-        frame.size.width = self.frame.size.width - frame.origin.x
+        frame.origin.x = (enteredTextSize?.width.rounded() ?? 0) + textRect(forBounds: bounds).origin.x
+        frame.size.width = self.frame.size.width - clearButtonRect(forBounds: self.frame).size.width - frame.origin.x
         frame.size.height = self.frame.size.height
         label.frame = frame
         return label
@@ -286,9 +286,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()
 
-        let isAtEnd = selectedTextRange?.start == endOfDocument
         let isKeyboardReplacingText = lastReplacement != nil
-        if isKeyboardReplacingText, isAtEnd, markedTextRange == nil {
+        if isKeyboardReplacingText, markedTextRange == nil {
             notifyTextChanged?()
         } else {
             hideCursor = false

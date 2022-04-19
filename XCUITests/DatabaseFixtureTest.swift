@@ -12,7 +12,11 @@ class DatabaseFixtureTest: BaseTestCase {
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
         let key = String(parts[1])
         // for the current test name, add the db fixture used
-        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + fixtures[key]!, LaunchArguments.SkipContextualHintJumpBackIn]
+        launchArguments = [LaunchArguments.SkipIntro,
+                           LaunchArguments.SkipWhatsNew,
+                           LaunchArguments.SkipETPCoverSheet,
+                           LaunchArguments.LoadDatabasePrefix + fixtures[key]!,
+                           LaunchArguments.SkipContextualHints]
         super.setUp()
     }
     /* Disabled due to issue with db: 8281*/
@@ -50,7 +54,7 @@ class DatabaseFixtureTest: BaseTestCase {
         // History list has two cells that are for recently closed and synced devices that should not count as history items,
         // the actual max number is 100
         let loaded = NSPredicate(format: "count == 102")
-        expectation(for: loaded, evaluatedWith: app.tables["History List"].cells, handler: nil)
+        expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
         waitForExpectations(timeout: 30, handler: nil)
     }
 

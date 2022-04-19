@@ -26,8 +26,9 @@ class SaveLoginTest: BaseTestCase {
             waitForTabsButton()
             navigator.goto(TabTray)
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
+//            navigator.performAction(Action.CloseURLBarOpen)
+//            navigator.nowAt(NewTabScreen)
+            navigator.nowAt(URLBarOpen)
         }
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
@@ -38,6 +39,7 @@ class SaveLoginTest: BaseTestCase {
 
     private func openLoginsSettings() {
         navigator.goto(SettingsScreen)
+        waitForExistence(app.cells["SignInToSync"], timeout: 5)
         app.cells["SignInToSync"].swipeUp()
         navigator.goto(LoginsSettings)
 
@@ -228,6 +230,7 @@ class SaveLoginTest: BaseTestCase {
         closeURLBar()
         navigator.goto(LoginsSettings)
         // This only appears the first time
+        sleep(2)
         if app.otherElements.buttons["Continue"].exists {
             app.otherElements.buttons["Continue"].tap()
         }

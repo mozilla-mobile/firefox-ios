@@ -21,7 +21,7 @@ extension Notification.Name {
 
     // Fired when the user finishes navigating to a page and the location has changed
     public static let OnLocationChange = Notification.Name("OnLocationChange")
-  
+
     // MARK: Notification UserInfo Keys
     public static let UserInfoKeyHasSyncableAccount = Notification.Name("UserInfoKeyHasSyncableAccount")
 
@@ -58,7 +58,23 @@ extension Notification.Name {
 
     public static let DisplayThemeChanged = Notification.Name("DisplayThemeChanged")
 
-    public static let TabClosed = Notification.Name("TabClosed")
+    public static let SearchBarPositionDidChange = Notification.Name("SearchBarPositionDidChange")
+
+    public static let WallpaperDidChange = Notification.Name("WallpaperDidChange")
+
+    public static let UpdateLabelOnTabClosed = Notification.Name("UpdateLabelOnTabClosed")
+
+    public static let TopTabsTabClosed = Notification.Name("TopTabsTabClosed")
+
+    public static let TabsTrayDidClose = Notification.Name("TabsTrayDidClose")
+
+    public static let TabsPrivacyModeChanged = Notification.Name("TabsPrivacyModeChanged")
 
     public static let OpenClearRecentHistory = Notification.Name("OpenClearRecentHistory")
+
+    // MARK: Tab manager
+
+    // Tab manager creates a toast for undo recently closed tabs and a notification is
+    // fired when user taps on undo button on Toast
+    public static let DidTapUndoCloseAllTabToast = Notification.Name("DidTapUndoCloseAllTabToast")
 }

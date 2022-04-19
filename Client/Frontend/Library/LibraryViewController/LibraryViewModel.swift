@@ -4,9 +4,10 @@
 
 import Foundation
 
-class LibraryViewModel {
+class LibraryViewModel: FeatureFlagsProtocol {
 
     let profile: Profile
+    let tabManager: TabManager
     let panelDescriptors: [LibraryPanelDescriptor]
 
     fileprivate var panelState = LibraryPanelViewState()
@@ -15,8 +16,13 @@ class LibraryViewModel {
         set { panelState.currentState = newValue }
     }
 
-    init(withProfile profile: Profile) {
+    init(withProfile profile: Profile, tabManager: TabManager) {
         self.profile = profile
-        self.panelDescriptors = LibraryPanels(profile: profile).enabledPanels
+        self.tabManager = tabManager
+        self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
+    }
+
+    var shouldShowSearch: Bool {
+        return self.featureFlags.isFeatureActiveForBuild(.historyGroups) && currentPanelState == .history(state: .mainView)
     }
 }

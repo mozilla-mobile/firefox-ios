@@ -8,12 +8,35 @@ import Shared
 enum AppSettingsDeeplinkOption {
     case contentBlocker
     case customizeHomepage
+    case customizeTabs
+    case customizeToolbar
+    case wallpaper
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsProtocol {
+
+    // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption?
 
+    // MARK: - Initializers
+    init(with profile: Profile,
+         and tabManager: TabManager,
+         delegate: SettingsDelegate?,
+         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil) {
+        self.deeplinkTo = destination
+
+        super.init()
+        self.profile = profile
+        self.tabManager = tabManager
+        self.settingsDelegate = delegate
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -48,6 +71,20 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         case .customizeHomepage:
             viewController = HomePageSettingViewController(prefs: profile.prefs)
+
+        case .customizeTabs:
+            viewController = TabsSettingsViewController()
+
+        case .customizeToolbar:
+            let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
+            viewController = SearchBarSettingsViewController(viewModel: viewModel)
+
+        case .wallpaper:
+            let viewModel = WallpaperSettingsViewModel(with: tabManager, and: WallpaperManager())
+            let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
+            // Push wallpaper settings view controller directly as its not of type settings viewcontroller
+            navigationController?.pushViewController(wallpaperVC, animated: true)
+            return
         }
 
         viewController.profile = profile
@@ -66,13 +103,20 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             HomeSetting(settings: self),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
+            SiriPageSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
                         titleText: .AppSettingsBlockPopups),
+            NoImageModeSetting(settings: self)
            ]
 
-        generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        if SearchBarSettingsViewModel.isEnabled {
+            generalSettings.insert(SearchBarSetting(settings: self), at: 5)
+        }
 
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs) || featureFlags.isFeatureActiveForBuild(.inactiveTabs) {
+        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureActiveForBuild(.tabTrayGroups)
+        let inactiveTabsAreBuildActive = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
+        let inactiveTabsAreNimbusActive = featureFlags.isFeatureActiveForNimbus(.inactiveTabs)
+        if tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 
@@ -164,7 +208,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
-                ResetJumpBackInContextualHint(settings: self),
+                ToggleHistoryGroups(settings: self),
+                ResetContextualHints(settings: self),
                 OpenFiftyTabsDebugOption(settings: self),
                 ExperimentsSettings(settings: self)
             ])]

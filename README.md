@@ -23,7 +23,7 @@ Building the code
 -----------------
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install, Node, and a Python 3 virtualenv for localization scripts:
+1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
     ```shell
     brew update
     brew install node
@@ -40,6 +40,8 @@ Building the code
     ```
 1. Open `Client.xcodeproj` in Xcode.
 1. Build the `Fennec` scheme in Xcode.
+
+Note: In case you have dependencies issues with SPM, you can try to reset package caches and resolve package version.
 
 Building User Scripts
 -----------------

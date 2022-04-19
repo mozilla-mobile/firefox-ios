@@ -59,7 +59,7 @@ class DownloadHelper: NSObject {
         tab.webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
-    
+
     required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let request = request else {
             return nil
@@ -95,12 +95,12 @@ class DownloadHelper: NSObject {
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 
-        var filenameItem: PhotonActionSheetItem
+        var filenameItem: SingleActionViewModel
         if let expectedSize = expectedSize {
             let expectedSizeAndHost = "\(expectedSize) — \(host)"
-            filenameItem = PhotonActionSheetItem(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
+            filenameItem = SingleActionViewModel(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
         } else {
-            filenameItem = PhotonActionSheetItem(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
+            filenameItem = SingleActionViewModel(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
         }
         filenameItem.customHeight = { _ in
             return 80
@@ -111,14 +111,18 @@ class DownloadHelper: NSObject {
             label.lineBreakMode = .byCharWrapping
         }
 
-        let downloadFileItem = PhotonActionSheetItem(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
+        let downloadFileItem = SingleActionViewModel(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
             self.browserViewController.downloadQueue.enqueue(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
 
-        let actions = [[filenameItem], [downloadFileItem]]
+        let actions = [[filenameItem.items], [downloadFileItem.items]]
+        let viewModel = PhotonActionSheetViewModel(actions: actions,
+                                                   closeButtonTitle: .CancelString,
+                                                   title: download.filename,
+                                                   modalStyle: .overCurrentContext)
 
-        browserViewController.presentSheetWith(title: download.filename, actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: .CancelString, suppressPopover: true)
+        browserViewController.presentSheetWith(viewModel: viewModel, on: browserViewController, from: browserViewController.urlBar)
     }
 }
 
@@ -126,18 +130,36 @@ class OpenPassBookHelper: NSObject {
     fileprivate var url: URL
 
     fileprivate let browserViewController: BrowserViewController
+    fileprivate let cookieStore: WKHTTPCookieStore
+    fileprivate lazy var session = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: .ephemeral)
 
-    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
+    required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let mimeType = response.mimeType, mimeType == MIMEType.Passbook, PKAddPassesViewController.canAddPasses(),
-            let responseURL = response.url, !forceDownload else { return nil }
+              let responseURL = response.url, !forceDownload else { return nil }
         self.url = responseURL
         self.browserViewController = browserViewController
+        self.cookieStore = cookieStore
         super.init()
     }
 
     func open() {
-        guard let passData = try? Data(contentsOf: url) else { return }
+        // add webview cookies to download session
+        self.cookieStore.getAllCookies { [weak self] cookies in
+            guard let self = self else { return }
+            for cookie in cookies {
+                self.session.configuration.httpCookieStorage?.setCookie(cookie)
+            }
+            self.session.dataTask(with: self.url) { (data, response, error) in
+                guard let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data else {
+                    self.presentErrorAlert()
+                    return
+                }
+                self.open(passData: data)
+            }.resume()
+        }
+    }
 
+    private func open(passData: Data) {
         do {
             let pass = try PKPass(data: passData)
 
@@ -147,16 +169,24 @@ class OpenPassBookHelper: NSObject {
             } else {
                 if let addController = PKAddPassesViewController(pass: pass) {
                     browserViewController.present(addController, animated: true, completion: nil)
+                } else {
+                    presentErrorAlert(pass: pass)
                 }
             }
         } catch {
-            let alertController = UIAlertController(title: .UnableToAddPassErrorTitle, message: .UnableToAddPassErrorMessage, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss, style: .cancel) { (action) in
-                    // Do nothing.
-            })
-            browserViewController.present(alertController, animated: true, completion: nil)
+            presentErrorAlert()
             return
         }
+    }
+
+    private func presentErrorAlert(pass: PKPass? = nil) {
+        let detail = pass == nil ? "" : " \(pass!.localizedName) \(pass!.localizedDescription)"
+        let message = .UnableToAddPassErrorMessage + detail
+        let alertController = UIAlertController(title: .UnableToAddPassErrorTitle, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss, style: .cancel) { (action) in
+            // Do nothing.
+        })
+        browserViewController.present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -169,10 +199,10 @@ class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource {
 
     required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let mimeType = response.mimeType,
-                 (mimeType == MIMEType.USDZ || mimeType == MIMEType.Reality),
-                 let responseURL = response.url as NSURL?,
-                 !forceDownload,
-                 !canShowInWebView else { return nil }
+              (mimeType == MIMEType.USDZ || mimeType == MIMEType.Reality),
+              let responseURL = response.url as NSURL?,
+              !forceDownload,
+              !canShowInWebView else { return nil }
         self.url = responseURL
         self.browserViewController = browserViewController
         self.previewController = QLPreviewController()

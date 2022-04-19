@@ -63,7 +63,7 @@ final public class BreachAlertsManager {
         // 1b. local file exists, so load from that
         guard let fileData = FileManager.default.contents(atPath: cacheURL.path) else {
             completion(Maybe(failure: BreachAlertsError(description: "failed to get data from breach.json")))
-            Sentry.shared.send(message: "BreachAlerts: failed to get data from breach.json")
+            SentryIntegration.shared.send(message: "BreachAlerts: failed to get data from breach.json")
             try? FileManager.default.removeItem(at: cacheURL) // bad file, so delete it
             self.fetchAndSaveBreaches(completion)
             return

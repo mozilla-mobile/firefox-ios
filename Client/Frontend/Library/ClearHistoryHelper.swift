@@ -8,28 +8,31 @@ import WebKit
 class ClearHistoryHelper {
 
     private let profile: Profile
+    private let tabManager: TabManager
 
-    init(profile: Profile) {
+    init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
+        self.tabManager = tabManager
     }
 
     /// Present a prompt that will enable the user to choose how he wants to clear his recent history
     /// - Parameters:
     ///   - viewController: The view controller the clear history prompt is shown on
     ///   - didComplete: Did complete a recent history clear up action
-    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: @escaping () -> Void) {
+    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: ((Date?) -> Void)? = nil) {
         func remove(hoursAgo: Int) {
             if let date = Calendar.current.date(byAdding: .hour, value: -hoursAgo, to: Date()) {
                 let types = WKWebsiteDataStore.allWebsiteDataTypes()
                 WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date, completionHandler: {})
 
-                self.profile.history.removeHistoryFromDate(date).uponQueue(.main) { _ in
-                    didComplete()
+                self.profile.history.removeHistoryFromDate(date).uponQueue(.global(qos: .userInteractive)) { _ in
+                    guard let completion = didComplete else { return }
+                    completion(date)
                 }
             }
         }
 
-        let alert = UIAlertController(title: .ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: .LibraryPanel.History.ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
 
         // This will run on the iPad-only, and sets the alert to be centered with no arrow.
         guard let view = viewController.view else { return }
@@ -51,10 +54,13 @@ class ClearHistoryHelper {
         alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
             let types = WKWebsiteDataStore.allWebsiteDataTypes()
             WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
-            self.profile.history.clearHistory().uponQueue(.main) { _ in
-                didComplete()
+            self.profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { item in
+                guard let completion = didComplete else { return }
+                completion(nil)
             }
             self.profile.recentlyClosedTabs.clearTabs()
+            self.tabManager.clearAllTabsHistory()
+            NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
         }))
         let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
         alert.addAction(cancelAction)
