@@ -427,7 +427,7 @@ extension GridTabViewController {
     }
 
     func dismissTabTray() {
-        _ = self.navigationController?.dismiss(animated: true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 
@@ -460,6 +460,9 @@ extension GridTabViewController {
 extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
+            if tab.isFxHomeTab {
+                notificationCenter.post(name: .TabsTrayDidSelectHomeTab, object: nil)
+            }
             tabManager.selectTab(tab)
             dismissTabTray()
         }
