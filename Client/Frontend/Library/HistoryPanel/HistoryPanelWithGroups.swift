@@ -401,6 +401,9 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
+        // Adding support to delete item during search in next ticket
+        guard !viewModel.isSearchInProgress else { return nil }
+
         // For UX consistency, every cell in history panel SHOULD have a trailing action.
         let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
             guard let self = self else {
@@ -667,12 +670,6 @@ extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
     // Happens WAY too often. We should consider fetching the next set when the user HITS the bottom instead.
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard !viewModel.isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }
-
-        guard !viewModel.isSearchInProgress else {
-            viewModel.updateSearchOffset()
-            performSearch(term: searchbar.text ?? "")
-            return
-        }
 
         fetchDataAndUpdateLayout(animating: false)
     }

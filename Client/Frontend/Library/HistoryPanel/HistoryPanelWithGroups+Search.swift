@@ -30,7 +30,6 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
 
     func startSearchState() {
         bottomStackView.isHidden = false
-        searchbar.text = ""
         searchbar.becomeFirstResponder()
         viewModel.isSearchInProgress = true
     }
