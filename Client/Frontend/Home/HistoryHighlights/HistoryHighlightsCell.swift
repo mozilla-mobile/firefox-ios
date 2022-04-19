@@ -129,10 +129,10 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = options.title
         if let descriptionCount = options.description {
             itemDescription.text = descriptionCount
+            itemDescription.isHidden = false
         }
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
-        itemDescription.isHidden = itemDescription.text?.isEmpty ?? true
 
         if let corners = options.corners {
             contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
@@ -149,6 +149,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
         shadowViewLayer?.removeFromSuperlayer()
         heroImage.image = nil
+        itemDescription.isHidden = true
     }
 
     // MARK: - Setup Helper methods
