@@ -743,6 +743,10 @@ extension FirefoxHomeViewController: FirefoxHomeContextMenuHelperDelegate {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool) {
         homePanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
+
+    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
+    }
 }
 
 // MARK: - Popover Presentation Delegate
