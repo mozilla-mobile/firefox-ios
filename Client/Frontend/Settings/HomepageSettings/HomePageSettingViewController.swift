@@ -35,8 +35,11 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     var isHistoryHighlightsSectionEnabled: Bool {
-        // TODO: If this feature is going behind a Nimbus flag, that should be added here
-        return featureFlags.isFeatureActiveForBuild(.historyHighlights)
+        guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
+              featureFlags.isFeatureActiveForNimbus(.historyHighlights)
+        else { return false }
+
+        return true
     }
 
     // MARK: - Initializers

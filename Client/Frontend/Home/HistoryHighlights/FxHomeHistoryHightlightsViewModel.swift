@@ -111,8 +111,12 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureActiveForBuild(.historyHighlights)
-        && featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled && !isPrivate
+        guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
+              featureFlags.isFeatureActiveForNimbus(.historyHighlights),
+              featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled
+        else { return false }
+
+        return !isPrivate
     }
 
     var hasData: Bool {
