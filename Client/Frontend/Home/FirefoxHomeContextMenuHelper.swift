@@ -9,6 +9,7 @@ import Storage
 protocol FirefoxHomeContextMenuHelperDelegate: UIViewController {
     func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
+    func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
 }
 
 extension FirefoxHomeContextMenuHelperDelegate {
@@ -41,24 +42,49 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with sourceView: UIView?, sectionType: FirefoxHomeSectionType) -> [PhotonRowActions]? {
-        guard let siteURL = URL(string: site.url) else { return nil }
-
-        guard var actions = getDefaultContextMenuActions(for: site,
-                                                         delegate: delegate,
-                                                         sectionType: sectionType,
-                                                         isZeroSearch: viewModel.isZeroSearch)
-        else { return nil }
-
-        let bookmarkAction = getBookmarkAction(site: site)
-        let shareAction = getShareAction(siteURL: siteURL, sourceView: sourceView)
-        actions.append(contentsOf: [bookmarkAction,
-                                    shareAction])
-
-        if sectionType == .topSites {
-            actions.append(contentsOf: viewModel.topSiteViewModel.getTopSitesAction(site: site))
+        var actions = [PhotonRowActions]()
+        if sectionType == .topSites, let topSitesActions = getTopSitesActions(site: site) {
+            actions = topSitesActions
+        } else if sectionType == .pocket, let pocketActions = getPocketActions(site: site, with: sourceView) {
+            actions = pocketActions
         }
 
         return actions
+    }
+
+    // MARK: - Default actions
+
+    func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
+        return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
+            self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }.items
+    }
+
+    // MARK: - Pocket
+
+    private func getPocketActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
+        guard let siteURL = site.url.asURL else { return nil }
+
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .pocket)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
+        let shareAction = getShareAction(siteURL: siteURL, sourceView: sourceView)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
+    }
+
+    private func getOpenInNewTabAction(siteURL: URL, sectionType: FirefoxHomeSectionType) -> PhotonRowActions {
+        return SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
+            self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+
+            if sectionType == .pocket {
+                let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: self.viewModel.isZeroSearch)
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .pocketStory,
+                                             extras: originExtras)
+            }
+        }.items
     }
 
     private func getBookmarkAction(site: Site) -> PhotonRowActions {
@@ -118,11 +144,96 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         }).items
     }
 
+    // MARK: - Top sites
+
+    func getTopSitesActions(site: Site) -> [PhotonRowActions]? {
+        guard let siteURL = site.url.asURL else { return nil }
+
+        let topSiteActions: [PhotonRowActions]
+        if let _ = site as? PinnedSite {
+            topSiteActions = [getRemovePinTopSiteAction(site: site),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getRemoveTopSiteAction(site: site)]
+
+        } else if let _ = site as? SponsoredTile {
+            topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getSettingsAction(),
+                              getSponsoredContentAction()]
+
+        } else {
+            topSiteActions = [getPinTopSiteAction(site: site),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL),
+                              getRemoveTopSiteAction(site: site)]
+        }
+        return topSiteActions
+    }
+
+    // Removes the site out of the top sites. If site is pinned it removes it from pinned and remove
+    private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
+        return SingleActionViewModel(title: .RemoveContextMenuTitle,
+                                     iconString: ImageIdentifiers.actionRemove,
+                                     tapHandler: { _ in
+
+            self.viewModel.topSiteViewModel.removePinTopSite(site)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.viewModel.topSiteViewModel.hideURLFromTopSites(site)
+            }
+
+            self.sendTopSiteContextualTelemetry(type: .remove)
+        }).items
+    }
+
+    private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
+        return SingleActionViewModel(title: .AddToShortcutsActionTitle,
+                                     iconString: ImageIdentifiers.addShortcut,
+                                     tapHandler: { _ in
+            self.viewModel.topSiteViewModel.pinTopSite(site)
+            self.sendTopSiteContextualTelemetry(type: .pin)
+        }).items
+    }
+
+    // Unpin removes it from the location it's in. Still can appear in the top sites as unpin
+    private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
+        return SingleActionViewModel(title: .RemoveFromShortcutsActionTitle,
+                                     iconString: ImageIdentifiers.removeFromShortcut,
+                                     tapHandler: { _ in
+            self.viewModel.topSiteViewModel.removePinTopSite(site)
+            self.sendTopSiteContextualTelemetry(type: .unpin)
+        }).items
+    }
+
+    private func getSettingsAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, tapHandler: { _ in
+            self.delegate?.homePanelDidRequestToOpenSettings(at: .customizeTopSites)
+            self.sendTopSiteContextualTelemetry(type: .settings)
+        }).items
+    }
+
+    private func getSponsoredContentAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
+            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3469 SUMO page here is a placeholder, real page needs to be replaced
+            guard let url = URL(string: "https://support.mozilla.org/") else { return }
+            self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
+            self.sendTopSiteContextualTelemetry(type: .sponsoredSupport)
+        }).items
+    }
+
     private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping () -> Void) {
         viewModel.profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
             let isBookmarked = result.successValue ?? false
             site.setBookmarked(isBookmarked)
             completionHandler()
         }
+    }
+
+    // MARK: Telemetry
+
+    enum ContextualActionType: String {
+        case remove, unpin, pin, settings, sponsoredSupport
+    }
+
+    private func sendTopSiteContextualTelemetry(type: ContextualActionType) {
+        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
     }
 }
