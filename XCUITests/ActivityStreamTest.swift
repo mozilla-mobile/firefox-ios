@@ -85,6 +85,9 @@ class ActivityStreamTest: BaseTestCase {
         // A new site has been added to the top sites
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
 
+        waitForExistence(app.buttons["urlBar-cancel"])
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(BrowserTab)
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
