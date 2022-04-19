@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import SwiftyJSON
 
 // These are taken from the Places docs
 // http://mxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsINavHistoryService.idl#1187

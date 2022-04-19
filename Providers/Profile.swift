@@ -18,7 +18,6 @@ import MozillaAppServices
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT
-    import SwiftyJSON
 #endif
 
 private let log = Logger.syncLogger

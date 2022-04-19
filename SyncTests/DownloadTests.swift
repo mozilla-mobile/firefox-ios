@@ -7,7 +7,6 @@ import Shared
 @testable import Sync
 
 import XCTest
-import SwiftyJSON
 
 func identity<T>(x: T) -> T {
     return x
