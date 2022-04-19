@@ -5,8 +5,6 @@
 import Foundation
 import Shared
 
-import SwiftyJSON
-
 public let KeyLength = 32
 
 open class KeyBundle: Hashable {

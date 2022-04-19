@@ -6,7 +6,6 @@
 @testable import Client
 import Foundation
 
-import SwiftyJSON
 import XCTest
 
 class FxAPushMessageTest: XCTestCase {

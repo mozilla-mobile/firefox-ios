@@ -5,7 +5,6 @@
 import Foundation
 import WebKit
 import Shared
-import SwiftyJSON
 @testable import Client
 
 class SessionRestoreTests: KIFTestCase {
