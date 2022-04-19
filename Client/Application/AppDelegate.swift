@@ -121,6 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
+        FeatureFlagsManager.shared.updateNimbusLayer()
 
         setupRootViewController()
 

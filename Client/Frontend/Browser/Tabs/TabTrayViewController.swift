@@ -167,7 +167,7 @@ class TabTrayViewController: UIViewController {
                            observing: [.DisplayThemeChanged,
                                        .ProfileDidStartSyncing,
                                        .ProfileDidFinishSyncing,
-                                       .TabClosed])
+                                       .UpdateLabelOnTabClosed])
 
     }
 
@@ -355,16 +355,18 @@ class TabTrayViewController: UIViewController {
 // MARK: - Notifiable protocol
 extension TabTrayViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
-            updateButtonTitle(notification)
-        case .TabClosed:
-            countLabel.text = viewModel.normalTabsCount
-            iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), forSegmentAt: 0)
-        default:
-            break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
+                self?.updateButtonTitle(notification)
+            case .UpdateLabelOnTabClosed:
+                guard let label = self?.countLabel else { return }
+                self?.countLabel.text = self?.viewModel.normalTabsCount
+                self?.iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: label), forSegmentAt: 0)
+            default: break
+            }
         }
     }
 }
@@ -406,6 +408,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        notificationCenter.post(name: .TabsTrayDidClose, object: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 }
@@ -425,6 +428,7 @@ extension TabTrayViewController {
     }
 
     @objc func didTapDone() {
+        notificationCenter.post(name: .TabsTrayDidClose, object: nil)
         self.dismiss(animated: true, completion: nil)
     }
 }

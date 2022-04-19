@@ -111,6 +111,7 @@ class ContextualHintViewModel {
 
     func stopTimer() {
         timer?.invalidate()
+        timer = nil
     }
 
     // MARK: Text

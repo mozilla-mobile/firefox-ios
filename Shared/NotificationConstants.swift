@@ -62,7 +62,11 @@ extension Notification.Name {
 
     public static let WallpaperDidChange = Notification.Name("WallpaperDidChange")
 
-    public static let TabClosed = Notification.Name("TabClosed")
+    public static let UpdateLabelOnTabClosed = Notification.Name("UpdateLabelOnTabClosed")
+
+    public static let TopTabsTabClosed = Notification.Name("TopTabsTabClosed")
+
+    public static let TabsTrayDidClose = Notification.Name("TabsTrayDidClose")
 
     public static let TabsPrivacyModeChanged = Notification.Name("TabsPrivacyModeChanged")
 

@@ -908,6 +908,28 @@ history:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-12-01"
+  search_tap:
+    type: event
+    description: |
+      Recorded when a user taps on search icon in history panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9438
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10494
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-01"
+  delete_tap:
+    type: event
+    description: |
+      Recorded when a user taps on trash icon in history panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10020
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10494
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-01"
 
 # Legacy IDs for continuity and for deletion-request
 legacy.ids:
