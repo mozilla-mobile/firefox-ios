@@ -10,6 +10,7 @@ enum AppSettingsDeeplinkOption {
     case customizeHomepage
     case customizeTabs
     case customizeToolbar
+    case customizeTopSites
     case wallpaper
 }
 
@@ -84,6 +85,13 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             let wallpaperVC = WallpaperSettingsViewController(with: viewModel)
             // Push wallpaper settings view controller directly as its not of type settings viewcontroller
             navigationController?.pushViewController(wallpaperVC, animated: true)
+            return
+
+        case .customizeTopSites:
+            let topSitesVC = TopSitesRowCountSettingsController(prefs: profile.prefs)
+            topSitesVC.profile = profile
+            // Push top sites settings view controller directly as its not of type settings viewcontroller
+            navigationController?.pushViewController(topSitesVC, animated: false)
             return
         }
 

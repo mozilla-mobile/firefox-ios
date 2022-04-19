@@ -67,7 +67,7 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
         group.notify(queue: dataQueue) {
             // Pre-loading the data with a default number of tiles so we always show section when needed
-            self.calculateTopSiteData(numberOfTilesPerRow: 4)
+            self.calculateTopSiteData(numberOfTilesPerRow: 8)
 
             dataLoadingCompletion?()
         }

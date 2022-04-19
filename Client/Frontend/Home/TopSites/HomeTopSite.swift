@@ -60,4 +60,37 @@ final class HomeTopSite {
             self.imageLoaded?(image)
         }
     }
+
+    // MARK: Telemetry
+
+    private var sentSiteImpressionTelemetry = false
+
+    func impressionTracking() {
+        guard isSponsoredTile, !sentSiteImpressionTelemetry else { return }
+
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .topSiteImpression,
+                                     value: nil,
+                                     extras: getSiteExtra())
+        sentSiteImpressionTelemetry = true
+    }
+
+    func getTelemetrySiteType() -> String {
+        if isPinned && isGoogleGUID {
+            return "google"
+        } else if isPinned {
+            return "user-added"
+        } else if isSuggested {
+            return "suggested"
+        } else if isSponsoredTile {
+            return "sponsored"
+        }
+
+        return "history-based"
+    }
+
+    private func getSiteExtra() -> [String: String] {
+        return [TelemetryWrapper.EventExtraKey.topSiteUrl.rawValue: "\(site.url)"]
+    }
 }
