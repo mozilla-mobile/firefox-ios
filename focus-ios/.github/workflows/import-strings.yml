@@ -34,6 +34,7 @@ jobs:
     - name: Update new strings
       run: |-
         git diff || (git add Blockzilla/*/*.lproj/* Blockzilla/*.lproj/*)
+        git restore Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
