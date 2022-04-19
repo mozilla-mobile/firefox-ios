@@ -24,7 +24,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100
+    case v39, v96, v97, v98, v99, v100, v101
 
     // Used for all cases before version 39.
     case unknown
@@ -170,6 +170,11 @@ extension String {
 
         public struct YourLibrary {
 
+        }
+
+        public struct ContextualMenu {
+            public static let Settings = MZLocalizedString("FirefoxHomepage.ContextualMenu.Settings.v101", value: "Settings", comment: "The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings.", lastUpdated: .v101)
+            public static let SponsoredContent = MZLocalizedString("FirefoxHomepage.ContextualMenu.SponsoredContent.v101", value: "Our Sponsors & Your Privacy", comment: "The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works.", lastUpdated: .v101)
         }
     }
 }

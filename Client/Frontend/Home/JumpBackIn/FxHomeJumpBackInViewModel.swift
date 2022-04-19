@@ -32,21 +32,16 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     private var recentGroups: [ASGroup<Tab>]?
     private let isZeroSearch: Bool
     private let profile: Profile
-    private let nimbus: FxNimbus
     private let tabManager: TabManager
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var isPrivate: Bool
 
-    private lazy var homescreen = nimbus.features.homescreenFeature.value()
-
     init(isZeroSearch: Bool = false,
          profile: Profile,
          isPrivate: Bool,
-         nimbus: FxNimbus,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
     ) {
         self.profile = profile
-        self.nimbus = nimbus
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
         self.tabManager = tabManager
@@ -181,7 +176,7 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
 
     var isEnabled: Bool {
         guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
-              homescreen.sectionsEnabled[.jumpBackIn] == true,
+              featureFlags.isFeatureActiveForNimbus(.jumpBackIn),
               featureFlags.userPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
         else { return false }
 

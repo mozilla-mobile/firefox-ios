@@ -10,6 +10,7 @@ enum AppSettingsDeeplinkOption {
     case customizeHomepage
     case customizeTabs
     case customizeToolbar
+    case customizeTopSites
     case wallpaper
 }
 
@@ -18,16 +19,13 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption?
-    var nimbus: FxNimbus
 
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
          delegate: SettingsDelegate?,
-         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil,
-         with nimbus: FxNimbus = FxNimbus.shared) {
+         deeplinkingTo destination: AppSettingsDeeplinkOption? = nil) {
         self.deeplinkTo = destination
-        self.nimbus = nimbus
 
         super.init()
         self.profile = profile
@@ -88,6 +86,13 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             // Push wallpaper settings view controller directly as its not of type settings viewcontroller
             navigationController?.pushViewController(wallpaperVC, animated: true)
             return
+
+        case .customizeTopSites:
+            let topSitesVC = TopSitesRowCountSettingsController(prefs: profile.prefs)
+            topSitesVC.profile = profile
+            // Push top sites settings view controller directly as its not of type settings viewcontroller
+            navigationController?.pushViewController(topSitesVC, animated: false)
+            return
         }
 
         viewController.profile = profile
@@ -118,8 +123,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         let tabTrayGroupsAreBuildActive = featureFlags.isFeatureActiveForBuild(.tabTrayGroups)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
-        if let inactiveTabsAreNimbusActive = nimbus.features.tabTrayFeature.value().sectionsEnabled[.inactiveTabs],
-           tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
+        let inactiveTabsAreNimbusActive = featureFlags.isFeatureActiveForNimbus(.inactiveTabs)
+        if tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 

@@ -31,30 +31,4 @@ extension HomePanelContextMenu {
 
         return contextMenu
     }
-
-    func getDefaultContextMenuActions(for site: Site,
-                                      delegate: FirefoxHomeContextMenuHelperDelegate?,
-                                      sectionType: FirefoxHomeSectionType,
-                                      isZeroSearch: Bool) -> [PhotonRowActions]? {
-
-        guard let siteURL = site.url.asURL else { return nil }
-
-        let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle, iconString: ImageIdentifiers.newTab) { _ in
-            delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-
-            if sectionType == .pocket {
-                let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .pocketStory,
-                                             extras: originExtras)
-            }
-        }.items
-
-        let openInNewPrivateTabAction = SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
-            delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }.items
-
-        return [openInNewTabAction, openInNewPrivateTabAction]
-    }
 }
