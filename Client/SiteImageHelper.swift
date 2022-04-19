@@ -129,18 +129,8 @@ class SiteImageHelper {
                     return
                 }
 
-                image.averageColor() { color in
-                    // If a color is perceived as too dark, we put a white background
-                    guard let color = color, color.luma < 0.2 else {
-                        SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
-                        completion(image, true)
-                        return
-                    }
-                    let coloredBackgroundImage = image.getNewImage(backgroundColor: .white)
-
-                    SiteImageHelper.cache.setObject(coloredBackgroundImage ?? image, forKey: faviconCacheKey)
-                    completion(coloredBackgroundImage, true)
-                }
+                SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
+                completion(image, true)
             })
         }
     }
