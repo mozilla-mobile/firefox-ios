@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SwiftyJSON
 @testable import Sync
 
 import XCTest

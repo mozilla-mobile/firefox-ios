@@ -9,6 +9,7 @@ import Storage
 import UIKit
 
 import XCTest
+import SwiftyJSON
 
 class RecordTests: XCTestCase {
     func testGUIDs() {

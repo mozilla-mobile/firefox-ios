@@ -7,6 +7,8 @@ import Shared
 @testable import Sync
 
 import XCTest
+import SwiftyJSON
+
 // Always return a gigantic encoded payload.
 private func massivify<T>(_ record: Record<T>) -> JSON? {
     return JSON([
