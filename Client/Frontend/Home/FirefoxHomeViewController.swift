@@ -71,6 +71,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                            observing: [.HomePanelPrefsChanged,
                                        .TopTabsTabClosed,
                                        .TabsTrayDidClose,
+                                       .TabsTrayDidSelectHomeTab,
                                        .TabsPrivacyModeChanged])
     }
 
@@ -628,10 +629,14 @@ extension FirefoxHomeViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
     func reloadAll() {
-        self.collectionView.reloadData()
-
         DispatchQueue.global(qos: .userInteractive).async {
             self.viewModel.updateData()
+            // Collection view should only actually reload its data once the various
+            // sections have data to display. As such, it must be done after the
+            // `updateData` call, which is, itself, async.
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
 }
@@ -782,7 +787,9 @@ extension FirefoxHomeViewController: Notifiable {
             switch notification.name {
             case .TabsPrivacyModeChanged:
                 self?.adjustPrivacySensitiveSections(notification: notification)
-            case .TabsTrayDidClose, .TopTabsTabClosed:
+            case .TabsTrayDidClose,
+                    .TopTabsTabClosed,
+                    .TabsTrayDidSelectHomeTab:
                 self?.reloadAll()
             case .HomePanelPrefsChanged:
                 self?.reloadAll()
