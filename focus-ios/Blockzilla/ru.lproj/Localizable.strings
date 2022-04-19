@@ -377,7 +377,7 @@
 "Settings.Search.NewSearchEngineAdded" = "Добавлена новая поисковая система.";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Восстановить набор поисковых систем по умолчанию";
+"Settings.Search.RestoreEngine" = "Восстановить поисковые системы по умолчанию";
 
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "Имя поисковой системы";

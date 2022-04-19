@@ -259,6 +259,9 @@
 /* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Incognito.Description" = "%@ d iminig n tbaḍnit yettwagen i ummesten mgal aḍfar akked usewḥel n ugbur.";
 
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Ugar n tunigin tusligt tafessast";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Swel iɣewwaren akken ara tferneḍ acḥal i terniḍ tebḍiḍ-t neɣ tesneqdeḍ.";
 

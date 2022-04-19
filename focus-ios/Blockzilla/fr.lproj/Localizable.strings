@@ -253,6 +253,12 @@
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Effacez votre historique de navigation, vos mots de passe, vos cookies, et empêchez les publicités indésirables de vous suivre d’un simple clic !";
 
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Faites passer votre navigation privée à la vitesse supérieure.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Bienvenue dans Firefox %@ !";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Annuler";
 
@@ -609,6 +615,12 @@
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Ces paramètres par défaut offrent une protection renforcée. Mais il est facile de modifier les paramètres pour répondre à vos besoins spécifiques.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Appuyez sur la corbeille à tout moment pour supprimer toute trace de votre session en cours.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Vous êtes protégé·e !";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Utilisez Touch ID pour revenir sur %@";
