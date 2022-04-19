@@ -7,7 +7,6 @@ import Shared
 @testable import Sync
 
 import XCTest
-import SwiftyJSON
 
 class InfoTests: XCTestCase {
     func testSame() {

@@ -9,7 +9,6 @@ import Storage
 import XCGLogger
 
 import XCTest
-import SwiftyJSON
 
 private let log = Logger.syncLogger
 

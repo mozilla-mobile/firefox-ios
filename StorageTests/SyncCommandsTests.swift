@@ -8,7 +8,6 @@ import Shared
 @testable import Client
 
 import XCTest
-import SwiftyJSON
 
 func byValue(_ a: SyncCommand, b: SyncCommand) -> Bool {
     return a.value < b.value

@@ -10,7 +10,6 @@ import Shared
 import MozillaAppServices
 
 import Foundation
-import SwiftyJSON
 import XCTest
 
 import Glean
