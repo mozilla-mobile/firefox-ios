@@ -80,8 +80,8 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
-        waitForExistence(app.cells.staticTexts["mozilla"])
-        XCTAssertTrue(app.cells.staticTexts["mozilla"].exists)
+        waitForExistence(app.cells.staticTexts["Mozilla"])
+        XCTAssertTrue(app.cells.staticTexts["Mozilla"].exists)
         // A new site has been added to the top sites
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
 
@@ -89,7 +89,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
-        XCTAssertFalse(app.cells.staticTexts["mozilla"].exists)
+        XCTAssertFalse(app.cells.staticTexts["Mozilla"].exists)
     }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
