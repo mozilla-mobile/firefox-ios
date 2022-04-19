@@ -21,8 +21,10 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
         case main
     }
 
+    let profile: Profile
     let viewModel: SearchGroupedItemsViewModel
     var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     lazy private var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -47,8 +49,9 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
 
     // MARK: - Inits
 
-    init(viewModel: SearchGroupedItemsViewModel) {
+    init(viewModel: SearchGroupedItemsViewModel, profile: Profile) {
         self.viewModel = viewModel
+        self.profile = profile
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -118,9 +121,9 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
                 cell.descriptionLabel.isHidden = false
                 cell.leftImageView.layer.borderColor = ThemeManager.shared.currentTheme.colours.layer4.cgColor
                 cell.leftImageView.layer.borderWidth = 0.5
-                cell.leftImageView.contentMode = .center
-                cell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-                    cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: 24, height: 24))
+                self.getFavIcon(for: site) { [weak cell] image in
+                    cell?.leftImageView.image = image
+                    cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
                 }
 
                 return cell
@@ -128,6 +131,12 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
 
             // This shouldn't happen! An empty row!
             return UITableViewCell()
+        }
+    }
+
+    private func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
+        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
+            completion(image)
         }
     }
 
@@ -186,6 +195,10 @@ extension SearchGroupedItemsViewController: UITableViewDelegate {
                                      object: .selectedHistoryItem,
                                      value: .historyPanelGroupedItem,
                                      extras: nil)
+
+        if viewModel.presenter == .recentlyVisited {
+            dismiss(animated: true, completion: nil)
+        }
     }
 }
 

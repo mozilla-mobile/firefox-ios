@@ -127,10 +127,12 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     // MARK: - Public methods
     public func updateCell(with options: HistoryHighlightsViewModel) {
         itemTitle.text = options.title
-        itemDescription.text = options.description
+        if let descriptionCount = options.description {
+            itemDescription.text = descriptionCount
+        }
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
-        itemDescription.isHidden = itemDescription.text?.isEmpty ?? false
+        itemDescription.isHidden = itemDescription.text?.isEmpty ?? true
 
         if let corners = options.corners {
             contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)

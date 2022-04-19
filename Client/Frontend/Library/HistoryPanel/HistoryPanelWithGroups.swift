@@ -340,17 +340,16 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
     private func configureASGroupCell(_ asGroup: ASGroup<Site>, _ cell: TwoLineImageOverlayCell) -> TwoLineImageOverlayCell {
         if let groupCount = asGroup.description {
-            cell.descriptionLabel.text = "\(groupCount) sites"
+            cell.descriptionLabel.text = groupCount
         }
 
         cell.titleLabel.text = asGroup.displayTitle
         cell.leftImageView.layer.borderWidth = 0
         cell.leftImageView.contentMode = .center
         cell.chevronAccessoryView.isHidden = false
-        cell.leftImageView.setImageAndBackground(forIcon: nil, website: nil) { [weak cell] in
-            cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
-            cell?.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)
-        }
+        cell.leftImageView.contentMode = .scaleAspectFit
+        cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)
+        cell.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
 
         return cell
     }
@@ -553,7 +552,7 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
 
     private func handleASGroupItemTapped(asGroupItem: ASGroup<Site>) {
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel)
+        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
         asGroupListVC.title = asGroupItem.displayTitle
 

@@ -620,7 +620,7 @@ extension FirefoxHomeViewController {
         let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
 
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel)
+        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: viewModel.profile)
 
         let dismissableController: DismissableNavigationViewController
         dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)
