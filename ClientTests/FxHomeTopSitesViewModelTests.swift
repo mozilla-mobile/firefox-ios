@@ -176,8 +176,7 @@ extension FxHomeTopSitesViewModelTests {
         let nimbusMock = NimbusMock()
 
         let viewModel = FxHomeTopSitesViewModel(profile: profile,
-                                                isZeroSearch: false,
-                                                nimbus: nimbusMock)
+                                                isZeroSearch: false)
 
         if useManager {
             let managerStub = FxHomeTopSitesManagerStub(profile: profile)

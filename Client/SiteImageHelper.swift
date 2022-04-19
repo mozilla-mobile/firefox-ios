@@ -23,14 +23,18 @@ class SiteImageHelper {
 
     private static let cache = NSCache<NSString, UIImage>()
     private let throttler = Throttler(seconds: 0.5, on: .main)
-    private let profile: Profile
+    private let faviconFetcher: Favicons
 
     lazy var metadataProvider: LPMetadataProvider = {
         return LPMetadataProvider()
     }()
 
-    init(profile: Profile) {
-        self.profile = profile
+    convenience init(profile: Profile) {
+        self.init(faviconFetcher: profile.favicons)
+    }
+
+    init(faviconFetcher: Favicons) {
+        self.faviconFetcher = faviconFetcher
     }
 
     /// Given a `Site`, this will fetch the type of image you're looking for while allowing you to fallback to the next `SiteImageType`.
@@ -74,6 +78,10 @@ class SiteImageHelper {
                                     completion: completion)
             } else { return }
         }
+    }
+
+    static func clearCacheData() {
+        SiteImageHelper.cache.removeAllObjects()
     }
 
     // MARK: - Private
@@ -122,7 +130,7 @@ class SiteImageHelper {
         if let cachedImage = SiteImageHelper.cache.object(forKey: faviconCacheKey) {
             completion(cachedImage, true)
         } else {
-            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
+            faviconFetcher.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
                 guard let image = result.successValue else {
                     // Should not happen since we have fallback of letter favicon
                     completion(nil, false)
