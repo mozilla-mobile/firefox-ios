@@ -106,7 +106,7 @@ struct FlaggableFeature {
             return UserFeaturePreference.enabled.rawValue
 
         // Nimbus default options
-        case .jumpBackIn, .pocket, .recentlySaved:
+        case .jumpBackIn, .pocket, .recentlySaved, .historyHighlights:
             return checkNimbusHomepageFeatures(from: nimbusLayer).rawValue
         case .inactiveTabs:
             return checkNimbusTabTrayFeatures(from: nimbusLayer).rawValue
