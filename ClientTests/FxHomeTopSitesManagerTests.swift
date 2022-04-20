@@ -240,6 +240,9 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         let manager = createManager(addPinnedSiteCount: 12)
         manager.addContiles(shouldSucceed: true, contilesCount: 0)
 
+        profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
+        profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
+
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
             XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, false)
             XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, false)

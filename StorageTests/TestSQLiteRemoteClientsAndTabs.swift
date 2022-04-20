@@ -6,7 +6,6 @@ import Foundation
 import Shared
 @testable import Storage
 @testable import Client
-import SwiftyJSON
 
 import XCTest
 

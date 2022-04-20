@@ -166,6 +166,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         configureSponsoredSite(topSite)
 
         applyTheme()
+
+        topSite.impressionTracking()
     }
 
     // MARK: - Setup Helper methods

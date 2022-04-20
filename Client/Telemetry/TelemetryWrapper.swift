@@ -368,6 +368,8 @@ extension TelemetryWrapper {
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case topSiteTile = "top-site-tile"
+        case topSiteImpression = "top-site-impression"
+        case topSiteContextualMenu = "top-site-contextual-menu"
         case pocketStory = "pocket-story"
         case pocketSectionImpression = "pocket-section-impression"
         case library = "library"
@@ -387,6 +389,8 @@ extension TelemetryWrapper {
         case libraryPanel = "library-panel"
         case navigateToGroupHistory = "navigate-to-group-history"
         case selectedHistoryItem = "selected-history-item"
+        case searchHistory = "search-history"
+        case deleteHistory = "delete-history"
         case sharePageWith = "share-page-with"
         case sendToDevice = "send-to-device"
         case copyAddress = "copy-address"
@@ -484,6 +488,8 @@ extension TelemetryWrapper {
     public enum EventExtraKey: String, CustomStringConvertible {
         case topSitePosition = "tilePosition"
         case topSiteTileType = "tileType"
+        case topSiteUrl = "topSiteUrl"
+        case contextualMenuType = "contextualMenuType"
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
         case tabsQuantity = "tabsQuantity"
@@ -550,6 +556,20 @@ extension TelemetryWrapper {
 
             if let position = extras?[EventExtraKey.topSitePosition.rawValue] as? String, let tileType = extras?[EventExtraKey.topSiteTileType.rawValue] as? String {
                 GleanMetrics.TopSite.tilePressed.record(GleanMetrics.TopSite.TilePressedExtra(position: position, tileType: tileType))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        case (.information, .view, .topSiteImpression, _, let extras):
+            if let url = extras?[EventExtraKey.topSiteUrl.rawValue] as? String {
+                GleanMetrics.TopSite.sponsoredTileImpressions.record(GleanMetrics.TopSite.SponsoredTileImpressionsExtra(tileUrl: url))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+
+        case (.action, .view, .topSiteContextualMenu, _, let extras):
+            if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
+                GleanMetrics.TopSite.contextualMenu.record(GleanMetrics.TopSite.ContextualMenuExtra(type: type))
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
@@ -693,6 +713,10 @@ extension TelemetryWrapper {
             GleanMetrics.History.groupList.add()
         case (.action, .tap, .selectedHistoryItem, let type?, _):
             GleanMetrics.History.selectedItem[type.rawValue].add()
+        case (.action, .tap, .searchHistory, _, _):
+            GleanMetrics.History.searchTap.record()
+        case (.action, .tap, .deleteHistory, _, _):
+            GleanMetrics.History.deleteTap.record()
         // MARK: Sync
         case (.action, .open, .syncTab, _, _):
             GleanMetrics.Sync.openTab.add()

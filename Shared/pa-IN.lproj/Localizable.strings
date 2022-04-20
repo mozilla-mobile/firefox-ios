@@ -802,6 +802,12 @@
 /* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "ਹਟਾਓ";
 
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ ਵਿੱਚ ਸਭ ਸਾਈਟਾਂ ਨੂੰ ਹਟਾਉਣਾ ਹੈ?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "ਅਤੀਤ (ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਸਿੰਕ ਕੀਤੇ ਅਤੀਤ ਦੇ ਸਮੇਤ), ਕੂਕੀਜ਼ ਤੇ ਹੋਰ ਬਰਾਊਜ਼ਰ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ।";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "ਕੋਈ ਅਤੀਤ ਨਹੀਂ ਲੱਭਿਆ";
 
@@ -1358,6 +1364,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "ਫਾਇਰਫਾਕਸ ਨੂੰ ਆਪਣੇ ਡਿਵਾਈਸ ਦੇ ਕੈਮਰੇ ਲਈ ‘Settings’ -> ‘Privacy’ -> ‘Camera’ ਰਾਹੀਂ ਪਹੁੰਚ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ।";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "ਡਿਵਾਈਸ ‘Settings’ > ‘Firefox’ ਉੱਤੇ ਜਾਓ। Firefox ਨੂੰ ਕੈਮਰਾ ਵਰਤਣ ਦੀ ਇਜ਼ਾਜ਼ਤ ਦਿਓ।";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR ਕੋਡ ਨੂੰ ਸਕੈਨ ਕਰੋ";
 
@@ -1659,6 +1668,9 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox ਵਾਲਪੇਪਰ, ਜਾਮਨੀ ਪੈਟਰਨ";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox ਵਾਲਪੇਪਰ,  ਕੰਢੇ ਉੱਤੇ ਪਹਾੜ ਵਾਲੀ ਤਰਤੀਬ।";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox ਵਾਲਪੇਪਰ, ਅਸਮਾਨੀ ਨੀਲਾ ਪੈਟਰਨ";
 
@@ -1670,6 +1682,9 @@
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "ਮੁੱਖ ਸਫ਼ਾ ਵਾਲਪੇਪਰ ਚੱਕਰ ਬਦਲੋ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox ਵਾਲਪੇਪਰ, ਦੁਮੇਲ ਪਹਾੜੀ ਵਾਲੀ ਤਰਤੀਬ।";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ਸ਼ੁਰੂਆਤੀ ਸਕਰੀਨ";

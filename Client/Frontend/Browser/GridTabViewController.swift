@@ -341,7 +341,7 @@ extension GridTabViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        NotificationCenter.default.post(name: .TabClosed, object: nil)
+        NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
     }
     func tabManagerDidAddTabs(_ tabManager: TabManager) {}
 
@@ -427,7 +427,7 @@ extension GridTabViewController {
     }
 
     func dismissTabTray() {
-        _ = self.navigationController?.dismiss(animated: true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 
@@ -460,6 +460,9 @@ extension GridTabViewController {
 extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
+            if tab.isFxHomeTab {
+                notificationCenter.post(name: .TabsTrayDidSelectHomeTab, object: nil)
+            }
             tabManager.selectTab(tab)
             dismissTabTray()
         }
@@ -540,7 +543,7 @@ extension GridTabViewController: TabPeekDelegate {
             let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
 
             cell.close()
-            NotificationCenter.default.post(name: .TabClosed, object: nil)
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
         }
     }
 

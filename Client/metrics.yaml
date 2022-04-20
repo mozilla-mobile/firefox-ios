@@ -492,6 +492,40 @@ top_site:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
+  sponsored_tile_impressions:
+    type: event
+    description: |
+        Records when a user sees a sponsored tile on
+        the Firefox home page
+    extra_keys:
+      tile_url:
+        type: string
+        description: |
+          Url of the sponsored tile
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3834
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10514
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-10-14"
+  contextual_menu:
+    type: event
+    description: |
+        Records when a user clicks on a contextual
+        menu option on top site
+    extra_keys:
+      type:
+        type: string
+        description: |
+          Type of contextual action
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3834
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10514
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-10-14"
 
 # HomePage
 firefox_home_page:
@@ -908,6 +942,28 @@ history:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-12-01"
+  search_tap:
+    type: event
+    description: |
+      Recorded when a user taps on search icon in history panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9438
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10494
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-01"
+  delete_tap:
+    type: event
+    description: |
+      Recorded when a user taps on trash icon in history panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10020
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10494
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-01"
 
 # Legacy IDs for continuity and for deletion-request
 legacy.ids:
