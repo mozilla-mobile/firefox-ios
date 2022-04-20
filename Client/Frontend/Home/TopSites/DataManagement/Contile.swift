@@ -11,8 +11,14 @@ struct Contile: Codable {
     let name: String
     let url: String
     let clickUrl: String
-    let imageURL: String
+    let imageUrl: String
     let imageSize: Int
     let impressionUrl: String
-    let position: Int
+    let position: Int?
 }
+
+// Root node containing contiles
+struct Contiles: Codable {
+    let tiles: [Contile]
+}
+

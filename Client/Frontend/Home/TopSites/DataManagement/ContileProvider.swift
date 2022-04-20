@@ -18,7 +18,7 @@ class ContileProvider: ContileProviderInterface, Loggable {
 
     private let contileResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
 
-    lazy var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent,
+    lazy var urlSession = makeURLSession(userAgent: UserAgent.mobileUserAgent(),
                                          configuration: URLSessionConfiguration.default)
 
     enum Error: Swift.Error {
@@ -69,8 +69,9 @@ class ContileProvider: ContileProviderInterface, Loggable {
         do {
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            var contiles: [Contile] = try decoder.decode([Contile].self, from: data)
-            contiles.sort { $0.position < $1.position }
+            let rootNote = try decoder.decode(Contiles.self, from: data)
+            var contiles = rootNote.tiles
+            contiles.sort { $0.position ?? 0 < $1.position ?? 0 }
             completion(.success(contiles))
 
         } catch let error {
