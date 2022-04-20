@@ -18,7 +18,7 @@ enum ContextualHintViewType: String {
     case toolbarLocation = "ToolbarLocation"
 
     var hintExtraForToolbarLocation: String {
-        BrowserViewController.foregroundBVC().isBottomSearchBar ? "ToolbarLocationBottom" : "ToolbarLocationBottom"
+        BrowserViewController.foregroundBVC().isBottomSearchBar ? "ToolbarLocationBottom" : "ToolbarLocationTop"
     }
 }
 
