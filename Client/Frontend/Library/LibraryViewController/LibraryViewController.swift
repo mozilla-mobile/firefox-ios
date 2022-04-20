@@ -125,6 +125,7 @@ class LibraryViewController: UIViewController {
     // MARK: - View setup & lifecycle
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        // Needed to update toolbar on panel changes
         updateViewWithState()
     }
 
@@ -198,7 +199,7 @@ class LibraryViewController: UIViewController {
     fileprivate func shouldShowBottomToolbar() {
         switch viewModel.currentPanelState {
         case .bookmarks(state: let subState):
-            navigationController?.setToolbarHidden(subState == .mainView, animated: true)
+            navigationController?.setToolbarHidden(subState == .mainView, animated: false)
         case .history:
             let shouldShowSearch = viewModel.shouldShowSearch
             navigationController?.setToolbarHidden(!shouldShowSearch, animated: true)

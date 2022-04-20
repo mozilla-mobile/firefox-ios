@@ -204,14 +204,9 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
     private func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] date in
-            if let date = date {
-                self?.viewModel.removeVisibleSectionFor(date: date)
-            } else {
-                // The only time there's no date is when we are deleting everything.
-                self?.viewModel.visibleSections = []
-            }
-
-            self?.applySnapshot()
+            // Clearing groupedSites and refetch from database
+            self?.viewModel.groupedSites = DateGroupedTableData<Site>()
+            self?.fetchDataAndUpdateLayout()
 
             if let cell = self?.clearHistoryCell {
                 self?.setTappableStateAndStyle(
@@ -335,12 +330,10 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         }
 
         cell.titleLabel.text = asGroup.displayTitle
-        cell.leftImageView.layer.borderWidth = 0
-        cell.leftImageView.contentMode = .center
         cell.chevronAccessoryView.isHidden = false
         cell.leftImageView.contentMode = .scaleAspectFit
-        cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)
-        cell.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
+        cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
+        cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
 
         return cell
     }
