@@ -380,17 +380,21 @@ workflows:
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Focus
     - xcode-test@2:
+        is_always_run: true
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan FullFunctionalTests
         - scheme: Focus
-        - simulator_device: iPad Air (4th generation)
+        - simulator_device: iPad Pro (12.9-inch) (5th generation)
+        - simulator_os_version: '15.4'
     - xcode-test@2:
+        is_always_run: true
         inputs:
         - xcodebuild_test_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO -maximum-parallel-testing-workers 2 -testPlan SmokeTest
         - scheme: Focus
-        - simulator_device: iPad Air (4th generation)
+        - simulator_device:  iPad Pro (12.9-inch) (5th generation)
+        - simulator_os_version: '15.4'
     - deploy-to-bitrise-io@1: {}
     meta:
       bitrise.io:
