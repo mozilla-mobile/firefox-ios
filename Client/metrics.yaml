@@ -2076,7 +2076,7 @@ cfr_analytics:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-08-01"
+    expires: "2022-10-01"
   dismiss_cfr_from_outside_tap:
     type: event
     description: |
@@ -2094,7 +2094,7 @@ cfr_analytics:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-08-01"
+    expires: "2022-10-01"
   press_cfr_action_button:
     type: event
     description: |
@@ -2112,7 +2112,7 @@ cfr_analytics:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-08-01"
+    expires: "2022-10-01"
 
 # Inactive Tabs metrics
 inactive_tabs_tray:
