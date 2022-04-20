@@ -1937,6 +1937,7 @@ extension BrowserViewController: MenuActionable {
             onboardingEventsHandler: onboardingEventsHandler,
             whatsNewEventsHandler: whatsNewEventsHandler,
             themeManager: themeManager,
+            dismissScreenCompletion: activateUrlBarOnHomeView,
             shouldScrollToSiri: shouldScrollToSiri
         )
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)

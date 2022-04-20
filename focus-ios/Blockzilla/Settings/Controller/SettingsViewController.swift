@@ -40,6 +40,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
+    private let dismissScreenCompletion: (() -> Void)
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
@@ -148,6 +150,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         onboardingEventsHandler: OnboardingEventsHandler,
         whatsNewEventsHandler: WhatsNewEventsHandler,
         themeManager: ThemeManager,
+        dismissScreenCompletion:  @escaping (() -> Void),
         shouldScrollToSiri: Bool = false
     ) {
         self.searchEngineManager = searchEngineManager
@@ -156,6 +159,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.onboardingEventsHandler = onboardingEventsHandler
         self.whatsNewEventsHandler = whatsNewEventsHandler
         self.themeManager = themeManager
+        self.dismissScreenCompletion =  dismissScreenCompletion
         super.init(nibName: nil, bundle: nil)
 
         tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
@@ -509,7 +513,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             browserViewController.refreshTipsDisplay()
         }
         #endif
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: dismissScreenCompletion)
     }
 
     @objc private func aboutClicked() {
