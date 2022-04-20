@@ -386,7 +386,7 @@
 "ErrorPages.AdvancedWarning2.Text" = "یہ ایک حملہ آور کی طرف سے ایک غلط کنفیگریشن یا چھیڑنا ہو سکتا ہے. اگر آپ ممکنہ خطرے کو قبول کرتے ہیں تو آگے بڑھیں۔";
 
 /* Warning text on the certificate error page */
-"ErrorPages.CertWarning.Description" = "a% کے مالک نے انکی ویب سائٹ نامناسب طرحہ سے تشکیل کی ہیں۔ اپنی معلومات کو چوری ہونے سے حفاظت کے لئے، Firefox نے اس ویب سائٹ سے نہیں جڑا ہے۔";
+"ErrorPages.CertWarning.Description" = "@% کے مالک نے انکی ویب سائٹ نامناسب طرحہ سے تشکیل کی ہیں۔ اپنی معلومات کو چوری ہونے سے حفاظت کے لئے، Firefox نے اس ویب سائٹ سے نہیں جڑا ہے۔";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "اس کنکشن کا بھروسا نہیں ہے";
