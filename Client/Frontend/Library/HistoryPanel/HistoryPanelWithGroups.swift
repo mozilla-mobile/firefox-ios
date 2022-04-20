@@ -153,7 +153,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
         viewModel.reloadData() { [weak self] success in
             guard success else { return }
-            
+
             DispatchQueue.main.async {
                 self?.applySnapshot(animatingDifferences: animating)
                 self?.toggleEmptyState()
@@ -211,7 +211,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
                 self?.viewModel.visibleSections = []
             }
 
-            self?.fetchDataAndUpdateLayout(animating: true)
+            self?.applySnapshot()
 
             if let cell = self?.clearHistoryCell {
                 self?.setTappableStateAndStyle(
