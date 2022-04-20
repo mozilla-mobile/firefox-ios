@@ -37,6 +37,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
     func exitSearchState() {
         viewModel.isSearchInProgress = false
         applySnapshot()
+        self.searchbar.text = ""
         self.searchbar.resignFirstResponder()
         bottomStackView.isHidden = true
     }

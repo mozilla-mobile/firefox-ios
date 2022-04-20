@@ -23,6 +23,7 @@ class LibraryViewModel: FeatureFlagsProtocol {
     }
 
     var shouldShowSearch: Bool {
-        return self.featureFlags.isFeatureActiveForBuild(.historyGroups) && currentPanelState == .history(state: .mainView)
+        return self.featureFlags.isFeatureActiveForBuild(.historyGroups) &&
+        currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
     }
 }

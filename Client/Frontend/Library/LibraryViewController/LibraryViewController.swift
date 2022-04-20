@@ -370,7 +370,7 @@ class LibraryViewController: UIViewController {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolderEditMode):
             setToolbarItems(bottomToolbarItemsBothButtons, animated: true)
-        case .history(state: .mainView):
+        case .history:
             if viewModel.shouldShowSearch {
                 setToolbarItems(bottomToolbarHistoryItemsButton, animated: true)
             }

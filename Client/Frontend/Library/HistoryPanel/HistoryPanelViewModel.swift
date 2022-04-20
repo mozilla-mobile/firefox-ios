@@ -145,7 +145,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             // Force 100ms delay between resolution of the last batch of results
             // and the next time `fetchData()` can be called.
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                self.currentFetchOffset += self.queryFetchLimit
                 self.isFetchInProgress = false
 
                 self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")

@@ -118,13 +118,13 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         handleRefreshControl()
         setupLayout()
         configureDatasource()
-        fetchDataAndUpdateLayout()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         bottomStackView.isHidden = !viewModel.isSearchInProgress
+        fetchDataAndUpdateLayout()
     }
 
     // MARK: - Private helpers
@@ -153,8 +153,11 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
         viewModel.reloadData() { [weak self] success in
             guard success else { return }
-
-            self?.applySnapshot(animatingDifferences: animating)
+            
+            DispatchQueue.main.async {
+                self?.applySnapshot(animatingDifferences: animating)
+                self?.toggleEmptyState()
+            }
         }
     }
 
@@ -466,6 +469,14 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         return overlayView
     }
 
+    func toggleEmptyState() {
+        if emptyStateOverlayView.superview != nil {
+            emptyStateOverlayView.removeFromSuperview()
+        }
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+    }
+
     // MARK: - Themeable
 
     func applyTheme() {
@@ -479,12 +490,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         searchbar.tintColor = UIColor.theme.textField.textAndTint
 
         tableView.reloadData()
-    }
-
-    func toggleEmptyState() {
-        emptyStateOverlayView.removeFromSuperview()
-        emptyStateOverlayView = createEmptyStateOverlayView()
-        updateEmptyPanelState()
     }
 }
 
