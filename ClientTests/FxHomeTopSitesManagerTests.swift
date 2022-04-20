@@ -139,7 +139,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
 
     // MARK: Sponsored tiles
 
-    func testLoadTopSitesData_addContile() {
+    func testLoadTopSitesData_addSponsoredTile() {
         let manager = createManager()
         manager.addContiles(shouldSucceed: true, contilesCount: 1)
 
@@ -149,7 +149,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         }
     }
 
-    func testCalculateTopSitesData_addContileAfterGoogle() {
+    func testCalculateTopSitesData_addSponsoredTileAfterGoogle() {
         let manager = createManager()
         manager.addContiles(shouldSucceed: true, contilesCount: 1)
 
@@ -161,7 +161,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         }
     }
 
-    func testCalculateTopSitesData_doesNotAddContileIfError() {
+    func testCalculateTopSitesData_doesNotAddSponsoredTileIfError() {
         let manager = createManager()
         manager.addContiles(shouldSucceed: false, contilesCount: 1)
 
@@ -173,7 +173,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         }
     }
 
-    func testCalculateTopSitesData_doesNotAddContileIfSuccessEmpty() {
+    func testCalculateTopSitesData_doesNotAddSponsoredTileIfSuccessEmpty() {
         let manager = createManager()
         manager.addContiles(shouldSucceed: true, contilesCount: 0)
 
@@ -223,7 +223,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         }
     }
 
-    func testCalculateTopSitesData_addNextTileIfContileIsDuplicate() {
+    func testCalculateTopSitesData_addNextTileIfSponsoredTileIsDuplicate() {
         let manager = createManager(addPinnedSiteCount: 1)
         manager.addContiles(shouldSucceed: true, contilesCount: 2, duplicateFirstTile: true, pinnedDuplicateTile: true)
 
@@ -264,9 +264,47 @@ class FxHomeTopSitesManagerTests: XCTestCase {
     }
 }
 
-// MARK: - Helper methods
+// MARK: - ContileProviderMock
+class ContileProviderMock: ContileProviderInterface {
 
-// MARK: ContileProviderMock
+    private var result: ContileResult
+
+    static var defaultSuccessData: [Contile] {
+        return [Contile(id: 1,
+                        name: "Firefox",
+                        url: "https://firefox.com",
+                        clickUrl: "https://firefox.com/click",
+                        imageURL: "https://test.com/image1.jpg",
+                        imageSize: 200,
+                        impressionUrl: "https://test.com",
+                        position: 1),
+                Contile(id: 2,
+                        name: "Mozilla",
+                        url: "https://mozilla.com",
+                        clickUrl: "https://mozilla.com/click",
+                        imageURL: "https://test.com/image2.jpg",
+                        imageSize: 200,
+                        impressionUrl: "https://example.com",
+                        position: 2),
+                Contile(id: 3,
+                        name: "Focus",
+                        url: "https://support.mozilla.org/en-US/kb/firefox-focus-ios",
+                        clickUrl: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
+                        imageURL: "https://test.com/image3.jpg",
+                        imageSize: 200,
+                        impressionUrl: "https://another-example.com",
+                        position: 3)]
+    }
+
+    init(result: ContileResult) {
+        self.result = result
+    }
+
+    func fetchContiles(completion: @escaping (ContileResult) -> Void) {
+        completion(result)
+    }
+}
+
 extension ContileProviderMock {
 
     static func getContiles(contilesCount: Int,
@@ -323,7 +361,7 @@ extension FxHomeTopSitesManager {
                                                             duplicateFirstTile: duplicateFirstTile,
                                                             pinnedDuplicateTile: pinnedDuplicateTile)
 
-        let result = shouldSucceed ? ContileProvider.Result.success(resultContile) : ContileProvider.Result.failure(ContileProviderMock.Error.invalidData)
+        let result = shouldSucceed ? ContileProvider.Result.success(resultContile) : ContileProvider.Result.failure(ContileProvider.Error.failure)
 
         let contileProviderMock = ContileProviderMock(result: result)
         contileProvider = contileProviderMock
