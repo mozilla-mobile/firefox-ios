@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Chjode";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Principià a navigazione";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "D’un cliccu simplice, squassate a vostra cronolugia di navigazione, e vostre parolle d’intesa, i vostri canistrelli, è impedite e publicità indesiderevule di seguitavvi.";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "A vostra cronolugia ùn vi seguita micca";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ hè un navigatore dedicatu à a cunfidenzialità cù una prutezzione contr’à u spiunagiu è u blucchime di cuntenutu.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Più chè solu incognitu";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Cunfigureghja e preferenze per sceglie s’è vò scumpartite assai o pocu.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Prutezzione discreziunale";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Fate passà a vostra navigazione privata à u livellu superiore.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Benvenuta in Firefox %@ !";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Abbandunà";
 
@@ -296,10 +323,10 @@
 "SearchEngine.addEngineError" = "Ùn hà micca funziunatu. Pruvate di rimpiazzà u termine di a ricerca da : %s.";
 
 /* Label for disable option on search suggestions prompt */
-"SearchSuggestions.promptDisable" = "Innò";
+"SearchSuggestions.promptDisable" = "Nò";
 
 /* Label for enable option on search suggestions prompt */
-"SearchSuggestions.promptEnable" = "Iè";
+"SearchSuggestions.promptEnable" = "Sì";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
 "SearchSuggestions.promptMessage" = "Per ottene sugestioni di ricerca, %@ hà bisognu di mandà à u mutore di ricerca ciò chì vo stampittate in a barra d’indirizzu.";
@@ -600,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Ci seria u cuntenutu chì manca o u situ si cumpurteria d’una manera strana ?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Andà à e preferenze per urganizà l’ozzioni specifiche di cunfidenzialità è di sicurità.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Ste preferenze predefinite furniscenu una prutezzione forte. Ma hè faciule di mudificalle per suddisfà i vostri bisogni specifichi.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ hà fermatu stu situ di spiunavvi. Picchichjate u scudu per cunnosce ciò ch’avemu bluccatu.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Picchichjate a curbella à ogni mumenti per caccià tutta traccia di a vostra sessione currente.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Site prutetti !";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Impiegà Touch ID per rivene nant’à %@";
