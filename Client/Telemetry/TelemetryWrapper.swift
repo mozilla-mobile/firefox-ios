@@ -461,6 +461,7 @@ extension TelemetryWrapper {
         case recentlySavedReadingListAction = "recently-saved-reading-list-action"
         case historyHighlightsShowAll = "history-highlights-show-all"
         case historyHighlightsItemOpened = "history-highlights-item-opened"
+        case historyHighlightsGroupOpen = "history-highlights-group-open"
         case customizeHomepageButton = "customize-homepage-button"
         case cycleWallpaperButton = "cycle-wallpaper-button"
         case toggleLogoWallpaperButton = "toggle-logo-wallpaper-button"
@@ -871,7 +872,9 @@ extension TelemetryWrapper {
         case (.action, .tap, .firefoxHomepage, .historyHighlightsShowAll, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsItemOpened, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyHighlightsItemOpened.record()
+        case (.action, .tap, .firefoxHomepage, .historyHighlightsGroupOpen, _):
+            GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
         case (.action, .view, .historyImpressions, _, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
 

@@ -94,7 +94,9 @@ class FxHomeHistoryHightlightsViewModel {
     // MARK: - Private Methods
 
     private func loadItems(completion: @escaping () -> Void) {
-        HistoryHighlightsManager.getHighlightsData(with: profile, and: tabManager.tabs) { [weak self] highlights in
+        HistoryHighlightsManager.getHighlightsData(with: profile,
+                                                   and: tabManager.tabs,
+                                                   shouldGroupHighlights: true) { [weak self] highlights in
             self?.historyItems = highlights
             completion()
         }
@@ -109,8 +111,12 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureActiveForBuild(.historyHighlights)
-        && featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled && !isPrivate
+        guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
+              featureFlags.isFeatureActiveForNimbus(.historyHighlights),
+              featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled
+        else { return false }
+
+        return !isPrivate
     }
 
     var hasData: Bool {
