@@ -37,7 +37,7 @@ public class RustPlaces {
             return nil
         } catch let err as NSError {
             if let placesError = err as? PlacesError {
-                Sentry.shared.sendWithStacktrace(message: "Places error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(message: "Places error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
             } else {
                 SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
             }
@@ -289,9 +289,9 @@ public class RustPlaces {
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let placesError = err as? PlacesError {
-                    Sentry.shared.sendWithStacktrace(message: "Places error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
+                    SentryIntegration.shared.sendWithStacktrace(message: "Places error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
                 } else {
-                    Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
+                    SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
                 }
 
                 deferred.fill(Maybe(failure: err))
