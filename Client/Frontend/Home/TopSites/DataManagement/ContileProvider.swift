@@ -23,7 +23,7 @@ extension ContileProviderInterface {
 }
 
 /// `Contile` is short for contextual tiles. This provider returns data that is used in Shortcuts (Top Sites) section on the Firefox home page.
-class ContileProvider: ContileProviderInterface, Loggable {
+class ContileProvider: ContileProviderInterface, Loggable, URLCaching {
 
     static let contileResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
 
@@ -85,34 +85,5 @@ class ContileProvider: ContileProviderInterface, Loggable {
             self.browserLog.error("Unable to parse with error: \(error)")
             completion(.failure(Error.failure))
         }
-    }
-
-    // MARK: Caching
-    // TODO: Laurie - Protocol for both pocket and contile ?
-
-    // The maximum contile cache age, 1 hour in milliseconds
-    private let maxCacheAge: Timestamp = OneMinuteInMilliseconds * 60
-    private let cacheAgeKey = "cache-time"
-
-    private func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data? {
-        let cachedResponse = URLCache.shared.cachedResponse(for: request)
-        guard let cachedAtTime = cachedResponse?.userInfo?[cacheAgeKey] as? Timestamp,
-              (timestamp - cachedAtTime) < maxCacheAge,
-              let data = cachedResponse?.data else {
-            return nil
-        }
-
-        return data
-    }
-
-    private func cache(response: HTTPURLResponse?, for request: URLRequest, with data: Data?) {
-        guard let response = response, let data  = data else {
-            return
-        }
-
-        let metadata = [cacheAgeKey: Date.now()]
-        let cachedResp = CachedURLResponse(response: response, data: data, userInfo: metadata, storagePolicy: .allowed)
-        URLCache.shared.removeCachedResponse(for: request)
-        URLCache.shared.storeCachedResponse(cachedResp, for: request)
     }
 }
