@@ -19,14 +19,13 @@ class ShareTrackersViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private lazy var trackerStatsLabel: SmartLabel = {
-        let trackerStatsLabel = SmartLabel()
+    private lazy var trackerStatsLabel: UILabel = {
+        let trackerStatsLabel = UILabel()
         trackerStatsLabel.font = .footnote14Light
         trackerStatsLabel.textColor = .secondaryText
-        trackerStatsLabel.numberOfLines = 0
-        trackerStatsLabel.minimumScaleFactor = UIConstants.layout.homeViewLabelMinimumScale
+        trackerStatsLabel.numberOfLines = 2
         trackerStatsLabel.setContentHuggingPriority(.required, for: .horizontal)
-        trackerStatsLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        trackerStatsLabel.setContentCompressionResistancePriority(.trackerStatsLabelContentCompressionPriority, for: .horizontal)
         return trackerStatsLabel
     }()
 
@@ -49,8 +48,8 @@ class ShareTrackersViewController: UIViewController {
         button.layer.borderWidth = 1.0
         button.layer.cornerRadius = 4
         button.contentEdgeInsets = UIEdgeInsets(top: CGFloat.trackerStatsShareButtonTopBottomPadding, left: CGFloat.trackerStatsShareButtonLeadingTrailingPadding, bottom: CGFloat.trackerStatsShareButtonTopBottomPadding, right: CGFloat.trackerStatsShareButtonLeadingTrailingPadding)
-        button.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .horizontal)
-        button.setContentHuggingPriority(UILayoutPriority(1000), for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.setContentHuggingPriority(.required, for: .horizontal)
         return button
     }()
 
@@ -87,4 +86,8 @@ fileprivate extension CGFloat {
     static let trackerStatsShareButtonLeadingTrailingPadding: CGFloat = 8
     static let shareTrackersLeadingTrailingOffset: CGFloat = 16
     static let shareTrackerStackViewSpacing: CGFloat = 16
+}
+
+fileprivate extension UILayoutPriority {
+    static let trackerStatsLabelContentCompressionPriority = UILayoutPriority(999)
 }
