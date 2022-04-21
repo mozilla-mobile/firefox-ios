@@ -8,9 +8,18 @@ import Shared
 typealias ContileResult = Swift.Result<[Contile], Error>
 
 protocol ContileProviderInterface {
+
     /// Fetch contiles either from cache or backend
-    /// - Parameter completion: Returns an array of Contile, can be empty
-    func fetchContiles(completion: @escaping (ContileResult) -> Void)
+    /// - Parameters:
+    ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
+    ///   - completion: Returns an array of Contile, can be empty
+    func fetchContiles(timestamp: Timestamp, completion: @escaping (ContileResult) -> Void)
+}
+
+extension ContileProviderInterface {
+    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
+        fetchContiles(timestamp: timestamp, completion: completion)
+    }
 }
 
 /// `Contile` is short for contextual tiles. This provider returns data that is used in Shortcuts (Top Sites) section on the Firefox home page.
@@ -25,7 +34,7 @@ class ContileProvider: ContileProviderInterface, Loggable {
         case failure
     }
 
-    func fetchContiles(completion: @escaping (ContileResult) -> Void) {
+    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
         guard let resourceEndpoint = URL(string: ContileProvider.contileResourceEndpoint) else {
             browserLog.error("The Contile resource URL is invalid: \(ContileProvider.contileResourceEndpoint)")
             completion(.failure(Error.failure))
@@ -36,7 +45,7 @@ class ContileProvider: ContileProviderInterface, Loggable {
                                  cachePolicy: .reloadIgnoringCacheData,
                                  timeoutInterval: 5)
 
-        if let cachedData = findCachedData(for: request) {
+        if let cachedData = findCachedData(for: request, timestamp: timestamp) {
             decode(data: cachedData, completion: completion)
         } else {
             fetchContiles(request: request, completion: completion)
@@ -85,10 +94,10 @@ class ContileProvider: ContileProviderInterface, Loggable {
     private let maxCacheAge: Timestamp = OneMinuteInMilliseconds * 60
     private let cacheAgeKey = "cache-time"
 
-    private func findCachedData(for request: URLRequest) -> Data? {
+    private func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data? {
         let cachedResponse = URLCache.shared.cachedResponse(for: request)
         guard let cachedAtTime = cachedResponse?.userInfo?[cacheAgeKey] as? Timestamp,
-              (Date.now() - cachedAtTime) < maxCacheAge,
+              (timestamp - cachedAtTime) < maxCacheAge,
               let data = cachedResponse?.data else {
             return nil
         }

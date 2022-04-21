@@ -9,39 +9,175 @@ import XCTest
 @testable import Client
 
 class ContileProviderTests: XCTestCase {
-    // TODO: Test getting error
-    // TODO: Test getting a 403
-    // TODO: Test getting no data
-    // TODO: Test getting wrong JSON
-    // TODO: Test ordering position
-    // TODO: Test ordering position with partly nil
-    // TODO: Test success
 
     override func setUp() {
         super.setUp()
-        URLCache.shared.removeAllCachedResponses()
+        clearState()
     }
 
     override func tearDown() {
         super.tearDown()
-        URLCache.shared.removeAllCachedResponses()
+        clearState()
     }
 
-    func testEmptyArrayResponse() {
-        stubResponse(response: emptyArrayResponse, statusCode: 200, error: nil)
+    func testErrorResponse_failsWithError() {
+        stubResponse(response: nil, statusCode: 200, error: anError)
         testProvider() { result in
-            if case .success(let contiles) = result {
-                XCTAssertEqual(contiles, [])
-            } else {
+            switch result {
+            case let .failure(error as ContileProvider.Error):
+                XCTAssertEqual(error, ContileProvider.Error.failure)
+            default:
                 XCTFail("Expected failure, got \(result) instead")
             }
         }
     }
+
+    func testNilDataResponse_failsWithError() {
+        stubResponse(response: nil, statusCode: 200, error: nil)
+        testProvider() { result in
+            switch result {
+            case let .failure(error as ContileProvider.Error):
+                XCTAssertEqual(error, ContileProvider.Error.failure)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+        }
+    }
+
+    func testEmptyResponse_failsWithError() {
+        stubResponse(response: emptyResponse, statusCode: 200, error: nil)
+        testProvider() { result in
+            switch result {
+            case let .failure(error as ContileProvider.Error):
+                XCTAssertEqual(error, ContileProvider.Error.failure)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+        }
+    }
+
+    func testAuthStatusCodeResponse_failsWithError() {
+        stubResponse(response: nil, statusCode: 403, error: nil)
+        testProvider() { result in
+            switch result {
+            case let .failure(error as ContileProvider.Error):
+                XCTAssertEqual(error, ContileProvider.Error.failure)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+        }
+    }
+
+    func testWrongResponse_failsWithError() {
+        stubResponse(response: emptyWrongResponse, statusCode: 200, error: nil)
+        testProvider() { result in
+            switch result {
+            case let .failure(error as ContileProvider.Error):
+                XCTAssertEqual(error, ContileProvider.Error.failure)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+        }
+    }
+
+    func testEmptyArrayResponse_succeedsWithEmptyArray() {
+        stubResponse(response: emptyArrayResponse, statusCode: 200, error: nil)
+        testProvider() { result in
+            switch result {
+            case let .success(contiles):
+                XCTAssertEqual(contiles, [])
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testOrderingTilePosition_succeedsWithCorrectPosition() {
+        stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
+        testProvider() { result in
+            switch result {
+            case let .success(contiles):
+                XCTAssertEqual(contiles[0].name, "Tile1")
+                XCTAssertEqual(contiles[1].name, "Tile2")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testOrderingTilePositionWithNilPosition_succeedsWithCorrectPosition() {
+        stubResponse(response: twoTilesWithOneNilPosition, statusCode: 200, error: nil)
+        testProvider() { result in
+            switch result {
+            case let .success(contiles):
+                XCTAssertEqual(contiles[0].name, "TileNilPosition")
+                XCTAssertEqual(contiles[1].name, "Tile1")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testCaching_succeedsFromCache() {
+        stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
+
+        let provider = getProvider()
+        let expectation = expectation(description: "Wait for completion")
+        provider.fetchContiles { result in
+            URLProtocolStub.removeStub()
+
+            provider.fetchContiles { result in
+                switch result {
+                case let .success(contiles):
+                    XCTAssertEqual(contiles.count, 2)
+                default:
+                    XCTFail("Expected success, got \(result) instead")
+                }
+                expectation.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+
+    func testCachingExpires_failsIfCacheIsTooOld() {
+        stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
+
+        let provider = getProvider()
+        let expectation = expectation(description: "Wait for completion")
+        provider.fetchContiles { result in
+            self.stubResponse(response: nil, statusCode: 403, error: nil)
+
+            provider.fetchContiles(timestamp: Date.tomorrow.toTimestamp()) { result in
+                switch result {
+                case let .failure(error as ContileProvider.Error):
+                    XCTAssertEqual(error, ContileProvider.Error.failure)
+                default:
+                    XCTFail("Expected failure, got \(result) instead")
+                }
+                expectation.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+
+    func testNoStubbing_doesntComplete() {
+        let provider = getProvider()
+        let expectation = expectation(description: "Wait for completion")
+        expectation.isInverted = true
+        provider.fetchContiles { result in
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
 }
 
-// MARK: - Helpers
+// MARK: - Helper functions
 
 private extension ContileProviderTests {
+
     func getProvider(file: StaticString = #filePath, line: UInt = #line) -> ContileProviderInterface {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]
@@ -73,68 +209,46 @@ private extension ContileProviderTests {
         URLProtocolStub.stub(data: mockJSONData, response: response, error: error)
     }
 
+    func clearState() {
+        URLCache.shared.removeAllCachedResponses()
+        URLProtocolStub.removeStub()
+    }
+
+    // MARK: - Mock responses
+
     var emptyArrayResponse: String {
         return "{\"tiles\":[]}"
+    }
+
+    var emptyWrongResponse: String {
+        return "{\"tiles\":[{\"answer\":\"isBad\"}]}"
     }
 
     var emptyResponse: String {
         return "{}"
     }
 
+    var twoTilesWithOneNilPosition: String {
+        return "{\"tiles\":[\(oneTileEmptyPosition),\(oneTileWithPosition)]}"
+    }
+
+    var twoTilesWithOutOfOrderPositions: String {
+        return "{\"tiles\":[\(secondTileWithPosition),\(oneTileWithPosition)]}"
+    }
+
+    var oneTileEmptyPosition: String {
+        return "{\"id\":1,\"name\":\"TileNilPosition\",\"url\":\"https://www.website.com\",\"click_url\":\"https://www.website.com\",\"image_url\":\"https://www.website.com\",\"image_size\":200,\"impression_url\":\"https://www.website.com\"}"
+    }
+
+    var oneTileWithPosition: String {
+        return "{\"id\":1,\"name\":\"Tile1\",\"url\":\"https://www.website.com\",\"click_url\":\"https://www.website.com\",\"image_url\":\"https://www.website.com\",\"image_size\":200,\"impression_url\":\"https://www.website.com\",\"position\":1}"
+    }
+
+    var secondTileWithPosition: String {
+        return "{\"id\":2,\"name\":\"Tile2\",\"url\":\"https://www.website2.com\",\"click_url\":\"https://www.website2.com\",\"image_url\":\"https://www.website2.com\",\"image_size\":200,\"impression_url\":\"https://www.website2.com\",\"position\":2}"
+    }
+
     var anError: NSError {
         return NSError(domain: "test error", code: 0)
     }
-}
-
-// MARK: URLProtocolStub
-class URLProtocolStub: URLProtocol {
-    private struct Stub {
-        let data: Data?
-        let response: URLResponse?
-        let error: Error?
-    }
-
-    private static var _stub: Stub?
-    private static var stub: Stub? {
-        get { return queue.sync { _stub } }
-        set { queue.sync { _stub = newValue } }
-    }
-
-    private static let queue = DispatchQueue(label: "URLProtocolStub.test.queue")
-
-    static func stub(data: Data?, response: URLResponse?, error: Error?) {
-        stub = Stub(data: data, response: response, error: error)
-    }
-
-    static func removeStub() {
-        stub = nil
-    }
-
-    override class func canInit(with request: URLRequest) -> Bool {
-        return true
-    }
-
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
-    }
-
-    override func startLoading() {
-        guard let stub = URLProtocolStub.stub else { return }
-
-        if let data = stub.data {
-            client?.urlProtocol(self, didLoad: data)
-        }
-
-        if let response = stub.response {
-            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-        }
-
-        if let error = stub.error {
-            client?.urlProtocol(self, didFailWithError: error)
-        } else {
-            client?.urlProtocolDidFinishLoading(self)
-        }
-    }
-
-    override func stopLoading() {}
 }
