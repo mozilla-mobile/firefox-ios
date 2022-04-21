@@ -16,6 +16,10 @@ enum ContextualHintViewType: String {
     case jumpBackIn = "JumpBackIn"
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
+
+    var hintExtraForToolbarLocation: String {
+        BrowserViewController.foregroundBVC().isBottomSearchBar ? "ToolbarLocationBottom" : "ToolbarLocationTop"
+    }
 }
 
 class ContextualHintViewModel {
@@ -30,7 +34,6 @@ class ContextualHintViewModel {
     private var hasSentTelemetryEvent = false
 
     var arrowDirection = UIPopoverArrowDirection.down
-
     private var hasAlreadyBeenPresented: Bool {
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey) else {
             return false
@@ -151,7 +154,8 @@ class ContextualHintViewModel {
 
     // MARK: - Telemetry
     func sendTelemetryEvent(for eventType: CFRTelemetryEvent) {
-        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: hintType.rawValue]
+        let hintTypeExtra = hintType == .toolbarLocation ? hintType.hintExtraForToolbarLocation : hintType.rawValue
+        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: hintTypeExtra]
 
         switch eventType {
         case .closeButton:
