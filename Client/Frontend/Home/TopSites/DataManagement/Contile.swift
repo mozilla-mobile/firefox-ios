@@ -6,7 +6,7 @@ import Foundation
 
 /// Contiles are a type of tiles belonging in the Shortcuts section on the Firefox home page.
 /// See ContileProvider and the resource endpoint there for context.
-struct Contile: Codable {
+struct Contile: Codable, Equatable {
     let id: Int
     let name: String
     let url: String

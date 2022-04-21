@@ -274,7 +274,7 @@ class ContileProviderMock: ContileProviderInterface {
                         name: "Firefox",
                         url: "https://firefox.com",
                         clickUrl: "https://firefox.com/click",
-                        imageURL: "https://test.com/image1.jpg",
+                        imageUrl: "https://test.com/image1.jpg",
                         imageSize: 200,
                         impressionUrl: "https://test.com",
                         position: 1),
@@ -282,7 +282,7 @@ class ContileProviderMock: ContileProviderInterface {
                         name: "Mozilla",
                         url: "https://mozilla.com",
                         clickUrl: "https://mozilla.com/click",
-                        imageURL: "https://test.com/image2.jpg",
+                        imageUrl: "https://test.com/image2.jpg",
                         imageSize: 200,
                         impressionUrl: "https://example.com",
                         position: 2),
@@ -290,7 +290,7 @@ class ContileProviderMock: ContileProviderInterface {
                         name: "Focus",
                         url: "https://support.mozilla.org/en-US/kb/firefox-focus-ios",
                         clickUrl: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
-                        imageURL: "https://test.com/image3.jpg",
+                        imageUrl: "https://test.com/image3.jpg",
                         imageSize: 200,
                         impressionUrl: "https://another-example.com",
                         position: 3)]
@@ -331,7 +331,7 @@ extension ContileProviderMock {
                        name: String(format: ContileProviderMock.pinnedTitle, "0"),
                        url: String(format: ContileProviderMock.pinnedURL, "0"),
                        clickUrl: "https://www.test.com/click",
-                       imageURL: "https://test.com/image0.jpg",
+                       imageUrl: "https://test.com/image0.jpg",
                        imageSize: 200,
                        impressionUrl: "https://test.com",
                        position: 1)
@@ -342,7 +342,7 @@ extension ContileProviderMock {
                        name: String(format: ContileProviderMock.title, "0"),
                        url: String(format: ContileProviderMock.url, "0"),
                        clickUrl: "https://www.test.com/click",
-                       imageURL: "https://test.com/image0.jpg",
+                       imageUrl: "https://test.com/image0.jpg",
                        imageSize: 200,
                        impressionUrl: "https://test.com",
                        position: 1)
@@ -361,7 +361,7 @@ extension FxHomeTopSitesManager {
                                                             duplicateFirstTile: duplicateFirstTile,
                                                             pinnedDuplicateTile: pinnedDuplicateTile)
 
-        let result = shouldSucceed ? ContileProvider.Result.success(resultContile) : ContileProvider.Result.failure(ContileProvider.Error.failure)
+        let result = shouldSucceed ? ContileResult.success(resultContile) : ContileResult.failure(ContileProvider.Error.failure)
 
         let contileProviderMock = ContileProviderMock(result: result)
         contileProvider = contileProviderMock

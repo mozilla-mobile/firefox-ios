@@ -16,7 +16,7 @@ protocol ContileProviderInterface {
 /// `Contile` is short for contextual tiles. This provider returns data that is used in Shortcuts (Top Sites) section on the Firefox home page.
 class ContileProvider: ContileProviderInterface, Loggable {
 
-    private let contileResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
+    static let contileResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
 
     lazy var urlSession = makeURLSession(userAgent: UserAgent.mobileUserAgent(),
                                          configuration: URLSessionConfiguration.default)
@@ -26,8 +26,8 @@ class ContileProvider: ContileProviderInterface, Loggable {
     }
 
     func fetchContiles(completion: @escaping (ContileResult) -> Void) {
-        guard let resourceEndpoint = URL(string: contileResourceEndpoint) else {
-            browserLog.error("The Contile resource URL is invalid: \(contileResourceEndpoint)")
+        guard let resourceEndpoint = URL(string: ContileProvider.contileResourceEndpoint) else {
+            browserLog.error("The Contile resource URL is invalid: \(ContileProvider.contileResourceEndpoint)")
             completion(.failure(Error.failure))
             return
         }
@@ -44,7 +44,7 @@ class ContileProvider: ContileProviderInterface, Loggable {
     }
 
     private func fetchContiles(request: URLRequest, completion: @escaping (ContileResult) -> Void) {
-        let fetchTask = urlSession.dataTask(with: request) { [weak self] data, response, error in
+        urlSession.dataTask(with: request) { [weak self] data, response, error in
             guard let self = self else { return }
 
             if let error = error {
@@ -60,9 +60,7 @@ class ContileProvider: ContileProviderInterface, Loggable {
 
             self.cache(response: response, for: request, with: data)
             self.decode(data: data, completion: completion)
-        }
-
-        fetchTask.resume()
+        }.resume()
     }
 
     private func decode(data: Data, completion: @escaping (ContileResult) -> Void) {
