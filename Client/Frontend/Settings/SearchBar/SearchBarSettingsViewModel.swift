@@ -99,3 +99,12 @@ private extension SearchBarSettingsViewModel {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
     }
 }
+
+// MARK: Telemetry
+extension SearchBarSettingsViewModel {
+
+    static func recordLocationTelemetry(for searchbarPosition: SearchBarPosition) {
+        let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: searchbarPosition.rawValue]
+        TelemetryWrapper.recordEvent(category: .information, method: .view, object: .awesomebarLocation, extras: extras)
+    }
+}

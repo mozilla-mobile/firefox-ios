@@ -416,6 +416,7 @@ extension TelemetryWrapper {
         case fxaRegistrationCompletedWebpage = "fxa-registration-completed-webpage"
         case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
+        case awesomebarLocation = "awesomebar-position"
     }
 
     public enum EventValue: String {
@@ -938,6 +939,15 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
+        // MARK: - Awesomebar
+        case (.information, .view, .awesomebarLocation, _, let extras):
+            if let location = extras?[EventExtraKey.preference.rawValue] as? String {
+                let locationExtra = GleanMetrics.Awesomebar.LocationExtra(location: location)
+                GleanMetrics.Awesomebar.location.record(locationExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }

@@ -430,6 +430,9 @@ class BrowserViewController: UIViewController {
         // Setup chron tabs A/B test
         chronTabsUserResearch = ChronTabsUserResearch()
         searchTelemetry = SearchTelemetry()
+
+        // Awesomebar Location Telemetry
+        SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
     }
 
     private func setupNotifications() {
