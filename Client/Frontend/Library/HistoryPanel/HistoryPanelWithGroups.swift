@@ -111,11 +111,11 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         super.viewDidLoad()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
-        viewModel.reloadData()
         viewModel.historyPanelNotifications.forEach {
             NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: $0, object: nil)
         }
 
+        handleRefreshControl()
         setupLayout()
         configureDatasource()
     }
@@ -123,19 +123,8 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
-        // logged in, remove any existing control.
-        handleRefreshControl()
-        applySnapshot()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        // Since the reload operation to fetch STG completes LATE, we need to apply snapshot again here :(
-        // Especially in the case where you navigate to the history panel from another panel.
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-            self.applySnapshot(animatingDifferences: true)
-        }
-
+        bottomStackView.isHidden = !viewModel.isSearchInProgress
+        fetchDataAndUpdateLayout()
     }
 
     // MARK: - Private helpers
@@ -155,15 +144,21 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
-
-        bottomStackView.isHidden = true
     }
 
-    func startSearchState() {
-        bottomStackView.isHidden = false
-        searchbar.text = ""
-        searchbar.becomeFirstResponder()
-        viewModel.isSearchInProgress = true
+    // Reload viewModel data and update layout
+    private func fetchDataAndUpdateLayout(animating: Bool = false) {
+        // Avoid refresing if search is in progress
+        guard !viewModel.isSearchInProgress else { return }
+
+        viewModel.reloadData() { [weak self] success in
+            guard success else { return }
+
+            DispatchQueue.main.async {
+                self?.applySnapshot(animatingDifferences: animating)
+                self?.toggleEmptyState()
+            }
+        }
     }
 
     func updateLayoutForKeyboard() {
@@ -209,15 +204,9 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
     private func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] date in
-            if let date = date {
-                self?.viewModel.removeVisibleSectionFor(date: date)
-            } else {
-                // The only time there's no date is when we are deleting everything.
-                self?.viewModel.visibleSections = []
-            }
-
-            self?.viewModel.reloadData()
-            self?.applySnapshot(animatingDifferences: true)
+            // Clearing groupedSites and refetch from database
+            self?.viewModel.groupedSites = DateGroupedTableData<Site>()
+            self?.fetchDataAndUpdateLayout()
 
             if let cell = self?.clearHistoryCell {
                 self?.setTappableStateAndStyle(
@@ -231,9 +220,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             viewModel.groupedSites = DateGroupedTableData<Site>()
-
-            viewModel.reloadData()
-            applySnapshot(animatingDifferences: true)
+            fetchDataAndUpdateLayout(animating: true)
 
             if profile.hasSyncableAccount() {
                 resyncHistory()
@@ -248,8 +235,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             break
         case .DatabaseWasReopened:
             if let dbName = notification.object as? String, dbName == "browser.db" {
-                viewModel.reloadData()
-                applySnapshot(animatingDifferences: true)
+                fetchDataAndUpdateLayout(animating: true)
             }
         case .OpenClearRecentHistory:
             showClearRecentHistory()
@@ -344,12 +330,10 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         }
 
         cell.titleLabel.text = asGroup.displayTitle
-        cell.leftImageView.layer.borderWidth = 0
-        cell.leftImageView.contentMode = .center
         cell.chevronAccessoryView.isHidden = false
         cell.leftImageView.contentMode = .scaleAspectFit
-        cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)
-        cell.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
+        cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
+        cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
 
         return cell
     }
@@ -413,6 +397,9 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
+        // Adding support to delete item during search in next ticket
+        guard !viewModel.isSearchInProgress else { return nil }
+
         // For UX consistency, every cell in history panel SHOULD have a trailing action.
         let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
             guard let self = self else {
@@ -475,6 +462,14 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         return overlayView
     }
 
+    func toggleEmptyState() {
+        if emptyStateOverlayView.superview != nil {
+            emptyStateOverlayView.removeFromSuperview()
+        }
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+    }
+
     // MARK: - Themeable
 
     func applyTheme() {
@@ -488,12 +483,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         searchbar.tintColor = UIColor.theme.textField.textAndTint
 
         tableView.reloadData()
-    }
-
-    func toggleEmptyState() {
-        emptyStateOverlayView.removeFromSuperview()
-        emptyStateOverlayView = createEmptyStateOverlayView()
-        updateEmptyPanelState()
     }
 }
 
@@ -628,8 +617,7 @@ extension HistoryPanelWithGroups {
             self.endRefreshing()
 
             if syncResult.isSuccess {
-                self.viewModel.reloadData()
-                self.applySnapshot(animatingDifferences: true)
+                self.fetchDataAndUpdateLayout(animating: true)
             }
         }
     }
@@ -681,14 +669,7 @@ extension HistoryPanelWithGroups: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard !viewModel.isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }
 
-        guard !viewModel.isSearchInProgress else {
-            viewModel.updateSearchOffset()
-            performSearch(term: searchbar.text ?? "")
-            return
-        }
-
-        viewModel.reloadData()
-        applySnapshot(animatingDifferences: false)
+        fetchDataAndUpdateLayout(animating: false)
     }
 
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {

@@ -91,10 +91,11 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     // MARK: - Private helpers
 
     /// Begin the process of fetching history data, and creating ASGroups from them. A prefetch also triggers this.
-    func reloadData() {
+    func reloadData(completion: @escaping (Bool) -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         guard !profile.isShutdown, !isFetchInProgress else {
             browserLog.debug("HistoryPanel tableView data could NOT be reloaded! Either the profile wasn't shut down, or there's a fetch in progress.")
+            completion(false)
             return
         }
 
@@ -112,6 +113,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
                     self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
                     || !self.groupsForSection(section: section).isEmpty
                 }
+                completion(true)
+            } else {
+                completion(false)
             }
         }
     }
@@ -141,7 +145,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             // Force 100ms delay between resolution of the last batch of results
             // and the next time `fetchData()` can be called.
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                self.currentFetchOffset += self.queryFetchLimit
                 self.isFetchInProgress = false
 
                 self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
@@ -223,7 +226,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     /// This will remove entire sections of data on triggering the Clear History flow.
     func removeVisibleSectionFor(date: Date) {
         // handle the past one hour later
-        var sectionToRemove: [Sections]
+        var sectionToRemove: [Sections]?
 
         // Selecting today and every option after gives us a date of the day before... So we adjust.
         let adjustedDate = date.dayAfter
@@ -232,11 +235,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             sectionToRemove = [.today]
         } else if adjustedDate.isYesterday() {
             sectionToRemove = [.today, .yesterday]
-        } else {
-            sectionToRemove = Sections.allCases
         }
 
-        sectionToRemove.forEach { section in
+        sectionToRemove?.forEach { section in
             visibleSections = visibleSections.filter { $0 != section }
         }
     }
