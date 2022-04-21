@@ -2244,6 +2244,27 @@ installed_mozilla_products:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-01"
 
+# Awesomebar related telemetry
+
+awesomebar:
+  location:
+    type: event
+    description: |
+      Records location of awesome bar when
+      user opens the app
+    extra_keys:
+      location:
+        type: string
+        description: |
+          The location of awesomebar (top or bottom)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3906
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10537
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-09-01"
+
 # Device specific metrics
 
 device:
