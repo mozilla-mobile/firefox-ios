@@ -802,6 +802,12 @@
 /* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Squassà";
 
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Squassà tutti i siti in %@ ?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Caccia a cronolugia (inchjusa quella sincrunizata da d’altri apparechji), i canistrelli è altri dati di navigazione.";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Nisunu elementu trovu in a cronolugia";
 
@@ -813,6 +819,9 @@
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
 "LibraryPanel.History.SyncedFromOtherDevices.v99" = "Sincrunizati nant’à d’altri apparechji";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Cronolugia sincrunizata";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "Più vechju";
@@ -1355,6 +1364,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Ci vole à permette à Firefox d’accede à l’apparechju-fotò di u vostru apparechju in « Preferenze» -> « Cunfidenzialità » -> « Apparechju-fotò ».";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Andà à « Preferenze » > « Firefox » di l’apparechju. Permette à Firefox d’accede à l’apparechju-fotò.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Analizà un codice QR";
 
@@ -1409,7 +1421,7 @@
 "Secure connection" = "Cunnessione assicurizata";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu di u penseru per chì Mozilla possa currege u penseru ?";
+"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu d’accidente per chì Mozilla possa currege u penseru ?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Dà u mo avisu";
@@ -1656,6 +1668,9 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Sfondulu di screnu Firefox, mudellu amatista.";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Sfondulu di screnu di Firefox, mudellu d’un tombulu di rena.";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Sfondulu di screnu Firefox, mudellu turchinu azuratu.";
 
@@ -1667,6 +1682,9 @@
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Cummutatore di u ciclu di sfondulu di screnu di a pagina d’accolta";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Sfondulu di screnu di Firefox, mudellu d’un’attrachju marina.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "SCRENU À L’APERTURA";
@@ -1703,6 +1721,12 @@
 
 /* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
 "Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Accurtatoghji finanziati";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Disattivatu";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Attivatu";
 
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "Preferenze di a pagina d’accolta";
@@ -2228,10 +2252,10 @@
 "TopSites.RemovePage.Button" = "Caccià a pagina - %@";
 
 /* Button to disallow the page to be translated to the user locale language */
-"TranslationToastHandler.PromptTranslate.Cancel" = "Innò";
+"TranslationToastHandler.PromptTranslate.Cancel" = "Nò";
 
 /* Button to allow the page to be translated to the user locale language */
-"TranslationToastHandler.PromptTranslate.OK" = "Iè";
+"TranslationToastHandler.PromptTranslate.OK" = "Sì";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
 "TranslationToastHandler.PromptTranslate.Title" = "Sta pagina pare esse in %1$@. Traducella in %2$@ cù %3$@ ?";
