@@ -247,6 +247,24 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Luk";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Afslut rundvisningen";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Med ét klik kan du slette din browserhistorik, dine adgangskoder og cookies - og forhindre uønskede reklamer i at følge dig.";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Din historik følger dig ikke";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ er en browser dedikeret til at beskytte dit privatliv ved hjælp af indholdsblokering og beskyttelse mod sporing.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Mere end bare inkognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfigurer indstillingerne for selv at bestemme, hvor meget eller hvor lidt du vil dele.";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Annuller";
 

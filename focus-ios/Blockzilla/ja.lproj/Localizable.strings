@@ -250,6 +250,30 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "ブラウジングを始める";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "クリックするだけでブラウジング履歴、パスワード、Cookie を消去し、不要な広告による追跡を防ぎます。";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "あなたの足跡から追跡されません";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ は追跡防止とコンテンツブロック機能を備えたプライバシー保護ブラウザーです。";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "匿名化だけではありません";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "設定で共有する量を決められます。";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "あなたの裁量で保護できます";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "プライベートブラウジングを次のレベルへ。";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Firefox %@ へようこそ！";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "キャンセル";
 
@@ -603,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "サイトのコンテンツが表示されなかったり動作がおかしいときは？";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "設定を開いて特定のプライバシーとセキュリティの設定を管理します。";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "これらのデフォルト設定は強力な保護を提供します。必要に応じて、簡単に設定を調整できます。";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ がこのサイトによるスパイ行動を阻止しました。ブロックしたものに関する情報を見るには盾アイコンをタップしてください。";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "ゴミ箱をタップするだけで、いつでも現在のセッションの痕跡をすべて削除します。";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "保護されています";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Touch ID を使って %@ へ戻る";

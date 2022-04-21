@@ -250,6 +250,24 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Começar a navegar";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Apague o seu histórico de navegação, palavras-passe, cookies e evite que anúncios indesejados o(a) sigam com um simples clique!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "O seu histórico não o(a) segue";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "O %@ é um navegador de privacidade dedicado com proteção contra rastreamento e bloqueio de anúncios.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Mais do que apenas incógnito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Defina as configurações para poder decidir quanto ou quão pouco partilha.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Proteção conforme o seu critério";
+
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Leve a sua navegação privada ao próximo nível.";
 
@@ -609,6 +627,18 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Falta conteúdo ou o site está a ter um comportamento estranho?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Vá às Configurações para gerir opções específicas de privacidade e segurança.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Estas configurações padrão oferecem uma proteção forte. Mas é fácil ajustar as configurações para cumprir com as suas necessidades específicas.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ impediu este site o(a) espionasse. Toque no escudo para obter informações sobre o que bloqueamos.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Toque na lixeira a qualquer momento para remover todos os vestígios da sua sessão atual.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Está protegido(a)!";
