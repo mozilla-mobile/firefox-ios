@@ -28,11 +28,18 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
         performSearch(term: searchText)
     }
 
+    func startSearchState() {
+        bottomStackView.isHidden = false
+        searchbar.becomeFirstResponder()
+        viewModel.isSearchInProgress = true
+    }
+
     func exitSearchState() {
-        applySnapshot()
-        self.searchbar.resignFirstResponder()
         viewModel.isSearchInProgress = false
-        toggleEmptyState()
+        applySnapshot()
+        self.searchbar.text = ""
+        self.searchbar.resignFirstResponder()
+        bottomStackView.isHidden = true
     }
 
     func performSearch(term: String) {

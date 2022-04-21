@@ -90,8 +90,8 @@ extension LibraryViewController {
               let historyPanel = panel.viewControllers.last as? HistoryPanelWithGroups else { return }
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .searchHistory)
-        viewModel.currentPanelState = .history(state: .search)
 
+        viewModel.currentPanelState = .history(state: .search)
         historyPanel.startSearchState()
     }
 
