@@ -29,6 +29,7 @@ jobs:
     - name: Update new strings
       run: |-
         git diff || (git add Shared/*/*.lproj/* Shared/*.lproj/* WidgetKit/*.lproj/* Client/*/*.lproj/* Client/*.lproj/*)
+        git restore Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
