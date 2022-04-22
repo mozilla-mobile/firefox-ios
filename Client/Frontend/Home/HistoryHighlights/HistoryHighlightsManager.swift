@@ -118,7 +118,8 @@ class HistoryHighlightsManager {
                 highlightItems.insert(group, at: insertIndex)
             } else {
                 // insert remaining items
-                highlightItems.append(contentsOf: groups.suffix(index))
+                let restOfGroups = Array(groups[index..<groups.count])
+                highlightItems.append(contentsOf: restOfGroups)
                 break
             }
         }
