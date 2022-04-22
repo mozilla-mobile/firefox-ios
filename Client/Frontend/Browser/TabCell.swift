@@ -171,7 +171,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     func configureWith(tab: Tab, isSelected selected: Bool) {
         isSelectedTab = selected
 
-        titleText.text = getTabTrayTitle(tab: tab)
+        titleText.text = tab.getTabTrayTitle()
         accessibilityLabel = getA11yTitleLabel(tab: tab)
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
@@ -267,20 +267,8 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
 // MARK: - Extension Tab Tray Cell protocol
 extension TabTrayCell {
 
-    /// Use the display title unless it's an empty string, then use the base domain from the url
-    func getTabTrayTitle(tab: Tab) -> String? {
-        let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
-        var backUpName: String = "" // In case display title is empty
-        if let baseDomain = baseDomain {
-            backUpName = baseDomain.contains("local") ? .AppMenu.AppMenuOpenHomePageTitleString : baseDomain
-        } else if let url = tab.url, let about = InternalURL(url)?.aboutComponent {
-            backUpName = about
-        }
-        return tab.displayTitle.isEmpty ? backUpName : tab.displayTitle
-    }
-
     func getA11yTitleLabel(tab: Tab) -> String? {
-        let baseName = getTabTrayTitle(tab: tab)
+        let baseName = tab.getTabTrayTitle()
 
         if isSelectedTab, let baseName = baseName, !baseName.isEmpty {
             return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
