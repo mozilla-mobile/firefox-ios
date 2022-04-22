@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "დახურვა";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "დაიწყეთ გვერდების მონახულება";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "გაასუფთავეთ მონახულებული გვერდების ისტორია, პაროლები, ფუნთუშები და აუკრძალეთ არასასურველ რეკლამებს დადევნების საშუალება, მხოლოდ ერთი დაწკაპებით!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "წარსული ვერ დაგედევნებათ კუდში";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ პირადულობის უზრუნველმყოფი ბრაუზერია, თვალის დევნებისგან დაცვითა და მავნე შიგთავსის შეზღუდვით.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "მეტი, ვიდრე მხოლოდ ფარული რეჟიმი";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "პარამეტრების მორგებით თავად გადაწყვიტეთ, რას და როგორ გაამხელთ.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "უსაფრთხოება თქვენი შეხედულებისამებრ";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "აიყვანეთ თვალიერების პირადი რეჟიმი ახალ დონეზე.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "მოგესალმებათ Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "გაუქმება";
 
@@ -600,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "საიტზე აკლია რამე ან უცნაურად მუშაობს?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "გადადით პარამეტრებში, პირადულობისა და უსაფრთხოების სურვილისამებრ სამართავად.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "ეს ნაგულისხმევი პარამეტრები ძლიერ დაცვას გთავაზობთ. თუმცა მარტივად შეგიძლიათ პარამეტრების შესწორება და საკუთარ საჭიროებებზე მორგება.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ უკრძალავს ამ საიტს თქვენს თვალთვალს. შეეხეთ ფარის ნიშანს და იხილეთ ვრცლად, რა შეიზღუდა.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "შეეხეთ სანაგვე ყუთის ნიშანს ყველა კვალის მოსაცილებლად.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "დაცული ხართ!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "გამოიყენეთ თითის ანაბეჭდი, %@-ზე დასაბრუნებლად";
