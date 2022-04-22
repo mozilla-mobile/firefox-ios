@@ -107,7 +107,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
     func configureWith(tab: Tab, isSelected selected: Bool) {
         isSelectedTab = selected
 
-        titleText.text = getTabTrayTitle(tab: tab)
+        titleText.text = tab.getTabTrayTitle()
         accessibilityLabel = getA11yTitleLabel(tab: tab)
         isAccessibilityElement = true
 
