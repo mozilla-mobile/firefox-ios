@@ -223,23 +223,24 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         return groups
     }
 
-    /// This will remove entire sections of data on triggering the Clear History flow.
-    func removeVisibleSectionFor(date: Date) {
-        // handle the past one hour later
-        var sectionToRemove: [Sections]?
-
-        // Selecting today and every option after gives us a date of the day before... So we adjust.
+    func deleteGroupsForDates(date: Date) {
         let adjustedDate = date.dayAfter
+        var deletableSections: [Sections]?
 
         if adjustedDate.isToday() {
-            sectionToRemove = [.today]
+            deletableSections = [.today]
         } else if adjustedDate.isYesterday() {
-            sectionToRemove = [.today, .yesterday]
+            deletableSections = [.today, .yesterday]
         }
 
-        sectionToRemove?.forEach { section in
-            visibleSections = visibleSections.filter { $0 != section }
+        guard let deletableSections = deletableSections else { return }
+
+        deletableSections.forEach { section in
+            groupsForSection(section: section).forEach { group in
+                removeHistoryItems(item: group, at: section.rawValue)
+            }
         }
+
     }
 
     /// This handles removing either a Site or an ASGroup<Site> from the view.

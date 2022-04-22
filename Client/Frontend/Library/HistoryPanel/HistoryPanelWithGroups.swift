@@ -206,6 +206,15 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] date in
             // Clearing groupedSites and refetch from database
             self?.viewModel.groupedSites = DateGroupedTableData<Site>()
+
+            /// Delete groupings that belong to THAT section.
+            if let date = date {
+                self?.viewModel.deleteGroupsForDates(date: date)
+            } else {
+                /// Otherwise delete ALL groups, since we're deleting all history anyways.
+                self?.viewModel.searchTermGroups.removeAll()
+            }
+
             self?.fetchDataAndUpdateLayout()
 
             if let cell = self?.clearHistoryCell {
