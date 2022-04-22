@@ -114,10 +114,12 @@ class HistoryHighlightsManager {
 
         for (index, group) in groups.enumerated() {
             let insertIndex = (index * 2) + 1
-            if insertIndex < highlightItems.count {
+            if insertIndex <= highlightItems.count {
                 highlightItems.insert(group, at: insertIndex)
             } else {
-                highlightItems.append(contentsOf: groups)
+                // insert remaining items
+                let restOfGroups = Array(groups[index..<groups.count])
+                highlightItems.append(contentsOf: restOfGroups)
                 break
             }
         }
