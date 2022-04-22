@@ -202,6 +202,20 @@ class Tab: NSObject {
         return lastTitle
     }
 
+    /// Use the display title unless it's an empty string, then use the base domain from the url
+    func getTabTrayTitle() -> String? {
+        let baseDomain = sessionData?.urls.last?.baseDomain ?? url?.baseDomain
+        var backUpName: String = "" // In case display title is empty
+
+        if let baseDomain = baseDomain {
+            backUpName = baseDomain.contains("local") ? .AppMenu.AppMenuOpenHomePageTitleString : baseDomain
+        } else if let url = url, let about = InternalURL(url)?.aboutComponent {
+            backUpName = about
+        }
+
+        return self.displayTitle.isEmpty ? backUpName : self.displayTitle
+    }
+
     var displayFavicon: Favicon? {
         return favicons.max { $0.width! < $1.width! }
     }
