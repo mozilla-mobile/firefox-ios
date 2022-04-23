@@ -250,11 +250,20 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Start surfinga";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Slett nettlesarhistorikken, passorda, infokapslane og hindre uønskte annonsar frå å følgje deg med eit enkelt klikk!";
+
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "Historikken din følgjer deg ikkje";
 
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ er ein dedikert personvernnettlesar med sporingsvern og innhaldsblokkering.";
+
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Meir enn berre inkognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfigurer innstillingane slik at du kan bestemme kor mykje eller lite du deler.";
 
 /* Text for a label that indicates the title of protection section from onboarding screen. */
 "Onboarding.Protection.Title" = "Vern etter eige skjønn";
@@ -618,6 +627,18 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Manglar nettstaden innhald eller oppfører han seg rart?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Gå til Innstillingar for å behandle spesifikke personvern- og sikkerheitsalternativ.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Desse standardinnstillingane gir sterkt vern. Men det er enkelt å tilpasse innstillingane for å møte dine spesielle behov.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ stoppa denne sida frå å spionere på deg. Trykk på skjoldet for informasjon om kva vi blokkerte.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Trykk på papirkorga når som helst for å fjerne alle spor etter gjeldande økt.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Du er verna!";

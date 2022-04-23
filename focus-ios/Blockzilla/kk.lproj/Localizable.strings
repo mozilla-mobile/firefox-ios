@@ -250,6 +250,30 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Шолуды бастау";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Қарапайым шерту арқылы шолу тарихын, парольдер, cookie файлдарын өшіріңіз және қажетсіз жарнамалардың сіздің соңыңыздан еруін болдырмаңыз!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Сіздің тарихыңыз сіздің соңыңыздан ермейді";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ – бақылаудан қорғанысы және құраманы бұғаттау мүмкіндігі бар арнайы жекелік браузері.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Жай ғана инкогнито режимінен артық";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Қаншалықты көп немесе аз бөлісетініңізді баптаулардан басқарыңыз.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Өз қалауыңыз бойынша қорғаныс";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Жекелік шолуды келесі деңгейге көтеріңіз.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Firefox %@ ішіне қош келдіңіз!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Бас тарту";
 
@@ -603,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Сайттың мазмұны жоқ, немесе мінез-құлығы біртүрлі ме?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Арнайы жекелік пен қауіпсіздік опцияларын басқару үшін \"Баптаулар\" бөліміне өтіңіз.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Бұл бастапқы баптаулар қатаң қорғаныс ұсынады. Бірақ нақты қажеттіліктеріңізді қанағаттандыру үшін баптауларды өзгерту оңай.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ бұл сайттың сізге тыңшылық жасауын тоқтатты. Біз блоктаған нәрселер туралы ақпарат алу үшін қалқанды шертіңіз.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Ағымдағы сессияның барлық іздерін кетіру үшін кез келген уақытта себетті шертіңіз.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Сіз қорғалғансыз!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ оралу үшін Touch ID қолданыңыз";

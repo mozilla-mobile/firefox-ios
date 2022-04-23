@@ -616,6 +616,9 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Spletnemu mestu manjka vsebina ali deluje nenavadno?";
 
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Te privzete nastavitve nudijo močno zaščito. Preprosto pa jih lahko prilagodite tako, da ustrezajo vašim potrebam.";
+
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Zaščiteni ste!";
 
