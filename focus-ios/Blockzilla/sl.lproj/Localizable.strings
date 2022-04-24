@@ -259,6 +259,9 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Več kot le brez beleženja zgodovine";
 
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Ponesite zasebno brskanje na novo raven.";
+
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Dobrodošli v Firefox %@u!";
 
@@ -616,8 +619,17 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Spletnemu mestu manjka vsebina ali deluje nenavadno?";
 
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Določene možnosti zasebnosti in varnosti lahko upravljate v nastavitvah.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Te privzete nastavitve nudijo močno zaščito. Preprosto pa jih lahko prilagodite tako, da ustrezajo vašim potrebam.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ je temu spletnemu mestu preprečil, da bi vohunilo za vami. Dotaknite se ščita za podatke o tem, kaj je zavrnjeno.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Z dotikom ikone koša lahko kadarkoli odstranite vse sledove trenutne seje.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Zaščiteni ste!";
