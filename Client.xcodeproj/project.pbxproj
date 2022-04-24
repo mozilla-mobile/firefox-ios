@@ -550,8 +550,8 @@
 		96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */; };
 		96EB6C3C27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3B27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift */; };
 		96EB6C3E27D9266500A9D159 /* HistoryActionables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3D27D9266500A9D159 /* HistoryActionables.swift */; };
-		96EB6C4027DBEE9800A9D159 /* GroupedHistoryItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3F27DBEE9800A9D159 /* GroupedHistoryItemsViewController.swift */; };
-		96EB6C4327DC205D00A9D159 /* GroupedHistoryItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C4227DC205D00A9D159 /* GroupedHistoryItemsViewModel.swift */; };
+		96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3F27DBEE9800A9D159 /* SearchGroupedItemsViewController.swift */; };
+		96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C4227DC205D00A9D159 /* SearchGroupedItemsViewModel.swift */; };
 		96F627002669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F626FF2669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift */; };
 		A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
@@ -2972,8 +2972,8 @@
 		96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewModel.swift; sourceTree = "<group>"; };
 		96EB6C3B27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryPanel+ContextMenuExtensions.swift"; sourceTree = "<group>"; };
 		96EB6C3D27D9266500A9D159 /* HistoryActionables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryActionables.swift; sourceTree = "<group>"; };
-		96EB6C3F27DBEE9800A9D159 /* GroupedHistoryItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedHistoryItemsViewController.swift; sourceTree = "<group>"; };
-		96EB6C4227DC205D00A9D159 /* GroupedHistoryItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedHistoryItemsViewModel.swift; sourceTree = "<group>"; };
+		96EB6C3F27DBEE9800A9D159 /* SearchGroupedItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupedItemsViewController.swift; sourceTree = "<group>"; };
+		96EB6C4227DC205D00A9D159 /* SearchGroupedItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupedItemsViewModel.swift; sourceTree = "<group>"; };
 		96F626FF2669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeRecentlySavedCollectionCell.swift; sourceTree = "<group>"; };
 		970E49B0AC65FFFA0E81DE43 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		971941E1A9BBC06723E127ED /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -5508,13 +5508,6 @@
 			path = HelperClass;
 			sourceTree = "<group>";
 		};
-		8A5CDEEC27E510A300CC60FF /* MockData */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = MockData;
-			sourceTree = "<group>";
-		};
 		8AB8571B27D929240075C173 /* TopSites */ = {
 			isa = PBXGroup;
 			children = (
@@ -5630,8 +5623,8 @@
 		96EB6C4127DBF00E00A9D159 /* GeneralizedTableView */ = {
 			isa = PBXGroup;
 			children = (
-				96EB6C3F27DBEE9800A9D159 /* GroupedHistoryItemsViewController.swift */,
-				96EB6C4227DC205D00A9D159 /* GroupedHistoryItemsViewModel.swift */,
+				96EB6C3F27DBEE9800A9D159 /* SearchGroupedItemsViewController.swift */,
+				96EB6C4227DC205D00A9D159 /* SearchGroupedItemsViewModel.swift */,
 			);
 			path = GeneralizedTableView;
 			sourceTree = "<group>";
@@ -6939,7 +6932,6 @@
 				D05434F3225FDA3400FDE4EF /* Library */,
 				E63ED8DF1BFD254E0097D08E /* Login Management */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
-				8A5CDEEC27E510A300CC60FF /* MockData */,
 				F84B21F51A0910F600AAB793 /* Reader */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
 				D3972BF01C22412B00035B87 /* Share */,
@@ -9083,7 +9075,7 @@
 				8AB8572327D935ED0075C173 /* TopSiteCollectionCell.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */,
-				96EB6C4327DC205D00A9D159 /* GroupedHistoryItemsViewModel.swift in Sources */,
+				96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */,
 				D30B101E1AA7F9C600C01CA3 /* LibraryPanels.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
@@ -9187,7 +9179,7 @@
 				4334145724C6378B001541F3 /* IntroScreenWelcomeView.swift in Sources */,
 				23B5B499254C955E009AE055 /* TabMoreMenuViewController.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
-				96EB6C4027DBEE9800A9D159 /* GroupedHistoryItemsViewController.swift in Sources */,
+				96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				EBB89508219398E500EB91A0 /* ContentBlocker+Safelist.swift in Sources */,

@@ -215,6 +215,11 @@ class SearchTermGroupsManager {
                     timestamp = tab.firstCreatedTime ?? 0
                 }
 
+                // Base timestamp on score to order historyHighlight properly
+                if let firstItem = orderedItems.first, let highlight = firstItem as? HistoryHighlight {
+                    timestamp = Date.now() - Timestamp(highlight.score)
+                }
+
                 return ASGroup<T>(searchTerm: $0.key.capitalized, groupedItems: orderedItems, timestamp: timestamp)
         }
     }

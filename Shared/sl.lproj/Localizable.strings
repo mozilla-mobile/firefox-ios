@@ -802,6 +802,12 @@
 /* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Izbriši";
 
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Izbriši vsa spletna mesta skupine %@?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Odstrani zgodovino (tudi sinhronizirano zgodovino z drugih naprav), piškotke in druge podatke brskanja.";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Ni najdene zgodovine";
 
@@ -1709,6 +1715,12 @@
 
 /* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
 "Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Sponzorirane bližnjice";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Izključeno";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Vključeno";
 
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "Nastavitve domače strani";

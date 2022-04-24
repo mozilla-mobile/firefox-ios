@@ -874,7 +874,7 @@ firefox_home_page:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
   history_highlights_item_opened:
-    type: counter
+    type: event
     description: |
       Counts the number of times a user taps to open an
       existing tab from the History Highlights section
@@ -883,9 +883,22 @@ firefox_home_page:
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9563
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-07-01"
+    expires: "2022-12-01"
+  history_highlights_group_open:
+    type: event
+    description: |
+      Records the event where a user taps on a group item
+      within the History Highlights (Recently Visited) section.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2912
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-12-01"
 
 # Library
 library:
@@ -2076,7 +2089,7 @@ cfr_analytics:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-08-01"
+    expires: "2022-10-01"
   dismiss_cfr_from_outside_tap:
     type: event
     description: |
@@ -2094,7 +2107,7 @@ cfr_analytics:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-08-01"
+    expires: "2022-10-01"
   press_cfr_action_button:
     type: event
     description: |
@@ -2112,7 +2125,7 @@ cfr_analytics:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-08-01"
+    expires: "2022-10-01"
 
 # Inactive Tabs metrics
 inactive_tabs_tray:
@@ -2240,6 +2253,27 @@ installed_mozilla_products:
     data_sensitivity:
       - technical
       - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-09-01"
+
+# Awesomebar related telemetry
+
+awesomebar:
+  location:
+    type: event
+    description: |
+      Records location of awesome bar when
+      user opens the app
+    extra_keys:
+      location:
+        type: string
+        description: |
+          The location of awesomebar (top or bottom)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3906
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10537
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-01"

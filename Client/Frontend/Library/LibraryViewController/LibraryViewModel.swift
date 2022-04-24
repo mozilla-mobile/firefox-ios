@@ -16,13 +16,14 @@ class LibraryViewModel: FeatureFlagsProtocol {
         set { panelState.currentState = newValue }
     }
 
+    var shouldShowSearch: Bool {
+        return self.featureFlags.isFeatureActiveForBuild(.historyGroups) &&
+        currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
+    }
+
     init(withProfile profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
         self.panelDescriptors = LibraryPanels(profile: profile, tabManager: tabManager).enabledPanels
-    }
-
-    var shouldShowSearch: Bool {
-        return self.featureFlags.isFeatureActiveForBuild(.historyGroups) && currentPanelState == .history(state: .mainView)
     }
 }

@@ -416,6 +416,7 @@ extension TelemetryWrapper {
         case fxaRegistrationCompletedWebpage = "fxa-registration-completed-webpage"
         case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
+        case awesomebarLocation = "awesomebar-position"
     }
 
     public enum EventValue: String {
@@ -461,6 +462,7 @@ extension TelemetryWrapper {
         case recentlySavedReadingListAction = "recently-saved-reading-list-action"
         case historyHighlightsShowAll = "history-highlights-show-all"
         case historyHighlightsItemOpened = "history-highlights-item-opened"
+        case historyHighlightsGroupOpen = "history-highlights-group-open"
         case customizeHomepageButton = "customize-homepage-button"
         case cycleWallpaperButton = "cycle-wallpaper-button"
         case toggleLogoWallpaperButton = "toggle-logo-wallpaper-button"
@@ -871,7 +873,9 @@ extension TelemetryWrapper {
         case (.action, .tap, .firefoxHomepage, .historyHighlightsShowAll, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
         case (.action, .tap, .firefoxHomepage, .historyHighlightsItemOpened, _):
-            GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+            GleanMetrics.FirefoxHomePage.historyHighlightsItemOpened.record()
+        case (.action, .tap, .firefoxHomepage, .historyHighlightsGroupOpen, _):
+            GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
         case (.action, .view, .historyImpressions, _, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
 
@@ -935,6 +939,15 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
+        // MARK: - Awesomebar
+        case (.information, .view, .awesomebarLocation, _, let extras):
+            if let location = extras?[EventExtraKey.preference.rawValue] as? String {
+                let locationExtra = GleanMetrics.Awesomebar.LocationExtra(location: location)
+                GleanMetrics.Awesomebar.location.record(locationExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }

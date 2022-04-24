@@ -7,19 +7,27 @@
 import Foundation
 import Storage
 
-class GroupedHistoryItemsViewModel {
+class SearchGroupedItemsViewModel {
 
     // MARK: - Properties
 
     var asGroup: ASGroup<Site>
+    var presenter: Presenter
+
+    /// There are two entry points into this VC. We will track the presenters without Coordinators for now.
+    enum Presenter {
+        case historyPanel
+        case recentlyVisited
+    }
 
     // UI
     let notifications = [Notification.Name.DisplayThemeChanged]
 
     // MARK: - Inits
 
-    init(asGroup: ASGroup<Site>) {
+    init(asGroup: ASGroup<Site>, presenter: Presenter) {
         self.asGroup = asGroup
+        self.presenter = presenter
     }
 
     // MARK: - Lifecycles
