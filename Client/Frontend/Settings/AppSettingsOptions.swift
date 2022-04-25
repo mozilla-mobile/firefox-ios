@@ -772,7 +772,7 @@ class SendFeedbackSetting: Setting {
     }
 
     override var url: URL? {
-        return URL(string: "https://mozilla.crowdicity.com/")
+        return URL(string: "https://connect.mozilla.org/")
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
