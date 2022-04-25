@@ -422,7 +422,7 @@
 "FxA.AccountVerificationRequired" = "اکائونٹ کی توثیق کاری درکار ہے";
 
 /* Message explaining that user needs to check email for Firefox Account verfication link. */
-"FxA.AccountVerificationRequiredSurface" = "آپ کو @% کی توثیق کرنے کی ضرورت ہے۔ Firefox سے توثیقی لنک کیلئے اپنا ای میل چیک کریں۔";
+"FxA.AccountVerificationRequiredSurface" = "آپ کو @% کی توثیق کرنے کی ضرورت ہے۔ Firefox سے توثیقی لنک کیلئے اپنا ای میل چیک کریں۔\n";
 
 /* Button label to connect another device to Sync */
 "FxA.ConnectAnotherDevice" = "ایک اور آلہ جوڑیں";
