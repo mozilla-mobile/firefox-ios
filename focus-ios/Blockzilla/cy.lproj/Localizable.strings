@@ -247,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Cau";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Cychwyn pori";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Dilewch eich hanes pori, cyfrineiriau, cwcis, ac atal hysbysebion diangen rhag eich dilyn chi drwy un clic syml!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Nid yw eich hanes yn eich dilyn";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "Mae %@ yn borwr preifatrwydd pwrpasol gyda diogelwch tracio a rhwystro cynnwys.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Mwy nag incognito yn unig";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Ffurfweddwch osodiadau fel y gallwch chi benderfynu gymaint neu gynlleied rydych chi'n ei rannu.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Diogelwch yn ôl eich dymuniad eich hun";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Ewch â'ch pori preifat i'r lefel nesaf.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Croeso i Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Diddymu";
 
@@ -600,6 +627,21 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Oes yna gynnwys ar goll neu a yw'r wefan yn ymddwyn yn rhyfedd?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ewch i'r Gosodiadau i reoli deisiadau preifatrwydd a diogelwch penodol.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Mae’r gosodiadau rhagosodedig hyn yn cynnig diogelwch cryf. Ond mae’n hawdd newid y gosodiadau i ddiwallu’ch anghenion penodol.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "Stopiodd %@ y wefan hon rhag ysbïo arnoch chi. Tapiwch y darian i gael gwybodaeth am yr hyn rydyn ni wedi'i rwystro.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Tapiwch y sbwriel unrhyw bryd i ddileu holl olion eich sesiwn gyfredol.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Rydych wedi’ch diogelu!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Defnyddio'r Touch ID i ddychwelyd i %@";

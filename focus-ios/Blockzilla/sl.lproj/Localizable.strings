@@ -250,6 +250,9 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Začnite z brskanjem";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Z enim samim klikom izbrišite zgodovino brskanja, gesla in piškotke ter preprečite, da bi vas spremljali neželeni oglasi.";
+
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "Vaša zgodovina vam ne sledi";
 
@@ -258,6 +261,12 @@
 
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Več kot le brez beleženja zgodovine";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Prikrojite nastavite in se odločite, koliko boste delili.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Zaščita po lastni presoji";
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Ponesite zasebno brskanje na novo raven.";
