@@ -43,8 +43,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
         profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
         delegate?.willInvalidateDataSources(forceTopSites: forceTopSites)
-        profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites).uponQueue(dataQueue) { [weak self] _ in
-            guard let self = self else { return }
+        profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites).uponQueue(dataQueue) { _ in
             self.delegate?.didInvalidateDataSources(refresh: forceTopSites, topSitesRefreshed: shouldInvalidateTopSites)
         }
     }

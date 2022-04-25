@@ -40,14 +40,9 @@ extension CGColor {
 
 extension UIColor {
 
-    // Per ITU-R BT.709
-    var luma: CGFloat {
-        let RGB = self.cgColor.components
-        return 0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]
-    }
-
     var isDarkColor: Bool {
-        return luma < 0.5
+        let RGB = self.cgColor.components
+        return (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]) < 0.5
     }
 
     var isBlackOrWhite: Bool {
