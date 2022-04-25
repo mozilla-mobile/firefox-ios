@@ -54,9 +54,12 @@ class ClearHistoryHelper {
         alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
             let types = WKWebsiteDataStore.allWebsiteDataTypes()
             WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
-            self.profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { item in
-                guard let completion = didComplete else { return }
-                completion(nil)
+            self.profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { _ in
+                // INT64_MAX represents the oldest possible time that AS would have
+                self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in
+                    guard let completion = didComplete else { return }
+                    completion(nil)
+                }
             }
             self.profile.recentlyClosedTabs.clearTabs()
             self.tabManager.clearAllTabsHistory()

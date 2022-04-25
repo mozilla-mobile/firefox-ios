@@ -127,10 +127,12 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     // MARK: - Public methods
     public func updateCell(with options: HistoryHighlightsViewModel) {
         itemTitle.text = options.title
-        itemDescription.text = options.description
+        if let descriptionCount = options.description {
+            itemDescription.text = descriptionCount
+            itemDescription.isHidden = false
+        }
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
-        itemDescription.isHidden = itemDescription.text?.isEmpty ?? false
 
         if let corners = options.corners {
             contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
@@ -139,12 +141,15 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         if options.shouldAddShadow {
             addShadowLayer(cornersToRound: options.corners ?? UIRectCorner())
         }
+        heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
         shadowViewLayer?.removeFromSuperlayer()
+        heroImage.image = nil
+        itemDescription.isHidden = true
     }
 
     // MARK: - Setup Helper methods

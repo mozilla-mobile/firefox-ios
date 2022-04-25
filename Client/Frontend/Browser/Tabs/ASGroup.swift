@@ -21,6 +21,10 @@ struct ASGroup<T>: Hashable {
 }
 
 extension ASGroup: HighlightItem {
+    var group: [HighlightItem]? {
+        return groupedItems as? [HighlightItem]
+    }
+
     var type: HighlightItemType {
         return .group
     }

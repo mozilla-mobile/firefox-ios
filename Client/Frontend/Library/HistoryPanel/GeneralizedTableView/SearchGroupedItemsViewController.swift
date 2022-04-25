@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /**
-This ViewController is meant to show a tableView of history items with NO section headers.
+This ViewController is meant to show a tableView of STG items in a flat list with NO section headers.
  When we have coordinators, where the coordinator provides the VM to the VC, we can
  generalize this.
  */
@@ -11,7 +11,7 @@ This ViewController is meant to show a tableView of history items with NO sectio
 import UIKit
 import Storage
 
-class GroupedHistoryItemsViewController: UIViewController, Loggable {
+class SearchGroupedItemsViewController: UIViewController, Loggable {
 
     // MARK: - Properties
 
@@ -22,8 +22,9 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
     }
 
     let profile: Profile
-    let viewModel: GroupedHistoryItemsViewModel
+    let viewModel: SearchGroupedItemsViewModel
     var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
     lazy private var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -38,13 +39,19 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         }
     }
 
+    fileprivate lazy var doneButton: UIBarButtonItem =  {
+        let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(doneButtonAction))
+        button.accessibilityIdentifier = "ShowGroupDoneButton"
+        return button
+    }()
+
     private var diffableDatasource: UITableViewDiffableDataSource<Sections, AnyHashable>?
 
     // MARK: - Inits
 
-    init(profile: Profile, viewModel: GroupedHistoryItemsViewModel) {
-        self.profile = profile
+    init(viewModel: SearchGroupedItemsViewModel, profile: Profile) {
         self.viewModel = viewModel
+        self.profile = profile
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -74,13 +81,18 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         applySnapshot()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .navigateToGroupHistory, value: nil, extras: nil)
-    }
-
     // MARK: - Misc. helpers
 
     private func setupLayout() {
+        /// This View needs to be configured a certain way based on who's presenting it.
+        switch viewModel.presenter {
+        case .recentlyVisited:
+            title = viewModel.asGroup.displayTitle
+            navigationItem.rightBarButtonItem = doneButton
+        default: break
+        }
+
+        // Adding subviews and constraints
         view.addSubviews(tableView)
 
         NSLayoutConstraint.activate([
@@ -109,9 +121,9 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
                 cell.descriptionLabel.isHidden = false
                 cell.leftImageView.layer.borderColor = ThemeManager.shared.currentTheme.colours.layer4.cgColor
                 cell.leftImageView.layer.borderWidth = 0.5
-                cell.leftImageView.contentMode = .center
-                cell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
-                    cell?.leftImageView.image = cell?.leftImageView.image?.createScaled(CGSize(width: 24, height: 24))
+                self.getFavIcon(for: site) { [weak cell] image in
+                    cell?.leftImageView.image = image
+                    cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
                 }
 
                 return cell
@@ -119,6 +131,12 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
 
             // This shouldn't happen! An empty row!
             return UITableViewCell()
+        }
+    }
+
+    private func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
+        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
+            completion(image)
         }
     }
 
@@ -149,9 +167,12 @@ class GroupedHistoryItemsViewController: UIViewController, Loggable {
         }
     }
 
+    @objc private func doneButtonAction() {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
-extension GroupedHistoryItemsViewController: UITableViewDelegate {
+extension SearchGroupedItemsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
 
@@ -174,10 +195,14 @@ extension GroupedHistoryItemsViewController: UITableViewDelegate {
                                      object: .selectedHistoryItem,
                                      value: .historyPanelGroupedItem,
                                      extras: nil)
+
+        if viewModel.presenter == .recentlyVisited {
+            dismiss(animated: true, completion: nil)
+        }
     }
 }
 
-extension GroupedHistoryItemsViewController: NotificationThemeable {
+extension SearchGroupedItemsViewController: NotificationThemeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
