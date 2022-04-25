@@ -2011,7 +2011,7 @@
 "Settings.WebsiteData.ButtonEdit" = "Chỉnh sửa";
 
 /* Button shows all websites on website data tableview */
-"Settings.WebsiteData.ButtonShowMore" = "Xem thêm";
+"Settings.WebsiteData.ButtonShowMore" = "Hiện thêm";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Hành động này sẽ xóa tất cả dữ liệu trang web của bạn. Nó không thể hoàn tác được.";
