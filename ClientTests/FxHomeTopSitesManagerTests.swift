@@ -29,6 +29,17 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         profile = nil
     }
 
+    func testTopSiteManager_hasNoLeaks() {
+        let topSitesManager = FxHomeTopSitesManager(profile: profile)
+        let historyStub = TopSiteHistoryManagerStub(profile: profile)
+        historyStub.addPinnedSiteCount = 0
+        topSitesManager.topSiteHistoryManager = historyStub
+
+        trackForMemoryLeaks(historyStub)
+        trackForMemoryLeaks(topSitesManager)
+        trackForMemoryLeaks(topSitesManager.topSiteHistoryManager)
+    }
+
     func testEmptyData_whenNotLoaded() {
         let manager = FxHomeTopSitesManager(profile: profile)
         XCTAssertEqual(manager.hasData, false)
@@ -333,12 +344,16 @@ extension FxHomeTopSitesManager {
 // MARK: FxHomeTopSitesManagerTests
 extension FxHomeTopSitesManagerTests {
 
-    func createManager(addPinnedSiteCount: Int = 0) -> FxHomeTopSitesManager {
+    func createManager(addPinnedSiteCount: Int = 0, file: StaticString = #file, line: UInt = #line) -> FxHomeTopSitesManager {
         let topSitesManager = FxHomeTopSitesManager(profile: profile)
 
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
         historyStub.addPinnedSiteCount = addPinnedSiteCount
         topSitesManager.topSiteHistoryManager = historyStub
+
+        trackForMemoryLeaks(topSitesManager, file: file, line: line)
+        trackForMemoryLeaks(historyStub, file: file, line: line)
+        trackForMemoryLeaks(topSitesManager.topSiteHistoryManager, file: file, line: line)
 
         return topSitesManager
     }

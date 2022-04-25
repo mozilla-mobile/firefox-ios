@@ -10,28 +10,14 @@ import Storage
 import SyncTelemetry
 
 class FxHomeTopSitesViewModelTests: XCTestCase {
-    var profile: MockProfile!
-    var viewModel: FxHomeTopSitesViewModel!
-
-    override func setUp() {
-        super.setUp()
-        self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
-        self.viewModel = FxHomeTopSitesViewModel(profile: self.profile,
-                                                 isZeroSearch: false)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        self.profile._shutdown()
-        self.viewModel = nil
-        self.profile = nil
-    }
 
     func testDeletionOfSingleSuggestedSite() {
-        let siteToDelete = TopSitesHelper.defaultTopSites(profile)[0]
+        let sut = createViewModelAndProfile(useManager: false)
 
-        viewModel.hideURLFromTopSites(siteToDelete)
-        let newSites = TopSitesHelper.defaultTopSites(profile)
+        let siteToDelete = TopSitesHelper.defaultTopSites(sut.1)[0]
+
+        sut.0.hideURLFromTopSites(siteToDelete)
+        let newSites = TopSitesHelper.defaultTopSites(sut.1)
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
             return a.url == b.url
@@ -39,19 +25,21 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testDeletionOfAllDefaultSites() {
-        let defaultSites = TopSitesHelper.defaultTopSites(profile)
+        let sut = createViewModelAndProfile(useManager: false)
+
+        let defaultSites = TopSitesHelper.defaultTopSites(sut.1)
         defaultSites.forEach({
-            viewModel.hideURLFromTopSites($0)
+            sut.0.hideURLFromTopSites($0)
         })
 
-        let newSites = TopSitesHelper.defaultTopSites(profile)
+        let newSites = TopSitesHelper.defaultTopSites(sut.1)
         XCTAssertTrue(newSites.isEmpty)
     }
 
     // MARK: Section dimension with Default row number
 
     func testSectionDimension_portraitIphone_defaultRowNumber() {
-        createManager()
+        let viewModel = createViewModel()
         let trait = FakeTraitCollection()
 
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
@@ -60,7 +48,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_landscapeIphone_defaultRowNumber() {
-        createManager()
+        let viewModel = createViewModel()
         let trait = FakeTraitCollection()
 
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: true)
@@ -69,7 +57,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_portraitiPadRegular_defaultRowNumber() {
-        createManager()
+        let viewModel = createViewModel()
         let trait = FakeTraitCollection()
 
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: false)
@@ -78,7 +66,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_landscapeiPadRegular_defaultRowNumber() {
-        createManager()
+        let viewModel = createViewModel()
         let trait = FakeTraitCollection()
 
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: true, isIphone: false)
@@ -87,7 +75,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_portraitiPadCompact_defaultRowNumber() {
-        createManager()
+        let viewModel = createViewModel()
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
 
@@ -97,7 +85,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_landscapeiPadCompact_defaultRowNumber() {
-        createManager()
+        let viewModel = createViewModel()
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
 
@@ -107,7 +95,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_portraitiPadUnspecified_defaultRowNumber() {
-        createManager()
+        let viewModel = createViewModel()
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
 
@@ -117,7 +105,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_landscapeiPadUnspecified_defaultRowNumber() {
-        createManager()
+        let viewModel = createViewModel()
         let trait = FakeTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
 
@@ -129,7 +117,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     // MARK: Section dimension with stubbed data
 
     func testSectionDimension_oneEmptyRow_shouldBeRemoved() {
-        createManager(overridenSiteCount: 4, overridenNumberOfRows: 2)
+        let viewModel = createViewModel(overridenSiteCount: 4, overridenNumberOfRows: 2)
         let trait = FakeTraitCollection()
 
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
@@ -138,7 +126,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_twoEmptyRow_shouldBeRemoved() {
-        createManager(overridenSiteCount: 4, overridenNumberOfRows: 3)
+        let viewModel = createViewModel(overridenSiteCount: 4, overridenNumberOfRows: 3)
         let trait = FakeTraitCollection()
 
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
@@ -147,7 +135,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_noEmptyRow_shouldNotBeRemoved() {
-        createManager(overridenSiteCount: 8, overridenNumberOfRows: 2)
+        let viewModel = createViewModel(overridenSiteCount: 8, overridenNumberOfRows: 2)
         let trait = FakeTraitCollection()
 
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
@@ -156,7 +144,7 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
     }
 
     func testSectionDimension_halfFilledRow_shouldNotBeRemoved() {
-        createManager(overridenSiteCount: 6, overridenNumberOfRows: 2)
+        let viewModel = createViewModel(overridenSiteCount: 6, overridenNumberOfRows: 2)
         let trait = FakeTraitCollection()
 
         let dimension = viewModel.getSectionDimension(for: trait, isLandscape: false, isIphone: true)
@@ -168,11 +156,42 @@ class FxHomeTopSitesViewModelTests: XCTestCase {
 // MARK: Helper methods
 extension FxHomeTopSitesViewModelTests {
 
-    func createManager(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) {
-        let managerStub = FxHomeTopSitesManagerStub(profile: profile)
-        managerStub.overridenSiteCount = overridenSiteCount
-        managerStub.overridenNumberOfRows = overridenNumberOfRows
-        viewModel.tileManager = managerStub
+    func createViewModel(useManager: Bool = true,
+                         overridenSiteCount: Int = 40,
+                         overridenNumberOfRows: Int = 2,
+                         file: StaticString = #file,
+                         line: UInt = #line) -> FxHomeTopSitesViewModel {
+        return createViewModelAndProfile(useManager: useManager,
+                                         overridenSiteCount: overridenSiteCount,
+                                         overridenNumberOfRows: overridenNumberOfRows,
+                                         file: file, line: line).0
+    }
+
+    func createViewModelAndProfile(useManager: Bool = true,
+                                   overridenSiteCount: Int = 40,
+                                   overridenNumberOfRows: Int = 2,
+                                   file: StaticString = #file,
+                                   line: UInt = #line) -> (FxHomeTopSitesViewModel, MockProfile) {
+        let profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
+        let nimbusMock = NimbusMock()
+
+        let viewModel = FxHomeTopSitesViewModel(profile: profile,
+                                                isZeroSearch: false)
+
+        if useManager {
+            let managerStub = FxHomeTopSitesManagerStub(profile: profile)
+            managerStub.overridenSiteCount = overridenSiteCount
+            managerStub.overridenNumberOfRows = overridenNumberOfRows
+            viewModel.tileManager = managerStub
+
+            trackForMemoryLeaks(managerStub)
+            trackForMemoryLeaks(managerStub.googleTopSiteManager)
+            trackForMemoryLeaks(managerStub.topSiteHistoryManager)
+        }
+
+        trackForMemoryLeaks(viewModel, file: file, line: line)
+
+        return (viewModel, profile)
     }
 }
 
