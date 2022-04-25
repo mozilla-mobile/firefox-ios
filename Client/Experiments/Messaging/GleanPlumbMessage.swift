@@ -25,6 +25,22 @@ struct GleanPlumbMessage {
     /// The minimal data about a message that we should persist.
     var metadata: GleanPlumbMessageMetaData
 
+    var isExpired: Bool {
+        metadata.isExpired || metadata.impressions >= style.maxDisplayCount
+    }
+
+    func isUnderExperimentWith(key experimentKey: String?) -> Bool {
+        guard let experimentKey = experimentKey else { return false }
+
+        if data.isControl { return true }
+
+        if id.hasSuffix("-") {
+            return id.hasPrefix(experimentKey)
+        }
+
+        return id == experimentKey
+    }
+
 }
 
 /// `MessageMeta` is where we store parts of the message that help us aggregate, query and determine non-expired messages.
@@ -42,4 +58,3 @@ struct GleanPlumbMessageMetaData: Codable {
     /// A message expiry status.
     var isExpired: Bool
 }
-

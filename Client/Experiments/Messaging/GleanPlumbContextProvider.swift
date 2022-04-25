@@ -17,7 +17,5 @@ class GleanPlumbContextProvider {
 
         return ["date_string": todaysDate]
     }
-    
+
 }
-
-

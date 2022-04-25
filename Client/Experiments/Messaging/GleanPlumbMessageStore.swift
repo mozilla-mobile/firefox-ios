@@ -33,10 +33,10 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
 
-    private let messagingHelper: GleanPlumbHelper
+    private let messagingUtility: GleanPlumbMessageUtility
 
-    init(messagingHelper: GleanPlumbHelper = GleanPlumbHelper()) {
-        self.messagingHelper = messagingHelper
+    init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility()) {
+        self.messagingUtility = messagingUtility
     }
 
     // MARK: - MessageStoreProtocol methods
@@ -45,9 +45,7 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
     func getMessageMetadata(messageId: String) -> GleanPlumbMessageMetaData {
 
         /// Return preexisting Message Metadata.
-        if let metadata = get(key: messageId) {
-            return metadata
-        }
+        if let metadata = get(key: messageId) { return metadata }
 
         return GleanPlumbMessageMetaData(id: messageId,
                                          impressions: 0,
@@ -61,7 +59,7 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
 
         messageToTrack.impressions += 1
 
-        if messagingHelper.checkExpiryFor(message) {
+        if message.isExpired {
             messageToTrack = onMessageExpired(messageToTrack, shouldReport: true)
         }
 
@@ -106,6 +104,9 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
     // MARK: - Private helpers
 
     /// Generate a key that's "treated" to prevent collisions.
+    ///
+    /// Collisions can happen if a message key string and a string elsewhere in the codebase happen to be the same.
+    /// We prevent it by prepending `GleanPlumb.Messages.` to the message key.
     private func generateKey(from key: String) -> String {
         return "GleanPlumb.Messages.\(key)"
     }

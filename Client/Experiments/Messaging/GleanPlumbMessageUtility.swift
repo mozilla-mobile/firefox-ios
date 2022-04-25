@@ -7,16 +7,20 @@ import Foundation
 import MozillaAppServices
 import Shared
 
-/// The Message Helper is responsible for preparing fetched messages to appear in a UI surface.
-/// It should do all operations on a message and return only valid, eligible, non-expired messages FOR the associated surface.
-class GleanPlumbHelper: Loggable {
+/// Methods here can be considered as tools for extracting certain information from a message.
+class GleanPlumbMessageUtility: Loggable {
+
+    // MARK: - Properties
+
+    /// Holds evaluations of JEXLS seen so far.
+    var jexlMap: [String: Bool] = [:]
 
     // MARK: - Public helpers
 
     func createGleanPlumbHelper() -> GleanPlumbMessageHelper? {
         let contextProvider = GleanPlumbContextProvider()
 
-        /// Create our GleanPlumbMessageHelper, to evaluate triggers later.
+        /// Create our GleanPlumbMessageHelper.
         do {
             return try Experiments.shared.createMessageHelper(additionalContext: contextProvider.createAdditionalDeviceContext())
         } catch {
@@ -31,26 +35,19 @@ class GleanPlumbHelper: Loggable {
     func isMessageEligible(_ message: GleanPlumbMessage, messageHelper: GleanPlumbMessageHelper) throws -> Bool {
         try message.triggers.reduce(true) { accumulator, trigger in
             guard accumulator else { return false }
+            var isTriggered: Bool
 
-            return try messageHelper.evalJexl(expression: trigger)
+            /// Check the jexlMap for the `Bool`, in the case we already evaluated it.
+            if jexlMap[trigger] != nil, let jexlEvaluation = jexlMap[trigger] {
+                isTriggered = jexlEvaluation
+            } else {
+                /// Otherwise, perform this expensive Foreign Function Interface operation once for the trigger.
+                isTriggered = try messageHelper.evalJexl(expression: trigger)
+                jexlMap[trigger] = isTriggered
+            }
+
+            return isTriggered
         }
-    }
-
-    func checkExpiryFor(_ message: GleanPlumbMessage) -> Bool {
-        return message.metadata.isExpired || (message.metadata.impressions >= message.style.maxDisplayCount)
-    }
-
-    /// If the message is under experiment, the call site needs to handle it in a special way.
-    func isMessageUnderExperiment(experimentKey: String?, message: GleanPlumbMessage) -> Bool {
-        guard let experimentKey = experimentKey else { return false }
-
-        if message.data.isControl { return true }
-
-        if message.id.hasSuffix("-") {
-            return message.id.hasPrefix(experimentKey)
-        }
-
-        return message.id == experimentKey
     }
 
 }

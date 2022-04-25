@@ -11,8 +11,9 @@ import UIKit
 /// The HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 /// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
 /// default browser message AKA the evergreen.
-
 class HomeTabBanner: UIView, GleanPlumbMessageManagable {
+
+    typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
 
     struct UX {
         static let cardSize = CGSize(width: 360, height: 224)
@@ -47,19 +48,28 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         button.titleLabel?.textAlignment = .center
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
-        button.accessibilityIdentifier = "Home.learnMoreDefaultBrowserbutton"
+        button.accessibilityIdentifier = a11y.ctaButton
         button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
     }
 
     private lazy var image: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: "splash")
+        imageView.image = UIImage(named: ImageIdentifiers.logo)
         imageView.contentMode = .scaleAspectFit
     }
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: "nav-stop")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(named: ImageIdentifiers.xMark)?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
+    }
+
+    private lazy var textStackView: UIStackView = .build { [weak self] stackView in
+        guard let self = self else { return }
+        stackView.addArrangedSubview(self.bannerTitle)
+        stackView.addArrangedSubview(self.descriptionText)
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = -16
     }
 
     private lazy var scrollView: UIScrollView = .build { view in
@@ -92,7 +102,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
     }
 
     private func setupLayout() {
-        cardView.addSubviews(ctaButton, image, bannerTitle, descriptionText, dismissButton)
+        cardView.addSubviews(ctaButton, image, textStackView, dismissButton)
         containerView.addSubview(cardView)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
@@ -102,11 +112,6 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
 
         NSLayoutConstraint.activate([
             // Constraints that set the size and position of the scroll view relative to its superview
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
             scrollView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             scrollView.topAnchor.constraint(equalTo: containerView.topAnchor),
             scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
@@ -138,22 +143,18 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
             image.widthAnchor.constraint(equalToConstant: UX.logoSize.width),
             image.heightAnchor.constraint(equalToConstant: UX.logoSize.height),
 
-            bannerTitle.topAnchor.constraint(equalTo: image.topAnchor, constant: -16),
-            bannerTitle.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16),
-            bannerTitle.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
+            textStackView.topAnchor.constraint(equalTo: dismissButton.bottomAnchor),
+            textStackView.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16),
+            textStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
+            textStackView.bottomAnchor.constraint(equalTo: ctaButton.topAnchor, constant: -8),
 
-            descriptionText.topAnchor.constraint(equalTo: bannerTitle.bottomAnchor),
-            descriptionText.leadingAnchor.constraint(equalTo: bannerTitle.leadingAnchor),
-            descriptionText.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            descriptionText.bottomAnchor.constraint(greaterThanOrEqualTo: ctaButton.topAnchor, constant: -16),
-
-            dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16),
-            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
+            dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 8),
+            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -8),
             dismissButton.heightAnchor.constraint(equalToConstant: 16),
             dismissButton.widthAnchor.constraint(equalToConstant: 16),
 
             ctaButton.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
-            ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16),
+            ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -8),
             ctaButton.widthAnchor.constraint(equalToConstant: UX.learnHowButtonSize.width),
             ctaButton.heightAnchor.constraint(equalToConstant: UX.learnHowButtonSize.height)
         ])
@@ -161,18 +162,13 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
 
     /// Apply message data, including handling of cases where certain parts of the message are missing.
     private func applyMessage() {
-
         /// If no messages exist, continue using our evergreen message.
         guard let message = message else {
-            /// Make sure the user hasn't already dismissed the evergreen.
-            if UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserCard) {
-                dismissClosure?()
-            } else {
-                bannerTitle.text = String.DefaultBrowserCardTitle
-                descriptionText.text = String.DefaultBrowserCardDescription
-                ctaButton.setTitle(String.DefaultBrowserCardButton, for: .normal)
-            }
+            bannerTitle.text = String.DefaultBrowserCardTitle
+            descriptionText.text = String.DefaultBrowserCardDescription
+            ctaButton.setTitle(String.DefaultBrowserCardButton, for: .normal)
 
+            TelemetryWrapper.recordEvent(category: .information, method: .view, object: .homeTabBannerEvergreen)
             return
         }
 
@@ -189,7 +185,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         if let title = message.data.title {
             bannerTitle.text = title
         } else {
-            bannerTitle.removeFromSuperview()
+            textStackView.removeArrangedView(bannerTitle)
         }
 
         descriptionText.text = message.data.text

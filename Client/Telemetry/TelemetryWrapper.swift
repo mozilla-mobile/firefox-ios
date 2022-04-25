@@ -359,6 +359,7 @@ extension TelemetryWrapper {
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
         case goToSettingsDefaultBrowserOnboarding = "default-browser-onboarding-go-to-settings"
+        case homeTabBannerEvergreen = "home-tab-banner-evergreen"
         case asDefaultBrowser = "as-default-browser"
         case mediumTabsOpenUrl = "medium-tabs-widget-url"
         case largeTabsOpenUrl = "large-tabs-widget-url"
@@ -661,6 +662,8 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
+        case (.information, .view, .homeTabBannerEvergreen, _, _):
+            GleanMetrics.DefaultBrowserCard.evergreenImpression.record()
 
         // MARK: Onboarding
         case (.action, .press, .dismissedOnboarding, _, let extras):

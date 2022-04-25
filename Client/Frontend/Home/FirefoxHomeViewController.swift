@@ -98,8 +98,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
 
-        /// As long as there's a message, always show it.
-
         if shouldDisplayHomeTabBanner {
             showHomeTabBanner()
         }
@@ -246,7 +244,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     // MARK: - Home Tab Banner
 
     private var shouldDisplayHomeTabBanner: Bool {
-        if #available(iOS 14.0, *) {
+        let message = messagingManager.getNextMessage(for: .newTabCard)
+        if #available(iOS 14.0, *), message != nil || !UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserCard) {
             return true
         } else {
             return false

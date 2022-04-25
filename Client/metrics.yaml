@@ -277,6 +277,17 @@ default_browser_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
+  evergreen_impression:
+    type: event
+    description: |
+      Reports events of Home Tab Banner evergreen impressions.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3560
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10600
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-12-01"
 
 # Default browser onboarding metrics
 default_browser_onboarding:
