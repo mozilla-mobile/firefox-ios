@@ -7,6 +7,8 @@ import Shared
 
 /// Protocol to provide a caching functionnality for network calls
 protocol URLCaching {
+    var urlCache: URLCache { get }
+
     func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data?
     func findCachedResponse(for request: URLRequest) -> [String: Any]?
     func cache(response: HTTPURLResponse?, for request: URLRequest, with data: Data?)
@@ -18,7 +20,7 @@ extension URLCaching {
     private var cacheAgeKey: String { "cache-time" }
 
     func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data? {
-        let cachedResponse = URLCache.shared.cachedResponse(for: request)
+        let cachedResponse = urlCache.cachedResponse(for: request)
         guard let cachedAtTime = cachedResponse?.userInfo?[cacheAgeKey] as? Timestamp,
               (timestamp - cachedAtTime) < maxCacheAge,
               let data = cachedResponse?.data else {
@@ -31,7 +33,7 @@ extension URLCaching {
     func findCachedResponse(for request: URLRequest) -> [String: Any]? {
         guard (findCachedData(for: request, timestamp: Date.now()) != nil) else { return nil }
 
-        let cachedResponse = URLCache.shared.cachedResponse(for: request)
+        let cachedResponse = urlCache.cachedResponse(for: request)
         guard let data = cachedResponse?.data, let json = try? JSONSerialization.jsonObject(with: data, options: []) else {
             return nil
         }
@@ -44,7 +46,7 @@ extension URLCaching {
 
         let metadata = [cacheAgeKey: Date.now()]
         let cachedResp = CachedURLResponse(response: response, data: data, userInfo: metadata, storagePolicy: .allowed)
-        URLCache.shared.removeCachedResponse(for: request)
-        URLCache.shared.storeCachedResponse(cachedResp, for: request)
+        urlCache.removeCachedResponse(for: request)
+        urlCache.storeCachedResponse(cachedResp, for: request)
     }
 }

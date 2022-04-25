@@ -30,6 +30,10 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching {
     lazy var urlSession = makeURLSession(userAgent: UserAgent.mobileUserAgent(),
                                          configuration: URLSessionConfiguration.default)
 
+    lazy var urlCache: URLCache = {
+        return URLCache.shared
+    }()
+
     enum Error: Swift.Error {
         case failure
     }

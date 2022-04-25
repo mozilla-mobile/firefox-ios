@@ -5,19 +5,14 @@
 import Foundation
 
 class URLProtocolStub: URLProtocol {
+
     private struct Stub {
         let data: Data?
         let response: URLResponse?
         let error: Error?
     }
 
-    private static var _stub: Stub?
-    private static var stub: Stub? {
-        get { return queue.sync { _stub } }
-        set { queue.sync { _stub = newValue } }
-    }
-
-    private static let queue = DispatchQueue(label: "URLProtocolStub.test.queue")
+    private static var stub: Stub?
 
     static func stub(data: Data?, response: URLResponse?, error: Error?) {
         stub = Stub(data: data, response: response, error: error)

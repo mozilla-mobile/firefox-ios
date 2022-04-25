@@ -120,7 +120,6 @@ class ContileProviderTests: XCTestCase {
 
     func testCaching_succeedsFromCache() {
         stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
-
         let provider = getProvider()
         let expectation = expectation(description: "Wait for completion")
         provider.fetchContiles { result in
@@ -142,7 +141,6 @@ class ContileProviderTests: XCTestCase {
 
     func testCachingExpires_failsIfCacheIsTooOld() {
         stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
-
         let provider = getProvider()
         let expectation = expectation(description: "Wait for completion")
         provider.fetchContiles { result in
@@ -182,10 +180,15 @@ private extension ContileProviderTests {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: configuration)
+        let cache = URLCache(memoryCapacity: 1000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
 
         let provider = ContileProvider()
         provider.urlSession = session
+        provider.urlCache = cache
+
         trackForMemoryLeaks(provider, file: file, line: line)
+        trackForMemoryLeaks(cache, file: file, line: line)
+
         return provider
     }
 
@@ -210,7 +213,6 @@ private extension ContileProviderTests {
     }
 
     func clearState() {
-        URLCache.shared.removeAllCachedResponses()
         URLProtocolStub.removeStub()
     }
 

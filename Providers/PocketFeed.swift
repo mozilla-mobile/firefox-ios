@@ -54,6 +54,10 @@ class Pocket: FeatureFlagsProtocol, URLCaching {
         self.pocketGlobalFeed = endPoint
     }
 
+    var urlCache: URLCache {
+        return URLCache.shared
+    }
+
     lazy private var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private lazy var pocketKey: String? = {
