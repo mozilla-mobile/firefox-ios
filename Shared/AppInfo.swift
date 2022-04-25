@@ -97,8 +97,16 @@ open class AppInfo {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundlePackageType") as! String == "APPL"
     }
 
-    // The port for the internal webserver, tests can change this
-    public static var webserverPort = 6571
+    // The port for the internal webserver, tests can change this by setting preferredWebserverPort
+    public static var webserverPort: UInt16 {
+        return mostRecentlyUsedWebserverPort ?? preferredWebserverPort
+    }
+
+    // The preferred port to use for the internal webserver, tests can change this.
+    // The actual port used may be different if the preferred one is unavailable.
+    public static var preferredWebserverPort: UInt16 = 6571
+    // Do not access this directly. Used internally here and in WebServer
+    public static var mostRecentlyUsedWebserverPort: UInt16?
 
     public static var isChinaEdition: Bool = {
         if UserDefaults.standard.bool(forKey: debugPrefIsChinaEdition) {

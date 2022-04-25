@@ -34,14 +34,37 @@ class WebServer {
     }
 
     @discardableResult func start() throws -> Bool {
-        if !server.isRunning {
-            try server.start(options: [
-                GCDWebServerOption_Port: AppInfo.webserverPort,
-                GCDWebServerOption_BindToLocalhost: true,
-                GCDWebServerOption_AutomaticallySuspendInBackground: false, // done by the app in AppDelegate
-                GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
-                GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
-            ])
+        if server.isRunning {
+            return true
+        }
+
+        var options: [String: Any] = [
+            GCDWebServerOption_BindToLocalhost: true,
+            GCDWebServerOption_AutomaticallySuspendInBackground: false, // done by the app in AppDelegate
+            GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
+            GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
+        ]
+
+        starter: do {
+            // If we haven't previously started the server then this will be the preferred port, otherwise it'll be whatever was last used
+            options[GCDWebServerOption_Port] = AppInfo.webserverPort
+            try server.start(options: options)
+        } catch {
+            // The port probably wasn't available.
+            // Try the 20 ports from the preferred one upwards, not bothering to retry the one that just failed.
+            for portToTry in AppInfo.preferredWebserverPort..<AppInfo.preferredWebserverPort + 20 where portToTry != AppInfo.webserverPort {
+                do {
+                    options[GCDWebServerOption_Port] = portToTry
+                    try server.start(options: options)
+                    // Store the port number so we jump straight to this the next time we start the server as it more likely to be available.
+                    AppInfo.mostRecentlyUsedWebserverPort = portToTry
+                    break starter
+                } catch {
+                }
+            }
+
+            // None of the ports were usable, throw the original error
+            throw error
         }
         return server.isRunning
     }

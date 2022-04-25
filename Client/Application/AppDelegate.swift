@@ -410,7 +410,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.
         singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
         singleShotTimer.setEventHandler {
-            WebServer.sharedInstance.server.stop()
+            if WebServer.sharedInstance.server.isRunning {
+                // Ensure it is actually running, otherwise stop() will abort in debug builds.
+                WebServer.sharedInstance.server.stop()
+            }
             self.shutdownWebServer = nil
         }
         singleShotTimer.resume()

@@ -24,8 +24,8 @@ class TestAppDelegate: AppDelegate {
         launchArguments.forEach { arg in
             if arg.starts(with: LaunchArguments.ServerPort) {
                 let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
-                if let port = Int(portString) {
-                    AppInfo.webserverPort = port
+                if let port = UInt16(portString) {
+                    AppInfo.preferredWebserverPort = port
                 } else {
                     fatalError("Failed to set web server port override.")
                 }
