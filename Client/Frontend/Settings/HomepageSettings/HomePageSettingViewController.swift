@@ -102,6 +102,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         showWebPage.textField.textAlignment = .natural
 
         return SettingSection(title: NSAttributedString(string: .SettingsHomePageURLSectionTitle),
+                              footerTitle: NSAttributedString(string: .Settings.Homepage.Current.Description),
                               children: [showTopSites, showWebPage])
     }
 
@@ -145,7 +146,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
             sectionItems.append(wallpaperSetting)
         }
 
-        return SettingSection(title: NSAttributedString(string: .SettingsCustomizeHomeTitle),
+        return SettingSection(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Title),
                               footerTitle: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Description),
                               children: sectionItems)
     }
