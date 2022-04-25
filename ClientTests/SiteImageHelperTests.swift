@@ -26,81 +26,89 @@ class SiteImageHelperTests: XCTestCase {
     // MARK: Hero image
 
     func test_heroImageLoading_completesOnUrlNotAWebsite() {
-        let sut = createSiteImageHelper()
+        let imageHelper = createSiteImageHelper()
 
-        fetchImage(for: "not a website", imageType: .heroImage, sut: sut) { image in
+        fetchImage(for: "not a website", imageType: .heroImage, imageHelper: imageHelper) { image in
             XCTAssertNil(image)
         }
     }
 
     func test_heroImageLoads_completesOnEmptyMetadata() {
-        let sut = createSiteImageHelper()
-        sut.metadataProvider = MetadataProviderFake()
+        let imageHelper = createSiteImageHelper()
 
-        fetchImage(for: "www.a-website.com", imageType: .heroImage, sut: sut) { image in
+        fetchImage(for: "www.a-website.com",
+                   imageType: .heroImage,
+                   imageHelper: imageHelper,
+                   metadataProvider: MetadataProviderFake()) { image in
             XCTAssertNil(image)
         }
     }
 
     func test_heroImageLoads_completesOnError() {
-        let sut = createSiteImageHelper()
+        let imageHelper = createSiteImageHelper()
         let fake = MetadataProviderFake()
         fake.errorResult = TestError.invalidResult
-        sut.metadataProvider = fake
 
-        fetchImage(for: "www.a-website.com", imageType: .heroImage, sut: sut) { image in
+        fetchImage(for: "www.a-website.com",
+                   imageType: .heroImage,
+                   imageHelper: imageHelper,
+                   metadataProvider: fake) { image in
             XCTAssertNil(image)
         }
     }
 
     func test_heroImageLoads_completesProviderImageError() {
-        let sut = createSiteImageHelper()
+        let imageHelper = createSiteImageHelper()
         let fake = MetadataProviderFake()
         let providerFake = ItemProviderFake()
         providerFake.errorResult = TestError.invalidResult
         providerFake.imageResult = nil
         fake.metadataResult.imageProvider = providerFake
-        sut.metadataProvider = fake
 
-        fetchImage(for: "www.a-website.com", imageType: .heroImage, sut: sut) { image in
+        fetchImage(for: "www.a-website.com",
+                   imageType: .heroImage,
+                   imageHelper: imageHelper,
+                   metadataProvider: fake) { image in
             XCTAssertNil(image)
         }
     }
 
     func test_heroImageLoads_completesOnImage() {
-        let sut = createSiteImageHelper()
+        let imageHelper = createSiteImageHelper()
         let fake = MetadataProviderFake()
         fake.metadataResult.imageProvider = ItemProviderFake()
-        sut.metadataProvider = fake
 
-        fetchImage(for: "www.a-website.com", imageType: .heroImage, sut: sut) { image in
+        fetchImage(for: "www.a-website.com",
+                   imageType: .heroImage,
+                   imageHelper: imageHelper,
+                   metadataProvider: fake) { image in
             XCTAssertNotNil(image)
         }
     }
 
     func test_heroImageLoads_completesFromCache() {
-        let sut = createSiteImageHelper()
+        let imageHelper = createSiteImageHelper()
         let fake = MetadataProviderFake()
         fake.metadataResult.imageProvider = ItemProviderFake()
-        sut.metadataProvider = fake
 
         let site = Site(url: "www.a-website.com", title: "Website")
         let expectation = self.expectation(description: "Hero image is fetched from cache")
-        sut.fetchImageFor(site: site,
-                          imageType: .heroImage,
-                          shouldFallback: false,
-                          completion: { image in
+        imageHelper.fetchImageFor(site: site,
+                                  imageType: .heroImage,
+                                  shouldFallback: false,
+                                  metadataProvider: fake,
+                                  completion: { image in
             XCTAssertNotNil(image)
 
             // Image is now cached, fake an error to see if it's fetched from cache
-            let sut2 = self.createSiteImageHelper()
+            let imageHelper2 = self.createSiteImageHelper()
             let fake2 = MetadataProviderFake()
             fake2.errorResult = TestError.invalidResult
-            sut2.metadataProvider = fake2
-            sut2.fetchImageFor(site: site,
-                               imageType: .heroImage,
-                               shouldFallback: false,
-                               completion: { image in
+            imageHelper2.fetchImageFor(site: site,
+                                       imageType: .heroImage,
+                                       shouldFallback: false,
+                                       metadataProvider: fake2,
+                                       completion: { image in
                 XCTAssertNotNil(image)
                 expectation.fulfill()
             })
@@ -111,15 +119,15 @@ class SiteImageHelperTests: XCTestCase {
     // MARK: Favicon image
 
     func test_faviconLoads_completesOnError() {
-        let sut = createSiteImageHelper(shouldFaviconSucceeds: false)
-        fetchImage(for: "www.a-website.com", imageType: .favicon, sut: sut) { image in
+        let imageHelper = createSiteImageHelper(shouldFaviconSucceeds: false)
+        fetchImage(for: "www.a-website.com", imageType: .favicon, imageHelper: imageHelper) { image in
             XCTAssertNil(image)
         }
     }
 
     func test_faviconLoads_completesOnImage() {
-        let sut = createSiteImageHelper()
-        fetchImage(for: "www.a-website.com", imageType: .favicon, sut: sut) { image in
+        let imageHelper = createSiteImageHelper()
+        fetchImage(for: "www.a-website.com", imageType: .favicon, imageHelper: imageHelper) { image in
             XCTAssertNotNil(image)
         }
     }
@@ -160,15 +168,17 @@ extension SiteImageHelperTests {
 
     func fetchImage(for siteName: String,
                     imageType: SiteImageType,
-                    sut: SiteImageHelper,
+                    imageHelper: SiteImageHelper,
+                    metadataProvider: LPMetadataProvider = LPMetadataProvider(),
                     completion: @escaping (UIImage?) -> Void) {
 
         let site = Site(url: siteName, title: "Website")
         let expectation = self.expectation(description: "Completion is called")
-        sut.fetchImageFor(site: site,
-                          imageType: imageType,
-                          shouldFallback: false,
-                          completion: { image in
+        imageHelper.fetchImageFor(site: site,
+                                  imageType: imageType,
+                                  shouldFallback: false,
+                                  metadataProvider: metadataProvider,
+                                  completion: { image in
             completion(image)
             expectation.fulfill()
         })
@@ -178,10 +188,10 @@ extension SiteImageHelperTests {
     func createSiteImageHelper(shouldFaviconSucceeds: Bool = true, file: StaticString = #file, line: UInt = #line) -> SiteImageHelper {
         let faviconFetcher = FaviconFetcherMock()
         faviconFetcher.shouldSucceed = shouldFaviconSucceeds
-        let sut = SiteImageHelper(faviconFetcher: faviconFetcher)
+        let imageHelper = SiteImageHelper(faviconFetcher: faviconFetcher)
 
-        trackForMemoryLeaks(sut, file: file, line: line)
-        return sut
+        trackForMemoryLeaks(imageHelper, file: file, line: line)
+        return imageHelper
     }
 }
 

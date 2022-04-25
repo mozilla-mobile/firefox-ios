@@ -25,10 +25,6 @@ class SiteImageHelper {
     private let throttler = Throttler(seconds: 0.5, on: .main)
     private let faviconFetcher: Favicons
 
-    lazy var metadataProvider: LPMetadataProvider = {
-        return LPMetadataProvider()
-    }()
-
     convenience init(profile: Profile) {
         self.init(faviconFetcher: profile.favicons)
     }
@@ -44,13 +40,18 @@ class SiteImageHelper {
     ///   - shouldFallback: Allow a fallback image to be given in the case where the `SiteImageType` you specify is not available.
     ///   - completion: Work to be done after fetching an image, ideally done on the main thread.
     /// - Returns: A UIImage.
-    func fetchImageFor(site: Site, imageType: SiteImageType, shouldFallback: Bool, completion: @escaping (UIImage?) -> Void) {
+    func fetchImageFor(site: Site,
+                       imageType: SiteImageType,
+                       shouldFallback: Bool,
+                       metadataProvider: LPMetadataProvider = LPMetadataProvider(),
+                       completion: @escaping (UIImage?) -> Void) {
+
         var didCompleteFetch = false
         var imageType = imageType
 
         switch imageType {
         case .heroImage:
-            fetchHeroImage(for: site) { [weak self] image, result in
+            fetchHeroImage(for: site, metadataProvider: metadataProvider) { [weak self] image, result in
                 guard let _ = self else { return }
                 didCompleteFetch = result
                 DispatchQueue.main.async {
@@ -86,7 +87,9 @@ class SiteImageHelper {
 
     // MARK: - Private
 
-    private func fetchHeroImage(for site: Site, completion: @escaping (UIImage?, Bool) -> ()) {
+    private func fetchHeroImage(for site: Site,
+                                metadataProvider: LPMetadataProvider = LPMetadataProvider(),
+                                completion: @escaping (UIImage?, Bool) -> ()) {
         let heroImageCacheKey = NSString(string: "\(site.url)\(SiteImageType.heroImage.rawValue)")
 
         // Fetch from cache, if not then fetch with LPMetadataProvider
@@ -99,11 +102,17 @@ class SiteImageHelper {
                 return
             }
 
-            fetchFromMetaDataProvider(heroImageCacheKey: heroImageCacheKey, url: url, completion: completion)
+            fetchFromMetaDataProvider(heroImageCacheKey: heroImageCacheKey,
+                                      url: url,
+                                      metadataProvider: metadataProvider,
+                                      completion: completion)
         }
     }
 
-    private func fetchFromMetaDataProvider(heroImageCacheKey: NSString, url: URL, completion: @escaping (UIImage?, Bool) -> ()) {
+    private func fetchFromMetaDataProvider(heroImageCacheKey: NSString,
+                                           url: URL,
+                                           metadataProvider: LPMetadataProvider = LPMetadataProvider(),
+                                           completion: @escaping (UIImage?, Bool) -> ()) {
 
         metadataProvider.startFetchingMetadata(for: url) { metadata, error in
             guard let metadata = metadata, let imageProvider = metadata.imageProvider, error == nil else {
