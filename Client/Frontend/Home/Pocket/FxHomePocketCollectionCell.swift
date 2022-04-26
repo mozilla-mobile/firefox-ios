@@ -120,7 +120,7 @@ extension FxHomePocketCollectionCell: UICollectionViewDataSource {
         if viewModel.isStoryCell(index: indexPath.row) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxHomeHorizontalCell
             let pocketStory = viewModel.pocketStories[indexPath.row]
-            let cellViewModel = FxHomeHorizontalCellViewModel(titleText: pocketStory.title, descriptionText: pocketStory.domain, tag: indexPath.item, hasFavicon: false)
+            let cellViewModel = FxHomeHorizontalCellViewModel(titleText: pocketStory.title, descriptionText: viewModel.domainAndReadingTimeForStory(atIndex: indexPath.row), tag: indexPath.item, hasFavicon: false)
             cell.configure(viewModel: cellViewModel)
             cell.setFallBackFaviconVisibility(isHidden: true)
             cell.heroImage.sd_setImage(with: pocketStory.imageURL)
