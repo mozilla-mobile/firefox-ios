@@ -562,7 +562,7 @@ class ExperimentsSettings: HiddenSetting {
     }
 }
 
-class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
+class ToggleChronTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle chronological tabs \(toNewStatus)",
@@ -575,7 +575,7 @@ class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
-class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
+class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
@@ -588,7 +588,7 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
-class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
+class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
@@ -602,7 +602,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
-class ToggleHistoryGroups: HiddenSetting, FeatureFlagsProtocol {
+class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActiveForBuild(.historyGroups) ? "OFF" : "ON"
         return NSAttributedString(

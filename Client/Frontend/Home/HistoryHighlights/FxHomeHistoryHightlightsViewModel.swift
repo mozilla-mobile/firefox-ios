@@ -104,7 +104,7 @@ class FxHomeHistoryHightlightsViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .historyHighlights

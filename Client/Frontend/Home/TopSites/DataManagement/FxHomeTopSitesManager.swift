@@ -10,7 +10,7 @@ protocol FxHomeTopSitesManagerDelegate: AnyObject {
     func reloadTopSites()
 }
 
-class FxHomeTopSitesManager: FeatureFlagsProtocol {
+class FxHomeTopSitesManager: FeatureFlaggable {
 
     private let profile: Profile
     private var topSites: [HomeTopSite] = []

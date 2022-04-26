@@ -97,7 +97,7 @@ class FxHomePocketViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .pocket

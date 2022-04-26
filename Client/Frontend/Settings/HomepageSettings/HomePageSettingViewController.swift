@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsProtocol {
+class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
 
     // MARK: - Variables
     /* variables for checkmark settings */

@@ -5,9 +5,9 @@
 import Shared
 
 // MARK: - Protocol
-protocol FeatureFlagsProtocol { }
+protocol FeatureFlaggable { }
 
-extension FeatureFlagsProtocol {
+extension FeatureFlaggable {
     var featureFlags: FeatureFlagsManager {
         return FeatureFlagsManager.shared
     }
@@ -39,7 +39,13 @@ enum FeatureFlagName: String, CaseIterable {
     case wallpapers
 }
 
-enum BuildFeatureFlags
+enum CoreFeatureFlag {
+    case adjustEnvironmentProd
+    case chronologicalTabs
+    case useMockData
+    case nimbus
+    case shakeToRestore
+}
 
 /// Manages feature flags for the application.
 ///
@@ -68,6 +74,13 @@ class FeatureFlagsManager {
     private var nimbusLayer = NimbusFeatureFlagLayer()
 
     // MARK: - Public methods
+
+    /// Used as the main way to find out whether a core feature is active or not.
+    public func isCoreFeatureActive(_ featureID: CoreFeatureFlag) -> Bool {
+        guard let feature = features[featureID] else { return false }
+        return feature.isActiveForBuild()
+    }
+
 
     /// Used as the main way to find out whether a feature is active or not,
     /// specifically for the build.
@@ -139,20 +152,44 @@ class FeatureFlagsManager {
     public func initializeFeatures(with profile: Profile) {
         features.removeAll()
 
+
         let adjustEnvironmentProd = FlaggableFeature(withID: .adjustEnvironmentProd,
                                                      and: profile,
                                                      enabledFor: [.release, .beta])
         features[.adjustEnvironmentProd] = adjustEnvironmentProd
+
+        let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
+                                         and: profile,
+                                         enabledFor: [])
+        features[.chronologicalTabs] = chronTabs
+
+        /// Use the Nimbus experimentation platform. If this is `true` then
+        /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
+        let nimbus = FlaggableFeature(withID: .nimbus,
+                                      and: profile,
+                                      enabledFor: [.release, .beta, .developer])
+        features[.nimbus] = nimbus
+
+        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
+                                              and: profile,
+                                              enabledFor: [.beta, .developer, .other])
+        features[.shakeToRestore] = shakeToRestore
+
+        let useMockData = FlaggableFeature(withID: .useMockData,
+                                           and: profile,
+                                           enabledFor: [.developer])
+        features[.useMockData] = useMockData
+
+
+
+
+
 
         let bottomSearchBar = FlaggableFeature(withID: .bottomSearchBar,
                                                and: profile,
                                                enabledFor: [.release, .beta, .developer])
         features[.bottomSearchBar] = bottomSearchBar
 
-        let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
-                                         and: profile,
-                                         enabledFor: [])
-        features[.chronologicalTabs] = chronTabs
 
         let historyHighlights = FlaggableFeature(withID: .historyHighlights,
                                                  and: profile,
@@ -179,18 +216,6 @@ class FeatureFlagsManager {
                                               enabledFor: [.release, .beta, .developer])
         features[.librarySection] = librarySection
 
-        let useMockData = FlaggableFeature(withID: .useMockData,
-                                           and: profile,
-                                           enabledFor: [.developer])
-        features[.useMockData] = useMockData
-
-        /// Use the Nimbus experimentation platform. If this is `true` then
-        /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
-        let nimbus = FlaggableFeature(withID: .nimbus,
-                                      and: profile,
-                                      enabledFor: [.release, .beta, .developer])
-        features[.nimbus] = nimbus
-
         let pocket = FlaggableFeature(withID: .pocket,
                                       and: profile,
                                       enabledFor: [.release, .beta, .developer])
@@ -211,11 +236,6 @@ class FeatureFlagsManager {
                                                enabledFor: [.beta, .developer])
 
         features[.reportSiteIssue] = reportSiteIssue
-
-        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
-                                              and: profile,
-                                              enabledFor: [.beta, .developer, .other])
-        features[.shakeToRestore] = shakeToRestore
 
         let sponsoredTiles = FlaggableFeature(withID: .sponsoredTiles,
                                               and: profile,

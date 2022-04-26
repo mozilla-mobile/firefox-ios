@@ -51,7 +51,7 @@ extension TabManager: TabEventHandler {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class TabManager: NSObject, FeatureFlagsProtocol {
+class TabManager: NSObject, FeatureFlaggable {
 
     // MARK: - Variables
     fileprivate var delegates = [WeakTabManagerDelegate]()
