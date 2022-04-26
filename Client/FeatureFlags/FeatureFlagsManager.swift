@@ -39,6 +39,8 @@ enum FeatureFlagName: String, CaseIterable {
     case wallpapers
 }
 
+enum BuildFeatureFlags
+
 /// Manages feature flags for the application.
 ///
 /// To add a new feature flag, you must do four things:
