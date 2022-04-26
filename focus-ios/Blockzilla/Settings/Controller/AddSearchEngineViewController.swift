@@ -219,8 +219,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     @objc func saveTapped() {
-        guard let name = nameInput.text else { return }
-        guard let template = templateInput.text else { return }
+        guard let name = nameInput.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+        guard let template = templateInput.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
 
         if !AddSearchEngineViewController.isValidTemplate(template) || !searchEngineManager.isValidSearchEngineName(name) {
             presentRetryError()
@@ -232,33 +232,15 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
         let searchString = template.replacingOccurrences(of: "%s", with: "Firefox Focus".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
 
-        guard let url = URL(string: searchString) else {
+        guard URL(string: searchString) != nil else {
             presentRetryError()
             showIndicator(false)
             return
         }
 
-        var request = URLRequest(url: url)
-        request.timeoutInterval = REQUEST_TIMEOUT
-
-        dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let statusCode = response.flatMap({ $0 as? HTTPURLResponse })?.statusCode else {
-                DispatchQueue.main.async { self.presentRetryError(); self.showIndicator(false) }
-                return }
-
-            DispatchQueue.main.async {
-                guard statusCode < 400 else {
-                    self.presentRetryError()
-                    self.navigationItem.rightBarButtonItem = self.saveButton
-                    return }
-
-                self.delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
-                Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-
-        dataTask?.resume()
+        self.delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
+        Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
+        self.navigationController?.popViewController(animated: true)
     }
 
     private func presentRetryError() {
