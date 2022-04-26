@@ -36,4 +36,3 @@ class HomeButtonHomePageAccessors {
         return URL(string: urlString)
     }
 }
-

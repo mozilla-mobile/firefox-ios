@@ -21,4 +21,3 @@ extension Deferred where T: Succeedable {
         XCTAssertTrue(self.value.isFailure)
     }
 }
-

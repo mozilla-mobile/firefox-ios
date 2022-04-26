@@ -789,4 +789,3 @@ class SettingsTableViewController: ThemedTableViewController {
         }
     }
 }
-

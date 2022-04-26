@@ -76,4 +76,3 @@ extension PhotonActionSheetAnimator {
         }
     }
 }
-

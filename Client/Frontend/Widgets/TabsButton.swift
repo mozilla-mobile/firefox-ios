@@ -218,4 +218,3 @@ extension TabsButton: NotificationThemeable {
         }
     }
 }
-

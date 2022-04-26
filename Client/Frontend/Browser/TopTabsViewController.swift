@@ -331,4 +331,3 @@ extension TopTabsViewController {
         return topTabDisplayManager
     }
 }
-

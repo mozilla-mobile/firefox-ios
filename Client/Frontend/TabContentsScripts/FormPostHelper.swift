@@ -92,4 +92,3 @@ class FormPostHelper: TabContentScript {
         return request
     }
 }
-
