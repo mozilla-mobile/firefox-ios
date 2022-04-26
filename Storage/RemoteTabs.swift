@@ -13,17 +13,6 @@ public struct ClientAndTabs: Equatable, CustomStringConvertible {
         return "<Client guid: \(client.guid ?? "nil"), \(tabs.count) tabs.>"
     }
 
-    // See notes in RemoteTabsPanel.swift.
-    public func approximateLastSyncTime() -> Timestamp {
-        if tabs.isEmpty {
-            return client.modified
-        }
-
-        return tabs.reduce(Timestamp(0), { m, tab in
-            return max(m, tab.lastUsed)
-        })
-    }
-
     public init(client: RemoteClient, tabs: [RemoteTab]) {
         self.client = client
         self.tabs = tabs
@@ -37,22 +26,12 @@ public func == (lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
 
 public protocol RemoteClientsAndTabs: SyncCommands {
     func wipeClients() -> Deferred<Maybe<()>>
-    func wipeRemoteTabs() -> Deferred<Maybe<()>>
-    func wipeTabs() -> Deferred<Maybe<()>>
     func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>>
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>>
     func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>>
-    func getRemoteDevices() -> Deferred<Maybe<[RemoteDevice]>>
-    func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
-    func getTabsForClientWithGUID(_ guid: GUID?) -> Deferred<Maybe<[RemoteTab]>>
     func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>>
     func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>>
-
-    // Returns number of tabs inserted.
-    func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> // Insert into the local client.
-    func insertOrUpdateTabsForClientGUID(_ clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
-
     func deleteClient(guid: GUID) -> Success
 }
 
@@ -88,6 +67,15 @@ public struct RemoteTab: Equatable {
 
     public func withClientGUID(_ clientGUID: String?) -> RemoteTab {
         return RemoteTab(clientGUID: clientGUID, URL: URL, title: title, history: history, lastUsed: lastUsed, icon: icon)
+    }
+
+    public func toRemoteTabRecord() -> RemoteTabRecord {
+        var history: [String] = []
+        history.append(contentsOf: self.history.map { $0.absoluteString })
+
+        let icon = self.icon != nil ? self.icon?.absoluteString : nil
+
+        return RemoteTabRecord(title: self.title, urlHistory: history, icon: icon, lastUsed: Int64(self.lastUsed))
     }
 }
 

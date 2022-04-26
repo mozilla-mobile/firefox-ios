@@ -87,6 +87,7 @@ open class MockProfile: Client.Profile {
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: RustPlaces
+    public var tabs: RustRemoteTabs
     public var files: FileAccessor
     public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
     public var logins: RustLogins
@@ -115,6 +116,11 @@ open class MockProfile: Client.Profile {
         readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
         let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
         places = RustPlaces(databasePath: placesDatabasePath)
+
+        let tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_tabs.db").path
+
+        tabs = RustRemoteTabs(databasePath: tabsDbPath)
+
         legacyPlaces = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
         recommendations = legacyPlaces
         history = legacyPlaces
@@ -130,6 +136,7 @@ open class MockProfile: Client.Profile {
         db.reopenIfClosed()
         _ = logins.reopenIfClosed()
         _ = places.reopenIfClosed()
+        _ = tabs.reopenIfClosed()
     }
 
     public func _shutdown() {
@@ -138,6 +145,7 @@ open class MockProfile: Client.Profile {
         db.forceClose()
         _ = logins.forceClose()
         _ = places.forceClose()
+        _ = tabs.forceClose()
     }
 
     public var isShutdown: Bool = false

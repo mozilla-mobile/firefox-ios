@@ -50,36 +50,12 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return succeed()
     }
 
-    open func wipeRemoteTabs() -> Deferred<Maybe<()>> {
-        return succeed()
-    }
-
-    open func wipeTabs() -> Success {
-        return succeed()
-    }
-
     open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
         return deferMaybe(0)
     }
 
     open func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>> {
         return deferMaybe(0)
-    }
-
-    open func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return insertOrUpdateTabsForClientGUID(nil, tabs: [RemoteTab]())
-    }
-
-    open func insertOrUpdateTabsForClientGUID(_ clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return deferMaybe(-1)
-    }
-
-    open func getRemoteDevices() -> Deferred<Maybe<[RemoteDevice]>> {
-        return deferMaybe([])
-    }
-
-    open func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return deferMaybe(self.clientsAndTabs)
     }
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
@@ -102,10 +78,6 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferMaybe(Set<GUID>(optFilter(self.clientsAndTabs.map { $0.client.guid })))
     }
 
-    open func getTabsForClientWithGUID(_ guid: GUID?) -> Deferred<Maybe<[RemoteTab]>> {
-        return deferMaybe(optFilter(self.clientsAndTabs.map { $0.client.guid == guid ? $0.tabs : nil })[0])
-    }
-
     open func deleteClient(guid: GUID) -> Success { return succeed() }
 
     open func deleteCommands() -> Success { return succeed() }
@@ -121,17 +93,6 @@ func removeLocalClient(_ a: ClientAndTabs) -> Bool {
     return a.client.guid != nil
 }
 
-func byGUID(_ a: ClientAndTabs, b: ClientAndTabs) -> Bool {
-    guard let aGUID = a.client.guid, let bGUID = b.client.guid else {
-        return false
-    }
-    return aGUID < bGUID
-}
-
-func byURL(_ a: RemoteTab, b: RemoteTab) -> Bool {
-    return a.URL.absoluteString < b.URL.absoluteString
-}
-
 class SQLRemoteClientsAndTabsTests: XCTestCase {
     var clientsAndTabs: SQLiteRemoteClientsAndTabs!
 
@@ -144,134 +105,6 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         } catch _ {
         }
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files))
-    }
-
-    func testInsertGetClear() {
-        // Insert some test data.
-        var remoteDevicesToInsert: [RemoteDevice] = []
-        // Filter the local client from mock test data.
-        let remoteClients = clients.filter(removeLocalClient)
-        for c in remoteClients {
-            let e = self.expectation(description: "Insert.")
-            clientsAndTabs.insertOrUpdateClient(c.client).upon {
-                XCTAssertTrue($0.isSuccess)
-                e.fulfill()
-            }
-            let remoteDevice = RemoteDevice(id: c.client.fxaDeviceId!, name: "FxA Device", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
-            remoteDevicesToInsert.append(remoteDevice)
-            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs).succeeded()
-        }
-        clientsAndTabs.replaceRemoteDevices(remoteDevicesToInsert).succeeded()
-
-        let f = self.expectation(description: "Get after insert.")
-        clientsAndTabs.getClientsAndTabs().upon {
-            if let got = $0.successValue {
-                let expected = remoteClients.sorted(by: byGUID)
-                let actual = got.sorted(by: byGUID)
-
-                // This comparison will fail if the order of the tabs changes. We sort the result
-                // as part of the DB query, so it's not actively sorted in Swift.
-                XCTAssertEqual(expected, actual)
-            } else {
-                XCTFail("Expected clients!")
-            }
-            f.fulfill()
-        }
-
-        // Update the test data with a client with new tabs, and one with no tabs.
-        let client0NewTabs = clients[1].tabs.map { $0.withClientGUID(self.clients[0].client.guid) }
-        let client1NewTabs: [RemoteTab] = []
-        let expected = [
-            ClientAndTabs(client: clients[0].client, tabs: client0NewTabs),
-            ClientAndTabs(client: clients[1].client, tabs: client1NewTabs),
-        ].sorted(by: byGUID)
-
-        func doUpdate(_ guid: String?, tabs: [RemoteTab]) {
-            let g0 = self.expectation(description: "Update client: \(guid ?? "nil").")
-            clientsAndTabs.insertOrUpdateTabsForClientGUID(guid, tabs: tabs).upon {
-                if let rowID = $0.successValue {
-                    XCTAssertTrue(rowID > -1)
-                } else {
-                    XCTFail("Didn't successfully update.")
-                }
-                g0.fulfill()
-            }
-        }
-
-        doUpdate(clients[0].client.guid, tabs: client0NewTabs)
-        doUpdate(clients[1].client.guid, tabs: client1NewTabs)
-        // Also update the local tabs list. It should still not appear in the expected tabs below.
-        doUpdate(clients[2].client.guid, tabs: client1NewTabs)
-
-        let h = self.expectation(description: "Get after update.")
-        clientsAndTabs.getClientsAndTabs().upon {
-            if let clients = $0.successValue {
-                XCTAssertEqual(expected, clients.sorted(by: byGUID))
-            } else {
-                XCTFail("Expected clients!")
-            }
-            h.fulfill()
-        }
-
-        // Now clear everything, and verify we have no clients or tabs whatsoever.
-        let i = self.expectation(description: "Clear.")
-        clientsAndTabs.clear().upon {
-            XCTAssertTrue($0.isSuccess)
-            i.fulfill()
-        }
-
-        let j = self.expectation(description: "Get after clear.")
-        clientsAndTabs.getClientsAndTabs().upon {
-            if let clients = $0.successValue {
-                XCTAssertEqual(0, clients.count)
-            } else {
-                XCTFail("Expected clients!")
-            }
-            j.fulfill()
-        }
-
-        self.waitForExpectations(timeout: 10, handler: nil)
-    }
-
-    func testGetTabsForClient() {
-        for c in clients {
-            let e = self.expectation(description: "Insert.")
-            clientsAndTabs.insertOrUpdateClient(c.client).upon {
-                XCTAssertTrue($0.isSuccess)
-                e.fulfill()
-            }
-            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs).succeeded()
-        }
-
-        let e = self.expectation(description: "Get after insert.")
-        let ct = clients[0]
-        clientsAndTabs.getTabsForClientWithGUID(ct.client.guid).upon {
-            if let got = $0.successValue {
-                // This comparison will fail if the order of the tabs changes. We sort the result
-                // as part of the DB query, so it's not actively sorted in Swift.
-                XCTAssertEqual(ct.tabs.count, got.count)
-                XCTAssertEqual(ct.tabs.sorted(by: byURL), got.sorted(by: byURL))
-            } else {
-                XCTFail("Expected tabs!")
-            }
-            e.fulfill()
-        }
-
-        let f = self.expectation(description: "Get after insert.")
-        let localClient = clients[0]
-        clientsAndTabs.getTabsForClientWithGUID(localClient.client.guid).upon {
-            if let got = $0.successValue {
-                // This comparison will fail if the order of the tabs changes. We sort the result
-                // as part of the DB query, so it's not actively sorted in Swift.
-                XCTAssertEqual(localClient.tabs.count, got.count)
-                XCTAssertEqual(localClient.tabs.sorted(by: byURL), got.sorted(by: byURL))
-            } else {
-                XCTFail("Expected tabs!")
-            }
-            f.fulfill()
-        }
-
-        self.waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testReplaceRemoteDevices() {
