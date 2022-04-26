@@ -28,6 +28,7 @@ class BackForwardTableViewCell: UITableViewCell {
         faviconView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
         faviconView.layer.masksToBounds = true
         faviconView.contentMode = .center
+        faviconView.translatesAutoresizingMaskIntoConstraints = false
         return faviconView
     }()
 
@@ -36,6 +37,7 @@ class BackForwardTableViewCell: UITableViewCell {
         label.text = " "
         label.font = label.font.withSize(BackForwardViewCellUX.fontSize)
         label.textColor = UIColor.theme.tabTray.tabTitleText
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -84,18 +86,16 @@ class BackForwardTableViewCell: UITableViewCell {
         contentView.addSubview(faviconView)
         contentView.addSubview(label)
 
-        faviconView.snp.makeConstraints { make in
-            make.height.equalTo(BackForwardViewCellUX.faviconWidth)
-            make.width.equalTo(BackForwardViewCellUX.faviconWidth)
-            make.centerY.equalTo(self)
-            make.leading.equalTo(self.safeArea.leading).offset(BackForwardViewCellUX.faviconPadding)
-        }
-
-        label.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.leading.equalTo(faviconView.snp.trailing).offset(BackForwardViewCellUX.labelPadding)
-            make.trailing.equalTo(self.safeArea.trailing).offset(-BackForwardViewCellUX.labelPadding)
-        }
+        NSLayoutConstraint.activate([
+            faviconView.heightAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
+            faviconView.widthAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
+            faviconView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            faviconView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: CGFloat(BackForwardViewCellUX.faviconPadding)),
+            
+            label.centerYAnchor.constraint(equalTo: centerYAnchor),
+            label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(BackForwardViewCellUX.labelPadding)),
+            label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-BackForwardViewCellUX.labelPadding))
+        ])
 
     }
 
