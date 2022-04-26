@@ -28,18 +28,17 @@ class ActivityStreamTest: BaseTestCase {
                                    LaunchArguments.SkipWhatsNew,
                                    LaunchArguments.SkipETPCoverSheet,
                                    LaunchArguments.LoadDatabasePrefix + pagesVisitediPad,
-                                   LaunchArguments.SkipContextualHints,
-                                   LaunchArguments.SkipSponsoredShortcuts]
+                                   LaunchArguments.SkipContextualHints]
             } else {
                 launchArguments = [LaunchArguments.SkipIntro,
                                    LaunchArguments.SkipWhatsNew,
                                    LaunchArguments.SkipETPCoverSheet,
                                    LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone,
-                                   LaunchArguments.SkipContextualHints,
-                                   LaunchArguments.SkipSponsoredShortcuts]
+                                   LaunchArguments.SkipContextualHints]
             }
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
+        launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
         super.setUp()
     }
 
