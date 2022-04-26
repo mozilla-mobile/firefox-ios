@@ -628,6 +628,7 @@
 		C877039625222FDC006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C877039725222FE6006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		C87D8B802818333F00A6307D /* NimbusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87D8B7F2818333F00A6307D /* NimbusManager.swift */; };
 		C87DC85627B2C8B0006EFCE2 /* WallpaperNetworkUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DC85527B2C8B0006EFCE2 /* WallpaperNetworkUtility.swift */; };
 		C87DC85A27B2C8DE006EFCE2 /* WallpaperFilePathProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DC85927B2C8DE006EFCE2 /* WallpaperFilePathProtocol.swift */; };
 		C87DC85C27B2C94D006EFCE2 /* WallpaperResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DC85B27B2C94D006EFCE2 /* WallpaperResourceManager.swift */; };
@@ -3457,6 +3458,7 @@
 		C874FC2726612BFF00EBE86E /* AlertControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerView.swift; sourceTree = "<group>"; };
 		C874FC642661367900EBE86E /* MainInterface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		C87D418CB1BEBDCD40E59AA1 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = "co.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		C87D8B7F2818333F00A6307D /* NimbusManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusManager.swift; sourceTree = "<group>"; };
 		C87DC85527B2C8B0006EFCE2 /* WallpaperNetworkUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkUtility.swift; sourceTree = "<group>"; };
 		C87DC85927B2C8DE006EFCE2 /* WallpaperFilePathProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperFilePathProtocol.swift; sourceTree = "<group>"; };
 		C87DC85B27B2C94D006EFCE2 /* WallpaperResourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperResourceManager.swift; sourceTree = "<group>"; };
@@ -5663,7 +5665,6 @@
 				C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */,
 				C82A94E4269CB77500624AA7 /* FlaggableFeature.swift */,
 				C8656D74270F834600E199EA /* FlaggableFeatureOptions.swift */,
-				C81B78A3280752A20000C15F /* NimbusFeatureFlagLayer.swift */,
 			);
 			path = FeatureFlags;
 			sourceTree = "<group>";
@@ -5828,6 +5829,15 @@
 				EB9A179E20E6C1A200B12184 /* ThemedWidgets.swift */,
 			);
 			path = LegacyThemeManager;
+			sourceTree = "<group>";
+		};
+		C87D8B7E2818331900A6307D /* Nimbus */ = {
+			isa = PBXGroup;
+			children = (
+				C87D8B7F2818333F00A6307D /* NimbusManager.swift */,
+				C81B78A3280752A20000C15F /* NimbusFeatureFlagLayer.swift */,
+			);
+			path = Nimbus;
 			sourceTree = "<group>";
 		};
 		C87DC85327B2C85E006EFCE2 /* Protocols */ = {
@@ -6799,6 +6809,7 @@
 				7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */,
 				74821FFD1DB6D3AC00EEEA72 /* MailSchemes.plist */,
 				ACD605D124B35EEE00EE4454 /* metrics.yaml */,
+				C87D8B7E2818331900A6307D /* Nimbus */,
 				DFACDFAD274D4D4B00A94EEC /* Protocols */,
 				E69DB0B91E97E301008A67E6 /* Telemetry */,
 				E65075551E37F714006961AC /* Utils */,
@@ -8975,6 +8986,7 @@
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
 				D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */,
 				C8954A512729AD9D001C7283 /* FxDefaultTheme.swift in Sources */,
+				C87D8B802818333F00A6307D /* NimbusManager.swift in Sources */,
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesHelper.swift in Sources */,
