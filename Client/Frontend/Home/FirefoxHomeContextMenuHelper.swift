@@ -211,8 +211,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
 
     private func getSponsoredContentAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
-            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3469 SUMO page here is a placeholder, real page needs to be replaced
-            guard let url = URL(string: "https://support.mozilla.org/") else { return }
+            guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
             self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
             self.sendTopSiteContextualTelemetry(type: .sponsoredSupport)
         }).items
