@@ -21,7 +21,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     fileprivate var currentRow = 0
     fileprivate var verticalConstraints: [NSLayoutConstraint] = []
     
-    
     var tableViewTopAnchor: NSLayoutConstraint!
     var tableViewBottomAnchor: NSLayoutConstraint!
     var tableViewHeightAnchor: NSLayoutConstraint!
