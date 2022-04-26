@@ -4,7 +4,7 @@
 
 import Foundation
 
-class LibraryViewModel: FeatureFlagsProtocol {
+class LibraryViewModel: FeatureFlaggable {
 
     let profile: Profile
     let tabManager: TabManager

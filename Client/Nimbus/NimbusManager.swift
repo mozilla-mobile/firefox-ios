@@ -24,9 +24,9 @@ class NimbusManager {
 
     // MARK: - Properties
     var featureFlagLayer: NimbusFeatureFlagLayer
+    var messagingLayer: oesuchoe
 
-    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer()
-    ) {
+    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer()) {
         self.featureFlagLayer = featureFlagLayer
     }
 

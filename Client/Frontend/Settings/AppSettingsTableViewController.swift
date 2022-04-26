@@ -15,7 +15,7 @@ enum AppSettingsDeeplinkOption {
 }
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
-class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsProtocol {
+class AppSettingsTableViewController: SettingsTableViewController, FeatureFlaggable {
 
     // MARK: - Properties
     var deeplinkTo: AppSettingsDeeplinkOption?

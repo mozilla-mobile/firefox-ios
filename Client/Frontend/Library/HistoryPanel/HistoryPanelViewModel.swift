@@ -13,7 +13,7 @@ private class FetchInProgressError: MaybeErrorType {
     }
 }
 
-class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
+class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions

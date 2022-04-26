@@ -61,7 +61,7 @@ struct TabDisplayOrder: Codable {
     var regularTabUUID: [String] = []
 }
 
-class TabDisplayManager: NSObject, FeatureFlagsProtocol {
+class TabDisplayManager: NSObject, FeatureFlaggable {
 
     // MARK: - Variables
     var performingChainedOperations = false

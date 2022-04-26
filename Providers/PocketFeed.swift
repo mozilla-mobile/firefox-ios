@@ -46,7 +46,7 @@ struct PocketStory {
 
 }
 
-class Pocket: FeatureFlagsProtocol, URLCaching {
+class Pocket: FeatureFlaggable, URLCaching {
 
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"

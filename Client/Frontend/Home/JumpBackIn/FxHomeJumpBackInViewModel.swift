@@ -22,7 +22,7 @@ struct JumpBackInList {
     }
 }
 
-class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
+class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
 
     // MARK: - Properties
     var onTapGroup: ((Tab) -> Void)?

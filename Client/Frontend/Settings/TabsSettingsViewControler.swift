@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProtocol {
+class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
 
     init() {
         super.init(style: .grouped)

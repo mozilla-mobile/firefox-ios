@@ -562,7 +562,20 @@ class ExperimentsSettings: HiddenSetting {
     }
 }
 
-class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
+class ToggleChronTabs: HiddenSetting, FeatureFlaggable {
+    override var title: NSAttributedString? {
+        let toNewStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs) ? "OFF" : "ON"
+        return NSAttributedString(string: "Toggle chronological tabs \(toNewStatus)",
+                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        featureFlags.toggleBuildFeature(.chronologicalTabs)
+        updateCell(navigationController)
+    }
+}
+
+class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
@@ -575,7 +588,7 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
-class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
+class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
@@ -589,7 +602,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
     }
 }
 
-class ToggleHistoryGroups: HiddenSetting, FeatureFlagsProtocol {
+class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActiveForBuild(.historyGroups) ? "OFF" : "ON"
         return NSAttributedString(

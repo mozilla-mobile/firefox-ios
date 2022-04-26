@@ -7,7 +7,7 @@ import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
-class TabScrollingController: NSObject, FeatureFlagsProtocol {
+class TabScrollingController: NSObject, FeatureFlaggable {
     private enum ScrollDirection {
         case up
         case down

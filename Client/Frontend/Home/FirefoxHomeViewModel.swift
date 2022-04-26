@@ -8,7 +8,7 @@ protocol FirefoxHomeViewModelDelegate: AnyObject {
     func reloadSection(index: Int?)
 }
 
-class FirefoxHomeViewModel: FeatureFlagsProtocol {
+class FirefoxHomeViewModel: FeatureFlaggable {
 
     struct UX {
         static let topSitesHeight: CGFloat = 90

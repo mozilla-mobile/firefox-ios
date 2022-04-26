@@ -85,7 +85,7 @@ class FirefoxHomeRecentlySavedViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .recentlySaved

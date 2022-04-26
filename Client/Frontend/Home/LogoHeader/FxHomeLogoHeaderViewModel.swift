@@ -25,7 +25,7 @@ class FxHomeLogoHeaderViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .logoHeader

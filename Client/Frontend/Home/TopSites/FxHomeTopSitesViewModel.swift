@@ -164,7 +164,7 @@ class FxHomeTopSitesViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .topSites
