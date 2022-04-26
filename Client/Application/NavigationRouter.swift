@@ -381,4 +381,3 @@ func == (lhs: DeepLink, rhs: DeepLink) -> Bool {
         return false
     }
 }
-

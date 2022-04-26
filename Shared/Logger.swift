@@ -95,4 +95,3 @@ public extension Logger {
         return URL(string: "\(logDir)/\(name).log")
     }
 }
-
