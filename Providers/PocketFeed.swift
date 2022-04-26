@@ -35,14 +35,14 @@ struct PocketStory {
     }
 }
 
-class Pocket: FeatureFlagsProtocol {
+class Pocket: FeatureFlagsProtocol, URLCaching {
 
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"
     }
 
     private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
-    private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
+
     private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
     private let pocketGlobalFeed: String
 
@@ -54,34 +54,15 @@ class Pocket: FeatureFlagsProtocol {
         self.pocketGlobalFeed = endPoint
     }
 
+    var urlCache: URLCache {
+        return URLCache.shared
+    }
+
     lazy private var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private lazy var pocketKey: String? = {
         return Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String
     }()
-
-    private func findCachedResponse(for request: URLRequest) -> [String: Any]? {
-        let cachedResponse = URLCache.shared.cachedResponse(for: request)
-        guard let cachedAtTime = cachedResponse?.userInfo?["cache-time"] as? Timestamp, (Date.now() - cachedAtTime) < MaxCacheAge else {
-            return nil
-        }
-
-        guard let data = cachedResponse?.data, let json = try? JSONSerialization.jsonObject(with: data, options: []) else {
-            return nil
-        }
-
-        return json as? [String: Any]
-    }
-
-    private func cache(response: HTTPURLResponse?, for request: URLRequest, with data: Data?) {
-        guard let resp = response, let data  = data else {
-            return
-        }
-        let metadata = ["cache-time": Date.now()]
-        let cachedResp = CachedURLResponse(response: resp, data: data, userInfo: metadata, storagePolicy: .allowed)
-        URLCache.shared.removeCachedResponse(for: request)
-        URLCache.shared.storeCachedResponse(cachedResp, for: request)
-    }
 
     // Fetch items from the global pocket feed
     func globalFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {

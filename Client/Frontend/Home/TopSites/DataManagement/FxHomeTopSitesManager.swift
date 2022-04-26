@@ -23,7 +23,7 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
     weak var delegate: FxHomeTopSitesManagerDelegate?
     lazy var topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
     lazy var googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
-    lazy var contileProvider: ContileProvider = ContileProviderMock()
+    lazy var contileProvider: ContileProviderInterface = ContileProvider()
 
     init(profile: Profile) {
         self.profile = profile
