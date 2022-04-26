@@ -79,6 +79,13 @@ class FxHomePocketViewModel {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: extras)
     }
 
+    func domainAndReadingTimeForStory(atIndex: Int) -> String {
+        let pocketStory = pocketStories[atIndex]
+        let domainAndReadingTime = "\(pocketStory.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, pocketStory.timeToRead))"
+
+        return domainAndReadingTime
+    }
+
     // MARK: - Private
 
     private func getPocketSites() -> Success {

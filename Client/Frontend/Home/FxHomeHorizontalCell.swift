@@ -133,8 +133,8 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     func configure(viewModel: FxHomeHorizontalCellViewModel) {
         tag = viewModel.tag
         itemTitle.text = viewModel.titleText
-        descriptionLabel.text = viewModel.descriptionText
         heroImage.image = viewModel.heroImage
+        descriptionLabel.text = viewModel.descriptionText
 
         if viewModel.hasFavicon {
             faviconImage.image = viewModel.favIconImage

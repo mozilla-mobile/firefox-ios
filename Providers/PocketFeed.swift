@@ -15,24 +15,35 @@ import Storage
 struct PocketStory {
     let url: URL
     let title: String
+    let timeToRead: Int64
     let storyDescription: String
     let imageURL: URL
     let domain: String
 
     static func parseJSON(list: Array<[String: Any]>) -> [PocketStory] {
         return list.compactMap({ (storyDict) -> PocketStory? in
-            guard let urlS = storyDict["url"] as? String, let domain = storyDict["domain"] as? String,
-                let imageURLS = storyDict["image_src"] as? String,
-                let title = storyDict["title"] as? String,
-                let description = storyDict["excerpt"] as? String else {
-                    return nil
-            }
+            guard let urlS = storyDict["url"] as? String,
+                  let domain = storyDict["domain"] as? String,
+                  let imageURLS = storyDict["image_src"] as? String,
+                  let title = storyDict["title"] as? String,
+                  let timeToRead = storyDict["time_to_read"] as? Int64,
+                  let description = storyDict["excerpt"] as? String else {
+                      return nil
+                  }
+
             guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS) else {
                 return nil
             }
-            return PocketStory(url: url, title: title, storyDescription: description, imageURL: imageURL, domain: domain)
+
+            return PocketStory(url: url,
+                               title: title,
+                               timeToRead: timeToRead,
+                               storyDescription: description,
+                               imageURL: imageURL,
+                               domain: domain)
         })
     }
+
 }
 
 class Pocket: FeatureFlagsProtocol, URLCaching {
