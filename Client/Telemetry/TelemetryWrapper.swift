@@ -522,7 +522,7 @@ extension TelemetryWrapper {
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value?.rawValue ?? "", extras: extras)
 
-        gleanRecordEvent(category: category, method: method, object: object, value: value, extras: extras);
+        gleanRecordEvent(category: category, method: method, object: object, value: value, extras: extras)
     }
 
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
