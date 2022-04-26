@@ -175,4 +175,3 @@ extension InitialViewController: ShareControllerDelegate {
         embedController?.navigationController.view.alpha = 0
     }
 }
-

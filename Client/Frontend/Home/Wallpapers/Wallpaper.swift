@@ -133,4 +133,3 @@ struct Wallpaper: Codable, Equatable {
         }
     }
 }
-

@@ -44,4 +44,3 @@ class MockableHistory: BrowserHistory, SyncableHistory, ResettableSyncStorage {
     func hasSyncedHistory() -> Deferred<Maybe<Bool>> { fatalError() }
     func resetClient() -> Success { fatalError() }
 }
-

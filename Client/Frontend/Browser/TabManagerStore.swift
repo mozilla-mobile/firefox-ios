@@ -162,4 +162,3 @@ extension TabManagerStore {
         return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).0.count
     }
 }
-

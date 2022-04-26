@@ -2,7 +2,6 @@ disabled_rules: # rule identifiers to exclude from running
 # Auto-correctable rules
 - void_return
 - trailing_semicolon
-- trailing_newline
 - trailing_comma
 - syntactic_sugar
 - statement_position
