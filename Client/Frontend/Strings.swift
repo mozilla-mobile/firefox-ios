@@ -140,6 +140,10 @@ extension String {
     /// Identifiers of all new strings should begin with `FirefoxHome.`
     public struct FirefoxHomepage {
 
+        public struct Common {
+            public static let SitesCount = MZLocalizedString("FirefoxHomepage.Common.SitesCount.v101", value: "Sites: %d", comment: "Label showing how many sites there is in a search group. %d represents a number", lastUpdated: .v101)
+        }
+
         public struct CustomizeHomepage {
             public static let ButtonTitle = MZLocalizedString("FirefoxHome.CustomizeHomeButton.Title", value: "Customize Homepage", comment: "A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page", lastUpdated: .v39)
         }
@@ -301,13 +305,18 @@ extension String {
 
         public struct Homepage {
 
+            public struct Current {
+                public static let Description = MZLocalizedString("Settings.Home.Current.Description.v101", value: "Choose what displays as the homepage.", comment: "This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for.", lastUpdated: .v101)
+            }
+
             public struct CustomizeFirefoxHome {
                 public static let JumpBackIn = MZLocalizedString("Settings.Home.Option.JumpBackIn", value: "Jump Back In", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off", lastUpdated: .v39)
                 public static let RecentlyVisited = MZLocalizedString("Settings.Home.Option.RecentlyVisited", value: "Recently Visited", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off", lastUpdated: .v39)
                 public static let RecentlySaved = MZLocalizedString("Settings.Home.Option.RecentlySaved", value: "Recently Saved", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Shortcuts = MZLocalizedString("Settings.Home.Option.Shortcuts", value: "Shortcuts", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Pocket = MZLocalizedString("Settings.Home.Option.Pocket", value: "Recommended by Pocket", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off", lastUpdated: .v39)
-                public static let Description = MZLocalizedString("Settings.Home.Option.Description", value: "Choose content you see on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v39)
+                public static let Title = MZLocalizedString("Settings.Home.Option.Title.v101", value: "Include on Homepage", comment: "In the settings menu, this is the title of the Firefox Homepage customization settings section", lastUpdated: .v101)
+                public static let Description = MZLocalizedString("Settings.Home.Option.Description.v101", value: "Choose what’s included on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v101)
                 public static let Wallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper", value: "Wallpaper", comment: "In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application.", lastUpdated: .v98)
             }
 
@@ -354,7 +363,8 @@ extension String {
 
         public struct Tabs {
             public static let TabsSectionTitle = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.Title", value: "Customize Tab Tray", comment: "In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage", lastUpdated: .v39)
-            public static let InactiveTabs = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.InactiveTabs", value: "Inactive Tabs", comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off", lastUpdated: .v39)
+            public static let InactiveTabs = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.InactiveTabs", value: "Inactive Tabs", comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not", lastUpdated: .v39)
+            public static let InactiveTabsDescription = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101", value: "Tabs you haven’t viewed for two weeks get moved to the inactive section.", comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not", lastUpdated: .v101)
             public static let TabGroups = MZLocalizedString("Settings.Tabs.CustomizeTabsSection.TabGroups", value: "Tab Groups", comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off", lastUpdated: .v39)
         }
 
@@ -467,7 +477,7 @@ extension String {
 // MARK: - Home Panel Context Menu
 extension String {
     public static let OpenInNewTabContextMenuTitle = MZLocalizedString("HomePanel.ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "The title for the Open in New Tab context menu action for sites in Home Panels", lastUpdated: .unknown)
-    public static let OpenInNewPrivateTabContextMenuTitle = MZLocalizedString("HomePanel.ContextMenu.OpenInNewPrivateTab", value: "Open in New Private Tab", comment: "The title for the Open in New Private Tab context menu action for sites in Home Panels", lastUpdated: .unknown)
+    public static let OpenInNewPrivateTabContextMenuTitle = MZLocalizedString("HomePanel.ContextMenu.OpenInNewPrivateTab.v101", value: "Open in a Private Tab", comment: "The title for the Open in New Private Tab context menu action for sites in Home Panels", lastUpdated: .v101)
     public static let BookmarkContextMenuTitle = MZLocalizedString("HomePanel.ContextMenu.Bookmark", value: "Bookmark", comment: "The title for the Bookmark context menu action for sites in Home Panels", lastUpdated: .unknown)
     public static let RemoveBookmarkContextMenuTitle = MZLocalizedString("HomePanel.ContextMenu.RemoveBookmark", value: "Remove Bookmark", comment: "The title for the Remove Bookmark context menu action for sites in Home Panels", lastUpdated: .unknown)
     public static let DeleteFromHistoryContextMenuTitle = MZLocalizedString("HomePanel.ContextMenu.DeleteFromHistory", value: "Delete from History", comment: "The title for the Delete from History context menu action for sites in Home Panels", lastUpdated: .unknown)
@@ -1811,9 +1821,6 @@ extension String {
 }
 
 extension String {
-    // Customize homepage options
-    public static let SettingsCustomizeHomeTitle = MZLocalizedString("Settings.Home.Option.Title", value: "Firefox Homepage", comment: "In the settings menu, this is the title of the Firefox Homepage customization settings section", lastUpdated: .v39)
-
     // Home screen
     public static let RecentlyVisitedRemoveButtonTitle = MZLocalizedString("ActivityStream.RecentlyVisited.RemoveButton.Title", value: "Remove", comment: "When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu.", lastUpdated: .v39)
 }
