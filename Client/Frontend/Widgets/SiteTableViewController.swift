@@ -14,16 +14,34 @@ struct SiteTableViewControllerUX {
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
 
+    enum CollapsibleState {
+        case up
+        case down
+
+        var image: UIImage? {
+            switch self {
+            case .up:
+                return UIImage.templateImageNamed(ImageIdentifiers.findPrevious)
+            case .down:
+                return UIImage.templateImageNamed(ImageIdentifiers.findNext)
+            }
+        }
+    }
+
+    var collapsibleState: CollapsibleState? {
+        willSet(state) {
+            headerActionButton.setImage(state?.image, for: .normal)
+        }
+    }
+
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         label.textColor = UIColor.theme.tableView.headerTextDark
     }
 
-    // Currently, historyPanel uses this WHEN STG is available in that section.
     let headerActionButton: UIButton = .build { button in
-        button.setTitle("Show all", for: .normal)
+        button.setImage(CollapsibleState.down.image, for: .normal)
         button.backgroundColor = .clear
-        button.titleLabel?.font = .systemFont(ofSize: 12)
         button.isHidden = true
     }
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
@@ -66,7 +84,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        headerActionButton.setTitleColor(UIColor.theme.tableView.rowActionAccessory, for: .normal)
+        headerActionButton.tintColor = UIColor.theme.tableView.rowActionAccessory
         backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }
