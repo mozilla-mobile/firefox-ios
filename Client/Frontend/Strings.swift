@@ -141,7 +141,7 @@ extension String {
     public struct FirefoxHomepage {
 
         public struct Common {
-            public static let SitesCount = MZLocalizedString("FirefoxHomepage.Common.SitesCount.v101", value: "%d sites", comment: "Label showing how many sites there is in a search group. %d represents a number", lastUpdated: .v101)
+            public static let SitesCount = MZLocalizedString("FirefoxHomepage.Common.SitesCount.v101", value: "Sites: %d", comment: "Label showing how many sites there is in a search group. %d represents a number", lastUpdated: .v101)
         }
 
         public struct CustomizeHomepage {
