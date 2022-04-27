@@ -36,6 +36,10 @@ struct FlaggableFeature {
             return FlagKeys.StartAtHome
         case .tabTrayGroups:
             return FlagKeys.TabTrayGroups
+        case .topSites:
+            return FlagKeys.TopSiteSection
+        case .sponsoredTiles:
+            return FlagKeys.SponsoredShortcuts
         case .wallpapers:
             return FlagKeys.CustomWallpaper
         default: return nil
@@ -100,9 +104,8 @@ struct FlaggableFeature {
         switch featureID {
         case .startAtHome:
             return StartAtHomeSetting.afterFourHours.rawValue
-        case .wallpapers:
-            // In this case, we want to enable the tap banner to cycle through
-            // wallpapers behaviour by default.
+        case .wallpapers, .topSites:
+            // Features that are on by default
             return UserFeaturePreference.enabled.rawValue
 
         // Nimbus default options
