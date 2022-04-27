@@ -155,7 +155,7 @@ class ActivityStreamTest: BaseTestCase {
         // Long tap on apple top site, second cell
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["Apple"], timeout: 3)
         app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["Apple"].press(forDuration:1)
-        app.tables["Context Menu"].cells.otherElements["Open in New Private Tab"].tap()
+        app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
         XCTAssertFalse(app.staticTexts["apple"].exists)
@@ -188,7 +188,7 @@ class ActivityStreamTest: BaseTestCase {
         // Long tap on apple top site, second cell
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells.element(boundBy: 3), timeout: 3)
         app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells.element(boundBy: 3).press(forDuration:1)
-        selectOptionFromContextMenu(option: "Open in New Private Tab")
+        selectOptionFromContextMenu(option: "Open in a Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
         // Workaroud needed after xcode 11.3 update Issue 5937

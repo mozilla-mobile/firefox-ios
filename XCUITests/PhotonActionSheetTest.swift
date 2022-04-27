@@ -47,7 +47,7 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 3)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.performAction(Action.ShareBrowserTabMenuOption)
 
         // Wait to see the Share options sheet

@@ -34,7 +34,7 @@ extension ASGroup: HighlightItem {
     }
 
     var description: String? {
-        return "\(groupedItems.count)"
+        return String.localizedStringWithFormat(.FirefoxHomepage.Common.SitesCount, groupedItems.count)
     }
 
     var siteUrl: URL? {
