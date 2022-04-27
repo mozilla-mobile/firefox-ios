@@ -21,4 +21,3 @@ struct Contile: Codable, Equatable {
 struct Contiles: Codable {
     let tiles: [Contile]
 }
-
