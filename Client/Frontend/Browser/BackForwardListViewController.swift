@@ -25,8 +25,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     var tableViewBottomAnchor: NSLayoutConstraint!
     var tableViewHeightAnchor: NSLayoutConstraint!
 
-    lazy var tableView: UITableView = {
-        let tableView = UITableView()
+    lazy var tableView: UITableView = .build { tableView in
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
@@ -37,16 +36,11 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         tableView.backgroundView = blurEffectView
         tableView.showsHorizontalScrollIndicator = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
+    }
 
-    lazy var shadow: UIView = {
-        let shadow = UIView()
-        shadow.backgroundColor = UIColor(white: 0, alpha: 0.2)
-        shadow.translatesAutoresizingMaskIntoConstraints = false
-        return shadow
-    }()
+    lazy var shadow: UIView = .build { view in
+        view.backgroundColor = UIColor(white: 0, alpha: 0.2)
+    }
 
     var tabManager: TabManager!
     weak var bvc: BrowserViewController?
