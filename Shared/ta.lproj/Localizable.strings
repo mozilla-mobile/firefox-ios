@@ -1597,7 +1597,7 @@
 "TranslationToastHandler.PromptTranslate.OK" = "ஆம்";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "இந்தப் பக்கம்% %1$@ இல் தோன்றுகிறது. %3$@ உள்ளடக்கங்களை %2$@ மொழிக்கு மொழிபெயர்க்கவா?";
+"TranslationToastHandler.PromptTranslate.Title" = "இந்தப் பக்கம் %1$@ இல் தோன்றுகிறது. %3$@ உள்ளடக்கங்களை %2$@ மொழிக்கு மொழிபெயர்க்கவா?";
 
 /* Tile title for Twitter */
 "Twitter" = "கீச்சு";
