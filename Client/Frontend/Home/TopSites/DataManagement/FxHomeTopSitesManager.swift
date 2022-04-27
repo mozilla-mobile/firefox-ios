@@ -108,6 +108,8 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
         addSponsoredTiles(sites: &sites, availableSpacesCount: availableSpacesCount)
         addGoogleTopSite(sites: &sites, availableSpacesCount: availableSpacesCount)
 
+        sites.removeDuplicates()
+
         topSites = sites.map { HomeTopSite(site: $0, profile: profile) }
 
         // Refresh data in the background so we'll have fresh data next time we show
@@ -185,9 +187,24 @@ private extension Array where Element == Site {
         }
     }
 
-    // Check to ensure a site isn't already existing in the pinned top sites
+    // Keeping the order of the sites, we remove duplicate tiles.
+    // Ex: If a sponsored tile is present then it has precedence over the history sites.
+    // Ex: A default site is present but user has recent history site of the same site. That recent history tile won't be added.
+    mutating func removeDuplicates() {
+        var alreadyThere = Set<Site>()
+        let uniqueSites = compactMap { (site) -> Site? in
+            let shouldAddSite = alreadyThere.first(where: { $0.url.asURL?.domainURL == site.url.asURL?.domainURL } ) == nil
+            guard shouldAddSite else { return nil }
+            alreadyThere.insert(site)
+            return site
+        }
+
+        self = uniqueSites
+    }
+
+    // We don't add a sponsored tile if that domain site is already pinned by the user.
     private func siteIsAlreadyPresent(site: Site) -> Bool {
-        return filter { $0.url == site.url && ($0 as? PinnedSite) != nil }.count > 0
+        return filter { ($0.url.asURL?.domainURL == site.url.asURL?.domainURL) && (($0 as? PinnedSite) != nil) }.count > 0
     }
 }
 
