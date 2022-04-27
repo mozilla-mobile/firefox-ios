@@ -237,12 +237,7 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
-        // By default with new chron tab there is one tab in private mode
-        if iPad() {
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        } else {
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        }
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")

@@ -151,7 +151,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         recentTabs = tabManager.recentlyAccessedNormalTabs
 
         if featureFlags.isFeatureBuildAndUserEnabled(.tabTrayGroups) {
-            SearchTermGroupsManager.getTabGroups(with: profile,
+            SearchTermGroupsUtility.getTabGroups(with: profile,
                                                  from: recentTabs,
                                                  using: .orderedDescending) { [weak self] groups, _ in
                 guard let strongSelf = self else { completion(); return }

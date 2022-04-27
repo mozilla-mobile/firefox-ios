@@ -221,7 +221,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     /// Provide groups for curruently fetched history items.
     private func populateASGroups(fetchedSites: [Site], completion: @escaping () -> Void) {
-        SearchTermGroupsManager.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, filteredItems in
+        SearchTermGroupsUtility.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, filteredItems in
             guard let searchTermGrouping = group else { return }
 
             self.searchTermGroups.append(contentsOf: searchTermGrouping)

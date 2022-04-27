@@ -173,7 +173,6 @@ class TabTrayViewController: UIViewController {
                                        .ProfileDidStartSyncing,
                                        .ProfileDidFinishSyncing,
                                        .UpdateLabelOnTabClosed])
-
     }
 
     required init?(coder: NSCoder) {

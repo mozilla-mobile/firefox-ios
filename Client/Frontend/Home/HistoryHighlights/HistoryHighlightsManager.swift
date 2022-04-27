@@ -88,7 +88,7 @@ class HistoryHighlightsManager {
         completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void
     ) {
 
-        SearchTermGroupsManager.getHighlightGroups(with: profile,
+        SearchTermGroupsUtility.getHighlightGroups(with: profile,
                                                    from: highlights,
                                                    using: .orderedAscending) { groups, filteredItems in
             completion(groups, filteredItems)

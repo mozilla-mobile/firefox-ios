@@ -562,19 +562,6 @@ class ExperimentsSettings: HiddenSetting {
     }
 }
 
-class ToggleChronTabs: HiddenSetting, FeatureFlaggable {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs) ? "OFF" : "ON"
-        return NSAttributedString(string: "Toggle chronological tabs \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.chronologicalTabs)
-        updateCell(navigationController)
-    }
-}
-
 class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
         let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
