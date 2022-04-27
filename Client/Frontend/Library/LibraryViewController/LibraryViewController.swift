@@ -154,7 +154,7 @@ class LibraryViewController: UIViewController {
             navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             librarySegmentControl.widthAnchor.constraint(equalToConstant: 343),
-            librarySegmentControl.heightAnchor.constraint(equalToConstant: CGFloat(ChronologicalTabsControllerUX.navigationMenuHeight)),
+            librarySegmentControl.heightAnchor.constraint(equalToConstant: CGFloat(32)),
 
             controllerContainerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
             controllerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

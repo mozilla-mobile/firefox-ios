@@ -147,7 +147,6 @@ class TabTrayViewController: UIViewController {
     // MARK: - Initializers
     init(tabTrayDelegate: TabTrayDelegate? = nil,
          profile: Profile,
-         showChronTabs: Bool = false,
          tabToFocus: Tab? = nil,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
          and notificationCenter: NotificationCenter = NotificationCenter.default,
@@ -157,7 +156,6 @@ class TabTrayViewController: UIViewController {
         self.notificationCenter = notificationCenter
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
                                           profile: profile,
-                                          showChronTabs: showChronTabs,
                                           tabToFocus: tabToFocus,
                                           tabManager: tabManager)
 
@@ -168,7 +166,6 @@ class TabTrayViewController: UIViewController {
                                        .ProfileDidStartSyncing,
                                        .ProfileDidFinishSyncing,
                                        .UpdateLabelOnTabClosed])
-
     }
 
     required init?(coder: NSCoder) {
@@ -245,7 +242,7 @@ class TabTrayViewController: UIViewController {
 
         navigationMenu.snp.makeConstraints { make in
             make.width.lessThanOrEqualTo(343)
-            make.height.equalTo(ChronologicalTabsControllerUX.navigationMenuHeight)
+            make.height.equalTo(32)
         }
     }
 

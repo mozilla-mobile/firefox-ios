@@ -19,7 +19,6 @@ extension FeatureFlaggable {
 enum FeatureFlagName: String, CaseIterable {
     case adjustEnvironmentProd
     case bottomSearchBar
-    case chronologicalTabs
     case historyHighlights
     case historyGroups
     case inactiveTabs
@@ -41,7 +40,6 @@ enum FeatureFlagName: String, CaseIterable {
 
 enum CoreFeatureFlag {
     case adjustEnvironmentProd
-    case chronologicalTabs
     case useMockData
     case nimbus
     case shakeToRestore
@@ -77,10 +75,10 @@ class FeatureFlagsManager {
 
     /// Used as the main way to find out whether a core feature is active or not.
     public func isCoreFeatureActive(_ featureID: CoreFeatureFlag) -> Bool {
-        guard let feature = features[featureID] else { return false }
-        return feature.isActiveForBuild()
+//        guard let feature = features[featureID] else { return false }
+//        return feature.isActiveForBuild()
+        return true
     }
-
 
     /// Used as the main way to find out whether a feature is active or not,
     /// specifically for the build.
@@ -152,16 +150,10 @@ class FeatureFlagsManager {
     public func initializeFeatures(with profile: Profile) {
         features.removeAll()
 
-
         let adjustEnvironmentProd = FlaggableFeature(withID: .adjustEnvironmentProd,
                                                      and: profile,
                                                      enabledFor: [.release, .beta])
         features[.adjustEnvironmentProd] = adjustEnvironmentProd
-
-        let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
-                                         and: profile,
-                                         enabledFor: [])
-        features[.chronologicalTabs] = chronTabs
 
         /// Use the Nimbus experimentation platform. If this is `true` then
         /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
@@ -189,7 +181,6 @@ class FeatureFlagsManager {
                                                and: profile,
                                                enabledFor: [.release, .beta, .developer])
         features[.bottomSearchBar] = bottomSearchBar
-
 
         let historyHighlights = FlaggableFeature(withID: .historyHighlights,
                                                  and: profile,

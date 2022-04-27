@@ -225,7 +225,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         // build groups
         if shouldEnableGroupedTabs {
-            SearchTermGroupsManager.getTabGroups(with: profile,
+            SearchTermGroupsUtility.getTabGroups(with: profile,
                                                  from: tabsToBuildFrom,
                                                  using: .orderedAscending) { tabGroups, filteredActiveTabs  in
                 self.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)

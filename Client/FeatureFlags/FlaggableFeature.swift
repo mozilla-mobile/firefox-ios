@@ -16,8 +16,6 @@ struct FlaggableFeature {
     private var featureKey: String? {
         typealias FlagKeys = PrefsKeys.FeatureFlags
         switch featureID {
-        case .chronologicalTabs:
-            return FlagKeys.ChronologicalTabs
         case .historyHighlights:
             return FlagKeys.HistoryHighlightsSection
         case .historyGroups:
