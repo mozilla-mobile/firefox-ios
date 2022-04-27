@@ -118,7 +118,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
             guard let item = filteredSiteRecords[safe: indexPath.row] else { return }
             viewModel.deselectItem(item)
             break
-        default: break;
+        default: break
         }
     }
 

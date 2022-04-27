@@ -55,4 +55,3 @@ class GleanTelemetryTests: XCTestCase {
         waitForExpectations(timeout: 5.0)
     }
 }
-

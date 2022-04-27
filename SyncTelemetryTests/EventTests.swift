@@ -100,4 +100,3 @@ extension Event: Equatable {
         return propsAreEqual
     }
 }
-

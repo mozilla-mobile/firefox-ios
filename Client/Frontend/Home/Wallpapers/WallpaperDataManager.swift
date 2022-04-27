@@ -172,4 +172,3 @@ struct WallpaperDataManager {
         resourceManager.verifyResources(for: specialCollections)
     }
 }
-

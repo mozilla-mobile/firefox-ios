@@ -15,34 +15,45 @@ import Storage
 struct PocketStory {
     let url: URL
     let title: String
+    let timeToRead: Int64
     let storyDescription: String
     let imageURL: URL
     let domain: String
 
     static func parseJSON(list: Array<[String: Any]>) -> [PocketStory] {
         return list.compactMap({ (storyDict) -> PocketStory? in
-            guard let urlS = storyDict["url"] as? String, let domain = storyDict["domain"] as? String,
-                let imageURLS = storyDict["image_src"] as? String,
-                let title = storyDict["title"] as? String,
-                let description = storyDict["excerpt"] as? String else {
-                    return nil
-            }
+            guard let urlS = storyDict["url"] as? String,
+                  let domain = storyDict["domain"] as? String,
+                  let imageURLS = storyDict["image_src"] as? String,
+                  let title = storyDict["title"] as? String,
+                  let timeToRead = storyDict["time_to_read"] as? Int64,
+                  let description = storyDict["excerpt"] as? String else {
+                      return nil
+                  }
+
             guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS) else {
                 return nil
             }
-            return PocketStory(url: url, title: title, storyDescription: description, imageURL: imageURL, domain: domain)
+
+            return PocketStory(url: url,
+                               title: title,
+                               timeToRead: timeToRead,
+                               storyDescription: description,
+                               imageURL: imageURL,
+                               domain: domain)
         })
     }
+
 }
 
-class Pocket: FeatureFlagsProtocol {
+class Pocket: FeatureFlagsProtocol, URLCaching {
 
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"
     }
 
     private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
-    private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
+
     private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
     private let pocketGlobalFeed: String
 
@@ -54,34 +65,15 @@ class Pocket: FeatureFlagsProtocol {
         self.pocketGlobalFeed = endPoint
     }
 
+    var urlCache: URLCache {
+        return URLCache.shared
+    }
+
     lazy private var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private lazy var pocketKey: String? = {
         return Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String
     }()
-
-    private func findCachedResponse(for request: URLRequest) -> [String: Any]? {
-        let cachedResponse = URLCache.shared.cachedResponse(for: request)
-        guard let cachedAtTime = cachedResponse?.userInfo?["cache-time"] as? Timestamp, (Date.now() - cachedAtTime) < MaxCacheAge else {
-            return nil
-        }
-
-        guard let data = cachedResponse?.data, let json = try? JSONSerialization.jsonObject(with: data, options: []) else {
-            return nil
-        }
-
-        return json as? [String: Any]
-    }
-
-    private func cache(response: HTTPURLResponse?, for request: URLRequest, with data: Data?) {
-        guard let resp = response, let data  = data else {
-            return
-        }
-        let metadata = ["cache-time": Date.now()]
-        let cachedResp = CachedURLResponse(response: resp, data: data, userInfo: metadata, storagePolicy: .allowed)
-        URLCache.shared.removeCachedResponse(for: request)
-        URLCache.shared.storeCachedResponse(cachedResp, for: request)
-    }
 
     // Fetch items from the global pocket feed
     func globalFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {

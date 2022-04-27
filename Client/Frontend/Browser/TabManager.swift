@@ -1089,4 +1089,3 @@ extension TabManager {
         store.clearArchive()
     }
 }
-
