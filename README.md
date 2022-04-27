@@ -1,7 +1,8 @@
 Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![codecov](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main)
 ===============
 
-Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
+Download on the [App Store](https://apps.apple.com/app/firefox-web-browser/id989804926).
+
 
 This branch (main)
 -----------
