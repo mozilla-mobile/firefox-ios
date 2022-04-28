@@ -28,6 +28,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case wallpapers
 }
 
+/// This enum is a constraint for any feature flag options that have more than
+/// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
+enum NimbusFeatureFlagWithCustomOptionsID {
+    case startAtHome
+}
+
 struct NimbusFlaggableFeature {
 
     // MARK: - Variables
@@ -105,27 +111,13 @@ struct NimbusFlaggableFeature {
         default:
             return existingOption == UserFeaturePreference.enabled.rawValue
         }
-
-//        // Feature option defaults
-//        switch featureID {
-//        case .startAtHome, .wallpapers:
-//            return true
-//
-//        // Nimbus default options
-//        case .jumpBackIn, .pocket, .recentlySaved, .historyHighlights:
-//            return checkNimbusHomepageFeatures(from: nimbusLayer) == UserFeaturePreference.enabled
-//        case .inactiveTabs:
-//            return checkNimbusTabTrayFeatures(from: nimbusLayer) == UserFeaturePreference.enabled
-//        default:
-//            return false
-//        }
     }
 
     /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
     /// convert it to the appropriate type.
     public func getUserPreference(using nimbusLayer: NimbusFeatureFlagLayer) -> String? {
         if let optionsKey = featureOptionsKey,
-            let existingOption = profile.prefs.stringForKey(optionsKey) {
+           let existingOption = profile.prefs.stringForKey(optionsKey) {
             return existingOption
         }
 
@@ -147,27 +139,18 @@ struct NimbusFlaggableFeature {
         }
     }
 
-    /// Allows fine grain control over a feature, by allowing to directly set the state to ON
-    /// or OFF, and also set the features option as an Int
+    /// Allows to directly set the state of a feature.
+    ///
+    /// Not all features are user togglable. If there exists no feature key - as defined
+    /// in the `featureKey()` function - with which to write to UserDefaults, then the
+    /// feature cannot be turned on/off and its state can only be set when initialized,
+    /// based on build channel.
     public func setUserPreferenceFor(_ option: String) {
         guard !option.isEmpty,
               let optionsKey = featureOptionsKey
         else { return }
 
         profile.prefs.setString(option, forKey: optionsKey)
-    }
-
-    /// Toggles a feature On or Off, and saves the status to UserDefaults.
-    ///
-    /// Not all features are user togglable. If there exists no feature key - as defined
-    /// in the `featureKey()` function - with which to write to UserDefaults, then the
-    /// feature cannot be turned on/off and its state can only be set when initialized,
-    /// based on build channel. Furthermore, this controls build availability, and
-    /// does not reflect user preferences.
-    public func toggleBuildFeature(using nimbusLayer: NimbusFeatureFlagLayer) {
-        guard let featureKey = featureKey else { return }
-        let currentFeatureState = isUserEnabled(using: nimbusLayer)
-        profile.prefs.setBool(!currentFeatureState, forKey: featureKey)
     }
 }
 

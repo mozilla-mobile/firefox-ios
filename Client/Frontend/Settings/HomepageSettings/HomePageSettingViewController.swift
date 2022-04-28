@@ -141,13 +141,13 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
     private func setupStartAtHomeSection() -> SettingSection? {
         guard featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly) else { return nil }
-        guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome) else { return nil }
+        guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.getCustomState(for: .startAtHome) else { return nil }
         currentStartAtHomeSetting = startAtHomeSetting
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
 
         let onOptionSelected: ((Bool, StartAtHomeSetting) -> Void) = { state, option in
-            self.featureFlags.setUserPreferenceFor(.startAtHome, to: option)
+            self.featureFlags.set(feature: .startAtHome, to: option)
             self.tableView.reloadData()
 
             let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.StartAtHome,
@@ -195,7 +195,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, FeatureFlagsProtocol {
+    class TopSitesSettings: Setting, FeatureFlaggable {
         var profile: Profile
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
@@ -203,7 +203,7 @@ extension HomePageSettingViewController {
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         override var status: NSAttributedString {
-            let areShortcutsOn = featureFlags.userPreferenceFor(.topSites) == UserFeaturePreference.enabled
+            let areShortcutsOn = featureFlags.isFeatureEnabled(.topSites, checking: .userOnly)
             let status: String = areShortcutsOn ? .Settings.Homepage.Shortcuts.ToggleOn : .Settings.Homepage.Shortcuts.ToggleOff
             return NSAttributedString(string: String(format: status))
         }

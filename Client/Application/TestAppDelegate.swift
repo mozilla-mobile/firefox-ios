@@ -9,7 +9,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-class TestAppDelegate: AppDelegate, FeatureFlagsProtocol {
+class TestAppDelegate: AppDelegate, FeatureFlaggable {
 
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
@@ -98,7 +98,7 @@ class TestAppDelegate: AppDelegate, FeatureFlagsProtocol {
         }
 
         if launchArguments.contains(LaunchArguments.SkipSponsoredShortcuts) {
-            featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.disabled)
+            featureFlags.set(feature: .sponsoredTiles, to: false)
         }
 
         // Don't show the What's New page.
