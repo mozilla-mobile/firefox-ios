@@ -68,10 +68,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         return !isSearchInProgress ? .HistoryPanelEmptyStateTitle : .LibraryPanel.History.NoHistoryResult
     }
 
-    var shouldShowEmptyState: Bool {
-        return isSearchInProgress ? searchResultSites.isEmpty : groupedSites.isEmpty
-    }
-
     let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
                                      Notification.Name.PrivateDataClearedHistory,
                                      Notification.Name.DynamicFontChanged,
@@ -131,6 +127,13 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             self.searchResultSites = results
             completion(!results.isEmpty)
         }
+    }
+
+    func shouldShowEmptyState(searchText: String) -> Bool {
+        guard isSearchInProgress else { return groupedSites.isEmpty }
+
+        // if the search text is empty we show the regular history so the empty should not show
+        return !searchText.isEmpty ? searchResultSites.isEmpty : false
     }
 
     func updateSearchOffset() {

@@ -19,8 +19,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchText = searchBar.text, !searchText.isEmpty else {
-            viewModel.searchResultSites.removeAll()
-            applySearchSnapshot()
+            handleEmptySearch()
             return
         }
 
@@ -50,7 +49,7 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
             }
 
             self.applySearchSnapshot()
-            self.toggleEmptyState()
+            self.updateEmptyPanelState()
         }
     }
 
@@ -64,7 +63,13 @@ extension HistoryPanelWithGroups: UISearchBarDelegate {
 
     private func handleNoResults() {
         applySearchSnapshot()
-        toggleEmptyState()
+        updateEmptyPanelState()
+    }
+
+    private func handleEmptySearch() {
+        viewModel.searchResultSites.removeAll()
+        applySnapshot()
+        updateEmptyPanelState()
     }
 }
 
