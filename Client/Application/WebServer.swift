@@ -34,7 +34,7 @@ class WebServer {
     }
 
     @discardableResult func start() throws -> Bool {
-        if server.isRunning {
+        guard !server.isRunning else {
             return true
         }
 
