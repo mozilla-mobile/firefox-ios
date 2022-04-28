@@ -6,6 +6,7 @@ import Foundation
 import Shared
 
 class TopSitesRowCountSettingsController: SettingsTableViewController {
+
     let prefs: Prefs
     var numberOfRows: Int32
     static let defaultNumberOfRows: Int32 = 2
@@ -14,7 +15,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         self.prefs = prefs
         numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
         super.init(style: .grouped)
-        self.title = .AppMenu.AppMenuTopSitesTitleString
+        self.title = .Settings.Homepage.Shortcuts.RowsPageTitle
     }
 
     required init?(coder aDecoder: NSCoder) {

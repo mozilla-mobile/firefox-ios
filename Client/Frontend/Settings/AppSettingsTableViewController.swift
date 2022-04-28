@@ -88,11 +88,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
             return
 
         case .customizeTopSites:
-            let topSitesVC = TopSitesRowCountSettingsController(prefs: profile.prefs)
-            topSitesVC.profile = profile
-            // Push top sites settings view controller directly as its not of type settings viewcontroller
-            navigationController?.pushViewController(topSitesVC, animated: false)
-            return
+            viewController = TopSitesSettingsViewController()
         }
 
         viewController.profile = profile
