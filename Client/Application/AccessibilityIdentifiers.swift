@@ -96,7 +96,7 @@ public struct AccessibilityIdentifiers {
                 static let recentlySaved = "Recently Saved"
                 static let recentVisited = "Recently Visited"
                 static let recommendedByPocket = "Recommended by Pocket"
-                static let wallPaper = "WallpaperSettings"
+                static let wallpaper = "WallpaperSettings"
             }
         }
 

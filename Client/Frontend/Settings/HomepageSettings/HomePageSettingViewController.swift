@@ -241,7 +241,7 @@ extension HomePageSettingViewController {
         var tabManager: TabManager
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallPaper }
+        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,
