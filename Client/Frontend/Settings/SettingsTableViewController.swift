@@ -193,9 +193,9 @@ class BoolSetting: Setting, FeatureFlaggable {
     fileprivate let defaultValue: Bool?
     fileprivate let settingDidChange: ((Bool) -> Void)?
     fileprivate let statusText: NSAttributedString?
-    fileprivate let featureFlagName: FeatureFlagName?
+    fileprivate let featureFlagName: NimbusFeatureFlagID?
 
-    init(prefs: Prefs?, prefKey: String? = nil, defaultValue: Bool?, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, featureFlagName: FeatureFlagName? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    init(prefs: Prefs?, prefKey: String? = nil, defaultValue: Bool?, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, featureFlagName: NimbusFeatureFlagID? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         self.prefs = prefs
         self.prefKey = prefKey
         self.defaultValue = defaultValue
@@ -213,7 +213,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
-    convenience init(with featureFlagID: FeatureFlagName, titleText: NSAttributedString) {
+    convenience init(with featureFlagID: NimbusFeatureFlagID, titleText: NSAttributedString) {
         self.init(prefs: nil, defaultValue: nil, attributedTitleText: titleText, featureFlagName: featureFlagID)
     }
 

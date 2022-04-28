@@ -29,7 +29,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? configureRefreshControl() : nil
+            featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly) ? configureRefreshControl() : nil
         }
     }
 

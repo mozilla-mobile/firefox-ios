@@ -117,10 +117,9 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             generalSettings.insert(SearchBarSetting(settings: self), at: 5)
         }
 
-        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureActiveForBuild(.tabTrayGroups)
-        let inactiveTabsAreBuildActive = featureFlags.isFeatureActiveForBuild(.inactiveTabs)
-        let inactiveTabsAreNimbusActive = featureFlags.isFeatureActiveForNimbus(.inactiveTabs)
-        if tabTrayGroupsAreBuildActive || (inactiveTabsAreBuildActive && inactiveTabsAreNimbusActive) {
+        let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
+        let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+        if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
             generalSettings.insert(TabsSetting(), at: 3)
         }
 

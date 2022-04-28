@@ -8,7 +8,6 @@ class StartAtHomeHelper: FeatureFlaggable {
     private var isRestoringTabs: Bool
     // Override only for unit test to test `shouldSkipStartHome` logic
     private var isRunningTest: Bool
-    lazy var startAtHomeSetting: StartAtHomeSetting? = featureFlags.userPreferenceFor(.startAtHome)
 
     init(isRestoringTabs: Bool,
          isRunnigTest: Bool = AppConstants.IsRunningTest) {
@@ -26,8 +25,8 @@ class StartAtHomeHelper: FeatureFlaggable {
     /// the user's last activity and whether, based on their settings, Start at Home feature
     /// should perform its function.
     public func shouldStartAtHome() -> Bool {
-        guard featureFlags.isFeatureActiveForBuild(.startAtHome),
-              let setting = startAtHomeSetting,
+        guard featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly),
+              let setting = featureFlags.userPreferenceFor(.startAtHome),
               setting != .disabled
         else { return false }
 

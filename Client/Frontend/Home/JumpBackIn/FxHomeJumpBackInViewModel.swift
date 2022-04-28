@@ -150,7 +150,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     private func updateJumpBackInData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs
 
-        if featureFlags.isFeatureBuildAndUserEnabled(.tabTrayGroups) {
+        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
             SearchTermGroupsUtility.getTabGroups(with: profile,
                                                  from: recentTabs,
                                                  using: .orderedDescending) { [weak self] groups, _ in
@@ -175,12 +175,11 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     }
 
     var isEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
-              featureFlags.isFeatureActiveForNimbus(.jumpBackIn),
-              featureFlags.userPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
-        else { return false }
+        if featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) {
+            return !isPrivate
+        }
 
-        return !isPrivate
+        return false
     }
 
     var hasData: Bool {

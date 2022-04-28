@@ -128,7 +128,7 @@ class TabManager: NSObject, FeatureFlaggable {
     var recentlyAccessedNormalTabs: [Tab] {
         var eligibleTabs: [Tab]
 
-        if featureFlags.isFeatureBuildAndUserEnabled(.inactiveTabs) {
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
             eligibleTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
         } else {
             eligibleTabs = normalTabs

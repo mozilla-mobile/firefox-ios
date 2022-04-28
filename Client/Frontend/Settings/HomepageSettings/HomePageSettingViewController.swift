@@ -15,31 +15,19 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     var hasHomePage = false
 
     var isJumpBackInSectionEnabled: Bool {
-        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.jumpBackIn)
-        let isNimbusFeatureEnabled = featureFlags.isFeatureActiveForNimbus(.jumpBackIn)
-        guard isFeatureEnabled, isNimbusFeatureEnabled else { return false }
-        return true
+        return featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly)
     }
 
     var isRecentlySavedSectionEnabled: Bool {
-        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.recentlySaved)
-        let isNimbusFeatureEnabled = featureFlags.isFeatureActiveForNimbus(.recentlySaved)
-        guard isFeatureEnabled, isNimbusFeatureEnabled else { return false }
-        return true
+        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildOnly)
     }
 
     var isWallpaperSectionEnabled: Bool {
-        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.wallpapers)
-        guard isFeatureEnabled else { return false }
-        return true
+        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 
     var isHistoryHighlightsSectionEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
-              featureFlags.isFeatureActiveForNimbus(.historyHighlights)
-        else { return false }
-
-        return true
+        return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
     }
 
     // MARK: - Initializers
@@ -152,7 +140,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     private func setupStartAtHomeSection() -> SettingSection? {
-        guard featureFlags.isFeatureActiveForBuild(.startAtHome) else { return nil }
+        guard featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly) else { return nil }
         guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome) else { return nil }
         currentStartAtHomeSetting = startAtHomeSetting
 

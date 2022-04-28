@@ -17,8 +17,7 @@ class LibraryViewModel: FeatureFlaggable {
     }
 
     var shouldShowSearch: Bool {
-        return self.featureFlags.isFeatureActiveForBuild(.historyGroups) &&
-        currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
+        return featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) && currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
     }
 
     var segmentedControlItems: [UIImage] {

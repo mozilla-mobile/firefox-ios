@@ -55,7 +55,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     // MARK: - Section availability variables
 
     var isYourLibrarySectionEnabled: Bool {
-        UIDevice.current.userInterfaceIdiom != .pad && featureFlags.isFeatureActiveForNimbus(.librarySection)
+        return UIDevice.current.userInterfaceIdiom != .pad && featureFlags.isFeatureEnabled(.librarySection, checking: .buildOnly)
     }
 
     // MARK: - Initializers

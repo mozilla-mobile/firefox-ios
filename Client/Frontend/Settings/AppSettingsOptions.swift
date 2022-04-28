@@ -564,7 +564,7 @@ class ExperimentsSettings: HiddenSetting {
 
 class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
@@ -577,7 +577,7 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
 
 class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
@@ -591,7 +591,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
 
 class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.historyGroups) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) ? "OFF" : "ON"
         return NSAttributedString(
             string: "Toggle history groups \(toNewStatus)",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])

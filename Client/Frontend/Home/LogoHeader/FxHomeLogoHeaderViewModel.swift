@@ -32,6 +32,6 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureActiveForBuild(.wallpapers)
+        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 }

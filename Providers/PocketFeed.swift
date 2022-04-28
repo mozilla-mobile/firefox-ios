@@ -140,7 +140,7 @@ class Pocket: FeatureFlaggable, URLCaching {
     }
 
     private var shouldUseMockData: Bool {
-        return featureFlags.isFeatureActiveForBuild(.useMockData) && (pocketKey == "" || pocketKey == nil)
+        return featureFlags.isCoreFeatureEnabled(.useMockData) && (pocketKey == "" || pocketKey == nil)
     }
 
     private func getMockDataFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {
