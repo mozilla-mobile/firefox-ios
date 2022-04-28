@@ -66,42 +66,39 @@ class FeatureFlagsManager: NimbusManageable {
         }
     }
 
-//    public func userPreferenceFor<T>(_ featureID: NimbusFeatureFlagID) -> T? {
-//        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-//        guard let userSetting = feature.getUserPreference(using: nimbusManager.featureFlagLayer) else { return nil }
-//
-//        switch featureID {
-//        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
-//        default: return nil
-//        }
-//    }
-
-    public func toggleBuildFeature(_ featureID: NimbusFeatureFlagID) {
+    /// Retrieves a feature key for any specific feature, if it has one.
+    public func featureKey(for featureID: NimbusFeatureFlagID) -> String? {
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-        feature.toggleBuildFeature(using: nimbusManager.featureFlagLayer)
+        return feature.featureOptionsKey
     }
 
-//    /// Retrieves a feature key for any specific feature, if it has one.
-//    public func featureKey(for featureID: NimbusFeatureFlagID) -> String? {
-////        return features[featureID]?.featureOptionsKey
-//    }
+    public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
+        switch featureID {
+        case .startAtHome:
+            let feature = NimbusFlaggableFeature(withID: .startAtHome, and: profile)
+            guard let userSetting = feature.getUserPreference(using: nimbusManager.featureFlagLayer) else { return nil }
 
-    /// Main interface for accessing feature options.
-    ///
-    /// Function must have context when called: `let foo: Type = featureOption(.example)`
-    /// Any feature with an option attached must be listed, and further converted into
-    /// it's appropriate type in the switch statement.
-//    public func userPreferenceFor<T>(_ featureID: NimbusFeatureFlagID) -> T? {
-//        guard let feature = features[featureID],
-//              let userSetting = feature.getUserPreference(using: nimbusLayer)
-//        else { return nil }
-//
-//        switch featureID {
-//        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
-//        default: return UserFeaturePreference(rawValue: userSetting) as? T
-//        }
-//    }
-//
+            return StartAtHomeSetting(rawValue: userSetting) as? T
+        }
+    }
+
+    public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool) {
+        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
+        let newSetting = desiredState ? UserFeaturePreference.enabled.rawValue : UserFeaturePreference.disabled.rawValue
+        feature.setUserPreferenceFor(newSetting)
+    }
+
+    public func set<T: FlaggableFeatureOptions>(feature featureID: NimbusFeatureFlagWithCustomOptionsID, to desiredState: T) {
+
+        switch featureID {
+        case .startAtHome:
+            if let option = desiredState as? StartAtHomeSetting {
+                let feature = NimbusFlaggableFeature(withID: .startAtHome, and: profile)
+                feature.setUserPreferenceFor(option.rawValue)
+            }
+        }
+    }
+
 //    /// Main interface for setting a feature's state and options. Options are enums of
 //    /// `FlaggableFeatureOptions` type and also conform to Int.
 //    public func setUserPreferenceFor<T: FlaggableFeatureOptions>(_ featureID: NimbusFeatureFlagID, to option: T) {
@@ -119,7 +116,9 @@ class FeatureFlagsManager: NimbusManageable {
 //    }
 //
     /// Sets up features with default channel availablility. For ease of use, please add
-    /// new features alphabetically.
+    /// new features alphabetically. These features are only core features in the
+    /// application. See the relevant documentation on `CoreFlaggableFeature` and
+    /// `NimbusFlaggableFeature` for more exlanation on the differences.
     ///
     /// This should ONLY be called when instatiating the feature flag system,
     /// and never again.
@@ -140,6 +139,7 @@ class FeatureFlagsManager: NimbusManageable {
                                                enabledFor: [.developer])
         coreFeatures[.useMockData] = useMockData
     }
+}
 
     // ROUX
 //        let bottomSearchBar = FlaggableFeature(withID: .bottomSearchBar,
@@ -222,4 +222,3 @@ class FeatureFlagsManager: NimbusManageable {
 //                                          and: profile,
 //                                          enabledFor: [.release, .beta, .developer])
 //        features[.wallpapers] = wallpapers
-}

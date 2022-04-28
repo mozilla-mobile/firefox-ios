@@ -264,7 +264,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     // These methods allow a subclass to control how the pref is saved
     func displayBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
-            control.isOn = featureFlags.userPreferenceFor(featureFlagName) == UserFeaturePreference.enabled
+            control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
         } else {
             guard let key = prefKey, let defaultValue = defaultValue else {
                 return
@@ -275,8 +275,7 @@ class BoolSetting: Setting, FeatureFlaggable {
 
     func writeBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
-            let controlState = control.isOn ? UserFeaturePreference.enabled : UserFeaturePreference.disabled
-            featureFlags.setUserPreferenceFor(featureFlagName, to: controlState)
+            featureFlags.set(feature: featureFlagName, to: control.isOn)
 
         } else {
             guard let key = prefKey else {

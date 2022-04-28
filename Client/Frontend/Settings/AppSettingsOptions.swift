@@ -570,7 +570,8 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.pullToRefresh)
+        let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly)
+        featureFlags.set(feature: .pullToRefresh, to: newStatus)
         updateCell(navigationController)
     }
 }
@@ -583,7 +584,8 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.inactiveTabs)
+        let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+        featureFlags.set(feature: .inactiveTabs, to: newStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
     }
@@ -598,7 +600,8 @@ class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.historyGroups)
+        let newStatus = !featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly)
+        featureFlags.set(feature: .historyGroups, to: newStatus)
         updateCell(navigationController)
     }
 }

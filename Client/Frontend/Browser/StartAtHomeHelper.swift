@@ -26,7 +26,7 @@ class StartAtHomeHelper: FeatureFlaggable {
     /// should perform its function.
     public func shouldStartAtHome() -> Bool {
         guard featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly),
-              let setting = featureFlags.userPreferenceFor(.startAtHome),
+              let setting: StartAtHomeSetting = featureFlags.getCustomState(for: .startAtHome),
               setting != .disabled
         else { return false }
 
