@@ -151,10 +151,10 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     static let maximumNumberOfSponsoredTile = 2
 
-    // TODO: Check for settings user preference with https://mozilla-hub.atlassian.net/browse/FXIOS-3469
     // TODO: Check for nimbus with https://mozilla-hub.atlassian.net/browse/FXIOS-3468
     private var shouldLoadSponsoredTiles: Bool {
-        return featureFlags.isFeatureActiveForBuild(.sponsoredTiles) && profile.prefs.boolForKey(PrefsKeys.KeyShowSponsoredShortcuts) ?? true
+        return featureFlags.isFeatureActiveForBuild(.sponsoredTiles)
+        && featureFlags.userPreferenceFor(.sponsoredTiles) == UserFeaturePreference.enabled
     }
 
     private var shouldShowSponsoredTiles: Bool {

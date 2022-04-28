@@ -171,7 +171,7 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureActiveForNimbus(.topSites)
+        return featureFlags.isFeatureActiveForNimbus(.topSites) && featureFlags.userPreferenceFor(.topSites) == UserFeaturePreference.enabled
     }
 
     var hasData: Bool {

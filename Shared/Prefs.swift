@@ -4,6 +4,7 @@
 
 import Foundation
 
+// New keys should follow the name: "[nameOfTheFeature]Key" written with camel case
 public struct PrefsKeys {
     // When this pref is set (by the user) it overrides default behaviour which is just based on app locale.
     public static let KeyEnableChinaSyncService = "useChinaSyncService"
@@ -50,6 +51,8 @@ public struct PrefsKeys {
         public static let RecentlySavedSection = "recentlySavedSectionEnabled"
         public static let StartAtHome = "startAtHome"
         public static let TabTrayGroups = "KeyEnableGroupedTabsKey"
+        public static let SponsoredShortcuts = "sponsoredShortcutsKey"
+        public static let TopSiteSection = "topSitesKey"
     }
 
     // Firefox contextual hint
@@ -74,7 +77,6 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
-    public static let KeyShowSponsoredShortcuts = "showSponsoredShortcuts"
 
     // Tabs Tray
     public static let KeyInactiveTabsModel = "KeyInactiveTabsModelKey"
