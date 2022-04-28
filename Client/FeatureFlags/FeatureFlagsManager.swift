@@ -49,14 +49,14 @@ class FeatureFlagsManager: NimbusManageable {
     /// Used as the main way to find out whether a feature is active or not,
     /// specifically for the build.
     public func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
-                                 checking: FlaggableFeatureCheckOptions
+                                 checking channelsToCheck: FlaggableFeatureCheckOptions
     ) -> Bool {
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
 
         let nimbusSetting = feature.isNimbusEnabled(using: nimbusManager.featureFlagLayer)
         let userSetting = feature.isUserEnabled(using: nimbusManager.featureFlagLayer)
 
-        switch checking {
+        switch channelsToCheck {
         case .buildOnly:
             return nimbusSetting
         case .buildAndUser:
@@ -66,15 +66,15 @@ class FeatureFlagsManager: NimbusManageable {
         }
     }
 
-    public func userPreferenceFor<T>(_ featureID: NimbusFeatureFlagID) -> T? {
-        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-        guard let userSetting = feature.getUserPreference(using: nimbusManager.featureFlagLayer) else { return nil }
-
-        switch featureID {
-        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
-        default: return nil
-        }
-    }
+//    public func userPreferenceFor<T>(_ featureID: NimbusFeatureFlagID) -> T? {
+//        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
+//        guard let userSetting = feature.getUserPreference(using: nimbusManager.featureFlagLayer) else { return nil }
+//
+//        switch featureID {
+//        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
+//        default: return nil
+//        }
+//    }
 
     public func toggleBuildFeature(_ featureID: NimbusFeatureFlagID) {
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
