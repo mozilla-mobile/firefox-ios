@@ -27,12 +27,11 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable 
         let tabGroupsSetting = BoolSetting(with: .tabTrayGroups,
                                            titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
 
-        if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
-           featureFlags.isFeatureActiveForNimbus(.inactiveTabs) {
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
             sectionItems.append(inactiveTabsSetting)
         }
 
-        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) {
+        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly) {
             sectionItems.append(tabGroupsSetting)
         }
 

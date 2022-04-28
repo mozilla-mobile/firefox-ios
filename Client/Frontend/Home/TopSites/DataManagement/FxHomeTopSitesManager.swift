@@ -153,8 +153,7 @@ class FxHomeTopSitesManager: FeatureFlaggable {
 
     // TODO: Check for nimbus with https://mozilla-hub.atlassian.net/browse/FXIOS-3468
     private var shouldLoadSponsoredTiles: Bool {
-        return featureFlags.isFeatureActiveForBuild(.sponsoredTiles)
-        && featureFlags.userPreferenceFor(.sponsoredTiles) == UserFeaturePreference.enabled
+        return featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildAndUser)
     }
 
     private var shouldShowSponsoredTiles: Bool {

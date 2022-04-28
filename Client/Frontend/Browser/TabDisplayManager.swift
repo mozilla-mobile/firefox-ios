@@ -86,11 +86,11 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
 
     var shouldEnableGroupedTabs: Bool {
-        return featureFlags.isFeatureBuildAndUserEnabled(.tabTrayGroups)
+        return featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser)
     }
 
     var shouldEnableInactiveTabs: Bool {
-        return featureFlags.isFeatureBuildAndUserEnabled(.inactiveTabs)
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
     }
 
     var orderedTabs: [Tab] {

@@ -1,21 +1,45 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Foundation
 import Shared
 import MozillaAppServices
 import UIKit
 
-struct FlaggableFeature {
+/// An enum describing the featureID of all features found in Nimbus.
+/// Please add new features alphabetically.
+enum NimbusFeatureFlagID: String, CaseIterable {
+    case bottomSearchBar
+    case historyHighlights
+    case historyGroups
+    case inactiveTabs
+    case jumpBackIn
+    case librarySection
+    case pocket
+    case pullToRefresh
+    case recentlySaved
+    case reportSiteIssue
+    case shakeToRestore
+    case sponsoredTiles
+    case startAtHome
+    case tabTrayGroups
+    case topSites
+    case wallpapers
+}
+
+struct NimbusFlaggableFeature {
 
     // MARK: - Variables
     private let profile: Profile
-    private let buildChannels: [AppBuildChannel]
-    private var featureID: FeatureFlagName
+    private var featureID: NimbusFeatureFlagID
 
     private var featureKey: String? {
         typealias FlagKeys = PrefsKeys.FeatureFlags
+
         switch featureID {
+        case .bottomSearchBar:
+            return nil
         case .historyHighlights:
             return FlagKeys.HistoryHighlightsSection
         case .historyGroups:
@@ -24,23 +48,28 @@ struct FlaggableFeature {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
+        case .librarySection:
+            return nil
         case .pocket:
             return FlagKeys.ASPocketStories
         case .pullToRefresh:
             return FlagKeys.PullToRefresh
         case .recentlySaved:
             return FlagKeys.RecentlySavedSection
+        case .shakeToRestore:
+            return nil
+        case .sponsoredTiles:
+            return FlagKeys.SponsoredShortcuts
         case .startAtHome:
             return FlagKeys.StartAtHome
+        case .reportSiteIssue:
+            return nil
         case .tabTrayGroups:
             return FlagKeys.TabTrayGroups
         case .topSites:
             return FlagKeys.TopSiteSection
-        case .sponsoredTiles:
-            return FlagKeys.SponsoredShortcuts
         case .wallpapers:
             return FlagKeys.CustomWallpaper
-        default: return nil
         }
     }
 
@@ -51,50 +80,52 @@ struct FlaggableFeature {
 
     // MARK: - Initializers
 
-    init(withID featureID: FeatureFlagName,
-         and profile: Profile,
-         enabledFor channels: [AppBuildChannel]
-    ) {
+    init(withID featureID: NimbusFeatureFlagID, and profile: Profile) {
         self.featureID = featureID
         self.profile = profile
-        self.buildChannels = channels
     }
 
     // MARK: - Public methods
+    public func isNimbusEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
+        return nimbusLayer.checkNimbusConfigFor(featureID)
+    }
 
-    /// Returns whether or not the feature is active for the build.
-    ///
-    /// This variable returns a `Bool` based on a priority queue.
-    ///
-    /// 1. It will check whether or not there exists a value for
-    /// the feature written on disk. Users generally set these states
-    /// from the debug menu and, if they have set something manually,
-    /// we will respect that and return the respective value.
-    ///
-    /// 2. If there is no setting written to the disk, then every feature
-    /// has an underlying default state for each build channel (Release,
-    /// Beta, Developer) and that value will be returned.
-    public func isActiveForBuild() -> Bool {
-        if let key = featureKey, let existingPref = profile.prefs.boolForKey(key) {
-            return existingPref
+    /// Returns whether or not the feature is enabled. If a specific setting is required
+    /// (ie. startAtHome which has multiple types of setting) then we should be using
+    /// `getPreferenceFor`
+    public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
+        guard let optionsKey = featureOptionsKey,
+              let existingOption = profile.prefs.stringForKey(optionsKey)
+        else { return isNimbusEnabled(using: nimbusLayer) }
 
-        } else {
-            #if MOZ_CHANNEL_RELEASE
-            return buildChannels.contains(.release)
-            #elseif MOZ_CHANNEL_BETA
-            return buildChannels.contains(.beta)
-            #elseif MOZ_CHANNEL_FENNEC
-            return buildChannels.contains(.developer)
-            #else
-            return buildChannels.contains(.other)
-            #endif
+        switch featureID {
+        case .startAtHome:
+            return (existingOption == StartAtHomeSetting.afterFourHours.rawValue)
+            || (existingOption == StartAtHomeSetting.always.rawValue)
+        default:
+            return existingOption == UserFeaturePreference.enabled.rawValue
         }
+
+//        // Feature option defaults
+//        switch featureID {
+//        case .startAtHome, .wallpapers:
+//            return true
+//
+//        // Nimbus default options
+//        case .jumpBackIn, .pocket, .recentlySaved, .historyHighlights:
+//            return checkNimbusHomepageFeatures(from: nimbusLayer) == UserFeaturePreference.enabled
+//        case .inactiveTabs:
+//            return checkNimbusTabTrayFeatures(from: nimbusLayer) == UserFeaturePreference.enabled
+//        default:
+//            return false
+//        }
     }
 
     /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
     /// convert it to the appropriate type.
     public func getUserPreference(using nimbusLayer: NimbusFeatureFlagLayer) -> String? {
-        if let optionsKey = featureOptionsKey, let existingOption = profile.prefs.stringForKey(optionsKey) {
+        if let optionsKey = featureOptionsKey,
+            let existingOption = profile.prefs.stringForKey(optionsKey) {
             return existingOption
         }
 
@@ -112,7 +143,7 @@ struct FlaggableFeature {
         case .inactiveTabs:
             return checkNimbusTabTrayFeatures(from: nimbusLayer).rawValue
         default:
-            return UserFeaturePreference.disabled.rawValue
+            return nil
         }
     }
 
@@ -133,18 +164,15 @@ struct FlaggableFeature {
     /// feature cannot be turned on/off and its state can only be set when initialized,
     /// based on build channel. Furthermore, this controls build availability, and
     /// does not reflect user preferences.
-    public func toggleBuildFeature() {
+    public func toggleBuildFeature(using nimbusLayer: NimbusFeatureFlagLayer) {
         guard let featureKey = featureKey else { return }
-        profile.prefs.setBool(!isActiveForBuild(), forKey: featureKey)
-    }
-
-    public func isNimbusActive(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
-        return nimbusLayer.checkNimbusConfigFor(featureID)
+        let currentFeatureState = isUserEnabled(using: nimbusLayer)
+        profile.prefs.setBool(!currentFeatureState, forKey: featureKey)
     }
 }
 
 // MARK: - Nimbus related methods
-extension FlaggableFeature {
+extension NimbusFlaggableFeature {
     private func checkNimbusTabTrayFeatures(
         from nimbusLayer: NimbusFeatureFlagLayer
     ) -> UserFeaturePreference {

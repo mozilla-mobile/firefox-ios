@@ -30,7 +30,7 @@ class NimbusFeatureFlagLayer {
             self.librarySection = librarySection
         }
 
-        func getValue(for featureID: FeatureFlagName) -> Bool {
+        func getValue(for featureID: NimbusFeatureFlagID) -> Bool {
             switch featureID {
             case .jumpBackIn: return jumpBackIn
             case .pocket: return pocket
@@ -50,7 +50,7 @@ class NimbusFeatureFlagLayer {
             self.inactiveTabs = inactiveTabs
         }
 
-        func getValue(for featureID: FeatureFlagName) -> Bool {
+        func getValue(for featureID: NimbusFeatureFlagID) -> Bool {
             switch featureID {
             case .inactiveTabs: return inactiveTabs
             default: return false
@@ -74,7 +74,7 @@ class NimbusFeatureFlagLayer {
         fetchTabTrayFeatures(from: nimbus)
     }
 
-    public func checkNimbusConfigFor(_ featureID: FeatureFlagName) -> Bool {
+    public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID) -> Bool {
         switch featureID {
         case .jumpBackIn,
                 .pocket,

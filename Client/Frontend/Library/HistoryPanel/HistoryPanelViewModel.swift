@@ -110,7 +110,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
             }
 
             self.currentFetchOffset += self.queryFetchLimit
-            if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
+            if self.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) {
                 self.populateASGroups(fetchedSites: fetchedSites) {
                     self.buildVisibleSections()
                     completion(true)

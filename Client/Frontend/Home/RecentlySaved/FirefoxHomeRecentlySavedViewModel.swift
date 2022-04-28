@@ -92,9 +92,7 @@ extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFla
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureActiveForBuild(.recentlySaved)
-        && featureFlags.isFeatureActiveForNimbus(.recentlySaved)
-        && featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
+        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
     }
 
     var hasData: Bool {

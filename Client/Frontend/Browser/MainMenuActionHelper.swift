@@ -360,7 +360,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     }
 
     private func getReportSiteIssueAction() -> PhotonRowActions? {
-        guard featureFlags.isFeatureActiveForBuild(.reportSiteIssue) else { return nil }
+        guard featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly) else { return nil }
+
         return SingleActionViewModel(title: .AppMenu.AppMenuReportSiteIssueTitleString,
                                      iconString: ImageIdentifiers.reportSiteIssue) { _ in
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
