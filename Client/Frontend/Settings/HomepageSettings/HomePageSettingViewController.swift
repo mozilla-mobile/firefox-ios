@@ -102,6 +102,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
         showWebPage.textField.textAlignment = .natural
 
         return SettingSection(title: NSAttributedString(string: .SettingsHomePageURLSectionTitle),
+                              footerTitle: NSAttributedString(string: .Settings.Homepage.Current.Description),
                               children: [showTopSites, showWebPage])
     }
 
@@ -145,7 +146,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
             sectionItems.append(wallpaperSetting)
         }
 
-        return SettingSection(title: NSAttributedString(string: .SettingsCustomizeHomeTitle),
+        return SettingSection(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Title),
                               footerTitle: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Description),
                               children: sectionItems)
     }
@@ -206,28 +207,28 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting {
-        let profile: Profile
+    class TopSitesSettings: Setting, FeatureFlagsProtocol {
+        var profile: Profile
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-        override var status: NSAttributedString {
-            let num = self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
-            return NSAttributedString(string: String(format: .Settings.Homepage.Shortcuts.RowCount, num))
-        }
-
-        override var accessibilityIdentifier: String? { return "TopSitesRows" }
+        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage }
         override var style: UITableViewCell.CellStyle { return .value1 }
+
+        override var status: NSAttributedString {
+            let areShortcutsOn = featureFlags.userPreferenceFor(.topSites) == UserFeaturePreference.enabled
+            let status: String = areShortcutsOn ? .Settings.Homepage.Shortcuts.ToggleOn : .Settings.Homepage.Shortcuts.ToggleOff
+            return NSAttributedString(string: String(format: status))
+        }
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Shortcuts,
-                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+            super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsPageTitle))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            let viewController = TopSitesRowCountSettingsController(prefs: profile.prefs)
-            viewController.profile = profile
-            navigationController?.pushViewController(viewController, animated: true)
+            let topSitesVC = TopSitesSettingsViewController()
+            topSitesVC.profile = profile
+            navigationController?.pushViewController(topSitesVC, animated: true)
         }
     }
 }
@@ -240,7 +241,7 @@ extension HomePageSettingViewController {
         var tabManager: TabManager
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-        override var accessibilityIdentifier: String? { return "WallpaperSettings" }
+        override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,

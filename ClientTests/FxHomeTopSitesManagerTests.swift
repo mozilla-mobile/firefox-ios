@@ -8,9 +8,10 @@ import Shared
 import Storage
 import XCTest
 
-class FxHomeTopSitesManagerTests: XCTestCase {
+class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlagsProtocol {
 
     private var profile: MockProfile!
+    private var contileProviderMock: ContileProviderMock!
 
     override func setUp() {
         super.setUp()
@@ -24,6 +25,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
+        contileProviderMock = nil
         profile.prefs.clearAll()
         profile._shutdown()
         profile = nil
@@ -31,7 +33,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
 
     func testEmptyData_whenNotLoaded() {
         let manager = FxHomeTopSitesManager(profile: profile)
-        XCTAssertEqual(manager.hasData, false)
+        XCTAssertFalse(manager.hasData)
         XCTAssertEqual(manager.siteCount, 0)
     }
 
@@ -60,7 +62,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         let manager = createManager()
 
         testLoadData(manager: manager, numberOfTilesPerRow: nil) {
-            XCTAssertEqual(manager.hasData, true)
+            XCTAssertTrue(manager.hasData)
             XCTAssertEqual(manager.siteCount, 11)
         }
     }
@@ -69,7 +71,7 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         let manager = createManager()
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.hasData, true)
+            XCTAssertTrue(manager.hasData)
             XCTAssertEqual(manager.siteCount, 11)
         }
     }
@@ -97,8 +99,8 @@ class FxHomeTopSitesManagerTests: XCTestCase {
 
         // We test that without a pref, google is added
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleGUID)
         }
     }
 
@@ -107,8 +109,8 @@ class FxHomeTopSitesManagerTests: XCTestCase {
 
         // We test that without a pref, google is added even with pinned tiles
         testLoadData(manager: manager, numberOfTilesPerRow: 1) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleGUID)
         }
     }
 
@@ -120,8 +122,8 @@ class FxHomeTopSitesManagerTests: XCTestCase {
 
         // We test that having more pinned than available tiles, google tile isn't put in
         testLoadData(manager: manager, numberOfTilesPerRow: 1) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, false)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, false)
+            XCTAssertFalse(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertFalse(manager.getSite(index: 0)!.isGoogleGUID)
         }
     }
 
@@ -131,147 +133,260 @@ class FxHomeTopSitesManagerTests: XCTestCase {
         let manager = createManager(addPinnedSiteCount: 3)
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.hasData, true)
+            XCTAssertTrue(manager.hasData)
             XCTAssertEqual(manager.siteCount, 14)
-            XCTAssertEqual(manager.getSite(index: 0)?.isPinned, true)
+            XCTAssertTrue(manager.getSite(index: 0)!.isPinned)
         }
     }
 
     // MARK: Sponsored tiles
 
-    func testLoadTopSitesData_addContile() {
-        let manager = createManager()
-        manager.addContiles(shouldSucceed: true, contilesCount: 1)
+    func testLoadTopSitesData_addSponsoredTile() {
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1)
+        let manager = createManager(expectedContileResult: ContileResult.success(expectedContileResult))
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.hasData, true)
+            XCTAssertTrue(manager.hasData)
             XCTAssertEqual(manager.siteCount, 12)
         }
     }
 
-    func testCalculateTopSitesData_addContileAfterGoogle() {
-        let manager = createManager()
-        manager.addContiles(shouldSucceed: true, contilesCount: 1)
+    func testCalculateTopSitesData_addSponsoredTileAfterGoogle() {
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1)
+        let manager = createManager(expectedContileResult: ContileResult.success(expectedContileResult))
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, true)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertTrue(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
         }
     }
 
-    func testCalculateTopSitesData_doesNotAddContileIfError() {
-        let manager = createManager()
-        manager.addContiles(shouldSucceed: false, contilesCount: 1)
+    func testCalculateTopSitesData_doesNotAddSponsoredTileIfError() {
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileResult.failure(ContileProvider.Error.failure)
+        let manager = createManager(expectedContileResult: expectedContileResult)
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, false)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertFalse(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
         }
     }
 
-    func testCalculateTopSitesData_doesNotAddContileIfSuccessEmpty() {
-        let manager = createManager()
-        manager.addContiles(shouldSucceed: true, contilesCount: 0)
+    func testCalculateTopSitesData_doesNotAddSponsoredTileIfSuccessEmpty() {
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileResult.success([])
+        let manager = createManager(expectedContileResult: expectedContileResult)
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, false)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertFalse(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
         }
     }
 
     func testCalculateTopSitesData_doesNotAddMoreSponsoredTileThanMaximum() {
-        let manager = createManager()
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
         // Max contiles is currently at 2, so it should add 2 contiles only
-        manager.addContiles(shouldSucceed: true, contilesCount: 3)
+        let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 3)
+        let manager = createManager(expectedContileResult: ContileResult.success(expectedContileResult))
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, true)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, true)
-            XCTAssertEqual(manager.getSite(index: 3)?.isSponsoredTile, false)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertTrue(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertTrue(manager.getSite(index: 2)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 3)!.isSponsoredTile)
         }
     }
 
     func testCalculateTopSitesData_doesNotAddSponsoredTileIfDuplicatePinned() {
-        let manager = createManager(addPinnedSiteCount: 1)
-        manager.addContiles(shouldSucceed: true, contilesCount: 1, duplicateFirstTile: true, pinnedDuplicateTile: true)
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
+                                                                    duplicateFirstTile: true,
+                                                                    pinnedDuplicateTile: true)
+        let manager = createManager(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, false)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertFalse(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
         }
     }
 
     func testCalculateTopSitesData_addSponsoredTileIfDuplicateIsNotPinned() {
-        let manager = createManager(addPinnedSiteCount: 1)
-        manager.addContiles(shouldSucceed: true, contilesCount: 1, duplicateFirstTile: true)
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 1,
+                                                                    duplicateFirstTile: true)
+        let manager = createManager(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, true)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertTrue(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
         }
     }
 
-    func testCalculateTopSitesData_addNextTileIfContileIsDuplicate() {
-        let manager = createManager(addPinnedSiteCount: 1)
-        manager.addContiles(shouldSucceed: true, contilesCount: 2, duplicateFirstTile: true, pinnedDuplicateTile: true)
+    func testCalculateTopSitesData_addNextTileIfSponsoredTileIsDuplicate() {
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileProviderMock.getContiles(contilesCount: 2,
+                                                                    duplicateFirstTile: true,
+                                                                    pinnedDuplicateTile: true)
+        let manager = createManager(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success(expectedContileResult))
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.title, ContileProviderMock.defaultSuccessData[0].name)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertTrue(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertEqual(manager.getSite(index: 1)!.title, ContileProviderMock.defaultSuccessData[0].name)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
         }
     }
 
     func testCalculateTopSitesData_doesNotAddTileIfAllSpacesArePinned() {
-        let manager = createManager(addPinnedSiteCount: 12)
-        manager.addContiles(shouldSucceed: true, contilesCount: 0)
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileResult.success([])
+        let manager = createManager(addPinnedSiteCount: 12, expectedContileResult: expectedContileResult)
 
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteAddedKey)
         profile.prefs.setBool(true, forKey: PrefsKeys.GoogleTopSiteHideKey)
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, false)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, false)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, false)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertFalse(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertFalse(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
         }
     }
 
     func testCalculateTopSitesData_doesNotAddTileIfAllSpacesArePinnedAndGoogleIsThere() {
-        let manager = createManager(addPinnedSiteCount: 11)
-        manager.addContiles(shouldSucceed: true, contilesCount: 0)
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedContileResult = ContileResult.success([])
+        let manager = createManager(addPinnedSiteCount: 11, expectedContileResult: expectedContileResult)
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleURL, true)
-            XCTAssertEqual(manager.getSite(index: 0)?.isGoogleGUID, true)
-            XCTAssertEqual(manager.getSite(index: 1)?.isSponsoredTile, false)
-            XCTAssertEqual(manager.getSite(index: 2)?.isSponsoredTile, false)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertFalse(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
+        }
+    }
+
+    // MARK: Duplicates
+
+    // Sponsored > Frequency
+    func testDuplicates_SponsoredTileHasPrecedenceOnFrequencyTiles() {
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let manager = createManager(expectedContileResult: ContileResult.success([ContileProviderMock.duplicateTile]))
+
+        testLoadData(manager: manager, numberOfTilesPerRow: 6) {
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertEqual(manager.getSite(index: 1)!.title, ContileProviderMock.duplicateTile.name)
+            XCTAssertTrue(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
+        }
+    }
+
+    // Pinned > Sponsored
+    func testDuplicates_PinnedTilesHasPrecedenceOnSponsoredTiles() {
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let manager = createManager(addPinnedSiteCount: 1, expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile]))
+
+        testLoadData(manager: manager, numberOfTilesPerRow: 6) {
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+            XCTAssertFalse(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertTrue(manager.getSite(index: 1)!.isPinned)
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
+            XCTAssertFalse(manager.getSite(index: 2)!.isPinned)
+        }
+    }
+
+    // Pinned > Frequency
+    func testDuplicates_PinnedTilesHasPrecedenceOnFrequencyTiles() {
+        featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.enabled)
+
+        let expectedPinnedURL = String(format: ContileProviderMock.url, "0")
+        let manager = createManager(addPinnedSiteCount: 1, siteCount: 3, duplicatePinnedSiteURL: true)
+
+        testLoadData(manager: manager, numberOfTilesPerRow: 4) {
+            XCTAssertEqual(manager.siteCount, 4)
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+
+            let tile1 = manager.getSite(index: 1)
+            XCTAssertFalse(tile1!.isSponsoredTile)
+            XCTAssertTrue(tile1!.isPinned)
+            XCTAssertEqual(tile1!.site.url, expectedPinnedURL)
+
+            let tile2 = manager.getSite(index: 2)
+            XCTAssertFalse(tile2!.isSponsoredTile)
+            XCTAssertFalse(tile2!.isPinned)
+            XCTAssertNotEqual(tile2!.title, expectedPinnedURL)
+
+            let tile3 = manager.getSite(index: 3)
+            XCTAssertFalse(tile3!.isSponsoredTile)
+            XCTAssertFalse(tile3!.isPinned)
+            XCTAssertNotEqual(tile3!.title, expectedPinnedURL)
         }
     }
 }
 
-// MARK: - Helper methods
+// MARK: - ContileProviderMock
+class ContileProviderMock: ContileProviderInterface {
 
-// MARK: ContileProviderMock
+    private var result: ContileResult
+
+    static var defaultSuccessData: [Contile] {
+        return [Contile(id: 1,
+                        name: "Firefox",
+                        url: "https://firefox.com",
+                        clickUrl: "https://firefox.com/click",
+                        imageUrl: "https://test.com/image1.jpg",
+                        imageSize: 200,
+                        impressionUrl: "https://test.com",
+                        position: 1),
+                Contile(id: 2,
+                        name: "Mozilla",
+                        url: "https://mozilla.com",
+                        clickUrl: "https://mozilla.com/click",
+                        imageUrl: "https://test.com/image2.jpg",
+                        imageSize: 200,
+                        impressionUrl: "https://example.com",
+                        position: 2),
+                Contile(id: 3,
+                        name: "Focus",
+                        url: "https://support.mozilla.org/en-US/kb/firefox-focus-ios",
+                        clickUrl: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
+                        imageUrl: "https://test.com/image3.jpg",
+                        imageSize: 200,
+                        impressionUrl: "https://another-example.com",
+                        position: 3)]
+    }
+
+    init(result: ContileResult) {
+        self.result = result
+    }
+
+    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
+        completion(result)
+    }
+}
+
 extension ContileProviderMock {
 
     static func getContiles(contilesCount: Int,
-                            duplicateFirstTile: Bool,
-                            pinnedDuplicateTile: Bool) -> [Contile] {
+                            duplicateFirstTile: Bool = false,
+                            pinnedDuplicateTile: Bool = false) -> [Contile] {
 
         var defaultData = ContileProviderMock.defaultSuccessData
 
@@ -293,7 +408,7 @@ extension ContileProviderMock {
                        name: String(format: ContileProviderMock.pinnedTitle, "0"),
                        url: String(format: ContileProviderMock.pinnedURL, "0"),
                        clickUrl: "https://www.test.com/click",
-                       imageURL: "https://test.com/image0.jpg",
+                       imageUrl: "https://test.com/image0.jpg",
                        imageSize: 200,
                        impressionUrl: "https://test.com",
                        position: 1)
@@ -304,41 +419,30 @@ extension ContileProviderMock {
                        name: String(format: ContileProviderMock.title, "0"),
                        url: String(format: ContileProviderMock.url, "0"),
                        clickUrl: "https://www.test.com/click",
-                       imageURL: "https://test.com/image0.jpg",
+                       imageUrl: "https://test.com/image0.jpg",
                        imageSize: 200,
                        impressionUrl: "https://test.com",
                        position: 1)
     }
 }
 
-// MARK: FxHomeTopSitesManager
-extension FxHomeTopSitesManager {
-
-    func addContiles(shouldSucceed: Bool,
-                     contilesCount: Int = 0,
-                     duplicateFirstTile: Bool = false,
-                     pinnedDuplicateTile: Bool = false) {
-
-        let resultContile = ContileProviderMock.getContiles(contilesCount: contilesCount,
-                                                            duplicateFirstTile: duplicateFirstTile,
-                                                            pinnedDuplicateTile: pinnedDuplicateTile)
-
-        let result = shouldSucceed ? ContileProvider.Result.success(resultContile) : ContileProvider.Result.failure(ContileProviderMock.Error.invalidData)
-
-        let contileProviderMock = ContileProviderMock(result: result)
-        contileProvider = contileProviderMock
-    }
-}
-
 // MARK: FxHomeTopSitesManagerTests
 extension FxHomeTopSitesManagerTests {
 
-    func createManager(addPinnedSiteCount: Int = 0) -> FxHomeTopSitesManager {
+    func createManager(addPinnedSiteCount: Int = 0,
+                       siteCount: Int = 10,
+                       duplicatePinnedSiteURL: Bool = false,
+                       expectedContileResult: ContileResult = .success([])) -> FxHomeTopSitesManager {
         let topSitesManager = FxHomeTopSitesManager(profile: profile)
 
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
+        historyStub.siteCount = siteCount
         historyStub.addPinnedSiteCount = addPinnedSiteCount
+        historyStub.duplicatePinnedSiteURL = duplicatePinnedSiteURL
         topSitesManager.topSiteHistoryManager = historyStub
+
+        contileProviderMock = ContileProviderMock(result: expectedContileResult)
+        topSitesManager.contileProvider = contileProviderMock
 
         return topSitesManager
     }
@@ -367,12 +471,14 @@ class TopSiteHistoryManagerStub: TopSiteHistoryManager {
 
     var siteCount = 10
     var addPinnedSiteCount: Int = 0
+    var duplicatePinnedSiteURL = false
 
     func createHistorySites() -> [Site] {
         var sites = [Site]()
 
         (0..<addPinnedSiteCount).forEach {
-            let site = Site(url: String(format: ContileProviderMock.pinnedURL, "\($0)"), title: String(format: ContileProviderMock.pinnedTitle, "\($0)"))
+            let pinnedSiteURL = duplicatePinnedSiteURL ? String(format: ContileProviderMock.url, "\($0)"): String(format: ContileProviderMock.pinnedURL, "\($0)")
+            let site = Site(url: pinnedSiteURL, title: String(format: ContileProviderMock.pinnedTitle, "\($0)"))
             sites.append(PinnedSite(site: site))
         }
 

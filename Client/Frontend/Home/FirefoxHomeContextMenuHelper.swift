@@ -184,7 +184,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
     }
 
     private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
-        return SingleActionViewModel(title: .AddToShortcutsActionTitle,
+        return SingleActionViewModel(title: .PinTopsiteActionTitle2,
                                      iconString: ImageIdentifiers.addShortcut,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.pinTopSite(site)
@@ -194,7 +194,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
 
     // Unpin removes it from the location it's in. Still can appear in the top sites as unpin
     private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
-        return SingleActionViewModel(title: .RemoveFromShortcutsActionTitle,
+        return SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
                                      iconString: ImageIdentifiers.removeFromShortcut,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.removePinTopSite(site)
@@ -211,8 +211,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
 
     private func getSponsoredContentAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
-            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3469 SUMO page here is a placeholder, real page needs to be replaced
-            guard let url = URL(string: "https://support.mozilla.org/") else { return }
+            guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
             self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
             self.sendTopSiteContextualTelemetry(type: .sponsoredSupport)
         }).items

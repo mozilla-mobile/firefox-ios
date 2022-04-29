@@ -359,13 +359,13 @@
 "Downloads" = "Isidar";
 
 /* The label of the button the user will press to start downloading a file */
-"Downloads.Alert.DownloadNow" = "Sider tura";
+"Downloads.Alert.DownloadNow" = "Sader tura";
 
 /* Button confirming the cancellation of the download. */
 "Downloads.CancelDialog.Cancel" = "Sefsex";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "S tidet triḍ ad tesfesxeḍ asider-a?";
+"Downloads.CancelDialog.Message" = "S tidet triḍ ad tesfesxeḍ asader-a?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Kemmel";
@@ -377,10 +377,10 @@
 "Downloads.Error.Message" = "Isidar ur ttusefraken ara deg Firefox akka tura.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
-"Downloads.Toast.Cancelled.LabelText" = "Asider ittwafsex";
+"Downloads.Toast.Cancelled.LabelText" = "Asader ittwafsex";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
-"Downloads.Toast.Failed.LabelText" = "Asider ur yiddi ara";
+"Downloads.Toast.Failed.LabelText" = "Asader ur yiddi ara";
 
 /* The button to retry a failed download from the Download Failed toast. */
 "Downloads.Toast.Failed.RetryButton" = "Σreḍ i tikelt nniḍen";
@@ -456,6 +456,15 @@
 
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Kkes";
+
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "Ismal: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Iɣewwaren";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Wid yettbeddan fell-aɣ akked tudert-ik tabaḍnit";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "S lmendad";
@@ -642,6 +651,9 @@
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "Ldi deg iccer uslig amaynut";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Ldi deg yiccer uslig";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Ldi deg yiccer amaynut";
@@ -1626,8 +1638,11 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Amatu";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Fren acu ara d-yettwaskanen am usebter agejdan.";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description" = "Fren agbur i tettwaliḍ ɣef usebter agejdan n Firefox.";
+"Settings.Home.Option.Description.v101" = "Fren acu ara yeddun ɣef usebter agejdan n Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Uɣal ɣer deffir";
@@ -1660,7 +1675,7 @@
 "Settings.Home.Option.StartAtHome.Title" = "Agdil n twaledyawt";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "Asebter agejdan n Firefox";
+"Settings.Home.Option.Title.v101" = "Seddu-t ɣef usebter agejdan";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "Tugna n ugilal";
@@ -1896,8 +1911,11 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Leqraya";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Accaren arurmiden";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Accaren ur tesneqdeḍ ara snat ledwaṛ ad ttusnekzen ɣer teggayt tarurmidt.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Igrawen n waccaren";

@@ -87,11 +87,16 @@ public struct AccessibilityIdentifiers {
             }
 
             struct CustomizeFirefox {
-                static let shortcuts = ""
+                struct Shortcuts {
+                    static let settingsPage = "TopSitesSettings"
+                    static let topSitesRows = "TopSitesRows"
+                }
+
                 static let jumpBackIn = "Jump Back In"
                 static let recentlySaved = "Recently Saved"
                 static let recentVisited = "Recently Visited"
                 static let recommendedByPocket = "Recommended by Pocket"
+                static let wallpaper = "WallpaperSettings"
             }
         }
 

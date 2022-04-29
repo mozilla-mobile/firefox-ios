@@ -55,4 +55,3 @@ public func == (lhs: ReadingListItem, rhs: ReadingListItem) -> Bool {
         && lhs.archived == rhs.archived
         && lhs.favorite == rhs.favorite
 }
-

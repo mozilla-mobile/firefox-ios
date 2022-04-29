@@ -253,7 +253,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
             viewModel.deselectItem(item)
             break
-        default: break;
+        default: break
         }
     }
 

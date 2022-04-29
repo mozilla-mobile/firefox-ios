@@ -13,7 +13,7 @@ struct TPPageStats {
     }
 
     init() {
-        domains = [BlocklistCategory: Set<String>]();
+        domains = [BlocklistCategory: Set<String>]()
     }
 
     private init(domains: [BlocklistCategory: Set<String>], blocklistName: BlocklistCategory, host: String) {
@@ -21,7 +21,7 @@ struct TPPageStats {
         if self.domains[blocklistName] == nil {
             self.domains[blocklistName] = Set<String>()
         }
-       self.domains[blocklistName]?.insert(host);
+       self.domains[blocklistName]?.insert(host)
     }
 
     func create(matchingBlocklist blocklistName: BlocklistCategory, host: String) -> TPPageStats {

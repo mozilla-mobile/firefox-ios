@@ -164,4 +164,3 @@ public struct RecordEncrypter<T: CleartextPayloadJSON> {
         self.factory = factory
     }
 }
-
