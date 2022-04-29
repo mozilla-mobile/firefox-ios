@@ -67,12 +67,6 @@ class FeatureFlagsManager: NimbusManageable {
         }
     }
 
-    /// Retrieves a feature key for any specific feature, if it has one.
-    public func featureKey(for featureID: NimbusFeatureFlagID) -> String? {
-        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-        return feature.featureOptionsKey
-    }
-
     /// Retrieves a custom state for any type of feature that has more than just a
     /// binary state. Further information on return types can be found in
     /// `FlaggableFeatureOptions`

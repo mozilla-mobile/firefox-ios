@@ -40,14 +40,14 @@ final class FeatureFlagUserPrefsMigrationUtility {
 
         keys.forEach { oldKey, newKey in
             let oldKey = oldKey + "UserPreferences"
-            let newKey = newKey + "UserPreferences"
+            let newKey = newKey
             migrateExistingPreference(from: oldKey, to: newKey)
         }
     }
 
     private func buildKeyDictionary() -> [String: String] {
         typealias legacy = PrefsKeys.LegacyFeatureFlags
-        typealias new = PrefsKeys.NewFeatureFlags
+        typealias new = PrefsKeys.FeatureFlags
 
         return [legacy.ASPocketStories: new.ASPocketStories,
                 legacy.CustomWallpaper: new.CustomWallpaper,

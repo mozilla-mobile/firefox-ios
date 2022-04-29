@@ -247,11 +247,11 @@ class BoolSetting: Setting, FeatureFlaggable {
         settingDidChange?(control.isOn)
 
         if let featureFlagName = featureFlagName {
-            guard let key = featureFlags.featureKey(for: featureFlagName) else { return }
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .change,
                                          object: .setting,
-                                         extras: ["pref": key as Any, "to": control.isOn])
+                                         extras: ["pref": featureFlagName.rawValue as Any,
+                                                  "to": control.isOn])
 
         } else {
             TelemetryWrapper.recordEvent(category: .action,
