@@ -48,9 +48,7 @@ open class ClosedTabsStore {
     open func removeTabsFromDate(_ date: Date) {
         let timestampToRemoveFrom = date.toTimestamp()
         // If lastExecutedTime wasn't present on tab, we do not delete that tab since information isn't available
-        tabs = tabs.filter {
-            return $0.lastExecutedTime ?? UINT64_MAX < timestampToRemoveFrom
-        }
+        tabs = tabs.filter { $0.lastExecutedTime ?? 0 < timestampToRemoveFrom }
 
         saveTabs(tabs)
     }
