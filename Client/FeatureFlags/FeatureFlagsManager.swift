@@ -46,8 +46,9 @@ class FeatureFlagsManager: NimbusManageable {
         return feature.isActiveForBuild()
     }
 
-    /// Used as the main way to find out whether a feature is active or not,
-    /// specifically for the build.
+    /// Used as the main way to find out whether a feature is active or not, checking
+    /// either just for the build, the build and user preferences, or just user
+    /// preferences (supported by Nimbus defaults).
     public func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
                                  checking channelsToCheck: FlaggableFeatureCheckOptions
     ) -> Bool {
@@ -72,6 +73,9 @@ class FeatureFlagsManager: NimbusManageable {
         return feature.featureOptionsKey
     }
 
+    /// Retrieves a custom state for any type of feature that has more than just a
+    /// binary state. Further information on return types can be found in
+    /// `FlaggableFeatureOptions`
     public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
         switch featureID {
         case .startAtHome:
@@ -82,12 +86,17 @@ class FeatureFlagsManager: NimbusManageable {
         }
     }
 
+    /// Set a feature that has a binary state to on or off
     public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool) {
+        if featureID == .startAtHome { return }
+
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
         let newSetting = desiredState ? UserFeaturePreference.enabled.rawValue : UserFeaturePreference.disabled.rawValue
         feature.setUserPreferenceFor(newSetting)
     }
 
+    /// Set a feature that has a custom state to that custom state. More information
+    /// on custom states can be found in `FlaggableFeatureOptions`
     public func set<T: FlaggableFeatureOptions>(feature featureID: NimbusFeatureFlagWithCustomOptionsID, to desiredState: T) {
 
         switch featureID {
@@ -123,6 +132,8 @@ class FeatureFlagsManager: NimbusManageable {
     /// This should ONLY be called when instatiating the feature flag system,
     /// and never again.
     public func initializeDeveloperFeatures(with profile: Profile) {
+        self.profile = profile
+        
         coreFeatures.removeAll()
 
         let adjustEnvironmentProd = CoreFlaggableFeature(withID: .adjustEnvironmentProd,

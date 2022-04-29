@@ -150,7 +150,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             self.featureFlags.set(feature: .startAtHome, to: option)
             self.tableView.reloadData()
 
-            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.StartAtHome,
+            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.LegacyFeatureFlags.StartAtHome,
                           TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
         }
