@@ -6,7 +6,6 @@ import UIKit
 import Shared
 import WebKit
 import Storage
-import SnapKit
 
 private struct BackForwardViewUX {
     static let RowHeight: CGFloat = 50
@@ -20,10 +19,12 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     fileprivate lazy var sites = [String: Site]()
     fileprivate var dismissing = false
     fileprivate var currentRow = 0
-    fileprivate var verticalConstraints: [Constraint] = []
+    fileprivate var verticalConstraints: [NSLayoutConstraint] = []
+    var tableViewTopAnchor: NSLayoutConstraint!
+    var tableViewBottomAnchor: NSLayoutConstraint!
+    var tableViewHeightAnchor: NSLayoutConstraint!
 
-    lazy var tableView: UITableView = {
-        let tableView = UITableView()
+    lazy var tableView: UITableView = .build { tableView in
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
@@ -34,15 +35,11 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         tableView.backgroundView = blurEffectView
         tableView.showsHorizontalScrollIndicator = false
+    }
 
-        return tableView
-    }()
-
-    lazy var shadow: UIView = {
-        let shadow = UIView()
-        shadow.backgroundColor = UIColor(white: 0, alpha: 0.2)
-        return shadow
-    }()
+    lazy var shadow: UIView = .build { view in
+        view.backgroundColor = UIColor(white: 0, alpha: 0.2)
+    }
 
     var tabManager: TabManager!
     weak var bvc: BrowserViewController?
@@ -80,14 +77,14 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         let toolBarShouldShow = bvc?.shouldShowToolbarForTraitCollection(traitCollection) ?? false
         let isBottomSearchBar = bvc?.isBottomSearchBar ?? false
         snappedToBottom = toolBarShouldShow || isBottomSearchBar
-
-        tableView.snp.makeConstraints { make in
-            make.height.equalTo(0)
-            make.left.right.equalTo(self.view)
-        }
-        shadow.snp.makeConstraints { make in
-            make.left.right.equalTo(self.view)
-        }
+        tableViewHeightAnchor = tableView.heightAnchor.constraint(equalToConstant: 0)
+        NSLayoutConstraint.activate([
+            tableViewHeightAnchor,
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            shadow.leftAnchor.constraint(equalTo: view.leftAnchor),
+            shadow.rightAnchor.constraint(equalTo: view.rightAnchor),
+        ])
         remakeVerticalConstraints()
         view.layoutIfNeeded()
         scrollTableViewToIndex(currentRow)
@@ -155,14 +152,12 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             return
         }
         if bvc.shouldShowToolbarForTraitCollection(newCollection) != snappedToBottom, !bvc.isBottomSearchBar {
-            tableView.snp.updateConstraints { make in
-                if snappedToBottom {
-                    make.bottom.equalTo(self.view).offset(0)
-                } else {
-                    make.top.equalTo(self.view).offset(0)
-                }
-                make.height.equalTo(0)
+            if snappedToBottom {
+                tableViewBottomAnchor.constant = 0
+            } else {
+                tableViewTopAnchor.constant = 0
             }
+            tableViewHeightAnchor.constant = 0
             snappedToBottom = !snappedToBottom
         }
     }
@@ -170,9 +165,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         let correctHeight = {
-            self.tableView.snp.updateConstraints { make in
-                make.height.equalTo(min(BackForwardViewUX.RowHeight * CGFloat(self.listData.count), size.height / 2))
-            }
+            self.tableViewHeightAnchor.constant = min(BackForwardViewUX.RowHeight * CGFloat(self.listData.count), size.height / 2)
         }
         coordinator.animate(alongsideTransition: nil) { _ in
             self.remakeVerticalConstraints()
@@ -185,33 +178,35 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             return
         }
         for constraint in self.verticalConstraints {
-            constraint.deactivate()
+            constraint.isActive = false
         }
         self.verticalConstraints = []
-        tableView.snp.makeConstraints { make in
-            if snappedToBottom {
-                let keyboardContainerHeight = bvc.overKeyboardContainer.frame.height
-                let toolbarContainerheight = bvc.bottomContainer.frame.height
-                let offset = keyboardContainerHeight + toolbarContainerheight
-                verticalConstraints += [make.bottom.equalTo(self.view).offset(-offset).constraint]
-            } else {
-                let statusBarHeight = UIWindow.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-                verticalConstraints += [make.top.equalTo(self.view).offset(bvc.header.frame.height + statusBarHeight).constraint]
-            }
-        }
-        shadow.snp.makeConstraints() { make in
-            if snappedToBottom {
-                verticalConstraints += [
-                    make.bottom.equalTo(tableView.snp.top).constraint,
-                    make.top.equalTo(self.view).constraint
-                ]
+        if snappedToBottom {
 
-            } else {
-                verticalConstraints += [
-                    make.top.equalTo(tableView.snp.bottom).constraint,
-                    make.bottom.equalTo(self.view).constraint
-                ]
-            }
+            let keyboardContainerHeight = bvc.overKeyboardContainer.frame.height
+            let toolbarContainerheight = bvc.bottomContainer.frame.height
+            let offset = keyboardContainerHeight + toolbarContainerheight
+            tableViewBottomAnchor = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset)
+            let constraints: [NSLayoutConstraint] = [
+                tableViewBottomAnchor,
+                shadow.bottomAnchor.constraint(equalTo: tableView.topAnchor),
+                shadow.topAnchor.constraint(equalTo: view.topAnchor)
+            ]
+            NSLayoutConstraint.activate(constraints)
+            verticalConstraints += constraints
+
+        } else {
+
+            let statusBarHeight = UIWindow.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+            tableViewTopAnchor = tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: bvc.header.frame.height + statusBarHeight)
+            let constraints: [NSLayoutConstraint] = [
+                tableViewTopAnchor,
+                shadow.topAnchor.constraint(equalTo: tableView.bottomAnchor),
+                shadow.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ]
+            NSLayoutConstraint.activate(constraints)
+            verticalConstraints += constraints
+
         }
     }
 
