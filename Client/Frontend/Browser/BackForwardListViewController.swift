@@ -20,7 +20,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     fileprivate var dismissing = false
     fileprivate var currentRow = 0
     fileprivate var verticalConstraints: [NSLayoutConstraint] = []
-    
     var tableViewTopAnchor: NSLayoutConstraint!
     var tableViewBottomAnchor: NSLayoutConstraint!
     var tableViewHeightAnchor: NSLayoutConstraint!
@@ -78,7 +77,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         let toolBarShouldShow = bvc?.shouldShowToolbarForTraitCollection(traitCollection) ?? false
         let isBottomSearchBar = bvc?.isBottomSearchBar ?? false
         snappedToBottom = toolBarShouldShow || isBottomSearchBar
-        
         tableViewHeightAnchor = tableView.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             tableViewHeightAnchor,
@@ -87,7 +85,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             shadow.leftAnchor.constraint(equalTo: view.leftAnchor),
             shadow.rightAnchor.constraint(equalTo: view.rightAnchor),
         ])
-        
         remakeVerticalConstraints()
         view.layoutIfNeeded()
         scrollTableViewToIndex(currentRow)
@@ -184,7 +181,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             constraint.isActive = false
         }
         self.verticalConstraints = []
-        
         if snappedToBottom {
 
             let keyboardContainerHeight = bvc.overKeyboardContainer.frame.height

@@ -19,7 +19,6 @@ class BackForwardTableViewCell: UITableViewCell {
         static let fontSize: CGFloat = 12.0
         static let textColor = UIColor.Photon.Grey80
     }
-    
     lazy var faviconView: UIImageView = .build { imageView in
         imageView.image = FaviconFetcher.defaultFavicon
         imageView.backgroundColor = UIColor.Photon.White100
@@ -86,7 +85,6 @@ class BackForwardTableViewCell: UITableViewCell {
             faviconView.widthAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
             faviconView.centerYAnchor.constraint(equalTo: centerYAnchor),
             faviconView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: CGFloat(BackForwardViewCellUX.faviconPadding)),
-            
             label.centerYAnchor.constraint(equalTo: centerYAnchor),
             label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(BackForwardViewCellUX.labelPadding)),
             label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-BackForwardViewCellUX.labelPadding))
