@@ -8,7 +8,7 @@
 "NSLocationWhenInUseUsageDescription" = "Ismal web iɣer trezzuḍ zemren ad sutren adig-inek.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Ayagi ad k-isireg asider d usali n tvidyutin.";
+"NSMicrophoneUsageDescription" = "Ayagi ad k-isireg asader d usali n tvidyutin.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Aya ad k-yeǧǧ ad teskelseḍ tiwlafin-inek.";
