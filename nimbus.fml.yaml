@@ -81,6 +81,32 @@ features:
             "library-shortcuts": false
           }
         }
+  searchTermGroupsFeature:
+    description: The feature that controls whether or not seacrh term groups are enabled.
+    variables:
+      sections-enabled:
+        description: "This property provides a lookup table of whether or not the given grouping should be enabled."
+        type: Map<SearchTermGroups, Boolean>
+        default:
+          {
+            "history-groups": false,
+            "tab-tray-groups": true,
+          }
+    defaults:
+      - channel: beta
+        value: {
+          "sections-enabled": {
+            "history-groups": true,
+            "tab-tray-groups": true,
+          }
+        }
+      - channel: developer
+        value: {
+          "sections-enabled": {
+            "history-groups": true,
+            "tab-tray-groups": true,
+          }
+        }
   tabTrayFeature:
     description: The tab tray screen that the user goes to when they open the tab tray.
     variables:
@@ -337,6 +363,13 @@ types:
       variants:
         inactive-tabs:
           description: Tabs that have been automatically closed for the user.
+    SearchTermGroups:
+      description: The identifiers for the different types of search term groups.
+      variants:
+        history-groups:
+          description: Grouping for items in History and RecentlyVisited
+        tab-tray-groups:
+          description: Grouping for items in the Tab Tray and in JumpBackIn
     ControlMessageBehavior:
       description: An enum to influence what should be displayed when a control message is selected.
       variants:
