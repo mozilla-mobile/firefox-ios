@@ -51,10 +51,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     private var hasRecentlyClosed: Bool { profile.recentlyClosedTabs.tabs.count > 0 }
 
     // UI
-    var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
-    var bottomStackView: BaseAlphaStackView = .build { stackview in
-        stackview.isClearBackground = true
-    }
+    var bottomStackView: BaseAlphaStackView = .build { _ in }
 
     lazy var searchbar: UISearchBar = .build { searchbar in
         searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
@@ -84,6 +81,14 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     }()
 
     lazy var emptyStateOverlayView: UIView = createEmptyStateOverlayView()
+    lazy var welcomeLabel: UILabel = .build { label in
+        label.text = self.viewModel.emptyStateText
+        label.textAlignment = .center
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontLight
+        label.textColor = UIColor.theme.homePanel.welcomeScreenText
+        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
+    }
     var refreshControl: UIRefreshControl?
     var clearHistoryCell: OneLineTableViewCell?
 
@@ -156,7 +161,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
             DispatchQueue.main.async {
                 self?.applySnapshot(animatingDifferences: animating)
-                self?.toggleEmptyState()
             }
         }
     }
@@ -386,6 +390,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         snapshot.appendItems(viewModel.historyActionables, toSection: .additionalHistoryActions)
 
         diffableDatasource?.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
+        updateEmptyPanelState()
     }
 
     // MARK: - Swipe Action helpers
@@ -394,8 +399,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         guard let historyItem = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
 
         viewModel.removeHistoryItems(item: historyItem, at: indexPath.section)
-
-        updateEmptyPanelState()
 
         if let historyActionableCell = clearHistoryCell {
             setTappableStateAndStyle(with: HistoryActionablesModel.activeActionables.first, on: historyActionableCell)
@@ -425,8 +428,9 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
     // MARK: - Empty State helpers
 
-    private func updateEmptyPanelState() {
-        if viewModel.shouldShowEmptyState, emptyStateOverlayView.superview == nil {
+    func updateEmptyPanelState() {
+        if viewModel.shouldShowEmptyState(searchText: searchbar.text ?? "") {
+            welcomeLabel.text = viewModel.emptyStateText
             tableView.tableFooterView = emptyStateOverlayView
         } else {
             tableView.alwaysBounceVertical = true
@@ -449,14 +453,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             bgColor.widthAnchor.constraint(equalTo: overlayView.widthAnchor)
         ])
 
-        let welcomeLabel: UILabel = .build { label in
-            label.text = self.viewModel.emptyStateText
-            label.textAlignment = .center
-            label.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-            label.textColor = UIColor.theme.homePanel.welcomeScreenText
-            label.numberOfLines = 0
-            label.adjustsFontSizeToFitWidth = true
-        }
         overlayView.addSubview(welcomeLabel)
 
         let welcomeLabelPriority = UILayoutPriority(100)
@@ -471,18 +467,10 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         return overlayView
     }
 
-    func toggleEmptyState() {
-        if emptyStateOverlayView.superview != nil {
-            emptyStateOverlayView.removeFromSuperview()
-        }
-        emptyStateOverlayView = createEmptyStateOverlayView()
-        updateEmptyPanelState()
-    }
-
     // MARK: - Themeable
 
     func applyTheme() {
-        toggleEmptyState()
+        updateEmptyPanelState()
 
         tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
         searchbar.backgroundColor = UIColor.theme.textField.backgroundInOverlay
@@ -549,6 +537,8 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
     }
 
     private func handleASGroupItemTapped(asGroupItem: ASGroup<Site>) {
+        exitSearchState()
+
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
         let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate

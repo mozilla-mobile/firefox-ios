@@ -53,10 +53,13 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     let historyActionables = HistoryActionablesModel.activeActionables
 
     var visibleSections: [Sections] = []
+    // Groups items we should have a single datasource containing sites and groups
     var searchTermGroups: [ASGroup<Site>] = []
+    // Only individual sites
+    var groupedSites = DateGroupedTableData<Site>()
     var isFetchInProgress = false
     var isSearchInProgress = false
-    var groupedSites = DateGroupedTableData<Site>()
+
     var searchResultSites = [Site]()
     var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
 
@@ -66,10 +69,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
 
     var emptyStateText: String {
         return !isSearchInProgress ? .HistoryPanelEmptyStateTitle : .LibraryPanel.History.NoHistoryResult
-    }
-
-    var shouldShowEmptyState: Bool {
-        return isSearchInProgress ? searchResultSites.isEmpty : groupedSites.isEmpty
     }
 
     let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
@@ -131,6 +130,13 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             self.searchResultSites = results
             completion(!results.isEmpty)
         }
+    }
+
+    func shouldShowEmptyState(searchText: String) -> Bool {
+        guard isSearchInProgress else { return groupedSites.isEmpty && searchTermGroups.isEmpty }
+
+        // if the search text is empty we show the regular history so the empty should not show
+        return !searchText.isEmpty ? searchResultSites.isEmpty : false
     }
 
     func updateSearchOffset() {
