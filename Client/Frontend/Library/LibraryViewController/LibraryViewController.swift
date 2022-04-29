@@ -308,7 +308,7 @@ class LibraryViewController: UIViewController {
 
         } else if selectedPanel == .history {
             if panel.viewControllers.count > 1 {
-                if viewModel.currentPanelState == .history(state: .mainView) {
+                if viewModel.currentPanelState == .history(state: .mainView) || viewModel.currentPanelState == .history(state: .search) {
                     viewModel.currentPanelState = .history(state: .inFolder)
                 }
             } else if viewModel.currentPanelState != .history(state: .search) {

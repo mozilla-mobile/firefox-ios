@@ -390,7 +390,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         snapshot.appendItems(viewModel.historyActionables, toSection: .additionalHistoryActions)
 
         diffableDatasource?.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
-        self.updateEmptyPanelState()
+        updateEmptyPanelState()
     }
 
     // MARK: - Swipe Action helpers
@@ -537,6 +537,8 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
     }
 
     private func handleASGroupItemTapped(asGroupItem: ASGroup<Site>) {
+        exitSearchState()
+
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: asGroupItem, presenter: .historyPanel)
         let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
