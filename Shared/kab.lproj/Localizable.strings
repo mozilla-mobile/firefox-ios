@@ -359,13 +359,13 @@
 "Downloads" = "Isidar";
 
 /* The label of the button the user will press to start downloading a file */
-"Downloads.Alert.DownloadNow" = "Sider tura";
+"Downloads.Alert.DownloadNow" = "Sader tura";
 
 /* Button confirming the cancellation of the download. */
 "Downloads.CancelDialog.Cancel" = "Sefsex";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "S tidet triḍ ad tesfesxeḍ asider-a?";
+"Downloads.CancelDialog.Message" = "S tidet triḍ ad tesfesxeḍ asader-a?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Kemmel";
@@ -377,10 +377,10 @@
 "Downloads.Error.Message" = "Isidar ur ttusefraken ara deg Firefox akka tura.";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
-"Downloads.Toast.Cancelled.LabelText" = "Asider ittwafsex";
+"Downloads.Toast.Cancelled.LabelText" = "Asader ittwafsex";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
-"Downloads.Toast.Failed.LabelText" = "Asider ur yiddi ara";
+"Downloads.Toast.Failed.LabelText" = "Asader ur yiddi ara";
 
 /* The button to retry a failed download from the Download Failed toast. */
 "Downloads.Toast.Failed.RetryButton" = "Σreḍ i tikelt nniḍen";
