@@ -41,7 +41,7 @@ struct NimbusFlaggableFeature {
     private var featureID: NimbusFeatureFlagID
 
     private var featureKey: String? {
-        typealias FlagKeys = PrefsKeys.LegacyFeatureFlags
+        typealias FlagKeys = PrefsKeys.FeatureFlags
 
         switch featureID {
         case .bottomSearchBar:
@@ -79,11 +79,6 @@ struct NimbusFlaggableFeature {
         }
     }
 
-    public var featureOptionsKey: String? {
-        guard let baseKey = featureKey else { return nil }
-        return baseKey + "UserPreferences"
-    }
-
     // MARK: - Initializers
 
     init(withID featureID: NimbusFeatureFlagID, and profile: Profile) {
@@ -100,7 +95,7 @@ struct NimbusFlaggableFeature {
     /// (ie. startAtHome which has multiple types of setting) then we should be using
     /// `getPreferenceFor`
     public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
-        guard let optionsKey = featureOptionsKey,
+        guard let optionsKey = featureKey,
               let existingOption = profile.prefs.stringForKey(optionsKey)
         else { return isNimbusEnabled(using: nimbusLayer) }
 
@@ -116,7 +111,7 @@ struct NimbusFlaggableFeature {
     /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
     /// convert it to the appropriate type.
     public func getUserPreference(using nimbusLayer: NimbusFeatureFlagLayer) -> String? {
-        if let optionsKey = featureOptionsKey,
+        if let optionsKey = featureKey,
            let existingOption = profile.prefs.stringForKey(optionsKey) {
             return existingOption
         }
@@ -147,7 +142,7 @@ struct NimbusFlaggableFeature {
     /// based on build channel.
     public func setUserPreferenceFor(_ option: String) {
         guard !option.isEmpty,
-              let optionsKey = featureOptionsKey
+              let optionsKey = featureKey
         else { return }
 
         profile.prefs.setString(option, forKey: optionsKey)

@@ -41,19 +41,19 @@ public struct PrefsKeys {
     public static let KeySearchBarPosition = "SearchBarPosition"
 
     // For ease of use, please list keys alphabetically.
-    public struct NewFeatureFlags {
-        public static let ASPocketStories = "ASPocketStories"
-        public static let CustomWallpaper = "CustomWallpaper"
-        public static let HistoryHighlightsSection = "HistoryHighlightsSection"
-        public static let HistoryGroups = "HistoryGroups"
-        public static let InactiveTabs = "InactiveTabs"
-        public static let JumpBackInSection = "JumpBackInSection"
-        public static let PullToRefresh = "PullToRefresh"
-        public static let RecentlySavedSection = "RecentlySavedSection"
-        public static let StartAtHome = "StartAtHome"
-        public static let SponsoredShortcuts = "SponsoredShortcuts"
-        public static let TabTrayGroups = "TabTrayGroups"
-        public static let TopSiteSection = "TopSites"
+    public struct FeatureFlags {
+        public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
+        public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
+        public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
+        public static let HistoryGroups = "HistoryGroupsUserPrefsKey"
+        public static let InactiveTabs = "InactiveTabsUserPrefsKey"
+        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let PullToRefresh = "PullToRefreshUserPrefsKey"
+        public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
+        public static let StartAtHome = "StartAtHomeUserPrefsKey"
+        public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
+        public static let TabTrayGroups = "TabTrayGroupsUserPrefsKey"
+        public static let TopSiteSection = "TopSitesUserPrefsKey"
     }
 
     public struct LegacyFeatureFlags {
