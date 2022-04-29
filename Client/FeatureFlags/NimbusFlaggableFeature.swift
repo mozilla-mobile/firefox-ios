@@ -41,7 +41,7 @@ struct NimbusFlaggableFeature {
     private var featureID: NimbusFeatureFlagID
 
     private var featureKey: String? {
-        typealias FlagKeys = PrefsKeys.FeatureFlags
+        typealias FlagKeys = PrefsKeys.LegacyFeatureFlags
 
         switch featureID {
         case .bottomSearchBar:

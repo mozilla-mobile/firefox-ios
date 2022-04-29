@@ -76,6 +76,17 @@ class NimbusFeatureFlagLayer {
 
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID) -> Bool {
         switch featureID {
+        case .bottomSearchBar,
+                .historyGroups,
+                .pullToRefresh,
+                .reportSiteIssue,
+                .shakeToRestore,
+                .sponsoredTiles,
+                .startAtHome,
+                .tabTrayGroups,
+                .wallpapers:
+            return true
+
         case .jumpBackIn,
                 .pocket,
                 .recentlySaved,
@@ -86,8 +97,6 @@ class NimbusFeatureFlagLayer {
 
         case .inactiveTabs:
             return tabTray.getValue(for: featureID)
-
-        default: return false
         }
     }
 

@@ -655,6 +655,8 @@
 		C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */; };
 		C8CE38BF265E71FE0009B09E /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */; };
 		C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */; };
+		C8D0D6F2281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D0D6F1281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift */; };
+		C8D0D6F4281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */; };
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
 		C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1D222EDE4400E30E52 /* Accelerate.framework */; };
 		C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1F222EDED000E30E52 /* SafariServices.framework */; };
@@ -3484,6 +3486,8 @@
 		C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = effective_tld_names.swift; sourceTree = "<group>"; };
+		C8D0D6F1281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagUserPrefsMigrationUtility.swift; sourceTree = "<group>"; };
+		C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsUserPrefsMigrationUtilityTests.swift; sourceTree = "<group>"; };
 		C8D3475789EF0BC1B4457F1A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
 		C8D9497CA0DF70586C706A76 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
@@ -5667,6 +5671,7 @@
 				C82A94E4269CB77500624AA7 /* CoreFlaggableFeature.swift */,
 				C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */,
 				C8656D74270F834600E199EA /* FlaggableFeatureOptions.swift */,
+				C8D0D6F1281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift */,
 			);
 			path = FeatureFlags;
 			sourceTree = "<group>";
@@ -6894,6 +6899,7 @@
 				8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */,
 				5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */,
 				8AD3E43A28062C3700EAB4DC /* FirefoxHomeViewControllerTests.swift */,
+				C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -8980,6 +8986,7 @@
 				8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
 				EBA3B2CD2268F27500728BDB /* PhotonActionSheetWidgets.swift in Sources */,
+				C8D0D6F2281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				C87DC85C27B2C94D006EFCE2 /* WallpaperResourceManager.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
@@ -9410,6 +9417,7 @@
 				CA24B53B24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
+				C8D0D6F4281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift in Sources */,
 				43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */,
 				8AE1E1D927B1BD380024C45E /* UIStackViewExtensionsTests.swift in Sources */,
 				3B6F40181DC7849C00656CC6 /* FxHomeTopSitesViewModelTests.swift in Sources */,

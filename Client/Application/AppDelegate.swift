@@ -104,6 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         telemetry = TelemetryWrapper(profile: profile)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
         ThemeManager.shared.updateProfile(with: profile)
 
         // Start intialzing the Nimbus SDK. This should be done after Glean

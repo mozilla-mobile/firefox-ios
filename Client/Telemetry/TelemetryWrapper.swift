@@ -226,7 +226,7 @@ class TelemetryWrapper {
             GleanMetrics.Preferences.closePrivateTabs.set(false)
         }
         // Pocket stories visible
-        if let pocketStoriesVisible = prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
+        if let pocketStoriesVisible = prefs.boolForKey(PrefsKeys.LegacyFeatureFlags.ASPocketStories) {
             GleanMetrics.ApplicationServices.pocketStoriesVisible.set(pocketStoriesVisible)
         } else {
             GleanMetrics.ApplicationServices.pocketStoriesVisible.set(true)
