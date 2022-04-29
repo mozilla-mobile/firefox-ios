@@ -9,6 +9,7 @@ import Shared
 
 class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
 
+    // MARK: - Properties
     typealias legacyFlags = PrefsKeys.LegacyFeatureFlags
     typealias newFlags = PrefsKeys.FeatureFlags
 
@@ -29,6 +30,7 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
 
     private var profile: MockProfile!
 
+    // MARK: - Set-up and tear down
     override func setUp() {
         super.setUp()
 
@@ -42,6 +44,8 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
         profile._shutdown()
         profile = nil
     }
+
+    // MARK: - Tests
 
     func testVerifyEmptyProfiles() {
         verifyNilStateForKeys()
@@ -63,7 +67,7 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
                 return
             }
 
-            XCTAssertTrue(string == UserFeaturePreference.enabled.rawValue)
+            XCTAssertEqual(string, UserFeaturePreference.enabled.rawValue)
             XCTAssertNil(profile.prefs.boolForKey(newKey))
         }
     }
@@ -115,8 +119,7 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
 
         profile.prefs.setString(UserFeaturePreference.disabled.rawValue, forKey: oldKey)
 
-        let migrationUtility = FeatureFlagUserPrefsMigrationUtility(with: profile)
-        migrationUtility.attemptMigration()
+        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
 
         guard let settingAsString = profile.prefs.stringForKey(oldKey),
               let settingAsBool = profile.prefs.boolForKey(newKey),
@@ -154,8 +157,7 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
                                 forKey: legacyFlags.StartAtHome + userPrefsSuffix)
 
         // Migrate
-        let migrationUtility = FeatureFlagUserPrefsMigrationUtility(with: profile)
-        migrationUtility.attemptMigration()
+        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
 
         // Verify that the expected settings have the expected settings.
         guard let pocketSetting = profile.prefs.boolForKey(newFlags.ASPocketStories),

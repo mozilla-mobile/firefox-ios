@@ -4,6 +4,13 @@
 
 import Shared
 
+// This enum was moved here from `FlaggableFeatureOptions` as it can be removed once
+// the migration utility gets removed.
+enum UserFeaturePreference: String, FlaggableFeatureOptions {
+    case enabled
+    case disabled
+}
+
 final class FeatureFlagUserPrefsMigrationUtility {
 
     // MARK: - Properties

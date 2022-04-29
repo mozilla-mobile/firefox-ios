@@ -85,19 +85,21 @@ class FeatureFlagsManager: NimbusManageable {
         if featureID == .startAtHome { return }
 
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-        let newSetting = desiredState ? UserFeaturePreference.enabled.rawValue : UserFeaturePreference.disabled.rawValue
-        feature.setUserPreferenceFor(newSetting)
+        feature.setUserPreference(to: desiredState)
     }
 
     /// Set a feature that has a custom state to that custom state. More information
     /// on custom states can be found in `FlaggableFeatureOptions`
-    public func set<T: FlaggableFeatureOptions>(feature featureID: NimbusFeatureFlagWithCustomOptionsID, to desiredState: T) {
+    public func set<T: FlaggableFeatureOptions>(
+        feature featureID: NimbusFeatureFlagWithCustomOptionsID,
+        to desiredState: T
+    ) {
 
         switch featureID {
         case .startAtHome:
             if let option = desiredState as? StartAtHomeSetting {
                 let feature = NimbusFlaggableFeature(withID: .startAtHome, and: profile)
-                feature.setUserPreferenceFor(option.rawValue)
+                feature.setUserPreference(to: option.rawValue)
             }
         }
     }

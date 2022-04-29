@@ -88,27 +88,29 @@ struct NimbusFlaggableFeature {
 
     // MARK: - Public methods
     public func isNimbusEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
-        return nimbusLayer.checkNimbusConfigFor(featureID)
-    }
-
-    /// Returns whether or not the feature is enabled. If a specific setting is required
-    /// (ie. startAtHome which has multiple types of setting) then we should be using
-    /// `getPreferenceFor`
-    public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
-        guard let optionsKey = featureKey,
-              let existingOption = profile.prefs.stringForKey(optionsKey)
-        else { return isNimbusEnabled(using: nimbusLayer) }
+        let nimbusValue = nimbusLayer.checkNimbusConfigFor(featureID)
 
         switch featureID {
-        case .startAtHome:
-            return (existingOption == StartAtHomeSetting.afterFourHours.rawValue)
-            || (existingOption == StartAtHomeSetting.always.rawValue)
+        case .pocket:
+            return nimbusValue && !Pocket.IslocaleSupported(Locale.current.identifier)
         default:
-            return existingOption == UserFeaturePreference.enabled.rawValue
+            return nimbusValue
         }
     }
 
-    /// Returns the feature option represented as an Int. The `FeatureFlagManager` will
+    /// Returns whether or not the feature's state was changed by the user. If no
+    /// preference exists, then the underlying Nimbus default is used. If a specific
+    /// setting is required (ie. startAtHome, which has multiple types of setting),
+    /// then we should be using `getPreferenceFor`
+    public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
+        guard let optionsKey = featureKey,
+              let option = profile.prefs.boolForKey(optionsKey)
+        else { return isNimbusEnabled(using: nimbusLayer) }
+
+        return option
+    }
+
+    /// Returns the feature option represented as a String. The `FeatureFlagManager` will
     /// convert it to the appropriate type.
     public func getUserPreference(using nimbusLayer: NimbusFeatureFlagLayer) -> String? {
         if let optionsKey = featureKey,
@@ -134,18 +136,34 @@ struct NimbusFlaggableFeature {
         }
     }
 
+    public func setUserPreference(to state: Bool) {
+        guard let key = featureKey else { return }
+
+        profile.prefs.setBool(state, forKey: key)
+    }
     /// Allows to directly set the state of a feature.
     ///
     /// Not all features are user togglable. If there exists no feature key - as defined
     /// in the `featureKey()` function - with which to write to UserDefaults, then the
     /// feature cannot be turned on/off and its state can only be set when initialized,
     /// based on build channel.
-    public func setUserPreferenceFor(_ option: String) {
+    public func setUserPreference(to option: String) {
         guard !option.isEmpty,
               let optionsKey = featureKey
         else { return }
 
-        profile.prefs.setString(option, forKey: optionsKey)
+        switch featureID {
+        case .startAtHome:
+            if option == StartAtHomeSetting.afterFourHours.rawValue
+                || option == StartAtHomeSetting.always.rawValue {
+                setUserPreference(to: true)
+            } else {
+                setUserPreference(to: false)
+            }
+            profile.prefs.setString(option, forKey: optionsKey)
+
+        default: break
+        }
     }
 }
 
