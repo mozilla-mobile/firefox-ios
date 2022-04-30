@@ -247,6 +247,15 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Tanca";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Comença a navegar";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "El vostre historial no us segueix";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Us donem la benvinguda al Firefox %@";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Cancel·la";
 
@@ -378,6 +387,9 @@
 
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Cadena de cerca que s'utilitzarà";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Exemple: exemple.motorcerca.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Enganxeu o escriviu una cadena de cerca. Si és necessari, substituïu el terme de cerca per «%s».";
@@ -511,6 +523,18 @@
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "Elimina de les dreceres";
 
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Canvia el nom de la drecera";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Nom de la drecera";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Desa";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Cancel·la";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Afegeix";
 
@@ -585,6 +609,9 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Hi falta contingut al lloc o actua de forma estranya?";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Esteu protegit!";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Utilitzeu el Touch ID per tornar al %@";
