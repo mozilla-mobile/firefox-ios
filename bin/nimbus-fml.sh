@@ -60,7 +60,7 @@ helptext() {
 MANIFEST_PATH=
 OUTPUT_DIR="${SOURCE_ROOT}/${PROJECT}/Generated"
 NAMESPACE=
-AS_VERSION=v92.0.1
+AS_VERSION=v93.0.4
 FRESHEN_FML=
 
 while (( "$#" )); do
