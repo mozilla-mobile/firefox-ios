@@ -129,7 +129,7 @@ class FeatureFlagsManager: NimbusManageable {
     /// and never again.
     public func initializeDeveloperFeatures(with profile: Profile) {
         self.profile = profile
-        
+
         coreFeatures.removeAll()
 
         let adjustEnvironmentProd = CoreFlaggableFeature(withID: .adjustEnvironmentProd,
@@ -147,85 +147,3 @@ class FeatureFlagsManager: NimbusManageable {
         coreFeatures[.useMockData] = useMockData
     }
 }
-
-    // ROUX
-//        let bottomSearchBar = FlaggableFeature(withID: .bottomSearchBar,
-//                                               and: profile,
-//                                               enabledFor: [.release, .beta, .developer])
-//        features[.bottomSearchBar] = bottomSearchBar
-//
-//        let historyHighlights = FlaggableFeature(withID: .historyHighlights,
-//                                                 and: profile,
-//                                                 enabledFor: [.release, .beta, .developer])
-//        features[.historyHighlights] = historyHighlights
-//
-//        let historyGroups = FlaggableFeature(withID: .historyGroups,
-//                                             and: profile,
-//                                             enabledFor: [.developer, .beta])
-//        features[.historyGroups] = historyGroups
-//
-//        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
-//                                            and: profile,
-//                                            enabledFor: [.developer, .beta, .release])
-//        features[.inactiveTabs] = inactiveTabs
-//
-//        let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
-//                                          and: profile,
-//                                          enabledFor: [.release, .beta, .developer])
-//        features[.jumpBackIn] = jumpBackIn
-//
-//        let librarySection = FlaggableFeature(withID: .librarySection,
-//                                              and: profile,
-//                                              enabledFor: [.release, .beta, .developer])
-//        features[.librarySection] = librarySection
-//
-//        let pocket = FlaggableFeature(withID: .pocket,
-//                                      and: profile,
-//                                      enabledFor: [.release, .beta, .developer])
-//        features[.pocket] = pocket
-//
-//        let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
-//                                             and: profile,
-//                                             enabledFor: [.release, .beta, .developer])
-//        features[.pullToRefresh] = pullToRefresh
-//
-//        let recentlySaved = FlaggableFeature(withID: .recentlySaved,
-//                                             and: profile,
-//                                             enabledFor: [.release, .beta, .developer])
-//        features[.recentlySaved] = recentlySaved
-//
-//        let reportSiteIssue = FlaggableFeature(withID: .reportSiteIssue,
-//                                               and: profile,
-//                                               enabledFor: [.beta, .developer])
-//
-//        features[.reportSiteIssue] = reportSiteIssue
-//
-//        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
-//                                              and: profile,
-//                                              enabledFor: [.beta, .developer, .other])
-//        features[.shakeToRestore] = shakeToRestore
-//
-//        let sponsoredTiles = FlaggableFeature(withID: .sponsoredTiles,
-//                                              and: profile,
-//                                              enabledFor: [.developer])
-//        features[.sponsoredTiles] = sponsoredTiles
-//
-//        let startAtHome = FlaggableFeature(withID: .startAtHome,
-//                                           and: profile,
-//                                           enabledFor: [.release, .beta, .developer])
-//        features[.startAtHome] = startAtHome
-//
-//        let tabTrayGroups = FlaggableFeature(withID: .tabTrayGroups,
-//                                             and: profile,
-//                                             enabledFor: [.developer])
-//        features[.tabTrayGroups] = tabTrayGroups
-//
-//        let topsites = FlaggableFeature(withID: .topSites,
-//                                        and: profile,
-//                                        enabledFor: [.release, .beta, .developer])
-//        features[.topSites] = topsites
-//
-//        let wallpapers = FlaggableFeature(withID: .wallpapers,
-//                                          and: profile,
-//                                          enabledFor: [.release, .beta, .developer])
-//        features[.wallpapers] = wallpapers

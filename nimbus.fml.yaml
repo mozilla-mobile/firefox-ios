@@ -4,6 +4,57 @@ channels:
   - beta
   - release
 features:
+  generalAppFeatures:
+    description: The feature that contains feature flags not belonging to other sections
+    variables:
+      sections-enabled:
+        description: "This property provides a lookup table of whether or not the given feature should be enabled."
+        type: Map<GeneralAppFeatureID, Boolean>
+        default:
+          {
+            "bottom-search-bar": true,
+            "pull-to-refresh": true,
+            "report-site-issue": false,
+            "shake-to-restore": false,
+            "wallpapers": true,
+          }
+    defaults:
+      - channel: beta
+        value: {
+          "sections-enabled": {
+            "bottom-search-bar": true,
+            "pull-to-refresh": true,
+            "report-site-issue": true,
+            "shake-to-restore": true,
+            "wallpapers": true,
+          }
+        }
+      - channel: developer
+        value: {
+          "sections-enabled": {
+            "bottom-search-bar": true,
+            "pull-to-refresh": true,
+            "report-site-issue": true,
+            "shake-to-restore": true,
+            "wallpapers": true,
+          }
+        }
+  startAtHomeFeature:
+    description: The controls for Start at Home feature
+    variables:
+      setting:
+        description: "This property provides a default setting for the startAtHomeFeature"
+        type: GeneralAppFeatureID
+        default: after-four-hours
+    defaults:
+      - channel: beta
+        value: {
+          "setting": after-four-hours
+        }
+      - channel: developer
+        value: {
+          "setting": after-four-hours
+        }
   search:
     description: The search feature
     variables:
@@ -343,6 +394,28 @@ types:
           description: This is the card that appears at the top on the Firefox Home Page.
         Unknown:
           description: A message has NOT declared its target surface.
+    GeneralAppFeatureID:
+      description: The identifiers for the different types of search term groups.
+      variants:
+        bottom-search-bar:
+          description: Whether the search bar is at the bottom or the top.
+        pull-to-refresh:
+          description: Whether the pullToRefresh feature is on
+        report-site-issue:
+          description: Whether the reportSiteIssue functionality is enabled
+        shake-to-restore:
+          description: Whether the shakeToRestore last closed tab feature is enabled
+        wallpapers:
+          description: Grouping for items in the Tab Tray and in JumpBackIn
+    StartAtHome:
+      description: The identifiers for the different types of options for StartAtHome
+      variants:
+        disabled:
+          description: App always opens to the last tab the user was on.
+        after-four-hours:
+          description: App opens to a new homepage tab after four hours of inactivity
+        always:
+          description: App opens to a new homepage tab after five minutes of inactiviny
     HomeScreenSection:
       description: The identifiers for the sections of the homescreen.
       variants:
