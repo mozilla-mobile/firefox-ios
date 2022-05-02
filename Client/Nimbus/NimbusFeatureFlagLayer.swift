@@ -234,7 +234,7 @@ class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus
     ) -> Bool {
 
-        let config = nimbus.features.searchTermGroupsFeature.value()
+        let config = nimbus.features.searchTermGroups.value()
         var nimbusID: SearchTermGroups
 
         switch featureID {
@@ -250,23 +250,12 @@ class NimbusFeatureFlagLayer {
 
     private func checkStartAtHomeFeature(for featureID: NimbusFeatureFlagID,
                                          from nimbus: FxNimbus
-    ) -> Bool {
+    ) -> StartAtHomeSetting {
 
-        let config = nimbus.features.generalAppFeatures.value()
-        var nimbusID: GeneralAppFeatureId
+        // ROUX
+        let config = nimbus.features.startAtHome.value()
 
-        switch featureID {
-        case .bottomSearchBar: nimbusID = GeneralAppFeatureId.bottomSearchBar
-        case .pullToRefresh: nimbusID = GeneralAppFeatureId.pullToRefresh
-        case .reportSiteIssue: nimbusID = GeneralAppFeatureId.reportSiteIssue
-        case .shakeToRestore: nimbusID = GeneralAppFeatureId.shakeToRestore
-        case .wallpapers: nimbusID = GeneralAppFeatureId.wallpapers
-        default: return false
-        }
-
-        guard let status = config.featureStatus[nimbusID] else { return false }
-
-        return status
+        return StartAtHomeSetting.afterFourHours
     }
 
 //    private func fetchGeneralFeatures(from nimbus: FxNimbus) {

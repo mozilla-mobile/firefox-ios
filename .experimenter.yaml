@@ -69,7 +69,7 @@ search:
     spotlight:
       type: json
       description: This property is covers the properties related to the spotlight
-search-term-groups-feature:
+search-term-groups:
   description: The feature that controls whether or not seacrh term groups are enabled.
   hasExposure: true
   exposureDescription: ""
@@ -77,7 +77,7 @@ search-term-groups-feature:
     grouping-enabled:
       type: json
       description: This property provides a lookup table of whether or not the given grouping should be enabled.
-start-at-home-feature:
+start-at-home:
   description: The controls for Start at Home feature
   hasExposure: true
   exposureDescription: ""

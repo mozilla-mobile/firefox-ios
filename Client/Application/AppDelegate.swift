@@ -122,7 +122,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        NimbusManager.shared.updateData(for: [.allLayers])
 
         setupRootViewController()
 

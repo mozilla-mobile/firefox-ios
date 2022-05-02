@@ -82,7 +82,9 @@ class FeatureFlagsManager: NimbusManageable {
 
     /// Set a feature that has a binary state to on or off
     public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool) {
-        if featureID == .startAtHome { return }
+        // Do nothing if this is a non-binary feature
+        let nonbinaryStateFeatures: [NimbusFeatureFlagID] = [.startAtHome]
+        if nonbinaryStateFeatures.contains(featureID) { return }
 
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
         feature.setUserPreference(to: desiredState)
@@ -104,22 +106,6 @@ class FeatureFlagsManager: NimbusManageable {
         }
     }
 
-//    /// Main interface for setting a feature's state and options. Options are enums of
-//    /// `FlaggableFeatureOptions` type and also conform to Int.
-//    public func setUserPreferenceFor<T: FlaggableFeatureOptions>(_ featureID: NimbusFeatureFlagID, to option: T) {
-//
-//        switch featureID {
-//        case .startAtHome:
-//            if let option = option as? StartAtHomeSetting {
-////                features[featureID]?.setUserPreferenceFor(option.rawValue)
-//            }
-//        default:
-//            if let option = option as? UserFeaturePreference {
-////                features[featureID]?.setUserPreferenceFor(option.rawValue)
-//            }
-//        }
-//    }
-//
     /// Sets up features with default channel availablility. For ease of use, please add
     /// new features alphabetically. These features are only core features in the
     /// application. See the relevant documentation on `CoreFlaggableFeature` and
