@@ -59,6 +59,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     var groupedSites = DateGroupedTableData<Site>()
     var isFetchInProgress = false
     var isSearchInProgress = false
+    var shouldResetHistory = false
 
     var searchResultSites = [Site]()
     var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
@@ -98,23 +99,25 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             return
         }
 
+        if shouldResetHistory {
+            resetHistory()
+        }
+
         fetchData().uponQueue(.global(qos: .userInteractive)) { result in
-            if let sites = result.successValue {
-                let fetchedSites = sites.asArray()
-
-                self.populateHistorySites(fetchedSites: fetchedSites)
-
-                if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
-                    self.populateASGroups()
-                }
-
-                self.visibleSections = Sections.allCases.filter { section in
-                    self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
-                    || !self.groupsForSection(section: section).isEmpty
-                }
-                completion(true)
-            } else {
+            guard let fetchedSites = result.successValue?.asArray(), !fetchedSites.isEmpty else {
                 completion(false)
+                return
+            }
+
+            self.currentFetchOffset += self.queryFetchLimit
+            if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
+                self.populateASGroups(fetchedSites: fetchedSites) {
+                    self.buildVisibleSections()
+                    completion(true)
+                }
+            } else {
+                self.populateHistorySites(fetchedSites: fetchedSites)
+                completion(true)
             }
         }
     }
@@ -160,6 +163,20 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         }
     }
 
+    private func resetHistory() {
+        currentFetchOffset = 0
+        searchTermGroups.removeAll()
+        groupedSites = DateGroupedTableData<Site>()
+        shouldResetHistory = false
+    }
+
+    private func buildVisibleSections() {
+        self.visibleSections = Sections.allCases.filter { section in
+            self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
+            || !self.groupsForSection(section: section).isEmpty
+        }
+    }
+
     /// Provide de-duplicated history and visible history sections.
     private func populateHistorySites(fetchedSites: [Site]) {
         let allCurrentGroupedSites = self.groupedSites.allItems()
@@ -177,21 +194,18 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
 
     /// Provide groups for curruently fetched history items.
-    private func populateASGroups() {
-        SearchTermGroupsManager.getSiteGroups(with: self.profile, from: self.groupedSites.allItems(), using: .orderedDescending) { group, filteredItems in
-            guard var searchTermGrouping = group else { return }
-
-            // Remove overlapping history & STG items
-            searchTermGrouping.forEach { group in
-                group.groupedItems.forEach { self.groupedSites.remove($0) }
-            }
-
-            // Remove overlapping STGs. This happens when the queryFetchLimit is too low - then STGManager makes duplicate groups.
-            self.searchTermGroups.forEach { group in
-                searchTermGrouping = searchTermGrouping.filter { $0.displayTitle != group.displayTitle }
-            }
+    private func populateASGroups(fetchedSites: [Site], completion: @escaping () -> Void) {
+        SearchTermGroupsManager.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, filteredItems in
+            guard let searchTermGrouping = group else { return }
 
             self.searchTermGroups.append(contentsOf: searchTermGrouping)
+
+            filteredItems.forEach { site in
+                if let latestVisit = site.latestVisit {
+                    self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                }
+            }
+            completion()
         }
     }
 
