@@ -258,16 +258,6 @@ class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkStartAtHomeFeature(for featureID: NimbusFeatureFlagID,
-                                         from nimbus: FxNimbus
-    ) -> StartAtHomeSetting {
-
-        // ROUX
-        let config = nimbus.features.startAtHomeFeature.value()
-
-        return StartAtHomeSetting.afterFourHours
-    }
-
 //    private func fetchGeneralFeatures(from nimbus: FxNimbus) {
 //        let config = nimbus.features.generalAppFeatures.value()
 //
