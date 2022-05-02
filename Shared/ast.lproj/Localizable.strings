@@ -47,10 +47,10 @@
 "ActivityStream.TopSites.SectionTitle" = "Sitios Principales";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Dismiss" = "Aceutar";
+"AddPass.Error.Dismiss" = "D'acuerdu";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Message" = "Asocedió un fallu mentanto s'amestaba la tarxeta a Wallet. Volvi tentalo dempués, por favor.";
+"AddPass.Error.Message" = "Asocedió un fallu mentanto s'amestaba la tarxeta a Wallet. Volvi tentalo dempués.";
 
 /* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Title" = "Hebo un fallu al amestar la tarxeta";
@@ -134,7 +134,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "Dir";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "¿Dir al enllaz copiáu?";
+"ClipboardToast.GoToCopiedLink.Title" = "¿Quies dir al enllaz copiáu?";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "Zarrar";
@@ -253,7 +253,7 @@
 "DownloadsPanel.EmptyState.Title" = "Equí amuésense los ficheros baxaos.";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Introduz la contraseña pa coneutate";
+"Enter your password to connect" = "Introduz la contraseña pa conectate";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Avanzao";
@@ -274,10 +274,10 @@
 "ErrorPages.VisitOnce.Button" = "Visitar sitiu de toes toes";
 
 /* Question shown to user when tapping a link that opens the App Store app */
-"ExternalLink.AppStore.ConfirmationTitle" = "¿Abrir esti enllaz na App Store?";
+"ExternalLink.AppStore.ConfirmationTitle" = "¿Quies abrir esti enllaz na App Store?";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "¿Abrir esti enllaz nuna aplicación esterna?";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "¿Quies abrir esti enllaz nuna aplicación esterna?";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
@@ -298,7 +298,7 @@
 "FxA.AccountVerificationRequiredSurface" = "Tienes de verificar %@. Comprueba'l to corréu pa ver si aportó l'enllaz de Firefox.";
 
 /* Button label to connect another device to Sync */
-"FxA.ConnectAnotherDevice" = "Coneutar otru preséu";
+"FxA.ConnectAnotherDevice" = "Conectar otru preséu";
 
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Cuenta de Firefox";
@@ -343,25 +343,25 @@
 "FxA.TakeYourWebWithYou" = "Lleva la web contigo";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync coneutóse con %@";
+"FxAPush_DeviceConnected_body" = "Firefox Sync conectóse con %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
-"FxAPush_DeviceConnected_title" = "Sync coneutáu";
+"FxAPush_DeviceConnected_title" = "Sync conectóse";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
-"FxAPush_DeviceDisconnected_body" = "%@ desconeutóse con ésitu.";
+"FxAPush_DeviceDisconnected_body" = "%@ desconectóse correutamente.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "Esti preséu desconeutóse esitósamente de Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Esti preséu desconectóse de Firefox Sync correutamente.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync desconeutáu";
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync desconectóse";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Sync desconeutáu";
+"FxAPush_DeviceDisconnected_title" = "Sync desconectóse";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un preséu desconeutóse de Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un preséu desconectóse de Firefox Sync";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Consigui les llingüetes abiertes, marcadores y contraseñes dende otros preseos de to.";
@@ -492,6 +492,24 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "puramente agora";
 
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Marcadores";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "Ficheru";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Historial";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Ferramientes";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Ventana";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Axustes";
+
 /* History tableview section header */
 "Last month" = "Últimu mes";
 
@@ -556,7 +574,7 @@
 "LoginsList.Title" = "ANICIOS DE SESIÓN GUARDAOS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Paez que Firefox cascó enantes. ¿Quedríes restaurar les llingüetes?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Paez que Firefox cascó enantes. ¿Quies restaurar les llingüetes?";
 
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Amestóse'l marcador";
@@ -698,7 +716,7 @@
 "No tabs" = "Ensin llingüetes";
 
 /* OK button */
-"OK" = "Aceutar";
+"OK" = "D'acuerdu";
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "Val";
@@ -791,7 +809,7 @@
 "Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Guarda les páxines na to Llista de llectura calcando l'iconu «+» del llibru nos controles de Vista de Llectura.";
 
 /* OK button to dismiss the error prompt. */
-"ScanQRCode.Error.OK.Button" = "Aceutar";
+"ScanQRCode.Error.OK.Button" = "D'acuerdu";
 
 /* Text for the instructions label, displayed in the QR scanner view */
 "ScanQRCode.Instructions.Label" = "Allinia'l códigu QR col marcu pa escaniar";
@@ -817,7 +835,7 @@
 "Search.ThirdPartyEngines.AddSuccess" = "¡Amestóse'l motor de busca!";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "¿Amestar fornidor de busques?";
+"Search.ThirdPartyEngines.AddTitle" = "¿Quies amestar el fornidor de busques?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Encaboxar";
@@ -835,13 +853,13 @@
 "Search.ThirdPartyEngines.FailedTitle" = "Falló";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.FormErrorMessage" = "Rellena tolos campos correutamente, por favor.";
+"Search.ThirdPartyEngines.FormErrorMessage" = "Rellena tolos campos correutamente.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.FormErrorTitle" = "Falló";
 
 /* The confirmation button */
-"Search.ThirdPartyEngines.OK" = "Aceutar";
+"Search.ThirdPartyEngines.OK" = "D'acuerdu";
 
 /* Accessibility hint describing the action performed when a search suggestion is clicked */
 "Searches for the suggestion" = "Busca la suxerencia";
@@ -850,7 +868,7 @@
 "Secure connection" = "Conexón segura";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "¿Unviar un informe del casque pa que Mozilla puea iguar el problema?";
+"Send a crash report so Mozilla can fix the problem?" = "¿Quies unviar un informe del casque pa que Mozilla puea iguar el problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Opinar";
@@ -869,7 +887,7 @@
 "SendTo.Error.Message" = "Namás puen compartise enllaces HTTP y HTTPS.";
 
 /* OK button to dismiss the error prompt. */
-"SendTo.Error.OK.Button" = "Aceutar";
+"SendTo.Error.OK.Button" = "D'acuerdu";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
 "SendTo.Error.Title" = "L'enllaz que tentes de compartir nun se pue compartir.";
@@ -959,7 +977,7 @@
 "Settings.Disconnect.DestructiveButton" = "Desconectar";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "¿Desconectase de Sync?";
+"Settings.Disconnect.Title" = "¿Quies desconectate de Sync?";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
 "Settings.DisplayTheme.Manual.SwitchSubtitle" = "Escueyi qué estilu quies";
