@@ -96,6 +96,9 @@ extension LibraryViewController {
     }
 
     @objc func bottomDeleteButtonAction() {
+        // Leave search mode when clearing history
+        viewModel.currentPanelState = .history(state: .mainView)
+
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .deleteHistory)
         NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }

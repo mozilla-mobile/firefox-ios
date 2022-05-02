@@ -57,8 +57,9 @@ class LibraryPanelDescriptor {
     let activeImageName: String
     let accessibilityLabel: String
     let accessibilityIdentifier: String
+    let panelType: LibraryPanelType
 
-    init(makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController), profile: Profile, tabManager: TabManager, imageName: String, accessibilityLabel: String, accessibilityIdentifier: String) {
+    init(makeViewController: @escaping ((_ profile: Profile, _ tabManager: TabManager) -> UIViewController), profile: Profile, tabManager: TabManager, imageName: String, accessibilityLabel: String, accessibilityIdentifier: String, panelType: LibraryPanelType) {
         self.makeViewController = makeViewController
         self.profile = profile
         self.tabManager = tabManager
@@ -66,6 +67,7 @@ class LibraryPanelDescriptor {
         self.activeImageName = self.imageName + "-active"
         self.accessibilityLabel = accessibilityLabel
         self.accessibilityIdentifier = accessibilityIdentifier
+        self.panelType = panelType
     }
 
     func setup() {
@@ -94,7 +96,8 @@ class LibraryPanels: FeatureFlagsProtocol {
             tabManager: tabManager,
             imageName: "Bookmarks",
             accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.Bookmarks"),
+            accessibilityIdentifier: "LibraryPanels.Bookmarks",
+            panelType: .bookmarks),
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
@@ -111,7 +114,8 @@ class LibraryPanels: FeatureFlagsProtocol {
             tabManager: tabManager,
             imageName: "History",
             accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.History"),
+            accessibilityIdentifier: "LibraryPanels.History",
+            panelType: .history),
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
@@ -121,7 +125,8 @@ class LibraryPanels: FeatureFlagsProtocol {
             tabManager: tabManager,
             imageName: "Downloads",
             accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.Downloads"),
+            accessibilityIdentifier: "LibraryPanels.Downloads",
+            panelType: .downloads),
 
         LibraryPanelDescriptor(
             makeViewController: { profile, tabManager in
@@ -131,6 +136,7 @@ class LibraryPanels: FeatureFlagsProtocol {
             tabManager: tabManager,
             imageName: "ReadingList",
             accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
-            accessibilityIdentifier: "LibraryPanels.ReadingList")
+            accessibilityIdentifier: "LibraryPanels.ReadingList",
+            panelType: .readingList)
     ]
 }

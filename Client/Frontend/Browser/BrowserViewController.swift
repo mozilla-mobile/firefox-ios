@@ -959,13 +959,19 @@ class BrowserViewController: UIViewController {
             presentedViewController.dismiss(animated: true, completion: nil)
         }
 
-        // We should not set libraryViewController to nil because the library panel losses the currentStat
+        // We should not set libraryViewController to nil because the library panel losses the currentState
         let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile, tabManager: tabManager)
         libraryViewController.delegate = self
         self.libraryViewController = libraryViewController
 
         if panel != nil {
             libraryViewController.selectedPanel = panel
+        }
+
+        // Reset history panel pagination to get latest history visit
+        if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
+           let vcPanel = historyPanel.viewController as? HistoryPanelWithGroups {
+            vcPanel.viewModel.shouldResetHistory = true //resetHistory()
         }
 
         let controller: DismissableNavigationViewController
