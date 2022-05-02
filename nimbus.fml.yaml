@@ -39,7 +39,7 @@ features:
             "wallpapers": true,
           }
         }
-  start-at-home-feature:
+  start-at-home:
     description: The controls for Start at Home feature
     variables:
       setting:
@@ -146,7 +146,7 @@ features:
             "status": true
           }
         }
-  search-term-groups-feature:
+  search-term-groups:
     description: The feature that controls whether or not seacrh term groups are enabled.
     variables:
       grouping-enabled:
