@@ -37,7 +37,12 @@ public class RustPlaces {
             return nil
         } catch let err as NSError {
             if let placesError = err as? PlacesError {
-                SentryIntegration.shared.sendWithStacktrace(message: "Places error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
+                switch placesError {
+                case .InternalPanic(let message):
+                    SentryIntegration.shared.sendWithStacktrace(message: "Panicked when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: message)
+                default:
+                    SentryIntegration.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
+                }
             } else {
                 SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
             }
@@ -262,8 +267,14 @@ public class RustPlaces {
         return error
     }
 
+    public func interrupt() {
+        api?.interrupt()
+    }
+
     public func forceClose() -> NSError? {
         var error: NSError? = nil
+
+        api?.interrupt()
 
         writerQueue.sync {
             guard isOpen else { return }
@@ -288,9 +299,12 @@ public class RustPlaces {
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let placesError = err as? PlacesError {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Places error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
-                } else {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
+                    switch placesError {
+                    case .InternalPanic(let message):
+                        SentryIntegration.shared.sendWithStacktrace(message: "Panicked when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: message)
+                    default:
+                        SentryIntegration.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
+                    }
                 }
 
                 deferred.fill(Maybe(failure: err))

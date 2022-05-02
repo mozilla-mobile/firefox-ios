@@ -14118,6 +14118,14 @@
 				version = 1.18.0;
 			};
 		};
+		1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mozilla/rust-components-swift";
+			requirement = {
+				kind = exactVersion;
+				version = 91.0.1;
+			};
+		};
 		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adjust/ios_sdk.git";
@@ -14147,7 +14155,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 93.0.4;
+				version = 91.1.0;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -14301,6 +14309,7 @@
 		};
 		43EFA63D2786562600400DF0 /* Places */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 1BE9ECAA271765C800D729BB /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Places;
 		};
 		5FA2233B27F74071005B3D87 /* Glean */ = {
