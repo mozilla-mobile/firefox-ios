@@ -45,7 +45,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     // MARK: - Properties
 
     private let profile: Profile
-    private let queryFetchLimit = 10
+    private let queryFetchLimit = 100
     private var currentFetchOffset = 0
     // Search offset and Limit
     private let searchQueryFetchLimit = 50
@@ -122,20 +122,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         }
     }
 
-    func resetHistory() {
-        currentFetchOffset = 0
-        searchTermGroups.removeAll()
-        groupedSites = DateGroupedTableData<Site>()
-        shouldResetHistory = false
-    }
-
-    private func buildVisibleSections() {
-        self.visibleSections = Sections.allCases.filter { section in
-            self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
-            || !self.groupsForSection(section: section).isEmpty
-        }
-    }
-
     // Add completion to reload on finish
     func performSearch(term: String, completion: @escaping (Bool) -> Void) {
         isFetchInProgress = true
@@ -174,6 +160,20 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             }
 
             return deferMaybe(result)
+        }
+    }
+
+    private func resetHistory() {
+        currentFetchOffset = 0
+        searchTermGroups.removeAll()
+        groupedSites = DateGroupedTableData<Site>()
+        shouldResetHistory = false
+    }
+
+    private func buildVisibleSections() {
+        self.visibleSections = Sections.allCases.filter { section in
+            self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
+            || !self.groupsForSection(section: section).isEmpty
         }
     }
 
