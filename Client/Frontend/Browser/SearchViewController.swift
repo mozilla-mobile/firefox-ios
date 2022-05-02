@@ -222,11 +222,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private func layoutTable() {
-        tableView.snp.remakeConstraints { make in
-            make.top.equalTo(self.view.snp.top)
-            make.leading.trailing.equalTo(self.view)
-            make.bottom.equalTo(self.searchEngineScrollView.snp.top)
-        }
+        // Note: We remove and re-add tableview from superview so that we can update
+        // the constraints to be aligned with Search Engine Scroll View top anchor
+        tableView.removeFromSuperview()
+        view.addSubviews(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: searchEngineScrollView.topAnchor)
+        ])
     }
 
     func reloadSearchEngines() {
