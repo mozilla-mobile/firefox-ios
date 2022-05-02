@@ -23,6 +23,10 @@ public struct AccessibilityIdentifiers {
 
     struct FirefoxHomepage {
 
+        struct HomeTabBanner {
+            static let ctaButton = "HomeTabBanner.ctaButton"
+        }
+
         struct OtherButtons {
             static let logoButton = "FxHomeLogoButton"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"

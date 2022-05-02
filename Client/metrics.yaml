@@ -277,6 +277,17 @@ default_browser_card:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-07-01"
+  evergreen_impression:
+    type: event
+    description: |
+      Reports events of Home Tab Banner evergreen impressions.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3560
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10600
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-12-01"
 
 # Default browser onboarding metrics
 default_browser_onboarding:
@@ -2296,3 +2307,93 @@ device:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-09-01"
+
+messaging:
+  shown:
+    type: event
+    description: |
+      A message was shown to the user.
+    extra_keys:
+      message_key:
+        description: The Id of the message
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10417
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-10-17"
+  dismissed:
+    type: event
+    description: |
+      A message was dismissed by the user.
+    extra_keys:
+      message_key:
+        description: The Id of the message
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10417
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-10-17"
+  clicked:
+    type: event
+    description: |
+      A message was clicked by the user.
+    extra_keys:
+      message_key:
+        description: The Id of the message
+        type: string
+      action_uuid:
+        description: The UUID of the action
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10417
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-10-17"
+  expired:
+    type: event
+    description: |
+      A message's max display count has been reached.
+    extra_keys:
+      message_key:
+        description: The Id of the message
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10417
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-10-17"
+  malformed:
+    type: event
+    description: |
+      A message was malformed.
+    extra_keys:
+      message_key:
+        description: The Id of the message
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10395
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10417
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - technical
+    expires: "2023-10-17"
