@@ -258,6 +258,10 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
                 fetchDataAndUpdateLayout(animating: true)
             }
         case .OpenClearRecentHistory:
+            if viewModel.isSearchInProgress {
+                exitSearchState()
+            }
+
             showClearRecentHistory()
         default:
             // no need to do anything at all
