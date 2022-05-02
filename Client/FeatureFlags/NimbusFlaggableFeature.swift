@@ -92,7 +92,7 @@ struct NimbusFlaggableFeature {
 
         switch featureID {
         case .pocket:
-            return nimbusValue && !Pocket.IslocaleSupported(Locale.current.identifier)
+            return nimbusValue && Pocket.IslocaleSupported(Locale.current.identifier)
         default:
             return nimbusValue
         }
