@@ -157,9 +157,19 @@ class NimbusFeatureFlagLayer {
             return checkSponsoredTilesFeature(from: nimbus)
 
         case .startAtHome:
-            return false
+            return checkNimbusConfigForStartAtHome(using: nimbus) != .disabled
         }
+    }
 
+    public func checkNimbusConfigForStartAtHome(using nimbus: FxNimbus = FxNimbus.shared) -> StartAtHomeSetting {
+        let config = nimbus.features.startAtHomeFeature.value()
+        let nimbusSetting = config.setting
+
+        switch nimbusSetting {
+        case .disabled: return .disabled
+        case .afterFourHours: return .afterFourHours
+        case .always: return .always
+        }
     }
 
     // MARK: - Private methods
