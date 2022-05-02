@@ -29,19 +29,19 @@ class NimbusManager {
         self.featureFlagLayer = featureFlagLayer
     }
 
-    func startupInitialization() {
-        updateData(for: [.allLayers])
-    }
-
-    public func updateData(for layers: [NimbusManagerLayers]) {
-        if layers.contains(.allLayers) {
-            featureFlagLayer.updateData()
-
-            return
-        }
-
-        if layers.contains(.featureFlags) {
-            featureFlagLayer.updateData()
-        }
-    }
+//    func startupInitialization() {
+//        updateData(for: [.allLayers])
+//    }
+//
+//    public func updateData(for layers: [NimbusManagerLayers]) {
+//        if layers.contains(.allLayers) {
+//            featureFlagLayer.updateData()
+//
+//            return
+//        }
+//
+//        if layers.contains(.featureFlags) {
+//            featureFlagLayer.updateData()
+//        }
+//    }
 }
