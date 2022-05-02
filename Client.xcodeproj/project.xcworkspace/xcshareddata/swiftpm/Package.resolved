@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/nbhasin2/GCDWebServer.git",
         "state": {
           "branch": "master",
-          "revision": "7674c93e79ee5aac17681acace324761325e7346",
+          "revision": "14f9eedb296c5b71fec971d8256ef3bfc20a2245",
           "version": null
         }
       },
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift.git",
         "state": {
           "branch": null,
-          "revision": "29772c84fd7dd17c9f2981c51ea4ccc04e353b32",
-          "version": "91.1.0"
+          "revision": "dfd17f5d50d0d61efa9d026004fbf9ce7f77295b",
+          "version": "93.0.4"
         }
       },
       {
