@@ -59,6 +59,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     var groupedSites = DateGroupedTableData<Site>()
     var isFetchInProgress = false
     var isSearchInProgress = false
+    var shouldResetHistory = false
 
     var searchResultSites = [Site]()
     var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
@@ -98,6 +99,10 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             return
         }
 
+        if shouldResetHistory {
+            resetHistory()
+        }
+
         fetchData().uponQueue(.global(qos: .userInteractive)) { result in
             guard let fetchedSites = result.successValue?.asArray(), !fetchedSites.isEmpty else {
                 completion(false)
@@ -121,6 +126,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         currentFetchOffset = 0
         searchTermGroups.removeAll()
         groupedSites = DateGroupedTableData<Site>()
+        shouldResetHistory = false
     }
 
     private func buildVisibleSections() {

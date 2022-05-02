@@ -968,11 +968,10 @@ class BrowserViewController: UIViewController {
             libraryViewController.selectedPanel = panel
         }
 
-        if panel == .history {
-            let panelIndex = libraryViewController.viewModel.panelDescriptors[panel?.rawValue ?? 1]
-            if let vcPanel = panelIndex.viewController as? HistoryPanelWithGroups {
-                vcPanel.viewModel.resetHistory()
-            }
+        // Reset history panel pagination to get latest history visit
+        if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
+           let vcPanel = historyPanel.viewController as? HistoryPanelWithGroups {
+            vcPanel.viewModel.shouldResetHistory = true //resetHistory()
         }
 
         let controller: DismissableNavigationViewController
