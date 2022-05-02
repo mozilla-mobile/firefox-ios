@@ -234,7 +234,7 @@ class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus
     ) -> Bool {
 
-        let config = nimbus.features.searchTermGroups.value()
+        let config = nimbus.features.searchTermGroupsFeature.value()
         var nimbusID: SearchTermGroups
 
         switch featureID {
@@ -253,7 +253,7 @@ class NimbusFeatureFlagLayer {
     ) -> StartAtHomeSetting {
 
         // ROUX
-        let config = nimbus.features.startAtHome.value()
+        let config = nimbus.features.startAtHomeFeature.value()
 
         return StartAtHomeSetting.afterFourHours
     }
