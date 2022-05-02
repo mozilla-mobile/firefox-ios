@@ -65,6 +65,11 @@ public struct AccessibilityIdentifiers {
     }
 
     struct LibraryPanels {
+        static let bookmarksView = "LibraryPanels.Bookmarks"
+        static let historyView = "LibraryPanels.History"
+        static let downloadsView = "LibraryPanels.Downloads"
+        static let readingListView = "LibraryPanels.ReadingList"
+
         struct HistoryPanel {
             static let tableView = "History List"
             static let clearHistoryCell = "HistoryPanel.clearHistory"
