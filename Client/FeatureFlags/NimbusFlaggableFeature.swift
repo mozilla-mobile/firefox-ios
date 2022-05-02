@@ -44,8 +44,6 @@ struct NimbusFlaggableFeature {
         typealias FlagKeys = PrefsKeys.FeatureFlags
 
         switch featureID {
-        case .bottomSearchBar:
-            return nil
         case .historyHighlights:
             return FlagKeys.HistoryHighlightsSection
         case .historyGroups:
@@ -54,28 +52,28 @@ struct NimbusFlaggableFeature {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
-        case .librarySection:
-            return nil
         case .pocket:
             return FlagKeys.ASPocketStories
         case .pullToRefresh:
             return FlagKeys.PullToRefresh
         case .recentlySaved:
             return FlagKeys.RecentlySavedSection
-        case .shakeToRestore:
-            return nil
         case .sponsoredTiles:
             return FlagKeys.SponsoredShortcuts
         case .startAtHome:
             return FlagKeys.StartAtHome
-        case .reportSiteIssue:
-            return nil
         case .tabTrayGroups:
             return FlagKeys.TabTrayGroups
         case .topSites:
             return FlagKeys.TopSiteSection
         case .wallpapers:
             return FlagKeys.CustomWallpaper
+
+        case .reportSiteIssue,
+                .librarySection,
+                .shakeToRestore,
+                .bottomSearchBar:
+            return nil
         }
     }
 
@@ -118,19 +116,10 @@ struct NimbusFlaggableFeature {
             return existingOption
         }
 
-        // Feature option defaults
         switch featureID {
         case .startAtHome:
-            return StartAtHomeSetting.afterFourHours.rawValue
-        case .wallpapers, .topSites:
-            // Features that are on by default
-            return UserFeaturePreference.enabled.rawValue
+            return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
 
-        // Nimbus default options
-        case .jumpBackIn, .pocket, .recentlySaved, .historyHighlights:
-            return checkNimbusHomepageFeatures(from: nimbusLayer).rawValue
-        case .inactiveTabs:
-            return checkNimbusTabTrayFeatures(from: nimbusLayer).rawValue
         default:
             return nil
         }
@@ -164,36 +153,5 @@ struct NimbusFlaggableFeature {
 
         default: break
         }
-    }
-}
-
-// MARK: - Nimbus related methods
-extension NimbusFlaggableFeature {
-    private func checkNimbusTabTrayFeatures(
-        from nimbusLayer: NimbusFeatureFlagLayer
-    ) -> UserFeaturePreference {
-
-        if nimbusLayer.checkNimbusConfigFor(featureID) {
-            return UserFeaturePreference.enabled
-        }
-
-        return UserFeaturePreference.disabled
-    }
-
-    private func checkNimbusHomepageFeatures(
-        from nimbusLayer: NimbusFeatureFlagLayer
-    ) -> UserFeaturePreference {
-
-        if nimbusLayer.checkNimbusConfigFor(featureID) {
-            // For pocket's default value, we also need to check the locale being supported.
-            // Here, we want to make sure the section is enabled && locale is supported before
-            // we would return that pocket is enabled
-            if featureID == .pocket && !Pocket.IslocaleSupported(Locale.current.identifier) {
-                return UserFeaturePreference.disabled
-            }
-            return UserFeaturePreference.enabled
-        }
-
-        return UserFeaturePreference.disabled
     }
 }
