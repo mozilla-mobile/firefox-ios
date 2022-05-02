@@ -20,7 +20,7 @@ messaging:
       description: Id or prefix of the message under experiment.
     messages:
       type: json
-      description: A growable collection of messages
+      description: "A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData."
     on-control:
       type: string
       description: What should be displayed when a control message is selected.

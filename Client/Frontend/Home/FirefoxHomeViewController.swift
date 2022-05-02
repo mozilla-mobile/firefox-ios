@@ -8,7 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 
-class FirefoxHomeViewController: UICollectionViewController, HomePanel {
+class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlumbMessageManagable {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
@@ -28,7 +28,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
 
-    lazy var defaultBrowserCard: DefaultBrowserCard = .build { card in
+    lazy var homeTabBanner: HomeTabBanner = .build { card in
         card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
@@ -98,8 +98,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
 
-        if shouldShowDefaultBrowserCard {
-            showDefaultBrowserCard()
+        if shouldDisplayHomeTabBanner {
+            showHomeTabBanner()
         }
 
         NSLayoutConstraint.activate([
@@ -188,7 +188,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     func applyTheme() {
-        defaultBrowserCard.applyTheme()
+        homeTabBanner.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
@@ -218,7 +218,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     // MARK: - Contextual hint
     private func prepareJumpBackInContextualHint(onView headerView: ASHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
-              !shouldShowDefaultBrowserCard
+              !shouldDisplayHomeTabBanner
         else { return }
 
         contextualHintViewController.configure(
@@ -241,37 +241,38 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         present(contextualHintViewController, animated: true, completion: nil)
     }
 
-    // MARK: - Default browser card
+    // MARK: - Home Tab Banner
 
-    private var shouldShowDefaultBrowserCard: Bool {
-        if #available(iOS 14.0, *), !UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
+    private var shouldDisplayHomeTabBanner: Bool {
+        let message = messagingManager.getNextMessage(for: .newTabCard)
+        if #available(iOS 14.0, *), message != nil || !UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserCard) {
             return true
         } else {
             return false
         }
     }
 
-    private func showDefaultBrowserCard() {
-        self.view.addSubview(defaultBrowserCard)
+    private func showHomeTabBanner() {
+        self.view.addSubview(homeTabBanner)
         NSLayoutConstraint.activate([
-            defaultBrowserCard.topAnchor.constraint(equalTo: view.topAnchor),
-            defaultBrowserCard.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
-            defaultBrowserCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            defaultBrowserCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            defaultBrowserCard.heightAnchor.constraint(equalToConstant: 264),
+            homeTabBanner.topAnchor.constraint(equalTo: view.topAnchor),
+            homeTabBanner.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
+            homeTabBanner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            homeTabBanner.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            homeTabBanner.heightAnchor.constraint(equalToConstant: 264),
 
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
-        defaultBrowserCard.dismissClosure = { [weak self] in
-            self?.dismissDefaultBrowserCard()
+        homeTabBanner.dismissClosure = { [weak self] in
+            self?.dismissHomeTabBanner()
         }
     }
 
-    public func dismissDefaultBrowserCard() {
-        self.defaultBrowserCard.removeFromSuperview()
+    public func dismissHomeTabBanner() {
+        self.homeTabBanner.removeFromSuperview()
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

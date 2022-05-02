@@ -188,6 +188,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testMenuOnTopSites() {
+        typealias homeTabBannerA11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
+
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
@@ -198,9 +200,9 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Set as Default browser screenshot
         navigator.goto(NewTabScreen)
         if #available(iOS 14, *) {
-            waitForExistence(app.buttons["Home.learnMoreDefaultBrowserbutton"], timeout: 15)
-            app.buttons["Home.learnMoreDefaultBrowserbutton"].tap()
-            waitForExistence(app.buttons["DefaultBrowserCard.goToSettingsButton"], timeout: 15)
+            waitForExistence(app.buttons[homeTabBannerA11y.ctaButton], timeout: 15)
+            app.buttons[homeTabBannerA11y.ctaButton].tap()
+            waitForExistence(app.buttons["HomeTabBanner.goToSettingsButton"], timeout: 15)
             snapshot("HomeDefaultBrowserLearnMore")
         }
     }
