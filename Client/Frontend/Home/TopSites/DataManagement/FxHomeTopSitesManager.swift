@@ -65,9 +65,9 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
         loadContiles(group: group)
         loadTopSites(group: group)
 
-        group.notify(queue: dataQueue) {
+        group.notify(queue: dataQueue) { [weak self] in
             // Pre-loading the data with a default number of tiles so we always show section when needed
-            self.calculateTopSiteData(numberOfTilesPerRow: 8)
+            self?.calculateTopSiteData(numberOfTilesPerRow: 8)
 
             dataLoadingCompletion?()
         }
@@ -77,9 +77,9 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
         guard shouldLoadSponsoredTiles else { return }
 
         group.enter()
-        contileProvider.fetchContiles { result in
+        contileProvider.fetchContiles { [weak self] result in
             if case .success(let contiles) = result {
-                self.contiles = contiles
+                self?.contiles = contiles
             }
             group.leave()
         }
@@ -87,8 +87,8 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     private func loadTopSites(group: DispatchGroup) {
         group.enter()
-        topSiteHistoryManager.getTopSites { sites in
-            self.historySites = sites
+        topSiteHistoryManager.getTopSites { [weak self] sites in
+            self?.historySites = sites
             group.leave()
         }
     }
