@@ -139,8 +139,8 @@ class FxHomeTopSitesViewModel {
             deleteTileForSuggestedSite(url)
         }
 
-        profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
+        profile.history.removeHostFromTopSites(host).uponQueue(.main) { [weak self] result in
+            guard result.isSuccess, let self = self else { return }
             self.tileManager.refreshIfNeeded(forceTopSites: true)
         }
     }
