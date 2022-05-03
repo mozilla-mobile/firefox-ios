@@ -165,8 +165,8 @@ features:
         type: Map<SearchTermGroups, Boolean>
         default:
           {
-            "history-groups": false,
-            "tab-tray-groups": true,
+            "history-groups": true,
+            "tab-tray-groups": false,
           }
     defaults:
       - channel: beta
