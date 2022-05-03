@@ -18,6 +18,9 @@ homescreenFeature:
     sponsored-tiles:
       type: json
       description: "This property defines the sponsored tile feature on the homepage, which is not a section therein."
+    wallpaper-feature:
+      type: json
+      description: "This property defines the sponsored tile feature on the homepage, which is not a section therein."
 messaging:
   description: "Configuration for the messaging system.\n\nIn practice this is a set of growable lookup tables for the\nmessage controller to piece together.\n"
   hasExposure: true
