@@ -43,8 +43,8 @@ class ClearHistoryHelper {
             popoverController.permittedArrowDirections = []
         }
 
-        [(String.ClearHistoryMenuOptionTheLastHour, 1),
-         (String.ClearHistoryMenuOptionToday, 24),
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
+        [(String.ClearHistoryMenuOptionToday, 24),
          (String.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {
             (name, time) in
             let action = UIAlertAction(title: name, style: .destructive) { _ in
