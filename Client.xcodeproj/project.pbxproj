@@ -8323,6 +8323,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/nimbus.fml.yaml",
+				"$(SRCROOT)/bin/nimbus-fml.sh",
 			);
 			name = "Nimbus Feature Manifest Generator Script";
 			outputFileListPaths = (

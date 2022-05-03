@@ -61,6 +61,7 @@ MANIFEST_PATH=
 OUTPUT_DIR="${SOURCE_ROOT}/${PROJECT}/Generated"
 NAMESPACE=
 AS_VERSION=v93.0.4
+AS_DOWNLOAD_URL="https://github.com/mozilla/application-services/releases/download/$AS_VERSION"
 FRESHEN_FML=
 
 while (( "$#" )); do
@@ -129,15 +130,25 @@ fi
 ## We create the nimbus-fml directory, which is gitignored, we use -p to make sure this doesn't fail if it already exists
 FML_DIR="$SOURCE_ROOT/build/nimbus-tools"
 
+if [[ -f $FML_DIR/nimbus-fml.sha256 ]]; then
+    echo "Checking if we need to redownload the FML"
+    NEW_CHECKSUM=$(curl -L $AS_DOWNLOAD_URL/nimbus-fml.sha256)
+    OLD_CHECKSUM=$(cat $FML_DIR/nimbus-fml.sha256)
+    if [ ! "$OLD_CHECKSUM" == "$NEW_CHECKSUM" ]; then
+        echo "The checksums don't match, redownloading the new FML"
+        FRESHEN_FML="true"
+    fi
+fi
+
 if [ ! -z $FRESHEN_FML ]; then
     rm -Rf "$FML_DIR"
 fi
 mkdir -p "$FML_DIR"
 if [[ ! -f "$FML_DIR/nimbus-fml.zip" ]] ; then
     # We now download the nimbus-fml from the github release
-    curl -L https://github.com/mozilla/application-services/releases/download/${AS_VERSION}/nimbus-fml.zip --output "$FML_DIR/nimbus-fml.zip"
+    curl -L $AS_DOWNLOAD_URL/nimbus-fml.zip --output "$FML_DIR/nimbus-fml.zip"
     # We also download the checksum
-    curl -L https://github.com/mozilla/application-services/releases/download/${AS_VERSION}/nimbus-fml.sha256 --output "$FML_DIR/nimbus-fml.sha256"
+    curl -L $AS_DOWNLOAD_URL/nimbus-fml.sha256 --output "$FML_DIR/nimbus-fml.sha256"
     pushd "${FML_DIR}"
     shasum --check nimbus-fml.sha256
     popd
