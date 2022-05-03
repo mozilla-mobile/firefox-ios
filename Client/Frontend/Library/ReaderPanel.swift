@@ -187,13 +187,13 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         super.viewWillAppear(animated)
         // Note this will then call applyTheme() on this class, which reloads the tableview.
         (navigationController as? ThemedNavigationController)?.applyTheme()
+        tableView.accessibilityIdentifier = "ReadingTable"
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.addGestureRecognizer(longPressRecognizer)
-        tableView.accessibilityIdentifier = "ReadingTable"
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableView.automaticDimension
         tableView.cellLayoutMarginsFollowReadableWidth = false

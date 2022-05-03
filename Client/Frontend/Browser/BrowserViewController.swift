@@ -971,7 +971,7 @@ class BrowserViewController: UIViewController {
         // Reset history panel pagination to get latest history visit
         if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
            let vcPanel = historyPanel.viewController as? HistoryPanelWithGroups {
-            vcPanel.viewModel.shouldResetHistory = true //resetHistory()
+            vcPanel.viewModel.shouldResetHistory = true
         }
 
         let controller: DismissableNavigationViewController

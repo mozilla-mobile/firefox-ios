@@ -28,11 +28,8 @@ class LibraryViewController: UIViewController {
     // UI Elements
     lazy var librarySegmentControl: UISegmentedControl = {
         var librarySegmentControl: UISegmentedControl
-        librarySegmentControl = UISegmentedControl(items: [UIImage(named: "library-bookmark")!,
-                                                           UIImage(named: "library-history")!,
-                                                           UIImage(named: "library-downloads")!,
-                                                           UIImage(named: "library-readinglist")!])
-        librarySegmentControl.accessibilityIdentifier = "librarySegmentControl"
+        librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+        librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
         librarySegmentControl.selectedSegmentIndex = 1
         librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         librarySegmentControl.translatesAutoresizingMaskIntoConstraints = false
@@ -50,26 +47,26 @@ class LibraryViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(topLeftButtonAction))
-        button.accessibilityIdentifier = "libraryPanelTopLeftButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.topLeftButton
         return button
     }()
 
     fileprivate lazy var topRightButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(topRightButtonAction))
-        button.accessibilityIdentifier = "libraryPanelTopRightButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.topRightButton
         return button
     }()
 
     // MARK: - Bottom Toolbar
     private lazy var bottomLeftButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self, action: #selector(bottomLeftButtonAction))
-        button.accessibilityIdentifier = "libraryPanelBottomLeftButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
         return button
     }()
 
     private lazy var bottomRightButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
-        button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
         return button
     }()
 
@@ -78,7 +75,7 @@ class LibraryViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomSearchButtonAction))
-        button.accessibilityIdentifier = "historyPanelBottomCenterButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomSearchButton
         return button
     }()
 
@@ -87,7 +84,7 @@ class LibraryViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomDeleteButtonAction))
-        button.accessibilityIdentifier = "deleteHistory"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomDeleteButton
         return button
     }()
 
@@ -222,10 +219,13 @@ class LibraryViewController: UIViewController {
 
                 if index < viewModel.panelDescriptors.count {
                     viewModel.panelDescriptors[index].setup()
-                    if let panel = self.viewModel.panelDescriptors[index].viewController,
+                    if let panelVC = self.viewModel.panelDescriptors[index].viewController,
                        let navigationController = self.viewModel.panelDescriptors[index].navigationController {
                         let accessibilityLabel = self.viewModel.panelDescriptors[index].accessibilityLabel
-                        setupLibraryPanel(panel, accessibilityLabel: accessibilityLabel)
+                        let accessibilityId = self.viewModel.panelDescriptors[index].accessibilityIdentifier
+                        setupLibraryPanel(panelVC,
+                                          accessibilityLabel: accessibilityLabel,
+                                          accessibilityIdentifier: accessibilityId)
                         self.showPanel(navigationController)
                     }
                 }
@@ -234,10 +234,13 @@ class LibraryViewController: UIViewController {
         }
     }
 
-    func setupLibraryPanel(_ panel: UIViewController, accessibilityLabel: String) {
+    func setupLibraryPanel(_ panel: UIViewController,
+                           accessibilityLabel: String,
+                           accessibilityIdentifier: String) {
         (panel as? LibraryPanel)?.libraryPanelDelegate = self
         panel.view.accessibilityNavigationStyle = .combined
         panel.view.accessibilityLabel = accessibilityLabel
+        panel.view.accessibilityIdentifier = accessibilityIdentifier
         panel.title = accessibilityLabel
         panel.navigationController?.setNavigationBarHidden(true, animated: false)
         panel.navigationController?.isNavigationBarHidden = true
