@@ -16,7 +16,6 @@ features:
             "pull-to-refresh": true,
             "report-site-issue": false,
             "shake-to-restore": false,
-            "wallpapers": true,
           }
     defaults:
       - channel: beta
@@ -26,7 +25,6 @@ features:
             "pull-to-refresh": true,
             "report-site-issue": true,
             "shake-to-restore": true,
-            "wallpapers": true,
           }
         }
       - channel: developer
@@ -36,7 +34,6 @@ features:
             "pull-to-refresh": true,
             "report-site-issue": true,
             "shake-to-restore": true,
-            "wallpapers": true,
           }
         }
   start-at-home-feature:
@@ -117,6 +114,14 @@ features:
           {
             "status": false,
           }
+      wallpaper-feature:
+        description: "This property defines the sponsored tile feature on the
+        homepage, which is not a section therein."
+        type: WallpaperFeature
+        default:
+          {
+            "status": true,
+          }
     defaults:
       - channel: developer
         value: {
@@ -129,6 +134,9 @@ features:
             "pocket": true,
           },
           "sponsored-tiles": {
+            "status": true
+          },
+          "wallpaper-feature": {
             "status": true
           }
         }
@@ -143,6 +151,9 @@ features:
             "pocket": true
           },
           "sponsored-tiles": {
+            "status": true
+          },
+          "wallpaper-feature": {
             "status": true
           }
         }
@@ -292,6 +303,13 @@ types:
           type: Boolean
           description: Whether or not the feature is enabled
           default: false
+    WallpaperFeature:
+      description: "The configuration for the wallpaper feature on the homescreen"
+      fields:
+        status:
+          type: Boolean
+          description: Whether or not the feature is enabled
+          default: true
     MessageData:
       description: >
         An object to describe a message. It uses human
@@ -426,8 +444,6 @@ types:
           description: Whether the reportSiteIssue functionality is enabled
         shake-to-restore:
           description: Whether the shakeToRestore last closed tab feature is enabled
-        wallpapers:
-          description: Grouping for items in the Tab Tray and in JumpBackIn
     StartAtHome:
       description: The identifiers for the different types of options for StartAtHome
       variants:

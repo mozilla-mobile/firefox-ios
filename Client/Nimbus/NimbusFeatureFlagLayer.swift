@@ -131,8 +131,7 @@ class NimbusFeatureFlagLayer {
         case .bottomSearchBar,
                 .pullToRefresh,
                 .reportSiteIssue,
-                .shakeToRestore,
-                .wallpapers:
+                .shakeToRestore:
 //            return general.getValue(for: featureID)
             return checkGeneralFeature(for: featureID, from: nimbus)
 
@@ -144,6 +143,9 @@ class NimbusFeatureFlagLayer {
                 .librarySection:
 //            return homescreen.getValue(for: featureID)
             return checkHomescreenFeature(for: featureID, from: nimbus)
+
+        case .wallpapers:
+            return checkNimbusForWallpapersFeature(using: nimbus)
 
         case .inactiveTabs:
 //            return tabTray.getValue(for: featureID)
@@ -185,7 +187,6 @@ class NimbusFeatureFlagLayer {
         case .pullToRefresh: nimbusID = GeneralAppFeatureId.pullToRefresh
         case .reportSiteIssue: nimbusID = GeneralAppFeatureId.reportSiteIssue
         case .shakeToRestore: nimbusID = GeneralAppFeatureId.shakeToRestore
-        case .wallpapers: nimbusID = GeneralAppFeatureId.wallpapers
         default: return false
         }
 
@@ -214,6 +215,11 @@ class NimbusFeatureFlagLayer {
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
+    }
+
+    private func checkNimbusForWallpapersFeature(using nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.homescreenFeature.value()
+        return config.wallpaperFeature.status
     }
 
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
