@@ -21,6 +21,13 @@ class LibraryViewModel: FeatureFlagsProtocol {
         currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
     }
 
+    var segmentedControlItems: [UIImage] {
+        [UIImage(named: ImageIdentifiers.libraryBookmars) ?? UIImage(),
+         UIImage(named: ImageIdentifiers.libraryHistory) ?? UIImage(),
+         UIImage(named: ImageIdentifiers.libraryDownloads) ?? UIImage(),
+         UIImage(named: ImageIdentifiers.libraryReadingList) ?? UIImage()]
+    }
+
     init(withProfile profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
