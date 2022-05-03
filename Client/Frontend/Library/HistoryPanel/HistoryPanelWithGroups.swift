@@ -209,31 +209,27 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
     private func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] date in
-            // Clearing groupedSites and refetch from database
-            self?.viewModel.groupedSites = DateGroupedTableData<Site>()
-
             // Delete groupings that belong to THAT section.
             if let date = date {
                 self?.viewModel.deleteGroupsForDates(date: date)
             } else {
                 // Otherwise delete ALL groups, since we're deleting all history anyways.
-                self?.viewModel.searchTermGroups.removeAll()
+                self?.viewModel.removeAllData()
             }
 
-            self?.fetchDataAndUpdateLayout()
-
-            self?.refreshRecentlyClosedCell()
+            DispatchQueue.main.async {
+                self?.applySnapshot()
+                self?.refreshRecentlyClosedCell()
+            }
         })
     }
 
     private func refreshRecentlyClosedCell() {
         guard let cell = recentlyClosedCell else { return }
 
-        DispatchQueue.main.async {
-            self.setTappableStateAndStyle(
-                with: HistoryActionablesModel.activeActionables.first(where: { $0.itemIdentity == .recentlyClosed }),
-                on: cell)
-        }
+        self.setTappableStateAndStyle(
+            with: HistoryActionablesModel.activeActionables.first(where: { $0.itemIdentity == .recentlyClosed }),
+            on: cell)
     }
 
     func handleNotifications(_ notification: Notification) {
@@ -409,7 +405,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     func removeHistoryItem(at indexPath: IndexPath) {
         guard let historyItem = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
 
-        viewModel.removeHistoryItems(item: historyItem, at: indexPath.section)
+        viewModel.removeHistoryItems(item: [historyItem], at: indexPath.section)
 
         applySnapshot(animatingDifferences: true)
     }
