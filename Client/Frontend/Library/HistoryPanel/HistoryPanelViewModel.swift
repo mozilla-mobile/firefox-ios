@@ -63,12 +63,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     // Only individual sites
     var groupedSites = DateGroupedTableData<Site>()
     var isFetchInProgress = false
-    var isSearchInProgress = false
     var shouldResetHistory = false
-
-    var searchResultSites = [Site]()
-    var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
-
     var hiddenSections: [Sections] = []
 
     private var hasRecentlyClosed: Bool {
@@ -148,6 +143,8 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
 
     func updateSearchOffset() {
         searchCurrentFetchOffset += searchQueryFetchLimit
+    }
+
     func collapseSection(sectionIndex: Int) {
         guard let sectionToHide = visibleSections[safe: sectionIndex - 1] else { return }
 

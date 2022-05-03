@@ -43,6 +43,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         button.setImage(CollapsibleState.down.image, for: .normal)
         button.backgroundColor = .clear
         button.isHidden = true
+        button.isUserInteractionEnabled = false
     }
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
