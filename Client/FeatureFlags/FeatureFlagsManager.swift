@@ -29,7 +29,7 @@ enum FlaggableFeatureCheckOptions {
 class FeatureFlagsManager: NimbusManageable {
 
     /// This Singleton should only be accessed directly in places where the
-    /// `FeatureFlagsProtocol` is not available. Otherwise, access to the feature
+    /// `FeatureFlaggable` is not available. Otherwise, access to the feature
     /// flags system should be done through the protocol, giving access to the
     /// `featureFlags` variable.
     static let shared = FeatureFlagsManager()
@@ -39,8 +39,7 @@ class FeatureFlagsManager: NimbusManageable {
     private var coreFeatures: [CoreFeatureFlagID: CoreFlaggableFeature] = [:]
 
     // MARK: - Public methods
-
-    /// Used as the main way to find out whether a core feature is active or not.
+    /// Used to find out whether a core feature is active or not.
     public func isCoreFeatureEnabled(_ featureID: CoreFeatureFlagID) -> Bool {
         guard let feature = coreFeatures[featureID] else { return false }
         return feature.isActiveForBuild()
@@ -109,7 +108,7 @@ class FeatureFlagsManager: NimbusManageable {
     /// Sets up features with default channel availablility. For ease of use, please add
     /// new features alphabetically. These features are only core features in the
     /// application. See the relevant documentation on `CoreFlaggableFeature` and
-    /// `NimbusFlaggableFeature` for more exlanation on the differences.
+    /// `NimbusFlaggableFeature` for more explanation on the differences.
     ///
     /// This should ONLY be called when instatiating the feature flag system,
     /// and never again.

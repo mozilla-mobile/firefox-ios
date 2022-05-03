@@ -564,13 +564,13 @@ class ExperimentsSettings: HiddenSetting {
 
 class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly)
+        let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly)
         featureFlags.set(feature: .pullToRefresh, to: newStatus)
         updateCell(navigationController)
     }
@@ -578,13 +578,13 @@ class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
 
 class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+        let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
         featureFlags.set(feature: .inactiveTabs, to: newStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
@@ -593,14 +593,14 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
 
 class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(
             string: "Toggle history groups \(toNewStatus)",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let newStatus = !featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly)
+        let newStatus = !featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly)
         featureFlags.set(feature: .historyGroups, to: newStatus)
         updateCell(navigationController)
     }
