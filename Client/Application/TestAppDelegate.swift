@@ -98,7 +98,7 @@ class TestAppDelegate: AppDelegate, FeatureFlaggable {
         }
 
         if launchArguments.contains(LaunchArguments.SkipSponsoredShortcuts) {
-            featureFlags.set(feature: .sponsoredTiles, to: false)
+            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
         }
 
         // Don't show the What's New page.
