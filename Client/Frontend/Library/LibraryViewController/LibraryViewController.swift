@@ -28,11 +28,8 @@ class LibraryViewController: UIViewController {
     // UI Elements
     lazy var librarySegmentControl: UISegmentedControl = {
         var librarySegmentControl: UISegmentedControl
-        librarySegmentControl = UISegmentedControl(items: [UIImage(named: ImageIdentifiers.libraryBookmars)!,
-                                                           UIImage(named: ImageIdentifiers.libraryHistory)!,
-                                                           UIImage(named: ImageIdentifiers.libraryDownloads)!,
-                                                           UIImage(named: ImageIdentifiers.libraryReadingList)!])
-        librarySegmentControl.accessibilityIdentifier = "librarySegmentControl"
+        librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+        librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
         librarySegmentControl.selectedSegmentIndex = 1
         librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         librarySegmentControl.translatesAutoresizingMaskIntoConstraints = false
@@ -50,26 +47,26 @@ class LibraryViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(topLeftButtonAction))
-        button.accessibilityIdentifier = "libraryPanelTopLeftButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.topLeftButton
         return button
     }()
 
     fileprivate lazy var topRightButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(title: String.AppSettingsDone, style: .done, target: self, action: #selector(topRightButtonAction))
-        button.accessibilityIdentifier = "libraryPanelTopRightButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.topRightButton
         return button
     }()
 
     // MARK: - Bottom Toolbar
     private lazy var bottomLeftButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed("nav-add"), style: .plain, target: self, action: #selector(bottomLeftButtonAction))
-        button.accessibilityIdentifier = "libraryPanelBottomLeftButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
         return button
     }()
 
     private lazy var bottomRightButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
-        button.accessibilityIdentifier = "bookmarksPanelBottomRightButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
         return button
     }()
 
@@ -78,7 +75,7 @@ class LibraryViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomSearchButtonAction))
-        button.accessibilityIdentifier = "historyPanelBottomCenterButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomSearchButton
         return button
     }()
 
@@ -87,7 +84,7 @@ class LibraryViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(bottomDeleteButtonAction))
-        button.accessibilityIdentifier = "deleteHistory"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomDeleteButton
         return button
     }()
 
