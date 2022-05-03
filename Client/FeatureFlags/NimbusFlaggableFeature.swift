@@ -125,17 +125,23 @@ struct NimbusFlaggableFeature {
         }
     }
 
+    /// Set a user preference that is of type on/off, to that respective state.
+    ///
+    /// Not all features are user togglable. If there exists no feature key - as defined
+    /// in the `featureKey()` function - with which to write to UserDefaults, then the
+    /// feature cannot be turned on/off.
     public func setUserPreference(to state: Bool) {
         guard let key = featureKey else { return }
 
         profile.prefs.setBool(state, forKey: key)
     }
-    /// Allows to directly set the state of a feature.
+
+    /// Allows to directly set the state of a feature using a string to allow for
+    /// states beyond on and off.
     ///
     /// Not all features are user togglable. If there exists no feature key - as defined
     /// in the `featureKey()` function - with which to write to UserDefaults, then the
-    /// feature cannot be turned on/off and its state can only be set when initialized,
-    /// based on build channel.
+    /// feature cannot be turned on/off.
     public func setUserPreference(to option: String) {
         guard !option.isEmpty,
               let optionsKey = featureKey
