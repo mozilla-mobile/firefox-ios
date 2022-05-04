@@ -1254,7 +1254,7 @@ class BrowserViewController: UIViewController {
             let searchData = tab.metadataManager?.tabGroupData ?? TabGroupData()
             searchData.tabAssociatedNextUrl = displayUrl.absoluteString
             tab.metadataManager?.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
-                                                         searchData: searchData)
+                                                         searchData: searchData, isPrivate: tab.isPrivate)
         }
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.tabDidChangeContentBlocking(tab)
@@ -1329,7 +1329,7 @@ class BrowserViewController: UIViewController {
 
         openURLInNewTab(nil, isPrivate: isPrivate)
         let freshTab = tabManager.selectedTab
-        freshTab?.metadataManager?.updateTimerAndObserving(state: .newTab)
+        freshTab?.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab?.isPrivate ?? false)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
@@ -1344,7 +1344,7 @@ class BrowserViewController: UIViewController {
                 let searchData = TabGroupData(searchTerm: text,
                                               searchUrl: searchURL.absoluteString,
                                               nextReferralUrl: "")
-                tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
+                tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
             }
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -1818,7 +1818,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let searchData = TabGroupData(searchTerm: searchTerm ?? "",
                                       searchUrl: url.absoluteString,
                                       nextReferralUrl: "")
-        tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
+        tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
