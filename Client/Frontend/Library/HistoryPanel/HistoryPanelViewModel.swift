@@ -174,7 +174,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
 
     private func resetHistory() {
         removeAllData()
-        
+
         shouldResetHistory = false
     }
 
