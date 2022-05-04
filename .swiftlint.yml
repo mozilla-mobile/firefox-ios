@@ -5,7 +5,6 @@ disabled_rules: # rule identifiers to exclude from running
 - syntactic_sugar
 - statement_position
 - redundant_void_return
-- redundant_optional_initialization
 - redundant_objc_attribute
 - redundant_discardable_let
 - protocol_property_accessors_order

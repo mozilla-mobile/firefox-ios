@@ -16,8 +16,8 @@ class FxHomePocketViewModel {
     private let isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
 
-    var onTapTileAction: ((URL) -> Void)? = nil
-    var onLongPressTileAction: ((Site, UIView?) -> Void)? = nil
+    var onTapTileAction: ((URL) -> Void)?
+    var onLongPressTileAction: ((Site, UIView?) -> Void)?
 
     init(profile: Profile, isZeroSearch: Bool) {
         self.profile = profile

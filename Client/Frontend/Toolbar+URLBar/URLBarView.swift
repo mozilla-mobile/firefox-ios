@@ -191,7 +191,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
     }
 
-    var profile: Profile? = nil
+    var profile: Profile?
     private var isBottomSearchBar: Bool {
         BrowserViewController.foregroundBVC().isBottomSearchBar
     }

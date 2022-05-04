@@ -251,7 +251,7 @@ public class RustPlaces {
     }
 
     public func reopenIfClosed() -> NSError? {
-        var error: NSError?  = nil
+        var error: NSError?
 
         writerQueue.sync {
             guard !isOpen else { return }
@@ -263,7 +263,7 @@ public class RustPlaces {
     }
 
     public func forceClose() -> NSError? {
-        var error: NSError? = nil
+        var error: NSError?
 
         writerQueue.sync {
             guard isOpen else { return }
