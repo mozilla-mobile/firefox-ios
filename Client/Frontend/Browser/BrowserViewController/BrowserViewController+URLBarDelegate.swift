@@ -326,7 +326,7 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             let searchData = TabGroupData(searchTerm: text,
                                           searchUrl: searchURL.absoluteString,
                                           nextReferralUrl: "")
-            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData)
+            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
