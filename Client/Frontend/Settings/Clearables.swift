@@ -46,6 +46,7 @@ class HistoryClearable: Clearable {
             SDImageCache.shared.clearDisk()
             SDImageCache.shared.clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
+            self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")

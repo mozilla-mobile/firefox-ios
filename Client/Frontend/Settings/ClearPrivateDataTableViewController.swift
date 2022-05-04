@@ -157,6 +157,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                         self.tableView.deselectRow(at: indexPath, animated: true)
                 }
             }
+
             if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
                 profile.syncManager.hasSyncedHistory().uponQueue(.main) { yes in
                     // Err on the side of warning, but this shouldn't fail.
