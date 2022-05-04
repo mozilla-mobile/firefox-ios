@@ -21,17 +21,17 @@ class TabMoreMenuHeader: UIView {
         title.numberOfLines = 2
         title.lineBreakMode = .byTruncatingTail
         title.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        title.textColor = UIColor.theme.defaultBrowserCard.textColor
+        title.textColor = UIColor.theme.homeTabBanner.textColor
         return title
     }()
 
     lazy var descriptionLabel: UILabel = {
         let descriptionText = UILabel()
-        descriptionText.text = String.DefaultBrowserCardDescription
+        descriptionText.text = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.DefaultBrowserDescription
         descriptionText.numberOfLines = 0
         descriptionText.lineBreakMode = .byWordWrapping
         descriptionText.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        descriptionText.textColor = UIColor.theme.defaultBrowserCard.textColor
+        descriptionText.textColor = UIColor.theme.homeTabBanner.textColor
         return descriptionText
     }()
 
