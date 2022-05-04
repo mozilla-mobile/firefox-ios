@@ -2102,7 +2102,7 @@
 "Sync.Syncing.Label" = "Sinhroniziram";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "Sinhroniziram ...";
+"Sync.SyncingEllipsis.Label" = "Sinhroniziram…";
 
 /* Panel accessibility label */
 "Synced Tabs" = "Sinhronizirani zavihki";
