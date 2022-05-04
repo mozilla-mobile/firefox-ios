@@ -251,16 +251,8 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         return groups
     }
 
-    func deleteGroupsForDates(date: Date) {
-        var deletableSections: [Sections]?
-
-        if date.isToday() {
-            deletableSections = [.today]
-        } else if date.isYesterday() {
-            deletableSections = [.today, .yesterday]
-        }
-
-        guard let deletableSections = deletableSections else { return }
+    func deleteGroupsForDates(date: Date)  {
+        guard let deletableSections = getDeletableSection(date: date) else { return }
 
         deletableSections.forEach { section in
             // Remove grouped items for delete section
@@ -268,13 +260,11 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             let singleItems = groupedSites.itemsForSection(section.rawValue - 1)
             sectionItems.append(contentsOf: singleItems)
             removeHistoryItems(item: sectionItems, at: section.rawValue)
-
         }
     }
 
     /// This handles removing either a Site or an ASGroup<Site> from the view.
     func removeHistoryItems(item historyItem: [AnyHashable], at section: Int) {
-
         historyItem.forEach { item in
             if let site = item as? Site {
                 deleteSingle(site: site)
@@ -291,5 +281,17 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     private func deleteSingle(site: Site) {
         groupedSites.remove(site)
         profile.history.removeHistoryForURL(site.url)
+    }
+
+    private func getDeletableSection(date: Date) -> [Sections]? {
+        var deletableSections: [Sections]?
+
+        if date.isToday() {
+            deletableSections = [.today]
+        } else if date.isYesterday() {
+            deletableSections = [.today, .yesterday]
+        }
+
+        return deletableSections
     }
 }

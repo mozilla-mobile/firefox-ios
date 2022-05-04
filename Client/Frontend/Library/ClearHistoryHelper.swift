@@ -7,6 +7,12 @@ import WebKit
 
 class ClearHistoryHelper {
 
+    enum DateOptions {
+        // case hour
+        case today
+        case yesterday
+    }
+
     private let profile: Profile
     private let tabManager: TabManager
 
@@ -20,15 +26,24 @@ class ClearHistoryHelper {
     ///   - viewController: The view controller the clear history prompt is shown on
     ///   - didComplete: Did complete a recent history clear up action
     func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: ((Date?) -> Void)? = nil) {
-        func remove(hoursAgo: Int) {
-            if let date = Calendar.current.date(byAdding: .hour, value: -hoursAgo, to: Date()) {
-                let types = WKWebsiteDataStore.allWebsiteDataTypes()
-                WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date, completionHandler: {})
+        func remove(dateOption: DateOptions) {
+            var date: Date?
+            switch dateOption {
+            case .today:
+                date = Date()
+            case .yesterday:
+                date = Calendar.current.date(byAdding: .hour, value: -24, to: Date())
+            }
 
-                self.profile.history.removeHistoryFromDate(date).uponQueue(.global(qos: .userInteractive)) { _ in
+            if let date = date {
+                let startOfDay = Calendar.current.startOfDay(for: date)
+                let types = WKWebsiteDataStore.allWebsiteDataTypes()
+                WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: startOfDay, completionHandler: {})
+
+                self.profile.history.removeHistoryFromDate(date).uponQueue(.global(qos: .userInteractive)) { result in
                     guard let completion = didComplete else { return }
-                    self.profile.recentlyClosedTabs.removeTabsFromDate(date)
-                    completion(date)
+                    self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
+                    completion(startOfDay)
                 }
             }
         }
@@ -44,11 +59,11 @@ class ClearHistoryHelper {
         }
 
         // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
-        [(String.ClearHistoryMenuOptionToday, 24),
-         (String.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {
+        [(String.ClearHistoryMenuOptionToday, DateOptions.today),
+         (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)].forEach {
             (name, time) in
             let action = UIAlertAction(title: name, style: .destructive) { _ in
-                remove(hoursAgo: time)
+                remove(dateOption: time)
             }
             alert.addAction(action)
         }
