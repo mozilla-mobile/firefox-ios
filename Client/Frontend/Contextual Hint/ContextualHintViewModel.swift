@@ -29,7 +29,7 @@ class ContextualHintViewModel {
     // MARK: - Properties
     var hintType: ContextualHintViewType
     var timer: Timer?
-    var presentFromTimer: (() -> Void)? = nil
+    var presentFromTimer: (() -> Void)?
     private var profile: Profile
     private var hasSentTelemetryEvent = false
 

@@ -74,7 +74,7 @@ class TabEventHandlerTests: XCTestCase {
 class DummyHandler: TabEventHandler {
     // This is not how this should be written in production — the handler shouldn't be keeping track
     // of individual tab state.
-    var isFocused: Bool? = nil
+    var isFocused: Bool?
 
     init() {
          register(self, forTabEvents: .didGainFocus, .didLoseFocus)

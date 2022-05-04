@@ -36,7 +36,7 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
 
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?
-    var selectedTab: Tab? = nil
+    var selectedTab: Tab?
     let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
     let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
     let GroupedTabCellIdentifier = "GroupedTabCellIdentifier"
@@ -198,8 +198,8 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     let midView = UIView()
 
     let singleTabCellIdentifier = "singleTabCellIdentifier"
-    var tabs: [Tab]? = nil
-    var selectedTab: Tab? = nil
+    var tabs: [Tab]?
+    var selectedTab: Tab?
     var searchGroupName: String = ""
     var notificationCenter: NotificationCenter = NotificationCenter.default
 

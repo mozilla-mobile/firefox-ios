@@ -7,7 +7,7 @@ import UIKit
 import Shared
 
 class IntroViewController: UIViewController, OnViewDismissable {
-    var onViewDismissed: (() -> Void)? = nil
+    var onViewDismissed: (() -> Void)?
     // private var
     // Private views
     private lazy var welcomeCard: IntroScreenWelcomeView = {

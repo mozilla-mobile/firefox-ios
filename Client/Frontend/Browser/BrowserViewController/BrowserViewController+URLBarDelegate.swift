@@ -12,8 +12,8 @@ protocol OnViewDismissable: AnyObject {
 }
 
 class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
-    var onViewDismissed: (() -> Void)? = nil
-    var onViewWillDisappear: (() -> Void)? = nil
+    var onViewDismissed: (() -> Void)?
+    var onViewWillDisappear: (() -> Void)?
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)

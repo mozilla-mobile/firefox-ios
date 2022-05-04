@@ -27,7 +27,7 @@ struct FxHomeHorizontalCellViewModel {
     let descriptionText: String
     let tag: Int
     var hasFavicon: Bool // Pocket has no favicon
-    var favIconImage: UIImage? = nil
+    var favIconImage: UIImage?
     var heroImage: UIImage?
 }
 

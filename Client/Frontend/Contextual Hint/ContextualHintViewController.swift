@@ -76,9 +76,9 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     // MARK: - Properties
     private var viewModel: ContextualHintViewModel
-    private var onViewSummoned: (() -> Void)? = nil
-    var onViewDismissed: (() -> Void)? = nil
-    private var onActionTapped: (() -> Void)? = nil
+    private var onViewSummoned: (() -> Void)?
+    var onViewDismissed: (() -> Void)?
+    private var onActionTapped: (() -> Void)?
     private var topContainerConstraint: NSLayoutConstraint?
     private var bottomContainerConstraint: NSLayoutConstraint?
 

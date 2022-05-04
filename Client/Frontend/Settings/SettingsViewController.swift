@@ -5,7 +5,7 @@
 import UIKit
 
 class SettingsViewController: UIViewController {
-    weak var settingsDelegate: SettingsDelegate? = nil
+    weak var settingsDelegate: SettingsDelegate?
 
     var profile: Profile!
     var tabManager: TabManager!

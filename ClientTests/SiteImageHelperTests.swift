@@ -220,7 +220,7 @@ class FaviconFetcherMock: Favicons {
 class MetadataProviderFake: LPMetadataProvider {
 
     var metadataResult = LPLinkMetadata()
-    var errorResult: Error? = nil
+    var errorResult: Error?
     override func startFetchingMetadata(for URL: URL, completionHandler: @escaping (LPLinkMetadata?, Error?) -> Void) {
         completionHandler(metadataResult, errorResult)
     }
@@ -229,7 +229,7 @@ class MetadataProviderFake: LPMetadataProvider {
 class ItemProviderFake: NSItemProvider {
 
     var imageResult: UIImage? = UIImage()
-    var errorResult: Error? = nil
+    var errorResult: Error?
     override func loadObject(ofClass aClass: NSItemProviderReading.Type, completionHandler: @escaping (NSItemProviderReading?, Error?) -> Void) -> Progress {
         completionHandler(imageResult, errorResult)
         return Progress()

@@ -197,7 +197,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                     bookmarkFolders.append((folder, indent))
                 }
 
-                var folderChildren: [BookmarkNodeData]? = nil
+                var folderChildren: [BookmarkNodeData]?
                 // Suitable to be appended
                 if folder.guid != self.bookmarkNodeGUID {
                     folderChildren = folder.children

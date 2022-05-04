@@ -41,7 +41,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     // MARK: - Properties
 
-    var onViewDismissed: (() -> Void)? = nil
+    var onViewDismissed: (() -> Void)?
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
     let theme = LegacyThemeManager.instance

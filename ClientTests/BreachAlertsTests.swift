@@ -42,7 +42,7 @@ class MockBreachAlertsClient: BreachAlertsClientProtocol {
         }
         completion(Maybe(success: mockData))
     }
-    var etag: String? = nil
+    var etag: String?
 }
 
 class BreachAlertsTests: XCTestCase {
