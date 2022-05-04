@@ -29,9 +29,9 @@ final class FeatureFlagUserPrefsMigrationUtility {
     }
 
     // MARK: - Initializers
-    init(with profile: Profile, and userDefaluts: UserDefaults = .standard) {
+    init(with profile: Profile, and userDefaults: UserDefaults = .standard) {
         self.profile = profile
-        self.userDefaults = userDefaluts
+        self.userDefaults = userDefaults
     }
 
     // MARK: - Methods
