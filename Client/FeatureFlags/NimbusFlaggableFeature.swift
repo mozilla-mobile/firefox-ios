@@ -99,7 +99,7 @@ struct NimbusFlaggableFeature {
     /// Returns whether or not the feature's state was changed by the user. If no
     /// preference exists, then the underlying Nimbus default is used. If a specific
     /// setting is required (ie. startAtHome, which has multiple types of setting),
-    /// then we should be using `getPreferenceFor`
+    /// then we should be using `getUserPreference`
     public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
         guard let optionsKey = featureKey,
               let option = profile.prefs.boolForKey(optionsKey)

@@ -19,6 +19,11 @@ protocol TabTrayViewDelegate: UIViewController {
 
 class TabTrayViewController: UIViewController {
 
+    struct UX {
+        static let navMenuWidth = 343
+        static let navMenuHeight = 32
+    }
+
     // MARK: - Variables
     var viewModel: TabTrayViewModel
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)?
@@ -84,7 +89,7 @@ class TabTrayViewController: UIViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
                                target: nil,
                                action: nil)
-        fixedSpace.width = 32
+        fixedSpace.width = CGFloat(UX.navMenuHeight)
         return fixedSpace
     }()
 
@@ -241,8 +246,8 @@ class TabTrayViewController: UIViewController {
         }
 
         navigationMenu.snp.makeConstraints { make in
-            make.width.lessThanOrEqualTo(343)
-            make.height.equalTo(32)
+            make.width.lessThanOrEqualTo(UX.navMenuWidth)
+            make.height.equalTo(UX.navMenuHeight)
         }
     }
 
