@@ -219,6 +219,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
             DispatchQueue.main.async {
                 self?.applySnapshot()
+                self?.tableView.reloadData()
                 self?.refreshRecentlyClosedCell()
             }
         })
