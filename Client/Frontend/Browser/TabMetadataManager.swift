@@ -36,7 +36,10 @@ class TabMetadataManager {
 
     func updateTimerAndObserving(state: TabGroupTimerState,
                                  searchData: TabGroupData = TabGroupData(),
-                                 tabTitle: String? = nil) {
+                                 tabTitle: String? = nil, isPrivate: Bool) {
+
+        guard !isPrivate else { return }
+
         switch state {
         case .navSearchLoaded:
             updateNavSearchLoadedState(searchData: searchData)

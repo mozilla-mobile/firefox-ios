@@ -243,8 +243,8 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         let previous = previous ?? selectedTab
 
-        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched)
-        tab?.metadataManager?.updateTimerAndObserving(state: .tabSelected)
+        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
+        tab?.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab?.isPrivate ?? false)
 
         // Make sure to wipe the private tabs if the user has the pref turned on
         if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {

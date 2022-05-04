@@ -157,7 +157,7 @@ extension BrowserViewController: WKUIDelegate {
                     let searchData = TabGroupData(searchTerm: searchTerm,
                                                   searchUrl: searchUrl,
                                                   nextReferralUrl: tab.url?.absoluteString ?? "")
-                    tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData)
+                    tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData, isPrivate: tab.isPrivate)
                 }
 
                 guard !self.topTabsVisible else {
@@ -734,7 +734,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 tab.adsProviderName = ""
             }
 
-            updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString)
+            updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString, isPrivate: tab.isPrivate)
         }
 
         // When tab url changes after web content starts loading on the page
@@ -754,14 +754,14 @@ extension BrowserViewController: WKNavigationDelegate {
 
             // Only update search term data with valid search term data
             if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
-                updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString)
+                updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString, isPrivate: tab.isPrivate)
             } else if !tab.isFxHomeTab {
                 let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
                                               searchUrl: webView.url?.absoluteString ?? "",
                                               nextReferralUrl: "")
                 metadataManager.updateTimerAndObserving(state: .openURLOnly,
                                                         searchData: searchData,
-                                                        tabTitle: webView.title)
+                                                        tabTitle: webView.title, isPrivate: tab.isPrivate)
             }
 
             // If this tab had previously crashed, wait 5 seconds before resetting
@@ -778,12 +778,12 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    private func updateObservationReferral(metadataManager: TabMetadataManager, url: String?) {
+    private func updateObservationReferral(metadataManager: TabMetadataManager, url: String?, isPrivate: Bool) {
         let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
                                       searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
                                       nextReferralUrl: url ?? "")
         metadataManager.updateTimerAndObserving(state: .tabNavigatedToDifferentUrl,
-                                                searchData: searchData)
+                                                searchData: searchData, isPrivate: isPrivate)
 
     }
 }
