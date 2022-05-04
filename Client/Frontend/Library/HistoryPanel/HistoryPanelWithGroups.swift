@@ -157,8 +157,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         guard !viewModel.isSearchInProgress else { return }
 
         viewModel.reloadData() { [weak self] success in
-            guard success else { return }
-
             DispatchQueue.main.async {
                 self?.applySnapshot(animatingDifferences: animating)
             }
@@ -235,7 +233,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
-            viewModel.groupedSites = DateGroupedTableData<Site>()
+            viewModel.removeAllData()
             fetchDataAndUpdateLayout(animating: true)
 
             if profile.hasSyncableAccount() {
