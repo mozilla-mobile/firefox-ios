@@ -147,6 +147,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
 
     func removeAllData() {
+        /// Since we remove all data, we reset our fetchOffset back to the start.
+        currentFetchOffset = 0
+
         searchTermGroups.removeAll()
         groupedSites = DateGroupedTableData<Site>()
         buildVisibleSections()
@@ -170,9 +173,8 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
 
     private func resetHistory() {
-        currentFetchOffset = 0
-        searchTermGroups.removeAll()
-        groupedSites = DateGroupedTableData<Site>()
+        removeAllData()
+
         shouldResetHistory = false
     }
 
