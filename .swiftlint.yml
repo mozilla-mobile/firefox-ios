@@ -4,7 +4,6 @@ disabled_rules: # rule identifiers to exclude from running
 - trailing_comma
 - syntactic_sugar
 - statement_position
-- redundant_void_return
 - redundant_objc_attribute
 - redundant_discardable_let
 - protocol_property_accessors_order
