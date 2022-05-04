@@ -193,8 +193,10 @@ private extension Array where Element == Site {
     mutating func removeDuplicates() {
         var alreadyThere = Set<Site>()
         let uniqueSites = compactMap { (site) -> Site? in
-            let shouldAddSite = alreadyThere.first(where: { $0.url.asURL?.domainURL == site.url.asURL?.domainURL } ) == nil
-            guard shouldAddSite else { return nil }
+            let siteDomain = site.url.asURL?.shortDomain
+            let shouldAddSite = alreadyThere.first(where: { $0.url.asURL?.shortDomain == siteDomain } ) == nil
+            // If shouldAddSite or site domain was not found, then insert the site
+            guard shouldAddSite || siteDomain == nil else { return nil }
             alreadyThere.insert(site)
             return site
         }
@@ -204,7 +206,8 @@ private extension Array where Element == Site {
 
     // We don't add a sponsored tile if that domain site is already pinned by the user.
     private func siteIsAlreadyPresent(site: Site) -> Bool {
-        return filter { ($0.url.asURL?.domainURL == site.url.asURL?.domainURL) && (($0 as? PinnedSite) != nil) }.count > 0
+        let siteDomain = site.url.asURL?.shortDomain
+        return filter { ($0.url.asURL?.shortDomain == siteDomain) && (($0 as? PinnedSite) != nil) }.count > 0
     }
 }
 
