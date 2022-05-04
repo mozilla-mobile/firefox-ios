@@ -175,11 +175,9 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     }
 
     var isEnabled: Bool {
-        if featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) {
-            return !isPrivate
-        }
+        guard featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) else { return false }
 
-        return false
+        return !isPrivate
     }
 
     var hasData: Bool {

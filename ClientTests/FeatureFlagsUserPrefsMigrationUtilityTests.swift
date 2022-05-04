@@ -36,6 +36,7 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
 
         profile = MockProfile(databasePrefix: "migrationUtility_tests")
         profile._reopen()
+        verifyNilStateForKeys()
     }
 
     override func tearDown() {
@@ -52,8 +53,6 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
     }
 
     func testSetAllKeysToTrue() {
-        verifyNilStateForKeys()
-
         keyDictionary.forEach { oldKey, _ in
             let oldKey = oldKey + userPrefsSuffix
             profile.prefs.setString(UserFeaturePreference.enabled.rawValue, forKey: oldKey)
@@ -73,8 +72,6 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
     }
 
     func testSettingKeysToAVarietyOfSettings() {
-        verifyNilStateForKeys()
-
         let randomSettingOptions = [true, false, nil]
 
         keyDictionary.forEach { oldKey, newKey in
@@ -111,7 +108,6 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
     }
 
     func testMigrationOfOneSetting() {
-        verifyNilStateForKeys()
         XCTAssertNil(profile.prefs.boolForKey(legacyFlags.MigrationCheck))
 
         let oldKey = legacyFlags.ASPocketStories + userPrefsSuffix
@@ -135,7 +131,6 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
     }
 
     func testMigrationOfMultipleSettings() {
-        verifyNilStateForKeys()
         XCTAssertNil(profile.prefs.boolForKey(legacyFlags.MigrationCheck))
 
         // User sets some preferences
@@ -189,12 +184,12 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
     }
 
     // MARK: - Helper methods
-    private func verifyNilStateForKeys() {
+    private func verifyNilStateForKeys(file: StaticString = #filePath, line: UInt = #line) {
         keyDictionary.forEach { oldKey, newKey in
             let oldKey = oldKey + "UserPreferences"
             let newKey = newKey
-            XCTAssertNil(profile.prefs.stringForKey(oldKey))
-            XCTAssertNil(profile.prefs.boolForKey(newKey))
+            XCTAssertNil(profile.prefs.stringForKey(oldKey), "Failing in \(file) on line \(line)")
+            XCTAssertNil(profile.prefs.boolForKey(newKey), "Failing in \(file) on line \(line)")
         }
     }
 }

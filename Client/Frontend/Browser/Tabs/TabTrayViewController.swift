@@ -91,7 +91,7 @@ class TabTrayViewController: UIViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
                                target: nil,
                                action: nil)
-        fixedSpace.width = 32
+        fixedSpace.width = CGFloat(UX.navMenuHeight)
         return fixedSpace
     }()
 
