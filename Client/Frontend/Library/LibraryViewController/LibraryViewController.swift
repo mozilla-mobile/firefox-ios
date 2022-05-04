@@ -20,7 +20,7 @@ class LibraryViewController: UIViewController {
     weak var delegate: LibraryPanelDelegate?
 
     // Variables
-    var onViewDismissed: (() -> Void)? = nil
+    var onViewDismissed: (() -> Void)?
 
     // Views
     fileprivate var controllerContainerView: UIView = .build { view in }
@@ -206,7 +206,7 @@ class LibraryViewController: UIViewController {
     }
 
     // MARK: - Panel
-    var selectedPanel: LibraryPanelType? = nil {
+    var selectedPanel: LibraryPanelType? {
         didSet {
             if oldValue == selectedPanel {
                 // Prevent flicker, allocations, and disk access: avoid duplicate view controllers.
