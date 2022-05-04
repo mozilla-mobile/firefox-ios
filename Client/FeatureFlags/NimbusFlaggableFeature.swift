@@ -149,12 +149,8 @@ struct NimbusFlaggableFeature {
 
         switch featureID {
         case .startAtHome:
-            if option == StartAtHomeSetting.afterFourHours.rawValue
-                || option == StartAtHomeSetting.always.rawValue {
-                setUserPreference(to: true)
-            } else {
-                setUserPreference(to: false)
-            }
+            let userPreference = option == StartAtHomeSetting.afterFourHours.rawValue || option == StartAtHomeSetting.always.rawValue
+            setUserPreference(to: userPreference)
             profile.prefs.setString(option, forKey: optionsKey)
 
         default: break
