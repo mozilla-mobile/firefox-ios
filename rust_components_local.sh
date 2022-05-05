@@ -27,7 +27,7 @@ USAGE:
     ${CMDNAME} [OPTIONS] <LOCAL_RUST_COMPONENTS_SWIFT_PATH>
 
 OPTIONS:
-    -d, --disable                                         Disables local development on rust-components-swift
+    -d, --disable <RUST_COMPONENTS_VERSION>               Disables local development on rust-components-swift, and resets it to the given version.
     -b, --branch  <RUST_COMPONENTS_SWIFT_BRANCH>          Specifies a specific branch of rust-components-swift. Defaults to the currently checked-out branch.
                                                           Useful only if you do not need application-services changes. Otherwise just manually checkout to the branch
                                                           then omit this option and use -a to set the application services directory
@@ -51,13 +51,13 @@ THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 PROJECT_FILE="$THIS_DIR/Client.xcodeproj/project.pbxproj"
 RUST_COMPONENTS_REMOTE="https://github.com/mozilla/rust-components-swift"
 REPO_PATH=
-DISABLE="false"
+RESET_VERSION=
 APP_SERVICES_DIR=
 while (( "$#" )); do
     case "$1" in
         -d|--disable)
-            DISABLE="true"
-            shift
+            DISABLE=$2
+            shift 2
             ;;
         -a|--application-services)
             APP_SERVICES_DIR=$2
@@ -86,12 +86,6 @@ while (( "$#" )); do
     esac
 done
 
-if [ "true" = $DISABLE ]; then
-  # We disable the local development and revert back
-  git checkout -- $PROJECT_FILE
-  exit 0
-fi
-
 if [ -z $REPO_PATH ]; then
     msg "Please set the rust-components-swift path."
     msg "This is a path to a local checkout of the rust-components-swift repository"
@@ -110,7 +104,7 @@ fi
 
 ## First we find the name of the branch the local rust-components-swift is on.
 pushd $REPO_PATH
-if [ -z BRANCH_NAME]; then
+if [ -z $BRANCH_NAME]; then
     BRANCH_NAME=$(git status --branch --porcelain | grep '##' | cut -c 4-)
 fi
 FULL_PATH=$( pwd )
@@ -126,6 +120,27 @@ fi
 
 RUST_COMPONENTS_REMOTE_ESCAPED=$(echo ${RUST_COMPONENTS_REMOTE} | sed 's/\//\\\//g')
 
+if [ ! -z $RESET_VERSION ]; then
+  # We disable the local development and revert back
+  msg "Resetting rust-components-swift to version $RESET_VERSION"
+  perl -0777 -pi -e "s/			repositoryURL = \"file:\/\/${FULL_PATH_ESCAPED}\";
+			requirement = {
+				kind = branch;
+				version = null;
+				branch = .*?;/			repositoryURL = \"${RUST_COMPONENTS_REMOTE_ESCAPED}.git\";
+			requirement = {
+				kind = exactVersion;
+				version = $RESET_VERSION;/igs" $PROJECT_FILE
+  msg "rust-components-swift now using version $RESET_VERSION"
+  msg "Make sure to reset package caches in Xcode"
+  msg "If that version looks wrong, use git to reset the changes to $PROJECT_FILE"
+  msg "Then try again, and make sure the version is correct"
+  exit 0
+fi
+
+
+
+
 ## We now want to replace the occurance of the remote repo with the full path
 ## The indentation here is important, and it's the indentation that Xcode by default sets
 ## Perl is installed by default on MacOS so it is safe to use here
@@ -139,7 +154,6 @@ perl -0777 -pi -e "s/			repositoryURL = \"${RUST_COMPONENTS_REMOTE_ESCAPED}.git\
 				branch = ${BRANCH_NAME};/igs" $PROJECT_FILE
 
 msg "Done setting up firefox-ios to use $REPO_PATH"
-msg "You will most likely need to reset package caches in Xcode, and possibly clear the build folder"
-msg "To undo the changes, you can run `${CMDNAME} -d` or reset the changes to the Xcode project file."
-msg "IMPORTANT: `${CMDNAME} -d` will remove **all** changes to the project file, so you might lose an uncommited work
-    if you made changes to the Xcode settings"
+msg "You will need to reset package caches in Xcode, and possibly clear the build folder"
+msg "You can reset package caches in Xcode by going to File -> Packages -> Reset Package Caches"
+msg "To undo the changes, you can run \`${CMDNAME} -d \<VERSION\>\ $REPO_PATH\` or reset the changes to the Xcode project file."
