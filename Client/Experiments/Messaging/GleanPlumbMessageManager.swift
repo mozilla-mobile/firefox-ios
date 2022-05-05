@@ -263,24 +263,23 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         FxNimbus.shared.features.messaging.recordExposure()
         let onControlActions = onControl
 
-        if message.data.isControl {
-            switch onControlActions {
-            case .showNone:
-                return nil
-            case .showNextMessage:
-                return messages.first { message in
-                    do {
-                        return try messagingUtility.isMessageEligible(message, messageHelper: helper)
-                        && !message.data.isControl
-                    } catch {
-                        onMalformedMessage(messageKey: message.id)
-                        return false
-                    }
+        if !message.data.isControl {
+            return message
+        }
+        switch onControlActions {
+        case .showNone:
+            return nil
+        case .showNextMessage:
+            return messages.first { message in
+                do {
+                    return try messagingUtility.isMessageEligible(message, messageHelper: helper)
+                    && !message.data.isControl
+                } catch {
+                    onMalformedMessage(messageKey: message.id)
+                    return false
                 }
             }
         }
-
-        return nil
     }
 
 }
