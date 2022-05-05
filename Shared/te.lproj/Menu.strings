@@ -10,6 +10,9 @@
 /* Label for the button, displayed in the menu, used to copy the page url to the clipboard. */
 "Menu.CopyAddress.Title" = "చిరునామా కాపీచెయ్యి";
 
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "లంకెను కాపీచేయి";
+
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "పేజీలో వెతకండి";
 

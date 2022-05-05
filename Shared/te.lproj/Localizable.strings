@@ -140,6 +140,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "సంచిక పేరు";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "డెస్క్‌టాప్ ఇష్టాంశాలు";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "ఇటీవలి ఇష్టాంశాలు";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "కొత్త ఇష్టాంశం";
 
@@ -217,6 +223,12 @@
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "కొత్త ట్యాబులో తెరువు";
+
+/* Context menu item for opening a link in a new private tab */
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "లంకెను అంతరంగిక ట్యాబులో తెరువు";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "లంకెను కొత్త ట్యాబులో తెరువు";
 
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "బొమ్మను భద్రపరచు";
@@ -633,6 +645,9 @@
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ లోని సైట్లన్నిటినీ తొలగించాలా?";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "చరిత్రేమీ లేదు";
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
 "LibraryPanel.History.RecentlyClosedTabs.v99" = "ఇటీవల మూసిన ట్యాబులు";
