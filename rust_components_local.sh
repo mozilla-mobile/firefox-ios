@@ -14,7 +14,7 @@ set -e
 # CMDNAME is used in the usage text below
 CMDNAME=$(basename "$0")
 USAGE=$(cat <<EOT
-${CMDNAME}
+$CMDNAME
 Tarik Eshaq <teshaq@mozilla.com>
 
 Uses a local version of rust-components-swift
@@ -24,7 +24,7 @@ and back to use the remote version.
 
 
 USAGE:
-    ${CMDNAME} [OPTIONS] <LOCAL_RUST_COMPONENTS_SWIFT_PATH>
+    $CMDNAME [OPTIONS] <LOCAL_RUST_COMPONENTS_SWIFT_PATH>
 
 OPTIONS:
     -d, --disable <RUST_COMPONENTS_VERSION>               Disables local development on rust-components-swift, and resets it to the given version.
@@ -50,13 +50,14 @@ helptext() {
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 PROJECT_FILE="$THIS_DIR/Client.xcodeproj/project.pbxproj"
 RUST_COMPONENTS_REMOTE="https://github.com/mozilla/rust-components-swift"
+RUST_COMPONENTS_REMOTE_ESCAPED=$(echo $RUST_COMPONENTS_REMOTE | sed 's/\//\\\//g')
 REPO_PATH=
 RESET_VERSION=
 APP_SERVICES_DIR=
 while (( "$#" )); do
     case "$1" in
         -d|--disable)
-            DISABLE=$2
+            RESET_VERSION=$2
             shift 2
             ;;
         -a|--application-services)
@@ -93,15 +94,6 @@ if [ -z $REPO_PATH ]; then
     exit 1
 fi
 
-if [ ! -z $APP_SERVICES_DIR ]; then
-    msg "Setting $REPO_PATH to use $APP_SERVICES_DIR"
-    msg "This might take a few minutes as it needs to build the Rust code from source"
-    pushd $REPO_PATH
-    ./appservices_local_xcframework.sh $APP_SERVICES_DIR
-    git commit -m "[Automation] enables local development, please revert this before pushing"
-    popd
-fi
-
 ## First we find the name of the branch the local rust-components-swift is on.
 pushd $REPO_PATH
 if [ -z $BRANCH_NAME]; then
@@ -118,19 +110,19 @@ if [ -z $BRANCH_NAME ]; then
     exit 1
 fi
 
-RUST_COMPONENTS_REMOTE_ESCAPED=$(echo ${RUST_COMPONENTS_REMOTE} | sed 's/\//\\\//g')
 
 if [ ! -z $RESET_VERSION ]; then
   # We disable the local development and revert back
   msg "Resetting rust-components-swift to version $RESET_VERSION"
-  perl -0777 -pi -e "s/			repositoryURL = \"file:\/\/${FULL_PATH_ESCAPED}\";
+  perl -0777 -pi -e "s/			repositoryURL = \"file:\/\/$FULL_PATH_ESCAPED\";
 			requirement = {
 				kind = branch;
 				version = null;
-				branch = .*?;/			repositoryURL = \"${RUST_COMPONENTS_REMOTE_ESCAPED}.git\";
+				branch = .*?;/			repositoryURL = \"$RUST_COMPONENTS_REMOTE_ESCAPED.git\";
 			requirement = {
 				kind = exactVersion;
 				version = $RESET_VERSION;/igs" $PROJECT_FILE
+
   msg "rust-components-swift now using version $RESET_VERSION"
   msg "Make sure to reset package caches in Xcode"
   msg "If that version looks wrong, use git to reset the changes to $PROJECT_FILE"
@@ -139,21 +131,33 @@ if [ ! -z $RESET_VERSION ]; then
 fi
 
 
+if [ ! -z $APP_SERVICES_DIR ]; then
+    msg "Setting $REPO_PATH to use $APP_SERVICES_DIR"
+    msg "This might take a few minutes as it needs to build the Rust code from source"
+    pushd $REPO_PATH
+    ./appservices_local_xcframework.sh $APP_SERVICES_DIR
+    git commit -m "[Automation] enables local development, please revert this before pushing"
+    popd
+fi
+
+
+
+
 
 
 ## We now want to replace the occurance of the remote repo with the full path
 ## The indentation here is important, and it's the indentation that Xcode by default sets
 ## Perl is installed by default on MacOS so it is safe to use here
-perl -0777 -pi -e "s/			repositoryURL = \"${RUST_COMPONENTS_REMOTE_ESCAPED}.git\";
+perl -0777 -pi -e "s/			repositoryURL = \"$RUST_COMPONENTS_REMOTE_ESCAPED.git\";
 			requirement = {
 				kind = exactVersion;
-				version = .*?;/			repositoryURL = \"file:\/\/${FULL_PATH_ESCAPED}\";
+				version = .*?;/			repositoryURL = \"file:\/\/$FULL_PATH_ESCAPED\";
 			requirement = {
 				kind = branch;
 				version = null;
-				branch = ${BRANCH_NAME};/igs" $PROJECT_FILE
+				branch = $BRANCH_NAME;/igs" $PROJECT_FILE
 
 msg "Done setting up firefox-ios to use $REPO_PATH"
 msg "You will need to reset package caches in Xcode, and possibly clear the build folder"
 msg "You can reset package caches in Xcode by going to File -> Packages -> Reset Package Caches"
-msg "To undo the changes, you can run \`${CMDNAME} -d \<VERSION\>\ $REPO_PATH\` or reset the changes to the Xcode project file."
+msg "To undo the changes, you can run \`$CMDNAME -d <VERSION> $REPO_PATH\` or reset the changes to the Xcode project file."
