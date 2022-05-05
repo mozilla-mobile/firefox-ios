@@ -11,7 +11,7 @@
 "NSMicrophoneUsageDescription" = "Hér getur þú tekið og hlaðið upp myndböndum.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað og hlaðið upp myndum.";
+"NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað og sent myndir.";
 
 /* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
 "UIApplicationShortcutItemTitle.EraseAndOpen" = "Hreinsa og opna";
