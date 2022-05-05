@@ -101,6 +101,11 @@ class TestAppDelegate: AppDelegate, FeatureFlaggable {
             profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
         }
 
+        // Change to 0 to deactivate chron tabs
+        if launchArguments.contains(LaunchArguments.ChronTabs) {
+            profile.prefs.setBool(false, forKey: PrefsKeys.LegacyFeatureFlags.ChronologicalTabs)
+        }
+
         // Don't show the What's New page.
         if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
             profile.prefs.setInt(1, forKey: PrefsKeys.KeyLastVersionNumber)

@@ -58,6 +58,7 @@ public struct PrefsKeys {
 
     public struct LegacyFeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesVisible"
+        public static let ChronologicalTabs = "chronTabsPrefKey"
         public static let CustomWallpaper = "customWallpaperPrefKey"
         public static let HistoryHighlightsSection = "historyHighlightsSectionEnabled"
         public static let HistoryGroups = "historyGroupsEnabled"
