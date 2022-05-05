@@ -65,9 +65,9 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
         loadContiles(group: group)
         loadTopSites(group: group)
 
-        group.notify(queue: dataQueue) {
+        group.notify(queue: dataQueue) { [weak self] in
             // Pre-loading the data with a default number of tiles so we always show section when needed
-            self.calculateTopSiteData(numberOfTilesPerRow: 8)
+            self?.calculateTopSiteData(numberOfTilesPerRow: 8)
 
             dataLoadingCompletion?()
         }
@@ -77,9 +77,9 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
         guard shouldLoadSponsoredTiles else { return }
 
         group.enter()
-        contileProvider.fetchContiles { result in
+        contileProvider.fetchContiles { [weak self] result in
             if case .success(let contiles) = result {
-                self.contiles = contiles
+                self?.contiles = contiles
             }
             group.leave()
         }
@@ -87,8 +87,8 @@ class FxHomeTopSitesManager: FeatureFlagsProtocol {
 
     private func loadTopSites(group: DispatchGroup) {
         group.enter()
-        topSiteHistoryManager.getTopSites { sites in
-            self.historySites = sites
+        topSiteHistoryManager.getTopSites { [weak self] sites in
+            self?.historySites = sites
             group.leave()
         }
     }
@@ -193,8 +193,10 @@ private extension Array where Element == Site {
     mutating func removeDuplicates() {
         var alreadyThere = Set<Site>()
         let uniqueSites = compactMap { (site) -> Site? in
-            let shouldAddSite = alreadyThere.first(where: { $0.url.asURL?.domainURL == site.url.asURL?.domainURL } ) == nil
-            guard shouldAddSite else { return nil }
+            let siteDomain = site.url.asURL?.shortDomain
+            let shouldAddSite = alreadyThere.first(where: { $0.url.asURL?.shortDomain == siteDomain } ) == nil
+            // If shouldAddSite or site domain was not found, then insert the site
+            guard shouldAddSite || siteDomain == nil else { return nil }
             alreadyThere.insert(site)
             return site
         }
@@ -204,7 +206,8 @@ private extension Array where Element == Site {
 
     // We don't add a sponsored tile if that domain site is already pinned by the user.
     private func siteIsAlreadyPresent(site: Site) -> Bool {
-        return filter { ($0.url.asURL?.domainURL == site.url.asURL?.domainURL) && (($0 as? PinnedSite) != nil) }.count > 0
+        let siteDomain = site.url.asURL?.shortDomain
+        return filter { ($0.url.asURL?.shortDomain == siteDomain) && (($0 as? PinnedSite) != nil) }.count > 0
     }
 }
 

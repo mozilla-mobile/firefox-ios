@@ -11,9 +11,9 @@ class PhotonActionSheetViewModel {
     var actions: [[PhotonRowActions]]
     var modalStyle: UIModalPresentationStyle
 
-    var closeButtonTitle: String? = nil
-    var site: Site? = nil
-    var title: String? = nil
+    var closeButtonTitle: String?
+    var site: Site?
+    var title: String?
     var tintColor = UIColor.theme.actionMenu.foreground
 
     var presentationStyle: PresentationStyle {

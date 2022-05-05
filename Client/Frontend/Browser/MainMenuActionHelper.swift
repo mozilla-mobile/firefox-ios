@@ -477,7 +477,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
 
         let iconString = needsReAuth ? ImageIdentifiers.warning : ImageIdentifiers.placeholderAvatar
 
-        var iconURL: URL? = nil
+        var iconURL: URL?
         if let str = rustAccount.userProfile?.avatarUrl, let url = URL(string: str) {
             iconURL = url
         }

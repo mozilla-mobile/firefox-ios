@@ -320,7 +320,7 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlagsProtocol {
         let manager = createManager(addPinnedSiteCount: 1, siteCount: 3, duplicatePinnedSiteURL: true)
 
         testLoadData(manager: manager, numberOfTilesPerRow: 4) {
-            XCTAssertEqual(manager.siteCount, 4)
+            XCTAssertEqual(manager.siteCount, 4, "Should have 3 sites and 1 pinned")
             XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
 
             let tile1 = manager.getSite(index: 1)
@@ -338,6 +338,17 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlagsProtocol {
             XCTAssertFalse(tile3!.isPinned)
             XCTAssertNotEqual(tile3!.title, expectedPinnedURL)
         }
+    }
+
+    func testTopSiteManager_hasNoLeaks() {
+        let topSitesManager = FxHomeTopSitesManager(profile: profile)
+        let historyStub = TopSiteHistoryManagerStub(profile: profile)
+        historyStub.addPinnedSiteCount = 0
+        topSitesManager.topSiteHistoryManager = historyStub
+
+        trackForMemoryLeaks(historyStub)
+        trackForMemoryLeaks(topSitesManager)
+        trackForMemoryLeaks(topSitesManager.topSiteHistoryManager)
     }
 }
 
@@ -399,9 +410,9 @@ extension ContileProviderMock {
     }
 
     static let pinnedTitle = "A pinned title %@"
-    static let pinnedURL = "www.a-pinned-url-%@.com"
+    static let pinnedURL = "https://www.apinnedurl%@.com"
     static let title = "A title %@"
-    static let url = "www.a-url-%@.com"
+    static let url = "https://www.aurl%@.com"
 
     static var pinnedDuplicateTile: Contile {
         return Contile(id: 1,
@@ -432,7 +443,10 @@ extension FxHomeTopSitesManagerTests {
     func createManager(addPinnedSiteCount: Int = 0,
                        siteCount: Int = 10,
                        duplicatePinnedSiteURL: Bool = false,
-                       expectedContileResult: ContileResult = .success([])) -> FxHomeTopSitesManager {
+                       expectedContileResult: ContileResult = .success([]),
+                       file: StaticString = #file,
+                       line: UInt = #line) -> FxHomeTopSitesManager {
+
         let topSitesManager = FxHomeTopSitesManager(profile: profile)
 
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
@@ -443,6 +457,10 @@ extension FxHomeTopSitesManagerTests {
 
         contileProviderMock = ContileProviderMock(result: expectedContileResult)
         topSitesManager.contileProvider = contileProviderMock
+
+        trackForMemoryLeaks(topSitesManager, file: file, line: line)
+        trackForMemoryLeaks(historyStub, file: file, line: line)
+        trackForMemoryLeaks(topSitesManager.topSiteHistoryManager, file: file, line: line)
 
         return topSitesManager
     }

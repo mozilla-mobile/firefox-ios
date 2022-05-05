@@ -41,7 +41,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     // MARK: - Properties
 
-    var onViewDismissed: (() -> Void)? = nil
+    var onViewDismissed: (() -> Void)?
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
     let theme = LegacyThemeManager.instance
@@ -127,7 +127,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
-        button.accessibilityIdentifier = "DefaultBrowserCard.goToSettingsButton"
+        button.accessibilityIdentifier = "HomeTabBanner.goToSettingsButton"
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, maxSize: 40)
         button.titleLabel?.adjustsFontSizeToFitWidth = true

@@ -65,8 +65,8 @@ enum Experiments {
         }
     }
 
-    private static var studiesSetting: Bool? = nil
-    private static var telemetrySetting: Bool? = nil
+    private static var studiesSetting: Bool?
+    private static var telemetrySetting: Bool?
 
     static func setStudiesSetting(_ setting: Bool) {
         studiesSetting = setting

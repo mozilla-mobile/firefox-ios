@@ -90,7 +90,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         label.adjustsFontSizeToFitWidth = true
     }
     var refreshControl: UIRefreshControl?
-    var clearHistoryCell: OneLineTableViewCell?
+    var recentlyClosedCell: OneLineTableViewCell?
 
     // MARK: - Inits
 
@@ -157,8 +157,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         guard !viewModel.isSearchInProgress else { return }
 
         viewModel.reloadData() { [weak self] success in
-            guard success else { return }
-
             DispatchQueue.main.async {
                 self?.applySnapshot(animatingDifferences: animating)
             }
@@ -187,6 +185,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
                 isEnabled = !viewModel.groupedSites.isEmpty
             case .recentlyClosed:
                 isEnabled = hasRecentlyClosed
+                recentlyClosedCell = cell
             default: break
             }
         }
@@ -208,31 +207,34 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
 
     private func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: { [weak self] date in
-            // Clearing groupedSites and refetch from database
-            self?.viewModel.groupedSites = DateGroupedTableData<Site>()
-
-            /// Delete groupings that belong to THAT section.
+            // Delete groupings that belong to THAT section.
             if let date = date {
                 self?.viewModel.deleteGroupsForDates(date: date)
             } else {
-                /// Otherwise delete ALL groups, since we're deleting all history anyways.
-                self?.viewModel.searchTermGroups.removeAll()
+                // Otherwise delete ALL groups, since we're deleting all history anyways.
+                self?.viewModel.removeAllData()
             }
 
-            self?.fetchDataAndUpdateLayout()
-
-            if let cell = self?.clearHistoryCell {
-                self?.setTappableStateAndStyle(
-                    with: HistoryActionablesModel.activeActionables.first(where: { $0.itemIdentity == .clearHistory }),
-                    on: cell)
+            DispatchQueue.main.async {
+                self?.applySnapshot()
+                self?.tableView.reloadData()
+                self?.refreshRecentlyClosedCell()
             }
         })
+    }
+
+    private func refreshRecentlyClosedCell() {
+        guard let cell = recentlyClosedCell else { return }
+
+        self.setTappableStateAndStyle(
+            with: HistoryActionablesModel.activeActionables.first(where: { $0.itemIdentity == .recentlyClosed }),
+            on: cell)
     }
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
-            viewModel.groupedSites = DateGroupedTableData<Site>()
+            viewModel.removeAllData()
             fetchDataAndUpdateLayout(animating: true)
 
             if profile.hasSyncableAccount() {
@@ -251,6 +253,10 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
                 fetchDataAndUpdateLayout(animating: true)
             }
         case .OpenClearRecentHistory:
+            if viewModel.isSearchInProgress {
+                exitSearchState()
+            }
+
             showClearRecentHistory()
         default:
             // no need to do anything at all
@@ -310,7 +316,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         cell.leftImageView.tintColor = .theme.browser.tint
         cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = historyActionable.itemA11yId
-        self.setTappableStateAndStyle(with: historyActionable, on: cell)
+        setTappableStateAndStyle(with: historyActionable, on: cell)
 
         return cell
     }
@@ -398,11 +404,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     func removeHistoryItem(at indexPath: IndexPath) {
         guard let historyItem = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
 
-        viewModel.removeHistoryItems(item: historyItem, at: indexPath.section)
-
-        if let historyActionableCell = clearHistoryCell {
-            setTappableStateAndStyle(with: HistoryActionablesModel.activeActionables.first, on: historyActionableCell)
-        }
+        viewModel.removeHistoryItems(item: [historyItem], at: indexPath.section)
 
         applySnapshot(animatingDifferences: true)
     }

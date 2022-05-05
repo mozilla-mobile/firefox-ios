@@ -1639,7 +1639,7 @@
 "Settings.General.SectionName" = "Generelt";
 
 /* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
-"Settings.Home.Current.Description.v101" = "Velg hva som skal vises som startsiden.";
+"Settings.Home.Current.Description.v101" = "Velg hva som skal vises som startside.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
 "Settings.Home.Option.Description.v101" = "Velg hva som er inkludert på Firefox-startsiden.";

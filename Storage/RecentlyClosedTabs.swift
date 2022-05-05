@@ -25,14 +25,14 @@ open class ClosedTabsStore {
         self.prefs = prefs
     }
 
-    open func addTab(_ url: URL, title: String?, faviconURL: String?) {
-        let recentlyClosedTab = ClosedTab(url: url, title: title ?? "", faviconURL: faviconURL ?? "")
+    open func addTab(_ url: URL, title: String?, faviconURL: String?, lastExecutedTime: Timestamp?) {
+        let recentlyClosedTab = ClosedTab(url: url, title: title, faviconURL: faviconURL, lastExecutedTime: lastExecutedTime)
         tabs.insert(recentlyClosedTab, at: 0)
         if tabs.count > maxNumberOfStoredClosedTabs {
             tabs.removeLast()
         }
-        let archivedTabsArray = try? NSKeyedArchiver.archivedData(withRootObject: tabs, requiringSecureCoding: true)
-        prefs.setObject(archivedTabsArray, forKey: KeyedArchiverKeys.recentlyClosedTabs.rawValue)
+
+        saveTabs(tabs)
     }
 
     open func popFirstTab() -> ClosedTab? {
@@ -44,45 +44,52 @@ open class ClosedTabsStore {
         prefs.removeObjectForKey(KeyedArchiverKeys.recentlyClosedTabs.rawValue)
         tabs = []
     }
+
+    open func removeTabsFromDate(_ date: Date) {
+        let timestampToRemoveFrom = date.toTimestamp()
+        // If lastExecutedTime wasn't present on tab, we do not delete that tab since information isn't available
+        tabs = tabs.filter { $0.lastExecutedTime ?? 0 < timestampToRemoveFrom }
+
+        saveTabs(tabs)
+    }
+
+    private func saveTabs(_ tabs: [ClosedTab]) {
+        let archivedTabsArray = try? NSKeyedArchiver.archivedData(withRootObject: tabs, requiringSecureCoding: true)
+        prefs.setObject(archivedTabsArray, forKey: KeyedArchiverKeys.recentlyClosedTabs.rawValue)
+    }
 }
 
 open class ClosedTab: NSObject, NSCoding {
 
     enum CodingKeys: String {
-        case url, title, faviconURL
+        case url, title, faviconURL, lastExecutedTime
     }
 
     public let url: URL
     public let title: String?
     public let faviconURL: String?
+    public let lastExecutedTime: Timestamp?
 
-    var jsonDictionary: [String: Any] {
-        let title = (self.title ?? "")
-        let faviconURL = (self.faviconURL ?? "")
-        let json: [String: Any] = [CodingKeys.title.rawValue: title,
-                                   CodingKeys.url.rawValue: url,
-                                   CodingKeys.faviconURL.rawValue: faviconURL]
-        return json
-    }
-
-    init(url: URL, title: String?, faviconURL: String?) {
-        assert(Thread.isMainThread)
+    init(url: URL, title: String?, faviconURL: String?, lastExecutedTime: Timestamp?) {
         self.title = title
         self.url = url
         self.faviconURL = faviconURL
+        self.lastExecutedTime = lastExecutedTime
         super.init()
     }
 
     required convenience public init?(coder: NSCoder) {
         guard let url = coder.decodeObject(forKey: CodingKeys.url.rawValue) as? URL,
               let faviconURL = coder.decodeObject(forKey: CodingKeys.faviconURL.rawValue) as? String,
-              let title = coder.decodeObject(forKey: CodingKeys.title.rawValue) as? String
+              let title = coder.decodeObject(forKey: CodingKeys.title.rawValue) as? String,
+              let date = coder.decodeObject(forKey: CodingKeys.lastExecutedTime.rawValue) as? Timestamp
         else { return nil }
 
         self.init(
             url: url,
             title: title,
-            faviconURL: faviconURL
+            faviconURL: faviconURL,
+            lastExecutedTime: date
         )
     }
 
@@ -90,5 +97,6 @@ open class ClosedTab: NSObject, NSCoding {
         coder.encode(url, forKey: CodingKeys.url.rawValue)
         coder.encode(faviconURL, forKey: CodingKeys.faviconURL.rawValue)
         coder.encode(title, forKey: CodingKeys.title.rawValue)
+        coder.encode(lastExecutedTime, forKey: CodingKeys.lastExecutedTime.rawValue)
     }
 }

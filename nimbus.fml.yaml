@@ -1,8 +1,8 @@
 ---
 channels:
-  - release
-  - beta
   - developer
+  - beta
+  - release
 features:
   search:
     description: The search feature
@@ -28,7 +28,7 @@ features:
     defaults: null
   nimbus-validation:
     description: "A feature that does not correspond to an application feature suitable for showing
-    that Nimbus is working."
+      that Nimbus is working."
     variables:
       settings-title:
         description: The title of displayed in the Settings screen and app menu.
@@ -47,7 +47,7 @@ features:
     variables:
       sections-enabled:
         description: "This property provides a lookup table of whether or not the given section should be enabled.
-        If the section is enabled, it should be toggleable in the settings screen, and on by default."
+          If the section is enabled, it should be toggleable in the settings screen, and on by default."
         type: Map<HomeScreenSection, Boolean>
         default:
           {
@@ -86,7 +86,7 @@ features:
     variables:
       sections-enabled:
         description: "This property provides a lookup table of whether or not the given section should be enabled.
-        If the section is enabled, it should be toggleable in the settings screen, and on by default."
+          If the section is enabled, it should be toggleable in the settings screen, and on by default."
         type: Map<TabTraySection, Boolean>
         default:
           {
@@ -119,7 +119,7 @@ features:
         default: null
 
       messages:
-        description: A growable collection of messages
+        description: A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData.
         type: Map<String, MessageData>
         default: {}
 
@@ -182,73 +182,15 @@ features:
             PERSISTENT:
               priority: 50
               max-display-count: 20
+            SURVEY:
+              priority: 55
+              max-display-count: 10
             WARNING:
               priority: 60
               max-display-count: 10
             URGENT:
               priority: 100
               max-display-count: 10
-
-      - channel: developer
-        value:
-          styles:
-            DEFAULT:
-              priority: 50
-              max-display-count: 100
-            EXPIRES_QUICKLY:
-              priority: 100
-              max-display-count: 1
-      - channel: developer
-        value: {
-          "messages": {
-            "my-viewpoint-survey": {
-              "title": "Message tile",
-              "text": "Love Firefox? Fill in our survey!",
-              "action": "https://surveyprovider.com/survey-id/{uuid}",
-              "trigger": [ "ALWAYS" ],
-              "style": "DEFAULT",
-              "button-label": "Go to the survey"
-            }
-          }
-        }
-      - channel: developer
-        value: {
-          "messages": {
-            "private-tabs-auto-close": {
-              "action": "OPEN_SETTINGS",
-              "text": "Sharing your phone? Autoclosing private tabs is for you!",
-              "trigger": [
-                  "USER_RECENTLY_INSTALLED"
-              ]
-            }
-          }
-        }
-      - channel: developer
-        value: {
-          "triggers": {
-            "USER_IE_COUNTRY": "'IE' in locale"
-          },
-
-          "styles": {
-            "irish-green": {
-              "priority": 50
-            }
-          },
-
-          "messages": {
-            "eu-tracking-protection-for-ireland": {
-              "action": "OPEN_SETTINGS",
-              "text": "GDPR has you covered. Firefox has GDPR covered",
-              "style": "irish-green",
-              "trigger": [
-                  "NEW_USER",
-                  "USER_IE_COUNTRY"
-              ]
-            }
-          },
-
-          "message-under-experiment": "eu-tracking-protection-for-"
-        }
 
 types:
   objects:
@@ -298,6 +240,11 @@ types:
             targeting expressions. The message will be
             shown if all expressions `true`.
           default: []
+        surface:
+          type: MessageSurfaceId
+          description: Each message will tell us the surface it is targeting with this.
+          # To start, we default to the new-tab-card
+          default: new-tab-card
     StyleData:
       description: >
         A group of properities (predominantly visual) to
@@ -361,6 +308,15 @@ types:
           description: A favicon icon
         letter:
           description: A letter icon
+    MessageSurfaceId:
+      description: >
+        For messaging, we would like to have a message tell us which surface its associated with.
+        This is a label that matches across both Android and iOS.
+      variants:
+        new-tab-card:
+          description: This is the card that appears at the top on the Firefox Home Page.
+        Unknown:
+          description: A message has NOT declared its target surface.
     HomeScreenSection:
       description: The identifiers for the sections of the homescreen.
       variants:

@@ -23,6 +23,10 @@ public struct AccessibilityIdentifiers {
 
     struct FirefoxHomepage {
 
+        struct HomeTabBanner {
+            static let ctaButton = "HomeTabBanner.ctaButton"
+        }
+
         struct OtherButtons {
             static let logoButton = "FxHomeLogoButton"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"
@@ -61,6 +65,18 @@ public struct AccessibilityIdentifiers {
     }
 
     struct LibraryPanels {
+        static let bookmarksView = "LibraryPanels.Bookmarks"
+        static let historyView = "LibraryPanels.History"
+        static let downloadsView = "LibraryPanels.Downloads"
+        static let readingListView = "LibraryPanels.ReadingList"
+        static let segmentedControl = "librarySegmentControl"
+        static let topLeftButton = "libraryPanelTopLeftButton"
+        static let topRightButton = "libraryPanelTopRightButton"
+        static let bottomLeftButton = "libraryPanelBottomLeftButton"
+        static let bottomRightButton = "bookmarksPanelBottomRightButton"
+        static let bottomSearchButton = "historyBottomSearchButton"
+        static let bottomDeleteButton = "historyBottomDeleteButton"
+
         struct HistoryPanel {
             static let tableView = "History List"
             static let clearHistoryCell = "HistoryPanel.clearHistory"

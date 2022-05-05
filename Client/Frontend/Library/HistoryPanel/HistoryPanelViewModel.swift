@@ -59,6 +59,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     var groupedSites = DateGroupedTableData<Site>()
     var isFetchInProgress = false
     var isSearchInProgress = false
+    var shouldResetHistory = false
 
     var searchResultSites = [Site]()
     var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
@@ -98,23 +99,25 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             return
         }
 
+        if shouldResetHistory {
+            resetHistory()
+        }
+
         fetchData().uponQueue(.global(qos: .userInteractive)) { result in
-            if let sites = result.successValue {
-                let fetchedSites = sites.asArray()
-
-                self.populateHistorySites(fetchedSites: fetchedSites)
-
-                if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
-                    self.populateASGroups()
-                }
-
-                self.visibleSections = Sections.allCases.filter { section in
-                    self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
-                    || !self.groupsForSection(section: section).isEmpty
-                }
-                completion(true)
-            } else {
+            guard let fetchedSites = result.successValue?.asArray(), !fetchedSites.isEmpty else {
                 completion(false)
+                return
+            }
+
+            self.currentFetchOffset += self.queryFetchLimit
+            if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
+                self.populateASGroups(fetchedSites: fetchedSites) {
+                    self.buildVisibleSections()
+                    completion(true)
+                }
+            } else {
+                self.populateHistorySites(fetchedSites: fetchedSites)
+                completion(true)
             }
         }
     }
@@ -143,6 +146,15 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         searchCurrentFetchOffset += searchQueryFetchLimit
     }
 
+    func removeAllData() {
+        /// Since we remove all data, we reset our fetchOffset back to the start.
+        currentFetchOffset = 0
+
+        searchTermGroups.removeAll()
+        groupedSites = DateGroupedTableData<Site>()
+        buildVisibleSections()
+    }
+
     /// A helper for the reload function.
     private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
         isFetchInProgress = true
@@ -157,6 +169,19 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             }
 
             return deferMaybe(result)
+        }
+    }
+
+    private func resetHistory() {
+        removeAllData()
+
+        shouldResetHistory = false
+    }
+
+    private func buildVisibleSections() {
+        self.visibleSections = Sections.allCases.filter { section in
+            return self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
+            || !self.groupsForSection(section: section).isEmpty
         }
     }
 
@@ -177,21 +202,18 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
 
     /// Provide groups for curruently fetched history items.
-    private func populateASGroups() {
-        SearchTermGroupsManager.getSiteGroups(with: self.profile, from: self.groupedSites.allItems(), using: .orderedDescending) { group, filteredItems in
-            guard var searchTermGrouping = group else { return }
-
-            // Remove overlapping history & STG items
-            searchTermGrouping.forEach { group in
-                group.groupedItems.forEach { self.groupedSites.remove($0) }
-            }
-
-            // Remove overlapping STGs. This happens when the queryFetchLimit is too low - then STGManager makes duplicate groups.
-            self.searchTermGroups.forEach { group in
-                searchTermGrouping = searchTermGrouping.filter { $0.displayTitle != group.displayTitle }
-            }
+    private func populateASGroups(fetchedSites: [Site], completion: @escaping () -> Void) {
+        SearchTermGroupsManager.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, filteredItems in
+            guard let searchTermGrouping = group else { return }
 
             self.searchTermGroups.append(contentsOf: searchTermGrouping)
+
+            filteredItems.forEach { site in
+                if let latestVisit = site.latestVisit {
+                    self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                }
+            }
+            completion()
         }
     }
 
@@ -229,56 +251,47 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         return groups
     }
 
-    func deleteGroupsForDates(date: Date) {
-        let adjustedDate = date.dayAfter
-        var deletableSections: [Sections]?
-
-        if adjustedDate.isToday() {
-            deletableSections = [.today]
-        } else if adjustedDate.isYesterday() {
-            deletableSections = [.today, .yesterday]
-        }
-
-        guard let deletableSections = deletableSections else { return }
+    func deleteGroupsForDates(date: Date)  {
+        guard let deletableSections = getDeletableSection(date: date) else { return }
 
         deletableSections.forEach { section in
-            groupsForSection(section: section).forEach { group in
-                removeHistoryItems(item: group, at: section.rawValue)
-            }
+            // Remove grouped items for delete section
+            var sectionItems: [AnyHashable] = groupsForSection(section: section)
+            let singleItems = groupedSites.itemsForSection(section.rawValue - 1)
+            sectionItems.append(contentsOf: singleItems)
+            removeHistoryItems(item: sectionItems, at: section.rawValue)
         }
-
     }
 
     /// This handles removing either a Site or an ASGroup<Site> from the view.
-    func removeHistoryItems(item historyItem: AnyHashable, at section: Int) {
-        guard let timeSection = Sections(rawValue: section) else { return }
-
-        let isSectionWithNoSites: Bool
-        let isSectionWithGroups: Bool
-
-        if let site = historyItem as? Site {
-            groupedSites.remove(site)
-            profile.history.removeHistoryForURL(site.url)
-        } else if let group = historyItem as? ASGroup<Site> {
-            group.groupedItems.forEach { site in
-                groupedSites.remove(site)
-                profile.history.removeHistoryForURL(site.url)
+    func removeHistoryItems(item historyItem: [AnyHashable], at section: Int) {
+        historyItem.forEach { item in
+            if let site = item as? Site {
+                deleteSingle(site: site)
+            } else if let group = item as? ASGroup<Site> {
+                group.groupedItems.forEach { site in
+                    deleteSingle(site: site)
+                }
+                searchTermGroups = searchTermGroups.filter { $0 != group }
             }
+        }
+        buildVisibleSections()
+    }
 
-            searchTermGroups = searchTermGroups.filter { $0 != group }
+    private func deleteSingle(site: Site) {
+        groupedSites.remove(site)
+        profile.history.removeHistoryForURL(site.url)
+    }
+
+    private func getDeletableSection(date: Date) -> [Sections]? {
+        var deletableSections: [Sections]?
+
+        if date.isToday() {
+            deletableSections = [.today]
+        } else if date.isYesterday() {
+            deletableSections = [.today, .yesterday]
         }
 
-        isSectionWithNoSites = groupedSites.numberOfItemsForSection(section - 1) == 0
-        isSectionWithGroups = searchTermGroups.contains { group in
-            if let groupSection = groupBelongsToSection(asGroup: group) {
-                return groupSection == timeSection
-            }
-
-            return false
-        }
-
-        if isSectionWithNoSites, !isSectionWithGroups {
-            visibleSections = visibleSections.filter { $0 != timeSection }
-        }
+        return deletableSections
     }
 }

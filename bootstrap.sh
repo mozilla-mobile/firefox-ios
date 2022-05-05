@@ -21,6 +21,7 @@ getLocale() {
 if [ "$1" == "--force" ]; then
     rm -rf firefoxios-l10n
     rm -rf LocalizationTools
+    rm -rf build
 fi
 
 if [ "$1" == "--importLocales" ]; then
