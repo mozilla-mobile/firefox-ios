@@ -615,18 +615,21 @@ extension SQLiteHistory: BrowserHistory {
                            limit: Int,
                            offset: Int,
                            completion: @escaping ([Site]) -> ()) {
+
         let query = """
             SELECT hist.* FROM history hist
             INNER JOIN history_fts historyFTS ON
                 historyFTS.rowid = hist.rowid
-            WHERE historyFTS.title LIKE "%\(searchTerm)%" OR
-                historyFTS.url LIKE "%\(searchTerm)%"
+            WHERE historyFTS.title LIKE ? OR
+                historyFTS.url LIKE ?
             ORDER BY local_modified DESC
             LIMIT \(limit)
             OFFSET \(offset);
             """
 
-        db.runQueryConcurrently(query, args: nil, factory: SQLiteHistory.basicHistoryColumnFactory).uponQueue(.main) { result in
+        let args: Args = ["%\(searchTerm)%", "%\(searchTerm)%"]
+
+        db.runQueryConcurrently(query, args: args, factory: SQLiteHistory.basicHistoryColumnFactory).uponQueue(.main) { result in
             guard result.isSuccess else {
                 completion([Site]())
                 return
