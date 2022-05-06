@@ -67,7 +67,6 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         tableView.prefetchDataSource = self
         tableView.delegate = self
         tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier)
         tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
 
@@ -296,7 +295,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             }
 
             if let searchTermGroup = item as? ASGroup<Site> {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
                     self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for STG!")
                     return nil
                 }
@@ -329,6 +328,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         cell.leftImageView.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
         cell.leftImageView.layer.borderWidth = HistoryPanelUX.IconBorderWidth
         cell.leftImageView.contentMode = .scaleAspectFit
+        cell.chevronAccessoryView.isHidden = true
         getFavIcon(for: site) { [weak cell] image in
             cell?.leftImageView.image = image
             cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
@@ -573,7 +573,7 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
             header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
             header.collapsibleImageView.isHidden = false
             let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
-            header.collapsibleState = isCollapsed ? SiteTableViewHeader.CollapsibleState.up : SiteTableViewHeader.CollapsibleState.down
+            header.collapsibleState = isCollapsed ? ExpandButtonState.right : ExpandButtonState.down
 
             // Configure tap to collapse/expand section
             header.tag = section

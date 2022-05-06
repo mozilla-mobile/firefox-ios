@@ -14,9 +14,6 @@ struct TwoLineCellUX {
 
 class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableCell {
 
-    /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
-    static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
-
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()
@@ -40,9 +37,8 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
     }()
 
     lazy var chevronAccessoryView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: "goBack")?.withHorizontallyFlippedOrientation()
-        imageView.image?.imageFlippedForRightToLeftLayoutDirection()
-        imageView.image?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
+        imageView.image = UIImage(named: ImageIdentifiers.menuChevron)
+        imageView.image?.withTintColor(UIColor.Photon.LightGrey40)
         imageView.isHidden = true
     }
 
@@ -110,7 +106,6 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
 
         // Only shown when we need a chevron, and is made visible at call site
         chevronAccessoryView.snp.makeConstraints { make in
-            make.height.width.equalTo(28)
             make.centerY.equalTo(containerView.snp.centerY)
             make.trailing.equalTo(containerView.snp.trailing).offset(-8)
         }
@@ -151,11 +146,13 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
+            self.chevronAccessoryView.tintColor = UIColor.Photon.LightGrey40
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
             self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
+            self.chevronAccessoryView.tintColor = UIColor.Photon.DarkGrey05
             self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
             self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         }

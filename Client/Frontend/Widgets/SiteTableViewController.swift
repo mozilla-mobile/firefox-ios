@@ -14,23 +14,10 @@ struct SiteTableViewControllerUX {
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
 
-    enum CollapsibleState {
-        case up
-        case down
-
-        var image: UIImage? {
-            switch self {
-            case .up:
-                return UIImage.templateImageNamed(ImageIdentifiers.findPrevious)
-            case .down:
-                return UIImage.templateImageNamed(ImageIdentifiers.findNext)
-            }
-        }
-    }
-
-    var collapsibleState: CollapsibleState? {
+    var collapsibleState: ExpandButtonState? {
         willSet(state) {
-            collapsibleImageView.image = state?.image
+            collapsibleImageView.image = state?.image?.tinted(withColor: UIColor.Photon.Blue20)
+
         }
     }
 
@@ -47,7 +34,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     }
 
     let collapsibleImageView: UIImageView = .build { imageView in
-        imageView.image = CollapsibleState.down.image
+        imageView.image = ExpandButtonState.down.image?.tinted(withColor: UIColor.Photon.Blue20)
         imageView.isHidden = true
     }
 
@@ -73,8 +60,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
-            collapsibleImageView.widthAnchor.constraint(equalToConstant: 28),
-            collapsibleImageView.heightAnchor.constraint(equalToConstant: 28),
             collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
 
@@ -97,7 +82,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        headerActionButton.tintColor = UIColor.theme.tableView.rowActionAccessory
         backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }
