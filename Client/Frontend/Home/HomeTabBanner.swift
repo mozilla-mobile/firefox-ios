@@ -14,6 +14,7 @@ import UIKit
 class HomeTabBanner: UIView, GleanPlumbMessageManagable {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
+    typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
 
     struct UX {
         static let cardSize = CGSize(width: 360, height: 224)
@@ -31,7 +32,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.textColor = UIColor.theme.defaultBrowserCard.textColor
+        label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var descriptionText: UILabel = .build { label in
@@ -39,7 +40,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textColor = UIColor.theme.defaultBrowserCard.textColor
+        label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var ctaButton: UIButton = .build { [weak self] button in
@@ -59,7 +60,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
         button.setImage(UIImage(named: ImageIdentifiers.xMark)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
+        button.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
     }
 
@@ -81,7 +82,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
     }
 
     private lazy var cardView: UIView = .build { view in
-        view.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
+        view.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
         view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
     }
@@ -164,9 +165,9 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
     private func applyMessage() {
         /// If no messages exist, continue using our evergreen message.
         guard let message = message else {
-            bannerTitle.text = String.DefaultBrowserCardTitle
-            descriptionText.text = String.DefaultBrowserCardDescription
-            ctaButton.setTitle(String.DefaultBrowserCardButton, for: .normal)
+            bannerTitle.text = BannerCopy.DefaultBrowserTitle
+            descriptionText.text = BannerCopy.DefaultBrowserDescription
+            ctaButton.setTitle(BannerCopy.DefaultBrowserButton, for: .normal)
 
             TelemetryWrapper.recordEvent(category: .information, method: .view, object: .homeTabBannerEvergreen)
             return
@@ -197,7 +198,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
 
         guard let message = message else {
             /// If we're here, that means we've shown the evergreen. Handle it as we always did.
-            UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserCard)
+            UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserCard)
 
             return
@@ -223,10 +224,10 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
     }
 
     func applyTheme() {
-        cardView.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
-        bannerTitle.textColor = UIColor.theme.defaultBrowserCard.textColor
-        descriptionText.textColor = UIColor.theme.defaultBrowserCard.textColor
-        dismissButton.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
+        cardView.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
+        bannerTitle.textColor = UIColor.theme.homeTabBanner.textColor
+        descriptionText.textColor = UIColor.theme.homeTabBanner.textColor
+        dismissButton.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
         containerView.backgroundColor = .clear
         backgroundColor = .clear
     }
