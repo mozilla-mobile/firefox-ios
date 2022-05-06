@@ -60,7 +60,7 @@ helptext() {
 MANIFEST_PATH=
 OUTPUT_DIR="${SOURCE_ROOT}/${PROJECT}/Generated"
 NAMESPACE=
-AS_VERSION=v93.0.4
+AS_VERSION=v93.1.0
 AS_DOWNLOAD_URL="https://github.com/mozilla/application-services/releases/download/$AS_VERSION"
 FRESHEN_FML=
 
