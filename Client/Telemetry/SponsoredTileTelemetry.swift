@@ -21,6 +21,10 @@ class SponsoredTileTelemetry {
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyContextId.rawValue) }
     }
 
+    static func clearUserDefaults() {
+        SponsoredTileTelemetry.contextId = nil
+    }
+
     static func setupContextId() {
         // Use existing client UUID, if doesn't exists create a new one
         if let stringContextId = contextId, let clientUUID = UUID(uuidString: stringContextId) {
@@ -28,6 +32,7 @@ class SponsoredTileTelemetry {
         } else {
             let newUUID = UUID()
             GleanMetrics.TopSite.contextId.set(newUUID)
+            contextId = newUUID.uuidString
         }
     }
 
