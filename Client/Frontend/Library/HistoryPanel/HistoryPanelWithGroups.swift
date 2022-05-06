@@ -571,7 +571,7 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
             header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
             header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
-            header.headerActionButton.isHidden = false
+            header.collapsibleImageView.isHidden = false
             let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
             header.collapsibleState = isCollapsed ? SiteTableViewHeader.CollapsibleState.up : SiteTableViewHeader.CollapsibleState.down
 

@@ -30,7 +30,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     var collapsibleState: CollapsibleState? {
         willSet(state) {
-            headerActionButton.setImage(state?.image, for: .normal)
+            collapsibleImageView.image = state?.image
         }
     }
 
@@ -40,11 +40,17 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     }
 
     let headerActionButton: UIButton = .build { button in
-        button.setImage(CollapsibleState.down.image, for: .normal)
+        button.setTitle("Show all", for: .normal)
         button.backgroundColor = .clear
+        button.titleLabel?.font = .systemFont(ofSize: 12)
         button.isHidden = true
-        button.isUserInteractionEnabled = false
     }
+
+    let collapsibleImageView: UIImageView = .build { imageView in
+        imageView.image = CollapsibleState.down.image
+        imageView.isHidden = true
+    }
+
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
@@ -56,6 +62,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
         translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(titleLabel, headerActionButton)
+        contentView.addSubviews(titleLabel, collapsibleImageView)
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
@@ -65,6 +72,11 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+
+            collapsibleImageView.widthAnchor.constraint(equalToConstant: 28),
+            collapsibleImageView.heightAnchor.constraint(equalToConstant: 28),
+            collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
 
             headerActionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             headerActionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
