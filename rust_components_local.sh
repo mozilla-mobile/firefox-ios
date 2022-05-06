@@ -97,7 +97,7 @@ fi
 ## First we find the name of the branch the local rust-components-swift is on.
 pushd $REPO_PATH
 if [ -z $BRANCH_NAME]; then
-    BRANCH_NAME=$(git status --branch --porcelain | grep '##' | cut -c 4-)
+    BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 fi
 FULL_PATH=$( pwd )
 FULL_PATH_ESCAPED=$( echo $FULL_PATH |  sed 's/\//\\\//g' )
