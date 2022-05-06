@@ -148,7 +148,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
 
         if #available(iOS 14.0, *) {
             settings += [
-                SettingSection(footerTitle: NSAttributedString(string: String.DefaultBrowserCardDescription), children: [DefaultBrowserSetting()])
+                SettingSection(footerTitle: NSAttributedString(string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.DefaultBrowserDescription),
+                               children: [DefaultBrowserSetting()])
             ]
         }
 

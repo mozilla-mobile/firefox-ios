@@ -225,7 +225,7 @@ class GeneralColor {
     var switchToggle: UIColor { return UIColor.Photon.Grey90A40 }
 }
 
-class DefaultBrowserCardColor {
+class HomeTabBannerColor {
     var backgroundColor: UIColor { return UIColor.Photon.Grey30 }
     var textColor: UIColor { return UIColor.black }
     var closeButtonBackground: UIColor { return UIColor.Photon.Grey20 }
@@ -256,7 +256,7 @@ protocol LegacyTheme {
     var general: GeneralColor { get }
     var actionMenu: ActionMenuColor { get }
     var switchToggleTheme: GeneralColor { get }
-    var defaultBrowserCard: DefaultBrowserCardColor { get }
+    var homeTabBanner: HomeTabBannerColor { get }
     var onboarding: OnboardingColor { get }
     var remotePanel: RemoteTabTrayColor { get }
 }
@@ -277,7 +277,7 @@ class NormalTheme: LegacyTheme {
     var general: GeneralColor { return GeneralColor() }
     var actionMenu: ActionMenuColor { return ActionMenuColor() }
     var switchToggleTheme: GeneralColor { return GeneralColor() }
-    var defaultBrowserCard: DefaultBrowserCardColor { return DefaultBrowserCardColor() }
+    var homeTabBanner: HomeTabBannerColor { return HomeTabBannerColor() }
     var onboarding: OnboardingColor { return OnboardingColor() }
     var remotePanel: RemoteTabTrayColor { return RemoteTabTrayColor() }
 }
