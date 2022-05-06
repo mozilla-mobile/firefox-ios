@@ -65,14 +65,10 @@ final class HomeTopSite {
 
     private var sentSiteImpressionTelemetry = false
 
-    func impressionTracking() {
-        guard isSponsoredTile, !sentSiteImpressionTelemetry else { return }
+    func impressionTracking(position: Int) {
+        guard !sentSiteImpressionTelemetry, let tile = site as? SponsoredTile else { return }
 
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .view,
-                                     object: .topSiteImpression,
-                                     value: nil,
-                                     extras: getSiteExtra())
+        SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
         sentSiteImpressionTelemetry = true
     }
 
@@ -88,9 +84,5 @@ final class HomeTopSite {
         }
 
         return "history-based"
-    }
-
-    private func getSiteExtra() -> [String: String] {
-        return [TelemetryWrapper.EventExtraKey.topSiteUrl.rawValue: "\(site.url)"]
     }
 }
