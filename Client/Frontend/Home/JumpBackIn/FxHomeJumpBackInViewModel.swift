@@ -28,6 +28,8 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     var onTapGroup: ((Tab) -> Void)?
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
 
+    weak var browserBarViewDelegate: BrowserBarViewDelegate?
+
     private var recentTabs: [Tab] = [Tab]()
     private var recentGroups: [ASGroup<Tab>]?
     private let isZeroSearch: Bool
@@ -84,9 +86,11 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(group: ASGroup<Tab>) {
-        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
-            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        guard let delegate = browserBarViewDelegate, delegate.urlBar.inOverlayMode else {
+            fatalError("Unable to leave overlay mode")
         }
+        delegate.urlBar.leaveOverlayMode()
+
         guard let firstTab = group.groupedItems.first else { return }
 
         onTapGroup?(firstTab)
@@ -99,9 +103,12 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(tab: Tab) {
-        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
-            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        guard let delegate = browserBarViewDelegate, delegate.urlBar.inOverlayMode else {
+            fatalError("Unable to leave overlay mode")
         }
+        delegate.urlBar.leaveOverlayMode()
+
+
         tabManager.selectTab(tab)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,

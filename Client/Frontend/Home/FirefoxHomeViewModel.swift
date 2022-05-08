@@ -10,6 +10,8 @@ protocol FirefoxHomeViewModelDelegate: AnyObject {
 
 class FirefoxHomeViewModel: FeatureFlaggable {
 
+    weak var browserViewDelegate: BrowserBarViewDelegate?
+
     struct UX {
         static let topSitesHeight: CGFloat = 90
         static let homeHorizontalCellHeight: CGFloat = 120
@@ -47,6 +49,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     var topSiteViewModel: FxHomeTopSitesViewModel
     var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
+    weak var browserBarViewDelegate: BrowserBarViewDelegate?
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
     var customizeButtonViewModel: FxHomeCustomizeButtonViewModel

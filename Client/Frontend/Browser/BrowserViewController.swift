@@ -30,7 +30,11 @@ enum ReferringPage {
     case tabTray
 }
 
-class BrowserViewController: UIViewController {
+protocol BrowserBarViewDelegate: AnyObject {
+    var urlBar: URLBarView! { get }
+}
+
+class BrowserViewController: UIViewController, BrowserBarViewDelegate {
 
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -858,6 +862,7 @@ class BrowserViewController: UIViewController {
                 isZeroSearch: !inline)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self
+            firefoxHomeViewController.browserBarViewDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController
             addChild(firefoxHomeViewController)
             view.addSubview(firefoxHomeViewController.view)
@@ -2593,6 +2598,11 @@ extension BrowserViewController: FeatureFlaggable {
 
 extension BrowserViewController {
     public static func foregroundBVC() -> BrowserViewController {
-        return (UIApplication.shared.delegate as! AppDelegate).browserViewController
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let browserViewController = appDelegate.browserViewController else {
+            fatalError("Unable unwrap BrowserViewController")
+        } 
+        
+        return browserViewController
     }
 }
