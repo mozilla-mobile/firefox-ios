@@ -90,35 +90,37 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(group: ASGroup<Tab>) {
-        guard let delegate = browserBarViewDelegate, delegate.urlBar.inOverlayMode else {
-            fatalError("Unable to leave overlay mode")
+        guard let delegate = browserBarViewDelegate, delegate.inOverlayMode else {
+            return
         }
-        delegate.urlBar.leaveOverlayMode()
+        delegate.leaveOverlayMode(didCancel: false)
 
         guard let firstTab = group.groupedItems.first else { return }
 
         onTapGroup?(firstTab)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .jumpBackInSectionGroupOpened,
-                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+        TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .firefoxHomepage,
+                value: .jumpBackInSectionGroupOpened,
+                extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        )
     }
 
     func switchTo(tab: Tab) {
-        guard let delegate = browserBarViewDelegate, delegate.urlBar.inOverlayMode else {
-            fatalError("Unable to leave overlay mode")
+        guard let delegate = browserBarViewDelegate, delegate.inOverlayMode else {
+            return
         }
-        delegate.urlBar.leaveOverlayMode()
+        delegate.leaveOverlayMode(didCancel: false)
 
-
-        tabManager.selectTab(tab)
+        tabManager.selectTab(tab, previous: nil)
         TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .jumpBackInSectionTabOpened,
-                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+                method: .tap,
+                object: .firefoxHomepage,
+                value: .jumpBackInSectionTabOpened,
+                extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        )
     }
 
     func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {

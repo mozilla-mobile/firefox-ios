@@ -31,10 +31,12 @@ enum ReferringPage {
 }
 
 protocol BrowserBarViewDelegate: AnyObject {
-    var urlBar: URLBarView! { get }
+    var inOverlayMode: Bool { get }
+
+    func leaveOverlayMode(didCancel cancel: Bool)
 }
 
-class BrowserViewController: UIViewController, BrowserBarViewDelegate {
+class BrowserViewController: UIViewController {
 
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
