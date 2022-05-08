@@ -232,6 +232,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "بند کریں";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "براؤزنگ شروع کریں";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "منسوخ کریں";
 
@@ -484,8 +487,17 @@
 /* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
 "Siri.openURL" = "پسندیدہ سائٹ کھولیں";
 
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "کھولنے کے لیے URL";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "ٹچ آئی ڈی کو آن کریں۔";
+
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "سائٹ کا مکمل ڈیسک ٹاپ ورژن دیکھنا چاہتے ہیں؟";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "آپ محفوظ ہیں!";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "اشتھاری ٹریکرز";
