@@ -31,20 +31,24 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
 
     private var recentTabs: [Tab] = [Tab]()
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+
     private var recentGroups: [ASGroup<Tab>]?
+
     private let isZeroSearch: Bool
     private let profile: Profile
-    private let tabManager: TabManager
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    private let tabManager: MozillaTabManager
     private var isPrivate: Bool
 
-    init(isZeroSearch: Bool = false,
-         profile: Profile,
-         isPrivate: Bool,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+    init(
+            isZeroSearch: Bool = false,
+            profile: Profile,
+            isPrivate: Bool,
+            tabManager: MozillaTabManager = BrowserViewController.foregroundBVC().tabManager
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.isPrivate = isPrivate
         self.isPrivate = isPrivate
         self.tabManager = tabManager
     }
