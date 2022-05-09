@@ -366,4 +366,10 @@ public class RustPlaces {
             return try connection.deleteHistoryMetadata(key: key)
         }
     }
+
+    public func deleteVisitsFor(url: Url) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            return try connection.deleteVisitsFor(url: url)
+        }
+    }
 }
