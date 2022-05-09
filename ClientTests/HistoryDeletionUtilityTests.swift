@@ -33,6 +33,8 @@ class HistoryDeletionUtilityTests: XCTestCase {
         profile = MockProfile(databasePrefix: "historyDeletion_tests")
         profile._reopen()
         deletionUtility = HistoryDeletionUtility(with: profile)
+
+        emptyDB()
     }
 
     override func tearDown() {
@@ -44,13 +46,10 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     func testEmptyRead() {
-        emptyDB()
         assertDBIsEmpty()
     }
 
     func testSingleDataExists() {
-        emptyDB()
-
         let testSites = [SiteElements(domain: "mozilla")]
         populateDBHistory(with: testSites)
 
@@ -58,8 +57,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     func testDeletingSingleItem() {
-        emptyDB()
-
         let expectation = expectation(description: "HistoryDeletionUtilityTest")
 
         let testSites = [SiteElements(domain: "mozilla")]
@@ -76,8 +73,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
    func testDeletingMultipleItemsEmptyingDatabase() {
-       emptyDB()
-
        let expectation = expectation(description: "HistoryDeletionUtilityTest")
        let sitesToDelete = [SiteElements(domain: "mozilla"),
                             SiteElements(domain: "amazon"),
@@ -97,8 +92,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
    }
 
    func testDeletingMultipleTopLevelItems() {
-       emptyDB()
-
        let expectation = expectation(description: "HistoryDeletionUtilityTest")
        let testSites = [SiteElements(domain: "cnn")]
        let sitesToDelete = [SiteElements(domain: "mozilla"),
@@ -120,8 +113,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
    }
 
    func testDeletingMultipleSpecificItems() {
-       emptyDB()
-
        let expectation = expectation(description: "HistoryDeletionUtilityTest")
        let testSites = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
        let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
@@ -141,46 +132,53 @@ class HistoryDeletionUtilityTests: XCTestCase {
 
        waitForExpectations(timeout: 30, handler: nil)
    }
+}
 
-    // MARK: - Helper functions
+// MARK: - Helper functions
+private extension HistoryDeletionUtilityTests
+    func emptyDB(file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess, file: file, line: line)
 
-    private func emptyDB() {
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess)
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess)
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess)
+        XCTAssertTrue(profile.history.removeHistoryFromDate(Date(timeIntervalSince1970: 0)).value.isSuccess, file: file, line: line)
 
-        XCTAssertTrue(profile.history.removeHistoryFromDate(Date(timeIntervalSince1970: 0)).value.isSuccess)
+        trackForMemoryLeaks(deletionUtility)
+
     }
 
-    private func assertDBIsEmpty() {
+    func assertDBIsEmpty() {
         assertMetadataIsEmpty()
         assertHistoryIsEmpty()
     }
 
-    private func assertMetadataIsEmpty() {
+    func assertMetadataIsEmpty(file: StaticString = #filePath, line: UInt = #line) {
         let emptyMetadata = profile.places.getHistoryMetadataSince(since: 0).value
-        XCTAssertTrue(emptyMetadata.isSuccess)
-        XCTAssertNotNil(emptyMetadata.successValue)
-        XCTAssertEqual(emptyMetadata.successValue!.count, 0)
+        XCTAssertTrue(emptyMetadata.isSuccess, file: file, line: line)
+        XCTAssertNotNil(emptyMetadata.successValue, file: file, line: line)
+        XCTAssertEqual(emptyMetadata.successValue!.count, 0, file: file, line: line)
     }
 
-    private func assertHistoryIsEmpty() {
+    func assertHistoryIsEmpty(file: StaticString = #filePath, line: UInt = #line) {
         let emptyHistory = profile.history.getSitesByLastVisit(limit: 100, offset: 0).value
-        XCTAssertTrue(emptyHistory.isSuccess)
-        XCTAssertNotNil(emptyHistory.successValue)
-        XCTAssertEqual(emptyHistory.successValue!.count, 0)
+        XCTAssertTrue(emptyHistory.isSuccess, file: file, line: line)
+        XCTAssertNotNil(emptyHistory.successValue, file: file, line: line)
+        XCTAssertEqual(emptyHistory.successValue!.count, 0, file: file, line: line)
     }
 
-    private func assertDBStateFor(_ sites: [SiteElements]) {
+    func assertDBStateFor(_ sites: [SiteElements],
+                                  file: StaticString = #filePath,
+                                  line: UInt = #line
+    ) {
         let metadataItems = profile.places.getHistoryMetadataSince(since: 0).value
-        XCTAssertTrue(metadataItems.isSuccess)
-        XCTAssertNotNil(metadataItems.successValue)
-        XCTAssertEqual(metadataItems.successValue!.count, sites.count)
+        XCTAssertTrue(metadataItems.isSuccess, file: file, line: line)
+        XCTAssertNotNil(metadataItems.successValue, file: file, line: line)
+        XCTAssertEqual(metadataItems.successValue!.count, sites.count, file: file, line: line)
 
         let historyItems = profile.history.getSitesByLastVisit(limit: 100, offset: 0).value
-        XCTAssertTrue(historyItems.isSuccess)
-        XCTAssertNotNil(historyItems.successValue)
-        XCTAssertEqual(historyItems.successValue!.count, sites.count)
+        XCTAssertTrue(historyItems.isSuccess, file: file, line: line)
+        XCTAssertNotNil(historyItems.successValue, file: file, line: line)
+        XCTAssertEqual(historyItems.successValue!.count, sites.count, file: file, line: line)
 
         for (index, site) in sites.enumerated() {
             guard let metadataURL = metadataItems.successValue?[index].url,
@@ -192,17 +190,20 @@ class HistoryDeletionUtilityTests: XCTestCase {
                 return
             }
 
-            XCTAssertEqual(metadataURL, "https://www.\(site.domain).com/\(site.path)")
-            XCTAssertEqual(metadataTitle, "\(site.domain) test")
-            XCTAssertEqual(metadataItems.successValue![index].documentType, DocumentType.regular)
-            XCTAssertEqual(metadataItems.successValue![index].totalViewTime, 1)
+            XCTAssertEqual(metadataURL, "https://www.\(site.domain).com/\(site.path)", file: file, line: line)
+            XCTAssertEqual(metadataTitle, "\(site.domain) test", file: file, line: line)
+            XCTAssertEqual(metadataItems.successValue![index].documentType, DocumentType.regular, file: file, line: line)
+            XCTAssertEqual(metadataItems.successValue![index].totalViewTime, 1, file: file, line: line)
 
-            XCTAssertEqual(historyURL, "https://www.\(site.domain).com/\(site.path)")
-            XCTAssertEqual(historyTitle, "\(site.domain) test")
+            XCTAssertEqual(historyURL, "https://www.\(site.domain).com/\(site.path)", file: file, line: line)
+            XCTAssertEqual(historyTitle, "\(site.domain) test", file: file, line: line)
         }
     }
 
-    private func populateDBHistory(with entries: [SiteElements]) {
+    func populateDBHistory(with entries: [SiteElements],
+                                   file: StaticString = #filePath,
+                                   line: UInt = #line
+    ) {
         entries.forEach { entry in
             let site = createWebsiteFor(domain: entry.domain, with: entry.path)
             addToLocalHistory(site: site)
@@ -212,19 +213,24 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
-    private func createWebsiteFor(domain name: String, with path: String = "") -> Site {
+    func createWebsiteFor(domain name: String, with path: String = "") -> Site {
         let urlString = "https://www.\(name).com/\(path)"
         let urlTitle = "\(name) test"
 
         return Site(url: urlString, title: urlTitle)
     }
 
-    private func addToLocalHistory(site: Site) {
+    func addToLocalHistory(site: Site, file: StaticString = #filePath, line: UInt = #line) {
         let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
-        XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
+        XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).", file: file, line: line)
     }
 
-    private func setupMetadataItem(forTestURL siteURL: String, withTitle title: String, andViewTime viewTime: Int32) {
+    func setupMetadataItem(forTestURL siteURL: String,
+                                   withTitle title: String,
+                                   andViewTime viewTime: Int32,
+                                   file: StaticString = #filePath,
+                                   line: UInt = #line
+    ) {
         let metadataKey1 = HistoryMetadataKey(url: siteURL, searchTerm: title, referrerUrl: nil)
 
         XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
@@ -235,7 +241,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
                 documentType: nil,
                 title: title
             )
-        ).value.isSuccess)
+        ).value.isSuccess, file: file, line: line)
 
         XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
             key: metadataKey1,
@@ -245,7 +251,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
                 documentType: nil,
                 title: nil
             )
-        ).value.isSuccess)
+        ).value.isSuccess, file: file, line: line)
 
         XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
             key: metadataKey1,
@@ -255,6 +261,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
                 documentType: .regular,
                 title: nil
             )
-        ).value.isSuccess)
+        ).value.isSuccess, file: file, line: line)
     }
 }
