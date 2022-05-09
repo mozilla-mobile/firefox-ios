@@ -14,7 +14,7 @@ import Shared
 // These basic cases are not tested here as they are tested in
 // `HistoryHighlightsManagerTests` and `TestHistory` respectively
 class HistoryDeletionUtilityTests: XCTestCase {
-    private struct SiteElements {
+    struct SiteElements {
         let domain: String
         let path: String
 
@@ -25,14 +25,12 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     private var profile: MockProfile!
-    private var deletionUtility: HistoryDeletionUtility!
 
     override func setUp() {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "historyDeletion_tests")
         profile._reopen()
-        deletionUtility = HistoryDeletionUtility(with: profile)
 
         emptyDB()
     }
@@ -40,7 +38,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
-        deletionUtility = nil
         profile._shutdown()
         profile = nil
     }
@@ -57,23 +54,17 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     func testDeletingSingleItem() {
-        let expectation = expectation(description: "HistoryDeletionUtilityTest")
-
         let testSites = [SiteElements(domain: "mozilla")]
         populateDBHistory(with: testSites)
 
         let siteEntry = createWebsiteFor(domain: "mozilla", with: "")
-        deletionUtility.delete([siteEntry.url]) { result in
+        deletionWithExpectation([siteEntry.url]) { result in
             XCTAssertTrue(result)
             self.assertDBIsEmpty()
-            expectation.fulfill()
         }
-
-        waitForExpectations(timeout: 30, handler: nil)
     }
 
    func testDeletingMultipleItemsEmptyingDatabase() {
-       let expectation = expectation(description: "HistoryDeletionUtilityTest")
        let sitesToDelete = [SiteElements(domain: "mozilla"),
                             SiteElements(domain: "amazon"),
                             SiteElements(domain: "google")]
@@ -82,17 +73,14 @@ class HistoryDeletionUtilityTests: XCTestCase {
        let siteEntries = sitesToDelete
            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
            .map { $0.url }
-       deletionUtility.delete(siteEntries) { result in
+
+       deletionWithExpectation(siteEntries) { result in
            XCTAssertTrue(result)
            self.assertDBIsEmpty()
-           expectation.fulfill()
        }
-
-       waitForExpectations(timeout: 30, handler: nil)
    }
 
    func testDeletingMultipleTopLevelItems() {
-       let expectation = expectation(description: "HistoryDeletionUtilityTest")
        let testSites = [SiteElements(domain: "cnn")]
        let sitesToDelete = [SiteElements(domain: "mozilla"),
                             SiteElements(domain: "google"),
@@ -102,18 +90,15 @@ class HistoryDeletionUtilityTests: XCTestCase {
        let siteEntries = sitesToDelete
            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
            .map { $0.url }
-       deletionUtility.delete(siteEntries) { result in
+
+       deletionWithExpectation(siteEntries) { result in
            XCTAssertTrue(result)
            // Assert DB contains only the expected number of things
            self.assertDBStateFor(testSites)
-           expectation.fulfill()
        }
-
-       waitForExpectations(timeout: 30, handler: nil)
    }
 
    func testDeletingMultipleSpecificItems() {
-       let expectation = expectation(description: "HistoryDeletionUtilityTest")
        let testSites = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
        let sitesToDelete = [SiteElements(domain: "cnn", path: "newsOne/test2.html"),
                             SiteElements(domain: "cnn", path: "newsOne/test3.html"),
@@ -123,28 +108,43 @@ class HistoryDeletionUtilityTests: XCTestCase {
        let siteEntries = sitesToDelete
            .map { self.createWebsiteFor(domain: $0.domain, with: $0.path) }
            .map { $0.url }
-       deletionUtility.delete(siteEntries) { result in
+
+       deletionWithExpectation(siteEntries) { result in
            XCTAssertTrue(result)
            // Assert DB contains only the expected number of things
            self.assertDBStateFor(testSites)
-           expectation.fulfill()
        }
-
-       waitForExpectations(timeout: 30, handler: nil)
    }
 }
 
 // MARK: - Helper functions
 private extension HistoryDeletionUtilityTests {
+
+    func createDeletionUtility(file: StaticString = #filePath, line: UInt = #line) -> HistoryDeletionUtility {
+        let deletionUtility = HistoryDeletionUtility(with: profile)
+        trackForMemoryLeaks(deletionUtility, file: file, line: line)
+
+        return deletionUtility
+    }
+
+    func deletionWithExpectation(_ siteEntries: [String], completion: @escaping (Bool) -> Void) {
+        let deletionUtility = createDeletionUtility()
+        let expectation = expectation(description: "HistoryDeletionUtilityTest")
+
+        deletionUtility.delete(siteEntries) { result in
+            completion(result)
+            expectation.fulfill()
+        }
+
+       waitForExpectations(timeout: 30, handler: nil)
+    }
+
     func emptyDB(file: StaticString = #filePath, line: UInt = #line) {
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess, file: file, line: line)
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess, file: file, line: line)
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess, file: file, line: line)
 
         XCTAssertTrue(profile.history.removeHistoryFromDate(Date(timeIntervalSince1970: 0)).value.isSuccess, file: file, line: line)
-
-        trackForMemoryLeaks(deletionUtility)
-
     }
 
     func assertDBIsEmpty() {
