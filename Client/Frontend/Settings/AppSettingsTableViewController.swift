@@ -210,7 +210,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagsP
                 SentryIDSetting(settings: self),
                 ChangeToChinaSetting(settings: self),
                 ShowEtpCoverSheet(settings: self),
-                ToggleChronTabs(settings: self),
                 TogglePullToRefresh(settings: self),
                 ToggleInactiveTabs(settings: self),
                 ToggleHistoryGroups(settings: self),

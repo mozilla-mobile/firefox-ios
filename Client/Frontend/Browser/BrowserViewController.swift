@@ -62,7 +62,6 @@ class BrowserViewController: UIViewController {
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
-    var chronTabsUserResearch: ChronTabsUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing: Bool = false
@@ -83,7 +82,6 @@ class BrowserViewController: UIViewController {
     var copyAddressAction: AccessibleAction!
 
     weak var gridTabTrayController: GridTabViewController?
-    weak var chronTabTrayController: ChronologicalTabsViewController?
     var tabTrayViewController: TabTrayViewController?
 
     let profile: Profile
@@ -427,8 +425,6 @@ class BrowserViewController: UIViewController {
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
         }
 
-        // Setup chron tabs A/B test
-        chronTabsUserResearch = ChronTabsUserResearch()
         searchTelemetry = SearchTelemetry()
 
         // Awesomebar Location Telemetry
@@ -2465,7 +2461,7 @@ extension BrowserViewController: TabTrayDelegate {
 extension BrowserViewController: NotificationThemeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
-        let ui: [NotificationThemeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, chronTabTrayController]
+        let ui: [NotificationThemeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController]
         ui.forEach { $0?.applyTheme() }
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor

@@ -18,8 +18,7 @@ class L10nBaseSnapshotTests: XCTestCase {
                 LaunchArguments.SkipWhatsNew,
                 LaunchArguments.SkipETPCoverSheet,
                 LaunchArguments.SkipIntro,
-                LaunchArguments.SkipContextualHints,
-                LaunchArguments.ChronTabs]
+                LaunchArguments.SkipContextualHints]
 
     override func setUp() {
         super.setUp()
