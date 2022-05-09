@@ -19,7 +19,6 @@ extension FeatureFlagsProtocol {
 enum FeatureFlagName: String, CaseIterable {
     case adjustEnvironmentProd
     case bottomSearchBar
-    case chronologicalTabs
     case historyHighlights
     case historyGroups
     case inactiveTabs
@@ -146,11 +145,6 @@ class FeatureFlagsManager {
                                                and: profile,
                                                enabledFor: [.release, .beta, .developer])
         features[.bottomSearchBar] = bottomSearchBar
-
-        let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
-                                         and: profile,
-                                         enabledFor: [])
-        features[.chronologicalTabs] = chronTabs
 
         let historyHighlights = FlaggableFeature(withID: .historyHighlights,
                                                  and: profile,

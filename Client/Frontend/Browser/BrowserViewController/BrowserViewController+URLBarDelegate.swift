@@ -34,7 +34,6 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
                                                            profile: profile,
-                                                           showChronTabs: shouldShowChronTabs(),
                                                            tabToFocus: tabToFocus)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
@@ -72,32 +71,6 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
 
         // App store review in-app prompt
         ratingPromptManager.showRatingPromptIfNeeded()
-    }
-
-    private func shouldShowChronTabs() -> Bool {
-        var shouldShowChronTabs = false // default don't show
-        let chronDebugValue = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ChronologicalTabs)
-        let chronLPValue = chronTabsUserResearch?.chronTabsState ?? false
-
-        // Only allow chron tabs on iPhone
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            // Respect debug mode chron tab value on
-            if chronDebugValue != nil {
-                shouldShowChronTabs = chronDebugValue!
-            // Respect build channel based settings
-            } else if chronDebugValue == nil {
-                if featureFlags.isFeatureActiveForBuild(.chronologicalTabs) {
-                    shouldShowChronTabs = true
-                } else {
-                    // Respect LP value
-                    shouldShowChronTabs = chronLPValue
-                }
-                profile.prefs.setBool(shouldShowChronTabs,
-                                      forKey: PrefsKeys.FeatureFlags.ChronologicalTabs)
-            }
-        }
-
-        return shouldShowChronTabs
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
