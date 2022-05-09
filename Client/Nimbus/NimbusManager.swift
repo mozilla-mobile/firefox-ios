@@ -12,11 +12,6 @@ extension NimbusManageable {
     }
 }
 
-enum NimbusManagerLayers: Equatable {
-    case allLayers
-    case featureFlags
-}
-
 class NimbusManager {
 
     // MARK: - Singleton
@@ -28,20 +23,4 @@ class NimbusManager {
     init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer()) {
         self.featureFlagLayer = featureFlagLayer
     }
-
-//    func startupInitialization() {
-//        updateData(for: [.allLayers])
-//    }
-//
-//    public func updateData(for layers: [NimbusManagerLayers]) {
-//        if layers.contains(.allLayers) {
-//            featureFlagLayer.updateData()
-//
-//            return
-//        }
-//
-//        if layers.contains(.featureFlags) {
-//            featureFlagLayer.updateData()
-//        }
-//    }
 }
