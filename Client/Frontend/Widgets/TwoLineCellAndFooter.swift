@@ -14,6 +14,9 @@ struct TwoLineCellUX {
 
 class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableCell {
 
+    /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
+    static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
+
     // Tableview cell items
     var selectedView: UIView = {
         let view = UIView()

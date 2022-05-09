@@ -68,6 +68,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         tableView.prefetchDataSource = self
         tableView.delegate = self
         tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier)
         tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: OneLineTableViewCell.cellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
 
@@ -286,7 +287,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             }
 
             if let site = item as? Site {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
                     self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for site!")
                     return nil
                 }
