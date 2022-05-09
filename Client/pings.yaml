@@ -15,6 +15,6 @@ topsites-impression:
   bugs:
     - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
   data_reviews:
-    - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10696
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
