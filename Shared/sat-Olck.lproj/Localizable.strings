@@ -457,6 +457,15 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "ᱚᱪᱚᱜᱽ ᱢᱮ";
 
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "ᱥᱟᱭᱤᱴ : %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "ᱥᱟᱡᱟᱣ ᱠᱚ";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ᱟᱞᱮ ᱠᱟᱹᱢᱤᱠᱚ ᱟᱨ ᱟᱢᱟᱜ ᱱᱤᱥᱚᱱ ᱠᱚ";
+
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "ᱠᱟᱹᱢᱤᱼᱤᱭᱟᱹ";
 
@@ -642,6 +651,9 @@
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵ ᱨᱮ ᱡᱷᱤᱜ ᱢᱮ";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵᱽ ᱨᱮ ᱡᱷᱤᱡᱽ ᱢᱮ";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "ᱱᱟᱶᱟ ᱴᱮᱵ ᱨᱮ ᱡᱷᱤᱜ ᱢᱮ";
@@ -1360,6 +1372,9 @@
 
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "ᱫᱚᱭᱟᱠᱟᱛᱮ Firefox ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱠᱮᱢᱨᱟ ᱵᱮᱵᱷᱟᱨ ᱪᱷᱚᱭ ᱮᱢ ‘ᱥᱟᱡᱟᱣ’ -> ‘ᱫᱟᱱᱟᱲ’ -> ‘ᱠᱮᱢᱨᱟ’ ᱾";
+
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "ᱥᱟᱫᱷᱚᱱ ‘ᱥᱟᱡᱟᱣ ᱠᱚ’> ‘Firefox’ ᱾ Firefox ᱫᱚ ᱠᱮᱢᱨᱟ ᱟᱫᱮᱨ ᱪᱷᱚᱟᱭᱮᱢ ᱾";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR ᱠᱚᱰ ᱥᱠᱟᱱ ᱢᱮ";
