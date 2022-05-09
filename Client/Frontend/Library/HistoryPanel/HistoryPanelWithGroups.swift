@@ -43,6 +43,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     private let clearHistoryHelper: ClearHistoryHelper
     var keyboardState: KeyboardState?
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -327,8 +328,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         cell.descriptionLabel.isHidden = false
         cell.leftImageView.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
         cell.leftImageView.layer.borderWidth = HistoryPanelUX.IconBorderWidth
-        cell.leftImageView.contentMode = .scaleAspectFit
-        cell.chevronAccessoryView.isHidden = true
+        cell.accessoryView = nil
         getFavIcon(for: site) { [weak cell] image in
             cell?.leftImageView.image = image
             cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
@@ -349,8 +349,8 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         }
 
         cell.titleLabel.text = asGroup.displayTitle
-        cell.chevronAccessoryView.isHidden = false
-        cell.leftImageView.contentMode = .scaleAspectFit
+        let imageView = UIImageView(image: chevronImage)
+        cell.accessoryView = imageView
         cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
         cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
 

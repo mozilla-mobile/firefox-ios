@@ -16,7 +16,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     var collapsibleState: ExpandButtonState? {
         willSet(state) {
-            collapsibleImageView.image = state?.image?.tinted(withColor: UIColor.Photon.Blue20)
+            collapsibleImageView.image = state?.image?.tinted(withColor: UIColor.Photon.Blue50)
 
         }
     }
@@ -34,7 +34,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     }
 
     let collapsibleImageView: UIImageView = .build { imageView in
-        imageView.image = ExpandButtonState.down.image?.tinted(withColor: UIColor.Photon.Blue20)
+        imageView.image = ExpandButtonState.down.image?.tinted(withColor: UIColor.Photon.Blue50)
         imageView.isHidden = true
     }
 

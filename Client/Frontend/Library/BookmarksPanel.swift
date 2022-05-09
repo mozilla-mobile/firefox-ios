@@ -46,6 +46,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     var bookmarkFolder: BookmarkFolderData?
     var bookmarkNodes = [BookmarkNodeData]()
     var recentBookmarks = [BookmarkNodeData]()
+    var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
 
     fileprivate var flashLastRowOnNextReload = false
 
@@ -371,7 +372,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
             cell.leftImageView.image = LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
             cell.leftImageView.contentMode = .center
-            cell.accessoryType = .disclosureIndicator
+            let imageView = UIImageView(image: chevronImage)
+            cell.accessoryView = imageView
             cell.editingAccessoryType = .disclosureIndicator
             return cell
         case let bookmarkItem as BookmarkItemData:
@@ -394,7 +396,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
                 cell.setNeedsLayout()
             }
 
-            cell.accessoryType = .none
+            cell.accessoryView = nil
             cell.editingAccessoryType = .disclosureIndicator
             return cell
         case is BookmarkSeparatorData:

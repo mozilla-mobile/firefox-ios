@@ -36,12 +36,6 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         return imgView
     }()
 
-    lazy var chevronAccessoryView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.menuChevron)
-        imageView.image?.withTintColor(UIColor.Photon.LightGrey40)
-        imageView.isHidden = true
-    }
-
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -79,7 +73,6 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         midView.addSubview(descriptionLabel)
 
         containerView.addSubview(leftImageView)
-        containerView.addSubview(chevronAccessoryView)
         containerView.addSubview(midView)
 
         containerView.addSubview(leftOverlayImageView)
@@ -102,12 +95,6 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
             make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
-        }
-
-        // Only shown when we need a chevron, and is made visible at call site
-        chevronAccessoryView.snp.makeConstraints { make in
-            make.centerY.equalTo(containerView.snp.centerY)
-            make.trailing.equalTo(containerView.snp.trailing).offset(-8)
         }
 
         leftOverlayImageView.snp.makeConstraints { make in
@@ -146,13 +133,11 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         if theme == .dark {
             self.backgroundColor = UIColor.Photon.Grey80
             self.titleLabel.textColor = .white
-            self.chevronAccessoryView.tintColor = UIColor.Photon.LightGrey40
             self.descriptionLabel.textColor = UIColor.Photon.Grey40
             self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         } else {
             self.backgroundColor = .white
             self.titleLabel.textColor = .black
-            self.chevronAccessoryView.tintColor = UIColor.Photon.DarkGrey05
             self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
             self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         }
@@ -162,6 +147,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         super.prepareForReuse()
         self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        leftImageView.image = nil
         applyTheme()
     }
 
