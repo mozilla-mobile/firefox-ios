@@ -135,7 +135,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
 }
 
 // MARK: - Helper functions
-private extension HistoryDeletionUtilityTests
+private extension HistoryDeletionUtilityTests {
     func emptyDB(file: StaticString = #filePath, line: UInt = #line) {
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess, file: file, line: line)
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess, file: file, line: line)
