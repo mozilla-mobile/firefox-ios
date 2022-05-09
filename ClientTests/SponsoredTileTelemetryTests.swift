@@ -48,7 +48,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
         SponsoredTileTelemetry.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[0]
         let topSite = SponsoredTile(contile: contile)
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
@@ -70,6 +69,8 @@ class SponsoredTileTelemetryTests: XCTestCase {
             expectation.fulfill()
         }
 
+        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
+
         waitForExpectations(timeout: 5.0)
     }
 
@@ -79,7 +80,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
         SponsoredTileTelemetry.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[1]
         let topSite = SponsoredTile(contile: contile)
-        SponsoredTileTelemetry.sendClickTelemetry(tile: topSite, position: 3)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
@@ -99,6 +99,8 @@ class SponsoredTileTelemetryTests: XCTestCase {
                                       failureMessage: "Should have contile url of \(contile.clickUrl)")
             expectation.fulfill()
         }
+
+        SponsoredTileTelemetry.sendClickTelemetry(tile: topSite, position: 3)
 
         waitForExpectations(timeout: 5.0)
     }
