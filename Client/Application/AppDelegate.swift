@@ -226,9 +226,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         pushNotificationSetup()
 
-        // user research variable setup for Chron tabs user research
-        _ = ChronTabsUserResearch()
-
         if let profile = self.profile {
             let persistedCurrentVersion = InstallType.persistedCurrentVersion()
             let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
