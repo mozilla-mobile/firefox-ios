@@ -23,8 +23,6 @@ class HistoryDeletionUtility {
     }
 
     private func deleteMetadata(_ sites: [String]) {
-        sites.forEach { _ = profile.places.deleteHistoryMetadata(
-            key: HistoryMetadataKey(url: $0, searchTerm: nil, referrerUrl: nil))
-        }
+        sites.forEach { _ = profile.places.deleteVisitsFor(url: $0 ) }
     }
 }
