@@ -19,7 +19,7 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
 
     override func generateSettings() -> [SettingSection] {
 
-        var sectionItems = [SettingSection]()
+        var sectionItems = [Setting]()
 
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                               titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
@@ -29,16 +29,15 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
 
         if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
            featureFlags.isFeatureActiveForNimbus(.inactiveTabs) {
-            sectionItems.append(SettingSection(title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
-                                               footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
-                                               children: [inactiveTabsSetting]))
+            sectionItems.append(inactiveTabsSetting)
         }
 
         if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) {
-            sectionItems.append(SettingSection(children: [tabGroupsSetting]))
+            sectionItems.append(tabGroupsSetting)
         }
 
-        return sectionItems
+        return [SettingSection(title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
+                               children: sectionItems)]
     }
 
     override func viewDidDisappear(_ animated: Bool) {
