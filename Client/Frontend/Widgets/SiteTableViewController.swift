@@ -14,18 +14,30 @@ struct SiteTableViewControllerUX {
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
 
+    var collapsibleState: ExpandButtonState? {
+        willSet(state) {
+            collapsibleImageView.image = state?.image?.tinted(withColor: UIColor.Photon.Blue50)
+
+        }
+    }
+
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         label.textColor = UIColor.theme.tableView.headerTextDark
     }
 
-    // Currently, historyPanel uses this WHEN STG is available in that section.
     let headerActionButton: UIButton = .build { button in
         button.setTitle("Show all", for: .normal)
         button.backgroundColor = .clear
         button.titleLabel?.font = .systemFont(ofSize: 12)
         button.isHidden = true
     }
+
+    let collapsibleImageView: UIImageView = .build { imageView in
+        imageView.image = ExpandButtonState.down.image?.tinted(withColor: UIColor.Photon.Blue50)
+        imageView.isHidden = true
+    }
+
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
@@ -37,6 +49,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
         translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(titleLabel, headerActionButton)
+        contentView.addSubviews(titleLabel, collapsibleImageView)
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
@@ -46,6 +59,9 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+
+            collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
 
             headerActionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             headerActionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
@@ -66,7 +82,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        headerActionButton.setTitleColor(UIColor.theme.tableView.rowActionAccessory, for: .normal)
         backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
         bordersHelper.applyTheme()
     }

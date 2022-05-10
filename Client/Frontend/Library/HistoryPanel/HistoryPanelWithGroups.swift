@@ -14,7 +14,7 @@ import os.log
 
 private struct HistoryPanelUX {
     static let WelcomeScreenItemWidth = 170
-    static let HeaderHeight = CGFloat(32)
+    static let HeaderHeight = CGFloat(40)
     static let IconSize = 23
     static let IconBorderColor = UIColor.Photon.Grey30
     static let IconBorderWidth: CGFloat = 0.5
@@ -43,6 +43,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
     private let clearHistoryHelper: ClearHistoryHelper
     var keyboardState: KeyboardState?
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+    var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -286,7 +287,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             }
 
             if let site = item as? Site {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
                     self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for site!")
                     return nil
                 }
@@ -296,7 +297,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
             }
 
             if let searchTermGroup = item as? ASGroup<Site> {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
                     self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for STG!")
                     return nil
                 }
@@ -328,7 +329,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         cell.descriptionLabel.isHidden = false
         cell.leftImageView.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
         cell.leftImageView.layer.borderWidth = HistoryPanelUX.IconBorderWidth
-        cell.leftImageView.contentMode = .scaleAspectFit
+        cell.accessoryView = nil
         getFavIcon(for: site) { [weak cell] image in
             cell?.leftImageView.image = image
             cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
@@ -349,8 +350,8 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         }
 
         cell.titleLabel.text = asGroup.displayTitle
-        cell.chevronAccessoryView.isHidden = false
-        cell.leftImageView.contentMode = .scaleAspectFit
+        let imageView = UIImageView(image: chevronImage)
+        cell.accessoryView = imageView
         cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
         cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
 
@@ -364,12 +365,14 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         snapshot.appendSections(viewModel.visibleSections)
 
         snapshot.sectionIdentifiers.forEach { section in
-            snapshot.appendItems(viewModel.groupedSites.itemsForSection(section.rawValue - 1), toSection: section)
+            if !viewModel.hiddenSections.contains(where: { $0 == section }) {
+                snapshot.appendItems(viewModel.groupedSites.itemsForSection(section.rawValue - 1), toSection: section)
+            }
         }
 
         // Insert the ASGroup at the correct spot!
         viewModel.searchTermGroups.forEach { grouping in
-            if let groupSection = viewModel.groupBelongsToSection(asGroup: grouping), viewModel.visibleSections.contains(groupSection) {
+            if let groupSection = viewModel.shouldAddGroupToSections(group: grouping) {
                 guard let individualItem = grouping.groupedItems.last, let lastVisit = individualItem.latestVisit else { return }
 
                 let groupTimeInterval = TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
@@ -551,6 +554,17 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
         navigationController?.pushViewController(asGroupListVC, animated: true)
     }
 
+    @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
+        guard let sectionNumber = sender.view?.tag else {
+            return
+        }
+
+        viewModel.collapseSection(sectionIndex: sectionNumber)
+        applySnapshot()
+        // Needed to refresh the header state
+        tableView.reloadData()
+    }
+
     // MARK: - TableView's Header & Footer view
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? SiteTableViewHeader, let actualSection = viewModel.visibleSections[safe: section - 1] {
@@ -558,15 +572,19 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
             header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground
             header.textLabel?.text = actualSection.title // At worst, we have a header with no text.
+            header.collapsibleImageView.isHidden = false
+            let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
+            header.collapsibleState = isCollapsed ? ExpandButtonState.right : ExpandButtonState.down
+
+            // Configure tap to collapse/expand section
+            header.tag = section
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
+            header.addGestureRecognizer(tapGesture)
 
             // let historySectionsWithGroups
             let _ = viewModel.searchTermGroups.map { group in
                 viewModel.groupBelongsToSection(asGroup: group)
             }
-
-            // NOTE: Uncomment this when we support showing the Show all button and its functionality in a later time.
-            // let visibleSectionsWithGroups = viewModel.visibleSections.filter { historySectionsWithGroups.contains($0) }
-            // header.headerActionButton.isHidden = !visibleSectionsWithGroups.contains(actualSection)
         }
 
     }

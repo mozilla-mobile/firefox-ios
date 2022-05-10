@@ -39,13 +39,6 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         return imgView
     }()
 
-    lazy var chevronAccessoryView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: "goBack")?.withHorizontallyFlippedOrientation()
-        imageView.image?.imageFlippedForRightToLeftLayoutDirection()
-        imageView.image?.withTintColor(ThemeManager.shared.currentTheme.colours.iconSecondary)
-        imageView.isHidden = true
-    }
-
     var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -83,7 +76,6 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         midView.addSubview(descriptionLabel)
 
         containerView.addSubview(leftImageView)
-        containerView.addSubview(chevronAccessoryView)
         containerView.addSubview(midView)
 
         containerView.addSubview(leftOverlayImageView)
@@ -106,13 +98,6 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
             make.height.width.equalTo(28)
             make.leading.equalTo(containerView.snp.leading).offset(15)
             make.centerY.equalTo(containerView.snp.centerY)
-        }
-
-        // Only shown when we need a chevron, and is made visible at call site
-        chevronAccessoryView.snp.makeConstraints { make in
-            make.height.width.equalTo(28)
-            make.centerY.equalTo(containerView.snp.centerY)
-            make.trailing.equalTo(containerView.snp.trailing).offset(-8)
         }
 
         leftOverlayImageView.snp.makeConstraints { make in
@@ -165,6 +150,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         super.prepareForReuse()
         self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        leftImageView.image = nil
         applyTheme()
     }
 
