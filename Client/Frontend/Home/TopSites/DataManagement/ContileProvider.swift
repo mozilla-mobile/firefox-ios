@@ -62,11 +62,12 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching {
 
             if let error = error {
                 self.browserLog.debug("An error occurred while fetching data: \(error)")
-                completion(Result.failure(Error.failure))
+                completion(.failure(Error.failure))
                 return
             }
 
-            guard let response = validatedHTTPResponse(response, statusCode: 200..<300), let data = data else {
+            guard let response = validatedHTTPResponse(response, statusCode: 200..<300), let data = data, !data.isEmpty else {
+                self.browserLog.debug("Response isn't proper: \(response.debugDescription), with data \(String(describing: data))")
                 completion(.failure(Error.failure))
                 return
             }
