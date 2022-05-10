@@ -49,7 +49,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         self.viewModel = FirefoxHomeViewModel(profile: profile,
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate)
-        self.viewModel.browserViewDelegate = browserBarViewDelegate
+        self.viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)

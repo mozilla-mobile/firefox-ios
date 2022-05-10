@@ -2608,3 +2608,13 @@ extension BrowserViewController {
         return browserViewController
     }
 }
+
+extension BrowserViewController: BrowserBarViewDelegate {
+    var inOverlayMode: Bool {
+        return urlBar.inOverlayMode
+    }
+
+    func leaveOverlayMode(didCancel cancel: Bool) {
+        urlBar.leaveOverlayMode(didCancel: cancel)
+    }
+}
