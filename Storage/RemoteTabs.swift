@@ -23,6 +23,11 @@ public struct ClientAndTabs: Equatable, CustomStringConvertible {
             return max(m, tab.lastUsed)
         })
     }
+
+    public init(client: RemoteClient, tabs: [RemoteTab]) {
+        self.client = client
+        self.tabs = tabs
+    }
 }
 
 public func == (lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {

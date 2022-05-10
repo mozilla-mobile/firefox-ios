@@ -22,7 +22,7 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable, Loggable {
 
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
-    fileprivate lazy var tableViewController = RemoteTabsTableViewController()
+    lazy var tableViewController = RemoteTabsTableViewController()
 
     init(profile: Profile) {
         self.profile = profile
@@ -113,7 +113,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 
     weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
     weak var remoteTabPanel: RemoteTabsPanel?
-    fileprivate var clientAndTabs: [ClientAndTabs]
+    var clientAndTabs: [ClientAndTabs]
     var hiddenSections = Set<Int>()
     private let siteImageHelper: SiteImageHelper
 
@@ -523,7 +523,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
 }
 
 // MARK: - RemoteTabsTableViewController
-fileprivate class RemoteTabsTableViewController: UITableViewController {
+class RemoteTabsTableViewController: UITableViewController {
 
     struct UX {
         static let RowHeight = SiteTableViewControllerUX.RowHeight
@@ -628,7 +628,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         self.tableView.reloadData()
     }
 
-    func refreshTabs(updateCache: Bool = false) {
+    func refreshTabs(updateCache: Bool = false, completion: (() -> Void)? = nil) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
 
         assert(Thread.isMainThread)
@@ -664,6 +664,8 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             } else {
                 self.endRefreshing()
             }
+
+            completion?()
         }
     }
 
