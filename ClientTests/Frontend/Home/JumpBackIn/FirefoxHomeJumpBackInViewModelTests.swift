@@ -11,7 +11,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     var subject: FirefoxHomeJumpBackInViewModel!
 
     var mockBrowserProfile: MockBrowserProfile!
-    var mockTabManager: MockTabManager!
+    var tabManager: TabManager!
     var mockBrowserBarViewDelegate: MockBrowserBarViewDelegate!
 
     var stubBrowserViewController: BrowserViewController!
@@ -19,17 +19,12 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        guard let appDelegate = UIApplication.shared.delegate as? TestAppDelegate else {
-            fatalError("Unable to set BrowserViewController")
-        }
-
-        // TODO: Inject BrowserViewController into FirefoxHomeJumpBackInViewModel
         mockBrowserProfile = MockBrowserProfile(
                 localName: "",
                 syncDelegate: nil,
                 clear: false
         )
-        mockTabManager = MockTabManager()
+        tabManager = TabManager(profile: mockBrowserProfile, imageStore: nil)
         stubBrowserViewController = BrowserViewController(
                 profile: mockBrowserProfile,
                 tabManager: TabManager(profile: mockBrowserProfile, imageStore: nil)
@@ -40,7 +35,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
                 isZeroSearch: false,
                 profile: mockBrowserProfile,
                 isPrivate: false,
-                tabManager: mockTabManager
+                tabManager: tabManager
         )
         subject.browserBarViewDelegate = mockBrowserBarViewDelegate
     }
@@ -88,14 +83,6 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(expectedTab, receivedTab)
     }
 }
-
-class MockTabManager: MozillaTabManager {
-    private(set) var recentlyAccessedNormalTabs: [Tab] = []
-
-    func selectTab(_ tab: Tab?, previous: Tab?) {}
-}
-
-class MockBrowserViewController: BrowserViewController {}
 
 class MockBrowserBarViewDelegate: BrowserBarViewDelegate {
     var inOverlayMode = false
