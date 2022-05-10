@@ -103,6 +103,10 @@ enum RemoteTabsError {
 protocol RemoteTabsPanelDataSource: UITableViewDataSource, UITableViewDelegate {
 }
 
+protocol CollapsibleTableViewSection: AnyObject {
+    func hideTableViewSection(_ section: Int)
+}
+
 // MARK: - RemoteTabsPanelClientAndTabsDataSource
 class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
 
@@ -110,12 +114,21 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         static let HeaderHeight = SiteTableViewControllerUX.RowHeight
     }
 
+    weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
     weak var remoteTabPanel: RemoteTabsPanel?
     fileprivate var clientAndTabs: [ClientAndTabs]
+    var hiddenSections = Set<Int>()
 
     init(remoteTabPanel: RemoteTabsPanel, clientAndTabs: [ClientAndTabs]) {
         self.remoteTabPanel = remoteTabPanel
         self.clientAndTabs = clientAndTabs
+    }
+
+    @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
+        guard let section = sender.view?.tag else {
+            return
+        }
+        collapsibleSectionDelegate?.hideTableViewSection(section)
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -123,6 +136,10 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.hiddenSections.contains(section) {
+            return 0
+        }
+
         return self.clientAndTabs[section].tabs.count
     }
 
@@ -131,7 +148,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension //RemoteTabsPanelUX.HeaderHeight
+        return UX.HeaderHeight
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -142,6 +159,15 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         view.titleLabel.text = client.name
         view.showBorder(for: .bottom, true)
         view.showBorder(for: .top, section != 0)
+
+        view.collapsibleImageView.isHidden = false
+        let isCollapsed = hiddenSections.contains(section)
+        view.collapsibleState = isCollapsed ? ExpandButtonState.right : ExpandButtonState.down
+
+        // Configure tap to collapse/expand section
+        view.tag = section
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
+        view.addGestureRecognizer(tapGesture)
 
         /*
         * A note on timestamps.
@@ -167,7 +193,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         return view
     }
 
-    fileprivate func tabAtIndexPath(_ indexPath: IndexPath) -> RemoteTab {
+    func tabAtIndexPath(_ indexPath: IndexPath) -> RemoteTab {
         return clientAndTabs[indexPath.section].tabs[indexPath.item]
     }
 
@@ -176,7 +202,6 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let tab = tabAtIndexPath(indexPath)
         cell.titleLabel.text = tab.title
         cell.descriptionLabel.text = tab.URL.absoluteString
-        // TODO: Bug 1144765 - Populate image with cached favicons.
         return cell
     }
 
@@ -566,7 +591,9 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             if nonEmptyClientAndTabs.count == 0 {
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .noTabs)
             } else {
-                self.tableViewDelegate = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel, clientAndTabs: nonEmptyClientAndTabs)
+                let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel, clientAndTabs: nonEmptyClientAndTabs)
+                tabsPanelDataSource.collapsibleSectionDelegate = self
+                self.tableViewDelegate = tabsPanelDataSource
             }
         }
         self.tableView.reloadData()
@@ -616,6 +643,21 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
         presentContextMenu(for: indexPath)
+    }
+}
+
+extension RemoteTabsTableViewController: CollapsibleTableViewSection {
+
+    func hideTableViewSection(_ section: Int) {
+        guard let dataSource = tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else { return }
+
+        if dataSource.hiddenSections.contains(section) {
+            dataSource.hiddenSections.remove(section)
+        } else {
+            dataSource.hiddenSections.insert(section)
+        }
+
+        tableView.reloadData()
     }
 }
 
