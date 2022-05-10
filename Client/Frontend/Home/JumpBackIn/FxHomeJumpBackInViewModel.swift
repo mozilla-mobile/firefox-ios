@@ -150,20 +150,20 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     private func updateJumpBackInData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs
 
-        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
-            SearchTermGroupsUtility.getTabGroups(with: profile,
-                                                 from: recentTabs,
-                                                 using: .orderedDescending) { [weak self] groups, _ in
-                guard let strongSelf = self else { completion(); return }
-                strongSelf.recentGroups = groups
-                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(from: strongSelf.recentTabs, and: groups)
-                completion()
-            }
-
-        } else {
+//        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
+//            SearchTermGroupsUtility.getTabGroups(with: profile,
+//                                                 from: recentTabs,
+//                                                 using: .orderedDescending) { [weak self] groups, _ in
+//                guard let strongSelf = self else { completion(); return }
+//                strongSelf.recentGroups = groups
+//                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(from: strongSelf.recentTabs, and: groups)
+//                completion()
+//            }
+//
+//        } else {
             jumpBackInList = createJumpBackInList(from: recentTabs)
             completion()
-        }
+//        }
     }
 }
 

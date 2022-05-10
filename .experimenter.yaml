@@ -89,9 +89,9 @@ start-at-home-feature:
       type: string
       description: This property provides a default setting for the startAtHomeFeature
       enum:
-        - disabled
-        - always
         - after-four-hours
+        - always
+        - disabled
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true
