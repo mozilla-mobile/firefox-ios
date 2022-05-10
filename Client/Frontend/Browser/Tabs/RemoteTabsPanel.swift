@@ -10,11 +10,6 @@ import Storage
 import Sync
 import XCGLogger
 
-private let log = Logger.browserLogger
-
-private let RemoteClientIdentifier = "RemoteClient"
-private let RemoteTabIdentifier = "RemoteTab"
-
 protocol RemotePanelDelegate: AnyObject {
     func remotePanelDidRequestToSignIn()
     func remotePanelDidRequestToCreateAccount()
@@ -23,7 +18,7 @@ protocol RemotePanelDelegate: AnyObject {
 }
 
 // MARK: - RemoteTabsPanel
-class RemoteTabsPanel: UIViewController, NotificationThemeable {
+class RemoteTabsPanel: UIViewController, NotificationThemeable, Loggable {
 
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
@@ -77,7 +72,7 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable {
             break
         default:
             // no need to do anything at all
-            log.warning("Received unexpected notification \(notification.name)")
+            browserLog.warning("Received unexpected notification \(notification.name)")
             break
         }
     }
@@ -120,10 +115,12 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     weak var remoteTabPanel: RemoteTabsPanel?
     fileprivate var clientAndTabs: [ClientAndTabs]
     var hiddenSections = Set<Int>()
+    private let siteImageHelper: SiteImageHelper
 
-    init(remoteTabPanel: RemoteTabsPanel, clientAndTabs: [ClientAndTabs]) {
+    init(remoteTabPanel: RemoteTabsPanel, clientAndTabs: [ClientAndTabs], profile: Profile) {
         self.remoteTabPanel = remoteTabPanel
         self.clientAndTabs = clientAndTabs
+        self.siteImageHelper = SiteImageHelper(profile: profile)
     }
 
     @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
@@ -156,7 +153,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! SiteTableViewHeader
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier) as! SiteTableViewHeader
         view.frame = CGRect(width: tableView.frame.width, height: UX.HeaderHeight)
         view.titleLabel.text = client.name
         view.showBorder(for: .bottom, true)
@@ -191,7 +188,12 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabIdentifier, for: indexPath) as! TwoLineImageOverlayCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+                                                       for: indexPath) as? TwoLineImageOverlayCell
+        else {
+            return UITableViewCell()
+        }
+
         let tab = tabAtIndexPath(indexPath)
         cell.titleLabel.text = tab.title
         cell.descriptionLabel.text = tab.URL.absoluteString
@@ -201,10 +203,17 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         cell.accessoryView = nil
 
         // TODO: Load favicon image from remote tab (tab.faviconURL) https://mozilla-hub.atlassian.net/browse/FXIOS-3754
+        // Client image is temporary and should be removed once we have the favicon URL
+        // siteImageHelper is already in the class to load from URL, just need to uncomment code and adjust
         let client = self.clientAndTabs[indexPath.section].client
         let image = getClientImage(client: client)
         cell.leftImageView.image = image
         cell.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
+
+//        getFavIcon(for: tab) { [weak cell] image in
+//            cell.leftImageView.image = image
+//            cell.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
+//        }
 
         return cell
     }
@@ -216,13 +225,20 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         remoteTabPanel?.remotePanelDelegate?.remotePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
     }
 
+    private func getFavIcon(for remoteTab: RemoteTab, completion: @escaping (UIImage?) -> Void) {
+        let site = Site(url: remoteTab.faviconURL!, title: remoteTab.title)
+        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
+            completion(image)
+        }
+    }
+
     private func getClientImage(client: RemoteClient) -> UIImage? {
         let image: UIImage?
         if client.type == "desktop" {
-            image = UIImage.templateImageNamed("deviceTypeDesktop")
+            image = UIImage.templateImageNamed(ImageIdentifiers.deviceTypeDesktop)
             image?.accessibilityLabel = .RemoteTabComputerAccessibilityLabel
         } else {
-            image = UIImage.templateImageNamed("deviceTypeMobile")
+            image = UIImage.templateImageNamed(ImageIdentifiers.deviceTypeMobile)
             image?.accessibilityLabel = .RemoteTabMobileAccessibilityLabel
         }
         return image
@@ -281,25 +297,21 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
 
 }
 
-fileprivate let emptySyncImageName = "emptySync"
-
 // MARK: - RemoteTabsErrorCell
 
-class RemoteTabsErrorCell: UITableViewCell {
+class RemoteTabsErrorCell: UITableViewCell, ReusableCell {
 
     struct UX {
         static let EmptyStateInstructionsWidth = 170
         static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15
     }
 
-    static let Identifier = "RemoteTabsErrorCell"
-
     let titleLabel = UILabel()
     let emptyStateImageView = UIImageView()
     let instructionsLabel = UILabel()
 
     init(error: RemoteTabsError) {
-        super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
+        super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
         selectionStyle = .none
 
         separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
@@ -307,7 +319,7 @@ class RemoteTabsErrorCell: UITableViewCell {
         let containerView = UIView()
         contentView.addSubview(containerView)
 
-        emptyStateImageView.image = UIImage.templateImageNamed(emptySyncImageName)
+        emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
         containerView.addSubview(emptyStateImageView)
         emptyStateImageView.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(containerView)
@@ -370,7 +382,7 @@ class RemoteTabsErrorCell: UITableViewCell {
 
 // MARK: - RemoteTabsNotLoggedInCell
 
-class RemoteTabsNotLoggedInCell: UITableViewCell {
+class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
 
     struct UX {
         static let EmptyStateSignInButtonColor = UIColor.Photon.Blue40
@@ -379,7 +391,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         static let EmptyStateSignInButtonWidth = 200
     }
 
-    static let Identifier = "RemoteTabsNotLoggedInCell"
     var remoteTabsPanel: RemoteTabsPanel?
     let instructionsLabel = UILabel()
     let signInButton = UIButton()
@@ -387,13 +398,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     let emptyStateImageView = UIImageView()
 
     init(remoteTabsPanel: RemoteTabsPanel?) {
-        super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
+        super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
         selectionStyle = .none
 
         self.remoteTabsPanel = remoteTabsPanel
         let createAnAccountButton = UIButton(type: .system)
 
-        emptyStateImageView.image = UIImage.templateImageNamed(emptySyncImageName)
+        emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
         contentView.addSubview(emptyStateImageView)
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
@@ -534,9 +545,8 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
-        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
-//        tableView.register(SimpleTwoLineCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
-        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
+        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
 
         tableView.rowHeight = UX.RowHeight
         tableView.separatorInset = .zero
@@ -547,7 +557,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
         tableView.separatorColor = UIColor.theme.tableView.separator
 
-        tableView.accessibilityIdentifier = "Synced Tabs"
+        tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -608,7 +618,9 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             if nonEmptyClientAndTabs.count == 0 {
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel, error: .noTabs)
             } else {
-                let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel, clientAndTabs: nonEmptyClientAndTabs)
+                let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
+                                                                                 clientAndTabs: nonEmptyClientAndTabs,
+                                                                                 profile: profile)
                 tabsPanelDataSource.collapsibleSectionDelegate = self
                 self.tableViewDelegate = tabsPanelDataSource
             }
