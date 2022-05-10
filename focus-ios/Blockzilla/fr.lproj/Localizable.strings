@@ -253,6 +253,12 @@
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Effacez votre historique de navigation, vos mots de passe, vos cookies, et empêchez les publicités indésirables de vous suivre d’un simple clic !";
 
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ est un navigateur dédié à la vie privée avec une protection contre le pistage et un blocage de contenu.";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Configurez les paramètres afin de décider ce que vous partagez.";
+
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Faites passer votre navigation privée à la vitesse supérieure.";
 
@@ -613,8 +619,14 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Un site se comporte bizarrement ou du contenu manque ?";
 
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Rendez-vous dans les paramètres pour gérer les options avancées de sécurité et de vie privée.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Ces paramètres par défaut offrent une protection renforcée. Mais il est facile de modifier les paramètres pour répondre à vos besoins spécifiques.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ a empêché ce site de vous espionner. Appuyez sur le bouclier pour obtenir des informations sur ce que nous avons bloqué.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Appuyez sur la corbeille à tout moment pour supprimer toute trace de votre session en cours.";
