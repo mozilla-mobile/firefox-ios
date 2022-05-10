@@ -112,6 +112,8 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 
     struct UX {
         static let HeaderHeight = SiteTableViewControllerUX.RowHeight
+        static let IconBorderColor = UIColor.Photon.Grey30
+        static let IconBorderWidth: CGFloat = 0.5
     }
 
     weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
@@ -181,15 +183,6 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         * Ideally, we should save and use the modified time of the tabs record itself.
         * This will be the real time that the other client uploaded tabs.
         */
-
-        let image: UIImage?
-        if client.type == "desktop" {
-            image = UIImage.templateImageNamed("deviceTypeDesktop")
-            image?.accessibilityLabel = .RemoteTabComputerAccessibilityLabel
-        } else {
-            image = UIImage.templateImageNamed("deviceTypeMobile")
-            image?.accessibilityLabel = .RemoteTabMobileAccessibilityLabel
-        }
         return view
     }
 
@@ -198,10 +191,21 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabIdentifier, for: indexPath) as! SimpleTwoLineCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabIdentifier, for: indexPath) as! TwoLineImageOverlayCell
         let tab = tabAtIndexPath(indexPath)
         cell.titleLabel.text = tab.title
         cell.descriptionLabel.text = tab.URL.absoluteString
+
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        cell.accessoryView = nil
+
+        // TODO: Load favicon image from remote tab (tab.faviconURL) https://mozilla-hub.atlassian.net/browse/FXIOS-3754
+        let client = self.clientAndTabs[indexPath.section].client
+        let image = getClientImage(client: client)
+        cell.leftImageView.image = image
+        cell.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
+
         return cell
     }
 
@@ -210,6 +214,18 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let tab = tabAtIndexPath(indexPath)
         // Remote panel delegate for cell selection
         remoteTabPanel?.remotePanelDelegate?.remotePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
+    }
+
+    private func getClientImage(client: RemoteClient) -> UIImage? {
+        let image: UIImage?
+        if client.type == "desktop" {
+            image = UIImage.templateImageNamed("deviceTypeDesktop")
+            image?.accessibilityLabel = .RemoteTabComputerAccessibilityLabel
+        } else {
+            image = UIImage.templateImageNamed("deviceTypeMobile")
+            image?.accessibilityLabel = .RemoteTabMobileAccessibilityLabel
+        }
+        return image
     }
 }
 
@@ -519,7 +535,8 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
-        tableView.register(SimpleTwoLineCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
+//        tableView.register(SimpleTwoLineCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
+        tableView.register(TwoLineImageOverlayCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
         tableView.rowHeight = UX.RowHeight
         tableView.separatorInset = .zero
