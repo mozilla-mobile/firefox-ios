@@ -68,7 +68,7 @@ struct NimbusFlaggableFeature {
         case .wallpapers:
             return FlagKeys.CustomWallpaper
 
-        case .reportSiteIssue
+        case .reportSiteIssue,
                 .shakeToRestore,
                 .bottomSearchBar:
             return nil
