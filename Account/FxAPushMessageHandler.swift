@@ -155,11 +155,11 @@ enum PushMessage: Equatable {
 
     var messageType: PushMessageType {
         switch self {
-        case .commandReceived(_):
+        case .commandReceived:
             return .commandReceived
-        case .deviceConnected(_):
+        case .deviceConnected:
             return .deviceConnected
-        case .deviceDisconnected(_):
+        case .deviceDisconnected:
             return .deviceDisconnected
         case .thisDeviceDisconnected:
             return .deviceDisconnected
