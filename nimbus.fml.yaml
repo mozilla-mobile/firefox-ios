@@ -113,6 +113,7 @@ features:
         default:
           {
             "status": false,
+            "max-number-of-tiles": 2
           }
       wallpaper-feature:
         description: "This property defines the wallpaper feature on the
@@ -131,10 +132,11 @@ features:
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
-            "pocket": true,
+            "pocket": true
           },
           "sponsored-tiles": {
-            "status": true
+            "status": true,
+            "max-number-of-tiles": 2
           },
           "wallpaper-feature": {
             "status": true
@@ -151,7 +153,8 @@ features:
             "pocket": true
           },
           "sponsored-tiles": {
-            "status": true
+            "status": true,
+            "max-number-of-tiles": 2
           },
           "wallpaper-feature": {
             "status": true
@@ -303,6 +306,10 @@ types:
           type: Boolean
           description: Whether or not the feature is enabled
           default: false
+        max-number-of-tiles:
+          type: Int
+          description: The maximum number of sponsored tiles a user can see
+          default: 2
     WallpaperFeature:
       description: "The configuration for the wallpaper feature on the homescreen"
       fields:

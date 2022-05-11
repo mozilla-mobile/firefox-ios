@@ -19,8 +19,11 @@ class NimbusManager {
 
     // MARK: - Properties
     var featureFlagLayer: NimbusFeatureFlagLayer
+    var sponsoredTileLayer: SponsoredTileLayer
 
-    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer()) {
+    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer(),
+         sponsoredTileLayer: SponsoredTileLayer = SponsoredTileLayer()) {
         self.featureFlagLayer = featureFlagLayer
+        self.sponsoredTileLayer = sponsoredTileLayer
     }
 }

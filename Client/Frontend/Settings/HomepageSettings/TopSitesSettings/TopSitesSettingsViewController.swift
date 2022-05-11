@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class TopSitesSettingsViewController: SettingsTableViewController {
+class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlaggable {
 
     // MARK: - Initializers
     init() {
@@ -22,15 +22,19 @@ class TopSitesSettingsViewController: SettingsTableViewController {
 
     // MARK: - Methods
     override func generateSettings() -> [SettingSection] {
+        var sections = [Setting]()
         let topSitesSetting = BoolSetting(with: .topSites,
                                           titleText: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsToggle))
+        sections.append(topSitesSetting)
 
-        // TODO: Only show setting if Nimbus enabled https://mozilla-hub.atlassian.net/browse/FXIOS-3468
-        let sponsoredShortcutSetting = BoolSetting(with: .sponsoredTiles,
-                                                   titleText: NSAttributedString(string: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle))
+        if featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildOnly) {
+            let sponsoredShortcutSetting = BoolSetting(with: .sponsoredTiles,
+                                                       titleText: NSAttributedString(string: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle))
+            sections.append(sponsoredShortcutSetting)
+        }
 
         let toggleSection = SettingSection(title: nil,
-                                           children: [topSitesSetting, sponsoredShortcutSetting])
+                                           children: sections)
 
         let rowSetting = RowSettings(settings: self)
         let rowSection = SettingSection(title: nil, children: [rowSetting])
