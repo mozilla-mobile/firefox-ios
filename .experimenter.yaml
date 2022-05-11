@@ -1,4 +1,12 @@
 ---
+general-app-features:
+  description: The feature that contains feature flags for the entire application
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    feature-status:
+      type: json
+      description: This property provides a lookup table of whether or not the given feature should be enabled.
 homescreenFeature:
   description: The homescreen that the user goes to when they press home or new tab.
   hasExposure: true
@@ -7,6 +15,12 @@ homescreenFeature:
     sections-enabled:
       type: json
       description: "This property provides a lookup table of whether or not the given section should be enabled. If the section is enabled, it should be toggleable in the settings screen, and on by default."
+    sponsored-tiles:
+      type: json
+      description: "This property defines the sponsored tile feature on the homepage, which is not a section therein."
+    wallpaper-feature:
+      type: json
+      description: "This property defines the wallpaper feature on the homepage, which is not a section therein."
 messaging:
   description: "Configuration for the messaging system.\n\nIn practice this is a set of growable lookup tables for the\nmessage controller to piece together.\n"
   hasExposure: true
@@ -25,8 +39,8 @@ messaging:
       type: string
       description: What should be displayed when a control message is selected.
       enum:
-        - show-next-message
         - show-none
+        - show-next-message
     styles:
       type: json
       description: "A map of styles to configure message appearance.\n"
@@ -58,6 +72,26 @@ search:
     spotlight:
       type: json
       description: This property is covers the properties related to the spotlight
+search-term-groups-feature:
+  description: The feature that controls whether or not search term groups are enabled.
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    grouping-enabled:
+      type: json
+      description: This property provides a lookup table of whether or not the given grouping should be enabled.
+start-at-home-feature:
+  description: The controls for Start at Home feature
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    setting:
+      type: string
+      description: This property provides a default setting for the startAtHomeFeature
+      enum:
+        - after-four-hours
+        - always
+        - disabled
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true

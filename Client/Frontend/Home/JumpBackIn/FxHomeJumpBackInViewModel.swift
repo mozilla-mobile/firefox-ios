@@ -22,7 +22,7 @@ struct JumpBackInList {
     }
 }
 
-class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
+class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
 
     // MARK: - Properties
     var onTapGroup: ((Tab) -> Void)?
@@ -60,7 +60,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // The maximum number of items to display in the whole section
     static var maxItemsToDisplay: Int {
-        return UIDevice.current.userInterfaceIdiom == .pad ? 3 : UIWindow.isLandscape ? 4 : 2
+        return UIDevice.current.userInterfaceIdiom == .pad ? 3 : (UIWindow.isLandscape ? 4 : 2)
     }
 
     static var maxNumberOfItemsInColumn: Int {
@@ -77,7 +77,10 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     /// Refresh data for new layout
     func refreshData() {
-        jumpBackInList = createJumpBackInList(from: recentTabs, and: recentGroups)
+        jumpBackInList = createJumpBackInList(
+            from: recentTabs,
+            withMaxItemsToDisplay: FirefoxHomeJumpBackInViewModel.maxItemsToDisplay,
+            and: recentGroups)
     }
 
     func switchTo(group: ASGroup<Tab>) {
@@ -121,17 +124,28 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
 
     // MARK: - Private
 
-    private func createJumpBackInList(from tabs: [Tab], and groups: [ASGroup<Tab>]? = nil) -> JumpBackInList {
+    private func createJumpBackInList(from tabs: [Tab],
+                                      withMaxItemsToDisplay maxItems: Int,
+                                      and groups: [ASGroup<Tab>]? = nil
+    ) -> JumpBackInList {
         let recentGroup = groups?.first
         let groupCount = recentGroup != nil ? 1 : 0
-        let recentTabs = filter(tabs: tabs, from: recentGroup, usingGroupCount: groupCount)
+        let recentTabs = filter(tabs: tabs,
+                                from: recentGroup,
+                                usingGroupCount: groupCount,
+                                withMaxItemsToDisplay: maxItems)
 
         return JumpBackInList(group: recentGroup, tabs: recentTabs)
     }
 
-    private func filter(tabs: [Tab], from recentGroup: ASGroup<Tab>?, usingGroupCount groupCount: Int) -> [Tab] {
+    private func filter(
+        tabs: [Tab],
+        from recentGroup: ASGroup<Tab>?,
+        usingGroupCount groupCount: Int,
+        withMaxItemsToDisplay maxItemsToDisplay: Int
+    ) -> [Tab] {
         var recentTabs = [Tab]()
-        let maxItemCount = FirefoxHomeJumpBackInViewModel.maxItemsToDisplay - groupCount
+        let maxItemCount = maxItemsToDisplay - groupCount
 
         for tab in tabs {
             // We must make sure to not include any 'solo' tabs that are also part of a group
@@ -149,19 +163,24 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
     /// Update data with tab and search term group managers
     private func updateJumpBackInData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs
+        let maxItemsToDisplay = FirefoxHomeJumpBackInViewModel.maxItemsToDisplay
 
-        if featureFlags.isFeatureBuildAndUserEnabled(.tabTrayGroups) {
-            SearchTermGroupsManager.getTabGroups(with: profile,
+        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
+            SearchTermGroupsUtility.getTabGroups(with: profile,
                                                  from: recentTabs,
                                                  using: .orderedDescending) { [weak self] groups, _ in
                 guard let strongSelf = self else { completion(); return }
                 strongSelf.recentGroups = groups
-                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(from: strongSelf.recentTabs, and: groups)
+                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(
+                    from: strongSelf.recentTabs,
+                    withMaxItemsToDisplay: maxItemsToDisplay,
+                    and: groups)
                 completion()
             }
 
         } else {
-            jumpBackInList = createJumpBackInList(from: recentTabs)
+            jumpBackInList = createJumpBackInList(from: recentTabs,
+                                                  withMaxItemsToDisplay: maxItemsToDisplay)
             completion()
         }
     }
@@ -175,10 +194,7 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     }
 
     var isEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.jumpBackIn),
-              featureFlags.isFeatureActiveForNimbus(.jumpBackIn),
-              featureFlags.userPreferenceFor(.jumpBackIn) == UserFeaturePreference.enabled
-        else { return false }
+        guard featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) else { return false }
 
         return !isPrivate
     }

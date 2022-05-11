@@ -29,7 +29,8 @@ class HomePageSettingsUITests: BaseTestCase {
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
                                LaunchArguments.LoadDatabasePrefix + prefilledTopSites,
-                               LaunchArguments.SkipContextualHints]
+                               LaunchArguments.SkipContextualHints,
+                               LaunchArguments.TurnOffTabGroupsInUserPreferences]
         }
         super.setUp()
     }

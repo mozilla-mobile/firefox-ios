@@ -40,7 +40,7 @@ extension AppDelegate {
             options = Experiments.InitializationOptions.normal
         }
 
+        FxNimbus.shared.initialize(with: { Experiments.shared } )
         Experiments.intialize(options)
-        FxNimbus.shared.api = Experiments.shared
     }
 }

@@ -74,7 +74,7 @@ class LibraryPanelDescriptor {
     }
 }
 
-class LibraryPanels: FeatureFlagsProtocol {
+class LibraryPanels: FeatureFlaggable {
     fileprivate let profile: Profile
     fileprivate let tabManager: TabManager
 

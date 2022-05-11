@@ -61,7 +61,7 @@ struct TabDisplayOrder: Codable {
     var regularTabUUID: [String] = []
 }
 
-class TabDisplayManager: NSObject, FeatureFlagsProtocol {
+class TabDisplayManager: NSObject, FeatureFlaggable {
 
     // MARK: - Variables
     var performingChainedOperations = false
@@ -86,11 +86,11 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
     var tabDisplayOrder: TabDisplayOrder = TabDisplayOrder()
 
     var shouldEnableGroupedTabs: Bool {
-        return featureFlags.isFeatureBuildAndUserEnabled(.tabTrayGroups)
+        return featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser)
     }
 
     var shouldEnableInactiveTabs: Bool {
-        return featureFlags.isFeatureBuildAndUserEnabled(.inactiveTabs)
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
     }
 
     var orderedTabs: [Tab] {
@@ -225,7 +225,7 @@ class TabDisplayManager: NSObject, FeatureFlagsProtocol {
 
         // build groups
         if shouldEnableGroupedTabs {
-            SearchTermGroupsManager.getTabGroups(with: profile,
+            SearchTermGroupsUtility.getTabGroups(with: profile,
                                                  from: tabsToBuildFrom,
                                                  using: .orderedAscending) { tabGroups, filteredActiveTabs  in
                 self.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)

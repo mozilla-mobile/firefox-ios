@@ -28,7 +28,7 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
     }
 }
 
-extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
+extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
         updateFindInPageVisibility(visible: false)
 

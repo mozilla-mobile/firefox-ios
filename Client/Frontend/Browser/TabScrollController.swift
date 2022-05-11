@@ -7,7 +7,7 @@ import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
-class TabScrollingController: NSObject, FeatureFlagsProtocol {
+class TabScrollingController: NSObject, FeatureFlaggable {
     private enum ScrollDirection {
         case up
         case down
@@ -29,7 +29,7 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? configureRefreshControl() : nil
+            featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly) ? configureRefreshControl() : nil
         }
     }
 

@@ -13,7 +13,7 @@ private class FetchInProgressError: MaybeErrorType {
     }
 }
 
-class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
+class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
@@ -110,7 +110,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             }
 
             self.currentFetchOffset += self.queryFetchLimit
-            if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
+            if self.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) {
                 self.populateASGroups(fetchedSites: fetchedSites) {
                     self.buildVisibleSections()
                     completion(true)
@@ -221,7 +221,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
 
     /// Provide groups for curruently fetched history items.
     private func populateASGroups(fetchedSites: [Site], completion: @escaping () -> Void) {
-        SearchTermGroupsManager.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, filteredItems in
+        SearchTermGroupsUtility.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, filteredItems in
             guard let searchTermGrouping = group else { return }
 
             self.searchTermGroups.append(contentsOf: searchTermGrouping)

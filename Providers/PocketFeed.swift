@@ -46,7 +46,7 @@ struct PocketStory {
 
 }
 
-class Pocket: FeatureFlagsProtocol, URLCaching {
+class Pocket: FeatureFlaggable, URLCaching {
 
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"
@@ -140,7 +140,7 @@ class Pocket: FeatureFlagsProtocol, URLCaching {
     }
 
     private var shouldUseMockData: Bool {
-        return featureFlags.isFeatureActiveForBuild(.useMockData) && (pocketKey == "" || pocketKey == nil)
+        return featureFlags.isCoreFeatureEnabled(.useMockData) && (pocketKey == "" || pocketKey == nil)
     }
 
     private func getMockDataFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {

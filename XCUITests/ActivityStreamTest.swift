@@ -34,7 +34,8 @@ class ActivityStreamTest: BaseTestCase {
                                    LaunchArguments.SkipWhatsNew,
                                    LaunchArguments.SkipETPCoverSheet,
                                    LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone,
-                                   LaunchArguments.SkipContextualHints]
+                                   LaunchArguments.SkipContextualHints,
+                                   LaunchArguments.TurnOffTabGroupsInUserPreferences]
             }
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)

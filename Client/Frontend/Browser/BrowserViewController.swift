@@ -2461,7 +2461,14 @@ extension BrowserViewController: TabTrayDelegate {
 extension BrowserViewController: NotificationThemeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
-        let ui: [NotificationThemeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController]
+        let ui: [NotificationThemeable?] = [urlBar,
+                                            toolbar,
+                                            readerModeBar,
+                                            topTabsViewController,
+                                            firefoxHomeViewController,
+                                            searchController,
+                                            libraryViewController,
+                                            libraryDrawerViewController]
         ui.forEach { $0?.applyTheme() }
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
@@ -2546,10 +2553,10 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
 // MARK: - Reopen last closed tab
 
-extension BrowserViewController {
+extension BrowserViewController: FeatureFlaggable {
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if featureFlags.isFeatureActiveForBuild(.shakeToRestore) {
+        if featureFlags.isFeatureEnabled(.shakeToRestore, checking: .buildOnly) {
             homePanelDidRequestToRestoreClosedTab(motion)
         }
     }

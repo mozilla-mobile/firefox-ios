@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsProtocol {
+class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
 
     // MARK: - Variables
     /* variables for checkmark settings */
@@ -15,31 +15,19 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     var hasHomePage = false
 
     var isJumpBackInSectionEnabled: Bool {
-        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.jumpBackIn)
-        let isNimbusFeatureEnabled = featureFlags.isFeatureActiveForNimbus(.jumpBackIn)
-        guard isFeatureEnabled, isNimbusFeatureEnabled else { return false }
-        return true
+        return featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly)
     }
 
     var isRecentlySavedSectionEnabled: Bool {
-        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.recentlySaved)
-        let isNimbusFeatureEnabled = featureFlags.isFeatureActiveForNimbus(.recentlySaved)
-        guard isFeatureEnabled, isNimbusFeatureEnabled else { return false }
-        return true
+        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildOnly)
     }
 
     var isWallpaperSectionEnabled: Bool {
-        let isFeatureEnabled = featureFlags.isFeatureActiveForBuild(.wallpapers)
-        guard isFeatureEnabled else { return false }
-        return true
+        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 
     var isHistoryHighlightsSectionEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
-              featureFlags.isFeatureActiveForNimbus(.historyHighlights)
-        else { return false }
-
-        return true
+        return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
     }
 
     // MARK: - Initializers
@@ -152,14 +140,14 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
     }
 
     private func setupStartAtHomeSection() -> SettingSection? {
-        guard featureFlags.isFeatureActiveForBuild(.startAtHome) else { return nil }
-        guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.userPreferenceFor(.startAtHome) else { return nil }
+        guard featureFlags.isFeatureEnabled(.startAtHome, checking: .buildOnly) else { return nil }
+        guard let startAtHomeSetting: StartAtHomeSetting = featureFlags.getCustomState(for: .startAtHome) else { return nil }
         currentStartAtHomeSetting = startAtHomeSetting
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
 
         let onOptionSelected: ((Bool, StartAtHomeSetting) -> Void) = { state, option in
-            self.featureFlags.setUserPreferenceFor(.startAtHome, to: option)
+            self.featureFlags.set(feature: .startAtHome, to: option)
             self.tableView.reloadData()
 
             let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.StartAtHome,
@@ -207,7 +195,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlagsPr
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, FeatureFlagsProtocol {
+    class TopSitesSettings: Setting, FeatureFlaggable {
         var profile: Profile
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
@@ -215,7 +203,7 @@ extension HomePageSettingViewController {
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         override var status: NSAttributedString {
-            let areShortcutsOn = featureFlags.userPreferenceFor(.topSites) == UserFeaturePreference.enabled
+            let areShortcutsOn = featureFlags.isFeatureEnabled(.topSites, checking: .userOnly)
             let status: String = areShortcutsOn ? .Settings.Homepage.Shortcuts.ToggleOn : .Settings.Homepage.Shortcuts.ToggleOff
             return NSAttributedString(string: String(format: status))
         }

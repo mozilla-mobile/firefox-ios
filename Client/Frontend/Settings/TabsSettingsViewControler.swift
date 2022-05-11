@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProtocol {
+class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
 
     init() {
         super.init(style: .grouped)
@@ -27,14 +27,13 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlagsProto
         let tabGroupsSetting = BoolSetting(with: .tabTrayGroups,
                                            titleText: NSAttributedString(string: .Settings.Tabs.TabGroups))
 
-        if featureFlags.isFeatureActiveForBuild(.inactiveTabs),
-           featureFlags.isFeatureActiveForNimbus(.inactiveTabs) {
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
             sectionItems.append(SettingSection(title: NSAttributedString(string: .Settings.Tabs.TabsSectionTitle),
                                                footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
                                                children: [inactiveTabsSetting]))
         }
 
-        if featureFlags.isFeatureActiveForBuild(.tabTrayGroups) {
+        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly) {
             sectionItems.append(SettingSection(children: [tabGroupsSetting]))
         }
 
