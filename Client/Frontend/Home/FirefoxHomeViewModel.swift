@@ -49,6 +49,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
+    var customizeButtonViewModel: FxHomeCustomizeButtonViewModel
 
     // MARK: - Initializers
     init(profile: Profile,
@@ -75,12 +76,14 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         self.pocketViewModel = FxHomePocketViewModel(
             profile: profile,
             isZeroSearch: isZeroSearch)
+        self.customizeButtonViewModel = FxHomeCustomizeButtonViewModel()
         self.childViewModels = [headerViewModel,
                                 topSiteViewModel,
                                 jumpBackInViewModel,
                                 recentlySavedViewModel,
                                 historyHighlightsViewModel,
-                                pocketViewModel]
+                                pocketViewModel,
+                                customizeButtonViewModel]
         self.isPrivate = isPrivate
 
         self.nimbus = nimbus
@@ -101,18 +104,6 @@ class FirefoxHomeViewModel: FeatureFlaggable {
 
         childViewModels.forEach {
             if $0.shouldShow { enabledSections.append($0.sectionType) }
-        }
-
-        // Laurie: todo customize home view model
-        // Sections that have no view model yet
-        // please remove when they have a view model and comform to FXHomeViewModelProtocol
-        for section in FirefoxHomeSectionType.allCases {
-            switch section {
-            case .customizeHome:
-                enabledSections.append(.customizeHome)
-            default:
-                break
-            }
         }
     }
 

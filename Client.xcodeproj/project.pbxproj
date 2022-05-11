@@ -451,6 +451,7 @@
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
 		8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */; };
+		8A161411282C035D00DDBB02 /* FxHomeCustomizeButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161410282C035D00DDBB02 /* FxHomeCustomizeButtonViewModel.swift */; };
 		8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */; };
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
 		8A2B1A5D28216C4D0061216B /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5A28216C4C0061216B /* Debug.xcconfig */; };
@@ -642,8 +643,8 @@
 		C8954A532729AD9D001C7283 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8954A4F2729AD9C001C7283 /* ThemeManager.swift */; };
 		C8954A542729AD9D001C7283 /* CustomTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8954A502729AD9D001C7283 /* CustomTheme.swift */; };
 		C8A012F126AB07D70096A7A7 /* FxHomeJumpBackInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A012F026AB07D70096A7A7 /* FxHomeJumpBackInViewModel.swift */; };
-		C8BA0E7627F20B8E00DD8214 /* HistoryDeletionUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */; };
 		C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */; };
+		C8BA0E7627F20B8E00DD8214 /* HistoryDeletionUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */; };
 		C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD46F3324A1606C001B3967 /* WidgetKit.framework */; };
 		C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE389A265E71E00009B09E /* CredentialListViewController.swift */; };
 		C8CE38B9265E71FE0009B09E /* EmptyPlaceholderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B1265E71FE0009B09E /* EmptyPlaceholderCell.swift */; };
@@ -2770,6 +2771,7 @@
 		8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultOnlyTestList.json; sourceTree = "<group>"; };
 		8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleTests.swift; sourceTree = "<group>"; };
 		8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensionsTests.swift; sourceTree = "<group>"; };
+		8A161410282C035D00DDBB02 /* FxHomeCustomizeButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeCustomizeButtonViewModel.swift; sourceTree = "<group>"; };
 		8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandler.swift; sourceTree = "<group>"; };
 		8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandlerTests.swift; sourceTree = "<group>"; };
 		8A2B1A5A28216C4C0061216B /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
@@ -7013,6 +7015,7 @@
 				8AB8574527D97CB00075C173 /* HomePanelContextMenu.swift */,
 				8AB8574727D97CD40075C173 /* HomePanelType.swift */,
 				8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */,
+				8A161410282C035D00DDBB02 /* FxHomeCustomizeButtonViewModel.swift */,
 				DF036E41274FD3FC002E834E /* HistoryHighlights */,
 				C87DC85F27B2CC1A006EFCE2 /* JumpBackIn */,
 				8AB8573527D950F30075C173 /* LogoHeader */,
@@ -9180,6 +9183,7 @@
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
 				433396C827ACE92500491049 /* CellWithRoundedButton.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
+				8A161411282C035D00DDBB02 /* FxHomeCustomizeButtonViewModel.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
