@@ -305,7 +305,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
             var object = TelemetryWrapper.EventObject.url
-            if case .text(_) = routerpath {
+            if case .text = routerpath {
                 object = .searchText
             }
             TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)

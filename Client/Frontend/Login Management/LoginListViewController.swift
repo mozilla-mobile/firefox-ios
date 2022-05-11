@@ -65,9 +65,9 @@ class LoginListViewController: SensitiveViewController {
 
         AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
             switch result {
-                case .success():
+                case .success:
                     fillDeferred(ok: true)
-                case .failure(_):
+                case .failure:
                     fillDeferred(ok: false)
             }
         }
