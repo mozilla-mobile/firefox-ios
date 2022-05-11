@@ -216,10 +216,6 @@ class HomePageSettingsUITests: BaseTestCase {
     func testCustomizeHomepage() {
         if !iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
-            waitForExistence(app.cells.otherElements["Bookmarks"], timeout: 5)
-            app.cells.otherElements["Bookmarks"].swipeUp()
-            waitForExistence(app.collectionViews.scrollViews.firstMatch, timeout: 5)
-            app.collectionViews.scrollViews.firstMatch.swipeUp()
             waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: 5)
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
