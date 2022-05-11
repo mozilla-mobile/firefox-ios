@@ -15,7 +15,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case historyGroups
     case inactiveTabs
     case jumpBackIn
-    case librarySection
     case pocket
     case pullToRefresh
     case recentlySaved
@@ -69,8 +68,7 @@ struct NimbusFlaggableFeature {
         case .wallpapers:
             return FlagKeys.CustomWallpaper
 
-        case .reportSiteIssue,
-                .librarySection,
+        case .reportSiteIssue
                 .shakeToRestore,
                 .bottomSearchBar:
             return nil

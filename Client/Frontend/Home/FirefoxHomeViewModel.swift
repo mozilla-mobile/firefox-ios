@@ -50,8 +50,6 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
 
-    // MARK: - Section availability variables
-
     // MARK: - Initializers
     init(profile: Profile,
          isZeroSearch: Bool = false,
