@@ -286,7 +286,7 @@ class TestHistory: ProfileTest {
             }
             cb()
         default:
-            history.clearHistory().upon() { success in cb() }
+            history.clearHistory().upon { success in cb() }
         }
     }
 
