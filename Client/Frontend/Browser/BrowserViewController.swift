@@ -1086,6 +1086,13 @@ class BrowserViewController: UIViewController {
         }
         self.show(toast: toast)
     }
+    
+    func removeBookmark(url: String) {
+        self.profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+            self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url)
+        }
+    }
 
     /// This function will open a view separate from the bookmark edit panel found in the
     /// Library Panel - Bookmarks section. In order to get the correct information, it needs
