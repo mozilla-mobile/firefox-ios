@@ -914,7 +914,7 @@ extension TabDisplayManager: TabManagerDelegate {
 
         // Open a link from website next to it
         if placeNextToParentTab, let selectedTabUUID = tabManager.selectedTab?.tabUUID {
-            let selectedTabIndex = dataStore.firstIndexDel() { t in
+            let selectedTabIndex = dataStore.firstIndexDel { t in
                 if let uuid = t.value?.tabUUID {
                     return uuid == selectedTabUUID
                 }
