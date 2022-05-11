@@ -198,11 +198,12 @@ extension BrowserViewController: WKUIDelegate {
             actions.append(UIAction(title: .ContextMenuOpenInNewPrivateTab, image: UIImage.templateImageNamed("menu-NewPrivateTab"), identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")) { _ in
                 addTab(url, true)
             })
-            
+
             let addBookmarkAction = UIAction(title: .ContextMenuBookmarkLink, image: UIImage.templateImageNamed(ImageIdentifiers.addToBookmark), identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")) { _ in
                 self.addBookmark(url: url.absoluteString, title: elements.title)
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
             }
+            
             let removeAction = UIAction(title: .RemoveBookmarkContextMenuTitle, image: UIImage.templateImageNamed(ImageIdentifiers.actionRemoveBookmark), identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")) { _ in
                 self.removeBookmark(url: url.absoluteString)
                 TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .contextMenu)
