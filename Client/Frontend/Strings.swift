@@ -153,6 +153,7 @@ extension String {
                 public static let DefaultBrowserTitle = MZLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
                 public static let DefaultBrowserDescription = MZLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
                 public static let DefaultBrowserButton = MZLocalizedString("DefaultBrowserCard.Button.v2", tableName: "Default Browser", value: "Learn How", comment: "Button string to learn how to set your default browser.", lastUpdated: .unknown)
+                public static let DefaultBrowserCloseAccessibility = MZLocalizedString("Close", comment: "Accessibility label for action denoting closing default browser card", lastUpdated: .unknown)
             }
         }
 

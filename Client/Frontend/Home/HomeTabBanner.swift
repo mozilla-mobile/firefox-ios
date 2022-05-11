@@ -62,6 +62,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         button.setImage(UIImage(named: ImageIdentifiers.xMark)?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
+        button.accessibilityLabel = BannerCopy.DefaultBrowserCloseAccessibility
     }
 
     private lazy var textStackView: UIStackView = .build { [weak self] stackView in
