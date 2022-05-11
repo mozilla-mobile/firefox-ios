@@ -813,13 +813,6 @@ extension String {
 // MARK: - Tab tray (chronological tabs)
 extension String {
     public static let TabTrayV2Title = MZLocalizedString("TabTray.Title", value: "Open Tabs", comment: "The title for the tab tray", lastUpdated: .unknown)
-    public static let TabTrayV2TodayHeader = MZLocalizedString("TabTray.Today.Header", value: "Today", comment: "The section header for tabs opened today", lastUpdated: .unknown)
-    public static let TabTrayV2YesterdayHeader = MZLocalizedString("TabTray.Yesterday.Header", value: "Yesterday", comment: "The section header for tabs opened yesterday", lastUpdated: .unknown)
-    public static let TabTrayV2LastWeekHeader = MZLocalizedString("TabTray.LastWeek.Header", value: "Last Week", comment: "The section header for tabs opened last week", lastUpdated: .unknown)
-    public static let TabTrayV2OlderHeader = MZLocalizedString("TabTray.Older.Header", value: "Older", comment: "The section header for tabs opened before last week", lastUpdated: .unknown)
-    public static let TabTraySwipeMenuMore = MZLocalizedString("TabTray.SwipeMenu.More", value: "More", comment: "The button title to see more options to perform on the tab.", lastUpdated: .unknown)
-    public static let TabTrayMoreMenuCopy = MZLocalizedString("TabTray.MoreMenu.Copy", value: "Copy", comment: "The title on the button to copy the tab address.", lastUpdated: .unknown)
-    public static let TabTrayV2PrivateTitle = MZLocalizedString("TabTray.PrivateTitle", value: "Private Tabs", comment: "The title for the tab tray in private mode", lastUpdated: .unknown)
 
     // Segmented Control tites for iPad
     public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString("TabTray.SegmentedControlTitles.Tabs", value: "Tabs", comment: "The title on the button to look at regular tabs.", lastUpdated: .unknown)

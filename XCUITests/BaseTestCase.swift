@@ -29,7 +29,8 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.SkipDefaultBrowserOnboarding,
                            LaunchArguments.DeviceName,
                            "\(LaunchArguments.ServerPort)\(serverPort)",
-                           LaunchArguments.SkipContextualHints]
+                           LaunchArguments.SkipContextualHints,
+                           LaunchArguments.TurnOffTabGroupsInUserPreferences]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()

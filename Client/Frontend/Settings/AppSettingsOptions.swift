@@ -562,43 +562,46 @@ class ExperimentsSettings: HiddenSetting {
     }
 }
 
-class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
+class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.pullToRefresh)
+        let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly)
+        featureFlags.set(feature: .pullToRefresh, to: newStatus)
         updateCell(navigationController)
     }
 }
 
-class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
+class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.inactiveTabs)
+        let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
+        featureFlags.set(feature: .inactiveTabs, to: newStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
     }
 }
 
-class ToggleHistoryGroups: HiddenSetting, FeatureFlagsProtocol {
+class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.historyGroups) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(
             string: "Toggle history groups \(toNewStatus)",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.historyGroups)
+        let newStatus = !featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly)
+        featureFlags.set(feature: .historyGroups, to: newStatus)
         updateCell(navigationController)
     }
 }

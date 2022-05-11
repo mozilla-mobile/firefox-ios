@@ -40,7 +40,23 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let KeySearchBarPosition = "SearchBarPosition"
 
+    // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
+        public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
+        public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
+        public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
+        public static let HistoryGroups = "HistoryGroupsUserPrefsKey"
+        public static let InactiveTabs = "InactiveTabsUserPrefsKey"
+        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let PullToRefresh = "PullToRefreshUserPrefsKey"
+        public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
+        public static let StartAtHome = "StartAtHomeUserPrefsKey"
+        public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
+        public static let TabTrayGroups = "TabTrayGroupsUserPrefsKey"
+        public static let TopSiteSection = "TopSitesUserPrefsKey"
+    }
+
+    public struct LegacyFeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesVisible"
         public static let CustomWallpaper = "customWallpaperPrefKey"
         public static let HistoryHighlightsSection = "historyHighlightsSectionEnabled"
@@ -53,6 +69,8 @@ public struct PrefsKeys {
         public static let TabTrayGroups = "KeyEnableGroupedTabsKey"
         public static let SponsoredShortcuts = "sponsoredShortcutsKey"
         public static let TopSiteSection = "topSitesKey"
+
+        public static let MigrationCheck = "MigrationCheck"
     }
 
     // Firefox contextual hint

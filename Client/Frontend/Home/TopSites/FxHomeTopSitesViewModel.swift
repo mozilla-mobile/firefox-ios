@@ -164,14 +164,14 @@ class FxHomeTopSitesViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .topSites
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureActiveForNimbus(.topSites) && featureFlags.userPreferenceFor(.topSites) == UserFeaturePreference.enabled
+        return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
     }
 
     var hasData: Bool {

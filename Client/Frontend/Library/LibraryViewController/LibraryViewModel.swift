@@ -4,7 +4,7 @@
 
 import Foundation
 
-class LibraryViewModel: FeatureFlagsProtocol {
+class LibraryViewModel: FeatureFlaggable {
 
     let profile: Profile
     let tabManager: TabManager
@@ -17,8 +17,7 @@ class LibraryViewModel: FeatureFlagsProtocol {
     }
 
     var shouldShowSearch: Bool {
-        return self.featureFlags.isFeatureActiveForBuild(.historyGroups) &&
-        currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
+        return featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) && currentPanelState == .history(state: .mainView) || currentPanelState == .history(state: .search)
     }
 
     var segmentedControlItems: [UIImage] {

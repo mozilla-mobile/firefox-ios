@@ -7,7 +7,7 @@ import Shared
 import Storage
 import MozillaAppServices
 
-class SearchTermGroupsManager {
+class SearchTermGroupsUtility {
 
     public static func getHighlightGroups(
         with profile: Profile,

@@ -8,7 +8,7 @@ protocol FirefoxHomeViewModelDelegate: AnyObject {
     func reloadSection(index: Int?)
 }
 
-class FirefoxHomeViewModel: FeatureFlagsProtocol {
+class FirefoxHomeViewModel: FeatureFlaggable {
 
     struct UX {
         static let topSitesHeight: CGFloat = 90
@@ -55,7 +55,7 @@ class FirefoxHomeViewModel: FeatureFlagsProtocol {
     // MARK: - Section availability variables
 
     var isYourLibrarySectionEnabled: Bool {
-        UIDevice.current.userInterfaceIdiom != .pad && featureFlags.isFeatureActiveForNimbus(.librarySection)
+        return UIDevice.current.userInterfaceIdiom != .pad && featureFlags.isFeatureEnabled(.librarySection, checking: .buildOnly)
     }
 
     // MARK: - Initializers
