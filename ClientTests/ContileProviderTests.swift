@@ -205,7 +205,7 @@ private extension ContileProviderTests {
 
     func stubResponse(response: String?, statusCode: Int, error: Error?) {
         let mockJSONData = response?.data(using: .utf8)
-        let response = HTTPURLResponse(url: URL(string: ContileProvider.contileResourceEndpoint)!,
+        let response = HTTPURLResponse(url: URL(string: ContileProvider.contileStagingResourceEndpoint)!,
                                        statusCode: statusCode,
                                        httpVersion: nil,
                                        headerFields: nil)!
