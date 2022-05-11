@@ -130,5 +130,9 @@ class FeatureFlagsManager: NimbusManageable {
         let useMockData = CoreFlaggableFeature(withID: .useMockData,
                                                enabledFor: [.developer])
         coreFeatures[.useMockData] = useMockData
+
+        let useStagingContileAPI = CoreFlaggableFeature(withID: .useStagingContileAPI,
+                                                        enabledFor: [.beta, .developer])
+        coreFeatures[.useStagingContileAPI] = useStagingContileAPI
     }
 }

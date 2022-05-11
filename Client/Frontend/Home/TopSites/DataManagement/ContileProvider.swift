@@ -23,9 +23,10 @@ extension ContileProviderInterface {
 }
 
 /// `Contile` is short for contextual tiles. This provider returns data that is used in Shortcuts (Top Sites) section on the Firefox home page.
-class ContileProvider: ContileProviderInterface, Loggable, URLCaching {
+class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFlaggable {
 
-    static let contileResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
+    static let contileProdResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
+    static let contileStagingResourceEndpoint = "https://contile-stage.topsites.nonprod.cloudops.mozgcp.net/v1/tiles"
 
     lazy var urlSession = makeURLSession(userAgent: UserAgent.mobileUserAgent(),
                                          configuration: URLSessionConfiguration.default)
@@ -39,8 +40,8 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching {
     }
 
     func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
-        guard let resourceEndpoint = URL(string: ContileProvider.contileResourceEndpoint) else {
-            browserLog.error("The Contile resource URL is invalid: \(ContileProvider.contileResourceEndpoint)")
+        guard let resourceEndpoint = resourceEndpoint else {
+            browserLog.error("The Contile resource URL is invalid: \(String(describing: resourceEndpoint))")
             completion(.failure(Error.failure))
             return
         }
@@ -87,8 +88,14 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching {
             completion(.success(contiles))
 
         } catch let error {
-            self.browserLog.error("Unable to parse with error: \(error)")
+            browserLog.error("Unable to parse with error: \(error)")
             completion(.failure(Error.failure))
         }
+    }
+
+    private var resourceEndpoint: URL? {
+        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) { return URL(string: ContileProvider.contileStagingResourceEndpoint) }
+
+        return URL(string: ContileProvider.contileProdResourceEndpoint)
     }
 }
