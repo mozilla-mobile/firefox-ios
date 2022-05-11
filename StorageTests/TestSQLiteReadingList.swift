@@ -44,7 +44,7 @@ class TestSQLiteReadingList: XCTestCase {
         switch result1 {
         case .failure(let error):
             XCTFail(error.description)
-        case .success( _):
+        case .success:
             break
         }
 
@@ -52,7 +52,7 @@ class TestSQLiteReadingList: XCTestCase {
         switch result2 {
         case .failure(let error):
             XCTFail(error.description)
-        case .success( _):
+        case .success:
             XCTAssert(result1.successValue == result2.successValue!)
         }
     }
@@ -87,7 +87,7 @@ class TestSQLiteReadingList: XCTestCase {
         switch result1 {
         case .failure(let error):
             XCTFail(error.description)
-        case .success(_):
+        case .success:
             break
         }
 

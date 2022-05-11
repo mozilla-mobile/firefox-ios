@@ -19,10 +19,10 @@ class SensitiveViewController: UIViewController {
             if !isAuthenticated {
                 AppAuthenticator.authenticateWithDeviceOwnerAuthentication { [self] result in
                     switch result {
-                        case .success():
+                        case .success:
                             isAuthenticated = false
                             removedBlurredOverlay()
-                        case .failure(_):
+                        case .failure:
                             isAuthenticated = false
                             navigationController?.dismiss(animated: true, completion: nil)
                             dismiss(animated: true)

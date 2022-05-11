@@ -28,8 +28,8 @@ enum LibraryPanelMainState: Equatable {
     // Allows detecting whether we're changing main panels or not
     func panelIsDifferentFrom(_ newState: LibraryPanelMainState) -> Bool {
         switch (self, newState) {
-        case (.bookmarks(_), .bookmarks(_)),
-             (.history(_), .history(_)),
+        case (.bookmarks, .bookmarks),
+             (.history, .history),
              (.downloads, .downloads),
              (.readingList, .readingList):
             return false
@@ -133,9 +133,9 @@ class LibraryPanelViewState {
 
     private func storeCurrentState() {
         switch state {
-        case .bookmarks(_):
+        case .bookmarks:
             bookmarksState = state
-        case .history(_):
+        case .history:
             historyState = state
         case .downloads, .readingList:
             return
