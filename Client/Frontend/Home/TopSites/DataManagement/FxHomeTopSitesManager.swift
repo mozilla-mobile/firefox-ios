@@ -110,7 +110,7 @@ class FxHomeTopSitesManager: FeatureFlaggable, NimbusManageable {
 
         sites.removeDuplicates()
 
-        topSites = sites.map { HomeTopSite(site: $0, profile: profile) }
+        topSites = sites.map { HomeTopSite(site: $0) }
 
         // Refresh data in the background so we'll have fresh data next time we show
         refreshIfNeeded(forceTopSites: false)
