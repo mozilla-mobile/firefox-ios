@@ -10,7 +10,7 @@ protocol FxHomeTopSitesManagerDelegate: AnyObject {
     func reloadTopSites()
 }
 
-class FxHomeTopSitesManager: FeatureFlaggable {
+class FxHomeTopSitesManager: FeatureFlaggable, NimbusManageable {
 
     private let profile: Profile
     private var topSites: [HomeTopSite] = []
@@ -130,7 +130,10 @@ class FxHomeTopSitesManager: FeatureFlaggable {
         // Google tile has precedence over Sponsored Tiles
         let sponsoredTileSpaces = availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount
         if sponsoredTileSpaces > 0 {
-            sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces, contiles: contiles)
+            let maxNumberOfTiles = nimbusManager.sponsoredTileLayer.getMaxNumberOfTiles()
+            sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
+                                    contiles: contiles,
+                                    maxNumberOfSponsoredTile: maxNumberOfTiles)
         }
     }
 
@@ -149,9 +152,6 @@ class FxHomeTopSitesManager: FeatureFlaggable {
 
     // MARK: - Sponsored tiles (Contiles)
 
-    static let maximumNumberOfSponsoredTile = 2
-
-    // TODO: Check for nimbus with https://mozilla-hub.atlassian.net/browse/FXIOS-3468
     private var shouldLoadSponsoredTiles: Bool {
         return featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildAndUser)
     }
@@ -168,8 +168,10 @@ private extension Array where Element == Site {
     /// - Parameters:
     ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
     ///   - sites: The top sites to add the sponsored tile to
-    mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile]) {
+    mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile], maxNumberOfSponsoredTile: Int) {
+        guard maxNumberOfSponsoredTile > 0 else { return }
         var siteAdded = 0
+
         for (index, _) in contiles.enumerated() {
 
             guard siteAdded < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
@@ -182,7 +184,7 @@ private extension Array where Element == Site {
             siteAdded += 1
 
             // Do not add more sponsored tile if we reach the maximum
-            guard siteAdded < FxHomeTopSitesManager.maximumNumberOfSponsoredTile else { break }
+            guard siteAdded < maxNumberOfSponsoredTile else { break }
         }
     }
 
