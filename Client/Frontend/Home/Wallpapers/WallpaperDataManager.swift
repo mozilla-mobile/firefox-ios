@@ -138,7 +138,6 @@ struct WallpaperDataManager {
     private func allSpecialCollections() -> [WallpaperCollection]? {
         var specialCollections = [WallpaperCollection]()
 
-
         specialCollections.append(projectHouseCollection())
         specialCollections.append(v100CelebrationCollection())
 
