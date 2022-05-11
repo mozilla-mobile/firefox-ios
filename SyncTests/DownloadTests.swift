@@ -56,7 +56,7 @@ class DownloadTests: XCTestCase {
 
         let ex = expectation(description: "batcher")
         let fetch1 = batcher.go(ic1, limit: 1)
-        fetch1.upon() { result in
+        fetch1.upon { result in
             ex.fulfill()
 
             // We are now off-main, and .value is safe to call from here on

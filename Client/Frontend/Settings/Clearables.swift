@@ -97,7 +97,7 @@ class SpotlightClearable: Clearable {
 
     func clear() -> Success {
         let deferred = Success()
-        UserActivityHandler.clearSearchIndex() { _ in
+        UserActivityHandler.clearSearchIndex { _ in
             deferred.fill(Maybe(success: ()))
         }
         return deferred
@@ -170,7 +170,7 @@ class TrackingProtectionClearable: Clearable {
 
     func clear() -> Success {
         let result = Success()
-        ContentBlocker.shared.clearSafelist() {
+        ContentBlocker.shared.clearSafelist {
             result.fill(Maybe(success: ()))
         }
         return result

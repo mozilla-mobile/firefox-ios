@@ -22,7 +22,7 @@ class ContileProviderTests: XCTestCase {
 
     func testErrorResponse_failsWithError() {
         stubResponse(response: nil, statusCode: 200, error: anError)
-        testProvider() { result in
+        testProvider { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
                 XCTAssertEqual(error, ContileProvider.Error.failure)
@@ -34,7 +34,7 @@ class ContileProviderTests: XCTestCase {
 
     func testNilDataResponse_failsWithError() {
         stubResponse(response: nil, statusCode: 200, error: nil)
-        testProvider() { result in
+        testProvider { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
                 XCTAssertEqual(error, ContileProvider.Error.failure)
@@ -46,7 +46,7 @@ class ContileProviderTests: XCTestCase {
 
     func testEmptyResponse_failsWithError() {
         stubResponse(response: emptyResponse, statusCode: 200, error: nil)
-        testProvider() { result in
+        testProvider { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
                 XCTAssertEqual(error, ContileProvider.Error.failure)
@@ -58,7 +58,7 @@ class ContileProviderTests: XCTestCase {
 
     func testAuthStatusCodeResponse_failsWithError() {
         stubResponse(response: nil, statusCode: 403, error: nil)
-        testProvider() { result in
+        testProvider { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
                 XCTAssertEqual(error, ContileProvider.Error.failure)
@@ -70,7 +70,7 @@ class ContileProviderTests: XCTestCase {
 
     func testWrongResponse_failsWithError() {
         stubResponse(response: emptyWrongResponse, statusCode: 200, error: nil)
-        testProvider() { result in
+        testProvider { result in
             switch result {
             case let .failure(error as ContileProvider.Error):
                 XCTAssertEqual(error, ContileProvider.Error.failure)
@@ -82,7 +82,7 @@ class ContileProviderTests: XCTestCase {
 
     func testEmptyArrayResponse_succeedsWithEmptyArray() {
         stubResponse(response: emptyArrayResponse, statusCode: 200, error: nil)
-        testProvider() { result in
+        testProvider { result in
             switch result {
             case let .success(contiles):
                 XCTAssertEqual(contiles, [])
@@ -94,7 +94,7 @@ class ContileProviderTests: XCTestCase {
 
     func testOrderingTilePosition_succeedsWithCorrectPosition() {
         stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
-        testProvider() { result in
+        testProvider { result in
             switch result {
             case let .success(contiles):
                 XCTAssertEqual(contiles[0].name, "Tile1")
@@ -107,7 +107,7 @@ class ContileProviderTests: XCTestCase {
 
     func testOrderingTilePositionWithNilPosition_succeedsWithCorrectPosition() {
         stubResponse(response: twoTilesWithOneNilPosition, statusCode: 200, error: nil)
-        testProvider() { result in
+        testProvider { result in
             switch result {
             case let .success(contiles):
                 XCTAssertEqual(contiles[0].name, "TileNilPosition")

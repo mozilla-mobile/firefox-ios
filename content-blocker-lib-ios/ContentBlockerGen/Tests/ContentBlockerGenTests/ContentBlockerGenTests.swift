@@ -38,7 +38,7 @@ final class ContentBlockerGenTests: XCTestCase {
         let categories = json["categories"]! as! [String: Any]
         let category = categories[CategoryTitle.Advertising.rawValue] as! [Any]
         var result = [String]()
-        category.forEach() {
+        category.forEach {
             result += contentBlocker.handleCategoryItem($0, action: .blockAll)
         }
 

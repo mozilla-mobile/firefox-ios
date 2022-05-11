@@ -52,7 +52,7 @@ class TabEventHandlerTests: XCTestCase {
 
         // Wait for tab count to increase by one with the popup open
         let actualTabCount = manager.tabs.count
-        let exists = NSPredicate() { obj, _ in
+        let exists = NSPredicate { obj, _ in
             let tabManager = obj as! TabManager
             return tabManager.tabs.count > actualTabCount
         }

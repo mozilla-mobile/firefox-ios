@@ -97,7 +97,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
                     // Since tabs are all sent within a single record, we don't count number of tabs applied
                     // but number of records. In this case it's just one.
                     downloadStats.applied += 1
-                    ins.upon() { res in
+                    ins.upon { res in
                         if let inserted = res.successValue {
                             if inserted != remotes.count {
                                 log.warning("Only inserted \(inserted) tabs, not \(remotes.count). Malformed or missing client?")

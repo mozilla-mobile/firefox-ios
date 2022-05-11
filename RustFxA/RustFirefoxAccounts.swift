@@ -279,7 +279,7 @@ open class RustFirefoxAccounts {
 
     public func disconnect() {
         guard let accountManager = accountManager.peek() else { return }
-        accountManager.logout() { _ in }
+        accountManager.logout { _ in }
         let prefs = RustFirefoxAccounts.prefs
         prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)

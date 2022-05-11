@@ -140,7 +140,7 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
         let deferred = Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>()
 
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
-            accountManager.getTokenServerEndpointURL() { result in
+            accountManager.getTokenServerEndpointURL { result in
                 guard case .success(let tokenServerEndpointURL) = result else {
                     deferred.fill(Maybe(failure: FxAClientError.local(NSError())))
                     return

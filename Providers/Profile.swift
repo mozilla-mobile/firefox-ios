@@ -1027,7 +1027,7 @@ open class BrowserProfile: Profile {
                         return
                     }
 
-                    accountManager.getTokenServerEndpointURL() { result in
+                    accountManager.getTokenServerEndpointURL { result in
                         guard case .success(let tokenServerEndpointURL) = result else {
                             d.fill(Maybe(failure: SyncUnlockGetURLError()))
                             return
@@ -1265,7 +1265,7 @@ open class BrowserProfile: Profile {
 
         @discardableResult public func syncEverything(why: SyncReason) -> Success {
             if let accountManager = RustFirefoxAccounts.shared.accountManager.peek(), accountManager.accountMigrationInFlight() {
-                accountManager.retryMigration() { _ in }
+                accountManager.retryMigration { _ in }
                 return Success()
             }
 

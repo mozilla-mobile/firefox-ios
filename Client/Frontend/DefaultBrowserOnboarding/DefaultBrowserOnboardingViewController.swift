@@ -94,7 +94,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.adjustsFontSizeToFitWidth = true
     }
 
-    private lazy var descriptionLabel1: UILabel = .build() { [weak self] label in
+    private lazy var descriptionLabel1: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[1]
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)

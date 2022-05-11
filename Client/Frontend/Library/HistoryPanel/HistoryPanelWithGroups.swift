@@ -157,7 +157,7 @@ class HistoryPanelWithGroups: UIViewController, LibraryPanel, Loggable, Notifica
         // Avoid refresing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
-        viewModel.reloadData() { [weak self] success in
+        viewModel.reloadData { [weak self] success in
             DispatchQueue.main.async {
                 self?.applySnapshot(animatingDifferences: animating)
             }
