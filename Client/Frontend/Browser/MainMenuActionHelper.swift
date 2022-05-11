@@ -290,6 +290,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
     private func getFindInPageAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuFindInPageTitleString,
                                      iconString: ImageIdentifiers.findInPage) { _ in
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .findInPage)
             self.delegate?.showFindInPage()
         }.items
     }
@@ -365,6 +366,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
                                      iconString: ImageIdentifiers.reportSiteIssue) { _ in
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
             self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reportSiteIssue)
         }.items
     }
 
