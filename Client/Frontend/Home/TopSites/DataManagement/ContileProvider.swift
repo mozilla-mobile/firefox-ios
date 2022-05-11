@@ -94,10 +94,8 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFl
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
-            return URL(string: ContileProvider.contileStagingResourceEndpoint)
-        } else {
-            return URL(string: ContileProvider.contileProdResourceEndpoint)
-        }
+        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) { return URL(string: ContileProvider.contileStagingResourceEndpoint) }
+
+        return URL(string: ContileProvider.contileProdResourceEndpoint)
     }
 }
