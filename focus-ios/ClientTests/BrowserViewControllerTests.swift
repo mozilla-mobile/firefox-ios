@@ -4,6 +4,7 @@
 
 import XCTest
 import Onboarding
+import AppShortcuts
 
 #if FOCUS
 @testable import Firefox_Focus
@@ -33,6 +34,7 @@ class BrowserViewControllerTests: XCTestCase {
 
     func testRequestReviewThreshold() {
         let bvc = BrowserViewController(
+            shortcutManager: ShortcutsManager(),
             authenticationManager: AuthenticationManager(),
             onboardingEventsHandler: onboardingEventsHandler,
             whatsNewEventsHandler: whatsNewEventsHandler,

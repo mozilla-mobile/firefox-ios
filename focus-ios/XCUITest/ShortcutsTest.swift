@@ -32,9 +32,9 @@ class ShortcutsTest: BaseTestCase {
 
     func testAdd4Shortcuts() {
         addShortcut(website: "mozilla.org")
-        // addShortcut(website: "example.com")
-        // addShortcut(website: "pocket.com")
-        // addShortcut(website: "wikipedia.com")
+//        addShortcut(website: "example.com")
+//        addShortcut(website: "pocket.com")
+//        addShortcut(website: "wikipedia.com")
 
         // Tap on erase button to go to homepage and check the shortcut created
         app.eraseButton.tap()

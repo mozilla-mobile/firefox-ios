@@ -103,19 +103,21 @@ class BaseTestCase: XCTestCase {
                 timeout: finishLoadingTimeout)
         }
     }
+    
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
+        waitForExistence(app.textFields["URLBar.urlText"], timeout: 3)
         app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].typeText(url+"\n")
+        app.textFields["URLBar.urlText"].clearAndEnterText(text: url+"\n")
 
-        if waitForLoadToFinish {
-            let finishLoadingTimeout: TimeInterval = 30
-            let progressIndicator = app.progressIndicators.element(boundBy: 0)
-            waitFor(progressIndicator,
-                    with: "exists != true",
-                    description: "Problem loading \(url)",
-                    timeout: finishLoadingTimeout)
-        }
+//        if waitForLoadToFinish {
+//            let finishLoadingTimeout: TimeInterval = 30
+//            let progressIndicator = app.progressIndicators.element(boundBy: 0)
+//            waitFor(progressIndicator,
+//                    with: "exists != true",
+//                    description: "Problem loading \(url)",
+//                    timeout: finishLoadingTimeout)
+//        }
     }
 
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0) {
@@ -141,3 +143,4 @@ class BaseTestCase: XCTestCase {
         waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
     }
 }
+                       

@@ -8,6 +8,7 @@ import Glean
 import Sentry
 import Combine
 import Onboarding
+import AppShortcuts
 
 enum AppPhase {
     case notRunning
@@ -44,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     }()
 
     private lazy var browserViewController = BrowserViewController(
+        shortcutManager: shortcutManager,
         authenticationManager: authenticationManager,
         onboardingEventsHandler: onboardingEventsHandler,
         whatsNewEventsHandler: whatsNewEventsHandler,
@@ -56,6 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     private let whatsNewEventsHandler = WhatsNewEventsHandler()
     private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
+    private lazy var shortcutManager: ShortcutsManager = .init()
 
     private lazy var onboardingEventsHandler = OnboardingEventsHandler(
         alwaysShowOnboarding: {
@@ -494,7 +497,7 @@ extension AppDelegate {
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel), buildInfo: GleanMetrics.GleanBuild.info)
 
         // Send "at startup" telemetry
-        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(ShortcutsManager.shared.numberOfShortcuts))
+        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(shortcutManager.shortcuts.count))
         GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
         GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))

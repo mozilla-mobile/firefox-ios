@@ -66,8 +66,6 @@
 		840057562735305600E48144 /* SettingsTableViewAccessoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840057552735305600E48144 /* SettingsTableViewAccessoryCell.swift */; };
 		840057582735309500E48144 /* SettingsTableViewToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840057572735309500E48144 /* SettingsTableViewToggleCell.swift */; };
 		8400575A27353B1800E48144 /* UIPasteBoardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400575927353B1800E48144 /* UIPasteBoardExtensions.swift */; };
-		845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845174A526CD0C2500510113 /* ShortcutsManager.swift */; };
-		845174A826CD2C7100510113 /* ShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845174A726CD2C7100510113 /* ShortcutView.swift */; };
 		846A23182668CC4500DB3C37 /* FullScreen.js in Resources */ = {isa = PBXBuildFile; fileRef = 846A23172668CC4500DB3C37 /* FullScreen.js */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
@@ -82,6 +80,10 @@
 		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
 		C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D142F26EF62BE007B275C /* TipsPageViewController.swift */; };
 		C82D143226EF634E007B275C /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82D143126EF634E007B275C /* TipViewController.swift */; };
+		C82F45F328193628000D7D84 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F228193628000D7D84 /* TestHelpers.swift */; };
+		C82F45F528193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */; };
+		C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = C82F45F628193EE8000D7D84 /* AppShortcuts */; };
+		C82F45F9281A76EF000D7D84 /* ShortcutsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */; };
 		C8337DF42710898800093D42 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE42710898800093D42 /* ImageLoader.swift */; };
 		C8337DF52710898800093D42 /* ToggleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE62710898800093D42 /* ToggleItem.swift */; };
 		C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8337DE72710898800093D42 /* TrackingProtectionState.swift */; };
@@ -596,8 +598,6 @@
 		840057552735305600E48144 /* SettingsTableViewAccessoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewAccessoryCell.swift; sourceTree = "<group>"; };
 		840057572735309500E48144 /* SettingsTableViewToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewToggleCell.swift; sourceTree = "<group>"; };
 		8400575927353B1800E48144 /* UIPasteBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPasteBoardExtensions.swift; sourceTree = "<group>"; };
-		845174A526CD0C2500510113 /* ShortcutsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsManager.swift; sourceTree = "<group>"; };
-		845174A726CD2C7100510113 /* ShortcutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutView.swift; sourceTree = "<group>"; };
 		846A23172668CC4500DB3C37 /* FullScreen.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullScreen.js; sourceTree = "<group>"; };
 		A89766D31F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D41F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -620,6 +620,9 @@
 		C817A35622CE73B4002529FF /* LockProtected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockProtected.swift; sourceTree = "<group>"; };
 		C82D142F26EF62BE007B275C /* TipsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsPageViewController.swift; sourceTree = "<group>"; };
 		C82D143126EF634E007B275C /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
+		C82F45F228193628000D7D84 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShortcutView+UIContextMenuInteractionDelegate.swift"; sourceTree = "<group>"; };
+		C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsPresenter.swift; sourceTree = "<group>"; };
 		C8337DE42710898800093D42 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		C8337DE62710898800093D42 /* ToggleItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleItem.swift; sourceTree = "<group>"; };
 		C8337DE72710898800093D42 /* TrackingProtectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionState.swift; sourceTree = "<group>"; };
@@ -1083,6 +1086,7 @@
 				C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */,
 				45D96F3127B196E100096BC0 /* Nimbus in Frameworks */,
 				45D96F3327B196E100096BC0 /* RustLog in Frameworks */,
+				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
 				45D96F3527B196E100096BC0 /* Viaduct in Frameworks */,
@@ -1126,6 +1130,7 @@
 				F74E8108218183F400D18535 /* SearchSuggestionsTest.swift */,
 				58408BA4265FC524003C4E4F /* BasicBrowsing.swift */,
 				D440BC17276B3535003FD9B1 /* ShortcutsTest.swift */,
+				C82F45F228193628000D7D84 /* TestHelpers.swift */,
 			);
 			path = XCUITest;
 			sourceTree = "<group>";
@@ -1405,15 +1410,6 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		C8D0306227E8A028000664DA /* AppShortcuts */ = {
-			isa = PBXGroup;
-			children = (
-				845174A526CD0C2500510113 /* ShortcutsManager.swift */,
-				845174A726CD2C7100510113 /* ShortcutView.swift */,
-			);
-			path = AppShortcuts;
-			sourceTree = "<group>";
-		};
 		C8D0306327E8AF5C000664DA /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -1431,6 +1427,7 @@
 				7460BD661F58B1B10096B745 /* GradientProgressBar.swift */,
 				EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */,
 				D30DF93D1DC1634F0064736C /* Toast.swift */,
+				C82F45F428193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -1699,7 +1696,6 @@
 				C8D0306B27E8B3FB000664DA /* SearchSuggestions */,
 				C8D0306827E8B109000664DA /* Siri */,
 				C8D0306427E8AF9A000664DA /* Utilities */,
-				C8D0306227E8A028000664DA /* AppShortcuts */,
 				C8D0306327E8AF5C000664DA /* UIComponents */,
 				C8D0305F27E89F32000664DA /* Nimbus */,
 				EB84F9702093815500BA6739 /* effective_tld_names.dat */,
@@ -1717,6 +1713,7 @@
 				E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
+				C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -1865,6 +1862,7 @@
 				C8FB1E6327F59D9C00C60DC6 /* UIHelpers */,
 				C8FB1E6527F5A79300C60DC6 /* DesignSystem */,
 				C871585F27FB29AC006224BB /* Onboarding */,
+				C82F45F628193EE8000D7D84 /* AppShortcuts */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -2232,6 +2230,7 @@
 				4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */,
 				F8DEC61426C6A31700C5F26B /* AppInfo.swift in Sources */,
 				F74E8109218183F400D18535 /* SearchSuggestionsTest.swift in Sources */,
+				C82F45F328193628000D7D84 /* TestHelpers.swift in Sources */,
 				C8D0306E27E9B03D000664DA /* UIConstants.swift in Sources */,
 				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,
@@ -2319,7 +2318,6 @@
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
 				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
 				D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */,
-				845174A826CD2C7100510113 /* ShortcutView.swift in Sources */,
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
 				C8337DFF2710898800093D42 /* SheetModalViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
@@ -2391,6 +2389,7 @@
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,
 				C817A35722CE73B4002529FF /* Deferred.swift in Sources */,
 				D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */,
+				C82F45F528193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift in Sources */,
 				C83FB7DC273BE4BC00B78CC5 /* Metadata.swift in Sources */,
 				D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */,
 				E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */,
@@ -2401,7 +2400,6 @@
 				C8337DFC2710898800093D42 /* AsyncImageView.swift in Sources */,
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
-				845174A626CD0C2500510113 /* ShortcutsManager.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				C871586227FC276D006224BB /* OnboardingFactory.swift in Sources */,
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
@@ -2410,6 +2408,7 @@
 				C82D143026EF62BE007B275C /* TipsPageViewController.swift in Sources */,
 				C8337DF42710898800093D42 /* ImageLoader.swift in Sources */,
 				F8714D2127A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift in Sources */,
+				C82F45F9281A76EF000D7D84 /* ShortcutsPresenter.swift in Sources */,
 				F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */,
 				C89AA96F271720330089838F /* ThemeTableViewAccessoryCell.swift in Sources */,
 				D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */,
@@ -5669,6 +5668,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = Viaduct;
+		};
+		C82F45F628193EE8000D7D84 /* AppShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppShortcuts;
 		};
 		C871585F27FB29AC006224BB /* Onboarding */ = {
 			isa = XCSwiftPackageProductDependency;

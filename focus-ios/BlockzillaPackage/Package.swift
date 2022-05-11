@@ -15,7 +15,10 @@ let package = Package(
             targets: ["DesignSystem"]),
         .library(
             name: "Onboarding",
-            targets: ["Onboarding"])
+            targets: ["Onboarding"]),
+        .library(
+            name: "AppShortcuts",
+            targets: ["AppShortcuts"])
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1")
@@ -38,6 +41,16 @@ let package = Package(
                 .product(name: "SnapKit", package: "SnapKit")
             ],
             exclude: ["Preview Files"]
-        )
+        ),
+        .target(
+            name: "AppShortcuts",
+            dependencies: [
+                "DesignSystem",
+                .product(name: "SnapKit", package: "SnapKit")
+            ]
+        ),
+        .testTarget(
+            name: "BlockzillaPackageTests",
+            dependencies: ["AppShortcuts"]),
     ]
 )

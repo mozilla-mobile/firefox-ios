@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import AppShortcuts
 
 protocol MenuItemProvider: AnyObject {
     var shortcutManager: ShortcutsManager { get }
@@ -87,7 +88,7 @@ extension MenuItemProvider where Self: MenuActionable {
     func getShortcutsItem(for url: URL) -> MenuAction? {
         if shortcutManager.isSaved(shortcut: Shortcut(url: url)) {
             return removeFromShortcutsItem(for: url)
-        } else if shortcutManager.numberOfShortcuts < UIConstants.maximumNumberOfShortcuts {
+        } else if shortcutManager.shortcuts.count < ShortcutsManager.maximumNumberOfShortcuts {
             return addToShortcutsItem(for: url)
         } else {
             return nil

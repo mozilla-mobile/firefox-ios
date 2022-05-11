@@ -11,6 +11,7 @@ import Intents
 import Glean
 import Combine
 import Onboarding
+import AppShortcuts
 
 class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
@@ -50,6 +51,7 @@ class BrowserViewController: UIViewController {
     private var onboardingEventsHandler: OnboardingEventsHandler
     private var whatsNewEventsHandler: WhatsNewEventsHandler
     private var themeManager: ThemeManager
+    private let shortcutsPresenter = ShortcutsPresenter()
 
     private enum URLBarScrollState {
         case collapsed
@@ -87,7 +89,7 @@ class BrowserViewController: UIViewController {
 
     init(
         tipManager: TipManager = TipManager.shared,
-        shortcutManager: ShortcutsManager = ShortcutsManager.shared,
+        shortcutManager: ShortcutsManager,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandler,
         whatsNewEventsHandler: WhatsNewEventsHandler,
@@ -133,14 +135,13 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func addShortcutsContainerConstraints() {
+        let config: ShortcutView.LayoutConfiguration = isIPadRegularDimensions ? .iPad : .default
         shortcutsContainer.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom).offset(isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerOffsetIPad : UIConstants.layout.shortcutsContainerOffset)
             make.width.equalTo(isIPadRegularDimensions ?
                                UIConstants.layout.shortcutsContainerWidthIPad :
                                 UIConstants.layout.shortcutsContainerWidth).priority(.medium)
-            make.height.equalTo(isIPadRegularDimensions ?
-                                UIConstants.layout.shortcutViewHeightIPad :
-                                    UIConstants.layout.shortcutViewHeight)
+            make.height.equalTo(config.height)
             make.centerX.equalToSuperview()
             make.leading.greaterThanOrEqualTo(mainContainerView).inset(8)
             make.trailing.lessThanOrEqualTo(mainContainerView).inset(-8)
@@ -194,7 +195,7 @@ class BrowserViewController: UIViewController {
         overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
 
-        shortcutManager.shortcutsState = .createShortcutViews
+        shortcutsPresenter.shortcutsState = .createShortcutViews
         background.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
         }
@@ -368,7 +369,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func setupShortcutEvents() {
-        shortcutManager
+        shortcutsPresenter
             .$shortcutsState
             .sink { [unowned self] shortcutsState in
 
@@ -386,12 +387,12 @@ class BrowserViewController: UIViewController {
                     shortcutsBackground.isHidden = true
 
                 case .editingURL(let text):
-                    let shouldShowShortcuts = text.isEmpty && shortcutManager.numberOfShortcuts != 0
+                    let shouldShowShortcuts = text.isEmpty && !shortcutManager.shortcuts.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
                     shortcutsBackground.isHidden = !urlBar.inBrowsingMode ? true : !shouldShowShortcuts
 
                 case .activeURLBar:
-                    let shouldShowShortcuts = shortcutManager.numberOfShortcuts != 0
+                    let shouldShowShortcuts = !shortcutManager.shortcuts.isEmpty
                     shortcutsContainer.isHidden = !shouldShowShortcuts
                     shortcutsBackground.isHidden = !shouldShowShortcuts || !urlBar.inBrowsingMode
 
@@ -408,25 +409,23 @@ class BrowserViewController: UIViewController {
     }
 
     private func addShortcuts() {
-        if shortcutManager.numberOfShortcuts != 0 {
-            for i in 0..<shortcutManager.numberOfShortcuts {
-                let shortcut = shortcutManager.shortcutAt(index: i)
-                let shortcutView = ShortcutView(shortcut: shortcut, isIpad: isIPadRegularDimensions)
+        if !shortcutManager.shortcuts.isEmpty {
+            for shortcut in shortcutManager.shortcuts {
+                let config: ShortcutView.LayoutConfiguration = isIPadRegularDimensions ? .iPad : .default
+                let shortcutView = ShortcutView(shortcut: shortcut, layoutConfiguration: config)
+                let interaction = UIContextMenuInteraction(delegate: shortcutView)
+                shortcutView.outerView.addInteraction(interaction)
                 shortcutView.setContentCompressionResistancePriority(.required, for: .horizontal)
                 shortcutView.setContentHuggingPriority(.required, for: .horizontal)
                 shortcutView.delegate = self
                 shortcutsContainer.addArrangedSubview(shortcutView)
                 shortcutView.snp.makeConstraints { make in
-                    make.width.equalTo(isIPadRegularDimensions ?
-                                        UIConstants.layout.shortcutViewWidthIPad :
-                                        UIConstants.layout.shortcutViewWidth)
-                    make.height.equalTo(isIPadRegularDimensions ?
-                                            UIConstants.layout.shortcutViewHeightIPad :
-                                            UIConstants.layout.shortcutViewHeight)
+                    make.width.equalTo(config.width)
+                    make.height.equalTo(config.height)
                 }
             }
         }
-        if shortcutManager.numberOfShortcuts < UIConstants.maximumNumberOfShortcuts {
+        if shortcutManager.shortcuts.count < ShortcutsManager.maximumNumberOfShortcuts {
             shortcutsContainer.addArrangedSubview(UIView())
         }
     }
@@ -670,7 +669,7 @@ class BrowserViewController: UIViewController {
         homeViewController.view.isHidden = false
         createURLBar()
         updateLockIcon(trackingProtectionStatus: trackingProtectionManager.trackingProtectionStatus)
-        shortcutManager.shortcutsState = .onHomeView
+        shortcutsPresenter.shortcutsState = .onHomeView
 
         // Clear the cache and cookies, starting a new session.
         WebCacheUtils.reset()
@@ -758,7 +757,7 @@ class BrowserViewController: UIViewController {
     func submit(url: URL) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
-        shortcutManager.shortcutsState = .none
+        shortcutsPresenter.shortcutsState = .none
 
         if isIPadRegularDimensions {
             urlBar.snp.makeConstraints { make in
@@ -869,7 +868,7 @@ class BrowserViewController: UIViewController {
     @objc private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
-        shortcutManager.shortcutsState = .activeURLBar
+        shortcutsPresenter.shortcutsState = .activeURLBar
     }
 
     @objc private func reload() {
@@ -1115,7 +1114,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard urlBar.url?.absoluteString != trimmedText else { return }
-        shortcutManager.shortcutsState = .editingURL(text: trimmedText)
+        shortcutsPresenter.shortcutsState = .editingURL(text: trimmedText)
         let isOnHomeView = !urlBar.inBrowsingMode
 
         if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
@@ -1202,7 +1201,7 @@ extension BrowserViewController: URLBarDelegate {
         guard !shortcutContextMenuIsOpenOnIpad() else { return }
         overlayView.dismiss()
         toggleURLBarBackground(isBright: !webViewController.isLoading)
-        shortcutManager.shortcutsState = .dismissedURLBar
+        shortcutsPresenter.shortcutsState = .dismissedURLBar
         webViewController.focus()
     }
 
@@ -1213,7 +1212,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-        shortcutManager.shortcutsState = .activeURLBar
+        shortcutsPresenter.shortcutsState = .activeURLBar
         homeViewController.updateUI(urlBarIsActive: true, isBrowsing: urlBar.inBrowsingMode)
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.urlBarContainer.alpha = 1
@@ -1328,7 +1327,7 @@ extension BrowserViewController: ShortcutViewDelegate {
         }))
         alert.addAction(UIAlertAction(title: UIConstants.strings.renameShortcutAlertPrimaryAction, style: .default, handler: { [unowned alert, unowned self] action in
             let newName = (alert.textFields?.first?.text ?? shortcut.name).trimmingCharacters(in: .whitespacesAndNewlines)
-            ShortcutsManager.shared.rename(shortcut: shortcut, newName: newName)
+            self.shortcutManager.rename(shortcut: shortcut, newName: newName)
             self.urlBar.activateTextField()
         }))
         self.show(alert, sender: nil)
@@ -1348,15 +1347,15 @@ extension BrowserViewController: ShortcutViewDelegate {
     }
 
     func removeFromShortcutsAction(shortcut: Shortcut) {
-        ShortcutsManager.shared.removeFromShortcuts(shortcut: shortcut)
-        self.shortcutsBackground.isHidden = self.shortcutManager.numberOfShortcuts == 0 || !self.urlBar.inBrowsingMode ? true : false
+        shortcutManager.remove(shortcut: shortcut)
+        self.shortcutsBackground.isHidden = self.shortcutManager.shortcuts.count == 0 || !self.urlBar.inBrowsingMode ? true : false
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_home_screen"].add()
     }
 }
 
 extension BrowserViewController: ShortcutsManagerDelegate {
 
-    func shortcutsUpdated() {
+    func shortcutsDidUpdate() {
         for subview in shortcutsContainer.subviews {
             subview.removeFromSuperview()
         }
@@ -1366,7 +1365,7 @@ extension BrowserViewController: ShortcutsManagerDelegate {
         for subview in shortcutsContainer.subviews {
             let subview = subview as? ShortcutView
             if let subviewShortcut = subview?.shortcut, subviewShortcut.url == shortcut.url {
-                subview?.renameShortcut(with: shortcut)
+                subview?.rename(shortcut: shortcut)
             }
         }
     }
@@ -1965,7 +1964,7 @@ extension BrowserViewController: MenuActionable {
 
     func addToShortcuts(url: URL) {
         let shortcut = Shortcut(url: url)
-        self.shortcutManager.addToShortcuts(shortcut: shortcut)
+        self.shortcutManager.add(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutAddedCounter.add()
         TipManager.shortcutsTip = false
 
@@ -1974,7 +1973,7 @@ extension BrowserViewController: MenuActionable {
 
     func removeShortcut(url: URL) {
         let shortcut = Shortcut(url: url)
-        self.shortcutManager.removeFromShortcuts(shortcut: shortcut)
+        self.shortcutManager.remove(shortcut: shortcut)
         GleanMetrics.Shortcuts.shortcutRemovedCounter["removed_from_browser_menu"].add()
 
         GleanMetrics.BrowserMenu.browserMenuAction.record(GleanMetrics.BrowserMenu.BrowserMenuActionExtra(item: "remove_from_shortcuts"))
