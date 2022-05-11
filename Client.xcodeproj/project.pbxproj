@@ -274,7 +274,6 @@
 		3E82980324BE4C31000A59FF /* FxATelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82980124BE4C31000A59FF /* FxATelemetry.swift */; };
 		43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4302EDBE2819D6640070D373 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 4302EDBD2819D6640070D373 /* SwiftyJSON */; };
-		4302EDBF2819D6790070D373 /* DynamicSwiftyJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */; };
 		43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		43118CF3251A9CCA00F24376 /* SiteArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */; };
 		43118D07251A9CD100F24376 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
@@ -539,6 +538,8 @@
 		8AEE62CB2756BA34003207D1 /* DownloadHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C82756BA34003207D1 /* DownloadHelper.js */; };
 		8AF0CFF527A0B0ED00C1A4A2 /* QuickActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF0CFF427A0B0ED00C1A4A2 /* QuickActionsTests.swift */; };
 		8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */; };
+		8AFD6275282C51D300451BC8 /* DynamicSwiftyJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */; };
+		8AFD6276282C51D300451BC8 /* DynamicSwiftyJson.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD3BCC1ED5B7FA00446D38 /* FxADeepLinkingTests.swift */; };
@@ -1441,6 +1442,17 @@
 			files = (
 				4368F88427966F350013419B /* SDWebImage.framework in Embed Frameworks */,
 				4368F835279665DF0013419B /* Sentry.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AFD6277282C51D300451BC8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8AFD6276282C51D300451BC8 /* DynamicSwiftyJson.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4536,7 +4548,7 @@
 			files = (
 				43AFC0F727967C8A0039DDF4 /* Fuzi.framework in Frameworks */,
 				43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */,
-				4302EDBF2819D6790070D373 /* DynamicSwiftyJson.framework in Frameworks */,
+				8AFD6275282C51D300451BC8 /* DynamicSwiftyJson.framework in Frameworks */,
 				4368F889279671B10013419B /* SDWebImage.framework in Frameworks */,
 				43BE581B278BE5AE00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
@@ -7102,6 +7114,7 @@
 				282731591ABC9BE600AA1954 /* Sources */,
 				2827315A1ABC9BE600AA1954 /* Frameworks */,
 				2827315C1ABC9BE600AA1954 /* Resources */,
+				8AFD6277282C51D300451BC8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
