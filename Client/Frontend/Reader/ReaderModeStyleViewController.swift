@@ -85,8 +85,8 @@ class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
         fontSizeRow.addSubview(fontSizeLabel)
 
         NSLayoutConstraint.activate([
-            fontSizeRow.centerXAnchor.constraint(equalTo: fontSizeRow.centerXAnchor),
-            fontSizeRow.centerYAnchor.constraint(equalTo: fontSizeRow.centerYAnchor),
+            fontSizeLabel.centerXAnchor.constraint(equalTo: fontSizeRow.centerXAnchor),
+            fontSizeLabel.centerYAnchor.constraint(equalTo: fontSizeRow.centerYAnchor),
         ])
 
         fontSizeButtons = [
