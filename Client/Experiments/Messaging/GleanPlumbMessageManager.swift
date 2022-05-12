@@ -203,6 +203,9 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// Reporting a malformed message is done at the call site when reacting to a `nil`.
     private func createMessage(messageId: String, message: MessageData, lookupTables: Messaging) -> GleanPlumbMessage? {
 
+        /// Guard against a message with a blank `text` property. 
+        if message.text.isEmpty { return nil }
+
         /// Ascertain a Message's style, to know priority and max impressions.
         guard let style = lookupTables.styles[message.style] else { return nil }
 
