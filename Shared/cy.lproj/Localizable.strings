@@ -2197,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Tabiau eraill";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Tabiau Preifat";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Mae tabiau ar gael yma am 30 diwrnod. Wedi hynny, bydd y tabiau'n cael eu cau'n awtomatig.";
 

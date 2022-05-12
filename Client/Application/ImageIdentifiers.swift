@@ -27,6 +27,7 @@ public struct ImageIdentifiers {
     public static let edit = "edit"
     public static let findInPage = "menu-FindInPage"
     public static let findNext = "find_next"
+    public static let findPrevious = "find_previous"
     public static let help = "help"
     public static let history = "menu-panel-History"
     public static let key = "key"

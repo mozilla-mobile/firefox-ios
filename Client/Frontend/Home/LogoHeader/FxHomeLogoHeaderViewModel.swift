@@ -25,13 +25,13 @@ class FxHomeLogoHeaderViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .logoHeader
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureActiveForBuild(.wallpapers)
+        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 }

@@ -155,12 +155,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
 
-        imageView.image = topSite.image
-        topSite.imageLoaded = { image in
-            // Checks to assign image to correct cell when reusing a cell
-            guard topSite.identifier == self.homeTopSite?.identifier else { return }
-            self.imageView.image = image
-        }
+        imageView.setFaviconOrDefaultIcon(forSite: topSite.site) {}
 
         configurePinnedSite(topSite)
         configureSponsoredSite(topSite)

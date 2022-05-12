@@ -24,7 +24,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101
+    case v39, v96, v97, v98, v99, v100, v101, v102
 
     // Used for all cases before version 39.
     case unknown
@@ -150,9 +150,10 @@ extension String {
 
         public struct HomeTabBanner {
             public struct EvergreenMessage {
-                public static let DefaultBrowserTitle = MZLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
-                public static let DefaultBrowserDescription = MZLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
-                public static let DefaultBrowserButton = MZLocalizedString("DefaultBrowserCard.Button.v2", tableName: "Default Browser", value: "Learn How", comment: "Button string to learn how to set your default browser.", lastUpdated: .unknown)
+                public static let HomeTabBannerTitle = MZLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small home tab banner shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
+                public static let HomeTabBannerDescription = MZLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small home tab banner shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
+                public static let HomeTabBannerButton = MZLocalizedString("DefaultBrowserCard.Button.v2", tableName: "Default Browser", value: "Learn How", comment: "Button string to learn how to set your default browser.", lastUpdated: .unknown)
+                public static let HomeTabBannerCloseAccessibility = MZLocalizedString("DefaultBrowserCloseButtonAccessibility.v102", value: "Close", comment: "Accessibility label for action denoting closing default browser home tab banner.", lastUpdated: .v102)
             }
         }
 
@@ -813,13 +814,6 @@ extension String {
 // MARK: - Tab tray (chronological tabs)
 extension String {
     public static let TabTrayV2Title = MZLocalizedString("TabTray.Title", value: "Open Tabs", comment: "The title for the tab tray", lastUpdated: .unknown)
-    public static let TabTrayV2TodayHeader = MZLocalizedString("TabTray.Today.Header", value: "Today", comment: "The section header for tabs opened today", lastUpdated: .unknown)
-    public static let TabTrayV2YesterdayHeader = MZLocalizedString("TabTray.Yesterday.Header", value: "Yesterday", comment: "The section header for tabs opened yesterday", lastUpdated: .unknown)
-    public static let TabTrayV2LastWeekHeader = MZLocalizedString("TabTray.LastWeek.Header", value: "Last Week", comment: "The section header for tabs opened last week", lastUpdated: .unknown)
-    public static let TabTrayV2OlderHeader = MZLocalizedString("TabTray.Older.Header", value: "Older", comment: "The section header for tabs opened before last week", lastUpdated: .unknown)
-    public static let TabTraySwipeMenuMore = MZLocalizedString("TabTray.SwipeMenu.More", value: "More", comment: "The button title to see more options to perform on the tab.", lastUpdated: .unknown)
-    public static let TabTrayMoreMenuCopy = MZLocalizedString("TabTray.MoreMenu.Copy", value: "Copy", comment: "The title on the button to copy the tab address.", lastUpdated: .unknown)
-    public static let TabTrayV2PrivateTitle = MZLocalizedString("TabTray.PrivateTitle", value: "Private Tabs", comment: "The title for the tab tray in private mode", lastUpdated: .unknown)
 
     // Segmented Control tites for iPad
     public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString("TabTray.SegmentedControlTitles.Tabs", value: "Tabs", comment: "The title on the button to look at regular tabs.", lastUpdated: .unknown)
@@ -963,7 +957,6 @@ extension String {
     /// Identifiers of all new strings should begin with `Menu.`
     public struct AppMenu {
         public static let AppMenuReportSiteIssueTitleString = MZLocalizedString("Menu.ReportSiteIssueAction.Title", tableName: "Menu", value: "Report Site Issue", comment: "Label for the button, displayed in the menu, used to report a compatibility issue with the current page.", lastUpdated: .unknown)
-        public static let AppMenuLibraryTitleString = MZLocalizedString("Menu.Library.Title", tableName: "Menu", value: "Your Library", comment: "Label for the button, displayed in the menu, used to open the Library", lastUpdated: .unknown)
         public static let AppMenuSharePageTitleString = MZLocalizedString("Menu.SharePageAction.Title", tableName: "Menu", value: "Share Page With…", comment: "Label for the button, displayed in the menu, used to open the share dialog.", lastUpdated: .unknown)
         public static let AppMenuCopyLinkTitleString = MZLocalizedString("Menu.CopyLink.Title", tableName: "Menu", value: "Copy Link", comment: "Label for the button, displayed in the menu, used to copy the current page link to the clipboard.", lastUpdated: .unknown)
         public static let AppMenuAddBookmarkTitleString = MZLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Bookmark This Page", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.", lastUpdated: .unknown)

@@ -85,16 +85,14 @@ class FirefoxHomeRecentlySavedViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .recentlySaved
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureActiveForBuild(.recentlySaved)
-        && featureFlags.isFeatureActiveForNimbus(.recentlySaved)
-        && featureFlags.userPreferenceFor(.recentlySaved) == UserFeaturePreference.enabled
+        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
     }
 
     var hasData: Bool {

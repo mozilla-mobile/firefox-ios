@@ -2026,9 +2026,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Ostale kartice";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Privatne kartice";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Kartice su ovdje dostupne 30 dana. Nakon toga automatski će biti zatvorene.";
 

@@ -85,8 +85,8 @@ class ContentBlocker {
 
         TPStatsBlocklistChecker.shared.startup()
 
-        removeOldListsByDateFromStore() {
-            self.removeOldListsByNameFromStore() {
+        removeOldListsByDateFromStore {
+            self.removeOldListsByNameFromStore {
                 self.compileListsNotInStore {
                     self.setupCompleted = true
                     NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
@@ -148,7 +148,7 @@ class ContentBlocker {
         }
 
         // Async required here to ensure remove() call is processed.
-        DispatchQueue.main.async() { [weak tab] in
+        DispatchQueue.main.async { [weak tab] in
             tab?.currentWebView()?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
         }
     }
@@ -238,7 +238,7 @@ extension ContentBlocker {
 
         UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
 
-        removeAllRulesInStore() {
+        removeAllRulesInStore {
             completion()
         }
     }

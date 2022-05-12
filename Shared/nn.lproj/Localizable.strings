@@ -2194,9 +2194,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Andre faner";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Private faner";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Faner er tilgjengelege her i 30 dagar. Etter den tida vert fanene automatisk attlatne.";
 

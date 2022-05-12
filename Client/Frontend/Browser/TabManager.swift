@@ -51,7 +51,7 @@ extension TabManager: TabEventHandler {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class TabManager: NSObject, FeatureFlagsProtocol {
+class TabManager: NSObject, FeatureFlaggable {
 
     // MARK: - Variables
     fileprivate var delegates = [WeakTabManagerDelegate]()
@@ -128,7 +128,7 @@ class TabManager: NSObject, FeatureFlagsProtocol {
     var recentlyAccessedNormalTabs: [Tab] {
         var eligibleTabs: [Tab]
 
-        if featureFlags.isFeatureBuildAndUserEnabled(.inactiveTabs) {
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
             eligibleTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
         } else {
             eligibleTabs = normalTabs

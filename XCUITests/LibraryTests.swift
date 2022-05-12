@@ -21,34 +21,3 @@ class LibraryTestsIpad: IpadOnlyTestCase {
         waitForExistence(app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView])
     }
 }
-
-class LibraryTestsIphone: IphoneOnlyTestCase {
-    
-    func testLibraryShortcutHomePage () {
-        if skipPlatform {return}
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        waitForExistence(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.library], timeout: 3)
-        waitForExistence(app.buttons["menu Bookmark"])
-        waitForExistence(app.buttons["menu panel ReadingList"])
-        waitForExistence(app.buttons["menu panel Downloads"])
-        
-        // Check if clicking on Bookmark option shows bookmarks
-        app.buttons["menu Bookmark"].tap()
-        navigator.nowAt(LibraryPanel_Bookmarks)
-        waitForExistence(app.tables["Bookmarks List"])
-        navigator.goto(HomePanelsScreen)
-
-        // Check if clicking on Reading List option shows reading list
-        app.buttons["menu panel ReadingList"].tap()
-        navigator.nowAt(LibraryPanel_ReadingList)
-        waitForExistence(app.tables["ReadingTable"])
-        navigator.goto(HomePanelsScreen)
-        
-        // Check if clicking on Downloads option shows downloads
-        app.buttons["menu panel Downloads"].tap()
-        navigator.nowAt(LibraryPanel_Downloads)
-        waitForExistence(app.tables["DownloadsTable"])
-        navigator.goto(HomePanelsScreen)
-    }
-}

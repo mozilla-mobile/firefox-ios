@@ -53,13 +53,13 @@ class GleanPlumbMessageStore: GleanPlumbMessagingStoreProtocol {
                                          isExpired: false)
     }
 
-    /// Update message metadata and persist that information.
+    /// Update message metadata. Report if that message has expired, and then persist the updated message Metadata.
     func onMessageDisplayed(_ message: GleanPlumbMessage) {
         var messageToTrack = message.metadata
 
         messageToTrack.impressions += 1
 
-        if message.isExpired {
+        if messageToTrack.impressions >= message.style.maxDisplayCount || messageToTrack.isExpired {
             messageToTrack = onMessageExpired(messageToTrack, shouldReport: true)
         }
 

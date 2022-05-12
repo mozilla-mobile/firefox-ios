@@ -39,7 +39,7 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, CanRemoveQuickActionBookmark {
+class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemoveQuickActionBookmark {
 
     typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
 
@@ -290,6 +290,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
     private func getFindInPageAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuFindInPageTitleString,
                                      iconString: ImageIdentifiers.findInPage) { _ in
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .findInPage)
             self.delegate?.showFindInPage()
         }.items
     }
@@ -360,11 +361,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlagsProtocol, Can
     }
 
     private func getReportSiteIssueAction() -> PhotonRowActions? {
-        guard featureFlags.isFeatureActiveForBuild(.reportSiteIssue) else { return nil }
+        guard featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly) else { return nil }
+
         return SingleActionViewModel(title: .AppMenu.AppMenuReportSiteIssueTitleString,
                                      iconString: ImageIdentifiers.reportSiteIssue) { _ in
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
             self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reportSiteIssue)
         }.items
     }
 

@@ -103,7 +103,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
-        FeatureFlagsManager.shared.initializeFeatures(with: profile)
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
         ThemeManager.shared.updateProfile(with: profile)
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
@@ -121,7 +122,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        FeatureFlagsManager.shared.updateNimbusLayer()
 
         setupRootViewController()
 
@@ -305,7 +305,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
             var object = TelemetryWrapper.EventObject.url
-            if case .text(_) = routerpath {
+            if case .text = routerpath {
                 object = .searchText
             }
             TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)

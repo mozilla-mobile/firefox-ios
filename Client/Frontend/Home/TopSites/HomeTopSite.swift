@@ -11,7 +11,6 @@ final class HomeTopSite {
 
     var site: Site
     var title: String
-    var image: UIImage?
 
     var sponsoredText: String {
         return .FirefoxHomepage.Shortcuts.Sponsored
@@ -44,20 +43,12 @@ final class HomeTopSite {
     var imageLoaded: ((UIImage?) -> Void)?
     var identifier = UUID().uuidString
 
-    init(site: Site, profile: Profile) {
+    init(site: Site) {
         self.site = site
         if let provider = site.metadata?.providerName {
             title = provider.lowercased().capitalized
         } else {
             title = site.title
-        }
-
-        let imageHelper = SiteImageHelper(profile: profile)
-        imageHelper.fetchImageFor(site: site,
-                                  imageType: .favicon,
-                                  shouldFallback: false) { image in
-            self.image = image
-            self.imageLoaded?(image)
         }
     }
 
