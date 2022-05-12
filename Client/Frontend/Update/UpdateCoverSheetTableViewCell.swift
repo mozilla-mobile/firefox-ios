@@ -14,7 +14,7 @@ struct UpdateCoverSheetTableViewCellUX {
 
     struct DescriptionLabel {
         static let paddingTop: CGFloat = 2
-        static let paddingTrailing: CGFloat = 18
+        static let paddingTrailing: CGFloat = -18
         static let bottom: CGFloat = -10
         static let leading: CGFloat = 10
     }

@@ -11,7 +11,7 @@ import Shared
 struct UpdateViewControllerUX {
     struct DoneButton {
         static let paddingTop: CGFloat = 20
-        static let paddingRight: CGFloat = 20
+        static let paddingRight: CGFloat = -20
         static let height: CGFloat = 20
     }
 
@@ -148,7 +148,7 @@ class UpdateViewController: UIViewController {
         // This button is located at top right hence top, right and height
         NSLayoutConstraint.activate([
             doneButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: UpdateViewControllerUX.DoneButton.paddingTop),
-            doneButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -UpdateViewControllerUX.DoneButton.paddingRight),
+            doneButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: UpdateViewControllerUX.DoneButton.paddingRight),
             doneButton.heightAnchor.constraint(equalToConstant: UpdateViewControllerUX.DoneButton.height)
         ])
 
