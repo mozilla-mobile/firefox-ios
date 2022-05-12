@@ -8384,7 +8384,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ $ACTION != \\\"indexbuild\\\" ]; then\n   bash $PWD/bin/nimbus-fml.sh -n MozillaAppServices\nfi\n";
+			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   bash $PWD/bin/nimbus-fml.sh -n MozillaAppServices\nfi\n";
 		};
 		60F653B827F61F7A0060D806 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
