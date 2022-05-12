@@ -24,7 +24,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 fileprivate enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101
+    case v39, v96, v97, v98, v99, v100, v101, v102
 
     // Used for all cases before version 39.
     case unknown
@@ -150,9 +150,10 @@ extension String {
 
         public struct HomeTabBanner {
             public struct EvergreenMessage {
-                public static let DefaultBrowserTitle = MZLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
-                public static let DefaultBrowserDescription = MZLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
-                public static let DefaultBrowserButton = MZLocalizedString("DefaultBrowserCard.Button.v2", tableName: "Default Browser", value: "Learn How", comment: "Button string to learn how to set your default browser.", lastUpdated: .unknown)
+                public static let HomeTabBannerTitle = MZLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small home tab banner shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
+                public static let HomeTabBannerDescription = MZLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small home tab banner shown that allows user to switch their default browser to Firefox.", lastUpdated: .unknown)
+                public static let HomeTabBannerButton = MZLocalizedString("DefaultBrowserCard.Button.v2", tableName: "Default Browser", value: "Learn How", comment: "Button string to learn how to set your default browser.", lastUpdated: .unknown)
+                public static let HomeTabBannerCloseAccessibility = MZLocalizedString("DefaultBrowserCloseButtonAccessibility.v102", value: "Close", comment: "Accessibility label for action denoting closing default browser home tab banner.", lastUpdated: .v102)
             }
         }
 
