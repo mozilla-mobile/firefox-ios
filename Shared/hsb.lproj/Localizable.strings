@@ -2197,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Druhe rajtarki";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Priwatne rajtarki";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Rajtarki su tu za 30 dnjow k dispoziciji. Po tutym času so rajtarki awtomatisce začinja.";
 

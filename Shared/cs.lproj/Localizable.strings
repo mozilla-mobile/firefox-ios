@@ -2134,9 +2134,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Další panely";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Anonymní panely";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Panely zde budou k dispozici po dobu 30 dnů. Poté se automaticky zavřou.";
 

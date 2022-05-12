@@ -2173,9 +2173,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Altre unghjette";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Unghjette private";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "L’unghjette sò dispunibule quì durante 30 ghjorni. Dopu à stu periudu, l’unghjette seranu chjose autumaticamente.";
 

@@ -2188,9 +2188,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Autres onglets";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Onglets privés";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Les onglets sont disponibles ici pendant 30 jours. Après ce délai, les onglets seront automatiquement fermés.";
 

@@ -1909,9 +1909,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "अन्य टैब";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "निजी टैब";
-
 /* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
 "TabTray.RecentlyClosed.SectionTitle" = "हाल ही में बंद हुआ";
 

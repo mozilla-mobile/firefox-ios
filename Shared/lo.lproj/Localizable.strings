@@ -2041,9 +2041,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "ແທັບອື່ນໆ";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "ແທັບສ່ວນຕົວ";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "ແທັບຈະປະກົດຢູ່ນີ້ເປັນເວລາ 30 ວັນ. ຫລັງຈາກນັ້ນແທັບຈະໄດ້ຮັບການປິດອັດຕະໂນມັດ.";
 

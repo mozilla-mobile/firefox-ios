@@ -2197,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "其他分頁";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "隱私分頁";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "分頁將於此處停留 30 天，超過之後將自動關閉。";
 

@@ -2197,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "기타 탭";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "사생활 보호 탭";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "탭은 여기에 30일 동안 유지됩니다. 그 이후에는 자동으로 닫힙니다.";
 

@@ -1789,9 +1789,6 @@
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Avaa valittu välilehti";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Yksityiset välilehdet";
-
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Yksityinen";
 
