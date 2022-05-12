@@ -25,8 +25,7 @@ class NimbusFeatureFlagLayer {
                 .pocket,
                 .recentlySaved,
                 .historyHighlights,
-                .topSites,
-                .librarySection:
+                .topSites:
             return checkHomescreenFeature(for: featureID, from: nimbus)
 
         case .wallpapers:
@@ -88,7 +87,6 @@ class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .topSites: nimbusID = HomeScreenSection.topSites
-        case .librarySection: nimbusID = HomeScreenSection.libraryShortcuts
         case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
         case .recentlySaved: nimbusID = HomeScreenSection.recentlySaved
         case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations

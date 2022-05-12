@@ -100,7 +100,6 @@ features:
         default:
           {
             "top-sites": true,
-            "library-shortcuts": false,
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
@@ -128,7 +127,6 @@ features:
         value: {
           "sections-enabled": {
             "top-sites": true,
-            "library-shortcuts": true,
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
@@ -146,7 +144,6 @@ features:
         value: {
           "sections-enabled": {
             "top-sites": true,
-            "library-shortcuts": false,
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
@@ -473,8 +470,6 @@ types:
           description: The tab groups
         pocket:
           description: The pocket section. This should only be available in the US.
-        library-shortcuts:
-          description: Library shortcuts section
     TabTraySection:
       description: The identifiers for the sections of the tab tray.
       variants:

@@ -957,7 +957,6 @@ extension String {
     /// Identifiers of all new strings should begin with `Menu.`
     public struct AppMenu {
         public static let AppMenuReportSiteIssueTitleString = MZLocalizedString("Menu.ReportSiteIssueAction.Title", tableName: "Menu", value: "Report Site Issue", comment: "Label for the button, displayed in the menu, used to report a compatibility issue with the current page.", lastUpdated: .unknown)
-        public static let AppMenuLibraryTitleString = MZLocalizedString("Menu.Library.Title", tableName: "Menu", value: "Your Library", comment: "Label for the button, displayed in the menu, used to open the Library", lastUpdated: .unknown)
         public static let AppMenuSharePageTitleString = MZLocalizedString("Menu.SharePageAction.Title", tableName: "Menu", value: "Share Page With…", comment: "Label for the button, displayed in the menu, used to open the share dialog.", lastUpdated: .unknown)
         public static let AppMenuCopyLinkTitleString = MZLocalizedString("Menu.CopyLink.Title", tableName: "Menu", value: "Copy Link", comment: "Label for the button, displayed in the menu, used to copy the current page link to the clipboard.", lastUpdated: .unknown)
         public static let AppMenuAddBookmarkTitleString = MZLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Bookmark This Page", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.", lastUpdated: .unknown)

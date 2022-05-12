@@ -26,7 +26,6 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
-//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.librarySection))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }
 //
@@ -49,7 +48,6 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
-//        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.librarySection))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }
 //
@@ -96,7 +94,6 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
-//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.librarySection))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }
 //
@@ -121,7 +118,6 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
-//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.librarySection))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }
 //
