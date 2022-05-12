@@ -231,7 +231,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         log.debug("Fetching current client record for client \(clientGUID).")
         let fetch = storageClient.get(clientGUID)
-        return fetch.bind() { result in
+        return fetch.bind { result in
             if let response = result.successValue, response.value.payload.isValid() {
                 let record = response.value
                 if var clientRecord = record.payload.json.dictionary {

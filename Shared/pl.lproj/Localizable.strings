@@ -2173,9 +2173,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Pozostałe karty";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Prywatne karty";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Karty są dostępne tutaj przez 30 dni. Po tym czasie zostaną automatycznie zamknięte.";
 

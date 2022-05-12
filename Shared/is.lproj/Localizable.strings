@@ -2197,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Aðrir flipar";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Huliðsflipar";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Flipar eru tiltækir hér í 30 daga. Eftir þann tíma verður flipum sjálfkrafa lokað.";
 

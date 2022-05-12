@@ -67,7 +67,7 @@ open class WeakList<T: AnyObject>: Sequence {
     open func makeIterator() -> AnyIterator<T> {
         var index = 0
 
-        return AnyIterator() {
+        return AnyIterator {
             if index >= self.items.count {
                 return nil
             }

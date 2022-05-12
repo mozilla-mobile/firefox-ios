@@ -60,7 +60,7 @@ class FxHomeHistoryHightlightsViewModel {
         self.tabManager = tabManager
         self.foregroundBVC = foregroundBVC
 
-        loadItems() {}
+        loadItems {}
     }
 
     // MARK: - Public methods

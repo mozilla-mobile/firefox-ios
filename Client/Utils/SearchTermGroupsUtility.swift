@@ -208,7 +208,7 @@ class SearchTermGroupsUtility {
     /// - Parameter groupDictionary: Dictionary that is to be processed
     /// - Returns: An array of `ASGroup<T>`
     private static func createGroups<T: Equatable>(from groupDictionary: [String: [T]]) -> [ASGroup<T>] {
-        return groupDictionary.map() {
+        return groupDictionary.map {
                 let orderedItems = orderItemsIn(group: $0.value)
                 var timestamp: Timestamp = 0
                 if let firstItem = orderedItems.first, let tab = firstItem as? Tab {

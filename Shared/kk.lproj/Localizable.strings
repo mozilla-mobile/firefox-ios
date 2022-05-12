@@ -2197,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Басқа беттер";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Жекелік беттер";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Беттер осында 30 күн ішінде қолжетімді. Осы уақыттан кейін беттер автоматты түрде жабылады.";
 

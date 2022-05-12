@@ -1722,9 +1722,6 @@
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Malfermi elektitan langeton";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Privataj langetoj";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Langetoj restos ĉi tie dum 30 tagoj. Post tiu tempo, langetoj estos aŭtomate fermitaj.";
 

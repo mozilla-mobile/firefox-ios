@@ -2170,9 +2170,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "ᱵᱷᱮᱜᱟᱨ ᱴᱮᱵᱽ ᱠᱚ";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "ᱯᱨᱟᱭᱣᱮᱴ ᱴᱮᱵᱽ ᱠᱚ";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "30 ᱫᱤᱱ ᱞᱟᱹᱜᱤᱫ ᱱᱚᱰᱮ ᱴᱮᱵᱽ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱚᱱᱟ ᱚᱠᱛᱚ ᱛᱟᱭᱚᱢ, ᱴᱮᱵᱽ ᱠᱚ ᱟᱡ ᱛᱮᱜᱮ ᱵᱚᱸᱫᱚᱜᱼᱟ ᱾";
 
