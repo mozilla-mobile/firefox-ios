@@ -120,7 +120,7 @@ extension BrowserViewController: WKUIDelegate {
             clonedWebView.load(URLRequest(url: url))
 
             return previewViewController
-        }, actionProvider: { (suggested) -> UIMenu? in
+        }, actionProvider: { [self] (suggested) -> UIMenu? in
             guard let url = elementInfo.linkURL, let currentTab = self.tabManager.selectedTab,
                 let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper,
                 let elements = contextHelper.elements else { return nil }
@@ -203,15 +203,15 @@ extension BrowserViewController: WKUIDelegate {
                 self.addBookmark(url: url.absoluteString, title: elements.title)
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
             }
-            
+
             let removeAction = UIAction(title: .RemoveBookmarkContextMenuTitle, image: UIImage.templateImageNamed(ImageIdentifiers.actionRemoveBookmark), identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")) { _ in
                 self.removeBookmark(url: url.absoluteString)
                 TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .contextMenu)
             }
-            
-            let isBookmarkedSite = self.profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
+
+            let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
             actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
-            
+
             actions.append(UIAction(title: .ContextMenuDownloadLink, image: UIImage.templateImageNamed(ImageIdentifiers.downloads), identifier: UIAction.Identifier("linkContextMenu.download")) { _ in
                 // This checks if download is a blob, if yes, begin blob download process
                 if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
