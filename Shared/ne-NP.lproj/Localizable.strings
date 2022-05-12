@@ -2125,9 +2125,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "अन्य ट्याबहरु";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "निजी ट्याबहरु";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "ट्याबहरू यहाँ 30 दिनका लागि मात्र उपलब्ध छन्। त्यो समय पछि, ट्याबहरू स्वचालित रूपमा बन्द हुनेछन्।";
 

@@ -2197,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Άλλες καρτέλες";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Ιδιωτικές καρτέλες";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Οι καρτέλες θα είναι διαθέσιμες εδώ για 30 ημέρες. Μετά από αυτό το χρονικό διάστημα, οι καρτέλες θα κλείσουν αυτόματα.";
 
