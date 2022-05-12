@@ -1293,7 +1293,7 @@ preferences:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10537
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-10"
@@ -1882,7 +1882,7 @@ tabs:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9785
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-10"
@@ -1893,7 +1893,7 @@ tabs:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9785
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-10"
@@ -2333,7 +2333,7 @@ awesomebar:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9785
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-10"

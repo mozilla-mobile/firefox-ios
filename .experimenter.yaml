@@ -39,8 +39,8 @@ messaging:
       type: string
       description: What should be displayed when a control message is selected.
       enum:
-        - show-none
         - show-next-message
+        - show-none
     styles:
       type: json
       description: "A map of styles to configure message appearance.\n"
@@ -89,8 +89,8 @@ start-at-home-feature:
       type: string
       description: This property provides a default setting for the startAtHomeFeature
       enum:
-        - always
         - disabled
+        - always
         - after-four-hours
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
