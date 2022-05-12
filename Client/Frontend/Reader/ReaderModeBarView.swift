@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import SnapKit
 import Shared
 import XCGLogger
 
@@ -67,26 +66,30 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
 
         readStatusButton = createButton(.markAsRead, action: #selector(tappedReadStatusButton))
         readStatusButton.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
-        readStatusButton.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(self.safeArea.left)
-            make.height.centerY.equalTo(self)
-            make.width.equalTo(80)
-        }
+        NSLayoutConstraint.activate([
+            readStatusButton.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+            readStatusButton.heightAnchor.constraint(equalTo: heightAnchor),
+            readStatusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            readStatusButton.widthAnchor.constraint(equalToConstant: 80)
+        ])
 
         settingsButton = createButton(.settings, action: #selector(tappedSettingsButton))
         settingsButton.accessibilityIdentifier = "ReaderModeBarView.settingsButton"
-        settingsButton.snp.makeConstraints { (make) -> Void in
-            make.height.centerX.centerY.equalTo(self)
-            make.width.equalTo(80)
-        }
+        NSLayoutConstraint.activate([
+            settingsButton.heightAnchor.constraint(equalTo: heightAnchor),
+            settingsButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            settingsButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            settingsButton.widthAnchor.constraint(equalToConstant: 80)
+        ])
 
         listStatusButton = createButton(.addToReadingList, action: #selector(tappedListStatusButton))
         listStatusButton.accessibilityIdentifier = "ReaderModeBarView.listStatusButton"
-        listStatusButton.snp.makeConstraints { (make) -> Void in
-            make.right.equalTo(self.safeArea.right)
-            make.height.centerY.equalTo(self)
-            make.width.equalTo(80)
-        }
+        NSLayoutConstraint.activate([
+            listStatusButton.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+            listStatusButton.heightAnchor.constraint(equalTo: heightAnchor),
+            listStatusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            listStatusButton.widthAnchor.constraint(equalToConstant: 80)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -106,10 +109,11 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
     }
 
     fileprivate func createButton(_ type: ReaderModeBarButtonType, action: Selector) -> UIButton {
-        let button = UIButton()
+        let button: UIButton = .build { button in
+            button.setImage(type.image, for: [])
+            button.addTarget(self, action: action, for: .touchUpInside)
+        }
         addSubview(button)
-        button.setImage(type.image, for: [])
-        button.addTarget(self, action: action, for: .touchUpInside)
         return button
     }
 
