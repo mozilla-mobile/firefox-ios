@@ -107,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
-        
+
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
         ThemeManager.shared.updateProfile(with: profile)
