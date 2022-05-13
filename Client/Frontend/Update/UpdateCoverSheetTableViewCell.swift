@@ -46,19 +46,15 @@ class UpdateCoverSheetTableViewCell: UITableViewCell {
 
     private func initialViewSetup() {
         self.selectionStyle = .none
-        addSubview(updateCoverSheetCellImageView)
-        addSubview(updateCoverSheetCellDescriptionLabel)
+        contentView.addSubviews(updateCoverSheetCellImageView, updateCoverSheetCellDescriptionLabel)
         NSLayoutConstraint.activate([
-            updateCoverSheetCellImageView.leftAnchor.constraint(equalTo: leftAnchor, constant: UpdateCoverSheetTableViewCellUX.ImageView.paddingLeft),
+            updateCoverSheetCellImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: UpdateCoverSheetTableViewCellUX.ImageView.paddingLeft),
             updateCoverSheetCellImageView.heightAnchor.constraint(equalToConstant: UpdateCoverSheetTableViewCellUX.ImageView.height),
             updateCoverSheetCellImageView.widthAnchor.constraint(equalToConstant: UpdateCoverSheetTableViewCellUX.ImageView.height),
-            updateCoverSheetCellImageView.topAnchor.constraint(equalTo: topAnchor, constant: UpdateCoverSheetTableViewCellUX.ImageView.paddingTop)
-        ])
-
-        NSLayoutConstraint.activate([
-            updateCoverSheetCellDescriptionLabel.topAnchor.constraint(equalTo: topAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTop),
-            updateCoverSheetCellDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTrailing),
-            updateCoverSheetCellDescriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.bottom),
+            updateCoverSheetCellImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UpdateCoverSheetTableViewCellUX.ImageView.paddingTop),
+            updateCoverSheetCellDescriptionLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTop),
+            updateCoverSheetCellDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTrailing),
+            updateCoverSheetCellDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.bottom),
             updateCoverSheetCellDescriptionLabel.leadingAnchor.constraint(equalTo: updateCoverSheetCellImageView.trailingAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.leading)
         ])
         fxThemeSupport()
