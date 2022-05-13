@@ -1317,9 +1317,6 @@
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Abrir la llingüeta esbillada";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Llingüetes privaes";
-
 /* The title on the button to look at regular tabs. */
 "TabTray.SegmentedControlTitles.Tabs" = "Llingüetes";
 

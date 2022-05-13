@@ -2197,9 +2197,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Andra flikar";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Privata flikar";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Flikar finns här i 30 dagar. Efter den tiden stängs flikarna automatiskt.";
 

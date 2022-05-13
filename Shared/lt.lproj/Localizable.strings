@@ -2035,9 +2035,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Kitos kortelės";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Privačios kortelės";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Kortelės čia bus laikomos 30 dienų. Po šio laiko jos bus automatiškai užvertos.";
 

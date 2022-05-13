@@ -2167,9 +2167,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Skeda të tjera";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Skeda Private";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Skedat janë të passhme këtu për 30 ditë. Pas kësaj kohe, skedat do të mbyllen automatikisht.";
 

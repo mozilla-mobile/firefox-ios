@@ -7,7 +7,6 @@ import Foundation
 enum FirefoxHomeSectionType: Int, CaseIterable {
     case logoHeader
     case topSites
-    case libraryShortcuts
     case jumpBackIn
     case recentlySaved
     case historyHighlights
@@ -20,7 +19,6 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
         case .recentlySaved: return .RecentlySavedSectionTitle
         case .topSites: return .ASShortcutsTitle
-        case .libraryShortcuts: return .AppMenu.AppMenuLibraryTitleString
         case .historyHighlights: return .FirefoxHomepage.HistoryHighlights.Title
         default: return nil
         }
@@ -33,7 +31,6 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .recentlySaved: return FirefoxHomeViewModel.UX.recentlySavedCellHeight
         case .historyHighlights: return FirefoxHomeViewModel.UX.historyHighlightsCellHeight
         case .topSites: return FirefoxHomeViewModel.UX.topSitesHeight
-        case .libraryShortcuts: return FirefoxHomeViewModel.UX.libraryShortcutsHeight
         case .customizeHome: return FirefoxHomeViewModel.UX.customizeHomeHeight
         case .logoHeader: return FirefoxHomeViewModel.UX.logoHeaderHeight
         }
@@ -89,7 +86,6 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
         case .recentlySaved: return FxHomeRecentlySavedCollectionCell.cellIdentifier
         case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.cellIdentifier
-        case .libraryShortcuts: return  ASLibraryCell.cellIdentifier
         case .customizeHome: return FxHomeCustomizeHomeView.cellIdentifier
         }
     }
@@ -102,7 +98,6 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
         case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self
         case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.self
-        case .libraryShortcuts: return ASLibraryCell.self
         case .customizeHome: return FxHomeCustomizeHomeView.self
         }
     }

@@ -19,8 +19,6 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         static let spacingBetweenSections: CGFloat = 24
         static let sectionInsetsForIpad: CGFloat = 101
         static let minimumInsets: CGFloat = 15
-        static let libraryShortcutsHeight: CGFloat = 90
-        static let libraryShortcutsMaxWidth: CGFloat = 375
         static let customizeHomeHeight: CGFloat = 100
         static let logoHeaderHeight: CGFloat = 85
     }
@@ -51,12 +49,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
-
-    // MARK: - Section availability variables
-
-    var isYourLibrarySectionEnabled: Bool {
-        return UIDevice.current.userInterfaceIdiom != .pad && featureFlags.isFeatureEnabled(.librarySection, checking: .buildOnly)
-    }
+    var customizeButtonViewModel: FxHomeCustomizeButtonViewModel
 
     // MARK: - Initializers
     init(profile: Profile,
@@ -83,12 +76,14 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         self.pocketViewModel = FxHomePocketViewModel(
             profile: profile,
             isZeroSearch: isZeroSearch)
+        self.customizeButtonViewModel = FxHomeCustomizeButtonViewModel()
         self.childViewModels = [headerViewModel,
                                 topSiteViewModel,
                                 jumpBackInViewModel,
                                 recentlySavedViewModel,
                                 historyHighlightsViewModel,
-                                pocketViewModel]
+                                pocketViewModel,
+                                customizeButtonViewModel]
         self.isPrivate = isPrivate
 
         self.nimbus = nimbus
@@ -109,21 +104,6 @@ class FirefoxHomeViewModel: FeatureFlaggable {
 
         childViewModels.forEach {
             if $0.shouldShow { enabledSections.append($0.sectionType) }
-        }
-
-        // Sections that have no view model yet
-        // please remove when they have a view model and comform to FXHomeViewModelProtocol
-        for section in FirefoxHomeSectionType.allCases {
-            switch section {
-            case .libraryShortcuts:
-                if isYourLibrarySectionEnabled {
-                    enabledSections.append(.libraryShortcuts)
-                }
-            case .customizeHome:
-                enabledSections.append(.customizeHome)
-            default:
-                break
-            }
         }
     }
 
