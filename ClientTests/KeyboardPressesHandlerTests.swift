@@ -177,6 +177,16 @@ class KeyboardPressesHandlerTests: XCTestCase {
         XCTAssertEqual(handler.isCmdAndShiftPressed, true)
     }
 
+    func testOnlyOneCmd_withCmdPressedMultipleTimes() {
+        let handler = KeyboardPressesHandler()
+        let cmdPress = createPress(keyCode: .keyboardLeftGUI)
+        handler.handlePressesBegan(Set([cmdPress]), with: nil)
+        handler.handlePressesBegan(Set([cmdPress]), with: nil)
+        handler.handlePressesEnded(Set([cmdPress]), with: nil)
+
+        XCTAssertEqual(handler.isCmdAndShiftPressed, false)
+    }
+
     // MARK: isOnlyOptionPressed
 
     func testOptionTrue_withLeftPress() {

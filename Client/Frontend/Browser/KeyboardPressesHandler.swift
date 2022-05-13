@@ -80,10 +80,11 @@ class KeyboardPressesHandler {
 
         for press in presses {
             guard let key = press.key?.keyCode else { continue }
-            if pressedIfFound {
-                keysPressed.append(key)
-            } else {
+
+            if !pressedIfFound {
                 keysPressed.removeAll(where: { $0 == key })
+            } else if !keysPressed.contains(key) {
+                keysPressed.append(key)
             }
         }
     }

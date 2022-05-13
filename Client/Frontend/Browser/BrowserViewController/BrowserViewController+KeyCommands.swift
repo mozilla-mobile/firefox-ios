@@ -114,6 +114,7 @@ extension BrowserViewController {
                                      extras: ["action": "new-tab"])
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        keyboardPressesHandler.reset()
     }
 
     @objc private func newPrivateTabKeyCommand() {
