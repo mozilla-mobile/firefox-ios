@@ -146,6 +146,7 @@ extension BrowserViewController {
             return
         }
         tabManager.removeTab(currentTab)
+        keyboardPressesHandler.reset()
     }
 
     @objc private func undoLastTabClosedKeyCommand() {
