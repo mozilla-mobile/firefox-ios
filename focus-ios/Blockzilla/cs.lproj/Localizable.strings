@@ -250,8 +250,23 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Začít prohlížet";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Smažte svou historii prohlížení, hesla a cookies a zabraňte jedním klepnutím nechtěným reklamám, aby vás pronásledovaly.";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Vaše historie vás nevysleduje";
+
 /* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Incognito.Description" = "%@ se zaměřuje na zajištění soukromí s ochranou proti sledování a blokováním obsahu.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Více než anonymní prohlížení";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Nastavte si podle vlastní potřeby, jak moc nebo málo chcete sdílet.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Ochrana podle vlastního uvážení";
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Posuňte anonymní prohlížení na vyšší úroveň.";
@@ -613,8 +628,17 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Chybí na stránce obsah nebo se chová podivně?";
 
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Všechny možnosti zabezpečení a ochrany soukromí najdete v nastavení.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Tato výchozí nastavení poskytují silnou ochranu. Můžete je ale jednoduše nastavit podle vlastních potřeb.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "Aplikace %@ zabránila tomuto serveru ve vašem sledování. Klepnutím na ikonu štítu se dozvíte, co bylo zablokováno.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Klepnutím na ikonu koše kdykoliv zahladíte všechny stopy po vašem prohlížení.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Jste chráněni!";
