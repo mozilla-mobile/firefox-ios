@@ -13,7 +13,5 @@ final class SponsoredTile: Site {
         self.guid = "default" + contile.name
 
         icon = Favicon(url: contile.imageUrl)
-        icon?.width = contile.imageSize
-        icon?.height = contile.imageSize
     }
 }
