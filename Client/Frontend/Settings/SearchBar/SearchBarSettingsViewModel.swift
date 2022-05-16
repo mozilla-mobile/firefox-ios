@@ -74,7 +74,8 @@ final class SearchBarSettingsViewModel: HasNimbusSearchBar {
 // MARK: Private
 private extension SearchBarSettingsViewModel {
 
-    /// New user defaults to bottom search bar, existing users keep their existing search bar position
+    /// New users default to whatever is predetermined by Nimbus and the experiments they
+    /// may be in. Existing users keep their existing search bar position.
     func getDefaultSearchPosition() -> SearchBarPosition {
         let nimbusPosition = nimbusSearchBar.getDefaultPosition()
         return InstallType.get() == .fresh ? nimbusPosition : .top
