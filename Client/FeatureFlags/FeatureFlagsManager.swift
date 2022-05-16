@@ -26,7 +26,7 @@ enum FlaggableFeatureCheckOptions {
     case userOnly
 }
 
-class FeatureFlagsManager: NimbusManageable {
+class FeatureFlagsManager: HasNimbusFeatureFlags {
 
     /// This Singleton should only be accessed directly in places where the
     /// `FeatureFlaggable` is not available. Otherwise, access to the feature
@@ -53,8 +53,8 @@ class FeatureFlagsManager: NimbusManageable {
     ) -> Bool {
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
 
-        let nimbusSetting = feature.isNimbusEnabled(using: nimbusManager.featureFlagLayer)
-        let userSetting = feature.isUserEnabled(using: nimbusManager.featureFlagLayer)
+        let nimbusSetting = feature.isNimbusEnabled(using: nimbusFlags)
+        let userSetting = feature.isUserEnabled(using: nimbusFlags)
 
         switch channelsToCheck {
         case .buildOnly:
@@ -73,7 +73,7 @@ class FeatureFlagsManager: NimbusManageable {
         switch featureID {
         case .startAtHome:
             let feature = NimbusFlaggableFeature(withID: .startAtHome, and: profile)
-            guard let userSetting = feature.getUserPreference(using: nimbusManager.featureFlagLayer) else { return nil }
+            guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
 
             return StartAtHomeSetting(rawValue: userSetting) as? T
         }
