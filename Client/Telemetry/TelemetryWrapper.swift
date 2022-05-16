@@ -506,6 +506,7 @@ extension TelemetryWrapper {
 
         case preference = "pref"
         case preferenceChanged = "to"
+        case isPrivate = "is-private"
 
         case wallpaperName = "wallpaperName"
         case wallpaperType = "wallpaperType"
@@ -595,6 +596,14 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+        case (.action, .tap, .privateBrowsingButton, _, let extras):
+            if let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? String {
+                let isPrivateExtra = GleanMetrics.Preferences.PrivateBrowsingButtonTappedExtra(isPrivate: isPrivate)
+                GleanMetrics.Preferences.privateBrowsingButtonTapped.record(isPrivateExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
 
         // MARK: QR Codes
         case (.action, .scan, .qrCodeText, _, _),
@@ -616,6 +625,10 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.openTabTray.record()
         case (.action, .close, .tabTray, _, _):
             GleanMetrics.Tabs.closeTabTray.record()
+        case (.action, .press, .tabToolbar, .tabView, _):
+            GleanMetrics.Tabs.pressTabToolbar.record()
+        case (.action, .press, .tab, _, _):
+            GleanMetrics.Tabs.pressTopTab.record()
         case(.action, .pull, .reload, _, _):
             GleanMetrics.Tabs.pullToRefresh.add()
         case(.action, .navigate, .tab, _, _):
@@ -962,6 +975,8 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object,
                                             value: value, extras: extras)
             }
+        case (.action, .drag, .locationBar, _, _):
+            GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .homeTabBanner, .messageImpression, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
