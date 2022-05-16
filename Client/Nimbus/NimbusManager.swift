@@ -44,7 +44,6 @@ class NimbusManager {
     init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer(),
          sponsoredTileLayer: NimbusSponsoredTileLayer = NimbusSponsoredTileLayer(),
          bottomSearchBarLayer: NimbusSearchBarLayer = NimbusSearchBarLayer()
-
     ) {
         self.featureFlagLayer = featureFlagLayer
         self.sponsoredTileLayer = sponsoredTileLayer

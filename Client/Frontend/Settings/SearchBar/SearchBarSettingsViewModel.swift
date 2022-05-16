@@ -45,8 +45,7 @@ final class SearchBarSettingsViewModel: HasNimbusSearchBar {
 
     var searchBarPosition: SearchBarPosition {
         guard let raw = prefs.stringForKey(PrefsKeys.KeySearchBarPosition) else {
-            let defaultPosition = getDefaultSearchPosition()
-            return defaultPosition
+            return getDefaultSearchPosition()
         }
 
         let position = SearchBarPosition(rawValue: raw) ?? .bottom
@@ -81,13 +80,12 @@ private extension SearchBarSettingsViewModel {
         return InstallType.get() == .fresh ? nimbusPosition : .top
     }
 
-    func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition, shouldNotify: Bool = true) {
+    func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
         prefs.setString(searchBarPosition.rawValue,
                         forKey: PrefsKeys.KeySearchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
         recordPreferenceChange(searchBarPosition)
 
-        guard shouldNotify else { return }
         let notificationObject = [PrefsKeys.KeySearchBarPosition: searchBarPosition]
         NotificationCenter.default.post(name: .SearchBarPositionDidChange, object: notificationObject)
     }
