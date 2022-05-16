@@ -981,6 +981,10 @@ extension TelemetryWrapper {
                 GleanMetrics.Messaging.clicked.record(
                     GleanMetrics.Messaging.ClickedExtra(actionUuid: actionUUID, messageKey: messageId)
                 )
+            } else if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
+                GleanMetrics.Messaging.clicked.record(
+                    GleanMetrics.Messaging.ClickedExtra(messageKey: messageId)
+                )
             }
         case(.information, .view, .homeTabBanner, .messageExpired, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
