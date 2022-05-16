@@ -2379,13 +2379,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        super.pressesBegan(presses, with: event)
         keyboardPressesHandler.handlePressesBegan(presses, with: event)
+        super.pressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        super.pressesEnded(presses, with: event)
         keyboardPressesHandler.handlePressesEnded(presses, with: event)
+        super.pressesEnded(presses, with: event)
     }
 }
 
