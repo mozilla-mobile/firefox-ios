@@ -19,6 +19,13 @@ protocol TabTrayViewDelegate: UIViewController {
 
 class TabTrayViewController: UIViewController {
 
+    struct UX {
+        struct NavigationMenu {
+            static let height: CGFloat = 32
+            static let width: CGFloat = 343
+        }
+    }
+
     // MARK: - Variables
     var viewModel: TabTrayViewModel
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)?
@@ -84,7 +91,7 @@ class TabTrayViewController: UIViewController {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
                                target: nil,
                                action: nil)
-        fixedSpace.width = 32
+        fixedSpace.width = CGFloat(UX.NavigationMenu.height)
         return fixedSpace
     }()
 
@@ -147,7 +154,6 @@ class TabTrayViewController: UIViewController {
     // MARK: - Initializers
     init(tabTrayDelegate: TabTrayDelegate? = nil,
          profile: Profile,
-         showChronTabs: Bool = false,
          tabToFocus: Tab? = nil,
          tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
          and notificationCenter: NotificationCenter = NotificationCenter.default,
@@ -157,7 +163,6 @@ class TabTrayViewController: UIViewController {
         self.notificationCenter = notificationCenter
         self.viewModel = TabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
                                           profile: profile,
-                                          showChronTabs: showChronTabs,
                                           tabToFocus: tabToFocus,
                                           tabManager: tabManager)
 
@@ -168,7 +173,6 @@ class TabTrayViewController: UIViewController {
                                        .ProfileDidStartSyncing,
                                        .ProfileDidFinishSyncing,
                                        .UpdateLabelOnTabClosed])
-
     }
 
     required init?(coder: NSCoder) {
@@ -244,8 +248,8 @@ class TabTrayViewController: UIViewController {
         }
 
         navigationMenu.snp.makeConstraints { make in
-            make.width.lessThanOrEqualTo(343)
-            make.height.equalTo(ChronologicalTabsControllerUX.navigationMenuHeight)
+            make.width.lessThanOrEqualTo(UX.NavigationMenu.width)
+            make.height.equalTo(UX.NavigationMenu.height)
         }
     }
 

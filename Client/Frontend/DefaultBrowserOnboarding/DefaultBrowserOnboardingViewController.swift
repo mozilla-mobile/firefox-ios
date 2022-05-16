@@ -94,7 +94,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.adjustsFontSizeToFitWidth = true
     }
 
-    private lazy var descriptionLabel1: UILabel = .build() { [weak self] label in
+    private lazy var descriptionLabel1: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[1]
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)
@@ -250,7 +250,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     @objc private func goToSettings() {
         viewModel.goToSettings?()
-        UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard") // Don't show default browser card if this button is clicked
+        UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage) // Don't show default browser card if this button is clicked
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
     }
 

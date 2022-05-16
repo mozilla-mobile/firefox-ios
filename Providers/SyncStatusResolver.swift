@@ -71,17 +71,17 @@ public struct SyncStatusResolver {
                     return .bad(message: .FirefoxSyncOfflineTitle)
                 case .noAccount:
                     return .warning(message: .FirefoxSyncOfflineTitle)
-                case .backoff(_):
+                case .backoff:
                     return .good
-                case .engineRemotelyNotEnabled(_):
+                case .engineRemotelyNotEnabled:
                     return .good
-                case .engineFormatOutdated(_):
+                case .engineFormatOutdated:
                     return .good
-                case .engineFormatTooNew(_):
+                case .engineFormatTooNew:
                     return .good
-                case .storageFormatOutdated(_):
+                case .storageFormatOutdated:
                     return .good
-                case .storageFormatTooNew(_):
+                case .storageFormatTooNew:
                     return .good
                 case .stateMachineNotReady:
                     return .good
@@ -102,14 +102,14 @@ public struct SyncStatusResolver {
         let aggregate: SyncDisplayState = displayStates.reduce(.good) { carried, displayState in
             switch displayState {
 
-            case .bad(_):
+            case .bad:
                 return displayState
 
-            case .warning(_):
+            case .warning:
                 // If the state we're carrying is worse than the stale one, keep passing
                 // along the worst one
                 switch carried {
-                case .bad(_):
+                case .bad:
                     return carried
                 default:
                     return displayState

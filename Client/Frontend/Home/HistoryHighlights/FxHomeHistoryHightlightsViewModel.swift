@@ -60,7 +60,7 @@ class FxHomeHistoryHightlightsViewModel {
         self.tabManager = tabManager
         self.foregroundBVC = foregroundBVC
 
-        loadItems() {}
+        loadItems {}
     }
 
     // MARK: - Public methods
@@ -104,17 +104,14 @@ class FxHomeHistoryHightlightsViewModel {
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFlagsProtocol {
+extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
     var sectionType: FirefoxHomeSectionType {
         return .historyHighlights
     }
 
     var isEnabled: Bool {
-        guard featureFlags.isFeatureActiveForBuild(.historyHighlights),
-              featureFlags.isFeatureActiveForNimbus(.historyHighlights),
-              featureFlags.userPreferenceFor(.historyHighlights) == UserFeaturePreference.enabled
-        else { return false }
+        guard featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser) else { return false }
 
         return !isPrivate
     }

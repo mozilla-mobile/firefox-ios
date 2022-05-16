@@ -103,12 +103,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
-        FeatureFlagsManager.shared.initializeFeatures(with: profile)
-        ThemeManager.shared.updateProfile(with: profile)
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
+
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
+        ThemeManager.shared.updateProfile(with: profile)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
@@ -121,7 +123,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        FeatureFlagsManager.shared.updateNimbusLayer()
 
         setupRootViewController()
 
@@ -226,9 +227,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         pushNotificationSetup()
 
-        // user research variable setup for Chron tabs user research
-        _ = ChronTabsUserResearch()
-
         if let profile = self.profile {
             let persistedCurrentVersion = InstallType.persistedCurrentVersion()
             let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
@@ -308,7 +306,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
             var object = TelemetryWrapper.EventObject.url
-            if case .text(_) = routerpath {
+            if case .text = routerpath {
                 object = .searchText
             }
             TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)

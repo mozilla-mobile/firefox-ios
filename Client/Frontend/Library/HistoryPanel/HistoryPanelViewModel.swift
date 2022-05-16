@@ -13,7 +13,7 @@ private class FetchInProgressError: MaybeErrorType {
     }
 }
 
-class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
+class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
@@ -45,24 +45,26 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     // MARK: - Properties
 
     private let profile: Profile
+    // Request limit and offset
     private let queryFetchLimit = 100
     private var currentFetchOffset = 0
-    // Search offset and Limit
     private let searchQueryFetchLimit = 50
     private var searchCurrentFetchOffset = 0
-    let historyActionables = HistoryActionablesModel.activeActionables
 
+    // Search
+    var isSearchInProgress = false
+    var searchResultSites = [Site]()
+    var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
+
+    let historyActionables = HistoryActionablesModel.activeActionables
     var visibleSections: [Sections] = []
     // Groups items we should have a single datasource containing sites and groups
     var searchTermGroups: [ASGroup<Site>] = []
     // Only individual sites
     var groupedSites = DateGroupedTableData<Site>()
     var isFetchInProgress = false
-    var isSearchInProgress = false
     var shouldResetHistory = false
-
-    var searchResultSites = [Site]()
-    var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
+    var hiddenSections: [Sections] = []
 
     private var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
@@ -88,8 +90,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         browserLog.debug("HistoryPanelViewModel Deinitialized.")
     }
 
-    // MARK: - Private helpers
-
     /// Begin the process of fetching history data, and creating ASGroups from them. A prefetch also triggers this.
     func reloadData(completion: @escaping (Bool) -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
@@ -110,7 +110,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
             }
 
             self.currentFetchOffset += self.queryFetchLimit
-            if self.featureFlags.isFeatureActiveForBuild(.historyGroups) {
+            if self.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) {
                 self.populateASGroups(fetchedSites: fetchedSites) {
                     self.buildVisibleSections()
                     completion(true)
@@ -122,7 +122,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         }
     }
 
-    // Add completion to reload on finish
     func performSearch(term: String, completion: @escaping (Bool) -> Void) {
         isFetchInProgress = true
 
@@ -146,6 +145,17 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         searchCurrentFetchOffset += searchQueryFetchLimit
     }
 
+    func collapseSection(sectionIndex: Int) {
+        guard let sectionToHide = visibleSections[safe: sectionIndex - 1] else { return }
+
+        if hiddenSections.contains(where: { $0 == sectionToHide }) {
+            let index = hiddenSections.firstIndex(of: sectionToHide) ?? 0
+            hiddenSections.remove(at: index)
+        } else {
+            hiddenSections.append(sectionToHide)
+        }
+    }
+
     func removeAllData() {
         /// Since we remove all data, we reset our fetchOffset back to the start.
         currentFetchOffset = 0
@@ -154,6 +164,14 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
         groupedSites = DateGroupedTableData<Site>()
         buildVisibleSections()
     }
+
+    func isSectionCollapsed(sectionIndex: Int) -> Bool {
+        guard let sectionToHide = visibleSections[safe: sectionIndex] else { return false }
+
+        return hiddenSections.contains(where: { $0 == sectionToHide })
+    }
+
+    // MARK: - Private helpers
 
     /// A helper for the reload function.
     private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
@@ -203,7 +221,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
 
     /// Provide groups for curruently fetched history items.
     private func populateASGroups(fetchedSites: [Site], completion: @escaping () -> Void) {
-        SearchTermGroupsManager.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, filteredItems in
+        SearchTermGroupsUtility.getSiteGroups(with: self.profile, from: fetchedSites, using: .orderedDescending) { group, filteredItems in
             guard let searchTermGrouping = group else { return }
 
             self.searchTermGroups.append(contentsOf: searchTermGrouping)
@@ -218,6 +236,16 @@ class HistoryPanelViewModel: Loggable, FeatureFlagsProtocol {
     }
 
     // MARK: - Public facing helpers
+
+    func shouldAddGroupToSections(group: ASGroup<Site>) -> HistoryPanelViewModel.Sections? {
+        guard let section = groupBelongsToSection(asGroup: group),
+                visibleSections.contains(section),
+              !hiddenSections.contains(section) else {
+            return nil
+        }
+
+        return section
+    }
 
     /// This helps us place an ASGroup<Site> in the correct section.
     func groupBelongsToSection(asGroup: ASGroup<Site>) -> HistoryPanelViewModel.Sections? {

@@ -65,9 +65,9 @@ class LoginListViewController: SensitiveViewController {
 
         AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
             switch result {
-                case .success():
+                case .success:
                     fillDeferred(ok: true)
-                case .failure(_):
+                case .failure:
                     fillDeferred(ok: false)
             }
         }
@@ -271,7 +271,7 @@ private extension LoginListViewController {
     }
 
     @objc func presentAddCredential() {
-        let addController = AddCredentialViewController() { [weak self] record in
+        let addController = AddCredentialViewController { [weak self] record in
             let result = self?.viewModel.save(loginRecord: record)
             self?.presentedViewController?.dismiss(animated: true) {
                 result?.upon { id in

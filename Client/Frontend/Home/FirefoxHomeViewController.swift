@@ -98,6 +98,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
 
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+
         if shouldDisplayHomeTabBanner {
             showHomeTabBanner()
         }
@@ -197,6 +201,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     }
 
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
+
+    @objc private func dismissKeyboard() {
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
     }
 
@@ -245,7 +253,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
 
     private var shouldDisplayHomeTabBanner: Bool {
         let message = messagingManager.getNextMessage(for: .newTabCard)
-        if #available(iOS 14.0, *), message != nil || !UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserCard) {
+        if #available(iOS 14.0, *), message != nil || !UserDefaults.standard.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage) {
             return true
         } else {
             return false
@@ -347,10 +355,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.topSites
                 headerView.moreButton.isHidden = true
                 return headerView
-            case .libraryShortcuts:
-                headerView.moreButton.isHidden = true
-                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.library
-                return headerView
             case .customizeHome:
                 headerView.moreButton.isHidden = true
                 return headerView
@@ -377,10 +381,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             cellSize.height *= CGFloat(viewModel.jumpBackInViewModel.numberOfItemsInColumn)
             cellSize.height += HistoryHighlightsCollectionCellUX.verticalPadding * 2
             return cellSize
-
-        case .libraryShortcuts:
-            let width = min(FirefoxHomeViewModel.UX.libraryShortcutsMaxWidth, cellSize.width)
-            return CGSize(width: width, height: cellSize.height)
 
         case .historyHighlights:
 
@@ -412,8 +412,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             }
 
             return .zero
-        case .libraryShortcuts:
-            return viewModel.isYourLibrarySectionEnabled ? getHeaderSize(forSection: section) : .zero
         case .jumpBackIn:
             return viewModel.jumpBackInViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
         case .historyHighlights:
@@ -446,8 +444,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
             return viewModel.pocketViewModel.shouldShow ? edgeInsets : .zero
         case .topSites:
             return viewModel.topSiteViewModel.shouldShow ? edgeInsets : .zero
-        case .libraryShortcuts:
-            return viewModel.isYourLibrarySectionEnabled ? edgeInsets : .zero
         case .jumpBackIn:
             return viewModel.jumpBackInViewModel.shouldShow ? edgeInsets : .zero
         case .historyHighlights:
@@ -490,34 +486,9 @@ extension FirefoxHomeViewController {
             return configureRecentlySavedCell(cell, forIndexPath: indexPath)
         case .historyHighlights:
             return configureHistoryHighlightsCell(cell, forIndexPath: indexPath)
-        case .libraryShortcuts:
-            return configureLibraryShortcutsCell(cell, forIndexPath: indexPath)
         case .customizeHome:
             return configureCustomizeHomeCell(cell, forIndexPath: indexPath)
         }
-    }
-
-    func configureLibraryShortcutsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let libraryCell = cell as? ASLibraryCell else { return UICollectionViewCell() }
-        let openBookmarks = { button in
-            self.openBookmarks(button)
-        }
-
-        let openHistory = { button in
-            self.openHistory(button)
-        }
-
-        let openDownloads = { button in
-            self.openDownloads(button)
-        }
-
-        let openReadingList = { button in
-            self.openReadingList(button)
-        }
-
-        libraryCell.buttonActions = [openBookmarks, openHistory, openDownloads, openReadingList]
-        libraryCell.loadLayout()
-        return cell
     }
 
     func configureLogoHeaderCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {

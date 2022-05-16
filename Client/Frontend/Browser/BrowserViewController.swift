@@ -62,7 +62,6 @@ class BrowserViewController: UIViewController {
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
-    var chronTabsUserResearch: ChronTabsUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing: Bool = false
@@ -83,7 +82,6 @@ class BrowserViewController: UIViewController {
     var copyAddressAction: AccessibleAction!
 
     weak var gridTabTrayController: GridTabViewController?
-    weak var chronTabTrayController: ChronologicalTabsViewController?
     var tabTrayViewController: TabTrayViewController?
 
     let profile: Profile
@@ -427,8 +425,6 @@ class BrowserViewController: UIViewController {
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
         }
 
-        // Setup chron tabs A/B test
-        chronTabsUserResearch = ChronTabsUserResearch()
         searchTelemetry = SearchTelemetry()
 
         // Awesomebar Location Telemetry
@@ -748,7 +744,7 @@ class BrowserViewController: UIViewController {
 
     func loadQueuedTabs(receivedURLs: [URL]? = nil) {
         // Chain off of a trivial deferred in order to run on the background queue.
-        succeed().upon() { res in
+        succeed().upon { res in
             self.dequeueQueuedTabs(receivedURLs: receivedURLs ?? [])
         }
     }
@@ -1089,6 +1085,13 @@ class BrowserViewController: UIViewController {
             isButtonTapped ? self.openBookmarkEditPanel() : nil
         }
         self.show(toast: toast)
+    }
+
+    func removeBookmark(url: String) {
+        profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+            self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark, url: url)
+        }
     }
 
     /// This function will open a view separate from the bookmark edit panel found in the
@@ -2376,13 +2379,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        super.pressesBegan(presses, with: event)
         keyboardPressesHandler.handlePressesBegan(presses, with: event)
+        super.pressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        super.pressesEnded(presses, with: event)
         keyboardPressesHandler.handlePressesEnded(presses, with: event)
+        super.pressesEnded(presses, with: event)
     }
 }
 
@@ -2465,7 +2468,14 @@ extension BrowserViewController: TabTrayDelegate {
 extension BrowserViewController: NotificationThemeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
-        let ui: [NotificationThemeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController, chronTabTrayController]
+        let ui: [NotificationThemeable?] = [urlBar,
+                                            toolbar,
+                                            readerModeBar,
+                                            topTabsViewController,
+                                            firefoxHomeViewController,
+                                            searchController,
+                                            libraryViewController,
+                                            libraryDrawerViewController]
         ui.forEach { $0?.applyTheme() }
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
@@ -2550,10 +2560,10 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
 // MARK: - Reopen last closed tab
 
-extension BrowserViewController {
+extension BrowserViewController: FeatureFlaggable {
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if featureFlags.isFeatureActiveForBuild(.shakeToRestore) {
+        if featureFlags.isFeatureEnabled(.shakeToRestore, checking: .buildOnly) {
             homePanelDidRequestToRestoreClosedTab(motion)
         }
     }

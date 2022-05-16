@@ -2173,9 +2173,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Beste fitxak";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Fitxa pribatuak";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Fitxak 30 egunez egongo dira erabilgarri. Denbora horren ondoren, automatikoki itxiko dira.";
 

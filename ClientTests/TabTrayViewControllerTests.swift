@@ -20,7 +20,7 @@ class TabTrayViewControllerTests: XCTestCase {
 
         profile = TabManagerMockProfile()
         manager = TabManager(profile: profile, imageStore: nil)
-        tabTray = TabTrayViewController(tabTrayDelegate: nil, profile: profile, showChronTabs: false, tabToFocus: nil, tabManager: manager)
+        tabTray = TabTrayViewController(tabTrayDelegate: nil, profile: profile, tabToFocus: nil, tabManager: manager)
         gridTab = GridTabViewController(tabManager: manager, profile: profile)
         manager.addDelegate(gridTab)
     }

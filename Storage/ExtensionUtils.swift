@@ -24,7 +24,7 @@ public struct ExtensionUtils {
         case rawText(String)
 
         public func isUrlType() -> Bool {
-            if case .shareItem(_) = self {
+            if case .shareItem = self {
                 return true
             } else {
                 return false

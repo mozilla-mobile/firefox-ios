@@ -54,14 +54,14 @@ class DefaultBrowserOnboardingViewModel {
 
     private func setupModel() {
         model = DefaultBrowserOnboardingModel(
-            titleText: String.DefaultBrowserCardTitle,
+            titleText: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerTitle,
             descriptionText: descriptionText,
             imageText: String.DefaultBrowserOnboardingScreenshot
         )
     }
 
     private var descriptionText: [String] {
-        [String.DefaultBrowserCardDescription,
+        [String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription,
          String.DefaultBrowserOnboardingDescriptionStep1,
          String.DefaultBrowserOnboardingDescriptionStep2,
          String.DefaultBrowserOnboardingDescriptionStep3]
