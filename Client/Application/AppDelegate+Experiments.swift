@@ -14,7 +14,7 @@ extension AppDelegate {
         // constructed singleton.
         FxNimbus.shared.initialize(with: { Experiments.shared } )
         // We also make sure that any cache invalidation happens after each applyPendingExperiments().
-        NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: nil) {
+        NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: nil) { _ in
             FxNimbus.shared.invalidateCachedValues()
         }
 
