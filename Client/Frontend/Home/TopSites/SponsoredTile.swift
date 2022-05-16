@@ -11,5 +11,7 @@ final class SponsoredTile: Site {
         super.init(url: contile.url, title: contile.name, bookmarked: nil)
         // A guid is required in case the site might become a pinned site
         self.guid = "default" + contile.name
+
+        icon = Favicon(url: contile.imageUrl)
     }
 }
