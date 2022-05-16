@@ -41,10 +41,10 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     private var isPrivate: Bool
 
     init(
-            isZeroSearch: Bool = false,
-            profile: Profile,
-            isPrivate: Bool,
-            tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+        isZeroSearch: Bool = false,
+        profile: Profile,
+        isPrivate: Bool,
+        tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
@@ -100,11 +100,11 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         onTapGroup?(firstTab)
 
         TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .tap,
-                object: .firefoxHomepage,
-                value: .jumpBackInSectionGroupOpened,
-                extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+            category: .action,
+            method: .tap,
+            object: .firefoxHomepage,
+            value: .jumpBackInSectionGroupOpened,
+            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
         )
     }
 
@@ -115,11 +115,12 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         delegate.leaveOverlayMode(didCancel: false)
 
         tabManager.selectTab(tab, previous: nil)
-        TelemetryWrapper.recordEvent(category: .action,
-                method: .tap,
-                object: .firefoxHomepage,
-                value: .jumpBackInSectionTabOpened,
-                extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .firefoxHomepage,
+            value: .jumpBackInSectionTabOpened,
+            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
         )
     }
 
@@ -219,7 +220,9 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     func updateData(completion: @escaping () -> Void) {
         // Has to be on main due to tab manager needing main tread
         // This can be fixed when tab manager has been revisited
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
             self.updateJumpBackInData(completion: completion)
         }
     }
