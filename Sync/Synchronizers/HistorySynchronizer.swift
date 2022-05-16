@@ -274,7 +274,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
                 // If we didn't finish downloading, do nothing further -- just pass
                 // through the download result.
-                case .notStarted(_):
+                case .notStarted:
                     return deferMaybe(syncResult)
 
                 case .partial:

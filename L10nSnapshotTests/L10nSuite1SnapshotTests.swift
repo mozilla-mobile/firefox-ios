@@ -16,7 +16,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
             args = [LaunchArguments.ClearProfile,
                     LaunchArguments.SkipWhatsNew,
                     LaunchArguments.SkipETPCoverSheet,
-                    LaunchArguments.SkipContextualHints]
+                    LaunchArguments.SkipContextualHints,
+                    LaunchArguments.TurnOffTabGroupsInUserPreferences]
         }
         super.setUp()
     }

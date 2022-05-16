@@ -11,69 +11,35 @@
                 "enabled": true,
                 "featureId": "messaging",
                 "value": {
-                  "message-under-experiment": "cmuresan-test-1",
-                  "messages": {
-                    "cmuresan-test-1": {
-                      "action": "https://en.wikipedia.org/wiki/Berserk_(manga)",
-                      "button-label": "Click here for Kentaro Miura masterpiece!",
-                      "text": "We don't talk about Berserk 2016.",
-                      "trigger": [
-                        "ALWAYS"
-                      ]
-                    }
-                  }
-                }
-              },
-              "ratio": 1,
-              "slug": "control"
-            },
-            {
-              "feature": {
-                "enabled": true,
-                "featureId": "messaging",
-                "value": {
-                  "message-under-experiment": "cmuresan-test-2",
-                  "messages": {
-                    "cmuresan-test-2": {
-                      "action": "OPEN_SETTINGS",
-                      "button-label": "Click here for Kentaro Miura masterpiece!",
-                      "text": "We don't talk about Berserk 2016.",
-                      "trigger": [
-                        "ALWAYS"
-                      ]
-                    }
-                  }
-                }
-              },
-              "ratio": 1,
-              "slug": "treatment-a"
-            },
-            {
-              "feature": {
-                "enabled": true,
-                "featureId": "messaging",
-                "value": {
-                  "actions": {
-                    "OPEN_SETTINGS": "://deep-link?url=settings/general"
-                  },
-                  "message-under-experiment": "cmuresan-test-message-2",
-                  "messages": {
-                    "cmuresan-test-message-2": {
-                      "action": "OPEN_SETTINGS",
-                      "button-label": "this is a test label",
-                      "text": "test message",
-                      "trigger": [
-                        "ALWAYS"
-                      ]
-                    }
-                  },
+                  "on-control": "show-next-message",
+                  "message-under-experiment": "may12-2022-943am",
                   "triggers": {
-                    "ALWAYS": "true"
+                      "ALWAYS": "true"
+                    },
+                  "actions": {
+                      "OPEN_LINK": "https://www.google.com/search?client=firefox-b-1-d&q=google&id={uuid}"
+                    },
+                  "styles": {
+                      "PPOPY": [
+                        "priority: 50",
+                        "max-display-count: 3"
+                      ]
+                    },
+                  "messages": {
+                    "may12-2022-1648": {
+                      "action": "OPEN_SETTINGS_THEME",
+                      "button-label": "PPOP",
+                      "style": "URGENT",
+                      "text": "Can you see the string?",
+                      "trigger": [
+                        "ALWAYS"
+                      ]
+                    }
                   }
                 }
               },
-              "ratio": 1,
-              "slug": "treatment-b"
+              "ratio": 0,
+              "slug": "control"
             }
           ],
           "bucketConfig": {

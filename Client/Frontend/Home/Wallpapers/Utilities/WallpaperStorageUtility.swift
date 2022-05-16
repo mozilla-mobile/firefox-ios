@@ -20,7 +20,7 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
     public func store(_ wallpaper: Wallpaper, and resources: WallpaperImageSet) {
         store(imageSet: resources) { result in
             switch result {
-            case .success(()):
+            case .success:
                 self.store(wallpaperObject: wallpaper)
                 NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
             case .failure(let error):

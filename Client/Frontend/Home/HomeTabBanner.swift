@@ -62,6 +62,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         button.setImage(UIImage(named: ImageIdentifiers.xMark)?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
+        button.accessibilityLabel = BannerCopy.HomeTabBannerCloseAccessibility
     }
 
     private lazy var textStackView: UIStackView = .build { [weak self] stackView in
@@ -165,9 +166,9 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
     private func applyMessage() {
         /// If no messages exist, continue using our evergreen message.
         guard let message = message else {
-            bannerTitle.text = BannerCopy.DefaultBrowserTitle
-            descriptionText.text = BannerCopy.DefaultBrowserDescription
-            ctaButton.setTitle(BannerCopy.DefaultBrowserButton, for: .normal)
+            bannerTitle.text = BannerCopy.HomeTabBannerTitle
+            descriptionText.text = BannerCopy.HomeTabBannerDescription
+            ctaButton.setTitle(BannerCopy.HomeTabBannerButton, for: .normal)
 
             TelemetryWrapper.recordEvent(category: .information, method: .view, object: .homeTabBannerEvergreen)
             return
@@ -209,10 +210,15 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
 
     /// The surface needs to handle CTAs a certain way when there's a message OR the evergreen.
     @objc func handleCTA() {
+        self.dismissClosure?()
+
         guard let message = message else {
             /// If we're here, that means we've shown the evergreen. Handle it as we always did.
             BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
+
+            /// The evergreen needs to be treated like the other messages - once interacted with, don't show it.
+            UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
 
             // Set default browser onboarding did show to true so it will not show again after user clicks this button
             UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)

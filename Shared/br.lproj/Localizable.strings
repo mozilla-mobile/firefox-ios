@@ -2173,9 +2173,6 @@
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Ivinelloù all";
 
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Ivinelloù prevez";
-
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "An ivinelloù a zo hegerz amañ e-pad 30 deiz. Goude e vo serret an ivinelloù ent emgefreek.";
 

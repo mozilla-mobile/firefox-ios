@@ -416,7 +416,7 @@ class NavigationTest: BaseTestCase {
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
         app.typeText("example.com\n")
 
-        waitUntilPageLoad()
+//        waitUntilPageLoad()
         waitForValueContains(urlBar, value: "example.com/")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
     }

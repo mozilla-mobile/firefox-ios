@@ -8,7 +8,7 @@ import Shared
 import XCGLogger
 
 private let log = Logger.browserLogger
-class TabManagerStore: FeatureFlagsProtocol {
+class TabManagerStore: FeatureFlaggable {
     fileprivate var lockedForReading = false
     fileprivate let imageStore: DiskImageStore?
     fileprivate var fileManager = FileManager.default

@@ -35,7 +35,7 @@ class TabTrayViewModel {
             case 0:
                 return .TabTrayV2Title
             case 1:
-                return . TabTrayPrivateBrowsingTitle
+                return .TabTrayPrivateBrowsingTitle
             case 2:
                 return .AppMenu.AppMenuSyncedTabsTitleString
             default:

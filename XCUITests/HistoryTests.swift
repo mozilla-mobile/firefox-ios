@@ -31,7 +31,8 @@ class HistoryTests: BaseTestCase {
                                LaunchArguments.SkipETPCoverSheet,
                                LaunchArguments.SkipDefaultBrowserOnboarding,
                                LaunchArguments.LoadDatabasePrefix + historyDB,
-                               LaunchArguments.SkipContextualHints]
+                               LaunchArguments.SkipContextualHints,
+                               LaunchArguments.TurnOffTabGroupsInUserPreferences]
         }
         super.setUp()
     }

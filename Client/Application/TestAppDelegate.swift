@@ -9,7 +9,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-class TestAppDelegate: AppDelegate, FeatureFlagsProtocol {
+class TestAppDelegate: AppDelegate, FeatureFlaggable {
 
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
@@ -97,8 +97,12 @@ class TestAppDelegate: AppDelegate, FeatureFlagsProtocol {
             profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
         }
 
+        if launchArguments.contains(LaunchArguments.TurnOffTabGroupsInUserPreferences) {
+            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.TabTrayGroups)
+        }
+
         if launchArguments.contains(LaunchArguments.SkipSponsoredShortcuts) {
-            featureFlags.setUserPreferenceFor(.sponsoredTiles, to: UserFeaturePreference.disabled)
+            profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
         }
 
         // Don't show the What's New page.

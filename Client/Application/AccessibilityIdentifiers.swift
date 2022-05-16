@@ -44,7 +44,6 @@ public struct AccessibilityIdentifiers {
             static let recentlySaved = "recentlySavedTitle"
             static let historyHighlights = "historyHightlightsTitle"
             static let pocket = "pocketTitle"
-            static let library = "libraryTitle"
             static let topSites = "topSitesTitle"
         }
 
