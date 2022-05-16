@@ -628,7 +628,7 @@ extension TelemetryWrapper {
         case (.action, .press, .tabToolbar, .tabView, _):
             GleanMetrics.Tabs.pressTabToolbar.record()
         case (.action, .press, .tab, _, _):
-            GleanMetrics.Tabs.pressTab.record()
+            GleanMetrics.Tabs.pressTopTab.record()
         case(.action, .pull, .reload, _, _):
             GleanMetrics.Tabs.pullToRefresh.add()
         case(.action, .navigate, .tab, _, _):

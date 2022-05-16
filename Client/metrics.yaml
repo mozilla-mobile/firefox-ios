@@ -1886,7 +1886,7 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-10"
-  press_tab:
+  press_top_tab:
     type: event
     description: |
       Records when a top tab is pressed
