@@ -5,10 +5,7 @@
 import Foundation
 import MozillaAppServices
 
-class NimbusFeatureFlagLayer {
-
-    // MARK: - Initializer
-    init() { }
+final class NimbusFeatureFlagLayer {
 
     // MARK: - Public methods
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
@@ -63,19 +60,14 @@ class NimbusFeatureFlagLayer {
     ) -> Bool {
 
         let config = nimbus.features.generalAppFeatures.value()
-        var nimbusID: GeneralAppFeatureId
 
         switch featureID {
-        case .bottomSearchBar: nimbusID = GeneralAppFeatureId.bottomSearchBar
-        case .pullToRefresh: nimbusID = GeneralAppFeatureId.pullToRefresh
-        case .reportSiteIssue: nimbusID = GeneralAppFeatureId.reportSiteIssue
-        case .shakeToRestore: nimbusID = GeneralAppFeatureId.shakeToRestore
+        case .bottomSearchBar: return config.searchBarPosition.status
+        case .pullToRefresh: return config.pullToRefresh.status
+        case .reportSiteIssue: return config.reportSiteIssue.status
+        case .shakeToRestore: return config.shakeToRestore.status
         default: return false
         }
-
-        guard let status = config.featureStatus[nimbusID] else { return false }
-
-        return status
     }
 
     private func checkHomescreenFeature(for featureID: NimbusFeatureFlagID,
