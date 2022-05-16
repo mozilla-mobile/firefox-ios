@@ -1280,7 +1280,23 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
+    expires: "2022-07-01"
+  private_browsing_button_tapped:
+    type: event
+    description: |
+      Records when the private browsing button is tapped
+    extra_keys:
+      is_private:
+        type: string
+        description: |
+          If the button is tapped or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-10"
 
 # QR Code metrics
 qr_code:
@@ -1858,7 +1874,29 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9785
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
+    expires: "2022-07-01"
+  press_tab_toolbar:
+    type: event
+    description: |
+      Records when tab view button is pressed
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-10"
+  press_top_tab:
+    type: event
+    description: |
+      Records when a top tab is pressed
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-10"
 
 # Theme metrics
 theme:
@@ -2287,7 +2325,18 @@ awesomebar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10537
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
+    expires: "2022-09-01"
+  drag_location_bar:
+    type: event
+    description: |
+      Records when dragging the location bar
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-10"
 
 # Device specific metrics
 
