@@ -23,7 +23,7 @@ protocol SearchBarPreferenceDelegate: AnyObject {
     func didUpdateSearchBarPositionPreference()
 }
 
-final class SearchBarSettingsViewModel {
+final class SearchBarSettingsViewModel: HasNimbusSearchBar {
 
     static var isEnabled: Bool {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
@@ -45,10 +45,7 @@ final class SearchBarSettingsViewModel {
 
     var searchBarPosition: SearchBarPosition {
         guard let raw = prefs.stringForKey(PrefsKeys.KeySearchBarPosition) else {
-            let defaultPosition = getDefaultSearchPosition()
-            // Do not notify if it's the default position being saved
-            saveSearchBarPosition(defaultPosition, shouldNotify: false)
-            return defaultPosition
+            return getDefaultSearchPosition()
         }
 
         let position = SearchBarPosition(rawValue: raw) ?? .bottom
@@ -77,18 +74,19 @@ final class SearchBarSettingsViewModel {
 // MARK: Private
 private extension SearchBarSettingsViewModel {
 
-    /// New user defaults to bottom search bar, existing users keep their existing search bar position
+    /// New users default to whatever is predetermined by Nimbus and the experiments they
+    /// may be in. Existing users keep their existing search bar position.
     func getDefaultSearchPosition() -> SearchBarPosition {
-        return InstallType.get() == .fresh ? .bottom : .top
+        let nimbusPosition = nimbusSearchBar.getDefaultPosition()
+        return InstallType.get() == .fresh ? nimbusPosition : .top
     }
 
-    func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition, shouldNotify: Bool = true) {
+    func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
         prefs.setString(searchBarPosition.rawValue,
                         forKey: PrefsKeys.KeySearchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
         recordPreferenceChange(searchBarPosition)
 
-        guard shouldNotify else { return }
         let notificationObject = [PrefsKeys.KeySearchBarPosition: searchBarPosition]
         NotificationCenter.default.post(name: .SearchBarPositionDidChange, object: notificationObject)
     }

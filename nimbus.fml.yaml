@@ -7,33 +7,67 @@ features:
   general-app-features:
     description: The feature that contains feature flags for the entire application
     variables:
-      feature-status:
-        description: "This property provides a lookup table of whether or not the given feature should be enabled."
-        type: Map<GeneralAppFeatureID, Boolean>
+      search-bar-position:
+        description: "This property defines whether or not the feature is
+        enabled, and the position of the search bar"
+        type: BottomSearchBar
         default:
           {
-            "bottom-search-bar": true,
-            "pull-to-refresh": true,
-            "report-site-issue": false,
-            "shake-to-restore": false,
+            "status": true,
+            "is-bottom": true
+          }
+      pull-to-refresh:
+        description: "This property defines whether or not the feature is enabled"
+        type: GeneralFeature
+        default:
+          {
+            "status": true
+          }
+      report-site-issue:
+        description: "This property defines whether or not the feature is enabled"
+        type: GeneralFeature
+        default:
+          {
+            "status": false
+          }
+      shake-to-restore:
+        description: "This property defines whether or not the feature is enabled"
+        type: GeneralFeature
+        default:
+          {
+            "status": false
           }
     defaults:
       - channel: beta
         value: {
-          "feature-status": {
-            "bottom-search-bar": true,
-            "pull-to-refresh": true,
-            "report-site-issue": true,
-            "shake-to-restore": true,
+          "search-bar-position": {
+            "status": true,
+            "is-bottom": true
+          },
+          "pull-to-refresh": {
+            "status": true
+          },
+          "report-site-issue": {
+            "status": true
+          },
+          "shake-to-restore": {
+            "status": true
           }
         }
       - channel: developer
         value: {
-          "feature-status": {
-            "bottom-search-bar": true,
-            "pull-to-refresh": true,
-            "report-site-issue": true,
-            "shake-to-restore": true,
+          "search-bar-position": {
+            "status": true,
+            "is-bottom": true
+          },
+          "pull-to-refresh": {
+            "status": true
+          },
+          "report-site-issue": {
+            "status": true
+          },
+          "shake-to-restore": {
+            "status": true
           }
         }
   start-at-home-feature:
@@ -117,7 +151,7 @@ features:
       wallpaper-feature:
         description: "This property defines the wallpaper feature on the
         homepage, which is not a section therein."
-        type: WallpaperFeature
+        type: GeneralFeature
         default:
           {
             "status": true,
@@ -296,6 +330,24 @@ features:
 
 types:
   objects:
+    GeneralFeature:
+      description: "The configuration for the a feature that can be enabled or disabled"
+      fields:
+        status:
+          type: Boolean
+          description: Whether or not the feature is enabled
+          default: false
+    BottomSearchBar:
+      description: "The configuration for the bottom search bar on the homescreen"
+      fields:
+        status:
+          type: Boolean
+          description: Whether or not the feature is enabled
+          default: true
+        is-bottom:
+          type: Boolean
+          description: Whether or not the default position is at the bottom
+          default: true
     SponsoredTiles:
       description: "The configuration for the sponsored tile on the homescreen"
       fields:
@@ -307,13 +359,6 @@ types:
           type: Int
           description: The maximum number of sponsored tiles a user can see
           default: 2
-    WallpaperFeature:
-      description: "The configuration for the wallpaper feature on the homescreen"
-      fields:
-        status:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: true
     MessageData:
       description: >
         An object to describe a message. It uses human
@@ -437,17 +482,6 @@ types:
           description: This is the card that appears at the top on the Firefox Home Page.
         Unknown:
           description: A message has NOT declared its target surface.
-    GeneralAppFeatureID:
-      description: The identifiers for the different types of search term groups.
-      variants:
-        bottom-search-bar:
-          description: Whether the search bar is at the bottom or the top.
-        pull-to-refresh:
-          description: Whether the pullToRefresh feature is on
-        report-site-issue:
-          description: Whether the reportSiteIssue functionality is enabled
-        shake-to-restore:
-          description: Whether the shakeToRestore last closed tab feature is enabled
     StartAtHome:
       description: The identifiers for the different types of options for StartAtHome
       variants:

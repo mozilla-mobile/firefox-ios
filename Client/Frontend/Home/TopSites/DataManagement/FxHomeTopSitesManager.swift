@@ -10,7 +10,7 @@ protocol FxHomeTopSitesManagerDelegate: AnyObject {
     func reloadTopSites()
 }
 
-class FxHomeTopSitesManager: FeatureFlaggable, NimbusManageable {
+class FxHomeTopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
 
     private let profile: Profile
     private var topSites: [HomeTopSite] = []
@@ -130,7 +130,7 @@ class FxHomeTopSitesManager: FeatureFlaggable, NimbusManageable {
         // Google tile has precedence over Sponsored Tiles
         let sponsoredTileSpaces = availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount
         if sponsoredTileSpaces > 0 {
-            let maxNumberOfTiles = nimbusManager.sponsoredTileLayer.getMaxNumberOfTiles()
+            let maxNumberOfTiles = nimbusSponoredTiles.getMaxNumberOfTiles()
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
                                     contiles: contiles,
                                     maxNumberOfSponsoredTile: maxNumberOfTiles)
