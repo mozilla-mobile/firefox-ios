@@ -12,9 +12,10 @@ enum InstallType: String, Codable {
 
     // Helper methods
     static func get() -> InstallType {
-        guard let rawValue = UserDefaults.standard.string(forKey: PrefsKeys.InstallType), let type = InstallType(rawValue: rawValue) else {
-            return unknown
-        }
+        guard let rawValue = UserDefaults.standard.string(forKey: PrefsKeys.InstallType),
+              let type = InstallType(rawValue: rawValue)
+        else { return unknown }
+        
         return type
     }
 

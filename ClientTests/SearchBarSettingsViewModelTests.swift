@@ -175,7 +175,7 @@ private extension SearchBarSettingsViewModelTests {
     }
 
     func setDefault(_ prefs: Prefs, defaultPosition: SearchBarPosition) {
-        prefs.setString(defaultPosition.rawValue, forKey: PrefsKeys.KeySearchBarPosition)
+        prefs.setString(defaultPosition.rawValue, forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
     }
 
     func verifyNotification(expectedPosition: SearchBarPosition,
@@ -184,7 +184,7 @@ private extension SearchBarSettingsViewModelTests {
                             line: UInt = #line) -> Bool {
 
         guard let dict = notification.object as? NSDictionary,
-              let newSearchBarPosition = dict[PrefsKeys.KeySearchBarPosition] as? SearchBarPosition
+              let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
         else {
             XCTFail("Notification should be \(expectedPosition), instead of \(notification.debugDescription)", file: file, line: line)
             return false
