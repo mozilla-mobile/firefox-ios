@@ -104,12 +104,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         telemetry = TelemetryWrapper(profile: profile)
 
+        // Initialize the feature flag subsytem.
+        // Among other things, it toggles on and off Nimbus, Contile, Adjust.
+        // i.e. this must be run before initializing those systems.
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
+
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
 
-        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
         ThemeManager.shared.updateProfile(with: profile)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
