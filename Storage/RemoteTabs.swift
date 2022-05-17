@@ -23,6 +23,11 @@ public struct ClientAndTabs: Equatable, CustomStringConvertible {
             return max(m, tab.lastUsed)
         })
     }
+
+    public init(client: RemoteClient, tabs: [RemoteTab]) {
+        self.client = client
+        self.tabs = tabs
+    }
 }
 
 public func == (lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
@@ -58,6 +63,7 @@ public struct RemoteTab: Equatable {
     public let history: [Foundation.URL]
     public let lastUsed: Timestamp
     public let icon: Foundation.URL?
+    public var faviconURL: String? // Empty for now until #10000 is done
 
     public static func shouldIncludeURL(_ url: Foundation.URL) -> Bool {
         if let _ = InternalURL(url) {

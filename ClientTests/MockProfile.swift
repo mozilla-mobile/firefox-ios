@@ -213,8 +213,9 @@ open class MockProfile: Client.Profile {
         return deferMaybe([])
     }
 
+    var mockClientAndTabs = [ClientAndTabs]()
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return deferMaybe([])
+        return deferMaybe(mockClientAndTabs)
     }
 
     public func cleanupHistoryIfNeeded() {}
