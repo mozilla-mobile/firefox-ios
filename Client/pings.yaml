@@ -1,0 +1,20 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+---
+$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
+
+topsites-impression:
+  description: |
+    Recorded when a sponsored top site is rendered and
+    visible on the newtab page. Visibility is qualified
+    as when the homepage is brought to the front of the
+    Browser, and sponsored tiles are 100% visible on screen.
+  include_client_id: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/10696
+  notification_emails:
+    - fx-ios-data-stewards@mozilla.com

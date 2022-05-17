@@ -105,15 +105,15 @@ class FxHomeTopSitesViewModel {
     }
 
     func tilePressed(site: HomeTopSite, position: Int) {
-        topSitePressTracking(site: site, position: position)
+        topSitePressTracking(homeTopSite: site, position: position)
         tilePressedHandler?(site.site, site.isGoogleURL)
     }
 
     // MARK: - Telemetry
 
-    private func topSitePressTracking(site: HomeTopSite, position: Int) {
+    private func topSitePressTracking(homeTopSite: HomeTopSite, position: Int) {
         // Top site extra
-        let type = site.getTelemetrySiteType()
+        let type = homeTopSite.getTelemetrySiteType()
         let topSiteExtra = [TelemetryWrapper.EventExtraKey.topSitePosition.rawValue: "\(position)",
                             TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue: type]
 
@@ -126,6 +126,11 @@ class FxHomeTopSitesViewModel {
                                      object: .topSiteTile,
                                      value: nil,
                                      extras: extras)
+
+        // Sponsored tile specific telemetry
+        if let tile = homeTopSite.site as? SponsoredTile {
+            SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position)
+        }
     }
 
     // MARK: - Context actions
