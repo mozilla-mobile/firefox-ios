@@ -14,22 +14,9 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
     // MARK: Default
 
-    func testDefaultSearchPosition_freshInstall() {
-        InstallType.set(type: .fresh)
+    func testDefaultSearchPosition() {
         let viewModel = createViewModel()
         XCTAssertEqual(viewModel.searchBarPosition, .bottom)
-    }
-
-    func testDefaultSearchPosition_upgrade() {
-        InstallType.set(type: .upgrade)
-        let viewModel = createViewModel()
-        XCTAssertEqual(viewModel.searchBarPosition, .top)
-    }
-
-    func testDefaultSearchPosition_unknown() {
-        InstallType.set(type: .unknown)
-        let viewModel = createViewModel()
-        XCTAssertEqual(viewModel.searchBarPosition, .top)
     }
 
     // MARK: Saved
@@ -132,9 +119,11 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     }
 
     func testNotificationSent_topIsReceived() {
-        expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: { notification in
+        expectation(forNotification: .SearchBarPositionDidChange,
+                    object: nil) { notification in
             self.verifyNotification(expectedPosition: .top, notification: notification)
-        })
+        }
+
         let (viewModel, prefs) = createViewModelWithPrefs()
         setDefault(prefs, defaultPosition: .bottom)
         callSetting(viewModel.topSetting)
@@ -143,9 +132,12 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     }
 
     func testNotificationSent_bottomIsReceived() {
-        expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: { notification in
-            self.verifyNotification(expectedPosition: .bottom, notification: notification)
-        })
+        expectation(forNotification: .SearchBarPositionDidChange,
+                    object: nil) { notification in
+            self.verifyNotification(expectedPosition: .bottom,
+                                    notification: notification)
+        }
+
         let (viewModel, prefs) = createViewModelWithPrefs()
         setDefault(prefs, defaultPosition: .top)
         callSetting(viewModel.bottomSetting)
