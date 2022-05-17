@@ -467,6 +467,7 @@
 		8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */; };
 		8A56955227C68AE00077A89E /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56955127C68AE00077A89E /* UILabelExtensions.swift */; };
 		8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */; };
+		8A5C3BC5282ABF8E003A8CCF /* RemoteTabsPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3BC4282ABF8E003A8CCF /* RemoteTabsPanelTests.swift */; };
 		8A5CDEED27E510F500CC60FF /* pocketglobalfeed.json in Resources */ = {isa = PBXBuildFile; fileRef = 3B61CD621F2A769D00D38DE1 /* pocketglobalfeed.json */; };
 		8A6A796D27F773550022D6C6 /* FirefoxHomeContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6A796C27F773550022D6C6 /* FirefoxHomeContextMenuHelper.swift */; };
 		8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */; };
@@ -2814,6 +2815,7 @@
 		8A5143D6BF179870414566ED /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Search.strings; sourceTree = "<group>"; };
 		8A56955127C68AE00077A89E /* UILabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewModel.swift; sourceTree = "<group>"; };
+		8A5C3BC4282ABF8E003A8CCF /* RemoteTabsPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelTests.swift; sourceTree = "<group>"; };
 		8A6A796C27F773550022D6C6 /* FirefoxHomeContextMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxHomeContextMenuHelper.swift; sourceTree = "<group>"; };
 		8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		8A6B77CD2811CD11001110D2 /* URLCaching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCaching.swift; sourceTree = "<group>"; };
@@ -6919,6 +6921,7 @@
 				D525DFB225FBE5E000B18763 /* TabTests.swift */,
 				C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */,
 				DFA514822761012D00266AA0 /* HistoryHighlightsManagerTests.swift */,
+				8A5C3BC4282ABF8E003A8CCF /* RemoteTabsPanelTests.swift */,
 				C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */,
 				213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */,
 				215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */,
@@ -9459,6 +9462,7 @@
 				8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */,
 				8A7A93EE2810ADF2005E7E1B /* ContileProviderTests.swift in Sources */,
 				8A33221F27DFE318008F809E /* FxHomeTopSitesManagerTests.swift in Sources */,
+				8A5C3BC5282ABF8E003A8CCF /* RemoteTabsPanelTests.swift in Sources */,
 				D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */,
 				63306D452110BAF000F25400 /* TabManagerStoreTests.swift in Sources */,
 				8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */,
