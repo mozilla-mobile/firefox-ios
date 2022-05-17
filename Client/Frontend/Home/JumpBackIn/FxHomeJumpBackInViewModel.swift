@@ -37,14 +37,14 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
 
     private let isZeroSearch: Bool
     private let profile: Profile
-    private let tabManager: TabManager
+    private let tabManager: TabManagerProtocol
     private var isPrivate: Bool
 
     init(
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
-        tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+        tabManager: TabManagerProtocol = BrowserViewController.foregroundBVC().tabManager
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
