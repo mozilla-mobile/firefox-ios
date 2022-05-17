@@ -572,6 +572,7 @@
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
 		BA6E311FBCA7A2157F48568A /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E371A3948814CAA0C83E4 /* Telemetry.swift */; };
 		BA6E327D482C60B7776F1630 /* FirefoxHomeJumpBackInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E325D53E21B6F758DDA6E /* FirefoxHomeJumpBackInViewModelTests.swift */; };
+		BA6E333F98A9199386C9D213 /* DispatchQueueProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E3EF580AE1E9F39DC509B /* DispatchQueueProtocol.swift */; };
 		BA6E3BF4B5AC115E7DBCAA5E /* FxATelemtryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E376117A53502756759A2 /* FxATelemtryTests.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
@@ -3271,6 +3272,7 @@
 		BA6E325D53E21B6F758DDA6E /* FirefoxHomeJumpBackInViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeJumpBackInViewModelTests.swift; sourceTree = "<group>"; };
 		BA6E371A3948814CAA0C83E4 /* Telemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Telemetry.swift; sourceTree = "<group>"; };
 		BA6E376117A53502756759A2 /* FxATelemtryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxATelemtryTests.swift; sourceTree = "<group>"; };
+		BA6E3EF580AE1E9F39DC509B /* DispatchQueueProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueueProtocol.swift; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		BAF14FEC94CB9DA4E08BA60C /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -6877,6 +6879,7 @@
 				DFACDFAD274D4D4B00A94EEC /* Protocols */,
 				E69DB0B91E97E301008A67E6 /* Telemetry */,
 				E65075551E37F714006961AC /* Utils */,
+				BA6E3EF580AE1E9F39DC509B /* DispatchQueueProtocol.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -8032,18 +8035,18 @@
 			packageReferences = (
 				1B3D99EF270E89D0006E1264 /* XCRemoteSwiftPackageReference "telemetry-ios" */,
 				1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
-				1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */,
-				433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */,
-				433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF" */,
-				433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
+				1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf.git" */,
+				433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer.git" */,
+				433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF.git" */,
+				433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift.git" */,
 				435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */,
-				432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */,
-				4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
-				4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */,
-				4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */,
-				43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */,
-				43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */,
+				432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk.git" */,
+				4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */,
+				4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit.git" */,
+				4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage.git" */,
+				43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger.git" */,
+				43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi.git" */,
+				43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi.git" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -9430,6 +9433,7 @@
 				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
 				C8954A532729AD9D001C7283 /* ThemeManager.swift in Sources */,
 				8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */,
+				BA6E333F98A9199386C9D213 /* DispatchQueueProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14397,7 +14401,7 @@
 				version = 5.0.1;
 			};
 		};
-		1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+		1BDA1F8827113852006B2FAB /* XCRemoteSwiftPackageReference "swift-protobuf.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-protobuf.git";
 			requirement = {
@@ -14405,7 +14409,7 @@
 				version = 1.18.0;
 			};
 		};
-		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */ = {
+		432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adjust/ios_sdk.git";
 			requirement = {
@@ -14413,7 +14417,7 @@
 				version = 4.29.6;
 			};
 		};
-		433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */ = {
+		433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nbhasin2/GCDWebServer.git";
 			requirement = {
@@ -14421,7 +14425,7 @@
 				kind = branch;
 			};
 		};
-		433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF" */ = {
+		433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kif-framework/KIF.git";
 			requirement = {
@@ -14429,7 +14433,7 @@
 				version = 3.8.6;
 			};
 		};
-		433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+		433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
@@ -14445,7 +14449,7 @@
 				version = 43.0.2;
 			};
 		};
-		4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+		4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
@@ -14453,7 +14457,7 @@
 				version = 7.9.0;
 			};
 		};
-		4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -14461,7 +14465,7 @@
 				version = 5.0.1;
 			};
 		};
-		4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+		4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
 			requirement = {
@@ -14469,7 +14473,7 @@
 				version = 5.12.0;
 			};
 		};
-		43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */ = {
+		43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/DaveWoodCom/XCGLogger.git";
 			requirement = {
@@ -14477,7 +14481,7 @@
 				version = 7.0.1;
 			};
 		};
-		43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
+		43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nbhasin2/Fuzi.git";
 			requirement = {
@@ -14485,7 +14489,7 @@
 				kind = branch;
 			};
 		};
-		43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */ = {
+		43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nbhasin2/MappaMundi.git";
 			requirement = {
@@ -14528,22 +14532,22 @@
 		};
 		432BD0232790EBD000A0F3C3 /* Adjust */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */;
+			package = 432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk.git" */;
 			productName = Adjust;
 		};
 		433F87CD2788EAB600693368 /* GCDWebServers */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer.git" */;
 			productName = GCDWebServers;
 		};
 		433F87CF2788ECDD00693368 /* GCDWebServers */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer.git" */;
 			productName = GCDWebServers;
 		};
 		433F87D42788F01500693368 /* KIF */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF" */;
+			package = 433F87D12788EF5B00693368 /* XCRemoteSwiftPackageReference "KIF.git" */;
 			productName = KIF;
 		};
 		435C85EF2788F4D00072B526 /* Glean */ = {
@@ -14553,37 +14557,37 @@
 		};
 		4368F82A279665370013419B /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */;
 			productName = Sentry;
 		};
 		4368F84C2796698A0013419B /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = 4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit.git" */;
 			productName = SnapKit;
 		};
 		4368F87D27966E960013419B /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			package = 4368F86C27966E770013419B /* XCRemoteSwiftPackageReference "SDWebImage.git" */;
 			productName = SDWebImage;
 		};
 		43A878FB27AB498E0071C372 /* MozillaAppServices */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift.git" */;
 			productName = MozillaAppServices;
 		};
 		43AFC0DB279678A80039DDF4 /* XCGLogger */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger.git" */;
 			productName = XCGLogger;
 		};
 		43AFC0F127967C0F0039DDF4 /* Fuzi */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
+			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi.git" */;
 			productName = Fuzi;
 		};
 		43C6A47E27A0679300C79856 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */;
+			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi.git" */;
 			productName = MappaMundi;
 		};
 		43EFA63D2786562600400DF0 /* Places */ = {
@@ -14597,7 +14601,7 @@
 		};
 		D433852B27ABC8150069DD33 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */;
+			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi.git" */;
 			productName = MappaMundi;
 		};
 /* End XCSwiftPackageProductDependency section */
