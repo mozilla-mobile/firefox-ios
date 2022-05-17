@@ -11895,6 +11895,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Sync/Info.plist;
@@ -11920,6 +11921,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -12181,6 +12183,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -12336,6 +12339,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -12426,6 +12430,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -12516,6 +12521,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -12606,6 +12612,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -12696,6 +12703,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -12786,6 +12794,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -13917,6 +13926,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				LD_RUNPATH_SEARCH_PATHS = (
