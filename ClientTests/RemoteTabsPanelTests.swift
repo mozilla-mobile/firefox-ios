@@ -108,7 +108,7 @@ private extension RemoteTabsPanelTests {
 
     func panelRefreshWithExpectation(panel: RemoteTabsPanel, completion: @escaping () -> Void) {
         let expectation = expectation(description: "Tabs should be refreshed")
-        panel.tableViewController.refreshTabs() {
+        panel.tableViewController.refreshTabs {
             completion()
             expectation.fulfill()
         }
