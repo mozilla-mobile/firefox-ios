@@ -961,6 +961,6 @@ trigger_map:
 - push_branch: v101.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  workflow: L10nBuild
+  workflow: RunUnitTests
 - pull_request_target_branch: epic-branch/*
   workflow: RunUnitTests
