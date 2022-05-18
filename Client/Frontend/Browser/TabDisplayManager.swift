@@ -308,7 +308,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         refreshStore()
 
         if createTabOnEmptyPrivateMode {
-            //if private tabs is empty and we are transitioning to it add a tab
+            // if private tabs is empty and we are transitioning to it add a tab
             if tabManager.privateTabs.isEmpty && isPrivate {
                 tabManager.addTab(isPrivate: true)
             }

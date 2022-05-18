@@ -3,12 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // TODO: Reimpelement once FxNimbus is open and able to be mocked properly
-//import Foundation
-//@testable import Client
-//import MozillaAppServices
-//import XCTest
+// import Foundation
+// @testable import Client
+// import MozillaAppServices
+// import XCTest
 //
-//class NimbusFeatureFlagLayerTests: XCTestCase {
+// class NimbusFeatureFlagLayerTests: XCTestCase {
 //
 //    override func setUp() {
 //        super.setUp()
@@ -146,4 +146,4 @@
 //
 //        return features
 //    }
-//}
+// }

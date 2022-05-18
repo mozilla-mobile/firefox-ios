@@ -142,7 +142,7 @@ extension FxAWebViewController: WKNavigationDelegate {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
         webView.evaluateJavascriptInDefaultContentWorld(hideLongpress)
 
-        //The helpBrowser shows the current URL in the navbar, the main fxa webview does not.
+        // The helpBrowser shows the current URL in the navbar, the main fxa webview does not.
         guard webView !== helpBrowser else {
             navigationItem.title = viewModel.composeTitle(basedOn: webView.url, hasOnlySecureContent: webView.hasOnlySecureContent)
             return

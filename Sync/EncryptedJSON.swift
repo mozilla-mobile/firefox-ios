@@ -121,7 +121,7 @@ open class EncryptedJSON {
         if _hmacBytes != nil {
             return _hmacBytes!
         }
-        //NSData(base16EncodedString: self["hmac"].asString!, options: NSDataBase16DecodingOptions.Default)
+        // NSData(base16EncodedString: self["hmac"].asString!, options: NSDataBase16DecodingOptions.Default)
         _hmacBytes = NSData(base16EncodedString: self["hmac"].stringValue, options: []) as Data
         return _hmacBytes!
     }
