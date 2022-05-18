@@ -15,7 +15,7 @@ enum InstallType: String, Codable {
         guard let rawValue = UserDefaults.standard.string(forKey: PrefsKeys.InstallType),
               let type = InstallType(rawValue: rawValue)
         else { return unknown }
-        
+
         return type
     }
 
