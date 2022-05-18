@@ -10,10 +10,9 @@ import Shared
 
 class SearchBarSettingsViewModelTests: XCTestCase {
 
-    private let expectationWaitTime: TimeInterval = 1
+    private let expectationWaitTime: TimeInterval = 2
 
     // MARK: Default
-
     func testDefaultSearchPosition() {
         let viewModel = createViewModel()
         XCTAssertEqual(viewModel.searchBarPosition, .bottom)
@@ -89,7 +88,6 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     // MARK: Notification
 
     func testNoNotificationSent_withoutDefaultPref() {
-        InstallType.set(type: .fresh)
         let expectation = expectation(forNotification: .SearchBarPositionDidChange, object: nil, handler: nil)
         expectation.isInverted = true
 
@@ -154,11 +152,16 @@ private extension SearchBarSettingsViewModelTests {
     }
 
     func createViewModelWithPrefs() -> (SearchBarSettingsViewModel, Prefs) {
-        let mockPrefs = MockProfile().prefs
-        mockPrefs.clearAll()
-        let viewModel = SearchBarSettingsViewModel(prefs: mockPrefs)
+        let mockProfile = MockProfile(databasePrefix: "SearchBarSettingsTests_")
+        mockProfile.prefs.clearAll()
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        let viewModel = SearchBarSettingsViewModel(prefs: mockProfile.prefs)
 
-        return (viewModel, mockPrefs)
+        addTeardownBlock {
+            mockProfile.prefs.clearAll()
+        }
+
+        return (viewModel, mockProfile.prefs)
     }
 
     func callSetting(_ setting: CheckmarkSetting) {
@@ -167,7 +170,8 @@ private extension SearchBarSettingsViewModelTests {
     }
 
     func setDefault(_ prefs: Prefs, defaultPosition: SearchBarPosition) {
-        prefs.setString(defaultPosition.rawValue, forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        prefs.setString(defaultPosition.rawValue,
+                        forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
     }
 
     func verifyNotification(expectedPosition: SearchBarPosition,
@@ -190,6 +194,7 @@ private extension SearchBarSettingsViewModelTests {
 private class SearchBarPreferenceDelegateMock: SearchBarPreferenceDelegate {
 
     var completion: () -> Void
+
     init(completion: @escaping () -> Void) {
         self.completion = completion
     }
