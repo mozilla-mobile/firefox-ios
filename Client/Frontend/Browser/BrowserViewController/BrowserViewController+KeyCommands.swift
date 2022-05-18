@@ -349,6 +349,7 @@ extension BrowserViewController {
 
             // View
             UIKeyCommand(action: #selector(zoomIn), input: "=", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomIn),
+            UIKeyCommand(action: #selector(zoomIn), input: "+", modifierFlags: .command),
             UIKeyCommand(action: #selector(zoomOut), input: "-", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomOut),
             UIKeyCommand(action: #selector(resetZoom), input: "0", modifierFlags: .command, discoverabilityTitle: shortcuts.ActualSize),
             UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: shortcuts.ReloadPage),
