@@ -259,6 +259,9 @@
 /* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Incognito.Description" = "%@ est un navigateur dédié à la vie privée avec une protection contre le pistage et un blocage de contenu.";
 
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Mieux qu’un mode incognito";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Configurez les paramètres afin de décider ce que vous partagez.";
 

@@ -47,7 +47,7 @@
 "AddPass.Error.Dismiss" = "Vai";
 
 /* Message of the 'Add Pass Failed' alert. */
-"AddPass.Error.Message" = "Un sbagliu hè accadutu durante l’aghjuntu di u bigliettu à Wallet. Provate torna un altra volta.";
+"AddPass.Error.Message" = "Un sbagliu hè accadutu durante l’aghjuntu di u bigliettu à Wallet. Pruvate torna un altra volta.";
 
 /* Title of the 'Add Pass Failed' alert. */
 "AddPass.Error.Title" = "Fiascu di l’aghjuntu di u bigliettu";
