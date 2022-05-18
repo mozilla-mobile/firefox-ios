@@ -252,13 +252,13 @@
 "ContextMenu.BookmarkLinkButtonTitle" = "Додати закладку";
 
 /* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Перемкнути";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Перейти";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Відкрито нову приватну вкладку";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Перемкнути";
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Перейти";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Відкрито нову вкладку";
