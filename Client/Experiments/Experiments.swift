@@ -166,10 +166,6 @@ enum Experiments {
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
     public static var shared: NimbusApi = {
-        guard FeatureFlagsManager.shared.isCoreFeatureEnabled(.nimbus) else {
-            return NimbusDisabled.shared
-        }
-
         guard let dbPath = Experiments.dbPath else {
             log.error("Nimbus didn't get to create, because of a nil dbPath")
             return NimbusDisabled.shared
