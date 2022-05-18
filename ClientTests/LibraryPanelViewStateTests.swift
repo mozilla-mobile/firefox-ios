@@ -16,7 +16,7 @@ class LibraryPanelViewStateTests: XCTestCase {
         panelState = nil
     }
 
-    //MARK: - Single panel interaction tests
+    // MARK: - Single panel interaction tests
     func testStateMachineInitializesWithProperState() {
         let actualState = panelState?.currentState
         let expectedState: LibraryPanelMainState = .bookmarks(state: .mainView)

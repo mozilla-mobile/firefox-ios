@@ -168,7 +168,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private func layoutSearchEngineScrollViewContent() {
         searchEngineScrollViewContent.snp.remakeConstraints { make in
             make.center.equalTo(self.searchEngineScrollView).priority(10)
-            //left-align the engines on iphones, center on ipad
+            // left-align the engines on iphones, center on ipad
             if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
                 make.left.equalTo(self.searchEngineScrollView).priority(1000)
             } else {
@@ -238,7 +238,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.snp.left
 
-        //search settings icon
+        // search settings icon
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "quickSearch"), for: [])
         searchButton.imageView?.contentMode = .center
@@ -249,13 +249,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
             make.size.equalTo(SearchViewControllerUX.FaviconSize)
-            //offset the left edge to align with search results
+            // offset the left edge to align with search results
             make.left.equalTo(leftEdge).offset(SearchViewControllerUX.SuggestionMargin * 2)
             make.top.equalTo(self.searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
             make.bottom.equalTo(self.searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
         }
 
-        //search engines
+        // search engines
         leftEdge = searchButton.snp.right
         for engine in quickSearchEngines {
             let engineButton = UIButton()
