@@ -450,7 +450,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             } else {
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
-                self.suggestions?.removeAll(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) } )
+                self.suggestions?.removeAll(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) })
                 // First suggestion should be what the user is searching
                 self.suggestions?.insert(self.searchQuery, at: 0)
             }
