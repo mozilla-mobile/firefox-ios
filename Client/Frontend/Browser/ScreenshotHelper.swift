@@ -28,7 +28,7 @@ class ScreenshotHelper {
             SentryIntegration.shared.send(message: "Tab Snapshot Error", tag: .tabManager, severity: .debug, description: "Tab webView or url is nil")
             return
         }
-        //Handle home page snapshots, can not use Apple API snapshot function for this
+        // Handle home page snapshots, can not use Apple API snapshot function for this
         if InternalURL(url)?.isAboutHomeURL ?? false {
             if let homePanel = controller?.firefoxHomeViewController {
                 let screenshot = homePanel.view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
@@ -36,10 +36,10 @@ class ScreenshotHelper {
                 tab.setScreenshot(screenshot)
                 TabEvent.post(.didSetScreenshot(isHome: true), for: tab)
             }
-        //Handle webview screenshots
+        // Handle webview screenshots
         } else {
             let configuration = WKSnapshotConfiguration()
-            //This is for a bug in certain iOS 13 versions, snapshots cannot be taken correctly without this boolean being set
+            // This is for a bug in certain iOS 13 versions, snapshots cannot be taken correctly without this boolean being set
             configuration.afterScreenUpdates = false
 
             webView.takeSnapshot(with: configuration) { image, error in
