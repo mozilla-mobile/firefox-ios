@@ -137,12 +137,6 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
                                                          enabledFor: [.release, .beta])
         coreFeatures[.adjustEnvironmentProd] = adjustEnvironmentProd
 
-        /// Use the Nimbus experimentation platform. If this is `true` then
-        /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
-        let nimbus = CoreFlaggableFeature(withID: .nimbus,
-                                          enabledFor: [.release, .beta, .developer])
-        coreFeatures[.nimbus] = nimbus
-
         let useMockData = CoreFlaggableFeature(withID: .useMockData,
                                                enabledFor: [.developer])
         coreFeatures[.useMockData] = useMockData
