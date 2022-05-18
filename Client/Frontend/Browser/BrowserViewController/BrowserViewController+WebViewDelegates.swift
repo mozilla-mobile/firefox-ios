@@ -380,7 +380,7 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     // Use for sms and mailto links, which do not show a confirmation before opening.
-    fileprivate func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> ()) {
+    fileprivate func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> Void) {
         let snackBar = TimerSnackBar(text: .ExternalLinkGenericConfirmation + "\n\(url.absoluteString)", img: nil)
         let ok = SnackButton(title: .OKString, accessibilityIdentifier: "AppOpenExternal.button.ok") { bar in
             tab.removeSnackbar(bar)
