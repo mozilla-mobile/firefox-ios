@@ -50,6 +50,11 @@ final class FeatureFlagUserPrefsMigrationUtility {
             let newKey = newKey
             migrateExistingPreference(from: oldKey, to: newKey)
         }
+
+        // The preference for search bar position was not originally saved using
+        // the "UserPreferences" suffix, and so must be done separately
+        migrateExistingPreference(from: PrefsKeys.LegacyFeatureFlags.KeySearchBarPosition,
+                                  to: PrefsKeys.FeatureFlags.SearchBarPosition)
     }
 
     private func buildKeyDictionary() -> [String: String] {
@@ -82,6 +87,10 @@ final class FeatureFlagUserPrefsMigrationUtility {
         } else if existingPreference == StartAtHomeSetting.afterFourHours.rawValue
                     || existingPreference == StartAtHomeSetting.always.rawValue
                     || existingPreference == StartAtHomeSetting.disabled.rawValue {
+            profile.prefs.setString(existingPreference, forKey: newKey)
+
+        } else if existingPreference == SearchBarPosition.bottom.rawValue
+                    || existingPreference == SearchBarPosition.top.rawValue {
             profile.prefs.setString(existingPreference, forKey: newKey)
         }
     }
