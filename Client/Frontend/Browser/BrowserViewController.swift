@@ -2603,8 +2603,8 @@ extension BrowserViewController {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
               let browserViewController = appDelegate.browserViewController else {
             fatalError("Unable unwrap BrowserViewController")
-        } 
-        
+        }
+
         return browserViewController
     }
 }

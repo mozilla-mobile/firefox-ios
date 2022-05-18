@@ -8,17 +8,17 @@ import WebKit
 
 class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
     var subject: FirefoxHomeJumpBackInViewModel!
-    
+
     var mockBrowserProfile: MockBrowserProfile!
     var mockTabManager: MockTabManager!
     var mockDispatchQueue: MockDispatchQueue!
-    
+
     var mockBrowserBarViewDelegate: MockBrowserBarViewDelegate!
     var stubBrowserViewController: BrowserViewController!
-    
+
     override func setUp() {
         super.setUp()
-        
+
         mockBrowserProfile = MockBrowserProfile(
             localName: "",
             syncDelegate: nil,
@@ -31,7 +31,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         )
         mockDispatchQueue = MockDispatchQueue()
         mockBrowserBarViewDelegate = MockBrowserBarViewDelegate()
-        
+
         subject = FirefoxHomeJumpBackInViewModel(
             isZeroSearch: false,
             profile: mockBrowserProfile,
@@ -41,7 +41,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         )
         subject.browserBarViewDelegate = mockBrowserBarViewDelegate
     }
-    
+
     func test_switchToGroup_noBrowserDelegate_doNothing() {
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
         subject.browserBarViewDelegate = nil
@@ -49,14 +49,14 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         subject.onTapGroup = { tab in
             completionDidRun = true
         }
-        
+
         subject.switchTo(group: group)
-        
+
         XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
         XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 0)
         XCTAssertFalse(completionDidRun)
     }
-    
+
     func test_switchToGroup_noGroupedItems_doNothing() {
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
         mockBrowserBarViewDelegate.inOverlayMode = true
@@ -64,14 +64,14 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         subject.onTapGroup = { tab in
             completionDidRun = true
         }
-        
+
         subject.switchTo(group: group)
-        
+
         XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
         XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 1)
         XCTAssertFalse(completionDidRun)
     }
-    
+
     func test_switchToGroup_notInOverlayMode_doNothing() {
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
         mockBrowserBarViewDelegate.inOverlayMode = false
@@ -79,13 +79,13 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         subject.onTapGroup = { tab in
             completionDidRun = true
         }
-        
+
         subject.switchTo(group: group)
-        
+
         XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
         XCTAssertFalse(completionDidRun)
     }
-    
+
     func test_switchToGroup_callCompletionOnFirstGroupedItem() {
         let expectedTab = Tab(bvc: stubBrowserViewController)
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [expectedTab], timestamp: 0)
@@ -94,45 +94,45 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         subject.onTapGroup = { tab in
             receivedTab = tab
         }
-        
+
         subject.switchTo(group: group)
-        
+
         XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
         XCTAssertEqual(expectedTab, receivedTab)
     }
-    
+
     func test_switchToTab_noBrowserDelegate_doNothing() {
         let expectedTab = Tab(bvc: stubBrowserViewController)
         subject.browserBarViewDelegate = nil
-        
+
         subject.switchTo(tab: expectedTab)
-        
+
         XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
         XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 0)
         XCTAssertTrue(mockTabManager.lastSelectedTabs.isEmpty)
     }
-    
+
     func test_switchToTab_notInOverlayMode_doNothing() {
         let tab = Tab(bvc: stubBrowserViewController)
         mockBrowserBarViewDelegate.inOverlayMode = false
-        
+
         subject.switchTo(tab: tab)
-        
+
         XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
         XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 0)
         XCTAssertTrue(mockTabManager.lastSelectedTabs.isEmpty)
     }
-    
+
     func test_switchToTab_tabManagerSelectsTab() {
         let tab1 = Tab(bvc: stubBrowserViewController)
         mockBrowserBarViewDelegate.inOverlayMode = true
-        
+
         subject.switchTo(tab: tab1)
-        
+
         XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
         XCTAssertEqual(mockTabManager.lastSelectedTabs[0], tab1)
     }
-    
+
     func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_max2() {
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
         let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
@@ -140,11 +140,11 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let tab3 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
         var completionDidRun = false
-        
+
         subject.updateData {
             completionDidRun = true
         }
-        
+
         XCTAssertEqual(mockDispatchQueue.lastAsyncContexts[0], DispatchQueueContext.main)
         XCTAssertTrue(completionDidRun)
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
@@ -155,19 +155,19 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
 
 class MockTabManager: TabManagerProtocol {
     var nextRecentlyAccessedNormalTabs = [Tab]()
-    
+
     var recentlyAccessedNormalTabs: [Tab] {
         return nextRecentlyAccessedNormalTabs
     }
-    
+
     var lastSelectedTabs = [Tab]()
     var lastSelectedPreviousTabs = [Tab]()
-    
+
     func selectTab(_ tab: Tab?, previous: Tab?) {
         if let tab = tab {
             lastSelectedTabs.append(tab)
         }
-        
+
         if let previous = previous {
             lastSelectedPreviousTabs.append(previous)
         }
@@ -176,19 +176,19 @@ class MockTabManager: TabManagerProtocol {
 
 class MockDispatchQueue: DispatchQueueProtocol {
     var lastAsyncContexts = [DispatchQueueContext]()
-    
+
     func async(context: DispatchQueueContext, _ work: @escaping @convention(block) () -> ()) {
         lastAsyncContexts.append(context)
-        
+
         work()
     }
 }
 
 class MockBrowserBarViewDelegate: BrowserBarViewDelegate {
     var inOverlayMode = false
-    
+
     var leaveOverlayModeCount = 0
-    
+
     func leaveOverlayMode(didCancel cancel: Bool) {
         leaveOverlayModeCount += 1
     }
@@ -197,7 +197,7 @@ class MockBrowserBarViewDelegate: BrowserBarViewDelegate {
 fileprivate extension Tab {
     convenience init(bvc: BrowserViewController, urlString: String? = "www.website.com") {
         self.init(bvc: bvc, configuration: WKWebViewConfiguration())
-        
+
         if let urlString = urlString {
             url = URL(string: urlString)!
         }

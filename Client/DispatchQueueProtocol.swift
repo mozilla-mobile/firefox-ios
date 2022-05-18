@@ -30,4 +30,3 @@ class MozillaDispatchQueue: DispatchQueueProtocol {
         shared(context).async(execute: work)
     }
 }
-
