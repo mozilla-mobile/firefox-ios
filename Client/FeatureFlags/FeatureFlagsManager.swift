@@ -70,12 +70,22 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     /// binary state. Further information on return types can be found in
     /// `FlaggableFeatureOptions`
     public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
-        switch featureID {
-        case .startAtHome:
-            let feature = NimbusFlaggableFeature(withID: .startAtHome, and: profile)
-            guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
 
-            return StartAtHomeSetting(rawValue: userSetting) as? T
+        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
+                                             and: profile)
+        guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
+
+        switch featureID {
+        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
+        case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
+        }
+    }
+
+    private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
+
+        switch featureID {
+        case .startAtHome: return .startAtHome
+        case .searchBarPosition: return .bottomSearchBar
         }
     }
 
@@ -96,10 +106,16 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         to desiredState: T
     ) {
 
+        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
+                                             and: profile)
         switch featureID {
         case .startAtHome:
             if let option = desiredState as? StartAtHomeSetting {
-                let feature = NimbusFlaggableFeature(withID: .startAtHome, and: profile)
+                feature.setUserPreference(to: option.rawValue)
+            }
+
+        case .searchBarPosition:
+            if let option = desiredState as? SearchBarPosition {
                 feature.setUserPreference(to: option.rawValue)
             }
         }

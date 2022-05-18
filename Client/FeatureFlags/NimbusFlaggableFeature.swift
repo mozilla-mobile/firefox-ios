@@ -31,9 +31,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
     case startAtHome
+    case searchBarPosition
 }
 
-struct NimbusFlaggableFeature {
+struct NimbusFlaggableFeature: HasNimbusSearchBar {
 
     // MARK: - Variables
     private let profile: Profile
@@ -43,6 +44,8 @@ struct NimbusFlaggableFeature {
         typealias FlagKeys = PrefsKeys.FeatureFlags
 
         switch featureID {
+        case .bottomSearchBar:
+            return FlagKeys.SearchBarPosition
         case .historyHighlights:
             return FlagKeys.HistoryHighlightsSection
         case .historyGroups:
@@ -69,8 +72,7 @@ struct NimbusFlaggableFeature {
             return FlagKeys.CustomWallpaper
 
         case .reportSiteIssue,
-                .shakeToRestore,
-                .bottomSearchBar:
+                .shakeToRestore:
             return nil
         }
     }
@@ -118,6 +120,9 @@ struct NimbusFlaggableFeature {
         case .startAtHome:
             return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
 
+        case .bottomSearchBar:
+            return nimbusSearchBar.getDefaultPosition().rawValue
+
         default:
             return nil
         }
@@ -149,6 +154,9 @@ struct NimbusFlaggableFeature {
         case .startAtHome:
             let userPreference = option == StartAtHomeSetting.afterFourHours.rawValue || option == StartAtHomeSetting.always.rawValue
             setUserPreference(to: userPreference)
+            profile.prefs.setString(option, forKey: optionsKey)
+
+        case .bottomSearchBar:
             profile.prefs.setString(option, forKey: optionsKey)
 
         default: break

@@ -71,6 +71,24 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
         }
     }
 
+    func testMigrateSearchBarPreferences() {
+
+        let position = SearchBarPosition.bottom.rawValue
+        // Save position to the old key
+        profile.prefs.setString(position,
+                                forKey: PrefsKeys.LegacyFeatureFlags.KeySearchBarPosition)
+
+        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
+
+        guard let prefsSetting = profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition) else {
+            XCTFail("There is no string saved for previous Search Bar Position")
+            return
+        }
+
+        // Ensure migration was successful
+        XCTAssertEqual(prefsSetting, position)
+    }
+
     func testSettingKeysToAVarietyOfSettings() {
         let randomSettingOptions = [true, false, nil]
 

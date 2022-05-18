@@ -38,7 +38,6 @@ public struct PrefsKeys {
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
-    public static let KeySearchBarPosition = "SearchBarPosition"
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
@@ -50,6 +49,7 @@ public struct PrefsKeys {
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let PullToRefresh = "PullToRefreshUserPrefsKey"
         public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
+        public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let TabTrayGroups = "TabTrayGroupsUserPrefsKey"
@@ -65,6 +65,7 @@ public struct PrefsKeys {
         public static let JumpBackInSection = "jumpBackInSectionEnabled"
         public static let PullToRefresh = "pullToRefresh"
         public static let RecentlySavedSection = "recentlySavedSectionEnabled"
+        public static let KeySearchBarPosition = "SearchBarPosition"
         public static let StartAtHome = "startAtHome"
         public static let TabTrayGroups = "KeyEnableGroupedTabsKey"
         public static let SponsoredShortcuts = "sponsoredShortcutsKey"

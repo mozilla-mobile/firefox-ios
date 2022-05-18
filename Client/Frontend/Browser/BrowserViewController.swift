@@ -197,7 +197,7 @@ class BrowserViewController: UIViewController {
 
     @objc func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
-              let newSearchBarPosition = dict[PrefsKeys.KeySearchBarPosition] as? SearchBarPosition,
+              let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
               urlBar != nil else { return }
 
         let newPositionIsBottom = newSearchBarPosition == .bottom
