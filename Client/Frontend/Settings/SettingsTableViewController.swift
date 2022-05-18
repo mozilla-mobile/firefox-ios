@@ -685,7 +685,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
-        ////self.profile.rustAccount.refreshProfile()
+        //// self.profile.rustAccount.refreshProfile()
         // TODO [rustfxa] listen to notification and refresh profile
     }
 

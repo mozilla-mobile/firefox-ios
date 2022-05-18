@@ -70,7 +70,7 @@ class NSURLExtensionsTests: XCTestCase {
         }
     }
 
-    //MARK: Public Suffix
+    // MARK: Public Suffix
     func testNormalBaseDomainWithSingleSubdomain() {
         // TLD Entry: co.uk
         let url = "http://a.bbc.co.uk".asURL!
@@ -118,7 +118,7 @@ class NSURLExtensionsTests: XCTestCase {
         XCTAssertEqual("kawasaki.jp", expected)
     }
 
-    //MARK: Base Domain
+    // MARK: Base Domain
     func testNormalBaseSubdomain() {
         // TLD Entry: co.uk
         let url = "http://bbc.co.uk".asURL!
@@ -450,7 +450,7 @@ class NSURLExtensionsTests: XCTestCase {
 
         let newURL = url.withQueryParams(params.map { URLQueryItem(name: $0, value: $1) })
 
-        //make sure the new url has all the right params.
+        // make sure the new url has all the right params.
         let newURLParams = newURL.getQuery()
         params.forEach { XCTAssertEqual(newURLParams[$0], $1, "The values in params should be the same in newURLParams") }
     }

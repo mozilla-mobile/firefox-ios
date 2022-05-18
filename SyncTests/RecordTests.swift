@@ -189,7 +189,7 @@ class RecordTests: XCTestCase {
         let envelope = EnvelopeJSON(inputString)
         if let r = toRecord(envelope) {
             XCTAssertEqual(r.id, expectedGUID)
-            XCTAssertTrue(r.modified == expectedLastModified) //1326254123650
+            XCTAssertTrue(r.modified == expectedLastModified) // 1326254123650
             XCTAssertEqual(r.sortindex, expectedSortIndex)
 
             if let ee = encryptClient(r) {

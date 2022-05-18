@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import SwiftyJSON
 
-//public struct PushRemoteError {
+// public struct PushRemoteError {
 //    static let MissingNecessaryCryptoKeys: Int32 = 101
 //    static let InvalidURLEndpoint: Int32         = 102
 //    static let ExpiredURLEndpoint: Int32         = 103
@@ -19,7 +19,7 @@ import SwiftyJSON
 //    static let MissingRequiredHeader: Int32      = 111
 //    static let InvalidTTLHeaderValue: Int32      = 112
 //    static let UnknownError: Int32               = 999
-//}
+// }
 
 public let PushClientErrorDomain = "org.mozilla.push.error"
 private let PushClientUnknownError = NSError(domain: PushClientErrorDomain, code: 999,

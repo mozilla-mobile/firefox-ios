@@ -510,7 +510,7 @@ class TabManager: NSObject, FeatureFlaggable {
             let tabsToRemove = isPrivate ? self.privateTabs : self.normalTabs
 
             if isPrivate && self.privateTabs.count < 1 {
-                //Bugzilla 1646756: close last private tab clears the WKWebViewConfiguration (#6827)
+                // Bugzilla 1646756: close last private tab clears the WKWebViewConfiguration (#6827)
                 DispatchQueue.main.async { [unowned self] in
                     self.privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true,
                                                                              prefs: self.profile.prefs)

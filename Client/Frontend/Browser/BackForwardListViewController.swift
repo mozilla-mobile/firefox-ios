@@ -118,7 +118,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     func homeAndNormalPagesOnly(_ bfList: WKBackForwardList) {
         let items = bfList.forwardList.reversed() + [bfList.currentItem].compactMap({$0}) + bfList.backList.reversed()
 
-        //error url's are OK as they are used to populate history on session restore.
+        // error url's are OK as they are used to populate history on session restore.
         listData = items.filter {
             guard let internalUrl = InternalURL($0.url) else { return true }
             if internalUrl.isAboutHomeURL {

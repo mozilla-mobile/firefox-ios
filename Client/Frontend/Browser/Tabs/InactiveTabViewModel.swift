@@ -78,8 +78,8 @@ class InactiveTabViewModel {
         inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
 
         let bvc = BrowserViewController.foregroundBVC()
-        //First time starting up with this feature we'll have cold start as update state
-        //after updating model we can mark tabs that needs to become inactive
+        // First time starting up with this feature we'll have cold start as update state
+        // after updating model we can mark tabs that needs to become inactive
         updateModelState(state: bvc.updateState)
         bvc.updateState = bvc.updateState == .coldStart ? .sameSession : bvc.updateState
 
@@ -101,7 +101,7 @@ class InactiveTabViewModel {
         if hasRunInactiveTabFeatureBefore == false { InactiveTabModel.hasRunInactiveTabFeatureBefore = true }
 
         for tab in self.allTabs {
-            //Append selected tab to normal tab as we don't want to remove that
+            // Append selected tab to normal tab as we don't want to remove that
             let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
 

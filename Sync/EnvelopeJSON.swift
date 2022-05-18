@@ -20,7 +20,7 @@ open class EnvelopeJSON {
     open func isValid() -> Bool {
         return !self.json.isError() &&
             self.json["id"].isString() &&
-            //self["collection"].isString &&
+            // self["collection"].isString &&
             self.json["payload"].isString()
     }
 

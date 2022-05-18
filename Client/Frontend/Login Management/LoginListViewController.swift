@@ -180,7 +180,7 @@ class LoginListViewController: SensitiveViewController {
         }
         // Theme the glass icon next to the search text field
         if let glassIconView = searchTextField.leftView as? UIImageView {
-            //Magnifying glass
+            // Magnifying glass
             glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
             glassIconView.tintColor = UIColor.theme.tableView.headerTextLight
         }

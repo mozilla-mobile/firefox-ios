@@ -38,7 +38,7 @@ enum BlocklistFileName: String, CaseIterable {
 
     case advertisingCookies = "disconnect-block-cookies-advertising"
     case analyticsCookies = "disconnect-block-cookies-analytics"
-    //case contentCookies = "disconnect-block-cookies-content"
+    // case contentCookies = "disconnect-block-cookies-content"
     case socialCookies = "disconnect-block-cookies-social"
 
     var filename: String { return self.rawValue }

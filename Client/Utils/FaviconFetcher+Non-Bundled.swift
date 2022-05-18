@@ -77,7 +77,7 @@ extension FaviconFetcher {
 
             for link in root.xpath("//head//link[contains(@rel, 'icon')]") {
                 guard let href = link["href"] else {
-                    continue //Skip the rest of the loop. But don't stop the loop
+                    continue // Skip the rest of the loop. But don't stop the loop
                 }
 
                 if let iconUrl = NSURL(string: href, relativeTo: url as URL), let absoluteString = iconUrl.absoluteString {

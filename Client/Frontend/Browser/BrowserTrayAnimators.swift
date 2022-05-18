@@ -255,7 +255,7 @@ private func headerTransform(_ frame: CGRect, toFrame finalFrame: CGRect, contai
     return transform
 }
 
-//MARK: Private Helper Methods
+// MARK: Private Helper Methods
 private func calculateCollapsedCellFrameUsingCollectionView(_ collectionView: UICollectionView, atIndex index: Int) -> CGRect {
     guard index < collectionView.numberOfItems(inSection: 0) else {
         return .zero
