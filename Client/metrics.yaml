@@ -503,23 +503,6 @@ top_site:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
-  sponsored_tile_impressions:
-    type: event
-    description: |
-        Records when a user sees a sponsored tile on
-        the Firefox home page
-    extra_keys:
-      tile_url:
-        type: string
-        description: |
-          Url of the sponsored tile
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3834
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10514
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
   contextual_menu:
     type: event
     description: |
@@ -537,6 +520,141 @@ top_site:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+  context_id:
+    type: uuid
+    description: |
+      A UUID that is unjoinable with other browser metrics. This ID will not be
+      shared with AdM, only for internal uses. This ID is shared across all
+      contextual services features.
+    lifetime: ping
+    send_in_pings:
+      - topsites-impression
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
+    data_sensitivity:
+      - highly_sensitive
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+    metadata:
+      tags:
+        - TopSites
+  contile_tile_id:
+    type: quantity
+    description: |
+      A unique identifier provided by the AdM for the sponsored TopSites tile
+    lifetime: ping
+    send_in_pings:
+      - topsites-impression
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+    unit: integer
+    metadata:
+      tags:
+        - TopSites
+  contile_advertiser:
+    type: string
+    description: |
+      Advertiser brand for the sponsored TopSites tile
+    lifetime: ping
+    send_in_pings:
+      - topsites-impression
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+    metadata:
+      tags:
+        - TopSites
+  contile_reporting_url:
+    type: url
+    description: |
+      The AdM reporting endpoint (impression_url for “impression” event,
+      click_url for “click” event).
+    lifetime: ping
+    send_in_pings:
+      - topsites-impression
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+    metadata:
+      tags:
+        - TopSites
+  contile_impression:
+    type: event
+    description: |
+      A user saw a Contile top site
+    extra_keys:
+      source:
+        description: The source of the event, example "newtab", "urlbar"
+        type: string
+      position:
+        description: The tile placement (1-based)
+        type: quantity
+    send_in_pings:
+      - topsites-impression
+      - events
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+    metadata:
+      tags:
+        - TopSites
+  contile_click:
+    type: event
+    description: |
+      A user clicked a Contile top site
+    extra_keys:
+      source:
+        description: The source of the event, example "newtab", "urlbar"
+        type: string
+      position:
+        description: The tile placement (1-based)
+        type: quantity
+    send_in_pings:
+      - topsites-impression
+      - events
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
+    metadata:
+      tags:
+        - TopSites
 
 # HomePage
 firefox_home_page:
@@ -1280,7 +1398,23 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
+    expires: "2022-07-01"
+  private_browsing_button_tapped:
+    type: event
+    description: |
+      Records when the private browsing button is tapped
+    extra_keys:
+      is_private:
+        type: string
+        description: |
+          If the button is tapped or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-10"
 
 # QR Code metrics
 qr_code:
@@ -1858,7 +1992,29 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9785
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
+    expires: "2022-07-01"
+  press_tab_toolbar:
+    type: event
+    description: |
+      Records when tab view button is pressed
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-10"
+  press_top_tab:
+    type: event
+    description: |
+      Records when a top tab is pressed
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-10"
 
 # Theme metrics
 theme:
@@ -2287,7 +2443,18 @@ awesomebar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10537
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
+    expires: "2022-09-01"
+  drag_location_bar:
+    type: event
+    description: |
+      Records when dragging the location bar
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-10"
 
 # Device specific metrics
 
