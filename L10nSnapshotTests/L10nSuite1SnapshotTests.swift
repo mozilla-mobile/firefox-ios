@@ -111,7 +111,9 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
-        navigator.goto(HistoryPanelContextMenu)
+        navigator.goto(LibraryPanel_History)
+        waitForExistence(app.tables["History List"])
+        app.tables["History List"].cells.element(boundBy: 1).staticTexts.element(boundBy: 1).press(forDuration: 2)
         snapshot("HistoryTableContextMenu-01")
     }
 
