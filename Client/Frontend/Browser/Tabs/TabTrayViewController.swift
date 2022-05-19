@@ -286,6 +286,7 @@ class TabTrayViewController: UIViewController {
         updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         viewModel.tabTrayView.didTogglePrivateMode(privateMode)
         updatePrivateUIState()
+        updateTitle()
     }
 
     private func showPanel(_ panel: UIViewController) {

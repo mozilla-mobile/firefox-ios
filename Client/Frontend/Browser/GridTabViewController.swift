@@ -282,7 +282,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         // we clear out all of the private tabs
         let exitingPrivateMode = !tabDisplayManager.isPrivate && tabManager.shouldClearPrivateTabs()
 
-        collectionView.layoutSubviews()
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
 
         let toView: UIView
         if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotView(afterScreenUpdates: !exitingPrivateMode) {

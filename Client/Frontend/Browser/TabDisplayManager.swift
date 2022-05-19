@@ -228,8 +228,11 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             SearchTermGroupsUtility.getTabGroups(with: profile,
                                                  from: tabsToBuildFrom,
                                                  using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-                self.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
-                completion(tabGroups, filteredActiveTabs)
+
+                ensureMainThread { [weak self] in
+                    self?.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
+                    completion(tabGroups, filteredActiveTabs)
+                }
             }
             return
         }
