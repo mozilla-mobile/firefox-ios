@@ -86,7 +86,7 @@
 "ActivityStream.TopSites.RowCount" = "Γραμμές: %d";
 
 /* The title for the setting page which lets you select the number of top site rows */
-"ActivityStream.TopSites.RowSettingFooter" = "Ορισμός σειρών";
+"ActivityStream.TopSites.RowSettingFooter" = "Ορισμός γραμμών";
 
 /* Section title label for Top Sites */
 "ActivityStream.TopSites.SectionTitle" = "Κορυφαίες ιστοσελίδες";
@@ -1723,10 +1723,10 @@
 "Settings.HomePage.SectionName" = "Αρχική σελίδα";
 
 /* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
-"Settings.Homepage.Shortcuts.Rows.v100" = "Σειρές";
+"Settings.Homepage.Shortcuts.Rows.v100" = "Γραμμές";
 
 /* This string is the title of the page to customize the number of rows in the shortcuts section */
-"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Σειρές";
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Γραμμές";
 
 /* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
 "Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Συντομεύσεις";
