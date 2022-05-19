@@ -63,15 +63,17 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs20tabTray() {
         if #available(iOS 13.0, *) {
             app.launch()
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
+            navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
                 // go to tab tray
-                    navigator.performAction(Action.CloseURLBarOpen)
-                    waitForTabsButton()
-                navigator.goto(TabTray)
+                app.buttons["TabToolbar.tabsButton"].tap()
+                app.buttons["doneButtonTabTray"].tap()
             }
         }
     }
@@ -79,13 +81,16 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs1280tabTray() {
         if #available(iOS 13.0, *) {
             app.launch()
+            navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
                 // go to tab tray
-                navigator.goto(TabTray)
+                app.buttons["TabToolbar.tabsButton"].tap()
+                app.buttons["doneButtonTabTray"].tap()
             }
         }
     }
