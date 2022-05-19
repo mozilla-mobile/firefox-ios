@@ -45,7 +45,7 @@ class SiteImageHelper {
                        imageType: SiteImageType,
                        shouldFallback: Bool,
                        metadataProvider: LPMetadataProvider = LPMetadataProvider(),
-                       completion: @escaping (UIImage?) -> ()) {
+                       completion: @escaping (UIImage?) -> Void) {
         var didCompleteFetch = false
         var imageType = imageType
 
@@ -87,7 +87,7 @@ class SiteImageHelper {
 
     // MARK: - Private
 
-    private func fetchHeroImage(for site: Site, metadataProvider: LPMetadataProvider, completion: @escaping (UIImage?, Bool?) -> ()) {
+    private func fetchHeroImage(for site: Site, metadataProvider: LPMetadataProvider, completion: @escaping (UIImage?, Bool?) -> Void) {
         let heroImageCacheKey = NSString(string: "\(site.url)\(SiteImageType.heroImage.rawValue)")
 
         // Fetch from cache, if not then fetch with LPMetadataProvider
@@ -110,7 +110,7 @@ class SiteImageHelper {
     private func fetchFromMetaDataProvider(heroImageCacheKey: NSString,
                                            url: URL,
                                            metadataProvider: LPMetadataProvider,
-                                           completion: @escaping (UIImage?, Bool?) -> ()) {
+                                           completion: @escaping (UIImage?, Bool?) -> Void) {
 
         metadataProvider.startFetchingMetadata(for: url) { metadata, error in
             guard let metadata = metadata, let imageProvider = metadata.imageProvider, error == nil else {
@@ -130,7 +130,7 @@ class SiteImageHelper {
         }
     }
 
-    private func fetchFavicon(for site: Site, completion: @escaping (UIImage?, Bool?) -> ()) {
+    private func fetchFavicon(for site: Site, completion: @escaping (UIImage?, Bool?) -> Void) {
         let faviconCacheKey = NSString(string: "\(site.url)\(SiteImageType.favicon.rawValue)")
 
         // Fetch from cache, if not then fetch from profile
