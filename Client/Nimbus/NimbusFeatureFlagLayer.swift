@@ -12,11 +12,14 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
-        case .bottomSearchBar,
-                .pullToRefresh,
+        case .pullToRefresh,
                 .reportSiteIssue,
                 .shakeToRestore:
             return checkGeneralFeature(for: featureID, from: nimbus)
+
+        case .bottomSearchBar,
+                .searchHighlights:
+            return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .jumpBackIn,
                 .pocket,
@@ -58,11 +61,9 @@ final class NimbusFeatureFlagLayer {
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.generalAppFeatures.value()
 
         switch featureID {
-        case .bottomSearchBar: return config.searchBarPosition.status
         case .pullToRefresh: return config.pullToRefresh.status
         case .reportSiteIssue: return config.reportSiteIssue.status
         case .shakeToRestore: return config.shakeToRestore.status
@@ -70,10 +71,21 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
+    private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
+                                        from nimbus: FxNimbus
+    ) -> Bool {
+        let config = nimbus.features.search.value().awesomeBar
+
+        switch featureID {
+        case .bottomSearchBar: return config.position.isPositionFeatureEnabled
+        case .searchHighlights: return config.searchHighlights
+        default: return false
+        }
+    }
+
     private func checkHomescreenFeature(for featureID: NimbusFeatureFlagID,
                                         from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.homescreenFeature.value()
         var nimbusID: HomeScreenSection
 
@@ -97,7 +109,6 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
-
         let config = nimbus.features.homescreenFeature.value()
 
         return config.sponsoredTiles.status
@@ -106,7 +117,6 @@ final class NimbusFeatureFlagLayer {
     private func checkTabTrayFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.tabTrayFeature.value()
         var nimbusID: TabTraySection
 
@@ -123,7 +133,6 @@ final class NimbusFeatureFlagLayer {
     private func checkGroupingFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.searchTermGroupsFeature.value()
         var nimbusID: SearchTermGroups
 
