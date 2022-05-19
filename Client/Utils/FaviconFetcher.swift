@@ -167,7 +167,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             guard err == nil else { return }
             do {
                 // save image to disk cache
-                if let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)    {
+                if let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) {
                     let imageKeyDirectoryUrl = container.appendingPathComponent("Library/Caches/fxfavicon/\(imageKey)")
                     try data?.write(to: imageKeyDirectoryUrl)
                 }

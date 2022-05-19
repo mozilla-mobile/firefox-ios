@@ -109,7 +109,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         // Remove any stale uuid from tab display order
         decodedTabUUID = decodedTabUUID.filter({ uuid in
             let shouldAdd = filteredTabUUIDs.contains(uuid)
-            filteredTabUUIDs.removeAll{ $0 == uuid }
+            filteredTabUUIDs.removeAll { $0 == uuid }
             return shouldAdd
         })
 
@@ -129,14 +129,14 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     func saveRegularOrderedTabs(from tabs: [Tab]) {
-        let uuids: [String] = tabs.map{ $0.tabUUID }
+        let uuids: [String] = tabs.map { $0.tabUUID }
         tabDisplayOrder.regularTabUUID = uuids
         TabDisplayOrder.encode(tabDisplayOrder: tabDisplayOrder)
     }
 
     var tabGroups: [ASGroup<Tab>]?
     var tabsInAllGroups: [Tab]? {
-        (tabGroups?.map{$0.groupedItems}.flatMap{$0})
+        (tabGroups?.map {$0.groupedItems}.flatMap {$0})
     }
 
     private(set) var isPrivate = false

@@ -313,7 +313,7 @@ public extension LoginEntry {
         }
 
         // Logins with both a formSubmitUrl and httpRealm are not valid.
-        if let _ = self.fields.formActionOrigin, let _ = self.fields.httpRealm  {
+        if let _ = self.fields.formActionOrigin, let _ = self.fields.httpRealm {
             return Maybe(failure: LoginRecordError(description: "Can't add a login with both a httpRealm and formSubmitUrl."))
         }
 

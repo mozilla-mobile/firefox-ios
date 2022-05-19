@@ -279,7 +279,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
         return groups
     }
 
-    func deleteGroupsForDates(date: Date)  {
+    func deleteGroupsForDates(date: Date) {
         guard let deletableSections = getDeletableSection(date: date) else { return }
 
         deletableSections.forEach { section in
