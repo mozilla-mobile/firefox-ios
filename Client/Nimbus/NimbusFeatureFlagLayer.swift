@@ -61,7 +61,6 @@ final class NimbusFeatureFlagLayer {
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.generalAppFeatures.value()
 
         switch featureID {
@@ -75,7 +74,6 @@ final class NimbusFeatureFlagLayer {
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
                                         from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.search.value().awesomeBar
 
         switch featureID {
@@ -88,7 +86,6 @@ final class NimbusFeatureFlagLayer {
     private func checkHomescreenFeature(for featureID: NimbusFeatureFlagID,
                                         from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.homescreenFeature.value()
         var nimbusID: HomeScreenSection
 
@@ -112,7 +109,6 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
-
         let config = nimbus.features.homescreenFeature.value()
 
         return config.sponsoredTiles.status
@@ -121,7 +117,6 @@ final class NimbusFeatureFlagLayer {
     private func checkTabTrayFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.tabTrayFeature.value()
         var nimbusID: TabTraySection
 
@@ -138,7 +133,6 @@ final class NimbusFeatureFlagLayer {
     private func checkGroupingFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
-
         let config = nimbus.features.searchTermGroupsFeature.value()
         var nimbusID: SearchTermGroups
 
