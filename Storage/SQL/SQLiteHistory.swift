@@ -614,7 +614,7 @@ extension SQLiteHistory: BrowserHistory {
     public func getHistory(matching searchTerm: String,
                            limit: Int,
                            offset: Int,
-                           completion: @escaping ([Site]) -> ()) {
+                           completion: @escaping ([Site]) -> Void) {
 
         let query = """
             SELECT hist.* FROM history hist
