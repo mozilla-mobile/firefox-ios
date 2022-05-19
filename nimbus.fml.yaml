@@ -7,15 +7,6 @@ features:
   general-app-features:
     description: The feature that contains feature flags for the entire application
     variables:
-      search-bar-position:
-        description: "This property defines whether or not the feature is
-        enabled, and the position of the search bar"
-        type: BottomSearchBar
-        default:
-          {
-            "status": true,
-            "is-bottom": true
-          }
       pull-to-refresh:
         description: "This property defines whether or not the feature is enabled"
         type: GeneralFeature
@@ -40,10 +31,6 @@ features:
     defaults:
       - channel: beta
         value: {
-          "search-bar-position": {
-            "status": true,
-            "is-bottom": true
-          },
           "pull-to-refresh": {
             "status": true
           },
@@ -56,10 +43,6 @@ features:
         }
       - channel: developer
         value: {
-          "search-bar-position": {
-            "status": true,
-            "is-bottom": true
-          },
           "pull-to-refresh": {
             "status": true
           },
@@ -94,7 +77,12 @@ features:
         type: AwesomeBar
         default:
           {
-            "use-page-content": false
+            "use-page-content": false,
+            "search-highlights": false,
+            "position": {
+              "is-position-feature-enabled": true,
+              "is-bottom": true
+            }
           }
       spotlight:
         description: "This property is covers the properties related to the spotlight"
@@ -107,7 +95,27 @@ features:
             "icon": "letter",
             "keep-for-days": null
           }
-    defaults: null
+    defaults:
+      - channel: beta
+        value: {
+          "awesome-bar": {
+            "search-highlights": true,
+            "position": {
+              "is-position-feature-enabled": true,
+              "is-bottom": true
+            }
+          }
+        }
+      - channel: developer
+        value: {
+          "awesome-bar": {
+            "search-highlights": true,
+            "position": {
+              "is-position-feature-enabled": true,
+              "is-bottom": true
+            }
+          }
+        }
   nimbus-validation:
     description: "A feature that does not correspond to an application feature suitable for showing
       that Nimbus is working."
@@ -124,6 +132,7 @@ features:
         description: The drawable displayed in the app menu for Settings
         type: String
         default: "menu-Settings"
+
   homescreenFeature:
     description: The homescreen that the user goes to when they press home or new tab.
     variables:
@@ -337,10 +346,33 @@ types:
           type: Boolean
           description: Whether or not the feature is enabled
           default: false
-    BottomSearchBar:
+
+    AwesomeBar:
+      description: "Represents the awesome bar object"
+      fields:
+        use-page-content:
+          description: "Whether or not to use page content"
+          type: Boolean
+          default: false
+          required: true
+        search-highlights:
+          description: "Whether or not search highlights are enabled"
+          type: Boolean
+          default: false
+        position:
+          description: "This property defines whether or not the feature is
+          enabled, and the position of the search bar"
+          type: SearchBarPositionFeature
+          default:
+            {
+              "is-position-feature-enabled": true,
+              "is-bottom": true
+            }
+
+    SearchBarPositionFeature:
       description: "The configuration for the bottom search bar on the homescreen"
       fields:
-        status:
+        is-position-feature-enabled:
           type: Boolean
           description: Whether or not the feature is enabled
           default: true
@@ -348,6 +380,7 @@ types:
           type: Boolean
           description: Whether or not the default position is at the bottom
           default: true
+
     SponsoredTiles:
       description: "The configuration for the sponsored tile on the homescreen"
       fields:
@@ -359,6 +392,7 @@ types:
           type: Int
           description: The maximum number of sponsored tiles a user can see
           default: 2
+
     MessageData:
       description: >
         An object to describe a message. It uses human
@@ -410,6 +444,7 @@ types:
           description: Each message will tell us the surface it is targeting with this.
           # To start, we default to the new-tab-card
           default: new-tab-card
+
     StyleData:
       description: >
         A group of properities (predominantly visual) to
@@ -428,14 +463,6 @@ types:
             before it is expired.
           default: 5
 
-    AwesomeBar:
-      description: "Represents the awesome bar object"
-      fields:
-        use-page-content:
-          description: "Whether or not to use page content"
-          type: Boolean
-          default: false
-          required: true
     Spotlight:
       description: "An object representing the spotlight"
       fields:
@@ -463,6 +490,7 @@ types:
           default: null
           description: "Number of days to keep"
           required: true
+
   enums:
     IconType:
       description: The different types of icons
@@ -473,6 +501,7 @@ types:
           description: A favicon icon
         letter:
           description: A letter icon
+
     MessageSurfaceId:
       description: >
         For messaging, we would like to have a message tell us which surface its associated with.
@@ -482,6 +511,7 @@ types:
           description: This is the card that appears at the top on the Firefox Home Page.
         Unknown:
           description: A message has NOT declared its target surface.
+
     StartAtHome:
       description: The identifiers for the different types of options for StartAtHome
       variants:
@@ -491,6 +521,7 @@ types:
           description: App opens to a new homepage tab after four hours of inactivity
         always:
           description: App opens to a new homepage tab after five minutes of inactiviny
+
     HomeScreenSection:
       description: The identifiers for the sections of the homescreen.
       variants:
@@ -504,11 +535,13 @@ types:
           description: The tab groups
         pocket:
           description: The pocket section. This should only be available in the US.
+
     TabTraySection:
       description: The identifiers for the sections of the tab tray.
       variants:
         inactive-tabs:
           description: Tabs that have been automatically closed for the user.
+
     SearchTermGroups:
       description: The identifiers for the different types of search term groups.
       variants:
@@ -516,6 +549,7 @@ types:
           description: Grouping for items in History and RecentlyVisited
         tab-tray-groups:
           description: Grouping for items in the Tab Tray and in JumpBackIn
+
     ControlMessageBehavior:
       description: An enum to influence what should be displayed when a control message is selected.
       variants:

@@ -19,6 +19,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case pullToRefresh
     case recentlySaved
     case reportSiteIssue
+    case searchHighlights
     case shakeToRestore
     case sponsoredTiles
     case startAtHome
@@ -71,14 +72,15 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .wallpapers:
             return FlagKeys.CustomWallpaper
 
+        // Cases where users do not have the option to manipulate a setting.
         case .reportSiteIssue,
-                .shakeToRestore:
+                .shakeToRestore,
+                .searchHighlights:
             return nil
         }
     }
 
     // MARK: - Initializers
-
     init(withID featureID: NimbusFeatureFlagID, and profile: Profile) {
         self.featureID = featureID
         self.profile = profile

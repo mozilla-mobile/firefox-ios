@@ -10,9 +10,6 @@ general-app-features:
     report-site-issue:
       type: json
       description: This property defines whether or not the feature is enabled
-    search-bar-position:
-      type: json
-      description: "This property defines whether or not the feature is enabled, and the position of the search bar"
     shake-to-restore:
       type: json
       description: This property defines whether or not the feature is enabled
@@ -98,9 +95,9 @@ start-at-home-feature:
       type: string
       description: This property provides a default setting for the startAtHomeFeature
       enum:
+        - always
         - disabled
         - after-four-hours
-        - always
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true
