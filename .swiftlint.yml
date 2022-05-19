@@ -14,8 +14,6 @@ disabled_rules: # rule identifiers to exclude from running
 - legacy_constant
 - legacy_cggeometry_functions
 - control_statement
-- closing_brace
-
 
 # Disabled all default rules
 - block_based_kvo
