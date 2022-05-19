@@ -12,11 +12,14 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
-        case .bottomSearchBar,
-                .pullToRefresh,
+        case .pullToRefresh,
                 .reportSiteIssue,
                 .shakeToRestore:
             return checkGeneralFeature(for: featureID, from: nimbus)
+
+        case .bottomSearchBar,
+                .searchHighlights:
+            return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .jumpBackIn,
                 .pocket,
@@ -62,10 +65,22 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.generalAppFeatures.value()
 
         switch featureID {
-        case .bottomSearchBar: return config.searchBarPosition.status
         case .pullToRefresh: return config.pullToRefresh.status
         case .reportSiteIssue: return config.reportSiteIssue.status
         case .shakeToRestore: return config.shakeToRestore.status
+        default: return false
+        }
+    }
+
+    private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
+                                        from nimbus: FxNimbus
+    ) -> Bool {
+
+        let config = nimbus.features.search.value().awesomeBar
+
+        switch featureID {
+        case .bottomSearchBar: return config.position.isPositionFeatureEnabled
+        case .searchHighlights: return config.searchHighlights
         default: return false
         }
     }
