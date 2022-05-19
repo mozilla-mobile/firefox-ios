@@ -50,7 +50,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
         setupIntroView()
     }
 
-    //onboarding intro view
+    // onboarding intro view
     private func setupIntroView() {
         // Initialize
         view.addSubview(syncCard)

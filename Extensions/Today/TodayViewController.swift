@@ -49,7 +49,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         return button
         }()
 
-//MARK: Feature for V29
+// MARK: Feature for V29
 // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.ClosePrivateTabsLabelV2, buttonImageName: "close-private-tabs")
