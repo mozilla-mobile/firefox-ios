@@ -274,7 +274,9 @@ class PhotonActionSheet: UIViewController {
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         if viewModel.presentationStyle == .popover && !wasHeightOverriden {
-            preferredContentSize = tableView.contentSize
+            var size = tableView.contentSize
+            size.height = tableView.contentSize.height - UX.TablePadding - UX.Spacing
+            preferredContentSize = size
         }
     }
 
