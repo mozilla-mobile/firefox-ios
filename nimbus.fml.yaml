@@ -43,10 +43,6 @@ features:
         }
       - channel: developer
         value: {
-          "search-bar-position": {
-            "status": true,
-            "is-bottom": true
-          },
           "pull-to-refresh": {
             "status": true
           },
