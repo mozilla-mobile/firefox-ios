@@ -250,6 +250,9 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "เริ่มการเรียกดู";
 
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "ประวัติของคุณไม่ได้ติดตามคุณ";
+
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "ยินดีต้อนรับสู่ Firefox %@!";
 
