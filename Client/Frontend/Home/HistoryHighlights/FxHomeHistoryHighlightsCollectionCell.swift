@@ -152,8 +152,7 @@ extension FxHomeHistoryHighlightsCollectionCell: UICollectionViewDataSource {
 
         // First check if this is the last item in the list
         if indexPath.row == totalItems - 1
-            || isBottomOfColumn(with: indexPath.row, totalItems: totalItems)
-        { return true }
+            || isBottomOfColumn(with: indexPath.row, totalItems: totalItems) { return true }
 
         return false
     }

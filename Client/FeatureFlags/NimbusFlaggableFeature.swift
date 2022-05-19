@@ -19,6 +19,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case pullToRefresh
     case recentlySaved
     case reportSiteIssue
+    case searchHighlights
     case shakeToRestore
     case sponsoredTiles
     case startAtHome
@@ -71,14 +72,15 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .wallpapers:
             return FlagKeys.CustomWallpaper
 
+        // Cases where users do not have the option to manipulate a setting.
         case .reportSiteIssue,
-                .shakeToRestore:
+                .shakeToRestore,
+                .searchHighlights:
             return nil
         }
     }
 
     // MARK: - Initializers
-
     init(withID featureID: NimbusFeatureFlagID, and profile: Profile) {
         self.featureID = featureID
         self.profile = profile
@@ -101,6 +103,14 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     /// setting is required (ie. startAtHome, which has multiple types of setting),
     /// then we should be using `getUserPreference`
     public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
+        if featureID == .startAtHome {
+            guard let pref = getUserPreference(using: nimbusLayer) else {
+                return isNimbusEnabled(using: nimbusLayer)
+            }
+
+            return pref == StartAtHomeSetting.afterFourHours.rawValue || pref == StartAtHomeSetting.always.rawValue
+        }
+
         guard let optionsKey = featureKey,
               let option = profile.prefs.boolForKey(optionsKey)
         else { return isNimbusEnabled(using: nimbusLayer) }
@@ -152,8 +162,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
 
         switch featureID {
         case .startAtHome:
-            let userPreference = option == StartAtHomeSetting.afterFourHours.rawValue || option == StartAtHomeSetting.always.rawValue
-            setUserPreference(to: userPreference)
             profile.prefs.setString(option, forKey: optionsKey)
 
         case .bottomSearchBar:

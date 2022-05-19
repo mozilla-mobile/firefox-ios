@@ -1,6 +1,5 @@
 disabled_rules: # rule identifiers to exclude from running
 # Auto-correctable rules
-- void_return
 - trailing_comma
 - syntactic_sugar
 - statement_position
@@ -8,7 +7,6 @@ disabled_rules: # rule identifiers to exclude from running
 - redundant_discardable_let
 - protocol_property_accessors_order
 - private_over_fileprivate
-- opening_brace
 - no_space_in_method_call
 - mark
 - legacy_nsgeometry_functions
@@ -16,8 +14,6 @@ disabled_rules: # rule identifiers to exclude from running
 - legacy_constant
 - legacy_cggeometry_functions
 - control_statement
-- closing_brace
-
 
 # Disabled all default rules
 - block_based_kvo

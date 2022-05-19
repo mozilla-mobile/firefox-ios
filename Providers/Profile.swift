@@ -188,7 +188,7 @@ extension Profile {
         return deferred
     }
 
-    func populateCredentialStore(identities: [ASPasswordCredentialIdentity]) -> Deferred<Result<Void, Error>>  {
+    func populateCredentialStore(identities: [ASPasswordCredentialIdentity]) -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
         ASCredentialIdentityStore.shared.saveCredentialIdentities(identities) { (success, error) in
             if success {

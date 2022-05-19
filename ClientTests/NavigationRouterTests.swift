@@ -120,7 +120,7 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertTrue(browserViewController.openedUrlFromExternalSource, "openedUrlFromExternalSource needs to be true for start at home feature")
     }
 
-    func testNavigationPath_handleClosingPrivateTabs_tabsAreDeleted(){
+    func testNavigationPath_handleClosingPrivateTabs_tabsAreDeleted() {
         browserViewController.tabManager.addTab(isPrivate: true)
         XCTAssertEqual(browserViewController.tabManager.privateTabs.count, 1, "There should be one private tab")
 
