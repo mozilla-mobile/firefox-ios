@@ -75,7 +75,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
 
     // Changing the prefs manually, to make sure settings are respected through
     // the FFMs interface
-    func testFFMRespectsProfileChangesForBoolSettings() {
+    func testManagerRespectsProfileChangesForBoolSettings() {
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
@@ -91,7 +91,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
 
     // Changing the prefs manually, to make sure settings are respected through
     // the FFMs interface
-    func testFFMRespectsProfileChangesForCustomSettings() {
+    func testManagerRespectsProfileChangesForCustomSettings() {
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
@@ -107,7 +107,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(featureFlags.getCustomState(for: .startAtHome), StartAtHomeSetting.always)
     }
 
-    func testFFMInterfaceForUpdatingBoolFlags() {
+    func testManagerInterfaceForUpdatingBoolFlags() {
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
         featureFlags.set(feature: .jumpBackIn, to: false)
@@ -115,7 +115,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertFalse(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
     }
 
-    func testFFMInterfaceForUpdatingCustomFlags() {
+    func testManagerInterfaceForUpdatingCustomFlags() {
         // Search Bar
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
         featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
