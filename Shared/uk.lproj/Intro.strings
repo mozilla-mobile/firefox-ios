@@ -32,7 +32,7 @@
 "Intro.Slides.Mail.Title" = "Налаштуйте зв'язок з програмою е-пошти";
 
 /* Description for the 'Private Browsing' panel in the First Run tour. */
-"Intro.Slides.Private.Description" = "Торкніться піктограми у вигляді маски, щоб перемкнутися в режим приватного перегляду.";
+"Intro.Slides.Private.Description" = "Торкніться піктограми у вигляді маски, щоб перейти в режим приватного перегляду.";
 
 /* Title for the third panel 'Private Browsing' in the First Run tour. */
 "Intro.Slides.Private.Title" = "Переглядайте без думки, що за вами хтось спостерігає";

@@ -4,26 +4,49 @@
 
 import Foundation
 
-protocol NimbusManageable { }
+protocol HasNimbusFeatureFlags { }
 
-extension NimbusManageable {
-    var nimbusManager: NimbusManager {
-        return NimbusManager.shared
+extension HasNimbusFeatureFlags {
+    var nimbusFlags: NimbusFeatureFlagLayer {
+        return NimbusManager.shared.featureFlagLayer
+    }
+}
+
+protocol HasNimbusSearchBar { }
+
+extension HasNimbusSearchBar {
+    var nimbusSearchBar: NimbusSearchBarLayer {
+        return NimbusManager.shared.bottomSearchBarLayer
+    }
+}
+
+protocol HasNimbusSponsoredTiles { }
+
+extension HasNimbusSponsoredTiles {
+    var nimbusSponoredTiles: NimbusSponsoredTileLayer {
+        return NimbusManager.shared.sponsoredTileLayer
     }
 }
 
 class NimbusManager {
 
     // MARK: - Singleton
+
+    /// To help with access control, we should use protocols to access the required
+    /// layers. `.shared` should, ideally, never be directly accessed.
     static let shared = NimbusManager()
 
     // MARK: - Properties
     var featureFlagLayer: NimbusFeatureFlagLayer
-    var sponsoredTileLayer: SponsoredTileLayer
+    var sponsoredTileLayer: NimbusSponsoredTileLayer
+    var bottomSearchBarLayer: NimbusSearchBarLayer
 
     init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer(),
-         sponsoredTileLayer: SponsoredTileLayer = SponsoredTileLayer()) {
+         sponsoredTileLayer: NimbusSponsoredTileLayer = NimbusSponsoredTileLayer(),
+         bottomSearchBarLayer: NimbusSearchBarLayer = NimbusSearchBarLayer()
+    ) {
         self.featureFlagLayer = featureFlagLayer
         self.sponsoredTileLayer = sponsoredTileLayer
+        self.bottomSearchBarLayer = bottomSearchBarLayer
     }
 }

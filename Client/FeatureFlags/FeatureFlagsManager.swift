@@ -26,7 +26,7 @@ enum FlaggableFeatureCheckOptions {
     case userOnly
 }
 
-class FeatureFlagsManager: NimbusManageable {
+class FeatureFlagsManager: HasNimbusFeatureFlags {
 
     /// This Singleton should only be accessed directly in places where the
     /// `FeatureFlaggable` is not available. Otherwise, access to the feature
@@ -53,8 +53,8 @@ class FeatureFlagsManager: NimbusManageable {
     ) -> Bool {
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
 
-        let nimbusSetting = feature.isNimbusEnabled(using: nimbusManager.featureFlagLayer)
-        let userSetting = feature.isUserEnabled(using: nimbusManager.featureFlagLayer)
+        let nimbusSetting = feature.isNimbusEnabled(using: nimbusFlags)
+        let userSetting = feature.isUserEnabled(using: nimbusFlags)
 
         switch channelsToCheck {
         case .buildOnly:
@@ -70,12 +70,22 @@ class FeatureFlagsManager: NimbusManageable {
     /// binary state. Further information on return types can be found in
     /// `FlaggableFeatureOptions`
     public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
-        switch featureID {
-        case .startAtHome:
-            let feature = NimbusFlaggableFeature(withID: .startAtHome, and: profile)
-            guard let userSetting = feature.getUserPreference(using: nimbusManager.featureFlagLayer) else { return nil }
 
-            return StartAtHomeSetting(rawValue: userSetting) as? T
+        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
+                                             and: profile)
+        guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
+
+        switch featureID {
+        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
+        case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
+        }
+    }
+
+    private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
+
+        switch featureID {
+        case .startAtHome: return .startAtHome
+        case .searchBarPosition: return .bottomSearchBar
         }
     }
 
@@ -96,10 +106,16 @@ class FeatureFlagsManager: NimbusManageable {
         to desiredState: T
     ) {
 
+        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
+                                             and: profile)
         switch featureID {
         case .startAtHome:
             if let option = desiredState as? StartAtHomeSetting {
-                let feature = NimbusFlaggableFeature(withID: .startAtHome, and: profile)
+                feature.setUserPreference(to: option.rawValue)
+            }
+
+        case .searchBarPosition:
+            if let option = desiredState as? SearchBarPosition {
                 feature.setUserPreference(to: option.rawValue)
             }
         }
@@ -120,12 +136,6 @@ class FeatureFlagsManager: NimbusManageable {
         let adjustEnvironmentProd = CoreFlaggableFeature(withID: .adjustEnvironmentProd,
                                                          enabledFor: [.release, .beta])
         coreFeatures[.adjustEnvironmentProd] = adjustEnvironmentProd
-
-        /// Use the Nimbus experimentation platform. If this is `true` then
-        /// `FxNimbus.shared` provides access to Nimbus. If false, it is a dummy object.
-        let nimbus = CoreFlaggableFeature(withID: .nimbus,
-                                          enabledFor: [.release, .beta, .developer])
-        coreFeatures[.nimbus] = nimbus
 
         let useMockData = CoreFlaggableFeature(withID: .useMockData,
                                                enabledFor: [.developer])

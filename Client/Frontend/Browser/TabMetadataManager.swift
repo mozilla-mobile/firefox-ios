@@ -64,7 +64,7 @@ class TabMetadataManager {
     /// - Parameters:
     ///   - title: Title to be saved
     ///   - completion: Completion handler that gets called once the recording is done. Initially used only for Unit test
-    func updateObservationTitle(_ title: String, completion: (() -> ())? = nil) {
+    func updateObservationTitle(_ title: String, completion: (() -> Void)? = nil) {
         guard shouldUpdateObservationTitle else {
             completion?()
             return
@@ -80,7 +80,7 @@ class TabMetadataManager {
         updateObservationForKey(key: key, observation: observation, completion: completion)
     }
 
-    func updateObservationViewTime(completion: (() -> ())? = nil) {
+    func updateObservationViewTime(completion: (() -> Void)? = nil) {
         let key = tabGroupData.tabHistoryMetadatakey()
         let observation = HistoryMetadataObservation(url: key.url,
                                                      referrerUrl: key.referrerUrl,
@@ -95,7 +95,7 @@ class TabMetadataManager {
 
     private func updateObservationForKey(key: HistoryMetadataKey,
                                          observation: HistoryMetadataObservation,
-                                         completion: (() -> ())?) {
+                                         completion: (() -> Void)?) {
         guard let profile = profile else { return }
 
         guard !key.url.isEmpty else { return }

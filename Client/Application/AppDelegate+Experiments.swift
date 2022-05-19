@@ -12,7 +12,7 @@ extension AppDelegate {
     func initializeExperiments() {
         // We intialize the generated FxNimbus singleton very early on with a lazily
         // constructed singleton.
-        FxNimbus.shared.initialize(with: { Experiments.shared } )
+        FxNimbus.shared.initialize(with: { Experiments.shared })
         // We also make sure that any cache invalidation happens after each applyPendingExperiments().
         NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: nil) { _ in
             FxNimbus.shared.invalidateCachedValues()

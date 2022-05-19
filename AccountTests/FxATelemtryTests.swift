@@ -11,7 +11,7 @@ import Shared
 import XCTest
 
 class FxATelemetryTests: XCTestCase {
-    func testParseTelemetry()  {
+    func testParseTelemetry() {
         let events: [Event] = FxATelemetry.parseTelemetry(fromJSONString:
         """
         {

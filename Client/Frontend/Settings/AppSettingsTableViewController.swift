@@ -56,7 +56,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
-        ////profile.rustAccount.refreshProfile()
+        //// profile.rustAccount.refreshProfile()
 
         checkForDeeplinkSetting()
     }
