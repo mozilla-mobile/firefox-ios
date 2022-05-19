@@ -102,7 +102,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     /// then we should be using `getUserPreference`
     public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
         if featureID == .startAtHome {
-            guard let pref = getUserPreference(using: nimbusLayer) else { return false }
+            guard let pref = getUserPreference(using: nimbusLayer) else {
+                return isNimbusEnabled(using: nimbusLayer)
+            }
+
             return pref == StartAtHomeSetting.afterFourHours.rawValue || pref == StartAtHomeSetting.always.rawValue
         }
 
