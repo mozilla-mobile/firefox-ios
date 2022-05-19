@@ -440,17 +440,17 @@ public class GleanSyncOperationHelper {
 
         switch engineName {
         case "tabs":
-            incomingLabelsToValue.forEach{ (l, v) in GleanMetrics.TabsSync.incoming[l].add(Int32(v))}
-            outgoingLabelsToValue.forEach{ (l, v) in GleanMetrics.TabsSync.outgoing[l].add(Int32(v)) }
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.TabsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.TabsSync.outgoing[l].add(Int32(v)) }
         case "bookmarks":
-            incomingLabelsToValue.forEach{ (l, v) in GleanMetrics.BookmarksSync.incoming[l].add(Int32(v))}
-            outgoingLabelsToValue.forEach{ (l, v) in GleanMetrics.BookmarksSync.outgoing[l].add(Int32(v)) }
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.outgoing[l].add(Int32(v)) }
         case "history":
-            incomingLabelsToValue.forEach{ (l, v) in GleanMetrics.HistorySync.incoming[l].add(Int32(v))}
-            outgoingLabelsToValue.forEach{ (l, v) in GleanMetrics.HistorySync.outgoing[l].add(Int32(v)) }
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.outgoing[l].add(Int32(v)) }
         case "logins":
-            incomingLabelsToValue.forEach{ (l, v) in GleanMetrics.LoginsSync.incoming[l].add(Int32(v))}
-            outgoingLabelsToValue.forEach{ (l, v) in GleanMetrics.LoginsSync.outgoing[l].add(Int32(v)) }
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.outgoing[l].add(Int32(v)) }
         default:
             break
         }
