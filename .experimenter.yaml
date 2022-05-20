@@ -10,9 +10,6 @@ general-app-features:
     report-site-issue:
       type: json
       description: This property defines whether or not the feature is enabled
-    search-bar-position:
-      type: json
-      description: "This property defines whether or not the feature is enabled, and the position of the search bar"
     shake-to-restore:
       type: json
       description: This property defines whether or not the feature is enabled
