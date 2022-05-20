@@ -262,6 +262,15 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "יותר מסתם גלישה בסתר";
 
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "הגדרות אלו נועדו לאפשר לך להחליט כמה לשתף אם בכלל.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "הגנה לפי שיקולך";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "עליית מדרגה בגלישה פרטית.";
+
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "ברוכים הבאים אל Firefox %@!";
 
@@ -591,6 +600,9 @@
 
 /* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.ShareTrackers.Title" = "אתם תגלשו. %@ יחסום.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "יש לבחור בהוספה לקיצורי הדרך מהתפריט של %@";
 
 /* Text for a label that indicates the title for shortcuts tip. */
 "Tip.Shortcuts.Title" = "יצירת קיצורי דרך לאתרים שבהם ביקרת הכי הרבה:";
