@@ -194,7 +194,7 @@ features:
           },
           "sponsored-tiles": {
             "status": true,
-            "max-number-of-tiles": 2
+            "max-number-of-tiles": 1
           },
           "wallpaper-feature": {
             "status": true
