@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "საშუალებას გაძლევთ, სურათის გადაღებისა და ატვირთვის.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox საჭიროებს Face ID-ს შენახულ ანგარიშებზე წვდომისთვის.";
+"NSFaceIDUsageDescription" = "Firefox საჭიროებს Face ID-ს შენახულ ანგარიშებთან წვდომისთვის.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ვებსაიტებმა, შესაძლოა მოითხოვოს თქვენი მდებარეობის მონაცემები.";
