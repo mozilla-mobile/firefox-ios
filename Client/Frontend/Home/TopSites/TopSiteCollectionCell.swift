@@ -112,6 +112,7 @@ extension TopSiteCollectionCell: UICollectionViewDelegate, UICollectionViewDataS
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = viewModel?.tileManager.getSite(index: indexPath.row) {
             cell.configure(contentItem, position: indexPath.row)
+            viewModel?.topSiteImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
 
         } else if let cell = collectionView.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) {

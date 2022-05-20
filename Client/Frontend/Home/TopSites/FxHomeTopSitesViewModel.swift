@@ -31,6 +31,7 @@ class FxHomeTopSitesViewModel {
 
     private let profile: Profile
     private let isZeroSearch: Bool
+    private var sentImpressionTelemetry = [String: Bool]()
 
     var sectionDimension: SectionDimension = FxHomeTopSitesViewModel.defaultDimension
     static var defaultDimension = SectionDimension(numberOfRows: 2, numberOfTilesPerRow: 6)
@@ -131,6 +132,19 @@ class FxHomeTopSitesViewModel {
         if let tile = homeTopSite.site as? SponsoredTile {
             SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position)
         }
+    }
+
+    func topSiteImpressionTelemetry(_ homeTopSite: HomeTopSite, position: Int) {
+        guard !hasSentImpressionForTile(homeTopSite) else { return }
+        homeTopSite.impressionTracking(position: position)
+    }
+
+    private func hasSentImpressionForTile(_ homeTopSite: HomeTopSite) -> Bool {
+        guard sentImpressionTelemetry[homeTopSite.site.url] != nil else {
+            sentImpressionTelemetry[homeTopSite.site.url] = true
+            return false
+        }
+        return true
     }
 
     // MARK: - Context actions
