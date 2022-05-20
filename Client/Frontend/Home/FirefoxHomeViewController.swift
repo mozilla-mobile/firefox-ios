@@ -19,7 +19,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
 
     private let flowLayout = UICollectionViewFlowLayout()
     private var hasSentJumpBackInSectionEvent = false
-    private var hasSentHistoryHighlightsSectionEvent = false
     private var isZeroSearch: Bool
     private var viewModel: FirefoxHomeViewModel
     private var contextMenuHelper: FirefoxHomeContextMenuHelper

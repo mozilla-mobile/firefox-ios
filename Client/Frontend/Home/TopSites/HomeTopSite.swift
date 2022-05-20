@@ -54,13 +54,11 @@ final class HomeTopSite {
 
     // MARK: Telemetry
 
-    private var sentSiteImpressionTelemetry = false
-
     func impressionTracking(position: Int) {
-        guard !sentSiteImpressionTelemetry, let tile = site as? SponsoredTile else { return }
+        // Only sending sponsored tile impressions for now
+        guard let tile = site as? SponsoredTile else { return }
 
         SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
-        sentSiteImpressionTelemetry = true
     }
 
     func getTelemetrySiteType() -> String {

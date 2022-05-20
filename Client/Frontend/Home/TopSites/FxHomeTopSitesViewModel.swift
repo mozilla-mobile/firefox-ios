@@ -133,6 +133,20 @@ class FxHomeTopSitesViewModel {
         }
     }
 
+    func topSiteImpressionTelemetry(_ homeTopSite: HomeTopSite, position: Int) {
+        guard !hasSentImpressionForTile(homeTopSite) else { return }
+        homeTopSite.impressionTracking(position: position)
+    }
+
+    private var sentImpressionTelemetry = [String: Bool]()
+    private func hasSentImpressionForTile(_ homeTopSite: HomeTopSite) -> Bool {
+        guard sentImpressionTelemetry[homeTopSite.site.url] != nil else {
+            sentImpressionTelemetry[homeTopSite.site.url] = true
+            return false
+        }
+        return true
+    }
+
     // MARK: - Context actions
 
     func hideURLFromTopSites(_ site: Site) {
