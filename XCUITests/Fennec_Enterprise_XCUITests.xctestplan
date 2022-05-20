@@ -103,6 +103,7 @@
         "SiteLoadTest",
         "SyncUITests\/testAccountManagementPage()",
         "TabTraySearchTabsTests\/testSearchTabs()",
+        "TabsPerformanceTest",
         "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingLandscape()",
         "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingPortrait()",
         "ToolbarTests\/testShowToolbarWhenScrollingDefaultOption()",
