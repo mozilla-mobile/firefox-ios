@@ -47,4 +47,3 @@ class OpenUtils: NSObject {
         return shareController
     }
 }
-

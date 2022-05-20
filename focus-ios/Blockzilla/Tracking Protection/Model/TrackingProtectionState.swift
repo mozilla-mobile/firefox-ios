@@ -9,4 +9,3 @@ enum TrackingProtectionState: Equatable {
     case homescreen
     case settings
 }
-
