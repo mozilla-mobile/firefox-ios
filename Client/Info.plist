@@ -95,6 +95,8 @@
 	<string>This lets you save photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This lets you save and upload photos.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This lets you access websites on your local network, usually for developers testing their websites.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.mozilla.ios.xrviewer.browsing</string>
