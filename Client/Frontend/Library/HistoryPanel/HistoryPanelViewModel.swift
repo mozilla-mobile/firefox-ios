@@ -175,6 +175,10 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     /// A helper for the reload function.
     private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
+        guard !isFetchInProgress else {
+            return deferMaybe(FetchInProgressError())
+        }
+
         isFetchInProgress = true
 
         return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
