@@ -54,7 +54,7 @@ class TrackingProtectionViewController: UIViewController {
     private lazy var toggleItems = [
         ToggleItem(label: UIConstants.strings.labelBlockAds2, settingsKey: .blockAds),
         ToggleItem(label: UIConstants.strings.labelBlockAnalytics, settingsKey: .blockAnalytics),
-        ToggleItem(label: UIConstants.strings.labelBlockSocial, settingsKey: .blockSocial),
+        ToggleItem(label: UIConstants.strings.labelBlockSocial, settingsKey: .blockSocial)
     ]
     private let blockOtherItem = ToggleItem(label: UIConstants.strings.labelBlockOther, settingsKey: .blockOther)
 

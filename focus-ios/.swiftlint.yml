@@ -173,7 +173,6 @@ disabled_rules: # rule identifiers to exclude from running
   - todo
   - toggle_bool
   - trailing_closure
-  - trailing_comma
   - trailing_newline
   - trailing_semicolon
   - type_body_length

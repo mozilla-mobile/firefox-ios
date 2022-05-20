@@ -51,6 +51,6 @@ let package = Package(
         ),
         .testTarget(
             name: "BlockzillaPackageTests",
-            dependencies: ["AppShortcuts"]),
+            dependencies: ["AppShortcuts"])
     ]
 )

@@ -31,7 +31,7 @@ extension Foundation.Bundle {
 
             /* Bundle should be present here when running previews from a different package (this is the path to "…/Debug-iphonesimulator/"). */
             Bundle(for: CurrentBundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent(),
-            Bundle(for: CurrentBundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent(),
+            Bundle(for: CurrentBundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent()
         ]
 
         for candidate in candidates {

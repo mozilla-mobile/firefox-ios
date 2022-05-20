@@ -922,7 +922,7 @@ class BrowserViewController: UIViewController {
                              action: #selector(BrowserViewController.showFindInPage),
                              input: "f",
                              modifierFlags: .command,
-                             propertyList: nil),
+                             propertyList: nil)
         ]
     }
 

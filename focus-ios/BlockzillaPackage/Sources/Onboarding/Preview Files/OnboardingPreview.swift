@@ -46,7 +46,7 @@ fileprivate extension OnboardingText {
                 .init(title: "More than just incognito", subtitle: "Focus is a dedicated privacy browser with tracking protection and content blocking.", image: .privateMode),
                 .init(title: "More than just incognito", subtitle: "Focus is a dedicated privacy browser with tracking protection and content blocking.", image: .privateMode),
                 .init(title: "More than just incognito", subtitle: "Focus is a dedicated privacy browser with tracking protection and content blocking.", image: .privateMode),
-                .init(title: "More than just incognito", subtitle: "Focus is a dedicated privacy browser with tracking protection and content blocking.", image: .privateMode),
+                .init(title: "More than just incognito", subtitle: "Focus is a dedicated privacy browser with tracking protection and content blocking.", image: .privateMode)
             ],
         onboardingButtonTitle: "start"
     )

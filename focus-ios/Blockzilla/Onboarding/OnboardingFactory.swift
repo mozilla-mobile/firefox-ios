@@ -16,7 +16,7 @@ class OnboardingFactory {
                     instructions: [
                         .init(title: .onboardingIncognitoTitle, subtitle: .onboardingIncognitoDescription, image: .privateMode),
                         .init(title: .onboardingHistoryTitle, subtitle: .onboardingHistoryDescription, image: .history),
-                        .init(title: .onboardingProtectionTitle, subtitle: .onboardingProtectionDescription, image: .settings),
+                        .init(title: .onboardingProtectionTitle, subtitle: .onboardingProtectionDescription, image: .settings)
                     ],
                     onboardingButtonTitle: .onboardingButtonTitle
                 ),
