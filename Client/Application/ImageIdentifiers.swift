@@ -20,6 +20,7 @@ public struct ImageIdentifiers {
     public static let addToReadingList = "addToReadingList"
     public static let bookmarks = "menu-panel-Bookmarks"
     public static let copyLink = "menu-Copy-Link"
+    public static let closeLargeButton = "close-large"
     public static let customSwitchBackground = "menu-customswitch-background"
     public static let customSwitchOff = "menu-customswitch-off"
     public static let customSwitchOn = "menu-customswitch-on"

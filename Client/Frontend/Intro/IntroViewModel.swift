@@ -5,7 +5,7 @@
 import Foundation
 
 struct IntroViewModel {
-    enum OnboardingCards {
+    enum OnboardingCards: CaseIterable {
         case welcome
         case wallpapers
         case signSync
@@ -13,5 +13,9 @@ struct IntroViewModel {
 
     var shouldShowNewOnboarding: Bool {
         return true
+    }
+
+    var enabledCards: [OnboardingCards] {
+        return OnboardingCards.allCases
     }
 }
