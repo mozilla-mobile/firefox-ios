@@ -9,7 +9,7 @@
     }
   ],
   "defaultOptions" : {
-
+    "codeCoverage" : false
   },
   "testTargets" : [
     {
@@ -21,7 +21,10 @@
         "ClipBoardTests",
         "CopiedLinksTests",
         "DataManagementTests",
-        "DatabaseFixtureTest\/testHistoryDatabaseFixture()",
+        "DatabaseFixtureTest\/testPerfBookmarks1000openMenu()",
+        "DatabaseFixtureTest\/testPerfBookmarks1000startUp()",
+        "DatabaseFixtureTest\/testPerfHistory4000openMenu()",
+        "DatabaseFixtureTest\/testPerfHistory4000startUp()",
         "DesktopModeTestsIpad",
         "DesktopModeTestsIphone",
         "DisplaySettingTests",
@@ -39,7 +42,6 @@
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
         "LibraryTestsIpad",
-        "LibraryTestsIphone",
         "MailAppSettingsTests",
         "NavigationTest",
         "NewTabSettingsTest",
@@ -58,7 +60,6 @@
         "SiteLoadTest",
         "SyncUITests",
         "TabCounterTests",
-        "TabTraySearchTabsTests",
         "ThirdPartySearchTest",
         "ToolbarTests",
         "TopTabsTest",

@@ -796,6 +796,7 @@
 		D433852E27ABC8340069DD33 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F87B27966E810013419B /* SDWebImage.framework */; };
 		D437C4FD25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D437C4FC25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift */; };
 		D4859A7727328569009A2390 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
+		D4C35391283500A600F7DC7D /* TabsPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C35390283500A600F7DC7D /* TabsPerformanceTests.swift */; };
 		D4C4BDCE2253725E00986F04 /* LibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C4BDCD2253725E00986F04 /* LibraryTests.swift */; };
 		D4F3D789232F960600FBB9AA /* WhatsNewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F3D788232F960600FBB9AA /* WhatsNewTest.swift */; };
 		D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51EA5B926406A0000334331 /* ExperimentsBranchesViewController.swift */; };
@@ -3718,6 +3719,7 @@
 		D486426E953609DD218A8798 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		D4A2419292C555D02004A495 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Storage.strings"; sourceTree = "<group>"; };
 		D4B5444899A0721B899F9E46 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D4C35390283500A600F7DC7D /* TabsPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPerformanceTests.swift; sourceTree = "<group>"; };
 		D4C4BDCD2253725E00986F04 /* LibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTests.swift; sourceTree = "<group>"; };
 		D4C792B625651FAE00FB7E86 /* Fennec_Enterprise_XCUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Fennec_Enterprise_XCUITests.xctestplan; path = XCUITests/Fennec_Enterprise_XCUITests.xctestplan; sourceTree = "<group>"; };
 		D4C792CA25651FC500FB7E86 /* PerformanceTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = PerformanceTestPlan.xctestplan; path = XCUITests/PerformanceTestPlan.xctestplan; sourceTree = "<group>"; };
@@ -5389,6 +5391,7 @@
 				2CCF17522105E4FD00705AE5 /* DisplaySettingsTests.swift */,
 				D4C4BDCD2253725E00986F04 /* LibraryTests.swift */,
 				D4F3D788232F960600FBB9AA /* WhatsNewTest.swift */,
+				D4C35390283500A600F7DC7D /* TabsPerformanceTests.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -8782,6 +8785,7 @@
 				2C4B6BF320349EB800A009C2 /* FirstRunTourTests.swift in Sources */,
 				2C4A07DC20246EAD0083E320 /* DragAndDropTests.swift in Sources */,
 				2C2A5EF41E68469500F02659 /* PrivateBrowsingTest.swift in Sources */,
+				D4C35391283500A600F7DC7D /* TabsPerformanceTests.swift in Sources */,
 				3D71C89E1F5703A1008D8646 /* CopiedLinksTests.swift in Sources */,
 				2CF449A51E7BFE2C00FD7595 /* NavigationTest.swift in Sources */,
 				8A8DDEC227628A7E00E7B97A /* HomePageUITest.swift in Sources */,
