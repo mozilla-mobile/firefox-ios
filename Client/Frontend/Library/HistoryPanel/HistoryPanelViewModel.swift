@@ -178,7 +178,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
         guard !isFetchInProgress else {
             return deferMaybe(FetchInProgressError())
         }
-        
+
         isFetchInProgress = true
 
         return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
