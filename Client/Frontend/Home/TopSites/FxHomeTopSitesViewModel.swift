@@ -31,6 +31,7 @@ class FxHomeTopSitesViewModel {
 
     private let profile: Profile
     private let isZeroSearch: Bool
+    private var sentImpressionTelemetry = [String: Bool]()
 
     var sectionDimension: SectionDimension = FxHomeTopSitesViewModel.defaultDimension
     static var defaultDimension = SectionDimension(numberOfRows: 2, numberOfTilesPerRow: 6)
@@ -138,7 +139,6 @@ class FxHomeTopSitesViewModel {
         homeTopSite.impressionTracking(position: position)
     }
 
-    private var sentImpressionTelemetry = [String: Bool]()
     private func hasSentImpressionForTile(_ homeTopSite: HomeTopSite) -> Bool {
         guard sentImpressionTelemetry[homeTopSite.site.url] != nil else {
             sentImpressionTelemetry[homeTopSite.site.url] = true
