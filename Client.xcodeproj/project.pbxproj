@@ -563,6 +563,7 @@
 		96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C4227DC205D00A9D159 /* SearchGroupedItemsViewModel.swift */; };
 		96F627002669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F626FF2669B0D100C82340 /* FxHomeRecentlySavedCollectionCell.swift */; };
 		96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F8DA48280452CA00E53239 /* GleanPlumbContextProvider.swift */; };
+		9B62CBB228393F2100A9786B /* PasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B62CBB128393F2100A9786B /* PasswordManager.swift */; };
 		A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
@@ -3056,6 +3057,7 @@
 		9B2A427086AAB7D6B5301167 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		9B314EEDBB87E85AFF6339D5 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		9B504676B0CA6CCD05D1639F /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = "dsb.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		9B62CBB128393F2100A9786B /* PasswordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManager.swift; sourceTree = "<group>"; };
 		9BA0422985D5448896A3EC26 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = "uk.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		9BAB4C0A93050A8433505859 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		9BCB46C0B4A2E1E8E41F84C2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -6413,6 +6415,7 @@
 				C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */,
 				E65075891E37F7AB006961AC /* NotificationConstants.swift */,
 				43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */,
+				9B62CBB128393F2100A9786B /* PasswordManager.swift */,
 				E650758B1E37F7AB006961AC /* Prefs.swift */,
 				8DFA42FBB7C25AC38ACEEA0D /* PrivateBrowsing.strings */,
 				CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */,
@@ -8572,6 +8575,7 @@
 				E65075A51E37F7AB006961AC /* NSFileManagerExtensions.swift in Sources */,
 				E65075A11E37F7AB006961AC /* HashExtensions.swift in Sources */,
 				3964B09A1EA8F06F00F2EEF4 /* FeatureSwitch.swift in Sources */,
+				9B62CBB328393F2100A9786B /* PasswordManager.swift in Sources */,
 				E65075981E37F7AB006961AC /* Bytes.swift in Sources */,
 				E65075B11E37F7AB006961AC /* FSUtils.m in Sources */,
 				CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */,
@@ -9324,6 +9328,7 @@
 				213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */,
 				8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
+				9B62CBB228393F2100A9786B /* PasswordManager.swift in Sources */,
 				96A562A027D6D0E80045144A /* ContileProvider.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,
 				9699F77326F39E5100C5FA47 /* SiteImageHelper.swift in Sources */,

@@ -139,6 +139,7 @@ extension AddCredentialViewController: UITableViewDataSource {
             loginCell.isEditingFieldData = true
             passwordField = loginCell.descriptionLabel
             passwordField?.accessibilityIdentifier = "passwordField"
+            passwordField?.inputAccessoryView = createSuggestedPasswordButton()
             return loginCell
 
         case .websiteItem:
@@ -252,5 +253,24 @@ extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
             return item
         }
         return nil
+    }
+}
+
+// MARK: - Secure Password Generation
+
+extension AddCredentialViewController {
+    private func createSuggestedPasswordButton() -> UIButton {
+        let buttonFrame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 60)
+        let button = UIButton(frame: buttonFrame)
+        button.backgroundColor = .secondarySystemGroupedBackground
+        button.setTitle(.PasswordManager.GenerateSecurePasswordButtonTitle, for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.addTarget(self, action: #selector(onSuggestedPasswordButtonPressed), for: .touchUpInside)
+        return button
+    }
+
+    @objc func onSuggestedPasswordButtonPressed() {
+        passwordField?.text = PasswordManager.generateSecurePassword()
+        passwordField?.endEditing(false)
     }
 }

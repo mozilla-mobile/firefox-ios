@@ -293,6 +293,13 @@ extension String {
     }
 }
 
+// MARK: - PasswordManager
+extension String {
+    public struct PasswordManager {
+        public static let GenerateSecurePasswordButtonTitle = MZLocalizedString("Generate Secure Password", comment: "This is the text that will appear on a button that can be pressed to have the app suggest a random, securely-generated password when manually entering new password entries", lastUpdated: .v102)
+    }
+}
+
 // MARK: - Passwords and Logins
 extension String {
     public struct PasswordsAndLogins {
