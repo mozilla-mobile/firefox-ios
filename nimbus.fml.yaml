@@ -396,11 +396,11 @@ types:
           # This should never be defaulted.
           default: ""
         title:
-          type: Option<String>
+          type: Option<Text>
           description: "The title text displayed to the user"
           default: null
         text:
-          type: String
+          type: Text
           description: "The message text displayed to the user"
           # This should never be defaulted.
           default: ""
@@ -409,7 +409,7 @@ types:
           description: "Indicates if this message is the control message, if true shouldn't be displayed"
           default: false
         button-label:
-          type: Option<String>
+          type: Option<Text>
           description: >
             The text on the button. If no text
             is present, the whole message is clickable.
