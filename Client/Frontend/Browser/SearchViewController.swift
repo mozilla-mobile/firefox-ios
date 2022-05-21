@@ -84,13 +84,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
-    var experimental: Variables?
+    var awesomeBarFeature: FeatureHolder<AwesomeBar>
     static var userAgent: String?
 
-    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager) {
+    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<AwesomeBar> = FxNimbus.shared.features.awesomeBar) {
         self.viewModel = viewModel
         self.tabManager = tabManager
-        self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
+        self.awesomeBarFeature = featureConfig
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -150,6 +150,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.viewWillAppear(animated)
         reloadSearchEngines()
         reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        awesomeBarFeature.recordExposure()
     }
 
     private func layoutSearchEngineScrollView() {
@@ -374,10 +379,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 $0 && content.range(of: $1, options: .caseInsensitive) != nil
             }
         }
+        let config = awesomeBarFeature.value()
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
-        let searchInContent = (experimental?.getBool("use-page-content") ?? false)
-            && searchTerms.find { $0.count >= 3 } != nil
+        let searchInContent = config.usePageContent
+            && searchTerms.find { $0.count >= config.minSearchTerm } != nil
 
         filteredOpenedTabs = currentTabs.filter { tab in
             guard let url = tab.url ?? tab.sessionData?.urls.last,
@@ -389,8 +395,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     searchInContent ? tab.readabilityResult?.textContent : nil,
                     url.absoluteString
                 ]
-                .filter { $0 != nil }
-                .map { $0! }
+                .compactMap { $0 }
 
             let text = lines.joined(separator: "\n")
             return find(in: text)

@@ -357,28 +357,6 @@ types:
           description: Whether or not the feature is enabled
           default: false
 
-    AwesomeBar:
-      description: "Represents the awesome bar object"
-      fields:
-        use-page-content:
-          description: "Whether or not to use page content"
-          type: Boolean
-          default: false
-          required: true
-        search-highlights:
-          description: "Whether or not search highlights are enabled"
-          type: Boolean
-          default: false
-        position:
-          description: "This property defines whether or not the feature is
-          enabled, and the position of the search bar"
-          type: SearchBarPositionFeature
-          default:
-            {
-              "is-position-feature-enabled": true,
-              "is-bottom": true
-            }
-
     SearchBarPositionFeature:
       description: "The configuration for the bottom search bar on the homescreen"
       fields:
