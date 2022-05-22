@@ -250,8 +250,26 @@
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "เริ่มการเรียกดู";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "ลบประวัติการเรียกดู รหัสผ่าน คุกกี้ และป้องกันไม่ให้โฆษณาที่ไม่ต้องการติดตามคุณในคลิกเดียว!";
+
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "ประวัติของคุณไม่ได้ติดตามคุณ";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ เป็นเบราว์เซอร์ที่เน้นเรื่องความเป็นส่วนตัวโดยเฉพาะซึ่งมาพร้อมการป้องกันการติดตามและการปิดกั้นเนื้อหา";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "ทำได้มากกว่าปกปิดตัวตน";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "กำหนดการตั้งค่าเพื่อตัดสินใจว่าต้องการแบ่งปันข้อมูลมากน้อยเพียงใด";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "ปรับแต่งการป้องกันด้วยตัวคุณเอง";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "ให้คุณเรียกดูแบบส่วนตัวในขั้นที่เหนือกว่า";
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "ยินดีต้อนรับสู่ Firefox %@!";
@@ -609,6 +627,18 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "ไซต์ไม่มีเนื้อหาหรือทำงานแปลก ๆ ?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "ไปที่การตั้งค่าเพื่อจัดการตัวเลือกต่าง ๆ เกี่ยวกับความเป็นส่วนตัวและความปลอดภัย";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "การตั้งค่าเริ่มต้นเหล่านี้ให้การปกป้องที่แข็งแกร่ง แต่คุณสามารถปรับแต่งการตั้งค่าให้ตรงกับความต้องการของคุณได้อย่างง่ายดาย";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ หยุดไซต์นี้ไม่ให้สอดแนมคุณแล้ว แตะโล่เพื่อดูข้อมูลเกี่ยวกับสิ่งที่เราปิดกั้น";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "แตะที่ถังขยะเมื่อใดก็ได้เพื่อลบร่องรอยการใช้งานทั้งหมดในวาระปัจจุบันของคุณออก";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "คุณได้รับการคุ้มครอง!";

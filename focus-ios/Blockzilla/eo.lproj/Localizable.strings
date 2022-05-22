@@ -43,6 +43,15 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Malfermi per %@";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Akcepti";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Eraro okazis dum aldono de la bileto al la monujo. Bonvolu klopodi denove poste.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Ne eblis aldoni la bileton";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Aŭtentikigu vin por reiri al %@";
 
@@ -238,6 +247,33 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Fermi";
 
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Komenci retumi";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Forigi vian retuman historion, pasvortojn, kuketojn kaj eviti ke nedezirataj reklamoj spuru vin tra la reto, pero unu alklako!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Via historio ne sekvas vin";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ estas retumilo kiu prizorgas vian privatecon per protekto kontraŭ spuriloj kaj blokado de enhavo.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Pli bona ol nur anonimeco";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Modifu agordojn por decidi kiom multe aŭ kiom malmulte vi dividas.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Protekto laŭ via volo";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Portu vian privatan retumon al la venonta nivelo.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Bonvenon al Firefox %@!";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Nuligi";
 
@@ -258,6 +294,12 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ŝatus aliri viajn fotojn";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Nesekura konekto";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Sekura konekto";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
 "Request Desktop Site" = "Peti skribotablan retejon";
@@ -298,14 +340,35 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokado de aliaj enhavaj spuriloj povus paneigi filmetojn kaj retpaĝojn.";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Nuligi";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Bloki enhavajn spurilojn";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Malhela";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ sendos tion, kion vi tajpas en la adresa strio, al via serĉilo.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla penas kolekti nur la datumojn nepre bezonatajn por provizi kaj plibonigi %@ por ĉiuj.";
 
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ povas de tempo al tempo instali kaj fari studojn.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Ĝenerala";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Pli da informo.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Hela";
+
+/* Manual value for theme section in settings menu */
+"Settings.manualTheme" = "Permane";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Doni noton al %@";
@@ -343,6 +406,9 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Serĉa teksto";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Ekzemplo: serĉilo.example.com/search/?q=%s";
+
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Alguu aŭ tajpu tekston. Se bezonatas, anstataŭigu la serĉan tekston per: %s.";
 
@@ -367,8 +433,29 @@
 /* Header label for security toggles displayed in the settings menu */
 "Settings.sectionSecurity" = "SEKURECO";
 
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Sistema etoso";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Etoso";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Elektilo de etoso";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklamado";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Statistikoj";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bloki teksaĵajn tiparojn";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Enhavo";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Socia";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Malbloki programon per Face ID";
@@ -388,11 +475,23 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Sendi datumojn pri uzo";
 
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Studoj";
+
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Malbloki programon per Touch ID";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID povas malbloki %@ se retadreso jam estas malfermita en la programo";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Malŝaltita";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Ŝaltita";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Uzi sisteman helan aŭ malhelan reĝimon";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novaĵoj";
@@ -402,6 +501,9 @@
 
 /* Text for a share button */
 "share" = "Dividi";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Aldoni al ŝparvojoj";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Kopii areson";
@@ -415,6 +517,9 @@
 /* Title for the share menu where users can take actions for the current website they are on. */
 "ShareMenu.PageActions" = "Retpaĝaj agoj";
 
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Forigi el ŝparvojoj";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Peti skribotablan retejon";
 
@@ -424,11 +529,29 @@
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Malfermi per Chrome";
 
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Malfermi per norma retumilo";
+
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Malfermi per Firefox";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Kundividi paĝon kun…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Forigi el ŝparvojoj";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Renomi ŝparvojon";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Nomo de ŝparvojo";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Konservi";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Nuligi";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Aldoni";
@@ -454,6 +577,72 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Vizitota retadreso";
 
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Bloki %@ kiam retejo estas malfermita:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Ŝalti Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Ŝalti Touch ID";
+
+/* Text for a label that indicates the description for release tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Release.Description" = "Pli da informo pri tiu ĉi kaj aliaj ĝisdatigoj por %@.";
+
+/* Text for a label that indicates the title for release tip. */
+"Tip.Release.Title" = "Jes, ni havas novan aspekton!";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Retpaĝaj agoj > Peti skribotablan retejon";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Ĉu vi volas vidi la skribotablan version de retejo?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ spuriloj ĝisnune blokitaj";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Vi retumas. %@ blokas.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Elektu Aldoni al ŝparvojoj el la menu de %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Kreu ŝparvojojn al la plej vizititaj retejoj:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Aldoni ŝparvojon al Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, forigi mian seancon de %@.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Aldoni ŝparvojon al Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, malfermu mian plej ŝatatan retejon.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Provu malŝalti la protekton kontraŭ spurado";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Ĉu mankas enhavo al la retejo aŭ ĉu ĝi agas strange?";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Iru al Agordoj por administri specifajn privatecajn kaj sekurecajn elekteblojn.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Tiuj ĉi normaj agordoj provizas fortan protekton. Sed estas facile modifi ilin por viaj specifaj bezonoj.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ ne permesis al tiu retejo spioni vin. Tuŝetu la ŝildon por scii kio estis blokita.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Tuŝetu la rubujon kiam ajn vi volas forigi ĉiujn spurojn de via nuna seanco.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Vi estas protektata!";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Reiri al %@ per Touch ID";
 
@@ -462,6 +651,15 @@
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Analizaj spuriloj";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Nesekura konekto";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Sekura konekto";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"trackingProtection.connectionVerifiedByLabel" = "Kontrolita de %@";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Enhavaj spuriloj";
@@ -478,11 +676,32 @@
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Pli da informo";
 
+/* Text for the button that closes the Shield Data and opens the regular Settings screen. */
+"trackingProtection.moreSettings" = "Pli da agordoj";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sociaj spuriloj";
 
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Protektoj malŝaltitaj dum tiu ĉi seanco";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Protektoj ŝaltitaj dum tiu ĉi seanco";
+
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Malŝalti ĝis kiam vi fermos %@ aŭ vi tajpos FORIGI.";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Plibonigita protekto kontraŭ spurado";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel2" = "Gardu viajn datumojn por vi mem. %@s protektas vin de pluraj el la plej oftaj spuriloj, kiuj sekvas vian retumon.";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Spuriloj blokitaj ekde %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Spuriloj kaj skriptoj blokendaj";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Aldoni aŭtomate kompletigotan ligilon";
@@ -495,6 +714,9 @@
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "FORIGI";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Retuma historio viŝita";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Serĉi en paĝo: %@";
