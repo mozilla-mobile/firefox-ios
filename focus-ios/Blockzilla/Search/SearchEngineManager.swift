@@ -8,7 +8,7 @@ class SearchEngineManager {
     public static let prefKeyEngine = "prefKeyEngine"
     public static let prefKeyDisabledEngines = "prefKeyDisabledEngines"
     public static let prefKeyCustomEngines = "prefKeyCustomEngines"
-    public static let prefKeyV98AndAboveResetSearchEngine = "prefKeyAboveV98ResetSearchEngine" //Ref Bug: #1653822
+    public static let prefKeyV98AndAboveResetSearchEngine = "prefKeyAboveV98ResetSearchEngine" // Ref Bug: #1653822
 
     private let prefs: UserDefaults
     var engines = [SearchEngine]()
@@ -62,7 +62,7 @@ class SearchEngineManager {
         // otherwise this is a default engine and so it should be added to the disabled engines array
 
         if activeEngine.name == engine.name {
-            //Can not remove active engine
+            // Can not remove active engine
             return
         }
 

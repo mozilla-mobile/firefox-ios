@@ -171,7 +171,7 @@ class HomeViewController: UIViewController {
         }
 
         if UIScreen.main.bounds.height ==  UIConstants.layout.iPhoneSEHeight {
-            textLogo.snp.updateConstraints{ make in
+            textLogo.snp.updateConstraints { make in
                 make.top.equalTo(self.view.snp.centerY).offset(urlBarIsActive ?  UIConstants.layout.textLogoOffsetSmallDevice : UIConstants.layout.textLogoOffset)
             }
         }

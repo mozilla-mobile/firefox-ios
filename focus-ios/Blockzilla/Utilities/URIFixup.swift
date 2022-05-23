@@ -17,7 +17,7 @@ class URIFixup {
         // this will be handle later in this function adding http prefix
         if let url = URL(string: trimmed), url.scheme != nil, trimmed.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) == nil {
 
-            //check for top-level domain if scheme is "http://" or "https://"
+            // check for top-level domain if scheme is "http://" or "https://"
             if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
                 if trimmed.range(of: ".") == nil {
                     return nil

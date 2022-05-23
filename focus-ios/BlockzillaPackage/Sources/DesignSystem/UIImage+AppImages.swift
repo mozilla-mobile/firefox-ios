@@ -4,7 +4,7 @@
 
 import UIKit
 
-//MARK: - Tracking protection images
+// MARK: - Tracking protection images
 
 public extension UIImage {
     convenience init?(named name: String) {

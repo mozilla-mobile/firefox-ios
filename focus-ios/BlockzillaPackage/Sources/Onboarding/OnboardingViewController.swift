@@ -30,7 +30,7 @@ public class OnboardingViewController: UIViewController {
         return scrollView
     }()
 
-    //MARK: Mozilla Icon
+    // MARK: Mozilla Icon
 
     private lazy var mozillaIconImageView: UIImageView = {
         let imageView = UIImageView(image: .mozilla)
@@ -40,7 +40,7 @@ public class OnboardingViewController: UIViewController {
         return imageView
     }()
 
-    //MARK: Title Labels
+    // MARK: Title Labels
 
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
@@ -63,7 +63,7 @@ public class OnboardingViewController: UIViewController {
         return label
     }()
 
-    //MARK: Instruction
+    // MARK: Instruction
 
     private func titleLabel(title: String) -> UILabel {
         let label = UILabel()
@@ -96,7 +96,7 @@ public class OnboardingViewController: UIViewController {
         return imageView
     }
 
-    //MARK: Start Browsing Button
+    // MARK: Start Browsing Button
 
     private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()

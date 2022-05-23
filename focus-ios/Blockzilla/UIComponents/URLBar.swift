@@ -640,8 +640,8 @@ class URLBar: UIView {
             borderColor = .foundation
             backgroundColor = .clear
 
-            editingURLTextConstrains.forEach{$0.deactivate()}
-            urlText.snp.makeConstraints{make in
+            editingURLTextConstrains.forEach { $0.deactivate() }
+            urlText.snp.makeConstraints { make in
                 make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlTextOffset)
             }
 
@@ -651,10 +651,10 @@ class URLBar: UIView {
             showBackgroundView = true
 
             if isIPadRegularDimensions && inBrowsingMode {
-                leftBarViewLayoutGuide.snp.makeConstraints{make in
+                leftBarViewLayoutGuide.snp.makeConstraints { make in
                     editingURLTextConstrains.append(make.leading.equalTo(urlText).offset(-UIConstants.layout.urlTextOffset).constraint)
                 }
-                editingURLTextConstrains.forEach{$0.activate()}
+                editingURLTextConstrains.forEach { $0.activate() }
                 toolset.stopReloadButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             }
             if !isIPadRegularDimensions {

@@ -22,7 +22,7 @@ enum SectionType: Int, Hashable {
 class TrackingProtectionViewController: UIViewController {
     var tooltipHeight: Constraint?
 
-    //MARK: - Data source
+    // MARK: - Data source
 
     lazy var dataSource = DataSource(
         tableView: self.tableView,
@@ -46,7 +46,7 @@ class TrackingProtectionViewController: UIViewController {
             }
         })
 
-    //MARK: - Toggles items
+    // MARK: - Toggles items
     private lazy var trackingProtectionItem = ToggleItem(
         label: UIConstants.strings.trackingProtectionToggleLabel,
         settingsKey: SettingsToggle.trackingProtection
@@ -58,7 +58,7 @@ class TrackingProtectionViewController: UIViewController {
     ]
     private let blockOtherItem = ToggleItem(label: UIConstants.strings.labelBlockOther, settingsKey: .blockOther)
 
-    //MARK: - Sections
+    // MARK: - Sections
     func secureConnectionSectionItems(title: String, image: UIImage) -> [SectionItem] {
         [
             SectionItem(configureCell: { _, _ in
@@ -137,7 +137,7 @@ class TrackingProtectionViewController: UIViewController {
                     if isOn {
                         let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
                         alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { [unowned self] _ in
-                            //TODO: Make sure to reset the toggle
+                            // TODO: Make sure to reset the toggle
                             cell.isOn = false
                             self.blockOtherItem.settingsValue = false
                             self.updateTelemetry(self.blockOtherItem.settingsKey, false)
@@ -193,7 +193,7 @@ class TrackingProtectionViewController: UIViewController {
         )
     ]
 
-    //MARK: - Views
+    // MARK: - Views
     private var headerHeight: Constraint?
 
     private lazy var header = TrackingHeaderView()
@@ -224,7 +224,7 @@ class TrackingProtectionViewController: UIViewController {
     private let onboardingEventsHandler: OnboardingEventsHandler
     private var cancellable: AnyCancellable?
 
-    //MARK: - VC Lifecycle
+    // MARK: - VC Lifecycle
     init(state: TrackingProtectionState, onboardingEventsHandler: OnboardingEventsHandler, favIconPublisher: AnyPublisher<UIImage, Never>? = nil) {
         self.state = state
         self.onboardingEventsHandler = onboardingEventsHandler

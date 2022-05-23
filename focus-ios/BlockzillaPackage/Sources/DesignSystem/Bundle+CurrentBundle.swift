@@ -14,9 +14,9 @@ extension Foundation.Bundle {
 
     static var myModule: Bundle = {
 
-        //Name of the target
+        // Name of the target
         let bundleName = "DesignSystem_DesignSystem"
-        //Name of Package prefixed by LocalPackages_
+        // Name of Package prefixed by LocalPackages_
         let localBundleName = "LocalPackages_Focus"
 
         let candidates = [

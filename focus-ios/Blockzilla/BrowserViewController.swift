@@ -815,7 +815,7 @@ class BrowserViewController: UIViewController {
         // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
 
-        //isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
+        // isIPadRegularDimensions check if the device is a Ipad and the app is not in split mode
         isIPadRegularDimensions = ((UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height))) || (UIDevice.current.userInterfaceIdiom == .pad &&  UIApplication.shared.orientation?.isPortrait == true && UIScreen.main.bounds.width == size.width)
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
 
@@ -992,7 +992,7 @@ class BrowserViewController: UIViewController {
         if let url = urlBar.url {
             let utils = OpenUtils(url: url, webViewController: webViewController)
 
-            actions.append([getShortcutsItem(for: url).map(PhotonActionSheetItem.init)].compactMap{ $0 })
+            actions.append([getShortcutsItem(for: url).map(PhotonActionSheetItem.init)].compactMap { $0 })
 
             var actionItems = [PhotonActionSheetItem(findInPageItem)]
             actionItems.append(

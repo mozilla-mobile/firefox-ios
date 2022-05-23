@@ -1,6 +1,6 @@
 import UIKit
 
-struct SectionItem{
+struct SectionItem {
 
     let id = UUID()
 

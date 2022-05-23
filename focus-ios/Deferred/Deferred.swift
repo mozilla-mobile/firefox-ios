@@ -58,7 +58,7 @@ open class Deferred<T> {
     }
 
     public func uponQueue(_ queue: DispatchQueue, block: @escaping (T) -> ()) {
-        let maybeValue: T? = protected.withWriteLock{ data in
+        let maybeValue: T? = protected.withWriteLock { data in
             if data.protectedValue == nil {
                 data.uponBlocks.append( (queue, block) )
             }
