@@ -6,46 +6,6 @@ import Foundation
 import Shared
 import Storage
 
-/*s
- The Pocket class is used to fetch stories from the Pocked API.
- Right now this only supports the global feed
-
- For a sample feed item check ClientTests/pocketglobalfeed.json
- */
-struct PocketStory {
-    let url: URL
-    let title: String
-    let timeToRead: Int64
-    let storyDescription: String
-    let imageURL: URL
-    let domain: String
-
-    static func parseJSON(list: Array<[String: Any]>) -> [PocketStory] {
-        return list.compactMap({ (storyDict) -> PocketStory? in
-            guard let urlS = storyDict["url"] as? String,
-                  let domain = storyDict["domain"] as? String,
-                  let imageURLS = storyDict["image_src"] as? String,
-                  let title = storyDict["title"] as? String,
-                  let timeToRead = storyDict["time_to_read"] as? Int64,
-                  let description = storyDict["excerpt"] as? String else {
-                      return nil
-                  }
-
-            guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS) else {
-                return nil
-            }
-
-            return PocketStory(url: url,
-                               title: title,
-                               timeToRead: timeToRead,
-                               storyDescription: description,
-                               imageURL: imageURL,
-                               domain: domain)
-        })
-    }
-
-}
-
 class Pocket: FeatureFlaggable, URLCaching {
 
     private class PocketError: MaybeErrorType {
@@ -76,16 +36,25 @@ class Pocket: FeatureFlaggable, URLCaching {
     }()
 
     // Fetch items from the global pocket feed
-    func globalFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {
+    func globalFeed(items: Int = 2) -> Deferred<[PocketFeedStory]> {
         if shouldUseMockData {
-            return getMockDataFeed(items: items)
+            return getMockDataFeed(count: items)
         } else {
             return getGlobalFeed(items: items)
         }
     }
 
-    private func getGlobalFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {
-        let deferred = Deferred<Array<PocketStory>>()
+    // Fetch items from the global pocket feed
+    func sponsoredFeed(items: Int = 2) -> Deferred<[PocketSponsoredStory]> {
+        if shouldUseMockData {
+            return getMockSponsoredFeed()
+        } else {
+            return Deferred(value: [])
+        }
+    }
+
+    private func getGlobalFeed(items: Int = 2) -> Deferred<Array<PocketFeedStory>> {
+        let deferred = Deferred<Array<PocketFeedStory>>()
 
         guard let request = createGlobalFeedRequest(items: items) else {
             deferred.fill([])
@@ -93,7 +62,7 @@ class Pocket: FeatureFlaggable, URLCaching {
         }
 
         if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? Array<[String: Any]> {
-            deferred.fill(PocketStory.parseJSON(list: items))
+            deferred.fill(PocketFeedStory.parseJSON(list: items))
             return deferred
         }
 
@@ -108,7 +77,8 @@ class Pocket: FeatureFlaggable, URLCaching {
             guard let items = json?["recommendations"] as? Array<[String: Any]> else {
                 return deferred.fill([])
             }
-            return deferred.fill(PocketStory.parseJSON(list: items))
+
+            return deferred.fill(PocketFeedStory.parseJSON(list: items))
         }.resume()
 
         return deferred
@@ -143,8 +113,8 @@ class Pocket: FeatureFlaggable, URLCaching {
         return featureFlags.isCoreFeatureEnabled(.useMockData) && (pocketKey == "" || pocketKey == nil)
     }
 
-    private func getMockDataFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {
-        let deferred = Deferred<Array<PocketStory>>()
+    private func getMockDataFeed(count: Int = 2) -> Deferred<Array<PocketFeedStory>> {
+        let deferred = Deferred<Array<PocketFeedStory>>()
         let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json")
         let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
 
@@ -154,7 +124,16 @@ class Pocket: FeatureFlaggable, URLCaching {
             return deferred
         }
 
-        deferred.fill(PocketStory.parseJSON(list: items))
+        deferred.fill(Array(PocketFeedStory.parseJSON(list: items).prefix(count)))
+        return deferred
+    }
+
+    private func getMockSponsoredFeed() -> Deferred<[PocketSponsoredStory]> {
+        let deferred = Deferred<[PocketSponsoredStory]>()
+        let path = Bundle(for: type(of: self)).path(forResource: "pocketsponsoredfeed", ofType: "json")
+        let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
+        let response = try! JSONDecoder().decode(PocketSponsoredRequest.self, from: data)
+        deferred.fill(response.spocs)
         return deferred
     }
 }

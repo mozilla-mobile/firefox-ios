@@ -14,6 +14,7 @@ struct FxHomeHorizontalCellUX {
     static let generalCornerRadius: CGFloat = 12
     // TODO: Limiting font size to xxLarge until we use compositional layout in all Firefox HomePage. Should be AX5.
     static let titleFontSize: CGFloat = 19 // Style subheadline - xxLarge
+    static let sponsoredFontSize: CGFloat = 12 // Style subheadline - xxLarge
     static let siteFontSize: CGFloat = 16 // Style caption1 - xxLarge
     static let stackViewShadowRadius: CGFloat = 4
     static let stackViewShadowOffset: CGFloat = 2

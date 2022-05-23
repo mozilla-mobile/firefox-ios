@@ -10,7 +10,6 @@ class FxHomePocketViewModel {
 
     // MARK: - Properties
 
-    private let profile: Profile
     private let pocketAPI = Pocket()
 
     private let isZeroSearch: Bool
@@ -18,13 +17,27 @@ class FxHomePocketViewModel {
 
     var onTapTileAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
+    var onScroll: (([UICollectionViewCell]) -> Void)?
 
-    init(profile: Profile, isZeroSearch: Bool) {
-        self.profile = profile
+    private(set) var pocketStoriesViewModels: [FxPocketHomeHorizontalCellViewModel] = []
+
+    init(pocketStoriesViewModel: [FxPocketHomeHorizontalCellViewModel] = [], isZeroSearch: Bool) {
         self.isZeroSearch = isZeroSearch
+        self.pocketStoriesViewModels = pocketStoriesViewModel
+        for pocketStoryViewModel in pocketStoriesViewModel {
+            bind(pocketStoryViewModel: pocketStoryViewModel)
+        }
     }
 
-    var pocketStories: [PocketStory] = []
+    private func bind(pocketStoryViewModel: FxPocketHomeHorizontalCellViewModel) {
+        pocketStoryViewModel.onTap = { [weak self] indexPath in
+            self?.recordTapOnStory(index: indexPath.row)
+            let siteUrl = self?.pocketStoriesViewModels[indexPath.row].url
+            siteUrl.map { self?.onTapTileAction?($0) }
+        }
+
+        self.pocketStoriesViewModels.append(pocketStoryViewModel)
+    }
 
     // The dimension of a cell
     // Fractions for iPhone to only show a slight portion of the next column
@@ -39,7 +52,7 @@ class FxHomePocketViewModel {
     }
 
     var numberOfCells: Int {
-        return pocketStories.count != 0 ? pocketStories.count + 1 : 0
+        return pocketStoriesViewModels.count != 0 ? pocketStoriesViewModels.count + 1 : 0
     }
 
     static var numberOfItemsInColumn: CGFloat {
@@ -47,12 +60,12 @@ class FxHomePocketViewModel {
     }
 
     func isStoryCell(index: Int) -> Bool {
-        return index < pocketStories.count
+        return index < pocketStoriesViewModels.count
     }
 
     func getSitesDetail(for index: Int) -> Site {
         if isStoryCell(index: index) {
-            return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+            return Site(url: pocketStoriesViewModels[index].url?.absoluteString ?? "", title: pocketStoriesViewModels[index].title)
         } else {
             return Site(url: Pocket.MoreStoriesURL.absoluteString, title: .FirefoxHomepage.Pocket.DiscoverMore)
         }
@@ -79,20 +92,38 @@ class FxHomePocketViewModel {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: extras)
     }
 
-    func domainAndReadingTimeForStory(atIndex: Int) -> String {
-        let pocketStory = pocketStories[atIndex]
-        let domainAndReadingTime = "\(pocketStory.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, pocketStory.timeToRead))"
-
-        return domainAndReadingTime
-    }
-
     // MARK: - Private
 
     private func getPocketSites() -> Success {
-        return pocketAPI.globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
-            self.pocketStories = pocketStory
-            return succeed()
-        }
+        pocketAPI
+            .globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
+            .both(pocketAPI.sponsoredFeed())
+            .bindQueue(.main) { [weak self] global, sponsored in
+                // Convert global feed to PocketStory
+                var globalTemp = global.map(PocketStory.init)
+
+                // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+                var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
+
+                // Making sure we insert a sponsored story at a valid index
+                let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
+                sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
+                sponsoredTemp.removeFirst()
+
+                let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
+                sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
+                sponsoredTemp.removeFirst()
+
+                // Add the story in the view models list
+                for story in globalTemp {
+                    self?.bind(pocketStoryViewModel: .init(story: story))
+                }
+                return succeed()
+            }
+    }
+
+    func showDiscoverMore() {
+        onTapTileAction?(Pocket.MoreStoriesURL)
     }
 }
 
@@ -113,7 +144,7 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     var hasData: Bool {
-        return !pocketStories.isEmpty
+        return !pocketStoriesViewModels.isEmpty
     }
 
     func updateData(completion: @escaping () -> Void) {
