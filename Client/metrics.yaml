@@ -25,7 +25,7 @@ accessibility:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-17"
@@ -41,7 +41,7 @@ accessibility:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-17"
@@ -57,7 +57,7 @@ accessibility:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-17"
@@ -73,7 +73,7 @@ accessibility:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-17"
@@ -89,7 +89,7 @@ accessibility:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-17"
