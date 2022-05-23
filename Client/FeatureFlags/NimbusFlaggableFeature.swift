@@ -16,6 +16,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case jumpBackIn
     case pocket
+    case sponsoredPocket
     case pullToRefresh
     case recentlySaved
     case reportSiteIssue
@@ -57,6 +58,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.JumpBackInSection
         case .pocket:
             return FlagKeys.ASPocketStories
+        case .sponsoredPocket:
+            return FlagKeys.ASSponsoredPocketStories
         case .pullToRefresh:
             return FlagKeys.PullToRefresh
         case .recentlySaved:

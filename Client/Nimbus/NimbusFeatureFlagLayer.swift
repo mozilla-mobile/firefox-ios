@@ -23,6 +23,7 @@ final class NimbusFeatureFlagLayer {
 
         case .jumpBackIn,
                 .pocket,
+                .sponsoredPocket,
                 .recentlySaved,
                 .historyHighlights,
                 .topSites:
@@ -95,6 +96,7 @@ final class NimbusFeatureFlagLayer {
         case .recentlySaved: nimbusID = HomeScreenSection.recentlySaved
         case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations
         case .pocket: nimbusID = HomeScreenSection.pocket
+//        case .sponsoredPocket: nimbusID = HomeScreenSection.sponsoredPocket
         default: return false
         }
 

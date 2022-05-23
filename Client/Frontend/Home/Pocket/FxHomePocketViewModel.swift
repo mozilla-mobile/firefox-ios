@@ -102,18 +102,21 @@ class FxHomePocketViewModel {
                 // Convert global feed to PocketStory
                 var globalTemp = global.map(PocketStory.init)
 
-                // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
+                if self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true {
+                    // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+                    var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
 
-                // Making sure we insert a sponsored story at a valid index
-                let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-                sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
-                sponsoredTemp.removeFirst()
+                    // Making sure we insert a sponsored story at a valid index
+                    let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
+                    sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
+                    sponsoredTemp.removeFirst()
 
-                let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-                sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
-                sponsoredTemp.removeFirst()
+                    let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
+                    sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
+                    sponsoredTemp.removeFirst()
+                }
 
+                self?.pocketStoriesViewModels = []
                 // Add the story in the view models list
                 for story in globalTemp {
                     self?.bind(pocketStoryViewModel: .init(story: story))
