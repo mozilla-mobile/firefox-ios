@@ -589,7 +589,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-        machine_type_id: g2.4core
+        machine_type_id: g2.8core
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -615,7 +615,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.1.x
-        machine_type_id: g2.4core
+        machine_type_id: g2.8core
   SPM_Deploy_Prod_Beta:
     steps:
     - activate-ssh-key@4.1:
@@ -935,7 +935,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-        machine_type_id: g2.8core
+        machine_type_id: g2-m1.8core
 app:
   envs:
   - opts:
