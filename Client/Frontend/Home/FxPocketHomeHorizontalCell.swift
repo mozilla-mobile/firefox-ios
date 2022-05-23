@@ -5,10 +5,6 @@
 import UIKit
 
 class FxPocketHomeHorizontalCellViewModel {
-    enum Action {
-        case cellTapped(IndexPath)
-    }
-
     var title: String { story.title }
     var imageURL: URL { story.imageURL }
     var url: URL? { story.url }
