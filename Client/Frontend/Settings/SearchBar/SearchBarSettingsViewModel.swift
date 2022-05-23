@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-enum SearchBarPosition: String {
+enum SearchBarPosition: String, FlaggableFeatureOptions {
     case bottom
     case top
 
@@ -23,7 +23,7 @@ protocol SearchBarPreferenceDelegate: AnyObject {
     func didUpdateSearchBarPositionPreference()
 }
 
-final class SearchBarSettingsViewModel {
+final class SearchBarSettingsViewModel: FeatureFlaggable {
 
     static var isEnabled: Bool {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
@@ -44,14 +44,10 @@ final class SearchBarSettingsViewModel {
     }
 
     var searchBarPosition: SearchBarPosition {
-        guard let raw = prefs.stringForKey(PrefsKeys.KeySearchBarPosition) else {
-            let defaultPosition = getDefaultSearchPosition()
-            // Do not notify if it's the default position being saved
-            saveSearchBarPosition(defaultPosition, shouldNotify: false)
-            return defaultPosition
+        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
+            return .bottom
         }
 
-        let position = SearchBarPosition(rawValue: raw) ?? .bottom
         return position
     }
 
@@ -77,26 +73,22 @@ final class SearchBarSettingsViewModel {
 // MARK: Private
 private extension SearchBarSettingsViewModel {
 
-    /// New user defaults to bottom search bar, existing users keep their existing search bar position
-    func getDefaultSearchPosition() -> SearchBarPosition {
-        return InstallType.get() == .fresh ? .bottom : .top
-    }
-
-    func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition, shouldNotify: Bool = true) {
-        prefs.setString(searchBarPosition.rawValue,
-                        forKey: PrefsKeys.KeySearchBarPosition)
+    func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
+        featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
         recordPreferenceChange(searchBarPosition)
 
-        guard shouldNotify else { return }
-        let notificationObject = [PrefsKeys.KeySearchBarPosition: searchBarPosition]
+        let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
         NotificationCenter.default.post(name: .SearchBarPositionDidChange, object: notificationObject)
     }
 
     func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
-        let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.KeySearchBarPosition,
+        let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.SearchBarPosition,
                       TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: searchBarPosition.rawValue]
-        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .change,
+                                     object: .setting,
+                                     extras: extras)
     }
 }
 

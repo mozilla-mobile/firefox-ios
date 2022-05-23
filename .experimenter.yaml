@@ -4,9 +4,15 @@ general-app-features:
   hasExposure: true
   exposureDescription: ""
   variables:
-    feature-status:
+    pull-to-refresh:
       type: json
-      description: This property provides a lookup table of whether or not the given feature should be enabled.
+      description: This property defines whether or not the feature is enabled
+    report-site-issue:
+      type: json
+      description: This property defines whether or not the feature is enabled
+    shake-to-restore:
+      type: json
+      description: This property defines whether or not the feature is enabled
 homescreenFeature:
   description: The homescreen that the user goes to when they press home or new tab.
   hasExposure: true
@@ -89,9 +95,9 @@ start-at-home-feature:
       type: string
       description: This property provides a default setting for the startAtHomeFeature
       enum:
-        - after-four-hours
         - always
         - disabled
+        - after-four-hours
 tabTrayFeature:
   description: The tab tray screen that the user goes to when they open the tab tray.
   hasExposure: true

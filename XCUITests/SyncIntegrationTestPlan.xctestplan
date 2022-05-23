@@ -4,6 +4,7 @@
       "id" : "FB8FB2A0-E461-4F52-AE3D-FB5F222D5262",
       "name" : "Configuration 1",
       "options" : {
+
       }
     }
   ],
@@ -82,6 +83,7 @@
         "SyncUITests",
         "TabCounterTests",
         "TabTraySearchTabsTests",
+        "TabsPerformanceTest",
         "ThirdPartySearchTest",
         "ToolbarTests",
         "TopTabsTest",

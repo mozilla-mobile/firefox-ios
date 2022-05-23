@@ -7,33 +7,50 @@ features:
   general-app-features:
     description: The feature that contains feature flags for the entire application
     variables:
-      feature-status:
-        description: "This property provides a lookup table of whether or not the given feature should be enabled."
-        type: Map<GeneralAppFeatureID, Boolean>
+      pull-to-refresh:
+        description: "This property defines whether or not the feature is enabled"
+        type: GeneralFeature
         default:
           {
-            "bottom-search-bar": true,
-            "pull-to-refresh": true,
-            "report-site-issue": false,
-            "shake-to-restore": false,
+            "status": true
+          }
+      report-site-issue:
+        description: "This property defines whether or not the feature is enabled"
+        type: GeneralFeature
+        default:
+          {
+            "status": false
+          }
+      shake-to-restore:
+        description: "This property defines whether or not the feature is enabled"
+        type: GeneralFeature
+        default:
+          {
+            "status": false
           }
     defaults:
       - channel: beta
         value: {
-          "feature-status": {
-            "bottom-search-bar": true,
-            "pull-to-refresh": true,
-            "report-site-issue": true,
-            "shake-to-restore": true,
+          "pull-to-refresh": {
+            "status": true
+          },
+          "report-site-issue": {
+            "status": true
+          },
+          "shake-to-restore": {
+            "status": true
           }
         }
       - channel: developer
         value: {
-          "feature-status": {
-            "bottom-search-bar": true,
-            "pull-to-refresh": true,
-            "report-site-issue": true,
-            "shake-to-restore": true,
+          "pull-to-refresh": {
+            "status": true
+          },
+          "report-site-issue": {
+            "status": true
+          },
+          "shake-to-restore": {
+            "status": true
           }
         }
   start-at-home-feature:
@@ -60,7 +77,12 @@ features:
         type: AwesomeBar
         default:
           {
-            "use-page-content": false
+            "use-page-content": false,
+            "search-highlights": false,
+            "position": {
+              "is-position-feature-enabled": true,
+              "is-bottom": true
+            }
           }
       spotlight:
         description: "This property is covers the properties related to the spotlight"
@@ -73,7 +95,27 @@ features:
             "icon": "letter",
             "keep-for-days": null
           }
-    defaults: null
+    defaults:
+      - channel: beta
+        value: {
+          "awesome-bar": {
+            "search-highlights": true,
+            "position": {
+              "is-position-feature-enabled": true,
+              "is-bottom": true
+            }
+          }
+        }
+      - channel: developer
+        value: {
+          "awesome-bar": {
+            "search-highlights": true,
+            "position": {
+              "is-position-feature-enabled": true,
+              "is-bottom": true
+            }
+          }
+        }
   nimbus-validation:
     description: "A feature that does not correspond to an application feature suitable for showing
       that Nimbus is working."
@@ -90,6 +132,7 @@ features:
         description: The drawable displayed in the app menu for Settings
         type: String
         default: "menu-Settings"
+
   homescreenFeature:
     description: The homescreen that the user goes to when they press home or new tab.
     variables:
@@ -117,7 +160,7 @@ features:
       wallpaper-feature:
         description: "This property defines the wallpaper feature on the
         homepage, which is not a section therein."
-        type: WallpaperFeature
+        type: GeneralFeature
         default:
           {
             "status": true,
@@ -151,7 +194,7 @@ features:
           },
           "sponsored-tiles": {
             "status": true,
-            "max-number-of-tiles": 2
+            "max-number-of-tiles": 1
           },
           "wallpaper-feature": {
             "status": true
@@ -296,6 +339,48 @@ features:
 
 types:
   objects:
+    GeneralFeature:
+      description: "The configuration for the a feature that can be enabled or disabled"
+      fields:
+        status:
+          type: Boolean
+          description: Whether or not the feature is enabled
+          default: false
+
+    AwesomeBar:
+      description: "Represents the awesome bar object"
+      fields:
+        use-page-content:
+          description: "Whether or not to use page content"
+          type: Boolean
+          default: false
+          required: true
+        search-highlights:
+          description: "Whether or not search highlights are enabled"
+          type: Boolean
+          default: false
+        position:
+          description: "This property defines whether or not the feature is
+          enabled, and the position of the search bar"
+          type: SearchBarPositionFeature
+          default:
+            {
+              "is-position-feature-enabled": true,
+              "is-bottom": true
+            }
+
+    SearchBarPositionFeature:
+      description: "The configuration for the bottom search bar on the homescreen"
+      fields:
+        is-position-feature-enabled:
+          type: Boolean
+          description: Whether or not the feature is enabled
+          default: true
+        is-bottom:
+          type: Boolean
+          description: Whether or not the default position is at the bottom
+          default: true
+
     SponsoredTiles:
       description: "The configuration for the sponsored tile on the homescreen"
       fields:
@@ -307,13 +392,7 @@ types:
           type: Int
           description: The maximum number of sponsored tiles a user can see
           default: 2
-    WallpaperFeature:
-      description: "The configuration for the wallpaper feature on the homescreen"
-      fields:
-        status:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: true
+
     MessageData:
       description: >
         An object to describe a message. It uses human
@@ -365,6 +444,7 @@ types:
           description: Each message will tell us the surface it is targeting with this.
           # To start, we default to the new-tab-card
           default: new-tab-card
+
     StyleData:
       description: >
         A group of properities (predominantly visual) to
@@ -383,14 +463,6 @@ types:
             before it is expired.
           default: 5
 
-    AwesomeBar:
-      description: "Represents the awesome bar object"
-      fields:
-        use-page-content:
-          description: "Whether or not to use page content"
-          type: Boolean
-          default: false
-          required: true
     Spotlight:
       description: "An object representing the spotlight"
       fields:
@@ -418,6 +490,7 @@ types:
           default: null
           description: "Number of days to keep"
           required: true
+
   enums:
     IconType:
       description: The different types of icons
@@ -428,6 +501,7 @@ types:
           description: A favicon icon
         letter:
           description: A letter icon
+
     MessageSurfaceId:
       description: >
         For messaging, we would like to have a message tell us which surface its associated with.
@@ -437,17 +511,7 @@ types:
           description: This is the card that appears at the top on the Firefox Home Page.
         Unknown:
           description: A message has NOT declared its target surface.
-    GeneralAppFeatureID:
-      description: The identifiers for the different types of search term groups.
-      variants:
-        bottom-search-bar:
-          description: Whether the search bar is at the bottom or the top.
-        pull-to-refresh:
-          description: Whether the pullToRefresh feature is on
-        report-site-issue:
-          description: Whether the reportSiteIssue functionality is enabled
-        shake-to-restore:
-          description: Whether the shakeToRestore last closed tab feature is enabled
+
     StartAtHome:
       description: The identifiers for the different types of options for StartAtHome
       variants:
@@ -457,6 +521,7 @@ types:
           description: App opens to a new homepage tab after four hours of inactivity
         always:
           description: App opens to a new homepage tab after five minutes of inactiviny
+
     HomeScreenSection:
       description: The identifiers for the sections of the homescreen.
       variants:
@@ -470,11 +535,13 @@ types:
           description: The tab groups
         pocket:
           description: The pocket section. This should only be available in the US.
+
     TabTraySection:
       description: The identifiers for the sections of the tab tray.
       variants:
         inactive-tabs:
           description: Tabs that have been automatically closed for the user.
+
     SearchTermGroups:
       description: The identifiers for the different types of search term groups.
       variants:
@@ -482,6 +549,7 @@ types:
           description: Grouping for items in History and RecentlyVisited
         tab-tray-groups:
           description: Grouping for items in the Tab Tray and in JumpBackIn
+
     ControlMessageBehavior:
       description: An enum to influence what should be displayed when a control message is selected.
       variants:

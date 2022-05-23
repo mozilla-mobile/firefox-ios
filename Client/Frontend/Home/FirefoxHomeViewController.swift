@@ -19,7 +19,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
 
     private let flowLayout = UICollectionViewFlowLayout()
     private var hasSentJumpBackInSectionEvent = false
-    private var hasSentHistoryHighlightsSectionEvent = false
     private var isZeroSearch: Bool
     private var viewModel: FirefoxHomeViewModel
     private var contextMenuHelper: FirefoxHomeContextMenuHelper
@@ -97,6 +96,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
 
         if shouldDisplayHomeTabBanner {
             showHomeTabBanner()
@@ -197,6 +200,10 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     }
 
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
+
+    @objc private func dismissKeyboard() {
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
     }
 

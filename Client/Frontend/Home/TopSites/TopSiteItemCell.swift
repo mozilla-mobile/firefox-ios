@@ -150,7 +150,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
 
-    func configure(_ topSite: HomeTopSite) {
+    func configure(_ topSite: HomeTopSite, position: Int) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
@@ -161,8 +161,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         configureSponsoredSite(topSite)
 
         applyTheme()
-
-        topSite.impressionTracking()
     }
 
     // MARK: - Setup Helper methods

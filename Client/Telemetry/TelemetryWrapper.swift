@@ -146,6 +146,7 @@ class TelemetryWrapper {
         self.profile = profile
 
         setSyncDeviceId()
+        SponsoredTileTelemetry.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
@@ -370,7 +371,6 @@ extension TelemetryWrapper {
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case topSiteTile = "top-site-tile"
-        case topSiteImpression = "top-site-impression"
         case topSiteContextualMenu = "top-site-contextual-menu"
         case pocketStory = "pocket-story"
         case pocketSectionImpression = "pocket-section-impression"
@@ -498,7 +498,6 @@ extension TelemetryWrapper {
     public enum EventExtraKey: String, CustomStringConvertible {
         case topSitePosition = "tilePosition"
         case topSiteTileType = "tileType"
-        case topSiteUrl = "topSiteUrl"
         case contextualMenuType = "contextualMenuType"
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
@@ -506,6 +505,7 @@ extension TelemetryWrapper {
 
         case preference = "pref"
         case preferenceChanged = "to"
+        case isPrivate = "is-private"
 
         case wallpaperName = "wallpaperName"
         case wallpaperType = "wallpaperType"
@@ -574,13 +574,6 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
-        case (.information, .view, .topSiteImpression, _, let extras):
-            if let url = extras?[EventExtraKey.topSiteUrl.rawValue] as? String {
-                GleanMetrics.TopSite.sponsoredTileImpressions.record(GleanMetrics.TopSite.SponsoredTileImpressionsExtra(tileUrl: url))
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-
         case (.action, .view, .topSiteContextualMenu, _, let extras):
             if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
                 GleanMetrics.TopSite.contextualMenu.record(GleanMetrics.TopSite.ContextualMenuExtra(type: type))
@@ -594,6 +587,14 @@ extension TelemetryWrapper {
                 GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to, preference: preference))
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .privateBrowsingButton, _, let extras):
+            if let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? String {
+                let isPrivateExtra = GleanMetrics.Preferences.PrivateBrowsingButtonTappedExtra(isPrivate: isPrivate)
+                GleanMetrics.Preferences.privateBrowsingButtonTapped.record(isPrivateExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
             }
 
         // MARK: QR Codes
@@ -616,6 +617,10 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.openTabTray.record()
         case (.action, .close, .tabTray, _, _):
             GleanMetrics.Tabs.closeTabTray.record()
+        case (.action, .press, .tabToolbar, .tabView, _):
+            GleanMetrics.Tabs.pressTabToolbar.record()
+        case (.action, .press, .tab, _, _):
+            GleanMetrics.Tabs.pressTopTab.record()
         case(.action, .pull, .reload, _, _):
             GleanMetrics.Tabs.pullToRefresh.add()
         case(.action, .navigate, .tab, _, _):
@@ -962,6 +967,8 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object,
                                             value: value, extras: extras)
             }
+        case (.action, .drag, .locationBar, _, _):
+            GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .homeTabBanner, .messageImpression, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
@@ -980,6 +987,10 @@ extension TelemetryWrapper {
                 let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
                 GleanMetrics.Messaging.clicked.record(
                     GleanMetrics.Messaging.ClickedExtra(actionUuid: actionUUID, messageKey: messageId)
+                )
+            } else if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
+                GleanMetrics.Messaging.clicked.record(
+                    GleanMetrics.Messaging.ClickedExtra(messageKey: messageId)
                 )
             }
         case(.information, .view, .homeTabBanner, .messageExpired, let extras):

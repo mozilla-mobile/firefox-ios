@@ -60,7 +60,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
     }()
 
     lazy var bottomSeparatorView: UIView = .build { separatorLine in
-        //separator hidden by default
+        // separator hidden by default
         separatorLine.isHidden = true
         separatorLine.backgroundColor = UIColor.Photon.Grey40
     }

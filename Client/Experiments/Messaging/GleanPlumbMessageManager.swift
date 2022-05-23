@@ -148,7 +148,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                                      object: .homeTabBanner,
                                      value: .messageInteracted,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
-                                              TelemetryWrapper.EventExtraKey.actionUUID.rawValue: UUID()])
+                                              TelemetryWrapper.EventExtraKey.actionUUID.rawValue: uuid])
     }
 
     /// For now, we will assume all dismissed messages should become expired right away. The
@@ -202,6 +202,9 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// We assemble one message at a time. If there's any issue with it, return `nil`.
     /// Reporting a malformed message is done at the call site when reacting to a `nil`.
     private func createMessage(messageId: String, message: MessageData, lookupTables: Messaging) -> GleanPlumbMessage? {
+
+        /// Guard against a message with a blank `text` property. 
+        if message.text.isEmpty { return nil }
 
         /// Ascertain a Message's style, to know priority and max impressions.
         guard let style = lookupTables.styles[message.style] else { return nil }

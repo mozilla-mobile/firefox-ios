@@ -175,6 +175,10 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     /// A helper for the reload function.
     private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
+        guard !isFetchInProgress else {
+            return deferMaybe(FetchInProgressError())
+        }
+
         isFetchInProgress = true
 
         return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
@@ -279,7 +283,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
         return groups
     }
 
-    func deleteGroupsForDates(date: Date)  {
+    func deleteGroupsForDates(date: Date) {
         guard let deletableSections = getDeletableSection(date: date) else { return }
 
         deletableSections.forEach { section in
