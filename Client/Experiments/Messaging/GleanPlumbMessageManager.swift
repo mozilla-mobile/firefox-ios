@@ -148,7 +148,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                                      object: .homeTabBanner,
                                      value: .messageInteracted,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
-                                              TelemetryWrapper.EventExtraKey.actionUUID.rawValue: uuid])
+                                              TelemetryWrapper.EventExtraKey.actionUUID.rawValue: uuid ?? "nil"])
     }
 
     /// For now, we will assume all dismissed messages should become expired right away. The

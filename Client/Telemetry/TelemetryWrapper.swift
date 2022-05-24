@@ -297,6 +297,11 @@ extension TelemetryWrapper {
         case qrPairing = "pairing"
         case settings = "settings"
         case application = "application"
+        case voiceOver = "voice-over"
+        case reduceTransparency = "reduce-transparency"
+        case reduceMotion = "reduce-motion"
+        case invertColors = "invert-colors"
+        case switchControl = "switch-control"
     }
 
     public enum EventObject: String {
@@ -530,6 +535,12 @@ extension TelemetryWrapper {
         // GleanPlumb
         case messageKey = "message-key"
         case actionUUID = "action-uuid"
+        // Accessibility
+        case isVoiceOverRunning = "is-voice-over-running"
+        case isSwitchControlRunning = "is-switch-control-running"
+        case isReduceTransparencyEnabled = "is-reduce-transparency-enabled"
+        case isReduceMotionEnabled = "is-reduce-motion-enabled"
+        case isInvertColorsEnabled = "is-invert-colors-enabled"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -777,6 +788,47 @@ extension TelemetryWrapper {
             GleanMetrics.AppCycle.foreground.record()
         case(.action, .background, .app, _, _):
             GleanMetrics.AppCycle.background.record()
+        // MARK: Accessibility
+        case(.action, .voiceOver, .app, _, let extras):
+            if let isRunning = extras?[EventExtraKey.isVoiceOverRunning.rawValue] as? String {
+                let isRunningExtra = GleanMetrics.Accessibility.VoiceOverExtra(isRunning: isRunning)
+                GleanMetrics.Accessibility.voiceOver.record(isRunningExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
+        case(.action, .switchControl, .app, _, let extras):
+            if let isRunning = extras?[EventExtraKey.isSwitchControlRunning.rawValue] as? String {
+                let isRunningExtra = GleanMetrics.Accessibility.SwitchControlExtra(isRunning: isRunning)
+                GleanMetrics.Accessibility.switchControl.record(isRunningExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
+        case(.action, .reduceTransparency, .app, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isReduceTransparencyEnabled.rawValue] as? String {
+                let isEnabledExtra = GleanMetrics.Accessibility.ReduceTransparencyExtra(isEnabled: isEnabled)
+                GleanMetrics.Accessibility.reduceTransparency.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
+        case(.action, .reduceMotion, .app, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isReduceMotionEnabled.rawValue] as? String {
+                let isEnabledExtra = GleanMetrics.Accessibility.ReduceMotionExtra(isEnabled: isEnabled)
+                GleanMetrics.Accessibility.reduceMotion.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
+        case(.action, .invertColors, .app, _, let extras):
+            if let isEnabled = extras?[EventExtraKey.isInvertColorsEnabled.rawValue] as? String {
+                let isEnabledExtra = GleanMetrics.Accessibility.InvertColorsExtra(isEnabled: isEnabled)
+                GleanMetrics.Accessibility.invertColors.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
         // MARK: App menu
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
