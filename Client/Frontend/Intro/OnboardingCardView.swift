@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import UIKit
 
 struct OnboardingCardViewModel {
@@ -24,11 +23,15 @@ struct OnboardingCardViewModel {
 }
 
 class OnboardingCardView: UIView, CardTheme {
-    let viewModel: OnboardingCardViewModel?
+    let viewModel: OnboardingCardViewModel
 
     private var fxTextThemeColor: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
         return theme == .dark ? .white : .black
+    }
+
+    private lazy var scrollView: UIScrollView = .build { view in
+        view.backgroundColor = .clear
     }
 
     private lazy var contentStackView: UIStackView = .build { stack in
@@ -41,7 +44,7 @@ class OnboardingCardView: UIView, CardTheme {
 
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "\(self.viewModel?.a11yRoot)ImageView"
+        imageView.accessibilityIdentifier = "\(self.viewModel.a11yRoot)ImageView"
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -53,7 +56,7 @@ class OnboardingCardView: UIView, CardTheme {
             withTextStyle: .title1,
             maxSize: 58)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel?.a11yRoot)TitleLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.a11yRoot)TitleLabel"
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
@@ -65,7 +68,7 @@ class OnboardingCardView: UIView, CardTheme {
             withTextStyle: .body,
             maxSize: 53)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel?.a11yRoot)DescriptionLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.a11yRoot)DescriptionLabel"
     }
 
     private lazy var primaryButton: UIButton = .build { button in
@@ -75,7 +78,7 @@ class OnboardingCardView: UIView, CardTheme {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
         button.titleLabel?.textAlignment = .center
-        button.accessibilityIdentifier = "\(self.viewModel?.a11yRoot)PrimaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.a11yRoot)PrimaryButton"
     }
 
     private lazy var secondaryButton: UIButton = .build { button in
@@ -85,7 +88,7 @@ class OnboardingCardView: UIView, CardTheme {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
         button.titleLabel?.textAlignment = .center
-        button.accessibilityIdentifier = "\(self.viewModel?.a11yRoot)SecondaryButton"
+        button.accessibilityIdentifier = "\(self.viewModel.a11yRoot)SecondaryButton"
     }
 
     init(viewModel: OnboardingCardViewModel) {
@@ -123,13 +126,13 @@ class OnboardingCardView: UIView, CardTheme {
     }
 
     func updateLayout() {
-        titleLabel.text = viewModel?.title
-        descriptionLabel.text = viewModel?.description
+        titleLabel.text = viewModel.title
+        descriptionLabel.text = viewModel.description
 
-        secondaryButton.isHidden = viewModel?.secondaryAction?.isEmpty ?? true
+        secondaryButton.isHidden = viewModel.secondaryAction?.isEmpty ?? true
 
-        imageView.image = viewModel?.image
-        primaryButton.setTitle(viewModel?.primaryAction, for: .normal)
-        secondaryButton.setTitle(viewModel?.secondaryAction, for: .normal)
+        imageView.image = viewModel.image
+        primaryButton.setTitle(viewModel.primaryAction, for: .normal)
+        secondaryButton.setTitle(viewModel.secondaryAction, for: .normal)
     }
 }

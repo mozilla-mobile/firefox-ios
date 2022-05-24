@@ -41,6 +41,10 @@ class IntroViewController: UIViewController, OnViewDismissable {
         return button
     }()
 
+    private lazy var scrollView: UIScrollView = .build { view in
+        view.backgroundColor = .clear
+    }
+
     private lazy var onboardingCard: OnboardingCardView = {
         let viewModel = OnboardingCardViewModel()
         let cardView = OnboardingCardView(viewModel: viewModel)
@@ -50,7 +54,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
     private lazy var pageControl: UIPageControl = .build { pageControl in
         pageControl.currentPage = 0
-        pageControl.numberOfPages = 3
+        pageControl.numberOfPages = self.viewModel.enabledCards.count
     }
 
     // Closure delegate
@@ -150,34 +154,40 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
     // MARK: - Nimbus onboarding
     private func setupOnboarding() {
-        view.addSubviews(onboardingCard)
-        view.addSubviews(pageControl)
+        view.addSubviews(pageControl, closeButton)
+        scrollView.addSubview(onboardingCard)
+        view.addSubview(scrollView)
 
-        var constraints = [
-            onboardingCard.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
-            onboardingCard.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            onboardingCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            onboardingCard.bottomAnchor.constraint(greaterThanOrEqualTo: pageControl.topAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
-            onboardingCard.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scrollView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(greaterThanOrEqualTo: pageControl.topAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+
+            // Constraints that set the size of the scrollable content area inside the scrollview
+            scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.frameLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
+            scrollView.frameLayoutGuide.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualTo: pageControl.topAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
+
+            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: onboardingCard.leadingAnchor),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: onboardingCard.topAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: onboardingCard.trailingAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: onboardingCard.bottomAnchor),
+            scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ]
+            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-        if viewModel.shouldShowNewOnboarding {
-            view.addSubview(closeButton)
-
-            let closeButtonConstraints = [
-                closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 24),
-                closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-                closeButton.widthAnchor.constraint(equalToConstant: 44),
-                closeButton.heightAnchor.constraint(equalToConstant: 44)
-            ]
-            constraints.append(contentsOf: closeButtonConstraints)
-
-        }
-        NSLayoutConstraint.activate(constraints)
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 24),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            closeButton.widthAnchor.constraint(equalToConstant: 44),
+            closeButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
     }
 
     @objc private func closeOnboarding() {
