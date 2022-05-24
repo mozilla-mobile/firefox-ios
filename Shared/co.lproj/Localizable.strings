@@ -210,7 +210,7 @@
 "BreachAlerts.BreachDate" = "Sta fughjita di dati hè accaduta u";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Parolle d’intesa sò state palisate o arrubate dapoi l’ultima mudificazione di a vostra parolla d’intesa. Per prutege stu contu, cunnittetevi à u situ è mudificate a vostra parolla d’intesa.";
+"BreachAlerts.Description" = "Parolle d’intesa sò state palisate o arrubate dapoi l’ultima mudificazione di a vostra parolla d’intesa. Per prutege stu contu, cunnittitevi à u situ è mudificate a vostra parolla d’intesa.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Sapene di più";
@@ -512,7 +512,7 @@
 "FxA.ResendEmail" = "Mandà u messaghji torna";
 
 /* FxA sign in view subtitle */
-"fxa.signin.camera-signin" = "Cunnittetevi cù u vostru apparechju-fotò";
+"fxa.signin.camera-signin" = "Cunnittitevi cù u vostru apparechju-fotò";
 
 /* FxA sign in create account label. */
 "fxa.signin.create-account-pt-1" = "Sincrunizà Firefox trà i vostri apparechji cù un contu.";
@@ -602,7 +602,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "E vostre unghjette da l’altri apparechji s’affissanu quì.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Cunnittetevi per affissà a lista di l’unghjette di i vostri altri apparechji.";
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Cunnittitevi per affissà a lista di l’unghjette di i vostri altri apparechji.";
 
 /* Description for the empty synced tabs 'not yet verified' state in the History Panel */
 "HistoryPanel.EmptySyncedTabsPanelNotYetVerifiedState.Description" = "U vostru contu deve esse verificatu.";
@@ -926,7 +926,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrà";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione Firefox nant’à un altru apparechju, cunnittetevi à u vostru contu Firefox.";
+"LoginsList.NoLoginsFound.Description" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione Firefox nant’à un altru apparechju, cunnittitevi à u vostru contu Firefox.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Alcuna identificazione di cunnessione trova";
