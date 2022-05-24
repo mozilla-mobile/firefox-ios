@@ -32,20 +32,20 @@ class DownloadQueueTests: XCTestCase {
     }
 
     func testEnqueueDownloadShouldAppendDownloadAndTriggerResume() {
-        queue.enqueueDownload(download)
+        queue.enqueue(download)
         XCTAssertTrue(download.downloadTriggered)
     }
 
     func testEnqueueDownloadShouldCallDownloadQueueDidStartDownload() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.delegate = mockQueueDelegate
-        queue.enqueueDownload(download)
+        queue.enqueue(download)
         XCTAssertEqual(mockQueueDelegate.methodCalled, didStartDownload)
     }
 
     func testCancelAllDownload() {
         queue.downloads = [download]
-        queue.cancelAllDownloads()
+        queue.cancelAll()
         XCTAssertTrue(download.downloadCanceled)
     }
 
@@ -106,13 +106,6 @@ class MockDownload: Download {
 
     override func cancel() {
         downloadCanceled = true
-    }
-
-    init() {
-        let urlRequest = URLRequest(url: url)
-        let urlResponse = URLResponse(url: url, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
-
-        super.init(preflightResponse: urlResponse, request: urlRequest)
     }
 
 }
