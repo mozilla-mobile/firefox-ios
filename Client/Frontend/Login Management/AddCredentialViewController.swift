@@ -113,6 +113,15 @@ class AddCredentialViewController: UIViewController {
             return "https://" + website
         }
     }
+
+    private func refreshSaveButtonEnabledStatus() {
+        let enableSave =
+            !(websiteField.text?.isEmpty ?? true) &&
+            !(usernameField.text?.isEmpty ?? true) &&
+            !(passwordField.text?.isEmpty ?? true)
+
+        saveButton.isEnabled = enableSave
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -189,18 +198,15 @@ extension AddCredentialViewController: KeyboardHelperDelegate {
 // MARK: - Cell Delegate
 extension AddCredentialViewController: LoginDetailTableViewCellDelegate {
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell) {
+        refreshSaveButtonEnabledStatus()
+
         guard cell.descriptionLabel == websiteField, let website = websiteField?.text else { return }
         websiteField.text = normalize(website: website)
     }
 
     func textFieldDidChange(_ cell: LoginDetailTableViewCell) {
         // TODO: Add validation if necessary
-        let enableSave =
-            !(websiteField.text?.isEmpty ?? true) &&
-            !(usernameField.text?.isEmpty ?? true) &&
-            !(passwordField.text?.isEmpty ?? true)
-
-        saveButton.isEnabled = enableSave
+        refreshSaveButtonEnabledStatus()
     }
 
     func canPerform(action: Selector, for cell: LoginDetailTableViewCell) -> Bool {
