@@ -282,12 +282,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         // we clear out all of the private tabs
         let exitingPrivateMode = !tabDisplayManager.isPrivate && tabManager.shouldClearPrivateTabs()
 
-        collectionView.layoutSubviews()
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
 
         let toView: UIView
         if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotView(afterScreenUpdates: !exitingPrivateMode) {
             emptyPrivateTabsView.isHidden = true
-            //when exiting private mode don't screenshot the collectionview (causes the UI to hang)
+            // when exiting private mode don't screenshot the collectionview (causes the UI to hang)
             newSnapshot.frame = collectionView.frame
             view.insertSubview(newSnapshot, aboveSubview: fromView)
             collectionView.alpha = 0

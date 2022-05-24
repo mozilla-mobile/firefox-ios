@@ -197,7 +197,7 @@ class BrowserViewController: UIViewController {
 
     @objc func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
-              let newSearchBarPosition = dict[PrefsKeys.KeySearchBarPosition] as? SearchBarPosition,
+              let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
               urlBar != nil else { return }
 
         let newPositionIsBottom = newSearchBarPosition == .bottom
@@ -2266,7 +2266,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let downloadAction = UIAlertAction(title: .ContextMenuDownloadLink, style: .default) { _ in
                 // This checks if download is a blob, if yes, begin blob download process
                 if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                    //if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
+                    // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
                     self.pendingDownloadWebView = currentTab.webView
                     let request = URLRequest(url: url)
                     currentTab.webView?.load(request)

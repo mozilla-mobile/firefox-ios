@@ -8,7 +8,7 @@ import Shared
 class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, ReusableCell {
 
     // MARK: - Properties
-    static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
+    static let ShadowOffsetSize: CGFloat = 2 // The shadow is used to hide the tab separator
 
     var isSelectedTab = false {
         didSet {

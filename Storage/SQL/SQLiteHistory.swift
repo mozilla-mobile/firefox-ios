@@ -402,7 +402,7 @@ extension SQLiteHistory: BrowserHistory {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
         }
 
-        //do a fuzzy delete so dupes can be removed
+        // do a fuzzy delete so dupes can be removed
         let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
         return db.run([query]) >>== {
             return self.db.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
@@ -614,7 +614,7 @@ extension SQLiteHistory: BrowserHistory {
     public func getHistory(matching searchTerm: String,
                            limit: Int,
                            offset: Int,
-                           completion: @escaping ([Site]) -> ()) {
+                           completion: @escaping ([Site]) -> Void) {
 
         let query = """
             SELECT hist.* FROM history hist

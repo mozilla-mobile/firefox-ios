@@ -716,7 +716,7 @@
 "InactiveTabs.TabTray.CloseButtonTitle" = "Chjode tutte l’unghjette inattive";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
-"Increase text size" = "Aummentà a dimensione di u testu";
+"Increase text size" = "Aumentà a dimensione di u testu";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "una stonda fà";
@@ -2120,7 +2120,7 @@
 "SyncState.Clients.Title" = "Clienti alluntanati";
 
 /* Title for Sync status message when synchronization failed to complete */
-"SyncState.Failed.Title" = "Fiascu di a sincrunisazione";
+"SyncState.Failed.Title" = "Fiascu di a sincrunizazione";
 
 /* The History sync component, used in SyncState.Partial.Title */
 "SyncState.History.Title" = "Cronolugia";

@@ -195,7 +195,7 @@ private extension Array where Element == Site {
         var alreadyThere = Set<Site>()
         let uniqueSites = compactMap { (site) -> Site? in
             let siteDomain = site.url.asURL?.shortDomain
-            let shouldAddSite = alreadyThere.first(where: { $0.url.asURL?.shortDomain == siteDomain } ) == nil
+            let shouldAddSite = alreadyThere.first(where: { $0.url.asURL?.shortDomain == siteDomain }) == nil
             // If shouldAddSite or site domain was not found, then insert the site
             guard shouldAddSite || siteDomain == nil else { return nil }
             alreadyThere.insert(site)
