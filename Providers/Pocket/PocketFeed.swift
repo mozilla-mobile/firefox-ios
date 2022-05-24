@@ -44,15 +44,6 @@ class Pocket: FeatureFlaggable, URLCaching {
         }
     }
 
-    // Fetch items from the global pocket feed
-    func sponsoredFeed(items: Int = 2) -> Deferred<[PocketSponsoredStory]> {
-        if shouldUseMockData {
-            return getMockSponsoredFeed()
-        } else {
-            return Deferred(value: [])
-        }
-    }
-
     private func getGlobalFeed(items: Int = 2) -> Deferred<Array<PocketFeedStory>> {
         let deferred = Deferred<Array<PocketFeedStory>>()
 
@@ -125,15 +116,6 @@ class Pocket: FeatureFlaggable, URLCaching {
         }
 
         deferred.fill(Array(PocketFeedStory.parseJSON(list: items).prefix(count)))
-        return deferred
-    }
-
-    private func getMockSponsoredFeed() -> Deferred<[PocketSponsoredStory]> {
-        let deferred = Deferred<[PocketSponsoredStory]>()
-        let path = Bundle(for: type(of: self)).path(forResource: "pocketsponsoredfeed", ofType: "json")
-        let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
-        let response = try! JSONDecoder().decode(PocketSponsoredRequest.self, from: data)
-        deferred.fill(response.spocs)
         return deferred
     }
 }

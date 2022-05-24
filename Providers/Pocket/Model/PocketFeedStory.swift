@@ -11,7 +11,7 @@ import Foundation
  For a sample feed item check ClientTests/pocketglobalfeed.json
  */
 
-struct PocketFeedStory {
+struct PocketFeedStory: Equatable {
     let title: String
     let url: URL
     let domain: String

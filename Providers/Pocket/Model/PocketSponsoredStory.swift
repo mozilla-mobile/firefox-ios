@@ -42,19 +42,19 @@ struct PocketSponsoredRequest: Codable {
     let spocs: [PocketSponsoredStory]
 }
 
-struct Shim: Codable {
+struct Shim: Codable, Equatable {
     let click: String
     let impression: String
     let delete: String
     let save: String
 }
 
-struct Caps: Codable {
+struct Caps: Codable, Equatable {
     let lifetime: Int
     let campaign: Limit
     let flight: Limit
 
-    struct Limit: Codable {
+    struct Limit: Codable, Equatable {
         let count: Int
         let period: Int
     }

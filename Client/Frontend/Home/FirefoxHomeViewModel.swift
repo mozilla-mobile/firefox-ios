@@ -74,6 +74,8 @@ class FirefoxHomeViewModel: FeatureFlaggable {
             with: profile,
             isPrivate: isPrivate)
         self.pocketViewModel = FxHomePocketViewModel(
+            pocketAPI: Pocket(),
+            pocketSponsoredAPI: PocketSponsoredStoriesProvider(),
             isZeroSearch: isZeroSearch)
         self.customizeButtonViewModel = FxHomeCustomizeButtonViewModel()
         self.childViewModels = [headerViewModel,

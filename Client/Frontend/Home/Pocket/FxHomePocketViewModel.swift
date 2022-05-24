@@ -10,7 +10,8 @@ class FxHomePocketViewModel {
 
     // MARK: - Properties
 
-    private let pocketAPI = Pocket()
+    private let pocketAPI: Pocket
+    private let pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface
 
     private let isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
@@ -21,12 +22,10 @@ class FxHomePocketViewModel {
 
     private(set) var pocketStoriesViewModels: [FxPocketHomeHorizontalCellViewModel] = []
 
-    init(pocketStoriesViewModel: [FxPocketHomeHorizontalCellViewModel] = [], isZeroSearch: Bool) {
+    init(pocketAPI: Pocket, pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface, isZeroSearch: Bool) {
         self.isZeroSearch = isZeroSearch
-        self.pocketStoriesViewModels = pocketStoriesViewModel
-        for pocketStoryViewModel in pocketStoriesViewModel {
-            bind(pocketStoryViewModel: pocketStoryViewModel)
-        }
+        self.pocketAPI = pocketAPI
+        self.pocketSponsoredAPI = pocketSponsoredAPI
     }
 
     private func bind(pocketStoryViewModel: FxPocketHomeHorizontalCellViewModel) {
@@ -97,7 +96,7 @@ class FxHomePocketViewModel {
     private func getPocketSites() -> Success {
         pocketAPI
             .globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
-            .both(pocketAPI.sponsoredFeed())
+            .both(pocketSponsoredAPI.fetchSponsoredStories())
             .bindQueue(.main) { [weak self] global, sponsored in
                 // Convert global feed to PocketStory
                 var globalTemp = global.map(PocketStory.init)
@@ -107,12 +106,16 @@ class FxHomePocketViewModel {
 
                 // Making sure we insert a sponsored story at a valid index
                 let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-                sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
-                sponsoredTemp.removeFirst()
+                if let first = sponsoredTemp.first {
+                    globalTemp.insert(first, at: firstIndex)
+                    sponsoredTemp.removeAll(where: { $0 == first })
+                }
 
                 let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-                sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
-                sponsoredTemp.removeFirst()
+                if let second = sponsoredTemp.first {
+                    globalTemp.insert(second, at: secondIndex)
+                    sponsoredTemp.removeAll(where: { $0 == second })
+                }
 
                 // Add the story in the view models list
                 for story in globalTemp {
