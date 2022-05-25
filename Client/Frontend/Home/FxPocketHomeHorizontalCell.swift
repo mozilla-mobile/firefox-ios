@@ -66,7 +66,7 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }()
 
     private lazy var sponsoredIcon: UIImageView = {
-        let image = UIImageView(image: UIImage(named: "sponsored-star"))
+        let image = UIImageView(image: UIImage(named: ImageIdentifiers.sponsoredStar))
         NSLayoutConstraint.activate([
             image.heightAnchor.constraint(equalToConstant: 12),
             image.widthAnchor.constraint(equalToConstant: 12)
