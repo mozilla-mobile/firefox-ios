@@ -35,11 +35,13 @@ class HistoryHighlightsManager {
     ///   - profile: The user's `Profile` info
     ///   - tabs: List of `Tab` to filter open tabs from the highlight item list
     ///   - shouldGroupHighlights: Toggle to support highlight groups in the future for now is set to false
+    ///   - resultCount: The number of results to return
     ///   - completion: completion handler than contains either a list of `HistoryHighlights` if `shouldGroupHighlights` is set to false
     ///   or a combine list of `HistoryHighlights` and `ASGroup<HistoryHighlights>`if is true
     public static func getHighlightsData(with profile: Profile,
                                          and tabs: [Tab],
                                          shouldGroupHighlights: Bool = false,
+                                         resultCount: Int = 9,
                                          completion: @escaping ([HighlightItem]?) -> Void) {
 
         fetchHighlights(with: profile) { highlights in
@@ -56,10 +58,10 @@ class HistoryHighlightsManager {
             if shouldGroupHighlights {
                 buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
                     let collatedHighlights = collateForRecentlySaved(from: groups, and: filterHighlights)
-                    completion(Array(collatedHighlights.prefix(9)))
+                    completion(Array(collatedHighlights.prefix(resultCount)))
                 }
             } else {
-                completion(Array(filterHighlights.prefix(9)))
+                completion(Array(filterHighlights.prefix(resultCount)))
             }
         }
     }
