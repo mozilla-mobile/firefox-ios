@@ -817,6 +817,9 @@
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ ᱨᱮ ᱡᱷᱚᱛᱚ ᱥᱟᱭᱤᱴ ᱢᱮᱴᱟᱣ ᱟᱢ ᱥᱮ ?";
 
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "ᱦᱤᱛᱟᱹᱞ (ᱮᱴᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱠᱟᱱ ᱦᱤᱛᱟᱹᱞ ᱢᱮᱥᱟ ᱠᱟᱛᱮ), ᱠᱩᱠᱤᱡᱽ ᱟᱨ ᱮᱴᱟᱜ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱰᱟᱴᱟ ᱠᱚ ᱚᱪᱚᱜᱽ ᱟᱭ ᱾";
+
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "ᱱᱚᱰᱮ ᱱᱟᱜᱟᱢ ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ";
 
@@ -1635,6 +1638,12 @@
 /* General settings section title */
 "Settings.General.SectionName" = "ᱥᱟᱫᱷᱟᱨᱚᱱ";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱞᱮᱠᱷᱟᱛᱮ ᱪᱮᱫ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Firefox ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱞᱮᱠᱷᱟᱛᱮ ᱪᱮᱫ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "ᱦᱮᱡ ᱨᱩᱟᱹᱲᱚᱜ ᱢᱮ";
 
@@ -1665,11 +1674,17 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "ᱠᱷᱩᱞᱟᱹᱜ ᱠᱟᱱ ᱥᱠᱨᱤᱱ";
 
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱨᱮ ᱢᱮᱥᱟᱭ ᱢᱮ";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱞᱤᱞ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱫᱚᱨᱭᱟ ᱫᱷᱟᱨᱮ ᱵᱩᱨᱩ ᱨᱮᱭᱟᱜ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱚᱱᱟᱡᱽ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
@@ -1682,6 +1697,9 @@
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱞᱟᱴᱷᱟᱪᱤᱛᱟᱹᱨ ᱪᱚᱠᱨᱚ ᱩᱪᱟᱹᱲ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱵᱮᱲᱟ ᱦᱟᱹᱥᱩᱨ ᱵᱩᱨᱩ ᱨᱮᱭᱟᱜ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ᱯᱚᱨᱫᱟ ᱠᱷᱩᱞᱟᱹᱜ ᱠᱟᱱᱟ";
@@ -1703,6 +1721,12 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "ᱛᱷᱟᱨ ᱠᱚ";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "ᱛᱷᱟᱨ ᱠᱚ";
 
 /* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
 "Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱠᱚ";
@@ -1889,6 +1913,9 @@
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "ᱵᱟᱝ ᱩᱥᱨᱟᱹᱣ ᱴᱮᱵᱽᱥ";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "ᱟᱢᱟᱜ ᱴᱮᱵ ᱚᱠᱟ ᱫᱚ ᱵᱟᱨ ᱦᱟᱴ ᱫᱷᱟᱹᱵᱤᱡ ᱵᱟᱝ ᱧᱮᱞ ᱠᱟᱱᱟ ᱚᱱᱟ ᱫᱚ ᱵᱟᱝ ᱪᱟᱹᱞᱩᱜ ᱛᱷᱟᱨ ᱨᱮ ᱩᱪᱟᱹᱲᱚᱜᱼᱟ ᱾";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "ᱴᱮᱵᱽ ᱫᱳᱞ ᱠᱚ";
