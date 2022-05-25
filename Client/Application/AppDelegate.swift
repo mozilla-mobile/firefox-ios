@@ -595,14 +595,6 @@ extension UIApplication {
     static var isInPrivateMode: Bool {
         return BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? false
     }
-
-    var window: UIWindow? {
-        UIApplication.shared.windows.filter { $0.isKeyWindow }.first
-    }
-
-    var statusBarHeight: CGFloat {
-        window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-    }
 }
 
 // Orientation lock for views that use new modal presenter

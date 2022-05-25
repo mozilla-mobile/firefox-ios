@@ -208,13 +208,12 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     }
 
     func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
-        guard let window = UIApplication.shared.window else { return }
+        guard let window = UIWindow.keyWindow else { return }
         for cell in cells {
             // For every story cell get it's frame relative to the window
             let targetRect = cell.superview.map { window.convert(cell.frame, from: $0) } ?? .zero
 
             let ratio = targetRect.visibilityRatio(relativeTo: relativeRect)
-            
         }
     }
 
@@ -228,7 +227,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
             x: collectionView.frame.minX,
             y: collectionView.frame.minY,
             width: collectionView.frame.width,
-            height: collectionView.frame.height + UIApplication.shared.statusBarHeight
+            height: collectionView.frame.height + UIWindow.statusBarHeight
         )
         updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: relativeRect)
     }
@@ -555,7 +554,7 @@ extension FirefoxHomeViewController {
         }
 
         viewModel.pocketViewModel.onScroll = { [weak self] cells in
-            guard let window = UIApplication.shared.window else { return }
+            guard let window = UIWindow.keyWindow else { return }
             self?.updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: window.bounds)
         }
 
