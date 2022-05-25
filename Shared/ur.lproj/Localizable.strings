@@ -46,6 +46,9 @@
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "ٹیبز: %d";
 
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists, the Tab Group item title will be 'Your search for \"video games\"'. The %@ sign is a placeholder for the actual search the user did. */
+"ActivityStream.JumpBackIn.TabGroup.Title" = "آپ نے\"%@\" کی تلاش کی";
+
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
 "ActivityStream.Library.Title" = "حال ہی میں محفوظ شدہ";
 
@@ -147,7 +150,7 @@
 "Bookmark.DetailFieldURL.Label" = "URL";
 
 /* Toggle bookmarks syncing setting */
-"Bookmarks" = "نشانیاں";
+"Bookmarks" = "بک مارکس";
 
 /* A label indicating the action of adding a web page as a bookmark. */
 "Bookmarks.Actions.Add" = "شامل کریں";
@@ -177,7 +180,7 @@
 "Bookmarks.FolderName.Label" = "پوشہ کا نام";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "ڈیسک ٹاپ نشانیاں";
+"Bookmarks.Menu.DesktopBookmarks" = "ڈیسک ٹاپ بک مارکس";
 
 /* A label indicating all bookmarks that were recently added. */
 "Bookmarks.Menu.RecentlyBookmarked" = "حالیہ بک مارک کردہ";
@@ -286,6 +289,9 @@
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ربط شیئر کریں";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "ٹول بار ترتیبات";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "وہ ٹیبز جنہیں آپ نے دو ہفتوں سے نہیں دیکھا ہے یہاں منتقل کر دیا جاتا ہے۔";
@@ -433,11 +439,23 @@
 /* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
 "FirefoxHome.Pocket.DiscoverMore" = "مزید تلاش کریں";
 
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d منٹ";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "فکر انگیز کہانیاں";
+
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "ہٹائیں";
 
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "سائٹس: %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "سیٹنگز";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ہمارے کفیل اور آپ کی رازداری";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "سپانسر شدہ";
@@ -509,7 +527,7 @@
 "FxA.SignIntoSync" = "ہمہ وقت سازی میں سائن ان کریں";
 
 /* Label explaining what sync does */
-"FxA.SyncExplain" = "اپنے ٹیبس، نشانیاں اور پاسورڈ دیگر آلات سے حاصل کریں۔";
+"FxA.SyncExplain" = "اپنے ٹیبس، بک مارکس اور پاسورڈ دیگر آلات سے حاصل کریں۔";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "ابھی ہمہ وقت سازی کریں";
@@ -538,8 +556,11 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ایک آلہ Firefoxہمہ وقت سازی سے منقطع ہوا ہے";
 
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox لوگو، وال پیپر تبدیل کریں۔";
+
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
-"Get your open tabs, bookmarks, and passwords from your other devices." = "اپنے کھلے ٹیبس، نشانیاں اور پاسورڈ دیگر آلات سے حاصل کریں۔";
+"Get your open tabs, bookmarks, and passwords from your other devices." = "اپنے کھلے ٹیبس، بک مارکس اور پاسورڈ دیگر آلات سے حاصل کریں۔";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "مدد";
@@ -673,6 +694,9 @@
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "پچھلا ٹیب دکھائیں";
 
+/* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string is for the button the user must tap in order to turn on the Auto close feature */
+"InactiveTabs.TabTray.AutoClosePrompt.ButtonTitle" = "آٹو کلوز کو آن کریں";
+
 /* In the Tabs Tray, in the Inactive Tabs section, a prompt may come up about auto-closing tabs. This string describes what happens if you elect to turn on this option. */
 "InactiveTabs.TabTray.AutoClosePrompt.Content" = "Firefox ان ٹیبز کو بند کر دے گا جنہیں آپ نے پچھلے مہینے میں نہیں دیکھا۔";
 
@@ -711,6 +735,9 @@
 
 /* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.OpenLinkInNewTab" = "ربط نئی ٹیب میں کھولیں";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "صفحہ محفوظ کریں بطور…";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "بک مارک";
@@ -751,8 +778,17 @@
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "آخری ٹیب دکھائیں۔";
 
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "1-9 ٹیب نمبر دکھائیں";
+
 /* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.UndoCloseTab" = "ٹیب بند کو کالعدم کریں";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "اندر زوم کریں";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "باہر زوم کریں";
 
 /* History tableview section header */
 "Last month" = "پچھلا مہينہ";
@@ -768,6 +804,21 @@
 
 /* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "حذف کریں";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "%@ میں تمام سائٹس کو حذف کریں؟";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "کوئی سابقات نہیں ملی";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "حالیہ بند کیے گئے ٹیب";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "تلاش کی شرائط درج کریں";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "کسی دوسرے آلے سے ہمہ وقت ساز کیا گیا ہے";
 
 /* This label is meant to signify the section containing a group of items that are older than thirty days. */
 "LibraryPanel.Section.Older" = "پرانا";
@@ -878,6 +929,9 @@
 /* Name for Mark as unread button in reader mode
    Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "بطور غیر مطالعہ شدہ نشان زد کریں";
+
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "بک مارک شامل کریں";
 
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "نشانی شامل کردی گئی";
@@ -1612,7 +1666,7 @@
 "Settings.NewTab.Option.BlankPage" = "جالی صفحہ";
 
 /* Option in settings to show bookmarks when you open a new tab */
-"Settings.NewTab.Option.Bookmarks" = "نشانیاں";
+"Settings.NewTab.Option.Bookmarks" = "بک مارکس";
 
 /* The footer for the section to customize top sites in the new tab settings page. */
 "Settings.NewTab.Option.CustomizeFooter" = "سائٹس جو آُپ سب سے زیادہ ملاحظہ کرتے ہیں";
@@ -1627,7 +1681,7 @@
 "Settings.NewTab.Option.FirefoxHome" = "Firefox ابتدائی صفحہ";
 
 /* Option in the settings to turn off recent bookmarks in the Highlights section */
-"Settings.NewTab.Option.HighlightsBookmarks" = "حالیہ نشانیاں";
+"Settings.NewTab.Option.HighlightsBookmarks" = "حالیہ بک مارکس";
 
 /* Option in settings to turn off history in the highlights section */
 "Settings.NewTab.Option.HighlightsHistory" = "دورہ شدہ";
@@ -1910,7 +1964,7 @@
 "SwitchToPBM.KeyCodeTitle" = "نجی براوزنگ موڈ";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
-"Sync your tabs, bookmarks, passwords and more." = "اپنے ٹیبس، نشانیاں، پاسورڈ اور مزید کی ہمہ وقت سازی کریں۔";
+"Sync your tabs, bookmarks, passwords and more." = "اپنے ٹیبس، بک مارکس، پاسورڈ اور مزید کی ہمہ وقت سازی کریں۔";
 
 /* Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in. */
 "Sync your tabs, passwords and more." = "اپنے ٹیبس ، پاسورڈ اور مزید کی ہمہ وقت سازی کریں۔";
@@ -1931,7 +1985,7 @@
 "Synced Tabs" = "سینک ہو چکے ٹیبز";
 
 /* The Bookmark sync component, used in SyncState.Partial.Title */
-"SyncState.Bookmark.Title" = "نشانیاں";
+"SyncState.Bookmark.Title" = "بک مارکس";
 
 /* The Remote Clients sync component, used in SyncState.Partial.Title */
 "SyncState.Clients.Title" = "بعید صارفین";

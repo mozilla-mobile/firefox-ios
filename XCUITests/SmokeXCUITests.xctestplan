@@ -156,6 +156,7 @@
         "SyncUITests\/testTypeOnGivenFields()",
         "SyncUITests\/testUIFromSettings()",
         "TabCounterTests",
+        "TabsPerformanceTest",
         "ThirdPartySearchTest",
         "ToolbarTests",
         "TopTabsTest\/testAddTabFromContext()",
