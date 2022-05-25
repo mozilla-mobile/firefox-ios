@@ -31,20 +31,26 @@ class FxPocketHomeHorizontalCellViewModel {
 class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
-    let heroImageView: UIImageView = .build { imageView in
+    private lazy var heroImageView: UIImageView = {
+        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
         imageView.backgroundColor = .clear
-    }
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
 
-    private let titleLabel: UILabel = .build { label in
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                    maxSize: FxHomeHorizontalCellUX.titleFontSize)
         label.numberOfLines = 2
-    }
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     private lazy var sponsoredStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [sponsoredIcon, sponsoredLabel])
@@ -62,6 +68,8 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = .FirefoxHomepage.Pocket.Sponsored
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -75,12 +83,15 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         return image
     }()
 
-    private let descriptionLabel: UILabel = .build { label in
+    private lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    maxSize: FxHomeHorizontalCellUX.siteFontSize)
         label.textColor = .label
-    }
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
@@ -119,7 +130,6 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.text = viewModel.description
 
         heroImageView.sd_setImage(with: viewModel.imageURL)
-        sponsoredLabel.text = "Sponsored"
         sponsoredStack.isHidden = viewModel.sponsor == nil
         descriptionLabel.font = viewModel.sponsor == nil
         ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
