@@ -4,26 +4,58 @@
 
 import UIKit
 
-struct OnboardingCardViewModel {
-    let image: UIImage?
-    let title: String
-    let description: String?
-    let primaryAction: String
-    let secondaryAction: String?
-    let a11yRoot: String
+protocol OnboardingCardProtocol {
+    var cardType: IntroViewModel.OnboardingCards { get set }
+    var image: UIImage? { get set }
+    var title: String { get set }
+    var description: String? { get set }
+    var primaryAction: String { get set }
+    var secondaryAction: String? { get set }
+    var a11yIdRoot: String { get set }
 
-    init() {
-        image = UIImage(named: "tour-Welcome")
-        title = "Really long title to check if it goes into multiple lines"
-        description = "Same test as above but for Really long description to check if it goes into multiple lines and more important if the card height adjust "
-        primaryAction = "Primary"
-        secondaryAction = "Secondary"
-        a11yRoot = "test"
+    init(cardType: IntroViewModel.OnboardingCards,
+         image: UIImage?,
+         title: String,
+         description: String?,
+         primaryAction: String,
+         secondaryAction: String?,
+         a11yIdRoot: String)
+}
+
+extension OnboardingCardProtocol {
+    init(cardType: IntroViewModel.OnboardingCards,
+         image: UIImage?,
+         title: String,
+         description: String?,
+         primaryAction: String,
+         secondaryAction: String?,
+         a11yIdRoot: String) {
+
+        self.init(cardType: cardType,
+                  image: image,
+                  title: title,
+                  description: description,
+                  primaryAction: primaryAction,
+                  secondaryAction: secondaryAction,
+                  a11yIdRoot: a11yIdRoot)
     }
 }
 
+struct OnboardingCardViewModel: OnboardingCardProtocol {
+    var cardType: IntroViewModel.OnboardingCards
+    var image: UIImage?
+    var title: String
+    var description: String?
+    var primaryAction: String
+    var secondaryAction: String?
+    var a11yIdRoot: String
+}
+
 class OnboardingCardView: UIView, CardTheme {
-    let viewModel: OnboardingCardViewModel
+    var viewModel: OnboardingCardProtocol
+
+    var nextClosure: (() -> Void)?
+    var primaryActionClosure: (() -> Void)?
 
     private var fxTextThemeColor: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
@@ -44,7 +76,7 @@ class OnboardingCardView: UIView, CardTheme {
 
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "\(self.viewModel.a11yRoot)ImageView"
+        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -56,7 +88,7 @@ class OnboardingCardView: UIView, CardTheme {
             withTextStyle: .title1,
             maxSize: 58)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yRoot)TitleLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
@@ -68,7 +100,7 @@ class OnboardingCardView: UIView, CardTheme {
             withTextStyle: .body,
             maxSize: 53)
         label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yRoot)DescriptionLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
     }
 
     private lazy var primaryButton: UIButton = .build { button in
@@ -78,7 +110,8 @@ class OnboardingCardView: UIView, CardTheme {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
         button.titleLabel?.textAlignment = .center
-        button.accessibilityIdentifier = "\(self.viewModel.a11yRoot)PrimaryButton"
+        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)PrimaryButton"
     }
 
     private lazy var secondaryButton: UIButton = .build { button in
@@ -88,22 +121,23 @@ class OnboardingCardView: UIView, CardTheme {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
         button.titleLabel?.textAlignment = .center
-        button.accessibilityIdentifier = "\(self.viewModel.a11yRoot)SecondaryButton"
+        button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)SecondaryButton"
     }
 
-    init(viewModel: OnboardingCardViewModel) {
+    init(viewModel: OnboardingCardProtocol) {
         self.viewModel = viewModel
 
         super.init(frame: .zero)
         self.setupView()
-        self.updateLayout()
+        self.updateLayout(viewModel: viewModel)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupView() {
+    private func setupView() {
         contentStackView.addArrangedSubview(imageView)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
@@ -116,16 +150,17 @@ class OnboardingCardView: UIView, CardTheme {
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor),
-            contentStackView.leftAnchor.constraint(equalTo: leftAnchor),
+            contentStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 24),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            contentStackView.rightAnchor.constraint(equalTo: rightAnchor),
+            contentStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -24),
 
             primaryButton.heightAnchor.constraint(equalToConstant: 45),
             secondaryButton.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
 
-    func updateLayout() {
+    func updateLayout(viewModel: OnboardingCardProtocol) {
+        self.viewModel = viewModel
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
 
@@ -134,5 +169,13 @@ class OnboardingCardView: UIView, CardTheme {
         imageView.image = viewModel.image
         primaryButton.setTitle(viewModel.primaryAction, for: .normal)
         secondaryButton.setTitle(viewModel.secondaryAction, for: .normal)
+    }
+
+    @objc func primaryAction() {
+        primaryActionClosure?()
+    }
+
+    @objc func secondaryAction() {
+        nextClosure?()
     }
 }

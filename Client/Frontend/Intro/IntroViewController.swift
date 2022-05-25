@@ -8,7 +8,7 @@ import Shared
 
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
-    let viewModel = IntroViewModel()
+    var viewModel = IntroViewModel(currentCard: IntroViewModel.OnboardingCards.welcome)
 
 //    private var fxBackgroundThemeColor: UIColor {
 //        return theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
@@ -46,7 +46,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
     }
 
     private lazy var onboardingCard: OnboardingCardView = {
-        let viewModel = OnboardingCardViewModel()
+        let viewModel = self.viewModel.getCardViewModel()
         let cardView = OnboardingCardView(viewModel: viewModel)
         cardView.translatesAutoresizingMaskIntoConstraints = false
         return cardView
@@ -188,11 +188,36 @@ class IntroViewController: UIViewController, OnViewDismissable {
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+
+        onboardingCard.nextClosure = {
+            guard self.viewModel.currentCard != .signSync else {
+                self.didFinishClosure?(self, nil)
+                return
+            }
+//            self.viewModel.showNextCard()
+//            self.onboardingCard.updateLayout(viewModel: self.viewModel.getCardViewModel()
+            self.showNextCard()
+        }
+
+        onboardingCard.primaryActionClosure = {
+            switch self.viewModel.currentCard {
+            case .welcome:
+                self.showNextCard()
+            default:
+                break
+            }
+        }
     }
 
     @objc private func closeOnboarding() {
-        print("Closing onboarding")
+        didFinishClosure?(self, nil)
     }
+
+    private func showNextCard() {
+        self.viewModel.showNextCard()
+        self.onboardingCard.updateLayout(viewModel: self.viewModel.getCardViewModel())
+    }
+
 }
 
 // MARK: UIViewController setup
