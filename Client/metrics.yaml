@@ -11,7 +11,88 @@
 
 ---
 $schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
-
+# Accessibility
+accessibility:
+  voice_over:
+    type: event
+    description: |
+      Records the Voice Over feature
+    extra_keys:
+      is_running:
+        type: string
+        description: |
+          If is running or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-17"
+  switch_control:
+    type: event
+    description: |
+      Records the Switch Control feature
+    extra_keys:
+      is_running:
+        type: string
+        description: |
+          If is running or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-17"
+  reduce_transparency:
+    type: event
+    description: |
+      Records the Reduce Transparency feature
+    extra_keys:
+      is_enabled:
+        type: string
+        description: |
+          If is enabled or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-17"
+  reduce_motion:
+    type: event
+    description: |
+      Records the Reduce Motion feature
+    extra_keys:
+      is_enabled:
+        type: string
+        description: |
+          If is enabled or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-17"
+  invert_colors:
+    type: event
+    description: |
+      Records the Invert Colors feature
+    extra_keys:
+      is_enabled:
+        type: string
+        description: |
+          If is enabled or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10839
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-17"
 # App menu
 app_menu:
   library:

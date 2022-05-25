@@ -571,6 +571,12 @@
 /* Toggle logins syncing setting */
 "Logins" = "Входящи данни";
 
+/* Message shown when you enter Logins & Passwords without having a device passcode set. */
+"Logins.DevicePasscodeRequired.Message" = "За да бъдат запазвани и за да разрешите автоматичното попълване на регистрации, включете Face ID, Touch ID или паролата на устройството.";
+
+/* Message shown when you enter Logins & Passwords for the first time. */
+"Logins.Onboarding.Message" = "Вашите регистрациите вече са защитени с Face ID, Touch ID или паролата на устройството.";
+
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Последна промяна";
 
