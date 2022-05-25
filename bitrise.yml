@@ -47,6 +47,8 @@ workflows:
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData"
             echo "show files"
             ls DerivedData/
+
+            ls DerivedData/Build/Products
     - script@1.1:
         title: Compress Derived Data
         is_always_run: true
@@ -55,7 +57,7 @@ workflows:
             set -euxo pipefail
             echo "-- compress --"
                 
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.0-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/XCUITests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.0-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec*"
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/XCUITests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec*"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
