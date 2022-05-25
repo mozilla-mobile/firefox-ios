@@ -210,7 +210,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
         guard let window = UIApplication.shared.window else { return }
         for cell in cells {
-            // For every story cell get it's frame realtive to the window
+            // For every story cell get it's frame relative to the window
             let targetRect = cell.superview.map { window.convert(cell.frame, from: $0) } ?? .zero
 
             let ratio = targetRect.visibilityRatio(relativeTo: relativeRect)
