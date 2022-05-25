@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import SwiftUI
-import Nimbus
+import FocusAppServices
 
 struct InternalExperimentsSettingsView {
     let availableExperiments: [AvailableExperiment]

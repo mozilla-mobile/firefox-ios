@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "53d2f85c6d2e579859605cbc73cc7b194484f83b",
-          "version": "91.0.0"
+          "revision": "cf57f9f45095026545519876c0d7ee18d0626a13",
+          "version": "93.2.0"
         }
       },
       {
@@ -39,7 +39,7 @@
       },
       {
         "package": "SnapKit",
-        "repositoryURL": "https://github.com/SnapKit/SnapKit.git",
+        "repositoryURL": "https://github.com/SnapKit/SnapKit",
         "state": {
           "branch": null,
           "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",

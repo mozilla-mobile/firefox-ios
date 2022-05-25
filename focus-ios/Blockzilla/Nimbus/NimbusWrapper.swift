@@ -4,9 +4,8 @@
 
 import os.log
 
-import RustLog
-import Viaduct
-import Nimbus
+import Foundation
+import FocusAppServices
 
 let NimbusUseStagingServerDefault = "NimbusUseStagingServer"
 let NimbusUsePreviewCollectionDefault = "NimbusUsePreviewCollection"

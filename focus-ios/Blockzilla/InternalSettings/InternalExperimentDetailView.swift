@@ -4,7 +4,7 @@
 
 import Combine
 import SwiftUI
-import Nimbus
+import FocusAppServices
 
 private let notEnrolledBranchSlug = "not-enrolled"
 

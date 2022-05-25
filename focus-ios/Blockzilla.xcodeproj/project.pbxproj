@@ -42,9 +42,7 @@
 		30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFF97F21810BF20055707C /* SearchSuggestClient.swift */; };
 		31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */; };
 		3AEC0B3E267DE30A007B7850 /* URIFixupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */; };
-		45D96F3127B196E100096BC0 /* Nimbus in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3027B196E100096BC0 /* Nimbus */; };
-		45D96F3327B196E100096BC0 /* RustLog in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3227B196E100096BC0 /* RustLog */; };
-		45D96F3527B196E100096BC0 /* Viaduct in Frameworks */ = {isa = PBXBuildFile; productRef = 45D96F3427B196E100096BC0 /* Viaduct */; };
+		45E8FFE72828DE4A0027A8F5 /* FocusAppServices in Frameworks */ = {isa = PBXBuildFile; productRef = 45E8FFE62828DE4A0027A8F5 /* FocusAppServices */; };
 		4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1284851FC5E242001A775B /* TPSettingsTest.swift */; };
 		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
 		4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */; };
@@ -1080,16 +1078,14 @@
 			files = (
 				F85F7A292655AD5800395515 /* SnapKit in Frameworks */,
 				CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */,
+				45E8FFE72828DE4A0027A8F5 /* FocusAppServices in Frameworks */,
 				C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */,
 				F85F7A2F2655AD5800395515 /* Telemetry in Frameworks */,
 				F8B92FBE279EC73700183998 /* Sentry in Frameworks */,
 				C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */,
-				45D96F3127B196E100096BC0 /* Nimbus in Frameworks */,
-				45D96F3327B196E100096BC0 /* RustLog in Frameworks */,
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				F85F7A2B2655AD5800395515 /* Fuzi in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
-				45D96F3527B196E100096BC0 /* Viaduct in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1856,12 +1852,10 @@
 				F85F7A2E2655AD5800395515 /* Telemetry */,
 				F8B92FBD279EC73700183998 /* Sentry */,
 				CDFA746E27ABD43D0055FE55 /* Glean */,
-				45D96F3027B196E100096BC0 /* Nimbus */,
-				45D96F3227B196E100096BC0 /* RustLog */,
-				45D96F3427B196E100096BC0 /* Viaduct */,
 				C8FB1E6327F59D9C00C60DC6 /* UIHelpers */,
 				C8FB1E6527F5A79300C60DC6 /* DesignSystem */,
 				C871585F27FB29AC006224BB /* Onboarding */,
+				45E8FFE62828DE4A0027A8F5 /* FocusAppServices */,
 				C82F45F628193EE8000D7D84 /* AppShortcuts */,
 			);
 			productName = Blockzilla;
@@ -2040,9 +2034,9 @@
 				F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F8324CB8264DC8ED007E4BFA /* XCRemoteSwiftPackageReference "Fuzi" */,
 				F8324E0726556E45007E4BFA /* XCRemoteSwiftPackageReference "telemetry-ios" */,
-				1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
 				F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */,
+				45E8FFE52828DE4A0027A8F5 /* XCRemoteSwiftPackageReference "rust-components-swift" */,
 			);
 			productRefGroup = E4BF2DD41BACE8CA00DA9D68 /* Products */;
 			projectDirPath = "";
@@ -5603,12 +5597,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
+		45E8FFE52828DE4A0027A8F5 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 91.0.0;
+				version = 93.2.0;
 			};
 		};
 		CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -5654,20 +5648,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		45D96F3027B196E100096BC0 /* Nimbus */ = {
+		45E8FFE62828DE4A0027A8F5 /* FocusAppServices */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Nimbus;
-		};
-		45D96F3227B196E100096BC0 /* RustLog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = RustLog;
-		};
-		45D96F3427B196E100096BC0 /* Viaduct */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B56C58327221B1C00BB1152 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
-			productName = Viaduct;
+			package = 45E8FFE52828DE4A0027A8F5 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
+			productName = FocusAppServices;
 		};
 		C82F45F628193EE8000D7D84 /* AppShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
