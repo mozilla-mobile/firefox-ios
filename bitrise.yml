@@ -44,7 +44,7 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
                 
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"     
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"     
             echo "show files"
             ls DerivedData/
     - script@1.1:
@@ -137,7 +137,7 @@ workflows:
                 echo "-- test-without-building --"
                 xcrun simctl list
 
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan SmokeXCUITests "test-without-building"
     #- xcode-test@3.1:
     #steps:
     #- xcode-test@3.1:
