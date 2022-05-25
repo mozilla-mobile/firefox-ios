@@ -55,7 +55,7 @@ workflows:
             set -euxo pipefail
             echo "-- compress --"
                 
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.0-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/XCUITests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.0-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec*" "/Users/vagrant/git"
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.0-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/XCUITests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.0-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec*"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
