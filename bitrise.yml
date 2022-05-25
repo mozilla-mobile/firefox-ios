@@ -1,7 +1,151 @@
-format_version: '6'
+format_version: '8'
 default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: ios
+pipelines:
+  pipeline_multiple_shards:
+    stages:
+      - stage_1: {}
+      - stage_2: {}
+stages:
+  stage_1:
+    workflows:
+      - configure_build: {}
+  stage_2:
+    workflows:
+      - build_and_test_1: {}
+      - build_and_test_2: {}
 workflows:
+  configure_build:
+    #- deploy-to-bitrise-io@2: { }
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    # - 4_A_xcode_build_and_test_Fennec
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
+        title: Bitrise Test Plan Sharder
+        inputs:
+        - xcode_project: Client.xcodeproj
+        - target: Client
+        - shards: '2'
+        - scheme: Fennec_Enterprise_XCUITests
+        - test_plan: SmokeXCUITests.xctestplan
+        - debug_mode: 'true'
+        - test_path: ''
+        - file_type: ".swift"
+    - script@1.1:
+        title: Build for Testing
+        inputs:
+        - content: |+
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            mkdir DerivedData
+                
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" "-configuration" "Fennec" "CODE_SIGNING_ALLOWED=NO" "-destination" "id=A48E6C50-5C88-4C57-BDA6-D7312B605E0D" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"     
+            echo "show files"
+            ls DerivedData/
+    - script@1.1:
+        title: Compress Derived Data
+        is_always_run: true
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- compress --"
+                
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.0-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/XCUITests/Smoketest2.xctestplan"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
+  build_and_test_1:
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1.*
+    - script@1.1:
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+                
+            echo "$BITRISE_ARTIFACT_PATHS"
+                
+            echo "-- unzip -- "
+            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            echo "show dir"
+            ls
+    - script@1.1:
+          title: Test without Building
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                set -ex 
+                
+                ls -la
+                mv ./Users/vagrant/git/* .
+                ls -la
+                
+                #rm Smoketest2.xctestplan
+                #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
+                #chmod 644 Smoketest2.xctestplan
+                
+                echo "-- test-without-building --"
+
+                xcodebuild -scheme Fennec_Enterprise_XCUITests -showdestinations
+                xcodebuild -scheme Fennec -showdestinations
+
+                #xcodebuild -showsdks
+                
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test
+    - deploy-to-bitrise-io@2: { }
+  build_and_test_2:
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1.*
+    - script@1.1:
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+                
+            echo "$BITRISE_ARTIFACT_PATHS"
+                
+            echo "-- unzip -- "
+            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            echo "show dir"
+            ls
+    - script@1.1:
+          title: Test without Building
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                set -ex 
+                
+                ls -la
+                mv ./Users/vagrant/git/* .
+                ls -la
+                
+                #rm SmokeXCUITests.xctestplan
+                #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
+                #chmod 644 Smoketest2.xctestplan
+                echo "-- test-without-building --"
+                xcrun simctl list
+
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
+    #- xcode-test@3.1:
+    #steps:
+    #- xcode-test@3.1:
+    #    inputs:
+    #    - scheme: Fennec_Enterprise_XCUITests
+    #    - xcodebuild_test_options: "-testPlan Smoketest2"
+    - deploy-to-bitrise-io@2: { }
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
@@ -90,10 +234,10 @@ workflows:
         inputs:
         - scheme: Fennec
         - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-    - xcode-test@3.1:
-        inputs:
-        - scheme: Fennec
-        - simulator_device: iPhone 8
+    #- xcode-test@3.1:
+    #    inputs:
+    #    - scheme: Fennec
+    #    - simulator_device: iPhone 8
   5_deploy_and_slack:
     steps:
     - deploy-to-bitrise-io@1.9: {}
@@ -740,7 +884,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   SPM_Deploy_Beta_Only:
     steps:
@@ -837,7 +981,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.2.x
+        stack: osx-xcode-13.1.x
         machine_type_id: g2.8core
   SPM_Nightly_Beta_Only:
     steps:
@@ -953,6 +1097,12 @@ app:
   - opts:
       is_expand: false
     BITRISE_BETA_VERSION: '101.1'
+
+meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+        machine_type_id: g2.4core
+
 trigger_map:
 - push_branch: main
   workflow: RunUnitTests
@@ -961,6 +1111,8 @@ trigger_map:
 - push_branch: v101.1
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  pipeline: pipeline_multiple_shards
+- push_branch: '*'
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   workflow: RunUnitTests
