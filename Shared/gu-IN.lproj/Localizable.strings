@@ -209,8 +209,17 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "પૃષ્ઠ લોડ કરી શકાયું નથી.";
 
+/* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
+"CoverSheet.v22.DarkMode.Description" = "iOS 13 વપરાશકર્તાઓ માટે, જ્યારે તમારો ફોન ડાર્ક મોડ પર સેટ કરેલો છે ત્યારેFirefox હવે આપમેળે ડાર્ક થીમ પર સ્વિચ કરે છે. આ વર્તન બદલવા માટે, સેટિંગ્સ> થીમ પર જાઓ.";
+
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "ડાર્ક થીમમાં હવે ડાર્ક કીબોર્ડ અને ડાર્ક સ્પ્લેશ સ્ક્રીન શામેલ છે.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "સેટિંગ્સ પર જાઓ";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "જાહેરાત ટ્રેકિંગ સામે રક્ષણ";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "એક ખાતુ બનાવો";
@@ -573,6 +582,12 @@
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "પાસવર્ડ સાચવો માટે %@?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ માટે લૉગિન અપડેટ કરો છો?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ માટે લૉગિન %1$@અપડેટ કરો છો?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "લૉગિન સાચવો";
@@ -1253,6 +1268,9 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "સિરી શૉર્ટકટ્સ";
 
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "ઠીક છે, સમજાઇ ગયું";
+
 /* Header description for tracking protection options section where Basic/Strict block list can be selected */
 "Settings.TrackingProtection.BlockListsHeader" = "તમે બ્રાઉઝિંગ પ્રવૃત્તિને ટ્રૅક કરી શકે તેવા વેબ ઘટકોને અવરોધિત કરવા માટે Firefox જે સૂચિનો ઉપયોગ કરશે તે પસંદ કરી શકો છો.";
 
@@ -1264,6 +1282,9 @@
 
 /* Explanation of strict mode. */
 "Settings.TrackingProtection.Info.StrictTitle" = "મજબૂત સુરક્ષા આપે છે, પરંતુ કેટલીક સાઇટ્સ તૂટી શકે છે.";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "વધુ જાણો";
 
 /* 'More Info' link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.MoreInfo" = "વધુ માહિતી…";
