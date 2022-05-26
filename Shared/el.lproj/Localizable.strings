@@ -346,6 +346,9 @@
    Title for default search engine settings section. */
 "Default Search Engine" = "Προεπιλεγμένη μηχανή αναζήτησης";
 
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Κλείσιμο";
+
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Ρυθμίσεις εμφάνισης";
 
