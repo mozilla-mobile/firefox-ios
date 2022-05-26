@@ -213,7 +213,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
             // For every story cell get it's frame relative to the window
             let targetRect = cell.superview.map { window.convert(cell.frame, from: $0) } ?? .zero
 
-            let ratio = targetRect.visibilityRatio(relativeTo: relativeRect)
+            // TODO: If visibility ratio is over 50% sponsored content can be marked as seen by the user
+            let _ = targetRect.visibilityRatio(relativeTo: relativeRect)
         }
     }
 
