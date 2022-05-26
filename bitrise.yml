@@ -92,7 +92,9 @@ workflows:
                 ls -la
                 pwd
 
-                #mv ./Users/vagrant/git/XCUITests/Smoketest2.xctestplan .
+                ls ./Users/vagrant/git/XCUITests
+
+                mv ./Users/vagrant/git/XCUITests/Smoketest2.xctestplan ./Users/vagrant/git/Smoke2.xctestplan
                 
                 #rm Smoketest2.xctestplan
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
@@ -104,7 +106,7 @@ workflows:
 
                 #xcodebuild -showsdks
                 
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test-without-building
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoke2" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test-without-building
     - deploy-to-bitrise-io@2: { }
   build_and_test_2:
     steps:
@@ -139,7 +141,7 @@ workflows:
 
                 pwd
 
-                #mv ./Users/vagrant/git/XCUITests/SmokeXCUITests.xctestplan .
+                mv ./Users/vagrant/git/XCUITests/SmokeXCUITests.xctestplan ./Users/vagrant/git/Smoke.xctestplan
                 
                 #rm SmokeXCUITests.xctestplan
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
@@ -147,7 +149,7 @@ workflows:
                 echo "-- test-without-building --"
                 xcrun simctl list
 
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan SmokeXCUITests "test-without-building"
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan Smoke "test-without-building"
     #- xcode-test@3.1:
     #steps:
     #- xcode-test@3.1:
