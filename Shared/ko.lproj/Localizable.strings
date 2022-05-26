@@ -346,6 +346,9 @@
    Title for default search engine settings section. */
 "Default Search Engine" = "기본 검색 엔진";
 
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "닫기";
+
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "화면 설정";
 
