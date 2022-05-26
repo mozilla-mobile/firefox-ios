@@ -92,7 +92,7 @@ workflows:
                 ls -la
                 pwd
 
-                mv ./Users/vagrant/git/XCUITests/Smoketest2.xctestplan .
+                #mv ./Users/vagrant/git/XCUITests/Smoketest2.xctestplan .
                 
                 #rm Smoketest2.xctestplan
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
@@ -139,7 +139,7 @@ workflows:
 
                 pwd
 
-                mv ./Users/vagrant/git/XCUITests/SmokeXCUITests.xctestplan .
+                #mv ./Users/vagrant/git/XCUITests/SmokeXCUITests.xctestplan .
                 
                 #rm SmokeXCUITests.xctestplan
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
