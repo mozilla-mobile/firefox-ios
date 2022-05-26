@@ -75,20 +75,12 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         $0.adjustsFontForContentSizeCategory = true
         $0.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                 maxSize: FxHomeHorizontalCellUX.siteFontSize)
-        $0.textColor = .label
     }
-
-    // MARK: - Variables
-    var notificationCenter: NotificationCenter = NotificationCenter.default
 
     // MARK: - Inits
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
-
-        applyTheme()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
@@ -96,16 +88,11 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
         heroImageView.image = nil
         descriptionLabel.text = nil
         titleLabel.text = nil
-        applyTheme()
     }
 
     // MARK: - Helpers
@@ -122,10 +109,12 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         : DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
                                                             maxSize: FxHomeHorizontalCellUX.siteFontSize)
 
-        descriptionLabel.textColor = viewModel.sponsor == nil ? .label : .secondaryLabel
+        titleLabel.textColor = .defaultTextColor
+        descriptionLabel.textColor = viewModel.sponsor == nil ? .defaultTextColor : .sponsoredDescriptionColor
     }
 
     private func setupLayout() {
+        contentView.backgroundColor = .cellBackground
         contentView.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
         contentView.layer.shadowRadius = FxHomeHorizontalCellUX.stackViewShadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: FxHomeHorizontalCellUX.stackViewShadowOffset)
@@ -157,25 +146,33 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }
 }
 
-// MARK: - Theme
-extension FxPocketHomeHorizontalCell: NotificationThemeable {
-    func applyTheme() {
-        if LegacyThemeManager.instance.currentName == .dark {
-            [titleLabel, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
-        } else {
-            [titleLabel, descriptionLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
-        }
-        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
-    }
-}
+// MARK: -FxPocketHomeHorizontalCell Colors based on interface trait
 
-// MARK: - Notifiable
-extension FxPocketHomeHorizontalCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-            case .DisplayThemeChanged:
-                applyTheme()
-            default: break
+fileprivate extension UIColor {
+    static let defaultTextColor: UIColor = .init { (traits) -> UIColor in
+        switch traits.userInterfaceStyle {
+            case .dark:
+                return UIColor.Photon.LightGrey10
+            default:
+                return UIColor.Photon.DarkGrey90
+        }
+    }
+
+    static let sponsoredDescriptionColor: UIColor = .init { (traits) -> UIColor in
+        switch traits.userInterfaceStyle {
+            case .dark:
+                return UIColor.Photon.LightGrey80
+            default:
+                return UIColor.Photon.LightGrey90
+        }
+    }
+
+    static let cellBackground: UIColor = .init { (traits) -> UIColor in
+        switch traits.userInterfaceStyle {
+            case .dark:
+                return UIColor.Photon.DarkGrey30
+            default:
+                return .white
         }
     }
 }
