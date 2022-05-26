@@ -57,7 +57,7 @@ workflows:
             set -euxo pipefail
             echo "-- compress --"
                 
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/XCUITests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec*"
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/XCUITests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec*" "$BITRISE_SOURCE_DIR/Client/"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
@@ -90,6 +90,9 @@ workflows:
                 ls -la
                 mv ./Users/vagrant/git/* .
                 ls -la
+                pwd
+
+                mv ./Users/vagrant/git/XCUITests/Smoketest2* .
                 
                 #rm Smoketest2.xctestplan
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
@@ -132,6 +135,10 @@ workflows:
                 ls -la
                 mv ./Users/vagrant/git/* .
                 ls -la
+
+                pwd
+
+                mv ./Users/vagrant/git/XCUITests/SmokeXCUITests.xctestplan
                 
                 #rm SmokeXCUITests.xctestplan
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
