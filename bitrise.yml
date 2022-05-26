@@ -102,11 +102,11 @@ workflows:
                 
                 echo "-- test-without-building --"
 
-                xcodebuild -scheme Fennec_Enterprise_XCUITests -showdestinations
+                #xcodebuild -scheme Fennec_Enterprise_XCUITests -showdestinations
 
                 #xcodebuild -showsdks
                 
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoke2" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test-without-building
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 8,OS=latest" test-without-building
     - deploy-to-bitrise-io@2: { }
   build_and_test_2:
     steps:
@@ -137,7 +137,7 @@ workflows:
                 ls -la
                 ls ./Users/vagrant/git/XCUITests
                 mv ./Users/vagrant/git/XCUITests/* .
-                mv ./Users/vagrant/git/* 
+                mv ./Users/vagrant/git/* .
                 ls -la
 
                 pwd
@@ -150,7 +150,7 @@ workflows:
                 echo "-- test-without-building --"
                 xcrun simctl list
 
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan Smoke "test-without-building"
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan SmokeXCUITests "test-without-building"
     #- xcode-test@3.1:
     #steps:
     #- xcode-test@3.1:
