@@ -2175,7 +2175,8 @@ extension BrowserViewController {
     }
 
     private func showProperIntroVC() {
-        let introViewController = IntroViewController()
+        let introViewModel = IntroViewModel()
+        let introViewController = IntroViewController(viewModel: introViewModel)
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             controller.dismiss(animated: true) {

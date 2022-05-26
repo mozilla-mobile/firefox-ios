@@ -12,33 +12,6 @@ protocol OnboardingCardProtocol {
     var primaryAction: String { get set }
     var secondaryAction: String? { get set }
     var a11yIdRoot: String { get set }
-
-    init(cardType: IntroViewModel.OnboardingCards,
-         image: UIImage?,
-         title: String,
-         description: String?,
-         primaryAction: String,
-         secondaryAction: String?,
-         a11yIdRoot: String)
-}
-
-extension OnboardingCardProtocol {
-    init(cardType: IntroViewModel.OnboardingCards,
-         image: UIImage?,
-         title: String,
-         description: String?,
-         primaryAction: String,
-         secondaryAction: String?,
-         a11yIdRoot: String) {
-
-        self.init(cardType: cardType,
-                  image: image,
-                  title: title,
-                  description: description,
-                  primaryAction: primaryAction,
-                  secondaryAction: secondaryAction,
-                  a11yIdRoot: a11yIdRoot)
-    }
 }
 
 struct OnboardingCardViewModel: OnboardingCardProtocol {
@@ -49,9 +22,30 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
     var primaryAction: String
     var secondaryAction: String?
     var a11yIdRoot: String
+
+    init(cardType: IntroViewModel.OnboardingCards,
+         image: UIImage?,
+         title: String,
+         description: String?,
+         primaryAction: String,
+         secondaryAction: String?,
+         a11yIdRoot: String) {
+
+        self.cardType = cardType
+        self.image = image
+        self.title = title
+        self.description = description
+        self.primaryAction = primaryAction
+        self.secondaryAction = secondaryAction
+        self.a11yIdRoot = a11yIdRoot
+    }
 }
 
-class OnboardingCardView: UIView, CardTheme {
+class OnboardingCardViewController: UIViewController, CardTheme {
+
+    struct UX {
+    }
+
     var viewModel: OnboardingCardProtocol
 
     var nextClosure: (() -> Void)?
@@ -128,7 +122,7 @@ class OnboardingCardView: UIView, CardTheme {
     init(viewModel: OnboardingCardProtocol) {
         self.viewModel = viewModel
 
-        super.init(frame: .zero)
+        super.init(nibName: nil, bundle: nil)
         self.setupView()
         self.updateLayout(viewModel: viewModel)
     }
@@ -142,17 +136,37 @@ class OnboardingCardView: UIView, CardTheme {
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
         contentStackView.setCustomSpacing(40, after: descriptionLabel)
-
         contentStackView.addArrangedSubview(primaryButton)
         contentStackView.addArrangedSubview(secondaryButton)
 
-        addSubviews(contentStackView)
+        scrollView.addSubview(contentStackView)
+        view.addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: topAnchor),
-            contentStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 24),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            contentStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -24),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scrollView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+
+            // Constraints that set the size of the scrollable content area inside the scrollview
+            scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.frameLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
+            scrollView.frameLayoutGuide.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
+
+            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: contentStackView.topAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
+            scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+
+            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 24),
+            contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -24),
 
             primaryButton.heightAnchor.constraint(equalToConstant: 45),
             secondaryButton.heightAnchor.constraint(equalToConstant: 45)

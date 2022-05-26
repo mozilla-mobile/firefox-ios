@@ -8,27 +8,8 @@ import Shared
 
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
-    var viewModel = IntroViewModel(currentCard: IntroViewModel.OnboardingCards.welcome)
-
-//    private var fxBackgroundThemeColor: UIColor {
-//        return theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
-//    }
-
-    // private var
-    // Private views
-    private lazy var welcomeCard: IntroScreenWelcomeView = {
-        let welcomeCardView = IntroScreenWelcomeView()
-        welcomeCardView.translatesAutoresizingMaskIntoConstraints = false
-        welcomeCardView.clipsToBounds = true
-        return welcomeCardView
-    }()
-
-    private lazy var syncCard: IntroScreenSyncView = {
-        let syncCardView = IntroScreenSyncView()
-        syncCardView.translatesAutoresizingMaskIntoConstraints = false
-        syncCardView.clipsToBounds = true
-        return syncCardView
-    }()
+    var viewModel: IntroViewModel
+    var onboardingPages = [OnboardingCardViewController]()
 
     // MARK: - Var related to onboarding
     private lazy var closeButton: UIButton = {
@@ -41,27 +22,25 @@ class IntroViewController: UIViewController, OnViewDismissable {
         return button
     }()
 
-    private lazy var scrollView: UIScrollView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    private lazy var onboardingCard: OnboardingCardView = {
-        let viewModel = self.viewModel.getCardViewModel()
-        let cardView = OnboardingCardView(viewModel: viewModel)
-        cardView.translatesAutoresizingMaskIntoConstraints = false
-        return cardView
+    private lazy var pageController: UIPageViewController = {
+        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        pageVC.dataSource = self
+        return pageVC
     }()
 
     private lazy var pageControl: UIPageControl = .build { pageControl in
         pageControl.currentPage = 0
         pageControl.numberOfPages = self.viewModel.enabledCards.count
+        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
+        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
     }
 
     // Closure delegate
     var didFinishClosure: ((IntroViewController, FxAPageType?) -> Void)?
 
     // MARK: Initializer
-    init() {
+    init(viewModel: IntroViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -72,13 +51,9 @@ class IntroViewController: UIViewController, OnViewDismissable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard !viewModel.shouldShowNewOnboarding else {
-            view.backgroundColor = .lightGray
-            setupOnboarding()
-            return
-        }
-
-        initialViewSetup()
+        view.backgroundColor = .lightGray
+        setupPageController()
+        setupLayout()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -88,97 +63,32 @@ class IntroViewController: UIViewController, OnViewDismissable {
     }
 
     // MARK: View setup
-    private func initialViewSetup() {
-        setupIntroView()
-    }
-
-    // onboarding intro view
-    private func setupIntroView() {
-        // Initialize
-        view.addSubview(syncCard)
-        view.addSubview(welcomeCard)
-
-        // Constraints
-        setupWelcomeCard()
-        setupSyncCard()
-    }
-
-    private func setupWelcomeCard() {
-        NSLayoutConstraint.activate([
-            welcomeCard.topAnchor.constraint(equalTo: view.topAnchor),
-            welcomeCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            welcomeCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            welcomeCard.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-
-        // Buton action closures
-        // Next button action
-        welcomeCard.nextClosure = {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.welcomeCard.alpha = 0
-            }) { _ in
-                self.welcomeCard.isHidden = true
-                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .syncScreenView)
-            }
+    private func setupPageController() {
+        var index = 0
+        self.viewModel.enabledCards.forEach { card in
+            let cardViewModel = viewModel.getCardViewModel(index: index)
+            let viewController = OnboardingCardViewController(viewModel: cardViewModel)
+            onboardingPages.append(viewController)
+            index += 1
         }
-        // Close button action
-        welcomeCard.closeClosure = {
-            self.didFinishClosure?(self, nil)
-        }
-        // Sign in button closure
-        welcomeCard.signInClosure = {
-            self.didFinishClosure?(self, .emailLoginFlow)
-        }
-        // Sign up button closure
-        welcomeCard.signUpClosure = {
-            self.didFinishClosure?(self, .emailLoginFlow)
+
+        if let firstViewController = onboardingPages.first {
+            pageController.setViewControllers([firstViewController],
+                                                  direction: .forward,
+                                                  animated: true,
+                                                  completion: nil)
         }
     }
 
-    private func setupSyncCard() {
-        NSLayoutConstraint.activate([
-            syncCard.topAnchor.constraint(equalTo: view.topAnchor),
-            syncCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            syncCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            syncCard.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-        // Start browsing button action
-        syncCard.startBrowsing = {
-            self.didFinishClosure?(self, nil)
-        }
-        // Sign-up browsing button action
-        syncCard.signUp = {
-            self.didFinishClosure?(self, .emailLoginFlow)
-        }
-    }
-
-    // MARK: - Nimbus onboarding
-    private func setupOnboarding() {
+    private func setupLayout() {
         view.addSubviews(pageControl, closeButton)
-        scrollView.addSubview(onboardingCard)
-        view.addSubview(scrollView)
+
+        addChild(pageController)
+        view.addSubview(pageController.view)
+        pageController.didMove(toParent: self)
 
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            scrollView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(greaterThanOrEqualTo: pageControl.topAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
-
-            // Constraints that set the size of the scrollable content area inside the scrollview
-            scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.frameLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
-            scrollView.frameLayoutGuide.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.frameLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualTo: pageControl.topAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
-
-            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: onboardingCard.leadingAnchor),
-            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: onboardingCard.topAnchor),
-            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: onboardingCard.trailingAnchor),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: onboardingCard.bottomAnchor),
-            scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-
+            pageControl.heightAnchor.constraint(equalToConstant: 40),
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -189,35 +99,60 @@ class IntroViewController: UIViewController, OnViewDismissable {
             closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
 
-        onboardingCard.nextClosure = {
-            guard self.viewModel.currentCard != .signSync else {
-                self.didFinishClosure?(self, nil)
-                return
-            }
-//            self.viewModel.showNextCard()
-//            self.onboardingCard.updateLayout(viewModel: self.viewModel.getCardViewModel()
-            self.showNextCard()
-        }
-
-        onboardingCard.primaryActionClosure = {
-            switch self.viewModel.currentCard {
-            case .welcome:
-                self.showNextCard()
-            default:
-                break
-            }
-        }
+//        onboardingCard.nextClosure = {
+//            guard self.viewModel.currentCard != .signSync else {
+//                self.didFinishClosure?(self, nil)
+//                return
+//            }
+//
+//            self.showNextCard()
+//        }
+//
+//        onboardingCard.primaryActionClosure = {
+//            switch self.viewModel.currentCard {
+//            case .welcome:
+//                self.showNextCard()
+//            default:
+//                break
+//            }
+//        }
     }
 
     @objc private func closeOnboarding() {
         didFinishClosure?(self, nil)
     }
 
-    private func showNextCard() {
-        self.viewModel.showNextCard()
-        self.onboardingCard.updateLayout(viewModel: self.viewModel.getCardViewModel())
+    private func showNextOnboardingCard(index: Int) -> OnboardingCardViewController? {
+        guard index < onboardingPages.count else { return nil }
+
+        let cardViewModel = viewModel.getCardViewModel(index: index)
+        return OnboardingCardViewController(viewModel: cardViewModel)
+    }
+}
+
+extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        return nil
     }
 
+    private func getIndex(viewController: OnboardingCardViewController) -> Int? {
+        let cardType = viewController.viewModel.cardType
+
+        return viewModel.enabledCards.firstIndex(of: cardType)
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let onboardingVC = viewController as? OnboardingCardViewController,
+              let index = getIndex(viewController: onboardingVC) else {
+              return nil
+        }
+
+        if index == viewModel.enabledCards.count - 1 { return nil }
+
+        pageControl.currentPage = index + 1
+        return showNextOnboardingCard(index: index + 1)
+    }
 }
 
 // MARK: UIViewController setup

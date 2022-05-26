@@ -19,9 +19,9 @@ struct IntroViewModel {
         return OnboardingCards.allCases
     }
 
-    private(set) var currentCard: OnboardingCards
+    func getCardViewModel(index: Int) -> OnboardingCardProtocol {
+        let currentCard = enabledCards[index]
 
-    func getCardViewModel() -> OnboardingCardProtocol {
         switch currentCard {
         case .welcome:
             return OnboardingCardViewModel(cardType: currentCard,
@@ -33,9 +33,9 @@ struct IntroViewModel {
                                           a11yIdRoot: "Welcome")
         case .wallpapers:
             return OnboardingCardViewModel(cardType: currentCard,
-                                          image: UIImage(named: "tour-Welcome"),
+                                          image: nil,
                                           title: "Wallpapers title",
-                                          description: "Wallpapers description",
+                                          description: nil,
                                           primaryAction: "Primary",
                                           secondaryAction: "Next",
                                           a11yIdRoot: "Wallpaper")
@@ -48,9 +48,5 @@ struct IntroViewModel {
                                           secondaryAction: "Start browsing",
                                           a11yIdRoot: "SignIn")
         }
-    }
-
-    mutating func showNextCard() {
-        currentCard = IntroViewModel.OnboardingCards(rawValue: currentCard.rawValue + 1)!
     }
 }
