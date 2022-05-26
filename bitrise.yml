@@ -88,13 +88,13 @@ workflows:
                 set -ex 
                 
                 ls -la
+                mv ./Users/vagrant/git/XCUITests/* .
                 mv ./Users/vagrant/git/* .
                 ls -la
                 pwd
 
-                ls ./Users/vagrant/git/XCUITests
-
-                mv ./Users/vagrant/git/XCUITests/Smoketest2.xctestplan ./Users/vagrant/git/Smoke2.xctestplan
+                #ls ./Users/vagrant/git/XCUITests
+                #mv ./Users/vagrant/git/XCUITests/Smoketest2.xctestplan ./Users/vagrant/git/Smoke2.xctestplan
                 
                 #rm Smoketest2.xctestplan
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
@@ -136,12 +136,13 @@ workflows:
                 
                 ls -la
                 ls ./Users/vagrant/git/XCUITests
-                mv ./Users/vagrant/git/* .
+                mv ./Users/vagrant/git/XCUITests/* .
+                mv ./Users/vagrant/git/* 
                 ls -la
 
                 pwd
 
-                mv ./Users/vagrant/git/XCUITests/SmokeXCUITests.xctestplan ./Users/vagrant/git/Smoke.xctestplan
+                #mv ./Users/vagrant/git/XCUITests/SmokeXCUITests.xctestplan ./Users/vagrant/git/Smoke.xctestplan
                 
                 #rm SmokeXCUITests.xctestplan
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
