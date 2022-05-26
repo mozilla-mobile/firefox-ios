@@ -2550,7 +2550,7 @@ awesomebar:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3751
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3751
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10867
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
