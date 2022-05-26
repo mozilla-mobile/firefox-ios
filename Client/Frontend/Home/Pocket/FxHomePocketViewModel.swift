@@ -36,7 +36,7 @@ class FxHomePocketViewModel {
             siteUrl.map { self?.onTapTileAction?($0) }
         }
 
-        self.pocketStoriesViewModels.append(pocketStoryViewModel)
+        pocketStoriesViewModels.append(pocketStoryViewModel)
     }
 
     // The dimension of a cell
