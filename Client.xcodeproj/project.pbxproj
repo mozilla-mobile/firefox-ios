@@ -73,12 +73,13 @@
 		211F00AC27F4D918001D9189 /* HistoryPanelWithGroups+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211F00AB27F4D918001D9189 /* HistoryPanelWithGroups+Search.swift */; };
 		213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */; };
 		213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */; };
+		215A5F9F283D38B800FF4053 /* WallpapersCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A5F9E283D38B800FF4053 /* WallpapersCardViewController.swift */; };
 		215B457F27D7FD4B00E5E800 /* TabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* TabGroupData.swift */; };
 		215B458027D7FD7D00E5E800 /* TabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* TabGroupData.swift */; };
 		215B458227DA420400E5E800 /* TabMetadataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458127DA420400E5E800 /* TabMetadataManager.swift */; };
 		215B458427DA87FC00E5E800 /* TabMetadataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */; };
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
-		21A7C45028353D0E0071D996 /* OnboardingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardView.swift */; };
+		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
 		21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */; };
 		2386E4E624F8358E0072EF17 /* HomeTabBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2386E4E524F8358E0072EF17 /* HomeTabBanner.swift */; };
 		23A50958253F782E008FEBD9 /* NewTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A50957253F782E008FEBD9 /* NewTabButton.swift */; };
@@ -1789,13 +1790,14 @@
 		211F00AB27F4D918001D9189 /* HistoryPanelWithGroups+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryPanelWithGroups+Search.swift"; sourceTree = "<group>"; };
 		213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelper.swift; sourceTree = "<group>"; };
 		213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelperTests.swift; sourceTree = "<group>"; };
+		215A5F9E283D38B800FF4053 /* WallpapersCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpapersCardViewController.swift; sourceTree = "<group>"; };
 		215B457E27D7FD4B00E5E800 /* TabGroupData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupData.swift; sourceTree = "<group>"; };
 		215B458127DA420400E5E800 /* TabMetadataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMetadataManager.swift; sourceTree = "<group>"; };
 		215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMetadataManagerTests.swift; sourceTree = "<group>"; };
 		2194437EA9B44A00EDC037FA /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/FindInPage.strings"; sourceTree = "<group>"; };
 		219F41288625C09DD40F008C /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
-		21A7C44F28353D0E0071D996 /* OnboardingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardView.swift; sourceTree = "<group>"; };
+		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
 		21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+ToolbarActions.swift"; sourceTree = "<group>"; };
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		220A4CC8B2685EEA3146A967 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -6438,7 +6440,8 @@
 				21A7C44D283539170071D996 /* IntroViewModel.swift */,
 				435D7CC22461EFDD0043ACB9 /* IntroScreenSyncView.swift */,
 				4334145624C6378B001541F3 /* IntroScreenWelcomeView.swift */,
-				21A7C44F28353D0E0071D996 /* OnboardingCardView.swift */,
+				21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */,
+				215A5F9E283D38B800FF4053 /* WallpapersCardViewController.swift */,
 			);
 			path = Intro;
 			sourceTree = "<group>";
@@ -9236,7 +9239,7 @@
 				211F00AC27F4D918001D9189 /* HistoryPanelWithGroups+Search.swift in Sources */,
 				96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */,
 				43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */,
-				21A7C45028353D0E0071D996 /* OnboardingCardView.swift in Sources */,
+				21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */,
 				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
@@ -9362,6 +9365,7 @@
 				8AD5702F27AB4DEA005BFDC8 /* UIStackViewExtensions.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				DFACDFAA274D489B00A94EEC /* FxHomeHistoryHightlightsViewModel.swift in Sources */,
+				215A5F9F283D38B800FF4053 /* WallpapersCardViewController.swift in Sources */,
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* DynamicFontHelper.swift in Sources */,

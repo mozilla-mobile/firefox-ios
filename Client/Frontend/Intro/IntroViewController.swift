@@ -9,7 +9,6 @@ import Shared
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
     var viewModel: IntroViewModel
-    var onboardingPages = [OnboardingCardViewController]()
 
     // MARK: - Var related to onboarding
     private lazy var closeButton: UIButton = {
@@ -25,6 +24,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
     private lazy var pageController: UIPageViewController = {
         let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageVC.dataSource = self
+        pageVC.delegate = self
         return pageVC
     }()
 
@@ -33,6 +33,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
         pageControl.numberOfPages = self.viewModel.enabledCards.count
         pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
         pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
+        pageControl.isUserInteractionEnabled = false
     }
 
     // Closure delegate
@@ -64,15 +65,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
     // MARK: View setup
     private func setupPageController() {
-        var index = 0
-        self.viewModel.enabledCards.forEach { card in
-            let cardViewModel = viewModel.getCardViewModel(index: index)
-            let viewController = OnboardingCardViewController(viewModel: cardViewModel)
-            onboardingPages.append(viewController)
-            index += 1
-        }
-
-        if let firstViewController = onboardingPages.first {
+        if let firstViewController = showNextOnboardingCard(index: 0) {
             pageController.setViewControllers([firstViewController],
                                                   direction: .forward,
                                                   animated: true,
@@ -81,11 +74,10 @@ class IntroViewController: UIViewController, OnViewDismissable {
     }
 
     private func setupLayout() {
-        view.addSubviews(pageControl, closeButton)
-
         addChild(pageController)
         view.addSubview(pageController.view)
         pageController.didMove(toParent: self)
+        view.addSubviews(pageControl, closeButton)
 
         NSLayoutConstraint.activate([
             pageControl.heightAnchor.constraint(equalToConstant: 40),
@@ -123,10 +115,21 @@ class IntroViewController: UIViewController, OnViewDismissable {
     }
 
     private func showNextOnboardingCard(index: Int) -> OnboardingCardViewController? {
-        guard index < onboardingPages.count else { return nil }
+        guard index < viewModel.enabledCards.count else { return nil }
 
         let cardViewModel = viewModel.getCardViewModel(index: index)
-        return OnboardingCardViewController(viewModel: cardViewModel)
+
+        if index == viewModel.enabledCards.firstIndex(of: .wallpapers) {
+            return WallpaperCardViewController(viewModel: cardViewModel)
+        } else {
+            return OnboardingCardViewController(viewModel: cardViewModel)
+        }
+    }
+
+    private func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
+        let cardType = viewController.viewModel.cardType
+
+        return viewModel.enabledCards.firstIndex(of: cardType)
     }
 }
 
@@ -136,22 +139,24 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         return nil
     }
 
-    private func getIndex(viewController: OnboardingCardViewController) -> Int? {
-        let cardType = viewController.viewModel.cardType
-
-        return viewModel.enabledCards.firstIndex(of: cardType)
-    }
-
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let onboardingVC = viewController as? OnboardingCardViewController,
-              let index = getIndex(viewController: onboardingVC) else {
+              let index = getCardIndex(viewController: onboardingVC) else {
               return nil
         }
 
         if index == viewModel.enabledCards.count - 1 { return nil }
 
-        pageControl.currentPage = index + 1
+//        pageControl.currentPage = index + 1
         return showNextOnboardingCard(index: index + 1)
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+
+        let index = previousViewControllers.count
+        guard completed, index != viewModel.enabledCards.count else { return }
+
+        pageControl.currentPage = index
     }
 }
 

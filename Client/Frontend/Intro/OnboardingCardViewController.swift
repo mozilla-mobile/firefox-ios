@@ -60,7 +60,7 @@ class OnboardingCardViewController: UIViewController, CardTheme {
         view.backgroundColor = .clear
     }
 
-    private lazy var contentStackView: UIStackView = .build { stack in
+    lazy var contentStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.distribution = .fill
         stack.alignment = .fill
@@ -123,15 +123,21 @@ class OnboardingCardViewController: UIViewController, CardTheme {
         self.viewModel = viewModel
 
         super.init(nibName: nil, bundle: nil)
-        self.setupView()
-        self.updateLayout(viewModel: viewModel)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupView() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupView()
+        // TODO: Remove parameter it's no needed anymore
+        updateLayout(viewModel: viewModel)
+    }
+
+    func setupView() {
         contentStackView.addArrangedSubview(imageView)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
@@ -145,17 +151,17 @@ class OnboardingCardViewController: UIViewController, CardTheme {
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            scrollView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
+//            scrollView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 60).priority(UILayoutPriority.defaultLow),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
+//            scrollView.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: -60).priority(UILayoutPriority.defaultLow),
             scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
 
             // Constraints that set the size of the scrollable content area inside the scrollview
             scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.frameLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 40).priority(UILayoutPriority.defaultLow),
+            scrollView.frameLayoutGuide.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 60).priority(UILayoutPriority.defaultLow),
             scrollView.frameLayoutGuide.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.frameLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: -40).priority(UILayoutPriority.defaultLow),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: -60).priority(UILayoutPriority.defaultLow),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
             scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: contentStackView.topAnchor),
@@ -176,11 +182,13 @@ class OnboardingCardViewController: UIViewController, CardTheme {
     func updateLayout(viewModel: OnboardingCardProtocol) {
         self.viewModel = viewModel
         titleLabel.text = viewModel.title
+        descriptionLabel.isHidden = viewModel.description?.isEmpty ?? true
         descriptionLabel.text = viewModel.description
 
         secondaryButton.isHidden = viewModel.secondaryAction?.isEmpty ?? true
 
         imageView.image = viewModel.image
+        imageView.isHidden = viewModel.image == nil
         primaryButton.setTitle(viewModel.primaryAction, for: .normal)
         secondaryButton.setTitle(viewModel.secondaryAction, for: .normal)
     }
