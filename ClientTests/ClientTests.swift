@@ -17,7 +17,7 @@ class ClientTests: XCTestCase {
         let device = DeviceInfo.deviceModel()
         let systemVersion = UIDevice.current.systemVersion
 
-        if AppInfo.appVersion != "0.0.1" {
+        if AppInfo.buildNumber != "1" {
             let expectedRegex = "^Firefox-iOS-Sync/[0-9\\.]+b[0-9]* \\(\(device); iPhone OS \(systemVersion)\\) \\([-_A-Za-z0-9= \\(\\)]+\\)$"
             let loc = ua.range(of: expectedRegex, options: .regularExpression)
             XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
