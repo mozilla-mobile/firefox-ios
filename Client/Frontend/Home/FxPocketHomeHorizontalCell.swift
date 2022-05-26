@@ -26,8 +26,8 @@ class FxPocketHomeHorizontalCellViewModel {
     }
 }
 
-// MARK: - FxHomeHorizontalCell
-/// A cell used in FxHomeScreen's Jump Back In and Pocket sections
+// MARK: - FxPocketHomeHorizontalCell
+/// A cell used in FxHomeScreen's Pocket section
 class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
