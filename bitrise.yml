@@ -88,7 +88,8 @@ workflows:
                 set -ex 
                 
                 ls -la
-                mv ./Users/vagrant/git/XCUITests/* .
+                ls ./Users/vagrant/git/XCUITests
+                cp ./Users/vagrant/git/XCUITests/* .
                 mv ./Users/vagrant/git/* .
                 ls -la
                 pwd
@@ -136,7 +137,7 @@ workflows:
                 
                 ls -la
                 ls ./Users/vagrant/git/XCUITests
-                mv ./Users/vagrant/git/XCUITests/* .
+                cp ./Users/vagrant/git/XCUITests/* .
                 mv ./Users/vagrant/git/* .
                 ls -la
 
@@ -148,9 +149,9 @@ workflows:
                 #cp TestShard_$((SHARD-1)).xctestplan Smoketest2.xctestplan
                 #chmod 644 Smoketest2.xctestplan
                 echo "-- test-without-building --"
-                xcrun simctl list
+                #xcrun simctl list
 
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -sdk iphonesimulator -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan SmokeXCUITests "test-without-building"
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
     #- xcode-test@3.1:
     #steps:
     #- xcode-test@3.1:
