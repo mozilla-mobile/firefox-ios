@@ -478,30 +478,38 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
+            // telemetry: search suggestion pressed
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .awesomebarResults, extras: [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.searchSuggestion.rawValue] )
             // Assume that only the default search engine can provide search suggestions.
             let engine = searchEngines.defaultEngine
             guard let suggestion = suggestions?[indexPath.row] else { return }
             if let url = engine.searchURLForQuery(suggestion) {
                 Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
                 GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
-                // telemetry : search suggestion item pressed
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
-            // telemetry : opened tab site pressed
+            // telemetry: opened tab pressed
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .awesomebarResults, extras: [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.openedTab.rawValue] )
             let tab = self.filteredOpenedTabs[indexPath.row]
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
-            // telemetry : remote tab site pressed
+            // telemetry: remote tab pressed
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .awesomebarResults, extras: [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.remoteTab.rawValue] )
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
-                // telemetry : site.bookmarked = true for bookmark
-                // telemetry : site.bookmarked = false for history
+                // telemetry: bookmark pressed
+                if site.bookmarked ?? false {
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .awesomebarResults, extras: [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.bookmarkItem.rawValue] )
+                } else {
+                // telemetry: history item pressed
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .awesomebarResults, extras: [TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue: TelemetryWrapper.EventValue.historyItem.rawValue] )
+                }
+
                 if let url = URL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
-                    TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
                 }
             }
         }
