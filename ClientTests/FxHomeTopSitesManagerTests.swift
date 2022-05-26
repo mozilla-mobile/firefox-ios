@@ -63,7 +63,7 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlaggable {
 
         testLoadData(manager: manager, numberOfTilesPerRow: nil) {
             XCTAssertTrue(manager.hasData)
-            XCTAssertEqual(manager.siteCount, 11)
+            XCTAssertEqual(manager.siteCount, 11, "Expects 1 google site, 10 history sites")
         }
     }
 
@@ -72,7 +72,7 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlaggable {
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
             XCTAssertTrue(manager.hasData)
-            XCTAssertEqual(manager.siteCount, 11)
+            XCTAssertEqual(manager.siteCount, 11, "Expects 1 google site, 10 history sites")
         }
     }
 
@@ -149,7 +149,7 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlaggable {
 
         testLoadData(manager: manager, numberOfTilesPerRow: 6) {
             XCTAssertTrue(manager.hasData)
-            XCTAssertEqual(manager.siteCount, 12)
+            XCTAssertEqual(manager.siteCount, 12, "Expects 1 google site, 1 contile, 10 history sites")
         }
     }
 
@@ -340,6 +340,26 @@ class FxHomeTopSitesManagerTests: XCTestCase, FeatureFlaggable {
         }
     }
 
+    // Pinned vs another Pinned of same domain
+    func testDuplicates_PinnedTilesOfSameDomainIsntDeduped() {
+        featureFlags.set(feature: .sponsoredTiles, to: true)
+
+        let manager = createManager(addPinnedSiteCount: 2, siteCount: 0)
+
+        testLoadData(manager: manager, numberOfTilesPerRow: 6) {
+            XCTAssertEqual(manager.siteCount, 3, "Should have google site and 2 pinned sites")
+            XCTAssertTrue(manager.getSite(index: 0)!.isGoogleURL)
+
+            XCTAssertFalse(manager.getSite(index: 1)!.isSponsoredTile)
+            XCTAssertTrue(manager.getSite(index: 1)!.isPinned)
+            XCTAssertEqual(manager.getSite(index: 1)!.site.url, "https://www.apinnedurl.com/pinned0")
+
+            XCTAssertFalse(manager.getSite(index: 2)!.isSponsoredTile)
+            XCTAssertTrue(manager.getSite(index: 2)!.isPinned)
+            XCTAssertEqual(manager.getSite(index: 2)!.site.url, "https://www.apinnedurl.com/pinned1")
+        }
+    }
+
     func testTopSiteManager_hasNoLeaks() {
         let topSitesManager = FxHomeTopSitesManager(profile: profile)
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
@@ -410,7 +430,7 @@ extension ContileProviderMock {
     }
 
     static let pinnedTitle = "A pinned title %@"
-    static let pinnedURL = "https://www.apinnedurl%@.com"
+    static let pinnedURL = "https://www.apinnedurl.com/pinned%@"
     static let title = "A title %@"
     static let url = "https://www.aurl%@.com"
 

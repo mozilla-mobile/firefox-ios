@@ -1624,6 +1624,76 @@ class TestSQLiteHistory: XCTestCase {
         }
 
     }
+
+    func testPinnedTopSitesDuplicateDomains() {
+        let db = BrowserDB(filename: "testPinnedTopSitesDuplicateDomains.db", schema: BrowserSchema(), files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().succeeded()
+        history.clearHistory().succeeded()
+
+        // create pinned sites with a same domain name
+        let site1 = Site(url: "http://site.com/foo1", title: "A duplicate domain \(1)")
+        site1.id = 1
+        site1.guid = "abc\(1)def"
+        addVisitForSite(site1, intoHistory: history, from: .local, atTime: Date.now())
+        let site2 = Site(url: "http://site.com/foo2", title: "A duplicate domain \(2)")
+        site2.id = 2
+        site2.guid = "abc\(2)def"
+        addVisitForSite(site2, intoHistory: history, from: .local, atTime: Date.now())
+
+        let expectation = self.expectation(description: "First.")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        func addPinnedSites() -> Success {
+            return history.addPinnedTopSite(site1) >>== {
+                sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
+                return history.addPinnedTopSite(site2)
+            }
+        }
+
+        func checkPinnedSites() -> Success {
+            return history.getPinnedTopSites() >>== { pinnedSites in
+                XCTAssertEqual(pinnedSites.count, 2)
+                XCTAssertEqual(pinnedSites[0]!.url, site2.url)
+                XCTAssertEqual(pinnedSites[1]!.url, site1.url, "The older pinned site should be last")
+                return succeed()
+            }
+        }
+
+        func removePinnedSites() -> Success {
+            return history.removeFromPinnedTopSites(site2) >>== {
+                return history.getPinnedTopSites() >>== { pinnedSites in
+                    XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
+                    XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
+                    return succeed()
+                }
+            }
+        }
+
+        func removeHistory() -> Success {
+            return history.clearHistory() >>== {
+                return history.getPinnedTopSites() >>== { pinnedSites in
+                    XCTAssertEqual(pinnedSites.count, 2, "Pinned sites should exist after a history clear")
+                    return succeed()
+                }
+            }
+        }
+
+        addPinnedSites()
+            >>> checkPinnedSites
+            >>> removeHistory
+            >>> done
+
+        waitForExpectations(timeout: 10.0) { error in
+            return
+        }
+    }
 }
 
 class TestSQLiteHistoryTransactionUpdate: XCTestCase {

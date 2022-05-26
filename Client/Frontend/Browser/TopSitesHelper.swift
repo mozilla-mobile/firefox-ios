@@ -30,13 +30,14 @@ struct TopSitesHelper {
 
             // Fetch the default sites
             let defaultSites = defaultTopSites(profile)
-            // create PinnedSite objects. used by the view layer to tell topsites apart
+            // Create PinnedSite objects. Used by the view layer to tell topsites apart
             let pinnedSites: [Site] = pinned.map({ PinnedSite(site: $0) })
 
             // Merge default topsites with a user's topsites.
             let mergedSites = mySites.union(defaultSites, f: unionOnURL)
-            // Merge pinnedSites with sites from the previous step
-            let allSites = pinnedSites.union(mergedSites, f: unionOnURL)
+            // Filter out duplicates in merged sites, but do not remove duplicates within pinned sites
+            let duplicateFreeList = pinnedSites.union(mergedSites, f: unionOnURL).filter { $0 as? PinnedSite == nil }
+            let allSites = pinnedSites + duplicateFreeList
 
             // Favour topsites from defaultSites as they have better favicons. But keep PinnedSites
             let newSites = allSites.map { site -> Site in
