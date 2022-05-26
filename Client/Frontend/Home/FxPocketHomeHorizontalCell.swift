@@ -31,67 +31,52 @@ class FxPocketHomeHorizontalCellViewModel {
 class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
-    private lazy var heroImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
-        imageView.backgroundColor = .clear
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
+    private lazy var heroImageView: UIImageView = .build {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
+        $0.backgroundColor = .clear
+    }
 
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+    private lazy var titleLabel: UILabel = .build {
+        $0.adjustsFontForContentSizeCategory = true
+        $0.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                    maxSize: FxHomeHorizontalCellUX.titleFontSize)
-        label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+        $0.numberOfLines = 2
+    }
 
-    private lazy var sponsoredStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [sponsoredIcon, sponsoredLabel])
-        stack.axis = .horizontal
-        stack.spacing = 8
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
+    private lazy var sponsoredStack: UIStackView = .build {
+        $0.addArrangedSubview(self.sponsoredIcon)
+        $0.addArrangedSubview(self.sponsoredLabel)
+        $0.axis = .horizontal
+        $0.spacing = 8
+    }
 
-    private lazy var sponsoredLabel: UILabel = {
-        let label = UILabel()
-        label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                       maxSize: FxHomeHorizontalCellUX.sponsoredFontSize)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 1
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = .FirefoxHomepage.Pocket.Sponsored
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private lazy var sponsoredLabel: UILabel = .build {
+        $0.adjustsFontForContentSizeCategory = true
+        $0.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                maxSize: FxHomeHorizontalCellUX.sponsoredFontSize)
+        $0.textColor = .secondaryLabel
+        $0.numberOfLines = 1
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.text = .FirefoxHomepage.Pocket.Sponsored
+    }
 
-    private lazy var sponsoredIcon: UIImageView = {
-        let image = UIImageView(image: UIImage(named: ImageIdentifiers.sponsoredStar))
+    private lazy var sponsoredIcon: UIImageView = .build {
+        $0.image = UIImage(named: ImageIdentifiers.sponsoredStar)
         NSLayoutConstraint.activate([
-            image.heightAnchor.constraint(equalToConstant: 12),
-            image.widthAnchor.constraint(equalToConstant: 12)
+            $0.heightAnchor.constraint(equalToConstant: 12),
+            $0.widthAnchor.constraint(equalToConstant: 12)
         ])
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
+    }
 
-    private lazy var descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: FxHomeHorizontalCellUX.siteFontSize)
-        label.textColor = .label
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private lazy var descriptionLabel: UILabel = .build {
+        $0.adjustsFontForContentSizeCategory = true
+        $0.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                                maxSize: FxHomeHorizontalCellUX.siteFontSize)
+        $0.textColor = .label
+    }
 
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
