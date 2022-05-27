@@ -70,10 +70,10 @@ features:
           "setting": after-four-hours
         }
   spotlight-search:
-    description: Add of webpages to iOS's core search.
+    description: Add pages as items findable with Spotlight.
     variables:
       enabled:
-        description: Add pages as items findable with Spotlight.
+        description: If this is true, then on each page load adds a new item to Spotlight.
         type: Boolean
         default: false
       searchable-content:
