@@ -7,7 +7,8 @@ import Foundation
 class EnhancedTrackingProtectionDetailsVC: UIViewController {
 
     // MARK: - UI
-
+    private let scrollView: UIScrollView = .build { scrollView in }
+    private let baseView: UIView = .build { view in }
     private let siteTitleLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.websiteTitle
     }
@@ -92,21 +93,31 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
     }
 
     private func setupView() {
-        view.addSubviews(siteTitleLabel, closeButton)
+        view.addSubview(scrollView)
+        scrollView.addSubview(baseView)
+        baseView.addSubviews(siteTitleLabel, closeButton)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
 
         siteInfoSection.addSubviews(siteInfoImage, siteInfoTitleLabel, siteInfoURLLabel)
-        view.addSubview(siteInfoSection)
+        baseView.addSubview(siteInfoSection)
 
         connectionView.addSubviews(connectionImage, connectionStatusLabel, connectionVerifierLabel)
-        view.addSubview(connectionView)
+        baseView.addSubview(connectionView)
 
         NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            baseView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            baseView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            baseView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             siteTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             siteTitleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
 
             closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
+            closeButton.topAnchor.constraint(equalTo: baseView.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
 
             siteInfoSection.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             siteInfoSection.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 33),
@@ -128,6 +139,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 
             connectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
             connectionView.topAnchor.constraint(equalTo: siteInfoSection.bottomAnchor, constant: 36),
+            connectionView.bottomAnchor.constraint(equalTo: baseView.bottomAnchor),
             connectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
             connectionView.heightAnchor.constraint(equalToConstant: 60),
 
