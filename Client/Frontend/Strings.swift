@@ -166,6 +166,7 @@ extension String {
             public static let SectionTitle = MZLocalizedString("FirefoxHome.Pocket.SectionTitle", value: "Thought-Provoking Stories", comment: "This is the title of the Pocket section on Firefox Homepage.", lastUpdated: .v98)
             public static let DiscoverMore = MZLocalizedString("FirefoxHome.Pocket.DiscoverMore", value: "Discover more", comment: "At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories.", lastUpdated: .v98)
             public static let NumberOfMinutes = MZLocalizedString("FirefoxHome.Pocket.Minutes.v99", value: "%d min", comment: "On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes", lastUpdated: .v99)
+            public static let Sponsored = MZLocalizedString("FirefoxHomepage.Pocket.Sponsored.v102", value: "Sponsored", comment: "This string will show under the description on pocket story, indicating that the story is sponsored.", lastUpdated: .v102)
         }
 
         public struct RecentlySaved {

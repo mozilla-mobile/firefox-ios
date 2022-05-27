@@ -36,26 +36,26 @@ struct PocketSponsoredStory: Codable {
         case caps = "caps"
         case sponsor = "sponsor"
     }
+
+    struct Shim: Codable {
+        let click: String
+        let impression: String
+        let delete: String
+        let save: String
+    }
+
+    struct Caps: Codable {
+        let lifetime: Int
+        let campaign: Limit
+        let flight: Limit
+
+        struct Limit: Codable {
+            let count: Int
+            let period: Int
+        }
+    }
 }
 
 struct PocketSponsoredRequest: Codable {
     let spocs: [PocketSponsoredStory]
-}
-
-struct Shim: Codable, Equatable {
-    let click: String
-    let impression: String
-    let delete: String
-    let save: String
-}
-
-struct Caps: Codable, Equatable {
-    let lifetime: Int
-    let campaign: Limit
-    let flight: Limit
-
-    struct Limit: Codable, Equatable {
-        let count: Int
-        let period: Int
-    }
 }
