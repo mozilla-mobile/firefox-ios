@@ -26,7 +26,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
 
     func cellHeight() -> CGFloat {
         switch self {
-        case .pocket: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
+        case .pocket: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight * FxHomePocketCollectionCellUX.numberOfItemsInColumn
         case .jumpBackIn: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight
         case .recentlySaved: return FirefoxHomeViewModel.UX.recentlySavedCellHeight
         case .historyHighlights: return FirefoxHomeViewModel.UX.historyHighlightsCellHeight

@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 struct FxHomePocketCollectionCellUX {
-    static let numberOfItemsInColumn = 3
+    static let numberOfItemsInColumn: CGFloat = 3
     static let discoverMoreMaxFontSize: CGFloat = 26 // Title 3 xxxLarge
     static let numberOfItemsInSection = 11
     static let numberOfSponsoredItemsInSection = 2
@@ -80,7 +80,7 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
             heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
         )
 
-        let subItems = Array(repeating: item, count: FxHomePocketCollectionCellUX.numberOfItemsInColumn)
+        let subItems = Array(repeating: item, count: Int(FxHomePocketCollectionCellUX.numberOfItemsInColumn))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
         group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
