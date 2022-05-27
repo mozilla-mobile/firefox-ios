@@ -9,6 +9,9 @@ protocol FXHomeViewModelProtocol {
 
     var sectionType: FirefoxHomeSectionType { get }
 
+    // Layout section so FirefoxHomeViewController view controller can setup the section
+    static var section: NSCollectionLayoutSection { get }
+
     // Returns true when section needs to load data and show itself
     var isEnabled: Bool { get }
 
@@ -33,6 +36,19 @@ extension FXHomeViewModelProtocol {
 
     var shouldShow: Bool {
         return isEnabled && hasData
+    }
+
+    // TODO: Laurie
+    static var section: NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .estimated(100))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(100))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+        return NSCollectionLayoutSection(group: group)
     }
 
     func updateData(completion: @escaping () -> Void) {}

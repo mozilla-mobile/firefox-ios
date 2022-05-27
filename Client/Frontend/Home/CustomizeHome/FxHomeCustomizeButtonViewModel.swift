@@ -15,6 +15,18 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
         return .customizeHome
     }
 
+    static var section: NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .estimated(100))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(100))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+        return NSCollectionLayoutSection(group: group)
+    }
+
     var isEnabled: Bool {
         return true
     }

@@ -188,9 +188,13 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     var sectionType: FirefoxHomeSectionType {
         return .topSites
     }
+    // TODO: Laurie
+//    var isEnabled: Bool {
+//        return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
+//    }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
+        return false
     }
 
     var hasData: Bool {

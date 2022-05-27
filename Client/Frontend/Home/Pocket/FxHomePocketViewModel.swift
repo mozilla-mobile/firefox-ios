@@ -102,14 +102,18 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     var sectionType: FirefoxHomeSectionType {
         return .pocket
     }
+    // TODO: Laurie
+//    var isEnabled: Bool {
+//        // For Pocket, the user preference check returns a user preference if it exists in
+//        // UserDefaults, and, if it does not, it will return a default preference based on
+//        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
+//        guard featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser) else { return false }
+//
+//        return true
+//    }
 
     var isEnabled: Bool {
-        // For Pocket, the user preference check returns a user preference if it exists in
-        // UserDefaults, and, if it does not, it will return a default preference based on
-        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
-        guard featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser) else { return false }
-
-        return true
+        return false
     }
 
     var hasData: Bool {

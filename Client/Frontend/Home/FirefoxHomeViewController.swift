@@ -17,7 +17,6 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
-    private let flowLayout = UICollectionViewFlowLayout()
     private var hasSentJumpBackInSectionEvent = false
     private var isZeroSearch: Bool
     private var viewModel: FirefoxHomeViewModel
@@ -52,7 +51,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
         self.contextMenuHelper = FirefoxHomeContextMenuHelper(viewModel: viewModel)
 
-        super.init(collectionViewLayout: flowLayout)
+        super.init(collectionViewLayout: FirefoxHomeViewController.createLayout())
 
         contextMenuHelper.delegate = self
         contextMenuHelper.getPopoverSourceRect = { [weak self] popoverView in
@@ -63,7 +62,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         viewModel.delegate = self
         collectionView?.delegate = self
         collectionView?.dataSource = self
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
         setupNotifications(forObserver: self,
@@ -153,6 +152,16 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyTheme()
+    }
+
+    // MARK: - Layout
+
+    static func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout {
+            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            return FirefoxHomeSectionType(rawValue: sectionIndex)?.section ?? nil
+        }
+        return layout
     }
 
     // MARK: - Helpers
@@ -303,157 +312,158 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
 
 // MARK: -  CollectionView Delegate
 
-extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
-
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
-            let title = FirefoxHomeSectionType(indexPath.section).title
-            headerView.title = title
-            headerView.titleLabel.accessibilityTraits = .header
-
-            switch FirefoxHomeSectionType(indexPath.section) {
-            case .pocket:
-                headerView.moreButton.isHidden = true
-                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.pocket
-                return headerView
-
-            case .jumpBackIn:
-                if !hasSentJumpBackInSectionEvent
-                    && viewModel.jumpBackInViewModel.isEnabled {
-                    TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
-                    hasSentJumpBackInSectionEvent = true
-                }
-                headerView.moreButton.isHidden = false
-                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
-                headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
-                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
-                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
-                prepareJumpBackInContextualHint(onView: headerView)
-
-                return headerView
-
-            case .recentlySaved:
-                headerView.moreButton.isHidden = false
-                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
-                headerView.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
-                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.recentlySaved
-                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.recentlySaved
-                return headerView
-
-            case .historyHighlights:
-                headerView.moreButton.isHidden = false
-                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
-                headerView.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
-                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.historyHighlights
-                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.historyHighlights
-                return headerView
-
-            case .topSites:
-                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.topSites
-                headerView.moreButton.isHidden = true
-                return headerView
-            case .customizeHome:
-                headerView.moreButton.isHidden = true
-                return headerView
-            case .logoHeader:
-                headerView.moreButton.isHidden = true
-                return headerView
-            }
-        default:
-            return UICollectionReusableView()
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var cellSize = FirefoxHomeSectionType(indexPath.section).cellSize(for: self.traitCollection, frameWidth: self.view.frame.width)
-
-        switch FirefoxHomeSectionType(indexPath.section) {
-        case .topSites:
-            let sectionDimension = viewModel.topSiteViewModel.getSectionDimension(for: traitCollection)
-            cellSize.height *= CGFloat(sectionDimension.numberOfRows)
-            cellSize.height += (FxHomeTopSitesViewModel.UX.parentInterItemSpacing * 2) * CGFloat(sectionDimension.numberOfRows)
-            return cellSize
-
-        case .jumpBackIn:
-            cellSize.height *= CGFloat(viewModel.jumpBackInViewModel.numberOfItemsInColumn)
-            cellSize.height += HistoryHighlightsCollectionCellUX.verticalPadding * 2
-            return cellSize
-
-        case .historyHighlights:
-
-            guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else {
-                return CGSize(width: cellSize.width, height: .zero)
-            }
-
-            // Returns the total height based on a variable column/row layout
-            let rowNumber = items.count < HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn ? items.count : HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
-
-            let sectionHeight = (cellSize.height * CGFloat(rowNumber)) + HistoryHighlightsCollectionCellUX.verticalPadding * 2
-            return CGSize(width: cellSize.width,
-                          height: sectionHeight)
-
-        default:
-            return cellSize
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-
-        switch FirefoxHomeSectionType(section) {
-        case .pocket:
-            return viewModel.pocketViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
-        case .topSites:
-            // Only show a header for top sites if the Firefox Browser logo is not showing
-            if viewModel.topSiteViewModel.shouldShow {
-                return viewModel.headerViewModel.shouldShow ? .zero : getHeaderSize(forSection: section)
-            }
-
-            return .zero
-        case .jumpBackIn:
-            return viewModel.jumpBackInViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
-        case .historyHighlights:
-            return viewModel.historyHighlightsViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
-        case .recentlySaved:
-            return viewModel.recentlySavedViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
-        default:
-            return .zero
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return .zero
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        // This removes extra space since insetForSectionAt is called for all sections even if they are not showing
-        // Root cause is that numberOfSections is always returned as FirefoxHomeSectionType.allCases
-        let sideInsets = FirefoxHomeSectionType(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
-        let edgeInsets = UIEdgeInsets(top: 0, left: sideInsets, bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, right: sideInsets)
-
-        switch FirefoxHomeSectionType(section) {
-        case .logoHeader:
-            return viewModel.headerViewModel.shouldShow ? edgeInsets : .zero
-        case .pocket:
-            return viewModel.pocketViewModel.shouldShow ? edgeInsets : .zero
-        case .topSites:
-            return viewModel.topSiteViewModel.shouldShow ? edgeInsets : .zero
-        case .jumpBackIn:
-            return viewModel.jumpBackInViewModel.shouldShow ? edgeInsets : .zero
-        case .historyHighlights:
-            return viewModel.historyHighlightsViewModel.shouldShow ? edgeInsets : .zero
-        case .recentlySaved:
-            return viewModel.recentlySavedViewModel.shouldShow ? edgeInsets : .zero
-        default:
-            return .zero
-        }
-    }
-}
+// TODO: Laurie
+//extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
+//
+//    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        switch kind {
+//        case UICollectionView.elementKindSectionHeader:
+//            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+//            let title = FirefoxHomeSectionType(indexPath.section).title
+//            headerView.title = title
+//            headerView.titleLabel.accessibilityTraits = .header
+//
+//            switch FirefoxHomeSectionType(indexPath.section) {
+//            case .pocket:
+//                headerView.moreButton.isHidden = true
+//                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.pocket
+//                return headerView
+//
+//            case .jumpBackIn:
+//                if !hasSentJumpBackInSectionEvent
+//                    && viewModel.jumpBackInViewModel.isEnabled {
+//                    TelemetryWrapper.recordEvent(category: .action, method: .view, object: .jumpBackInImpressions, value: nil, extras: nil)
+//                    hasSentJumpBackInSectionEvent = true
+//                }
+//                headerView.moreButton.isHidden = false
+//                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
+//                headerView.moreButton.addTarget(self, action: #selector(openTabTray), for: .touchUpInside)
+//                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.jumpBackIn
+//                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.jumpBackIn
+//                prepareJumpBackInContextualHint(onView: headerView)
+//
+//                return headerView
+//
+//            case .recentlySaved:
+//                headerView.moreButton.isHidden = false
+//                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
+//                headerView.moreButton.addTarget(self, action: #selector(openBookmarks), for: .touchUpInside)
+//                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.recentlySaved
+//                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.recentlySaved
+//                return headerView
+//
+//            case .historyHighlights:
+//                headerView.moreButton.isHidden = false
+//                headerView.moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
+//                headerView.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
+//                headerView.moreButton.accessibilityIdentifier = a11y.MoreButtons.historyHighlights
+//                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.historyHighlights
+//                return headerView
+//
+//            case .topSites:
+//                headerView.titleLabel.accessibilityIdentifier = a11y.SectionTitles.topSites
+//                headerView.moreButton.isHidden = true
+//                return headerView
+//            case .customizeHome:
+//                headerView.moreButton.isHidden = true
+//                return headerView
+//            case .logoHeader:
+//                headerView.moreButton.isHidden = true
+//                return headerView
+//            }
+//        default:
+//            return UICollectionReusableView()
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        var cellSize = FirefoxHomeSectionType(indexPath.section).cellSize(for: self.traitCollection, frameWidth: self.view.frame.width)
+//
+//        switch FirefoxHomeSectionType(indexPath.section) {
+//        case .topSites:
+//            let sectionDimension = viewModel.topSiteViewModel.getSectionDimension(for: traitCollection)
+//            cellSize.height *= CGFloat(sectionDimension.numberOfRows)
+//            cellSize.height += (FxHomeTopSitesViewModel.UX.parentInterItemSpacing * 2) * CGFloat(sectionDimension.numberOfRows)
+//            return cellSize
+//
+//        case .jumpBackIn:
+//            cellSize.height *= CGFloat(viewModel.jumpBackInViewModel.numberOfItemsInColumn)
+//            cellSize.height += HistoryHighlightsCollectionCellUX.verticalPadding * 2
+//            return cellSize
+//
+//        case .historyHighlights:
+//
+//            guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else {
+//                return CGSize(width: cellSize.width, height: .zero)
+//            }
+//
+//            // Returns the total height based on a variable column/row layout
+//            let rowNumber = items.count < HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn ? items.count : HistoryHighlightsCollectionCellConstants.maxNumberOfItemsPerColumn
+//
+//            let sectionHeight = (cellSize.height * CGFloat(rowNumber)) + HistoryHighlightsCollectionCellUX.verticalPadding * 2
+//            return CGSize(width: cellSize.width,
+//                          height: sectionHeight)
+//
+//        default:
+//            return cellSize
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//
+//        switch FirefoxHomeSectionType(section) {
+//        case .pocket:
+//            return viewModel.pocketViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
+//        case .topSites:
+//            // Only show a header for top sites if the Firefox Browser logo is not showing
+//            if viewModel.topSiteViewModel.shouldShow {
+//                return viewModel.headerViewModel.shouldShow ? .zero : getHeaderSize(forSection: section)
+//            }
+//
+//            return .zero
+//        case .jumpBackIn:
+//            return viewModel.jumpBackInViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
+//        case .historyHighlights:
+//            return viewModel.historyHighlightsViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
+//        case .recentlySaved:
+//            return viewModel.recentlySavedViewModel.shouldShow ? getHeaderSize(forSection: section) : .zero
+//        default:
+//            return .zero
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+//        return .zero
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return 0
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        // This removes extra space since insetForSectionAt is called for all sections even if they are not showing
+//        // Root cause is that numberOfSections is always returned as FirefoxHomeSectionType.allCases
+//        let sideInsets = FirefoxHomeSectionType(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
+//        let edgeInsets = UIEdgeInsets(top: 0, left: sideInsets, bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, right: sideInsets)
+//
+//        switch FirefoxHomeSectionType(section) {
+//        case .logoHeader:
+//            return viewModel.headerViewModel.shouldShow ? edgeInsets : .zero
+//        case .pocket:
+//            return viewModel.pocketViewModel.shouldShow ? edgeInsets : .zero
+//        case .topSites:
+//            return viewModel.topSiteViewModel.shouldShow ? edgeInsets : .zero
+//        case .jumpBackIn:
+//            return viewModel.jumpBackInViewModel.shouldShow ? edgeInsets : .zero
+//        case .historyHighlights:
+//            return viewModel.historyHighlightsViewModel.shouldShow ? edgeInsets : .zero
+//        case .recentlySaved:
+//            return viewModel.recentlySavedViewModel.shouldShow ? edgeInsets : .zero
+//        default:
+//            return .zero
+//        }
+//    }
+//}
 
 // MARK: - CollectionView Data Source
 

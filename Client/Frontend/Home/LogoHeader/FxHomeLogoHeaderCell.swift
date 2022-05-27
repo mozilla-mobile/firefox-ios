@@ -49,6 +49,7 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(logoButton)
 
         NSLayoutConstraint.activate([
+            logoButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
             logoButton.widthAnchor.constraint(equalToConstant: LogoViewUX.imageWidth),
             logoButton.heightAnchor.constraint(equalToConstant: LogoViewUX.imageHeight),
             logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

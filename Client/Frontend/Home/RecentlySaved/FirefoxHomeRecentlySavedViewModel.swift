@@ -90,9 +90,13 @@ extension FirefoxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFla
     var sectionType: FirefoxHomeSectionType {
         return .recentlySaved
     }
+    // TODO: Laurie
+//    var isEnabled: Bool {
+//        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
+//    }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentlySaved, checking: .buildAndUser)
+        return false
     }
 
     var hasData: Bool {

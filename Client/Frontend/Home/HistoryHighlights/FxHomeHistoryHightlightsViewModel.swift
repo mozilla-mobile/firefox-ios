@@ -109,11 +109,15 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
     var sectionType: FirefoxHomeSectionType {
         return .historyHighlights
     }
+    // TODO: Laurie
+//    var isEnabled: Bool {
+//        guard featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser) else { return false }
+//
+//        return !isPrivate
+//    }
 
     var isEnabled: Bool {
-        guard featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser) else { return false }
-
-        return !isPrivate
+        return false
     }
 
     var hasData: Bool {
