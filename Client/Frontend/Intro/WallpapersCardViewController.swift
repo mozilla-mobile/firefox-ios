@@ -9,20 +9,13 @@ class WallpaperCardViewController: OnboardingCardViewController {
     struct UX {
         static let third: CGFloat = 1/3
         static let quarter: CGFloat = 1/4
-        static let sixth: CGFloat = 1/6
-        static let inset: CGFloat = 3.5
+        static let itemInset: CGFloat = 3.5
+        static let groupInset: CGFloat = 8
+        static let collectionViewRadius: CGFloat = 8
     }
 
     var wallpaperManager: WallpaperManager
-
-    private var fxTextThemeColor: UIColor {
-        // For dark theme we want to show light colours and for light we want to show dark colours
-        return theme == .dark ? .white : .black
-    }
-
-    private lazy var imageView: UIImageView = .build { imageView in
-
-    }
+    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero,
@@ -31,44 +24,47 @@ class WallpaperCardViewController: OnboardingCardViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = UIColor.clear
+        collectionView.layer.cornerRadius = UX.collectionViewRadius
+        collectionView.backgroundColor = UIColor.Photon.Grey10A40
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(
-            WallpaperSettingCollectionCell.self,
-            forCellWithReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier)
+        collectionView.register(WallpaperSettingCollectionCell.self,
+                                forCellWithReuseIdentifier: WallpaperSettingCollectionCell.cellIdentifier)
 
         return collectionView
     }()
 
     private func getCompositionalLayout() -> UICollectionViewCompositionalLayout {
 
-        let deviceFractionalWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? UX.quarter : UX.third
-        let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? UX.sixth : deviceFractionalWidth
-
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(fractionalWidth),
-            heightDimension: .fractionalHeight(1))
+        let fractionalWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? UX.quarter : UX.third
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fractionalWidth),
+                                              heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: UX.inset,
-                                                     leading: UX.inset,
-                                                     bottom: UX.inset,
-                                                     trailing: UX.inset)
+        item.contentInsets = NSDirectionalEdgeInsets(top: UX.itemInset,
+                                                     leading: UX.itemInset,
+                                                     bottom: UX.itemInset,
+                                                     trailing: UX.itemInset)
 
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalWidth(fractionalWidth))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .fractionalWidth(fractionalWidth))
 
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitems: [item])
+        group.contentInsets = NSDirectionalEdgeInsets(top: UX.groupInset,
+                                                        leading: UX.groupInset,
+                                                        bottom: UX.groupInset,
+                                                        trailing: UX.groupInset)
 
         let section = NSCollectionLayoutSection(group: group)
         return UICollectionViewCompositionalLayout(section: section)
     }
 
-    override init(viewModel: OnboardingCardProtocol) {
-        self.wallpaperManager = WallpaperManager()
-        super.init(viewModel: viewModel)
+    init(viewModel: OnboardingCardProtocol,
+         delegate: OnboardingCardDelegate,
+         wallpaperManager: WallpaperManager = WallpaperManager()) {
+        self.wallpaperManager = wallpaperManager
+
+        super.init(viewModel: viewModel, delegate: delegate)
     }
 
     required init?(coder: NSCoder) {
@@ -78,10 +74,17 @@ class WallpaperCardViewController: OnboardingCardViewController {
     override func setupView() {
         super.setupView()
         contentStackView.insertArrangedView(collectionView, position: 2)
+        view.addSubview(wallpaperView)
 
         NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: 300).priority(.fittingSizeLevel)
+            collectionView.heightAnchor.constraint(equalToConstant: 240).priority(.defaultLow),
+
+            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
+            wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        view.sendSubviewToBack(wallpaperView)
         collectionView.reloadData()
     }
 }
@@ -100,5 +103,10 @@ extension WallpaperCardViewController: UICollectionViewDelegateFlowLayout, UICol
         cell.accessibilityLabel = wallpaperManager.getAccessibilityLabelForWallpaper(at: indexPath.row)
 
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
+        wallpaperManager.updateSelectedWallpaperIndex(to: indexPath.row)
     }
 }

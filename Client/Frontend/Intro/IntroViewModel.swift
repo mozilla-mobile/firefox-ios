@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 struct IntroViewModel {
     enum OnboardingCards: Int, CaseIterable {
@@ -25,28 +26,28 @@ struct IntroViewModel {
         switch currentCard {
         case .welcome:
             return OnboardingCardViewModel(cardType: currentCard,
-                                          image: UIImage(named: "tour-Welcome"),
-                                          title: "Welcome title",
-                                          description: "Welcome description",
-                                          primaryAction: "Primary",
+                                           image: UIImage(named: "tour-Welcome"),
+                                           title: .CardTitleWelcome,
+                                           description: .Onboarding.IntroDescriptionPart2,
+                                           primaryAction: .Onboarding.IntroAction,
                                           secondaryAction: nil,
                                           a11yIdRoot: "Welcome")
         case .wallpapers:
             return OnboardingCardViewModel(cardType: currentCard,
-                                          image: nil,
-                                          title: "Wallpapers title",
-                                          description: nil,
-                                          primaryAction: "Primary",
-                                          secondaryAction: "Next",
-                                          a11yIdRoot: "Wallpaper")
+                                           image: nil,
+                                           title: .Onboarding.WallpaperTitle,
+                                           description: nil,
+                                           primaryAction: .Onboarding.WallpaperAction,
+                                           secondaryAction: .Onboarding.LaterAction,
+                                           a11yIdRoot: "Wallpaper")
         case .signSync:
             return OnboardingCardViewModel(cardType: currentCard,
-                                          image: UIImage(named: "tour-Welcome"),
-                                          title: "Sign title",
-                                          description: "Sign description",
-                                          primaryAction: "Primary",
-                                          secondaryAction: "Start browsing",
-                                          a11yIdRoot: "SignIn")
+                                           image: UIImage(named: "tour-Welcome"),
+                                           title: .Onboarding.SyncTitle,
+                                           description: .Onboarding.SyncDescription,
+                                           primaryAction: .Onboarding.SyncAction,
+                                           secondaryAction: .WhatsNew.RecentButtonTitle,
+                                           a11yIdRoot: "Sync")
         }
     }
 }

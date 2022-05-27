@@ -11,15 +11,12 @@ class IntroViewController: UIViewController, OnViewDismissable {
     var viewModel: IntroViewModel
 
     // MARK: - Var related to onboarding
-    private lazy var closeButton: UIButton = {
-        let button = UIButton()
+    private lazy var closeButton: UIButton = .build { button in
         let closeImage = UIImage(named: ImageIdentifiers.closeLargeButton)
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
-        button.addTarget(self, action: #selector(closeOnboarding), for: .touchUpInside)
-        return button
-    }()
+        button.addTarget(self, action: #selector(self.closeOnboarding), for: .touchUpInside)
+    }
 
     private lazy var pageController: UIPageViewController = {
         let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
@@ -52,7 +49,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor.theme.browser.background
         setupPageController()
         setupLayout()
     }
@@ -90,24 +87,6 @@ class IntroViewController: UIViewController, OnViewDismissable {
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
-
-//        onboardingCard.nextClosure = {
-//            guard self.viewModel.currentCard != .signSync else {
-//                self.didFinishClosure?(self, nil)
-//                return
-//            }
-//
-//            self.showNextCard()
-//        }
-//
-//        onboardingCard.primaryActionClosure = {
-//            switch self.viewModel.currentCard {
-//            case .welcome:
-//                self.showNextCard()
-//            default:
-//                break
-//            }
-//        }
     }
 
     @objc private func closeOnboarding() {
@@ -120,9 +99,9 @@ class IntroViewController: UIViewController, OnViewDismissable {
         let cardViewModel = viewModel.getCardViewModel(index: index)
 
         if index == viewModel.enabledCards.firstIndex(of: .wallpapers) {
-            return WallpaperCardViewController(viewModel: cardViewModel)
+            return WallpaperCardViewController(viewModel: cardViewModel, delegate: self)
         } else {
-            return OnboardingCardViewController(viewModel: cardViewModel)
+            return OnboardingCardViewController(viewModel: cardViewModel, delegate: self)
         }
     }
 
@@ -131,10 +110,17 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
         return viewModel.enabledCards.firstIndex(of: cardType)
     }
+
+    private func moveToNextPage(cardType: IntroViewModel.OnboardingCards) {
+        if let nextViewController = showNextOnboardingCard(index: cardType.rawValue + 1) {
+            pageControl.currentPage = cardType.rawValue + 1
+            pageController.setViewControllers([nextViewController], direction: .forward, animated: true)
+        }
+    }
 }
 
+// MARK: UIPageViewControllerDataSource & UIPageViewControllerDelegate
 extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         return nil
     }
@@ -146,8 +132,6 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         }
 
         if index == viewModel.enabledCards.count - 1 { return nil }
-
-//        pageControl.currentPage = index + 1
         return showNextOnboardingCard(index: index + 1)
     }
 
@@ -157,6 +141,26 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         guard completed, index != viewModel.enabledCards.count else { return }
 
         pageControl.currentPage = index
+    }
+}
+
+extension IntroViewController: OnboardingCardDelegate {
+    func showNextPage(_ cardType: IntroViewModel.OnboardingCards) {
+        guard cardType != viewModel.enabledCards.last else {
+            self.didFinishClosure?(self, nil)
+            return
+        }
+
+        moveToNextPage(cardType: cardType)
+    }
+
+    func primaryAction(_ cardType: IntroViewModel.OnboardingCards) {
+        switch cardType {
+        case .welcome, .wallpapers:
+            moveToNextPage(cardType: cardType)
+        case .signSync:
+            didFinishClosure?(self, .emailLoginFlow)
+        }
     }
 }
 
