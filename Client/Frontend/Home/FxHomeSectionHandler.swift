@@ -18,15 +18,9 @@ protocol FxHomeSectionHandler {
 
 extension FxHomeSectionHandler {
 
-    func configure(_ cell: UICollectionViewCell,
-                   at indexPath: IndexPath) -> UICollectionViewCell {
-        // Useful when no particular configuration needs to be done on the cell
-        return cell
-    }
-
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-        // Action on cell is sometimes handled with a button, or gesture recognizers
+        // Action on cell is sometimes handled with a button, or gesture recognizers with closures
     }
 }

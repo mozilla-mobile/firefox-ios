@@ -159,7 +159,7 @@ extension FxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggabl
 // MARK: FxHomeSectionHandler
 extension FxHomeRecentlySavedViewModel: FxHomeSectionHandler {
 
-    func configure(cell: UICollectionViewCell,
+    func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
 
         guard let recentlySavedCell = cell as? FxHomeRecentlySavedCell else { return UICollectionViewCell() }

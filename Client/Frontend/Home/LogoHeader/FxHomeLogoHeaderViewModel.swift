@@ -59,7 +59,7 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
 
 extension FxHomeLogoHeaderViewModel: FxHomeSectionHandler {
 
-    func configure(cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
+    func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let logoHeaderCell = cell as? FxHomeLogoHeaderCell else { return UICollectionViewCell() }
         logoHeaderCell.configure(onTapAction: onTapAction)
         return logoHeaderCell

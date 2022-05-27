@@ -44,7 +44,7 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
 // MARK: FxHomeSectionHandler
 extension FxHomeCustomizeButtonViewModel: FxHomeSectionHandler {
 
-    func configure(cell: UICollectionViewCell,
+    func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
         customizeHomeCell.configure(onTapAction: onTapAction)
