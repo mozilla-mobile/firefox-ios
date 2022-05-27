@@ -669,8 +669,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
 // MARK: - Telemetry
 private extension SearchViewController {
-     func recordSearchListSelectionTelemetry(type: SearchListSection,
-                                                    isBookmark: Bool = false) {
+     func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
         let key = TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue
         switch type {
         case .searchSuggestions:
