@@ -2,11 +2,11 @@
 "Done" = "Facite";
 
 /* Text selection menu item */
-"Find in Page" = "Cercar in le pagina";
+"Find in Page" = "Cercar in pagina";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
-"Next in-page result" = "Resultato sequente in le pagina";
+"Next in-page result" = "Resultato sequente in pagina";
 
 /* Accessibility label for previous result button in Find in Page Toolbar. */
-"Previous in-page result" = "Resultato precedente in le pagina";
+"Previous in-page result" = "Resultato precedente in pagina";
 

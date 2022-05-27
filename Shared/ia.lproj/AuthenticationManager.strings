@@ -14,7 +14,7 @@
 "After 15 minutes" = "Post 15 minutas";
 
 /* Label used as a setting item and title of the following screen to change the current passcode */
-"Change Passcode" = "Cambiar le codice de accesso";
+"Change Passcode" = "Cambiar codice de accesso";
 
 /* Text displayed above the input field when changing the existing passcode */
 "Enter a new passcode" = "Insere un nove codice de accesso";
@@ -23,10 +23,10 @@
 "Enter a passcode" = "Insere un codice de accesso";
 
 /* Text displayed above the input field when changing the existing passcode */
-"Enter passcode" = "Insere un codice de accesso";
+"Enter passcode" = "Insere codice de accesso";
 
 /* Title of the dialog used to request the passcode */
-"Enter Passcode" = "Insere le codice de accesso";
+"Enter Passcode" = "Insere codice de accesso";
 
 /* Label for the Face ID/Passcode item in Settings */
 "Face ID & Passcode" = "Face ID e codice de accesso";
@@ -62,7 +62,7 @@
 "Require Passcode" = "Requirer le codice de accesso";
 
 /* Title of the dialog used to set a passcode */
-"Set Passcode" = "Definir un codice de accesso";
+"Set Passcode" = "Definir codice de accesso";
 
 /* Label for the Touch ID/Passcode item in Settings */
 "Touch ID & Passcode" = "Touch ID e codice de accesso";
@@ -74,10 +74,10 @@
 "touchid.require.passcode.reason.label" = "Usa tu dactylogramma pro configurar le intervallo de requesta del codice de accesso.";
 
 /* Label used as a setting item to turn off passcode */
-"Turn Passcode Off" = "Disactivar le codice de accesso";
+"Turn Passcode Off" = "Disactivar codice de accesso";
 
 /* Label used as a setting item to turn on passcode */
-"Turn Passcode On" = "Activar le codice de accesso";
+"Turn Passcode On" = "Activar codice de accesso";
 
 /* List section title for when to use Face ID */
 "Use Face ID" = "Usar Face ID";
