@@ -2545,7 +2545,7 @@ awesomebar:
       type:
         description: |
           Type: history-item, remote-tab, opened-tab,
-          bookmark-item, search-suggestionType of tap
+          bookmark-item, search-suggestion
         type: string
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-3751
