@@ -12,6 +12,8 @@ protocol FXHomeViewModelProtocol {
     // Layout section so FirefoxHomeViewController view controller can setup the section
     static var section: NSCollectionLayoutSection { get }
 
+    var numberOfItemsInSection: Int { get }
+
     // Returns true when section needs to load data and show itself
     var isEnabled: Bool { get }
 
@@ -49,6 +51,10 @@ extension FXHomeViewModelProtocol {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         return NSCollectionLayoutSection(group: group)
+    }
+
+    var numberOfItemsInSection: Int {
+        return 0
     }
 
     func updateData(completion: @escaping () -> Void) {}

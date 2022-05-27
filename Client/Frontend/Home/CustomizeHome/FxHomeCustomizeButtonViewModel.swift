@@ -4,8 +4,9 @@
 
 import Foundation
 
+/// Customize button is always present at the bottom of the page
 class FxHomeCustomizeButtonViewModel {
-    // Customize button is always present at the bottom of the page
+    var onTapAction: ((UIButton) -> Void)?
 }
 
 // MARK: FXHomeViewModelProtocol
@@ -27,7 +28,23 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
         return NSCollectionLayoutSection(group: group)
     }
 
+    var numberOfItemsInSection: Int {
+        return 1
+    }
+
     var isEnabled: Bool {
         return true
     }
+}
+
+// MARK: FxHomeSectionHandler
+extension FxHomeCustomizeButtonViewModel: FxHomeSectionHandler {
+
+    func configure(cell: UICollectionViewCell,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+        guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
+        customizeHomeCell.configure(onTapAction: onTapAction)
+        return customizeHomeCell
+    }
+
 }

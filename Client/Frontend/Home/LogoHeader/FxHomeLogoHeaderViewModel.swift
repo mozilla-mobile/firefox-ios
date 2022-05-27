@@ -8,6 +8,7 @@ import Shared
 class FxHomeLogoHeaderViewModel {
 
     private let profile: Profile
+    var onTapAction: ((UIButton) -> Void)?
 
     init(profile: Profile) {
         self.profile = profile
@@ -43,7 +44,20 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
         return NSCollectionLayoutSection(group: group)
     }
 
+    var numberOfItemsInSection: Int {
+        return 1
+    }
+
     var isEnabled: Bool {
         return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+    }
+}
+
+extension FxHomeLogoHeaderViewModel: FxHomeSectionHandler {
+
+    func configure(cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
+        guard let logoHeaderCell = cell as? FxHomeLogoHeaderCell else { return UICollectionViewCell() }
+        logoHeaderCell.configure(onTapAction: onTapAction)
+        return logoHeaderCell
     }
 }

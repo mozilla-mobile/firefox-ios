@@ -45,7 +45,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     private var childViewModels: [FXHomeViewModelProtocol]
     var headerViewModel: FxHomeLogoHeaderViewModel
     var topSiteViewModel: FxHomeTopSitesViewModel
-    var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
+    var recentlySavedViewModel: FxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
@@ -67,7 +67,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
             isZeroSearch: isZeroSearch,
             profile: profile,
             isPrivate: isPrivate)
-        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(
+        self.recentlySavedViewModel = FxHomeRecentlySavedViewModel(
             isZeroSearch: isZeroSearch,
             profile: profile)
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(
@@ -92,11 +92,13 @@ class FirefoxHomeViewModel: FeatureFlaggable {
 
     // MARK: - Interfaces
 
-    func updateData() {
-        childViewModels.forEach { section in
-            guard section.isEnabled else { return }
-            self.update(section: section)
-        }
+    func recordViewAppeared() {
+        nimbus.features.homescreenFeature.recordExposure()
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .firefoxHomepage,
+                                     value: .fxHomepageOrigin,
+                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
     }
 
     func updateEnabledSections() {
@@ -107,12 +109,23 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         }
     }
 
+    func updateData() {
+        childViewModels.forEach { section in
+            guard section.isEnabled else { return }
+            self.update(section: section)
+        }
+    }
+
     private func update(section: FXHomeViewModelProtocol) {
         section.updateData {
             guard section.shouldReloadSection else { return }
             let index = self.enabledSections.firstIndex(of: section.sectionType)
             self.delegate?.reloadSection(index: index)
         }
+    }
+
+    func getSectionViewModel(section: Int) -> FXHomeViewModelProtocol {
+        return childViewModels[section]
     }
 }
 

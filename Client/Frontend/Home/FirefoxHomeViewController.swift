@@ -91,7 +91,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         }
         collectionView?.register(ASHeaderView.self,
                                  forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                 withReuseIdentifier: "Header")
+                                 withReuseIdentifier: ASHeaderView.cellIdentifier)
         collectionView?.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .clear
         view.addSubview(wallpaperView)
@@ -114,10 +114,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         view.sendSubviewToBack(wallpaperView)
 
         applyTheme()
-
-        if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
-            collectionView.reloadData()
-        }
+        setupSectionsAction()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -126,13 +123,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        viewModel.nimbus.features.homescreenFeature.recordExposure()
+        viewModel.recordViewAppeared()
         animateFirefoxLogo()
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .firefoxHomepage,
-                                     value: .fxHomepageOrigin,
-                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
 
         super.viewDidAppear(animated)
     }
@@ -159,7 +151,13 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     static func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout {
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-            return FirefoxHomeSectionType(rawValue: sectionIndex)?.section ?? nil
+            // TODO: Laurie pass in the traitCollection from layoutEnvironment?
+            guard let section = FirefoxHomeSectionType(rawValue: sectionIndex)?.section else {
+                return nil
+            }
+
+            section.interGroupSpacing = FirefoxHomeViewModel.UX.spacingBetweenSections
+            return section
         }
         return layout
     }
@@ -175,6 +173,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
         }, completion: { _ in
+            // TODO: Laurie still necessary to reload here?
             // Workaround: label positions are not correct without additional reload
             self.collectionView?.reloadData()
         })
@@ -269,7 +268,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     }
 
     private func showHomeTabBanner() {
-        self.view.addSubview(homeTabBanner)
+        view.addSubview(homeTabBanner)
         NSLayoutConstraint.activate([
             homeTabBanner.topAnchor.constraint(equalTo: view.topAnchor),
             homeTabBanner.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
@@ -288,7 +287,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     }
 
     public func dismissHomeTabBanner() {
-        self.homeTabBanner.removeFromSuperview()
+        homeTabBanner.removeFromSuperview()
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -297,23 +296,23 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         ])
     }
 
-    // MARK: - Headers
+//     MARK: - Headers
 
-    private func getHeaderSize(forSection section: Int) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        let size = CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height)
-
-        return headerView.systemLayoutSizeFitting(size,
-                                                  withHorizontalFittingPriority: .required,
-                                                  verticalFittingPriority: .fittingSizeLevel)
-    }
+//    private func getHeaderSize(forSection section: Int) -> CGSize {
+//        let indexPath = IndexPath(row: 0, section: section)
+//        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+//        let size = CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height)
+//
+//        return headerView.systemLayoutSizeFitting(size,
+//                                                  withHorizontalFittingPriority: .required,
+//                                                  verticalFittingPriority: .fittingSizeLevel)
+//    }
 }
 
 // MARK: -  CollectionView Delegate
 
 // TODO: Laurie
-//extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
+// extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 //
 //    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 //        switch kind {
@@ -463,7 +462,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
 //            return .zero
 //        }
 //    }
-//}
+// }
 
 // MARK: - CollectionView Data Source
 
@@ -475,38 +474,36 @@ extension FirefoxHomeViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.updateEnabledSections()
-        return viewModel.enabledSections.contains(FirefoxHomeSectionType(section)) ? 1 : 0
+        return viewModel.getSectionViewModel(section: section).numberOfItemsInSection
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
 
+        // TODO: Laurie - Change this to protocol comformance instead of switch
         switch FirefoxHomeSectionType(indexPath.section) {
         case .logoHeader:
-            return configureLogoHeaderCell(cell, forIndexPath: indexPath)
+            return viewModel.headerViewModel.configure(cell, at: indexPath)
+
         case .topSites:
             return configureTopSitesCell(cell, forIndexPath: indexPath)
+
         case .pocket:
             return configurePocketItemCell(cell, forIndexPath: indexPath)
+
         case .jumpBackIn:
             return configureJumpBackInCell(cell, forIndexPath: indexPath)
+
         case .recentlySaved:
-            return configureRecentlySavedCell(cell, forIndexPath: indexPath)
+            return viewModel.recentlySavedViewModel.configure(cell, at: indexPath)
+
         case .historyHighlights:
             return configureHistoryHighlightsCell(cell, forIndexPath: indexPath)
-        case .customizeHome:
-            return configureCustomizeHomeCell(cell, forIndexPath: indexPath)
-        }
-    }
 
-    func configureLogoHeaderCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let logoHeaderCell = cell as? FxHomeLogoHeaderCell else { return UICollectionViewCell() }
-        let tap = UITapGestureRecognizer(target: self, action: #selector(changeHomepageWallpaper))
-        tap.numberOfTapsRequired = 1
-        logoHeaderCell.logoButton.addGestureRecognizer(tap)
-        logoHeaderCell.setNeedsLayout()
-        return logoHeaderCell
+        case .customizeHome:
+            return viewModel.customizeButtonViewModel.configure(cell, at: indexPath)
+        }
     }
 
     func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
@@ -515,28 +512,11 @@ extension FirefoxHomeViewController {
         topSiteCell.reloadLayout()
         topSiteCell.setNeedsLayout()
 
-        viewModel.topSiteViewModel.tilePressedHandler = { [weak self] site, isGoogle in
-            guard let url = site.url.asURL else { return }
-            self?.showSiteWithURLHandler(url, isGoogleTopSite: isGoogle)
-        }
-
-        viewModel.topSiteViewModel.tileLongPressedHandler = { [weak self] (site, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .topSites)
-        }
-
         return cell
     }
 
     private func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let pocketCell = cell as? FxHomePocketCollectionCell else { return UICollectionViewCell() }
-
-        viewModel.pocketViewModel.onTapTileAction = { [weak self] url in
-            self?.showSiteWithURLHandler(url)
-        }
-
-        viewModel.pocketViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .pocket)
-        }
 
         viewModel.pocketViewModel.recordSectionHasShown()
         pocketCell.viewModel = viewModel.pocketViewModel
@@ -546,24 +526,9 @@ extension FirefoxHomeViewController {
         return pocketCell
     }
 
-    private func configureRecentlySavedCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let recentlySavedCell = cell as? FxHomeRecentlySavedCollectionCell else { return UICollectionViewCell() }
-        recentlySavedCell.viewModel = viewModel.recentlySavedViewModel
-        recentlySavedCell.homePanelDelegate = homePanelDelegate
-        recentlySavedCell.libraryPanelDelegate = libraryPanelDelegate
-        recentlySavedCell.collectionView.reloadData()
-        recentlySavedCell.setNeedsLayout()
-
-        return recentlySavedCell
-    }
-
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         guard let jumpBackInCell = cell as? FxHomeJumpBackInCollectionCell else { return UICollectionViewCell() }
         jumpBackInCell.viewModel = viewModel.jumpBackInViewModel
-
-        viewModel.jumpBackInViewModel.onTapGroup = { [weak self] tab in
-            self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
-        }
 
         jumpBackInCell.reloadLayout()
         jumpBackInCell.setNeedsLayout()
@@ -575,14 +540,6 @@ extension FirefoxHomeViewController {
         guard let historyCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
 
         guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else { return UICollectionViewCell() }
-        viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
-            guard let url = highlight.siteUrl else {
-                self?.openHistoryHighligtsSearchGroup(item: highlight)
-                return
-            }
-
-            self?.homePanelDelegate?.homePanel(didSelectURL: url, visitType: .link, isGoogleTopSite: false)
-        }
 
         historyCell.viewModel = viewModel.historyHighlightsViewModel
         historyCell.viewModel?.recordSectionHasShown()
@@ -623,15 +580,16 @@ extension FirefoxHomeViewController {
         return Site(url: itemURL, title: highlight.displayTitle)
     }
 
-    private func configureCustomizeHomeCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
-        customizeHomeCell.goToSettingsButton.addTarget(
-            self,
-            action: #selector(openCustomizeHomeSettings),
-            for: .touchUpInside)
-        customizeHomeCell.setNeedsLayout()
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        return customizeHomeCell
+        switch FirefoxHomeSectionType(indexPath.section) {
+        case .recentlySaved:
+            viewModel.recentlySavedViewModel.didSelectItem(at: indexPath,
+                                                           homePanelDelegate: homePanelDelegate,
+                                                           libraryPanelDelegate: libraryPanelDelegate)
+        default:
+            break
+        }
     }
 }
 
@@ -655,7 +613,56 @@ extension FirefoxHomeViewController {
 
 // MARK: - Actions Handling
 
-extension FirefoxHomeViewController {
+private extension FirefoxHomeViewController {
+
+    // Setup all the tap and long press actions on cells in each sections
+    private func setupSectionsAction() {
+
+        // Header view
+        viewModel.headerViewModel.onTapAction = { [weak self] _ in
+            self?.changeHomepageWallpaper()
+        }
+
+        // Top sites
+        viewModel.topSiteViewModel.tilePressedHandler = { [weak self] site, isGoogle in
+            guard let url = site.url.asURL else { return }
+            self?.showSiteWithURLHandler(url, isGoogleTopSite: isGoogle)
+        }
+
+        viewModel.topSiteViewModel.tileLongPressedHandler = { [weak self] (site, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .topSites)
+        }
+
+        // Pocket
+        viewModel.pocketViewModel.onTapTileAction = { [weak self] url in
+            self?.showSiteWithURLHandler(url)
+        }
+
+        viewModel.pocketViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .pocket)
+        }
+
+        // Jumpback in
+        viewModel.jumpBackInViewModel.onTapGroup = { [weak self] tab in
+            self?.homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: tab)
+        }
+
+        // History highlights
+        viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
+            guard let url = highlight.siteUrl else {
+                self?.openHistoryHighligtsSearchGroup(item: highlight)
+                return
+            }
+
+            self?.homePanelDelegate?.homePanel(didSelectURL: url, visitType: .link, isGoogleTopSite: false)
+        }
+
+        // Customize home
+        viewModel.customizeButtonViewModel.onTapAction = { [weak self] _ in
+            self?.openCustomizeHomeSettings()
+        }
+    }
+
     @objc func openTabTray(_ sender: UIButton) {
         if sender.accessibilityIdentifier == a11y.MoreButtons.jumpBackIn {
             TelemetryWrapper.recordEvent(category: .action,
@@ -677,6 +684,7 @@ extension FirefoxHomeViewController {
                                          value: .recentlySavedSectionShowAll,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
         } else {
+            // TODO: Laurie - remove
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
@@ -694,6 +702,7 @@ extension FirefoxHomeViewController {
                                          value: .historyHighlightsShowAll)
 
         } else {
+            // TODO: Laurie - remove
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
@@ -702,25 +711,26 @@ extension FirefoxHomeViewController {
         }
     }
 
-    @objc func openReadingList(_ sender: UIButton) {
-        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .yourLibrarySection,
-                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.readingListPanel.rawValue])
-    }
+    // TODO: Laurie - remove
+//    @objc func openReadingList(_ sender: UIButton) {
+//        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .firefoxHomepage,
+//                                     value: .yourLibrarySection,
+//                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.readingListPanel.rawValue])
+//    }
 
-    @objc func openDownloads(_ sender: UIButton) {
-        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .yourLibrarySection,
-                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.downloadsPanel.rawValue])
-    }
+//    @objc func openDownloads(_ sender: UIButton) {
+//        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .firefoxHomepage,
+//                                     value: .yourLibrarySection,
+//                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.downloadsPanel.rawValue])
+//    }
 
-    @objc func openCustomizeHomeSettings() {
+    func openCustomizeHomeSettings() {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeHomepage)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
@@ -728,15 +738,15 @@ extension FirefoxHomeViewController {
                                      value: .customizeHomepageButton)
     }
 
-    @objc func contextualHintPresented() {
+    func contextualHintPresented() {
         homePanelDelegate?.homePanelDidPresentContextualHintOf(type: .jumpBackIn)
     }
 
-    @objc func openTabsSettings() {
+    func openTabsSettings() {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeTabs)
     }
 
-    @objc func changeHomepageWallpaper() {
+    func changeHomepageWallpaper() {
         wallpaperView.cycleWallpaper()
     }
 

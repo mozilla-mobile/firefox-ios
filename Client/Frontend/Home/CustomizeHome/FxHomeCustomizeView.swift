@@ -11,11 +11,12 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
     private struct UX {
         static let settingsButtonHeight: CGFloat = 36
         static let settingsButtonTopAnchorSpace: CGFloat = 28
+        static let settingsButtonBottomAnchorSpace: CGFloat = 16
         static let settingsButtonMaxFontSize: CGFloat = 49
     }
 
     // MARK: - UI Elements
-    let goToSettingsButton: UIButton = .build { button in
+    private let goToSettingsButton: ActionButton = .build { button in
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .subheadline,
                                                                                     maxSize: UX.settingsButtonMaxFontSize)
@@ -47,6 +48,7 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - UI Setup
+
     func setupView() {
         contentView.backgroundColor = .clear
         contentView.addSubview(goToSettingsButton)
@@ -58,6 +60,10 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
             goToSettingsButton.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 0),
             goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16)
         ])
+    }
+
+    func configure(onTapAction: ((UIButton) -> Void)?) {
+        goToSettingsButton.touchUpAction = onTapAction
     }
 }
 

@@ -40,7 +40,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         switch self {
         case .pocket: return FxHomePocketViewModel.section
         case .jumpBackIn: return FirefoxHomeJumpBackInViewModel.section
-        case .recentlySaved: return FirefoxHomeRecentlySavedViewModel.section
+        case .recentlySaved: return FxHomeRecentlySavedViewModel.section
         case .historyHighlights: return FxHomeHistoryHightlightsViewModel.section
         case .topSites: return FxHomeTopSitesViewModel.section
         case .customizeHome: return FxHomeCustomizeButtonViewModel.section
@@ -97,7 +97,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .topSites: return TopSiteCollectionCell.cellIdentifier
         case .pocket: return FxHomePocketCollectionCell.cellIdentifier
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
-        case .recentlySaved: return FxHomeRecentlySavedCollectionCell.cellIdentifier
+        case .recentlySaved: return FxHomeRecentlySavedCell.cellIdentifier
         case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.cellIdentifier
         case .customizeHome: return FxHomeCustomizeHomeView.cellIdentifier
         }
@@ -109,7 +109,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .topSites: return TopSiteCollectionCell.self
         case .pocket: return FxHomePocketCollectionCell.self
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
-        case .recentlySaved: return FxHomeRecentlySavedCollectionCell.self
+        case .recentlySaved: return FxHomeRecentlySavedCell.self
         case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.self
         case .customizeHome: return FxHomeCustomizeHomeView.self
         }

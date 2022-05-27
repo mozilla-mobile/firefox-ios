@@ -24,6 +24,9 @@ enum ASHeaderViewType {
 
 // Activity Stream header view
 class ASHeaderView: UICollectionReusableView {
+
+    static var cellIdentifier: String = "cellIdentifier"
+
     // MARK: - UIElements
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
