@@ -126,7 +126,7 @@
 "Authentication required" = "Authentication requirite";
 
 /* Description for button to suggest searching with a search engine. First argument is the name of the search engine to select */
-"Awesomebar.SearchWithEngine.Description" = "Cercar %@ directemente per le barra de adresse";
+"Awesomebar.SearchWithEngine.Description" = "Cercar %@ directemente desde le barra de adresse";
 
 /* Title for button to suggest searching with a search engine. First argument is the name of the search engine to select */
 "Awesomebar.SearchWithEngine.Title" = "Cercar con %@";
@@ -135,7 +135,7 @@
 "Back" = "Retro";
 
 /* Block pop-up windows setting */
-"Block Pop-up Windows" = "Blocar le fenestras emergente";
+"Block Pop-up Windows" = "Blocar fenestras emergente";
 
 /* The header title for the fields when editing a Bookmark */
 "Bookmark.BookmarkDetail.FieldsHeader.Bookmark.Title" = "Marcapaginas";
@@ -156,16 +156,16 @@
 "Bookmarks.Actions.Add" = "Adder";
 
 /* A label indicating the action of bookmarking all currently open non private tabs. */
-"Bookmarks.Actions.BookmarkAllTabs" = "Adder marcapaginas sur tote le schedas";
+"Bookmarks.Actions.BookmarkAllTabs" = "Adder tote le schedas al marcapaginas";
 
 /* A label indicating the action of bookmarking the current tab. */
 "Bookmarks.Actions.BookmarkCurrentTab" = "Adder scheda actual al marcapaginas";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
-"Bookmarks.Edit.Button" = "Rediger";
+"Bookmarks.Edit.Button" = "Modificar";
 
 /* The button to edit a bookmark */
-"Bookmarks.EditBookmark.Label" = "Modificar marcapaginas";
+"Bookmarks.EditBookmark.Label" = "Modificar marcapagina";
 
 /* The button to edit a folder */
 "Bookmarks.EditFolder.Label" = "Modificar dossier";
@@ -195,7 +195,7 @@
 "Bookmarks.NewSeparator.Label" = "Nove separator";
 
 /* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
-"Bookmarks.Search.SearchBookmarks" = "Cercar in le marcapaginas";
+"Bookmarks.Search.SearchBookmarks" = "Cercar in marcapaginas";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Titulo";
@@ -252,85 +252,85 @@
 "ContextMenu.BookmarkLinkButtonTitle" = "Adder al marcapaginas";
 
 /* The button text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Cambiar";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText" = "Commutar";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nove scheda private aperite";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Cambiar";
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Commutar";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Nove scheda aperite";
 
 /* Context menu item for copying an image to the clipboard */
-"ContextMenu.CopyImageButtonTitle" = "Copiar le imagine";
+"ContextMenu.CopyImageButtonTitle" = "Copiar imagine";
 
 /* Context menu item for copying an image URL to the clipboard */
-"ContextMenu.CopyImageLinkButtonTitle" = "Copiar le ligamine del imagine";
+"ContextMenu.CopyImageLinkButtonTitle" = "Copiar ligamine al imagine";
 
 /* Context menu item for copying a link URL to the clipboard */
-"ContextMenu.CopyLinkButtonTitle" = "Copiar le ligamine";
+"ContextMenu.CopyLinkButtonTitle" = "Copiar ligamine";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "Discargar le ligamine";
+"ContextMenu.DownloadLinkButtonTitle" = "Discargar ligamine";
 
 /* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenInNewTabButtonTitle" = "Aperir in un nove scheda";
+"ContextMenu.OpenInNewTabButtonTitle" = "Aperir in nove scheda";
 
 /* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Aperir le ligamine in un nove scheda private";
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Aperir ligamine in nove scheda private";
 
 /* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenLinkInNewTabButtonTitle" = "Aperir le ligamine in un nove scheda";
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "Aperir ligamine in nove scheda";
 
 /* Context menu item for saving an image */
-"ContextMenu.SaveImageButtonTitle" = "Salvar le imagine";
+"ContextMenu.SaveImageButtonTitle" = "Salvar imagine";
 
 /* Context menu item for sharing a link URL */
-"ContextMenu.ShareLinkButtonTitle" = "Compartir le ligamine";
+"ContextMenu.ShareLinkButtonTitle" = "Compartir ligamine";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
-"ContextualHint.SearchBarPlacement.ExistingUsers" = "Ora tu pote mover le barra del instrumentos al fundo, assi il es plus facile inserer informationes";
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Ora tu pote placiar le barra de instrumentos in basso, assi es plus facile inserer informationes";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
-"ContextualHint.SearchBarPlacement.NewUsers" = "Pro render le introduction information plus facile, le barra del instrumentos es ora prefixate al fundo.";
+"ContextualHint.SearchBarPlacement.NewUsers" = "Pro facilitar le insertion de informationes, le barra de instrumentos es ora placiate in basso per predefinition.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.Homepage.PersonalizedHome" = "Tu pagina principal personalisate de Firefox ora simplifica reprender de ubi tu lassava. Trova tu recente schedas, marcapaginas e resultatos del recerca.";
+"ContextualHints.Homepage.PersonalizedHome" = "Tu pagina principal personalisate in Firefox ora rende facile reprender ubi tu lassava. Retrova tu recente schedas, marcapaginas e resultatos de recerca.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
-"ContextualHints.SearchBarPlacement.CallToAction" = "Parametros del barra del instrumentos";
+"ContextualHints.SearchBarPlacement.CallToAction" = "Parametros del barra de instrumentos";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
-"ContextualHints.TabTray.InactiveTabs" = "Le schedas que tu non visualisava desde duo septimanas es displaciate hic.";
+"ContextualHints.TabTray.InactiveTabs" = "Le schedas que tu non ha visitate durante duo septimanas se transfere hic.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Disactivar in parametros";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
-"Could not add page to Reading list" = "Impossibile adder le pagina al lista de lectura";
+"Could not add page to Reading list" = "Non poteva adder le pagina al lista de lectura";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Impossibile adder le pagina al lista de lectura. Forsan illo es ja illac?";
+"Could not add page to Reading List. Maybe it’s already there?" = "Non poteva adder le pagina al lista de lectura. Forsan es ja presente?";
 
 /* Error message that is shown in settings when there was a problem loading */
-"Could not load page." = "Impossibile cargar le pagina.";
+"Could not load page." = "Non poteva cargar le pagina.";
 
 /* Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings. */
-"CoverSheet.v22.DarkMode.Description" = "Pro le usatores de iOS 13, Firefox ora commuta automaticamente a un thema obscur quando tu telephono es configurate a Modo obscur. Pro cambiar tal comportamento, ir a Parametros > Thema.";
+"CoverSheet.v22.DarkMode.Description" = "Pro le usatores de iOS 13, Firefox ora commuta automaticamente a un thema obscur quando tu telephono usa le modo obscur. Pro cambiar iste comportamento, visita Parametros > Thema.";
 
 /* Title for the new dark mode change in the version 22 app release. */
 "CoverSheet.v22.DarkMode.Title" = "Le thema obscur include ora un claviero obscur e pagina initial obscur.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "Le Protection traciamento augmentate integrate, adjuta blocar avisos publicitari de sequer te circum. Elige le modo Rigorose pro blocar ancora plus traciatores, avisos publicitari e messages emergente.";
+"CoverSheet.v24.ETP.Description" = "Le integration del Protection Anti-traciamento Reinfortiate adjuta a impedir al annuncios commercial de traciar te. Activa le modo Stricte pro blocar ancora plus traciatores, annuncias e fenestras emergente.";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Ir al Parametros";
 
 /* Title for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Title" = "Protection contra avisos traciamento";
+"CoverSheet.v24.ETP.Title" = "Protection contra traciamento publicitari";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Crear un conto";
@@ -345,6 +345,9 @@
    Title for default search engine picker.
    Title for default search engine settings section. */
 "Default Search Engine" = "Motor de recerca predefinite";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Clauder";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Parametros de visualisation";
@@ -371,7 +374,7 @@
 "Downloads.CancelDialog.Resume" = "Reprender";
 
 /* Alert dialog title when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Title" = "Cancellar le discargamento";
+"Downloads.CancelDialog.Title" = "Cancellar discargamento";
 
 /* The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle. */
 "Downloads.Error.Message" = "Le discargamentos non es ancora possibile in Firefox.";
@@ -452,7 +455,7 @@
 "FirefoxHome.Pocket.Minutes.v99" = "%d min";
 
 /* This is the title of the Pocket section on Firefox Homepage. */
-"FirefoxHome.Pocket.SectionTitle" = "Historias hastive";
+"FirefoxHome.Pocket.SectionTitle" = "Historias que face pensar";
 
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Remover";
@@ -464,7 +467,7 @@
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Parametros";
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
-"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Nostre sponsors e tu confidentialitate";
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Nostre sponsores e tu vita private";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "Sponsorisate";
@@ -533,7 +536,7 @@
 "fxa.signin.use-email-instead" = "Alteremente usa un email";
 
 /* Button label to sign into Sync */
-"FxA.SignIntoSync" = "Connecter se a Sync";
+"FxA.SignIntoSync" = "Aperir session in Sync";
 
 /* Label explaining what sync does */
 "FxA.SyncExplain" = "Obtene le schedas, le marcapaginas e le contrasignos de tu altere apparatos.";
@@ -542,7 +545,7 @@
 "FxA.SyncNow" = "Synchronisar ora";
 
 /* Call to action for sign into sync button */
-"FxA.TakeYourWebWithYou" = "Porta le web con te";
+"FxA.TakeYourWebWithYou" = "Porta tu web con te";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
 "FxAPush_DeviceConnected_body" = "Firefox Sync se ha connectite a %@";
@@ -566,7 +569,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparato se ha disconnectite de Firefox Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo de Firefox, cambia le fundo.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo de Firefox, cambia le fundo del schermo.";
 
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Obtene le schedas aperte, le marcapaginas e le contrasignos de tu altere apparatos.";
@@ -590,7 +593,7 @@
 "HistoryPanel.ClearHistoryMenuOptionToday" = "Hodie";
 
 /* Button to perform action to clear history for yesterday and today */
-"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Heri e hodie";
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Hodie e heri";
 
 /* Title for popup action menu to clear recent history. */
 "HistoryPanel.ClearHistoryMenuTitle" = "Rader le chronologia recente removera le chronologia, cookies e altere datos del navigator.";
@@ -1225,6 +1228,33 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "OK";
 
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "Comenciar";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v102" = "Independente. Sin scopo lucrative. Pro le ben public.";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "Ingagiate a tener le promissa de un melior internet pro totes.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "Non ora";
+
+/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
+"Onboarding.SyncAction.v102" = "Crear conto e aperir session";
+
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "Synchronisa automaticamente schedas e marcapaginas inter apparatos e cambia de schermo sin interrumper tu activitate.";
+
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "Synchronisation elimina interruption";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.WallpaperAction.v102" = "Fixar un fundo de schermo";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "Elige un fundo de schermo de Firefox";
+
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Comenciar a navigar";
 
@@ -1392,6 +1422,9 @@
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "Mutar al scheda";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Firefox suggere";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Le nove motor de recerca apparera in le barra de recerca rapide.";
