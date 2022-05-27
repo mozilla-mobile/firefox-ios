@@ -505,7 +505,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             }
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
