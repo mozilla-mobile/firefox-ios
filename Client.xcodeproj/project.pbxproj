@@ -572,7 +572,6 @@
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
 		BA6E311FBCA7A2157F48568A /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E371A3948814CAA0C83E4 /* Telemetry.swift */; };
 		BA6E327D482C60B7776F1630 /* FirefoxHomeJumpBackInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E325D53E21B6F758DDA6E /* FirefoxHomeJumpBackInViewModelTests.swift */; };
-		BA6E333F98A9199386C9D213 /* DispatchQueueProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E3EF580AE1E9F39DC509B /* DispatchQueueProtocol.swift */; };
 		BA6E3BF4B5AC115E7DBCAA5E /* FxATelemtryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E376117A53502756759A2 /* FxATelemtryTests.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
@@ -3272,7 +3271,6 @@
 		BA6E325D53E21B6F758DDA6E /* FirefoxHomeJumpBackInViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeJumpBackInViewModelTests.swift; sourceTree = "<group>"; };
 		BA6E371A3948814CAA0C83E4 /* Telemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Telemetry.swift; sourceTree = "<group>"; };
 		BA6E376117A53502756759A2 /* FxATelemtryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxATelemtryTests.swift; sourceTree = "<group>"; };
-		BA6E3EF580AE1E9F39DC509B /* DispatchQueueProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueueProtocol.swift; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		BAF14FEC94CB9DA4E08BA60C /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -6879,7 +6877,6 @@
 				DFACDFAD274D4D4B00A94EEC /* Protocols */,
 				E69DB0B91E97E301008A67E6 /* Telemetry */,
 				E65075551E37F714006961AC /* Utils */,
-				BA6E3EF580AE1E9F39DC509B /* DispatchQueueProtocol.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -9433,7 +9430,6 @@
 				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
 				C8954A532729AD9D001C7283 /* ThemeManager.swift in Sources */,
 				8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */,
-				BA6E333F98A9199386C9D213 /* DispatchQueueProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

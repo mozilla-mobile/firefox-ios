@@ -11,7 +11,6 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
 
     var mockBrowserProfile: MockBrowserProfile!
     var mockTabManager: MockTabManager!
-    var mockDispatchQueue: MockDispatchQueue!
 
     var mockBrowserBarViewDelegate: MockBrowserBarViewDelegate!
     var stubBrowserViewController: BrowserViewController!
@@ -29,15 +28,13 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             profile: mockBrowserProfile,
             tabManager: TabManager(profile: mockBrowserProfile, imageStore: nil)
         )
-        mockDispatchQueue = MockDispatchQueue()
         mockBrowserBarViewDelegate = MockBrowserBarViewDelegate()
 
         subject = FirefoxHomeJumpBackInViewModel(
             isZeroSearch: false,
             profile: mockBrowserProfile,
             isPrivate: false,
-            tabManager: mockTabManager,
-            dispatchQueue: mockDispatchQueue
+            tabManager: mockTabManager
         )
         subject.browserBarViewDelegate = mockBrowserBarViewDelegate
     }
@@ -130,6 +127,10 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         subject.switchTo(tab: tab1)
 
         XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
+        guard mockTabManager.lastSelectedTabs.count > 0 else {
+            XCTFail("No tabs were selected in mock tab manager.")
+            return
+        }
         XCTAssertEqual(mockTabManager.lastSelectedTabs[0], tab1)
     }
 
@@ -139,14 +140,17 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
         let tab3 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox3.com")
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-        var completionDidRun = false
+        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
         subject.updateData {
-            completionDidRun = true
+            expectation.fulfill()
         }
 
-        XCTAssertEqual(mockDispatchQueue.lastAsyncContexts[0], DispatchQueueContext.main)
-        XCTAssertTrue(completionDidRun)
+        wait(for: [expectation], timeout: 1.0)
+        guard subject.jumpBackInList.tabs.count > 0 else {
+            XCTFail("Incorrect number of tabs in subject")
+            return
+        }
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
         XCTAssertEqual(subject.jumpBackInList.tabs[1], tab2)
         XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab3))
@@ -171,16 +175,6 @@ class MockTabManager: TabManagerProtocol {
         if let previous = previous {
             lastSelectedPreviousTabs.append(previous)
         }
-    }
-}
-
-class MockDispatchQueue: DispatchQueueProtocol {
-    var lastAsyncContexts = [DispatchQueueContext]()
-
-    func async(context: DispatchQueueContext, _ work: @escaping @convention(block) () -> ()) {
-        lastAsyncContexts.append(context)
-
-        work()
     }
 }
 

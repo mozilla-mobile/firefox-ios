@@ -39,21 +39,18 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     private let profile: Profile
     private var isPrivate: Bool
     private let tabManager: TabManagerProtocol
-    private let dispatchQueue: DispatchQueueProtocol
 
     init(
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
-        tabManager: TabManagerProtocol = BrowserViewController.foregroundBVC().tabManager,
-        dispatchQueue: DispatchQueueProtocol = MozillaDispatchQueue()
+        tabManager: TabManagerProtocol = BrowserViewController.foregroundBVC().tabManager
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
         self.isPrivate = isPrivate
         self.tabManager = tabManager
-        self.dispatchQueue = dispatchQueue
     }
 
     // The dimension of a cell
@@ -233,7 +230,7 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     func updateData(completion: @escaping () -> Void) {
         // Has to be on main due to tab manager needing main tread
         // This can be fixed when tab manager has been revisited
-        dispatchQueue.async(context: .main) { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
 
             self.updateJumpBackInData(completion: completion)
