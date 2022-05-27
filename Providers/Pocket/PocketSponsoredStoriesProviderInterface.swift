@@ -5,5 +5,6 @@
 import Shared
 
 protocol PocketSponsoredStoriesProviderInterface {
-    func fetchSponsoredStories() -> Deferred<[PocketSponsoredStory]>
+    typealias SponsoredStoryResult = Swift.Result<[PocketSponsoredStory], Error>
+    func fetchSponsoredStories(completion: @escaping (SponsoredStoryResult) -> Void)
 }

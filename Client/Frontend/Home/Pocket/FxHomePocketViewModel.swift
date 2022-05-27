@@ -96,30 +96,36 @@ class FxHomePocketViewModel {
     private func getPocketSites() -> Success {
         pocketAPI
             .globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
-            .both(pocketSponsoredAPI.fetchSponsoredStories())
-            .bindQueue(.main) { [weak self] global, sponsored in
-                // Convert global feed to PocketStory
-                var globalTemp = global.map(PocketStory.init)
+            .bindQueue(.main) { [weak self] global in
+                self?.pocketSponsoredAPI.fetchSponsoredStories { [weak self] result in
+                    switch result {
+                        case let .success(sponsored):
+                            // Convert global feed to PocketStory
+                            var globalTemp = global.map(PocketStory.init)
 
-                // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
+                            // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+                            var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
 
-                // Making sure we insert a sponsored story at a valid index
-                let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-                if let first = sponsoredTemp.first {
-                    globalTemp.insert(first, at: firstIndex)
-                    sponsoredTemp.removeAll(where: { $0 == first })
-                }
+                            // Making sure we insert a sponsored story at a valid index
+                            let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
+                            if let first = sponsoredTemp.first {
+                                globalTemp.insert(first, at: firstIndex)
+                                sponsoredTemp.removeAll(where: { $0 == first })
+                            }
 
-                let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-                if let second = sponsoredTemp.first {
-                    globalTemp.insert(second, at: secondIndex)
-                    sponsoredTemp.removeAll(where: { $0 == second })
-                }
+                            let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
+                            if let second = sponsoredTemp.first {
+                                globalTemp.insert(second, at: secondIndex)
+                                sponsoredTemp.removeAll(where: { $0 == second })
+                            }
 
-                // Add the story in the view models list
-                for story in globalTemp {
-                    self?.bind(pocketStoryViewModel: .init(story: story))
+                            // Add the story in the view models list
+                            for story in globalTemp {
+                                self?.bind(pocketStoryViewModel: .init(story: story))
+                            }
+                        case .failure:
+                            ()
+                    }
                 }
                 return succeed()
             }

@@ -5,12 +5,15 @@
 import Shared
 
 class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, FeatureFlaggable {
-    func fetchSponsoredStories() -> Deferred<[PocketSponsoredStory]> {
-        let deferred = Deferred<[PocketSponsoredStory]>()
 
+    enum Error: Swift.Error {
+        case failure
+    }
+
+    func fetchSponsoredStories(completion: @escaping (SponsoredStoryResult) -> Void) {
         guard let request = sponsoredFeedRequest else {
-            deferred.fill([])
-            return deferred
+            completion(.failure(Error.failure))
+            return
         }
 
         // TODO: Get from cache
@@ -21,17 +24,16 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface, F
 
         urlSession.dataTask(with: request) { (data, response, error) in
             guard let _ = validatedHTTPResponse(response, contentType: "application/json"), let data = data else {
-                return deferred.fill([])
+                completion(.failure(Error.failure))
+                return
             }
 
             // TODO: store in cache
             // self.cache(response: response, for: request, with: data)
 
             let decodedResponse = try? JSONDecoder().decode(PocketSponsoredRequest.self, from: data)
-            deferred.fill(decodedResponse?.spocs ?? [])
+            completion(.success(decodedResponse?.spocs ?? []))
         }.resume()
-
-        return deferred
     }
 
     var endpoint: URL {

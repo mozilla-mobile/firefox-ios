@@ -5,12 +5,11 @@
 import Shared
 
 class MockPocketSponsoredStoriesProvider: PocketSponsoredStoriesProviderInterface {
-    func fetchSponsoredStories() -> Deferred<[PocketSponsoredStory]> {
-        let deferred = Deferred<[PocketSponsoredStory]>()
+
+    func fetchSponsoredStories(completion: @escaping (SponsoredStoryResult) -> Void) {
         let path = Bundle(for: type(of: self)).path(forResource: "pocketsponsoredfeed", ofType: "json")
         let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
         let response = try! JSONDecoder().decode(PocketSponsoredRequest.self, from: data)
-        deferred.fill(response.spocs)
-        return deferred
+        completion(.success(response.spocs))
     }
 }
