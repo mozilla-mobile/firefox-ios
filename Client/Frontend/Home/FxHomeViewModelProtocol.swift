@@ -14,6 +14,9 @@ protocol FXHomeViewModelProtocol {
 
     var numberOfItemsInSection: Int { get }
 
+    // The header view model to setup the header for this section
+    var headerViewModel: ASHeaderViewModel { get }
+
     // Returns true when section needs to load data and show itself
     var isEnabled: Bool { get }
 

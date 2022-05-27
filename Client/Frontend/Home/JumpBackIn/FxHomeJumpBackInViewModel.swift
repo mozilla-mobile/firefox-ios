@@ -27,6 +27,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     // MARK: - Properties
     var onTapGroup: ((Tab) -> Void)?
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
+    var headerButtonAction: ((UIButton) -> Void)?
 
     private var recentTabs: [Tab] = [Tab]()
     private var recentGroups: [ASGroup<Tab>]?
@@ -191,6 +192,15 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
 
     var sectionType: FirefoxHomeSectionType {
         return .jumpBackIn
+    }
+
+    var headerViewModel: ASHeaderViewModel {
+        return ASHeaderViewModel(title: FirefoxHomeSectionType.jumpBackIn.title,
+                                 titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+                                 isButtonHidden: false,
+                                 buttonTitle: .RecentlySavedShowAllText,
+                                 buttonAction: headerButtonAction,
+                                 buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
     }
     // TODO: Laurie
 //    var isEnabled: Bool {

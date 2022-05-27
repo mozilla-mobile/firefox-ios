@@ -188,6 +188,15 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     var sectionType: FirefoxHomeSectionType {
         return .topSites
     }
+
+    var headerViewModel: ASHeaderViewModel {
+        // Only show a header if the firefox browser logo isn't showing
+        let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        return ASHeaderViewModel(title: shouldShow ? FirefoxHomeSectionType.topSites.title: nil,
+                                 titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
+                                 isButtonHidden: true)
+    }
+
     // TODO: Laurie
 //    var isEnabled: Bool {
 //        return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)

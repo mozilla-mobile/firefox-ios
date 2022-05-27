@@ -102,6 +102,12 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     var sectionType: FirefoxHomeSectionType {
         return .pocket
     }
+
+    var headerViewModel: ASHeaderViewModel {
+        return ASHeaderViewModel(title: FirefoxHomeSectionType.pocket.title,
+                                 titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
+                                 isButtonHidden: true)
+    }
     // TODO: Laurie
 //    var isEnabled: Bool {
 //        // For Pocket, the user preference check returns a user preference if it exists in

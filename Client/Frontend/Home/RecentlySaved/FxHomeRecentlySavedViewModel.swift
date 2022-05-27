@@ -27,6 +27,8 @@ class FxHomeRecentlySavedViewModel {
     private let recentItemsHelper = RecentItemsHelper()
     private let dataQueue = DispatchQueue(label: "com.moz.recentlySaved.queue")
 
+    var headerButtonAction: ((UIButton) -> Void)?
+
     init(isZeroSearch: Bool, profile: Profile) {
         self.isZeroSearch = isZeroSearch
         self.profile = profile
@@ -98,6 +100,15 @@ extension FxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggabl
 
     var sectionType: FirefoxHomeSectionType {
         return .recentlySaved
+    }
+
+    var headerViewModel: ASHeaderViewModel {
+        return ASHeaderViewModel(title: FirefoxHomeSectionType.recentlySaved.title,
+                                 titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
+                                 isButtonHidden: false,
+                                 buttonTitle: .RecentlySavedShowAllText,
+                                 buttonAction: headerButtonAction,
+                                 buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved)
     }
 
     static var section: NSCollectionLayoutSection {

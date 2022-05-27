@@ -18,6 +18,7 @@ class FxHomeHistoryHightlightsViewModel {
     private var hasSentSectionEvent = false
 
     var onTapItem: ((HighlightItem) -> Void)?
+    var headerButtonAction: ((UIButton) -> Void)?
 
     // MARK: - Variables
     /// We calculate the number of columns dynamically based on the numbers of items
@@ -109,6 +110,16 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
     var sectionType: FirefoxHomeSectionType {
         return .historyHighlights
     }
+
+    var headerViewModel: ASHeaderViewModel {
+        return ASHeaderViewModel(title: FirefoxHomeSectionType.historyHighlights.title,
+                                 titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
+                                 isButtonHidden: false,
+                                 buttonTitle: .RecentlySavedShowAllText,
+                                 buttonAction: headerButtonAction,
+                                 buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.historyHighlights)
+    }
+
     // TODO: Laurie
 //    var isEnabled: Bool {
 //        guard featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser) else { return false }

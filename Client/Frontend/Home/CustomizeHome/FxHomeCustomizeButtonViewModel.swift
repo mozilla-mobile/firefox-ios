@@ -16,6 +16,10 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
         return .customizeHome
     }
 
+    var headerViewModel: ASHeaderViewModel {
+        return ASHeaderViewModel.emptyHeader
+    }
+
     static var section: NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))

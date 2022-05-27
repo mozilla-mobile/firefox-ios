@@ -21,6 +21,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         static let minimumInsets: CGFloat = 15
         static let customizeHomeHeight: CGFloat = 100
         static let logoHeaderHeight: CGFloat = 85
+        static let standardLeadingInset: CGFloat = 15
     }
 
     // MARK: - Properties
