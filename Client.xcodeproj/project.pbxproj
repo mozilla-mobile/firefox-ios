@@ -5561,6 +5561,15 @@
 			path = HelperClass;
 			sourceTree = "<group>";
 		};
+		8AB5958628412B620090F4AE /* CustomizeHome */ = {
+			isa = PBXGroup;
+			children = (
+				C8656D78270F866700E199EA /* FxHomeCustomizeView.swift */,
+				8A161410282C035D00DDBB02 /* FxHomeCustomizeButtonViewModel.swift */,
+			);
+			path = CustomizeHome;
+			sourceTree = "<group>";
+		};
 		8AB8571B27D929240075C173 /* TopSites */ = {
 			isa = PBXGroup;
 			children = (
@@ -7066,12 +7075,11 @@
 				3BB50E1F1D627539004B33DF /* FirefoxHomeViewController.swift */,
 				8A6A796C27F773550022D6C6 /* FirefoxHomeContextMenuHelper.swift */,
 				1DFE57FC27BADD7C0025DE58 /* FirefoxHomeViewModel.swift */,
-				C8656D78270F866700E199EA /* FxHomeCustomizeView.swift */,
 				8A9AC464276CEC4E0047F5B0 /* FxHomeHorizontalCell.swift */,
 				8AB8574527D97CB00075C173 /* HomePanelContextMenu.swift */,
 				8AB8574727D97CD40075C173 /* HomePanelType.swift */,
 				8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */,
-				8A161410282C035D00DDBB02 /* FxHomeCustomizeButtonViewModel.swift */,
+				8AB5958628412B620090F4AE /* CustomizeHome */,
 				DF036E41274FD3FC002E834E /* HistoryHighlights */,
 				C87DC85F27B2CC1A006EFCE2 /* JumpBackIn */,
 				8AB8573527D950F30075C173 /* LogoHeader */,
