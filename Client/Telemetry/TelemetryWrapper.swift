@@ -511,6 +511,7 @@ extension TelemetryWrapper {
         case preference = "pref"
         case preferenceChanged = "to"
         case isPrivate = "is-private"
+        case action = "action"
 
         case wallpaperName = "wallpaperName"
         case wallpaperType = "wallpaperType"
@@ -680,7 +681,21 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserOnboarding.goToSettingsPressed.add()
         case (.information, .view, .homeTabBannerEvergreen, _, _):
             GleanMetrics.DefaultBrowserCard.evergreenImpression.record()
-
+        // MARK: Downloads
+        case(.action, .tap, .downloadNowButton, _, _):
+            GleanMetrics.Downloads.downloadNowButtonTapped.record()
+        case(.action, .tap, .download, .downloadsPanel, _):
+            GleanMetrics.Downloads.downloadsPanelRowTapped.record()
+        case(.action, .view, .downloadsPanel, .downloadCompleteToast, _):
+            GleanMetrics.Downloads.viewDownloadCompleteToast.record()
+        // MARK: Key Commands
+        case(.action, .press, .keyCommand, _, let extras):
+            if let action = extras?[EventExtraKey.action.rawValue] as? String {
+                let actionExtra = GleanMetrics.KeyCommands.PressKeyCommandActionExtra(action: action)
+                GleanMetrics.KeyCommands.pressKeyCommandAction.record(actionExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         // MARK: Onboarding
         case (.action, .press, .dismissedOnboarding, _, let extras):
             if let slideNum = extras?["slide-num"] as? Int32 {
@@ -768,6 +783,11 @@ extension TelemetryWrapper {
             GleanMetrics.Sync.registrationCodeView.record()
         case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
             GleanMetrics.Sync.loginTokenView.record()
+        // MARK: App cycle
+        case(.action, .foreground, .app, _, _):
+            GleanMetrics.AppCycle.foreground.record()
+        case(.action, .background, .app, _, _):
+            GleanMetrics.AppCycle.background.record()
         // MARK: Accessibility
         case(.action, .voiceOver, .app, _, let extras):
             if let isRunning = extras?[EventExtraKey.isVoiceOverRunning.rawValue] as? String {

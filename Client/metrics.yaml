@@ -11,6 +11,31 @@
 
 ---
 $schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+# App cycle
+app_cycle:
+  foreground:
+    type: event
+    description: |
+      Records when the app comes to foreground
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-12"
+  background:
+    type: event
+    description: |
+      Records when the app goes to background
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-12"
 # Accessibility
 accessibility:
   voice_over:
@@ -415,7 +440,60 @@ app:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
-
+# Downloads
+downloads:
+  download_now_button_tapped:
+    type: event
+    description: |
+      Records when the download now button is pressed
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-12"
+  downloads_panel_row_tapped:
+    type: event
+    description: |
+      Records when a row is pressed in the downloads panel
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-12"
+  view_download_complete_toast:
+    type: event
+    description: |
+      Records when the toast message is tapped after a download is completed
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-12"
+# Key Commands
+key_commands:
+  press_key_command_action:
+    type: event
+    description: |
+      Records when a key command action is triggered
+    extra_keys:
+      action:
+        type: string
+        description: |
+          Records the action:
+          "close-tab/close-all-tabs/enter-tab/new-tab/select-tab/previous-tab/etc"
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2022-11-12"
 # Onboarding metrics
 onboarding:
   finish:
