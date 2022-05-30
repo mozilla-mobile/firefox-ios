@@ -429,9 +429,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
             return viewModel.recentlySavedViewModel.configure(collectionView, at: indexPath)
 
         case .historyHighlights:
-            let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
-            return configureHistoryHighlightsCell(cell, forIndexPath: indexPath)
+            return viewModel.historyHighlightsViewModel.configure(collectionView, at: indexPath)
 
         case .customizeHome:
             return viewModel.customizeButtonViewModel.configure(collectionView, at: indexPath)
@@ -445,45 +443,6 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
         topSiteCell.setNeedsLayout()
 
         return cell
-    }
-
-    private func configureHistoryHighlightsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let historyCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
-
-        guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else { return UICollectionViewCell() }
-
-        historyCell.viewModel = viewModel.historyHighlightsViewModel
-        historyCell.viewModel?.recordSectionHasShown()
-        historyCell.reloadLayout()
-        historyCell.setNeedsLayout()
-
-        return historyCell
-    }
-
-    private func openHistoryHighligtsSearchGroup(item: HighlightItem) {
-        guard let groupItem = item.group else { return }
-
-        var groupedSites = [Site]()
-        for item in groupItem {
-            groupedSites.append(buildSite(from: item))
-        }
-        let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
-
-        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: viewModel.profile)
-
-        let dismissableController: DismissableNavigationViewController
-        dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)
-
-        self.present(dismissableController, animated: true, completion: nil)
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .historyHighlightsGroupOpen,
-                                     extras: nil)
-
-        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
     }
 
     private func buildSite(from highlight: HighlightItem) -> Site {
@@ -507,6 +466,10 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
             viewModel.jumpBackInViewModel.didSelectItem(at: indexPath,
                                                         homePanelDelegate: homePanelDelegate,
                                                         libraryPanelDelegate: libraryPanelDelegate)
+        case .historyHighlights:
+            viewModel.historyHighlightsViewModel.didSelectItem(at: indexPath,
+                                                               homePanelDelegate: homePanelDelegate,
+                                                               libraryPanelDelegate: libraryPanelDelegate)
         default:
             break
         }
@@ -572,7 +535,7 @@ private extension FirefoxHomeViewController {
         // History highlights
         viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
             guard let url = highlight.siteUrl else {
-                self?.openHistoryHighligtsSearchGroup(item: highlight)
+                self?.openHistoryHighlightsSearchGroup(item: highlight)
                 return
             }
 
@@ -596,6 +559,32 @@ private extension FirefoxHomeViewController {
         viewModel.customizeButtonViewModel.onTapAction = { [weak self] _ in
             self?.openCustomizeHomeSettings()
         }
+    }
+
+    private func openHistoryHighlightsSearchGroup(item: HighlightItem) {
+        guard let groupItem = item.group else { return }
+
+        var groupedSites = [Site]()
+        for item in groupItem {
+            groupedSites.append(buildSite(from: item))
+        }
+        let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
+
+        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
+        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: viewModel.profile)
+
+        let dismissableController: DismissableNavigationViewController
+        dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)
+
+        self.present(dismissableController, animated: true, completion: nil)
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .historyHighlightsGroupOpen,
+                                     extras: nil)
+
+        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
     }
 
     @objc func openTabTray(_ sender: UIButton) {
@@ -731,12 +720,12 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
 extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
     func reloadSection(index: Int?) {
         DispatchQueue.main.async {
-            if let index = index {
-                let indexSet = IndexSet([index])
-                self.collectionView.reloadSections(indexSet)
-            } else {
+//            if let index = index {
+//                let indexSet = IndexSet([index])
+//                self.collectionView.reloadSections(indexSet)
+//            } else {
                 self.collectionView.reloadData()
-            }
+//            }
         }
     }
 }

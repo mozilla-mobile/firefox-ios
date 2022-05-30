@@ -71,7 +71,7 @@ class ASHeaderView: UICollectionReusableView {
 
     func setConstraints(viewModel: ASHeaderViewModel) {
         NSLayoutConstraint.activate([
-            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
+            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -viewModel.inset),
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor),

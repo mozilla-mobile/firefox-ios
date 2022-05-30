@@ -86,7 +86,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .pocket: return "" // Pocket has more than 1 cell type
         case .jumpBackIn: return FxHomeHorizontalCell.cellIdentifier
         case .recentlySaved: return FxHomeRecentlySavedCell.cellIdentifier
-        case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.cellIdentifier
+        case .historyHighlights: return HistoryHighlightsCell.cellIdentifier
         case .customizeHome: return FxHomeCustomizeHomeView.cellIdentifier
         }
     }
@@ -97,7 +97,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
                 FxHomeHorizontalCell.self,
                 FxHomePocketDiscoverMoreCell.self,
                 FxHomeRecentlySavedCell.self,
-                FxHomeHistoryHighlightsCollectionCell.self,
+                HistoryHighlightsCell.self,
                 FxHomeCustomizeHomeView.self
         ]
     }
