@@ -13,6 +13,7 @@ private enum SearchListSection: Int, CaseIterable {
     case remoteTabs
     case openedTabs
     case bookmarksAndHistory
+    case searchHighlights
 }
 
 private struct SearchViewControllerUX {
@@ -55,7 +56,7 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener, FeatureFlaggable {
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
@@ -67,6 +68,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
+    private var searchHighlights = [HighlightItem]()
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -109,6 +111,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         super.viewDidLoad()
         getCachedTabs()
+        loadSearchHighlights()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
@@ -138,6 +141,20 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
+    }
+
+    private func loadSearchHighlights() {
+        guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
+
+        HistoryHighlightsManager.getHighlightsData(with: profile,
+                                                   and: tabManager.tabs,
+                                                   resultCount: 3) { result in
+            guard let result = result else {
+                return
+            }
+            self.searchHighlights = result
+            self.reloadData()
+        }
     }
 
     @objc func dynamicFontChanged(_ notification: Notification) {
@@ -496,12 +513,17 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
-            if let site = data[indexPath.row] {
+            if let site = data[indexPath.row],
                 recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
                                                    isBookmark: site.bookmarked ?? false)
                 if let url = URL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
                 }
+            }
+        case .searchHighlights:
+            if let url = searchHighlights[indexPath.row].siteUrl {
+                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
+                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .searchHighlights, value: .awesomebarResults)
             }
         }
     }
@@ -531,6 +553,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return filteredRemoteClientTabs.count
         case .bookmarksAndHistory:
             return data.count
+        case .searchHighlights:
+            return searchHighlights.count
         }
     }
 
@@ -641,6 +665,21 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
+        case .searchHighlights:
+            let highlightItem = searchHighlights[indexPath.row]
+            let urlString = highlightItem.siteUrl?.absoluteString ?? ""
+            cell = twoLineCell
+            twoLineCell.descriptionLabel.isHidden = false
+            twoLineCell.titleLabel.text = highlightItem.displayTitle
+            twoLineCell.descriptionLabel.text = urlString
+            twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+            twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+            twoLineCell.leftImageView.contentMode = .center
+            twoLineCell.leftImageView.setImageAndBackground(forIcon: Favicon(url: urlString), website: highlightItem.siteUrl) { [weak twoLineCell] in
+                twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+            }
+            twoLineCell.accessoryView = nil
+            cell = twoLineCell
         }
         return cell
     }

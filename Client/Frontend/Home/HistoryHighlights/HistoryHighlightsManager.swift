@@ -41,7 +41,7 @@ class HistoryHighlightsManager {
     public static func getHighlightsData(with profile: Profile,
                                          and tabs: [Tab],
                                          shouldGroupHighlights: Bool = false,
-                                         resultCount: Int = 9,
+                                         resultCount: Int = HistoryHighlightsManager.defaultHighlightCount,
                                          completion: @escaping ([HighlightItem]?) -> Void) {
 
         fetchHighlights(with: profile) { highlights in
