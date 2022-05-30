@@ -30,8 +30,8 @@ struct IntroViewModel {
                                            title: .CardTitleWelcome,
                                            description: .Onboarding.IntroDescriptionPart2,
                                            primaryAction: .Onboarding.IntroAction,
-                                          secondaryAction: nil,
-                                          a11yIdRoot: "Welcome")
+                                           secondaryAction: nil,
+                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
         case .wallpapers:
             return OnboardingCardViewModel(cardType: currentCard,
                                            image: nil,
@@ -39,7 +39,7 @@ struct IntroViewModel {
                                            description: nil,
                                            primaryAction: .Onboarding.WallpaperAction,
                                            secondaryAction: .Onboarding.LaterAction,
-                                           a11yIdRoot: "Wallpaper")
+                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.wallpapersCard)
         case .signSync:
             return OnboardingCardViewModel(cardType: currentCard,
                                            image: UIImage(named: ImageIdentifiers.onboardingSync),
@@ -47,7 +47,19 @@ struct IntroViewModel {
                                            description: .Onboarding.SyncDescription,
                                            primaryAction: .Onboarding.SyncAction,
                                            secondaryAction: .WhatsNew.RecentButtonTitle,
-                                           a11yIdRoot: "Sync")
+                                           a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         }
+    }
+
+    func getNextIndex(currentIndex: Int, goForward: Bool) -> Int? {
+        if goForward && currentIndex + 1 < enabledCards.count {
+            return currentIndex + 1
+        }
+
+        if !goForward && currentIndex > 0 {
+            return currentIndex - 1
+        }
+
+        return nil
     }
 }

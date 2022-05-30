@@ -6,11 +6,6 @@ import Foundation
 import UIKit
 import Shared
 
-// TODO:
-// 2- Bring back old onboarding just in case
-// 3- Add debug option??
-// 4- Check indicator failing from 2 to 3 and going backwards sometimes
-
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
     var viewModel: IntroViewModel
@@ -67,12 +62,12 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
     // MARK: View setup
     private func setupPageController() {
-        if let firstViewController = showNextOnboardingCard(index: 0) {
-            pageController.setViewControllers([firstViewController],
-                                                  direction: .forward,
-                                                  animated: true,
-                                                  completion: nil)
-        }
+        let firstViewController = OnboardingCardViewController(viewModel: viewModel.getCardViewModel(index: 0),
+                                                               delegate: self)
+        pageController.setViewControllers([firstViewController],
+                                          direction: .forward,
+                                          animated: true,
+                                          completion: nil)
     }
 
     private func setupLayout() {
@@ -98,11 +93,10 @@ class IntroViewController: UIViewController, OnViewDismissable {
         didFinishClosure?(self, nil)
     }
 
-    private func showNextOnboardingCard(index: Int) -> OnboardingCardViewController? {
-        guard index < viewModel.enabledCards.count else { return nil }
+    private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
+        guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
 
         let cardViewModel = viewModel.getCardViewModel(index: index)
-
         if index == viewModel.enabledCards.firstIndex(of: .wallpapers) {
             return WallpaperCardViewController(viewModel: cardViewModel, delegate: self)
         } else {
@@ -110,42 +104,50 @@ class IntroViewController: UIViewController, OnViewDismissable {
         }
     }
 
-    private func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
-        let cardType = viewController.viewModel.cardType
-
-        return viewModel.enabledCards.firstIndex(of: cardType)
-    }
-
+    // Used to programatically set the pageViewController to show next card
     private func moveToNextPage(cardType: IntroViewModel.OnboardingCards) {
-        if let nextViewController = showNextOnboardingCard(index: cardType.rawValue + 1) {
+        if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
             pageControl.currentPage = cardType.rawValue + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: true)
         }
+    }
+
+    // Due to restrictions with PageViewController we need to get the index of the current view controller
+    // to calculate the next view controller
+    private func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
+        let cardType = viewController.viewModel.cardType
+
+        guard let index = viewModel.enabledCards.firstIndex(of: cardType) else {
+            return nil
+        }
+
+        return index
     }
 }
 
 // MARK: UIPageViewControllerDataSource & UIPageViewControllerDelegate
 extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return nil
-    }
 
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
               return nil
         }
 
-        if index == viewModel.enabledCards.count - 1 { return nil }
-        return showNextOnboardingCard(index: index + 1)
+        pageControl.currentPage = index
+        return getNextOnboardingCard(index: index, goForward: false)
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
 
-        let index = previousViewControllers.count
-        guard completed, index != viewModel.enabledCards.count else { return }
+        guard let onboardingVC = viewController as? OnboardingCardViewController,
+              let index = getCardIndex(viewController: onboardingVC) else {
+              return nil
+        }
 
         pageControl.currentPage = index
+        return getNextOnboardingCard(index: index, goForward: true)
+
     }
 }
 

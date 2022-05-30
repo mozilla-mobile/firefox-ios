@@ -79,7 +79,7 @@ class WallpaperCardViewController: OnboardingCardViewController {
         view.addSubview(wallpaperImageView)
 
         NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: 240).priority(.defaultLow),
+            collectionView.heightAnchor.constraint(equalToConstant: 260).priority(.defaultLow),
 
             wallpaperImageView.topAnchor.constraint(equalTo: view.topAnchor),
             wallpaperImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
