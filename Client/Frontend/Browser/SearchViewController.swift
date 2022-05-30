@@ -515,7 +515,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
-            if let site = data[indexPath.row],
+            if let site = data[indexPath.row] {
                 recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
                                                    isBookmark: site.bookmarked ?? false)
                 if let url = URL(string: site.url) {
@@ -524,8 +524,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             }
         case .searchHighlights:
             if let url = searchHighlights[indexPath.row].siteUrl {
+                recordSearchListSelectionTelemetry(type: .searchHighlights)
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .searchHighlights, value: .awesomebarResults)
             }
         }
     }
@@ -730,6 +730,11 @@ private extension SearchViewController {
                         TelemetryWrapper.EventValue.historyItem.rawValue
             TelemetryWrapper.recordEvent(category: .action, method: .tap,
                                          object: .awesomebarResults, extras: [key: extra])
+        case .searchHighlights:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .open,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
         }
     }
 }
