@@ -22,7 +22,33 @@ class HistoryHighlightsManager {
     private static let defaultViewTimeWeight = 10.0
     private static let defaultFrequencyWeight = 4.0
     private static let defaultHighlightCount = 9
+    private static let searchLimit = 1000
 
+    static func searchHighlightsData(searchQuery: String,
+                                     profile: Profile,
+                                     tabs: [Tab],
+                                     resultCount: Int,
+                                     completion: @escaping ([HighlightItem]?) -> Void) {
+        getHighlightsData(with: profile,
+                          and: tabs,
+                          resultCount: HistoryHighlightsManager.searchLimit) { results in
+
+            var searchResults = [HighlightItem]()
+
+            guard let results = results else {
+                completion(searchResults)
+                return
+            }
+            for site in results {
+                let urlString = site.siteUrl?.absoluteString ?? ""
+                if site.displayTitle.lowercased().contains(searchQuery) ||
+                    urlString.lowercased().contains(searchQuery) {
+                    searchResults.append(site)
+                }
+            }
+            completion(Array(searchResults.prefix(resultCount)))
+        }
+    }
     // MARK: - Public interface
 
     /// Fetches HistoryHighlight from A~S, and then filters currently open
@@ -69,7 +95,7 @@ class HistoryHighlightsManager {
     // MARK: - Data fetching functions
 
     private static func fetchHighlights(with profile: Profile,
-                                        andLimit limit: Int32 = 1000,
+                                        andLimit limit: Int32 = Int32(HistoryHighlightsManager.searchLimit),
                                         completion: @escaping ([HistoryHighlight]?) -> Void) {
 
         profile.places.getHighlights(weights: HistoryHighlightWeights(viewTime: self.defaultViewTimeWeight,

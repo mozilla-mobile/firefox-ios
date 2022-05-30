@@ -111,7 +111,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         super.viewDidLoad()
         getCachedTabs()
-        loadSearchHighlights()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
@@ -146,14 +145,15 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private func loadSearchHighlights() {
         guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
 
-        HistoryHighlightsManager.getHighlightsData(with: profile,
-                                                   and: tabManager.tabs,
-                                                   resultCount: 3) { result in
-            guard let result = result else {
+        HistoryHighlightsManager.searchHighlightsData(searchQuery: searchQuery,
+                                                      profile: profile,
+                                                      tabs: tabManager.tabs,
+                                                      resultCount: 3) { results in
+            guard let results = results else {
                 return
             }
-            self.searchHighlights = result
-            self.reloadData()
+            self.searchHighlights = results
+            self.tableView.reloadData()
         }
     }
 
@@ -446,6 +446,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             tableView.reloadData()
             return
         }
+
+        loadSearchHighlights()
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
