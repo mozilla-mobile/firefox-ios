@@ -125,6 +125,8 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
         applyTheme()
+
+        descriptionContainer.addArrangedViewToTop(faviconImage)
     }
 
     // MARK: - Helpers
