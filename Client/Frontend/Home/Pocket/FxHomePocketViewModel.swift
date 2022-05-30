@@ -89,6 +89,7 @@ class FxHomePocketViewModel {
 
     // MARK: - Private
 
+    // MARK: - TODO: Use settings toggle to determine if we show sponsored stories
     var showSponsors = true
 
     private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indexes: [Int]) {
