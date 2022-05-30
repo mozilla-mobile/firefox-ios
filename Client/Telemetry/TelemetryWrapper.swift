@@ -426,6 +426,7 @@ extension TelemetryWrapper {
         case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
         case awesomebarLocation = "awesomebar-position"
+        case searchHighlights = "search-highlights"
     }
 
     public enum EventValue: String {

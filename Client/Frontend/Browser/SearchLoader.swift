@@ -15,7 +15,7 @@ private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([
  * Shared data source for the SearchViewController and the URLBar domain completion.
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
-class SearchLoader: Loader<Cursor<Site>, SearchViewController> {
+class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
     fileprivate let frecentHistory: FrecentHistory
@@ -86,7 +86,11 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController> {
 
                 let deferredHistorySites = results[0].successValue?.asArray() ?? []
                 let deferredBookmarksSites = results[1].successValue?.asArray() ?? []
-                let combinedSites = deferredBookmarksSites + deferredHistorySites
+                var combinedSites = deferredBookmarksSites
+
+                if !self.featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) {
+                    combinedSites += deferredHistorySites
+                }
 
                 // Load the data in the table view.
                 self.load(ArrayCursor(data: combinedSites))

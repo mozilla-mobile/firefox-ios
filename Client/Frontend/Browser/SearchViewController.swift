@@ -13,6 +13,7 @@ private enum SearchListSection: Int, CaseIterable {
     case remoteTabs
     case openedTabs
     case bookmarksAndHistory
+    case searchHighlights
 }
 
 private struct SearchViewControllerUX {
@@ -55,7 +56,7 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener, FeatureFlaggable {
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
@@ -67,6 +68,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
+    private var searchHighlights = [HighlightItem]()
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -138,6 +140,21 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
+    }
+
+    private func loadSearchHighlights() {
+        guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
+
+        HistoryHighlightsManager.searchHighlightsData(searchQuery: searchQuery,
+                                                      profile: profile,
+                                                      tabs: tabManager.tabs,
+                                                      resultCount: 3) { results in
+            guard let results = results else {
+                return
+            }
+            self.searchHighlights = results
+            self.tableView.reloadData()
+        }
     }
 
     @objc func dynamicFontChanged(_ notification: Notification) {
@@ -430,6 +447,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return
         }
 
+        loadSearchHighlights()
+
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
             if let error = error {
@@ -503,6 +522,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
                 }
             }
+        case .searchHighlights:
+            if let url = searchHighlights[indexPath.row].siteUrl {
+                recordSearchListSelectionTelemetry(type: .searchHighlights)
+                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
+            }
         }
     }
 
@@ -531,6 +555,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return filteredRemoteClientTabs.count
         case .bookmarksAndHistory:
             return data.count
+        case .searchHighlights:
+            return searchHighlights.count
         }
     }
 
@@ -641,6 +667,21 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
+        case .searchHighlights:
+            let highlightItem = searchHighlights[indexPath.row]
+            let urlString = highlightItem.siteUrl?.absoluteString ?? ""
+            cell = twoLineCell
+            twoLineCell.descriptionLabel.isHidden = false
+            twoLineCell.titleLabel.text = highlightItem.displayTitle
+            twoLineCell.descriptionLabel.text = urlString
+            twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+            twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+            twoLineCell.leftImageView.contentMode = .center
+            twoLineCell.leftImageView.setImageAndBackground(forIcon: Favicon(url: urlString), website: highlightItem.siteUrl) { [weak twoLineCell] in
+                twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+            }
+            twoLineCell.accessoryView = nil
+            cell = twoLineCell
         }
         return cell
     }
@@ -689,6 +730,11 @@ private extension SearchViewController {
                         TelemetryWrapper.EventValue.historyItem.rawValue
             TelemetryWrapper.recordEvent(category: .action, method: .tap,
                                          object: .awesomebarResults, extras: [key: extra])
+        case .searchHighlights:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .open,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
         }
     }
 }
