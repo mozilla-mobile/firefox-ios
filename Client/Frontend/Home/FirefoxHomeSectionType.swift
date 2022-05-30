@@ -36,18 +36,6 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         }
     }
 
-    var section: NSCollectionLayoutSection {
-        switch self {
-        case .pocket: return FxHomePocketViewModel.section
-        case .jumpBackIn: return FirefoxHomeJumpBackInViewModel.section
-        case .recentlySaved: return FxHomeRecentlySavedViewModel.section
-        case .historyHighlights: return FxHomeHistoryHightlightsViewModel.section
-        case .topSites: return FxHomeTopSitesViewModel.section
-        case .customizeHome: return FxHomeCustomizeButtonViewModel.section
-        case .logoHeader: return FxHomeLogoHeaderViewModel.section
-        }
-    }
-
     // TODO: Laurie
 //    // Pocket, historyHighlight, recently saved and jump back in should have full width and add inset in their respective sections
 //    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3928
@@ -96,7 +84,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         case .logoHeader: return FxHomeLogoHeaderCell.cellIdentifier
         case .topSites: return TopSiteCollectionCell.cellIdentifier
         case .pocket: return "" // Pocket has more than 1 cell type
-        case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
+        case .jumpBackIn: return FxHomeHorizontalCell.cellIdentifier
         case .recentlySaved: return FxHomeRecentlySavedCell.cellIdentifier
         case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.cellIdentifier
         case .customizeHome: return FxHomeCustomizeHomeView.cellIdentifier
@@ -108,7 +96,6 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
                 TopSiteCollectionCell.self,
                 FxHomeHorizontalCell.self,
                 FxHomePocketDiscoverMoreCell.self,
-                FxHomeJumpBackInCollectionCell.self,
                 FxHomeRecentlySavedCell.self,
                 FxHomeHistoryHighlightsCollectionCell.self,
                 FxHomeCustomizeHomeView.self

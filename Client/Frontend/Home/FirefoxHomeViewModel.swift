@@ -125,8 +125,8 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         }
     }
 
-    func getSectionViewModel(section: Int) -> FXHomeViewModelProtocol {
-        return childViewModels[section]
+    func getSectionViewModel(section: Int) -> FXHomeViewModelProtocol? {
+        return childViewModels[safe: section]
     }
 }
 

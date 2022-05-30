@@ -111,7 +111,7 @@ extension FxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggabl
                                  buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved)
     }
 
-    static var section: NSCollectionLayoutSection {
+    var section: NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(UX.cellWidth),
             heightDimension: .estimated(UX.cellHeight)
@@ -153,6 +153,10 @@ extension FxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggabl
         group.notify(queue: .main) {
             completion()
         }
+    }
+
+    var shouldReloadSection: Bool {
+        return true
     }
 }
 

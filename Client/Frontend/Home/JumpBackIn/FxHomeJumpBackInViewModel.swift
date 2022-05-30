@@ -24,6 +24,14 @@ struct JumpBackInList {
 
 class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
 
+    struct UX {
+        static let verticalCellSpacing: CGFloat = 8
+        static let iPadHorizontalSpacing: CGFloat = 48
+        static let iPadCellSpacing: CGFloat = 16
+        static let iPhoneLandscapeCellWidth: CGFloat = 0.475
+        static let iPhonePortraitCellWidth: CGFloat = 0.95
+    }
+
     // MARK: - Properties
     var onTapGroup: ((Tab) -> Void)?
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
@@ -53,9 +61,9 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         if UIDevice.current.userInterfaceIdiom == .pad {
             return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
         } else if UIWindow.isLandscape {
-            return .fractionalWidth(JumpBackInCollectionCellUX.iPhoneLandscapeCellWidth) // iPhone in landscape
+            return .fractionalWidth(UX.iPhoneLandscapeCellWidth) // iPhone in landscape
         } else {
-            return .fractionalWidth(JumpBackInCollectionCellUX.iPhonePortraitCellWidth) // iPhone in portrait
+            return .fractionalWidth(UX.iPhonePortraitCellWidth) // iPhone in portrait
         }
     }
 
@@ -202,15 +210,40 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
                                  buttonAction: headerButtonAction,
                                  buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
     }
-    // TODO: Laurie
-//    var isEnabled: Bool {
-//        guard featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) else { return false }
-//
-//        return !isPrivate
-//    }
 
     var isEnabled: Bool {
-        return false
+        guard featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) else { return false }
+
+        return !isPrivate
+    }
+
+    var numberOfItemsInSection: Int {
+        return jumpBackInList.itemsToDisplay
+    }
+
+    var section: NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: FirefoxHomeJumpBackInViewModel.widthDimension,
+            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+        )
+
+        let count = min(FirefoxHomeJumpBackInViewModel.maxNumberOfItemsInColumn, numberOfItemsInSection)
+        let subItems = Array(repeating: item, count: count)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
+        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
+                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        section.orthogonalScrollingBehavior = .continuous
+        return section
     }
 
     var hasData: Bool {
@@ -229,5 +262,93 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
         self.isPrivate = isPrivate
+    }
+}
+
+// MARK: FxHomeSectionHandler
+extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
+
+    func configure(_ cell: UICollectionViewCell,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+
+        guard let jumpBackInCell = cell as? FxHomeHorizontalCell else { return UICollectionViewCell() }
+
+        if indexPath.row == (jumpBackInList.itemsToDisplay - 1),
+           let group = jumpBackInList.group {
+            configureCellForGroups(group: group, cell: jumpBackInCell, indexPath: indexPath)
+        } else {
+            configureCellForTab(item: jumpBackInList.tabs[indexPath.row], cell: jumpBackInCell, indexPath: indexPath)
+        }
+
+        return cell
+    }
+
+    func didSelectItem(at indexPath: IndexPath,
+                       homePanelDelegate: HomePanelDelegate?,
+                       libraryPanelDelegate: LibraryPanelDelegate?) {
+
+        if indexPath.row == jumpBackInList.itemsToDisplay - 1,
+           let group = jumpBackInList.group {
+            switchTo(group: group)
+
+        } else {
+            let tab = jumpBackInList.tabs[indexPath.row]
+            switchTo(tab: tab)
+        }
+    }
+
+    private func configureCellForGroups(group: ASGroup<Tab>, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
+        let firstGroupItem = group.groupedItems.first
+        let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
+
+        let descriptionText = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
+        let faviconImage = UIImage(imageLiteralResourceName: ImageIdentifiers.stackedTabsIcon).withRenderingMode(.alwaysTemplate)
+        let cellViewModel = FxHomeHorizontalCellViewModel(titleText: group.searchTerm.localizedCapitalized,
+                                                          descriptionText: descriptionText,
+                                                          tag: indexPath.item,
+                                                          hasFavicon: true,
+                                                          favIconImage: faviconImage)
+        cell.configure(viewModel: cellViewModel)
+
+        getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+            cell.heroImage.image = image
+        }
+    }
+
+    private func configureCellForTab(item: Tab, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
+        let itemURL = item.lastKnownUrl?.absoluteString ?? ""
+        let site = Site(url: itemURL, title: item.displayTitle)
+        let descriptionText = site.tileURL.shortDisplayString.capitalized
+
+        let cellViewModel = FxHomeHorizontalCellViewModel(titleText: site.title,
+                                                          descriptionText: descriptionText,
+                                                          tag: indexPath.item,
+                                                          hasFavicon: true)
+        cell.configure(viewModel: cellViewModel)
+
+        /// Sets a small favicon in place of the hero image in case there's no hero image
+        getFaviconImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+            cell.faviconImage.image = image
+
+            if cell.heroImage.image == nil {
+                cell.fallbackFaviconImage.image = image
+            }
+        }
+
+        /// Replace the fallback favicon image when it's ready or available
+        getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+
+            // If image is a square use it as a favicon
+            if image?.size.width == image?.size.height {
+                cell.fallbackFaviconImage.image = image
+                return
+            }
+
+            cell.setFallBackFaviconVisibility(isHidden: true)
+            cell.heroImage.image = image
+        }
     }
 }

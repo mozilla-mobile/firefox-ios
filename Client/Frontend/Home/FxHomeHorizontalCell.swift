@@ -12,9 +12,8 @@ struct FxHomeHorizontalCellUX {
     static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
     static let interGroupSpacing: CGFloat = 8
     static let generalCornerRadius: CGFloat = 12
-    // TODO: Limiting font size to xxLarge until we use compositional layout in all Firefox HomePage. Should be AX5.
-    static let titleFontSize: CGFloat = 19 // Style subheadline - xxLarge
-    static let siteFontSize: CGFloat = 16 // Style caption1 - xxLarge
+    static let titleFontSize: CGFloat = 49 // Style subheadline - AX5
+    static let siteFontSize: CGFloat = 43 // Style caption1 - AX5
     static let stackViewShadowRadius: CGFloat = 4
     static let stackViewShadowOffset: CGFloat = 2
     static let heroImageSize =  CGSize(width: 108, height: 80)
@@ -172,7 +171,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             imageContainer.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.heroImageSize.height),
             imageContainer.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.heroImageSize.width),
             imageContainer.topAnchor.constraint(equalTo: itemTitle.topAnchor),
-            imageContainer.bottomAnchor.constraint(greaterThanOrEqualTo: contentView.bottomAnchor, constant: -16),
+            imageContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16),
 
             heroImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
             heroImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
@@ -192,14 +191,16 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             // Description container, it's image and label
             descriptionContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
             descriptionContainer.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
-            descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
 
             faviconImage.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.height),
             faviconImage.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.width),
 
-            descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor),
+            descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor).priority(UILayoutPriority(999))
         ])
+
+        descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
     }
 }
 

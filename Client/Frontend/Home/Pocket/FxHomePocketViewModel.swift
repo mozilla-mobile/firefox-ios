@@ -117,7 +117,7 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
                                  isButtonHidden: true)
     }
 
-    static var section: NSCollectionLayoutSection {
+    var section: NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)

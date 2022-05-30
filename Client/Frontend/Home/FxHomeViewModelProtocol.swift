@@ -10,7 +10,7 @@ protocol FXHomeViewModelProtocol {
     var sectionType: FirefoxHomeSectionType { get }
 
     // Layout section so FirefoxHomeViewController view controller can setup the section
-    static var section: NSCollectionLayoutSection { get }
+    var section: NSCollectionLayoutSection { get }
 
     var numberOfItemsInSection: Int { get }
 
@@ -44,7 +44,7 @@ extension FXHomeViewModelProtocol {
     }
 
     // TODO: Laurie
-    static var section: NSCollectionLayoutSection {
+    var section: NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

@@ -36,7 +36,7 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
         return ASHeaderViewModel.emptyHeader
     }
 
-    static var section: NSCollectionLayoutSection {
+    var section: NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
