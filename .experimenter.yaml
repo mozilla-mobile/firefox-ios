@@ -1,21 +1,4 @@
 ---
-awesome-bar:
-  description: Configuring the awesome bar.
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    min-search-term:
-      type: int
-      description: The minimum number of characters that the user types before searching in the page.
-    position:
-      type: json
-      description: "This property defines whether or not the feature is enabled, and the position of the search bar\n"
-    search-highlights:
-      type: boolean
-      description: Whether or not search highlights are enabled
-    use-page-content:
-      type: boolean
-      description: "Search in the open tab's text content when typing."
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true
@@ -62,14 +45,22 @@ messaging:
       type: string
       description: What should be displayed when a control message is selected.
       enum:
-        - show-next-message
         - show-none
+        - show-next-message
     styles:
       type: json
       description: "A map of styles to configure message appearance.\n"
     triggers:
       type: json
       description: "A collection of out the box trigger expressions. Each entry maps to a valid JEXL expression.\n"
+search:
+  description: "Configuring the functionality to do with search. This will be separated into smaller sub-features in later releases.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    awesome-bar:
+      type: json
+      description: Configuring the awesome bar.
 search-term-groups-feature:
   description: The feature that controls whether or not search term groups are enabled.
   hasExposure: true
@@ -79,13 +70,13 @@ search-term-groups-feature:
       type: json
       description: This property provides a lookup table of whether or not the given grouping should be enabled.
 spotlight-search:
-  description: "Add of webpages to iOS's core search."
+  description: Add pages as items findable with Spotlight.
   hasExposure: true
   exposureDescription: ""
   variables:
     enabled:
       type: boolean
-      description: Add pages as items findable with Spotlight.
+      description: "If this is true, then on each page load adds a new item to Spotlight."
     icon-type:
       type: string
       description: "The icon that is displayed next to the item in the search results. If this is `null`, then no icon is displayed.\n"

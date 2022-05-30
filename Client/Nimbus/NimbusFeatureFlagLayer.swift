@@ -74,7 +74,7 @@ final class NimbusFeatureFlagLayer {
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
                                         from nimbus: FxNimbus
     ) -> Bool {
-        let config = nimbus.features.awesomeBar.value()
+        let config = nimbus.features.search.value().awesomeBar
 
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled

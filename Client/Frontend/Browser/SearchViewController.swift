@@ -84,13 +84,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
-    var awesomeBarFeature: FeatureHolder<AwesomeBar>
+    var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
 
-    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<AwesomeBar> = FxNimbus.shared.features.awesomeBar) {
+    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
         self.viewModel = viewModel
         self.tabManager = tabManager
-        self.awesomeBarFeature = featureConfig
+        self.searchFeature = featureConfig
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -154,7 +154,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        awesomeBarFeature.recordExposure()
+        searchFeature.recordExposure()
     }
 
     private func layoutSearchEngineScrollView() {
@@ -379,7 +379,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 $0 && content.range(of: $1, options: .caseInsensitive) != nil
             }
         }
-        let config = awesomeBarFeature.value()
+        let config = searchFeature.value().awesomeBar
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
         let searchInContent = config.usePageContent
