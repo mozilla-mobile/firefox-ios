@@ -15,7 +15,8 @@ class WallpaperCardViewController: OnboardingCardViewController {
     }
 
     var wallpaperManager: WallpaperManager
-    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+    var selectedWallpaper: Int
+    private lazy var wallpaperImageView: UIImageView = .build { _ in }
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero,
@@ -25,7 +26,7 @@ class WallpaperCardViewController: OnboardingCardViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.layer.cornerRadius = UX.collectionViewRadius
-        collectionView.backgroundColor = UIColor.Photon.Grey10A40
+        collectionView.backgroundColor = UIColor.Photon.Grey10A60
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(WallpaperSettingCollectionCell.self,
@@ -63,6 +64,7 @@ class WallpaperCardViewController: OnboardingCardViewController {
          delegate: OnboardingCardDelegate,
          wallpaperManager: WallpaperManager = WallpaperManager()) {
         self.wallpaperManager = wallpaperManager
+        self.selectedWallpaper = 0
 
         super.init(viewModel: viewModel, delegate: delegate)
     }
@@ -74,18 +76,23 @@ class WallpaperCardViewController: OnboardingCardViewController {
     override func setupView() {
         super.setupView()
         contentStackView.insertArrangedView(collectionView, position: 2)
-        view.addSubview(wallpaperView)
+        view.addSubview(wallpaperImageView)
 
         NSLayoutConstraint.activate([
             collectionView.heightAnchor.constraint(equalToConstant: 240).priority(.defaultLow),
 
-            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
-            wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            wallpaperImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            wallpaperImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wallpaperImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wallpaperImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        view.sendSubviewToBack(wallpaperView)
+        view.sendSubviewToBack(wallpaperImageView)
         collectionView.reloadData()
+    }
+
+    @objc override func primaryAction() {
+        wallpaperManager.updateSelectedWallpaperIndex(to: selectedWallpaper)
+        super.primaryAction()
     }
 }
 
@@ -107,6 +114,10 @@ extension WallpaperCardViewController: UICollectionViewDelegateFlowLayout, UICol
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
-        wallpaperManager.updateSelectedWallpaperIndex(to: indexPath.row)
+        // Once a tile is selected update imageview
+
+        selectedWallpaper = indexPath.row
+        let previewImage = wallpaperManager.getImageAt(index: selectedWallpaper, inLandscape: false)
+        wallpaperImageView.image = previewImage
     }
 }

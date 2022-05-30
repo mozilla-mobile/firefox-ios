@@ -6,6 +6,11 @@ import Foundation
 import UIKit
 import Shared
 
+// TODO:
+// 2- Bring back old onboarding just in case
+// 3- Add debug option??
+// 4- Check indicator failing from 2 to 3 and going backwards sometimes
+
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
     var viewModel: IntroViewModel

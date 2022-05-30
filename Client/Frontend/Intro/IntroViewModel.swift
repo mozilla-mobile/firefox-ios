@@ -26,7 +26,7 @@ struct IntroViewModel {
         switch currentCard {
         case .welcome:
             return OnboardingCardViewModel(cardType: currentCard,
-                                           image: UIImage(named: "tour-Welcome"),
+                                           image: UIImage(named: ImageIdentifiers.onboardingWelcome),
                                            title: .CardTitleWelcome,
                                            description: .Onboarding.IntroDescriptionPart2,
                                            primaryAction: .Onboarding.IntroAction,
@@ -42,7 +42,7 @@ struct IntroViewModel {
                                            a11yIdRoot: "Wallpaper")
         case .signSync:
             return OnboardingCardViewModel(cardType: currentCard,
-                                           image: UIImage(named: "tour-Welcome"),
+                                           image: UIImage(named: ImageIdentifiers.onboardingSync),
                                            title: .Onboarding.SyncTitle,
                                            description: .Onboarding.SyncDescription,
                                            primaryAction: .Onboarding.SyncAction,

@@ -47,12 +47,13 @@ protocol OnboardingCardDelegate: AnyObject {
     func primaryAction(_ cardType: IntroViewModel.OnboardingCards)
 }
 
-class OnboardingCardViewController: UIViewController, CardTheme {
+class OnboardingCardViewController: UIViewController {
 
     struct UX {
         static let stackViewSpacing: CGFloat = 16
-        static let stackViewSpacingButtons: CGFloat = 102
+        static let stackViewSpacingButtons: CGFloat = 80
         static let buttonHeight: CGFloat = 45
+        static let buttonCornerRadius: CGFloat = 13
         static let stackViewHorizontalPadding: CGFloat = 20
     }
 
@@ -61,11 +62,6 @@ class OnboardingCardViewController: UIViewController, CardTheme {
 
     var nextClosure: ((IntroViewModel.OnboardingCards) -> Void)?
     var primaryActionClosure: ((IntroViewModel.OnboardingCards) -> Void)?
-
-    private var fxTextThemeColor: UIColor {
-        // For dark theme we want to show light colours and for light we want to show dark colours
-        return theme == .dark ? .white : .black
-    }
 
     private lazy var scrollView: UIScrollView = .build { view in
         view.backgroundColor = .clear
@@ -88,10 +84,8 @@ class OnboardingCardViewController: UIViewController, CardTheme {
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.textColor = UIColor.red
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.textColor = self.fxTextThemeColor
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .title1,
             maxSize: 58)
@@ -99,11 +93,9 @@ class OnboardingCardViewController: UIViewController, CardTheme {
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
     }
 
-    // Onlu available for Welcome card and default cases
+    // Only available for Welcome card and default cases
     private lazy var descriptionBoldLabel: UILabel = .build { label in
-        label.textColor = UIColor.green
         label.numberOfLines = 0
-        label.textColor = self.fxTextThemeColor
         label.textAlignment = .center
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
             withTextStyle: .body,
@@ -114,9 +106,7 @@ class OnboardingCardViewController: UIViewController, CardTheme {
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
-        label.textColor = UIColor.green
         label.numberOfLines = 0
-        label.textColor = self.fxTextThemeColor
         label.textAlignment = .center
         label.font = DynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .body,
@@ -127,9 +117,8 @@ class OnboardingCardViewController: UIViewController, CardTheme {
 
     private lazy var primaryButton: UIButton = .build { button in
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        button.layer.cornerRadius = 13
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.backgroundColor = UIColor.Photon.Blue50
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
@@ -138,9 +127,8 @@ class OnboardingCardViewController: UIViewController, CardTheme {
 
     private lazy var secondaryButton: UIButton = .build { button in
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        button.layer.cornerRadius = 13
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.backgroundColor = UIColor.Photon.LightGrey30
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
@@ -156,6 +144,16 @@ class OnboardingCardViewController: UIViewController, CardTheme {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), LegacyThemeManager.instance.systemThemeIsOn {
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+            applyTheme()
+        }
     }
 
     override func viewDidLoad() {
@@ -208,7 +206,7 @@ class OnboardingCardViewController: UIViewController, CardTheme {
         contentStackView.setContentHuggingPriority(.defaultLow, for: .vertical)
     }
 
-    func updateLayout() {
+    private func updateLayout() {
         titleLabel.text = viewModel.title
         descriptionBoldLabel.isHidden = viewModel.cardType != .welcome
         descriptionBoldLabel.text = .Onboarding.IntroDescriptionPart1
@@ -220,6 +218,14 @@ class OnboardingCardViewController: UIViewController, CardTheme {
         imageView.isHidden = viewModel.image == nil
         primaryButton.setTitle(viewModel.primaryAction, for: .normal)
         secondaryButton.setTitle(viewModel.secondaryAction, for: .normal)
+    }
+
+    private func applyTheme() {
+        view.backgroundColor = UIColor.theme.homePanel.panelBackground
+        titleLabel.textColor = UIColor.theme.homeTabBanner.textColor
+        descriptionLabel.textColor = UIColor.theme.homeTabBanner.textColor
+        descriptionBoldLabel.textColor = UIColor.theme.homeTabBanner.textColor
+
     }
 
     @objc func primaryAction() {

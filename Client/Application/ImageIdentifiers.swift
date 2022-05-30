@@ -49,6 +49,8 @@ public struct ImageIdentifiers {
     public static let newTab = "quick_action_new_tab"
     public static let nightMode = "menu-NightMode"
     public static let noImageMode = "menu-NoImageMode"
+    public static let onboardingWelcome = "tour-Welcome"
+    public static let onboardingSync = "tour-sync-v2"
     public static let paste = "menu-Paste"
     public static let pasteAndGo = "menu-PasteAndGo"
     public static let pinSmall = "pin_small"
