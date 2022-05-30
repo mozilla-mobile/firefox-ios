@@ -35,44 +35,51 @@ class Pocket: FeatureFlaggable, URLCaching {
         return Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String
     }()
 
+    enum Error: Swift.Error {
+        case failure
+    }
+
     // Fetch items from the global pocket feed
-    func globalFeed(items: Int = 2) -> Deferred<[PocketFeedStory]> {
+    func globalFeed(items: Int = 2, completion: @escaping (Result<[PocketFeedStory], Error>) -> Void) {
         if shouldUseMockData {
-            return getMockDataFeed(count: items)
+            return getMockDataFeed(count: items, completion: completion)
         } else {
-            return getGlobalFeed(items: items)
+            return getGlobalFeed(items: items, completion: completion)
         }
     }
 
-    private func getGlobalFeed(items: Int = 2) -> Deferred<Array<PocketFeedStory>> {
-        let deferred = Deferred<Array<PocketFeedStory>>()
+    func globalFeed(items: Int = 2) async throws -> [PocketFeedStory] {
+        return try await withCheckedThrowingContinuation { continuation in
+            globalFeed(items: items) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
+    private func getGlobalFeed(items: Int = 2, completion: @escaping (Result<[PocketFeedStory], Error>) -> Void) {
 
         guard let request = createGlobalFeedRequest(items: items) else {
-            deferred.fill([])
-            return deferred
+            return completion(.failure(.failure))
         }
 
         if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? Array<[String: Any]> {
-            deferred.fill(PocketFeedStory.parseJSON(list: items))
-            return deferred
+            return completion(.success(PocketFeedStory.parseJSON(list: items)))
         }
 
         urlSession.dataTask(with: request) { (data, response, error) in
             guard let response = validatedHTTPResponse(response, contentType: "application/json"), let data = data else {
-                return deferred.fill([])
+                return completion(.failure(.failure))
             }
 
             self.cache(response: response, for: request, with: data)
 
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
             guard let items = json?["recommendations"] as? Array<[String: Any]> else {
-                return deferred.fill([])
+                return completion(.failure(.failure))
             }
 
-            return deferred.fill(PocketFeedStory.parseJSON(list: items))
+            return completion(.success(PocketFeedStory.parseJSON(list: items)))
         }.resume()
-
-        return deferred
     }
 
     // Returns nil if the locale is not supported
@@ -104,18 +111,15 @@ class Pocket: FeatureFlaggable, URLCaching {
         return featureFlags.isCoreFeatureEnabled(.useMockData) && (pocketKey == "" || pocketKey == nil)
     }
 
-    private func getMockDataFeed(count: Int = 2) -> Deferred<Array<PocketFeedStory>> {
-        let deferred = Deferred<Array<PocketFeedStory>>()
+    private func getMockDataFeed(count: Int = 2, completion: (Result<[PocketFeedStory], Error>) -> Void) {
         let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json")
         let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
 
         let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
         guard let items = json?["recommendations"] as? Array<[String: Any]> else {
-            deferred.fill([])
-            return deferred
+            return completion(.failure(.failure))
         }
 
-        deferred.fill(Array(PocketFeedStory.parseJSON(list: items).prefix(count)))
-        return deferred
+        return completion(.success(Array(PocketFeedStory.parseJSON(list: items).prefix(count))))
     }
 }

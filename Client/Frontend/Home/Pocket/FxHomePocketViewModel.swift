@@ -89,42 +89,42 @@ class FxHomePocketViewModel {
 
     // MARK: - Private
 
-    private func getPocketSites() -> Success {
-        pocketAPI
-            .globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
-            .bindQueue(.main) { [weak self] global in
-                self?.pocketSponsoredAPI.fetchSponsoredStories { [weak self] result in
-                    switch result {
-                        case let .success(sponsored):
-                            // Convert global feed to PocketStory
-                            var globalTemp = global.map(PocketStory.init)
+    var showSponsors = true
 
-                            // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                            var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
-
-                            // Making sure we insert a sponsored story at a valid index
-                            let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-                            if let first = sponsoredTemp.first {
-                                globalTemp.insert(first, at: firstIndex)
-                                sponsoredTemp.removeAll(where: { $0 == first })
-                            }
-
-                            let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-                            if let second = sponsoredTemp.first {
-                                globalTemp.insert(second, at: secondIndex)
-                                sponsoredTemp.removeAll(where: { $0 == second })
-                            }
-
-                            // Add the story in the view models list
-                            for story in globalTemp {
-                                self?.bind(pocketStoryViewModel: .init(story: story))
-                            }
-                        case .failure:
-                            ()
-                    }
-                }
-                return succeed()
+    private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indexes: [Int]) {
+        for index in indexes {
+            // Making sure we insert a sponsored story at a valid index
+            let normalisedIndex = min(index, globalFeed.endIndex)
+            if let first = sponsored.first {
+                globalFeed.insert(first, at: normalisedIndex)
+                sponsored.removeAll(where: { $0 == first })
             }
+        }
+    }
+
+    private func updatePocketSites() async {
+        do {
+            let global = try await pocketAPI.globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
+
+            // Convert global feed to PocketStory
+            var globalTemp = global.map(PocketStory.init)
+            let sponsored = try await pocketSponsoredAPI.fetchSponsoredStories()
+
+            if showSponsors {
+                // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+                var sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection))
+                self.insert(
+                    sponsored: &sponsoredTemp,
+                    into: &globalTemp,
+                    indexes: [FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem]
+                )
+            }
+
+            // Add the story in the view models list
+            for story in globalTemp {
+                self.bind(pocketStoryViewModel: .init(story: story))
+            }
+        } catch { }
     }
 
     func showDiscoverMore() {
@@ -153,7 +153,8 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     func updateData(completion: @escaping () -> Void) {
-        getPocketSites().uponQueue(.main) { _ in
+        Task {
+            await updatePocketSites()
             completion()
         }
     }
