@@ -84,14 +84,6 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         }
     }
 
-    /// Refresh data for new layout
-    func refreshData() {
-        jumpBackInList = createJumpBackInList(
-            from: recentTabs,
-            withMaxItemsToDisplay: FirefoxHomeJumpBackInViewModel.maxItemsToDisplay,
-            and: recentGroups)
-    }
-
     func switchTo(group: ASGroup<Tab>) {
         if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
             BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
@@ -259,7 +251,12 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
         }
     }
 
-    var shouldReloadSection: Bool { return true }
+    func refreshData(for traitCollection: UITraitCollection) {
+        jumpBackInList = createJumpBackInList(
+            from: recentTabs,
+            withMaxItemsToDisplay: FirefoxHomeJumpBackInViewModel.maxItemsToDisplay,
+            and: recentGroups)
+    }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
         self.isPrivate = isPrivate

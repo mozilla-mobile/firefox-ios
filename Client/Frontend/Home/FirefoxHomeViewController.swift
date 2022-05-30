@@ -115,8 +115,13 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
-        reloadOnRotation(with: coordinator)
         wallpaperView.updateImageForOrientationChange()
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+
+        reloadOnRotation(newCollection, with: coordinator)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -162,7 +167,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         let layout = UICollectionViewCompositionalLayout {
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
-            guard let viewModel = self.viewModel.getSectionViewModel(section: sectionIndex), viewModel.shouldShow else {
+            guard let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex), viewModel.shouldShow else {
                 return nil
             }
 
@@ -202,28 +207,34 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         //        let sourceView = collectionView.cellForItem(at: indexPath)
         //        onLongPressTileAction(site, sourceView)
 
- // TOPSITE
-//            guard longPressGestureRecognizer.state == .began else { return }
-//
-//            let point = longPressGestureRecognizer.location(in: collectionView)
-//            guard let indexPath = collectionView.indexPathForItem(at: point),
-//                  let viewModel = viewModel,
-//                  let tileLongPressedHandler = viewModel.tileLongPressedHandler,
-//                  let site = viewModel.tileManager.getSiteDetail(index: indexPath.row)
-//            else { return }
-//
-//            let sourceView = collectionView.cellForItem(at: indexPath)
-//            tileLongPressedHandler(site, sourceView)
+        // TOPSITE
+        //            guard longPressGestureRecognizer.state == .began else { return }
+        //
+        //            let point = longPressGestureRecognizer.location(in: collectionView)
+        //            guard let indexPath = collectionView.indexPathForItem(at: point),
+        //                  let viewModel = viewModel,
+        //                  let tileLongPressedHandler = viewModel.tileLongPressedHandler,
+        //                  let site = viewModel.tileManager.getSiteDetail(index: indexPath.row)
+        //            else { return }
+        //
+        //            let sourceView = collectionView.cellForItem(at: indexPath)
+        //            tileLongPressedHandler(site, sourceView)
     }
 
     // MARK: - Helpers
 
-    private func reloadOnRotation(with coordinator: UIViewControllerTransitionCoordinator) {
+    private func reloadOnRotation(_ newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        for (index, _) in viewModel.shownSections.enumerated() {
+            let viewModel  = viewModel.getSectionViewModel(shownSection: index)
+            viewModel?.refreshData(for: newCollection)
+        }
+
         coordinator.animate(alongsideTransition: { context in
-            // The AS context menu does not behave correctly. Dismiss it when rotating.
+            // The contextual menu does not behave correctly. Dismiss it when rotating.
             if let _ = self.presentedViewController as? PhotonActionSheet {
                 self.presentedViewController?.dismiss(animated: true, completion: nil)
             }
+
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.reloadData()
         }, completion: { _ in
@@ -239,17 +250,8 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         else { return }
 
         viewModel.isPrivate = isPrivate
-        if let jumpBackIndex = viewModel.enabledSections.firstIndex(of: FirefoxHomeSectionType.jumpBackIn) {
-            let indexSet = IndexSet([jumpBackIndex])
-            collectionView.reloadSections(indexSet)
-        }
-
-        if let highlightIndex = viewModel.enabledSections.firstIndex(of: FirefoxHomeSectionType.historyHighlights) {
-            let indexSet = IndexSet([highlightIndex])
-            collectionView.reloadSections(indexSet)
-        } else {
-            reloadAll()
-        }
+        viewModel.updateEnabledSections()
+        reloadAll()
     }
 
     func applyTheme() {
@@ -361,7 +363,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
                 ofKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: ASHeaderView.cellIdentifier,
                 for: indexPath) as? ASHeaderView,
-              let viewModel = viewModel.getSectionViewModel(section: indexPath.section)
+              let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
         else {
             return UICollectionReusableView()
         }
@@ -385,43 +387,16 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
         return headerView
     }
 
-    // Laurie
-    //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    //        // This removes extra space since insetForSectionAt is called for all sections even if they are not showing
-    //        // Root cause is that numberOfSections is always returned as FirefoxHomeSectionType.allCases
-    //        let sideInsets = FirefoxHomeSectionType(section).sectionInsets(self.traitCollection, frameWidth: self.view.frame.width)
-    //        let edgeInsets = UIEdgeInsets(top: 0, left: sideInsets, bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, right: sideInsets)
-    //
-    //        switch FirefoxHomeSectionType(section) {
-    //        case .logoHeader:
-    //            return viewModel.headerViewModel.shouldShow ? edgeInsets : .zero
-    //        case .pocket:
-    //            return viewModel.pocketViewModel.shouldShow ? edgeInsets : .zero
-    //        case .topSites:
-    //            return viewModel.topSiteViewModel.shouldShow ? edgeInsets : .zero
-    //        case .jumpBackIn:
-    //            return viewModel.jumpBackInViewModel.shouldShow ? edgeInsets : .zero
-    //        case .historyHighlights:
-    //            return viewModel.historyHighlightsViewModel.shouldShow ? edgeInsets : .zero
-    //        case .recentlySaved:
-    //            return viewModel.recentlySavedViewModel.shouldShow ? edgeInsets : .zero
-    //        default:
-    //            return .zero
-    //        }
-    //    }
-    // }
-
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return FirefoxHomeSectionType.allCases.count
+        return viewModel.shownSections.count
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.updateEnabledSections()
-        return viewModel.getSectionViewModel(section: section)?.numberOfItemsInSection(for: traitCollection) ?? 0
+        return viewModel.getSectionViewModel(shownSection: section)?.numberOfItemsInSection(for: traitCollection) ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let viewModel = viewModel.getSectionViewModel(section: indexPath.section) as? FxHomeSectionHandler else {
+        guard let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? FxHomeSectionHandler else {
             return UICollectionViewCell()
         }
 
@@ -429,28 +404,8 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
-        // TODO: Protocol laurie
-        switch FirefoxHomeSectionType(indexPath.section) {
-        case .recentlySaved:
-            viewModel.recentlySavedViewModel.didSelectItem(at: indexPath,
-                                                           homePanelDelegate: homePanelDelegate,
-                                                           libraryPanelDelegate: libraryPanelDelegate)
-        case .pocket:
-            viewModel.pocketViewModel.didSelectItem(at: indexPath,
-                                                    homePanelDelegate: homePanelDelegate,
-                                                    libraryPanelDelegate: libraryPanelDelegate)
-        case .jumpBackIn:
-            viewModel.jumpBackInViewModel.didSelectItem(at: indexPath,
-                                                        homePanelDelegate: homePanelDelegate,
-                                                        libraryPanelDelegate: libraryPanelDelegate)
-        case .historyHighlights:
-            viewModel.historyHighlightsViewModel.didSelectItem(at: indexPath,
-                                                               homePanelDelegate: homePanelDelegate,
-                                                               libraryPanelDelegate: libraryPanelDelegate)
-        default:
-            break
-        }
+        guard let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? FxHomeSectionHandler else { return }
+        viewModel.didSelectItem(at: indexPath, homePanelDelegate: homePanelDelegate, libraryPanelDelegate: libraryPanelDelegate)
     }
 }
 
@@ -460,16 +415,10 @@ extension FirefoxHomeViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
     func reloadAll() {
+        collectionView.reloadData()
+
         DispatchQueue.global(qos: .userInteractive).async {
             self.viewModel.updateData()
-            // Collection view should only actually reload its data once the various
-            // sections have data to display. As such, it must be done after the
-            // `updateData` call, which is, itself, async.
-
-            // TODO: Laurie
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
         }
     }
 }
@@ -701,14 +650,11 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
 
 // MARK: FirefoxHomeViewModelDelegate
 extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
-    func reloadSection(index: Int?) {
-        DispatchQueue.main.async {
-//            if let index = index {
-//                let indexSet = IndexSet([index])
-//                self.collectionView.reloadSections(indexSet)
-//            } else {
-                self.collectionView.reloadData()
-//            }
+
+    func reloadSection(section: FXHomeViewModelProtocol) {
+        ensureMainThread { [weak self] in
+            guard let self = self else { return }
+            self.viewModel.reloadSection(section, with: self.collectionView)
         }
     }
 }
@@ -717,15 +663,18 @@ extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
 extension FirefoxHomeViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
+            guard let self = self else { return }
+
+            self.viewModel.updateEnabledSections()
+
             switch notification.name {
             case .TabsPrivacyModeChanged:
-                self?.adjustPrivacySensitiveSections(notification: notification)
+                self.adjustPrivacySensitiveSections(notification: notification)
             case .TabsTrayDidClose,
                     .TopTabsTabClosed,
-                    .TabsTrayDidSelectHomeTab:
-                self?.reloadAll()
-            case .HomePanelPrefsChanged:
-                self?.reloadAll()
+                    .TabsTrayDidSelectHomeTab,
+                    .HomePanelPrefsChanged:
+                self.reloadAll()
             default: break
             }
         }

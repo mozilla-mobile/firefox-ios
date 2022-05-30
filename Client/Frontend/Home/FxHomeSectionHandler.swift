@@ -23,7 +23,9 @@ extension FxHomeSectionHandler {
 
     // Default configure use the FirefoxHomeSectionType cellIdentifier, when there's only one cell type in that section
     func configure(_ collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
-        let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
+        guard let viewModel = self as? FXHomeViewModelProtocol else { return UICollectionViewCell() }
+
+        let identifier = viewModel.sectionType.cellIdentifier
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
         return configure(cell, at: indexPath)
     }

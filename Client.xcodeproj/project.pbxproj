@@ -509,6 +509,7 @@
 		8AB8574827D97CD40075C173 /* HomePanelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8574727D97CD40075C173 /* HomePanelType.swift */; };
 		8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */; };
 		8ABC5AEE284532C900FEA552 /* FxHomePocketDiscoverMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC5AED284532C900FEA552 /* FxHomePocketDiscoverMoreCell.swift */; };
+		8ABC5AF028456DD800FEA552 /* FirefoxHomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC5AEF28456DD800FEA552 /* FirefoxHomeViewModelTests.swift */; };
 		8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */; };
 		8AD08D1727E91AC800B8E907 /* TabsQuantityTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
@@ -2857,6 +2858,7 @@
 		8AB8574727D97CD40075C173 /* HomePanelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePanelType.swift; sourceTree = "<group>"; };
 		8AB8574927D97CE90075C173 /* HomePanelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePanelDelegate.swift; sourceTree = "<group>"; };
 		8ABC5AED284532C900FEA552 /* FxHomePocketDiscoverMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomePocketDiscoverMoreCell.swift; sourceTree = "<group>"; };
+		8ABC5AEF28456DD800FEA552 /* FirefoxHomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxHomeViewModelTests.swift; sourceTree = "<group>"; };
 		8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsQuantityTelemetry.swift; sourceTree = "<group>"; };
 		8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsQuantityTelemetryTests.swift; sourceTree = "<group>"; };
 		8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetViewModel.swift; sourceTree = "<group>"; };
@@ -6943,6 +6945,7 @@
 				8AD3E43A28062C3700EAB4DC /* FirefoxHomeViewControllerTests.swift */,
 				C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
+				8ABC5AEF28456DD800FEA552 /* FirefoxHomeViewModelTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -9478,6 +9481,7 @@
 				8A7A93EE2810ADF2005E7E1B /* ContileProviderTests.swift in Sources */,
 				8A33221F27DFE318008F809E /* FxHomeTopSitesManagerTests.swift in Sources */,
 				C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */,
+				8ABC5AF028456DD800FEA552 /* FirefoxHomeViewModelTests.swift in Sources */,
 				8A5C3BC5282ABF8E003A8CCF /* RemoteTabsPanelTests.swift in Sources */,
 				D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */,
 				63306D452110BAF000F25400 /* TabManagerStoreTests.swift in Sources */,

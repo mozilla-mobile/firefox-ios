@@ -24,18 +24,6 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         }
     }
 
-    func cellHeight() -> CGFloat {
-        switch self {
-        case .pocket: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight * FxHomePocketViewModel.numberOfItemsInColumn
-        case .jumpBackIn: return FirefoxHomeViewModel.UX.homeHorizontalCellHeight
-        case .recentlySaved: return FirefoxHomeViewModel.UX.recentlySavedCellHeight
-        case .historyHighlights: return FirefoxHomeViewModel.UX.historyHighlightsCellHeight
-        case .topSites: return FirefoxHomeViewModel.UX.topSitesHeight
-        case .customizeHome: return FirefoxHomeViewModel.UX.customizeHomeHeight
-        case .logoHeader: return FirefoxHomeViewModel.UX.logoHeaderHeight
-        }
-    }
-
     // TODO: Laurie
 //    // Pocket, historyHighlight, recently saved and jump back in should have full width and add inset in their respective sections
 //    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-3928

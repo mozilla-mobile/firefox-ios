@@ -163,8 +163,6 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
             completion()
         }
     }
-
-    var shouldReloadSection: Bool { return true }
 }
 
 // MARK: FxHomeSectionHandler

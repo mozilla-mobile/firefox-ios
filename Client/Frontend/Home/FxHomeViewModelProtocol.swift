@@ -26,11 +26,11 @@ protocol FXHomeViewModelProtocol {
     // Returns true when section has data and is enabled
     var shouldShow: Bool { get }
 
-    // Update section data, completes when data has finished loading
+    // Update section data from backend, completes when data has finished loading
     func updateData(completion: @escaping () -> Void)
 
-    // If we need to reload the section after data was loaded
-    var shouldReloadSection: Bool { get }
+    // Refresh data after reloadOnRotation, so layout can be adjusted
+    func refreshData(for traitCollection: UITraitCollection)
 
     // Update section that are privacy sensitive, only implement when needed
     func updatePrivacyConcernedSection(isPrivate: Bool)
@@ -45,7 +45,7 @@ extension FXHomeViewModelProtocol {
 
     func updateData(completion: @escaping () -> Void) {}
 
-    var shouldReloadSection: Bool { return false }
+    func refreshData(for traitCollection: UITraitCollection) {}
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {}
 }

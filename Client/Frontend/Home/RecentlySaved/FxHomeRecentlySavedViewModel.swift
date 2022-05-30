@@ -154,10 +154,6 @@ extension FxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggabl
             completion()
         }
     }
-
-    var shouldReloadSection: Bool {
-        return true
-    }
 }
 
 // MARK: FxHomeSectionHandler

@@ -176,8 +176,6 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
         loadItems(completion: completion)
     }
 
-    var shouldReloadSection: Bool { return true }
-
     func updatePrivacyConcernedSection(isPrivate: Bool) {
         self.isPrivate = isPrivate
     }
@@ -191,7 +189,7 @@ extension FxHomeHistoryHightlightsViewModel: FxHomeSectionHandler {
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
         recordSectionHasShown()
-        
+
         let hideBottomLine = isBottomCell(indexPath: indexPath,
                                           totalItems: historyItems?.count)
         let cornersToRound = determineCornerToRound(indexPath: indexPath,

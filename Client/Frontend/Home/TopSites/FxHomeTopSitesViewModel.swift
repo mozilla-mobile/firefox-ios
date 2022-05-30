@@ -99,11 +99,6 @@ class FxHomeTopSitesViewModel {
         }
     }
 
-    func reloadData(for trait: UITraitCollection) {
-        sectionDimension = getSectionDimension(for: trait)
-        tileManager.calculateTopSiteData(numberOfTilesPerRow: sectionDimension.numberOfTilesPerRow)
-    }
-
     func tilePressed(site: HomeTopSite, position: Int) {
         topSitePressTracking(homeTopSite: site, position: position)
         tilePressedHandler?(site.site, site.isGoogleURL)
@@ -228,12 +223,13 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
         return tileManager.hasData
     }
 
-    var shouldReloadSection: Bool {
-        return true
-    }
-
     func updateData(completion: @escaping () -> Void) {
         tileManager.loadTopSitesData(dataLoadingCompletion: completion)
+    }
+
+    func refreshData(for traitCollection: UITraitCollection) {
+        sectionDimension = getSectionDimension(for: traitCollection)
+        tileManager.calculateTopSiteData(numberOfTilesPerRow: sectionDimension.numberOfTilesPerRow)
     }
 }
 
