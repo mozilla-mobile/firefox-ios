@@ -304,25 +304,32 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         guard isPrivate != isOn else { return }
 
         isPrivate = isOn
+
         UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
-        refreshStore()
-
-        if createTabOnEmptyPrivateMode {
+        if !isPrivate, let mostRecentNormalTab = mostRecentTab(inTabs: tabManager.normalTabs) {
+            self.tabManager.selectTab(mostRecentNormalTab)
+        } else if createTabOnEmptyPrivateMode {
             // if private tabs is empty and we are transitioning to it add a tab
             if tabManager.privateTabs.isEmpty && isPrivate {
-                tabManager.addTab(isPrivate: true)
+                let privateTabToSelect = tabManager.addTab(isPrivate: true)
+                self.tabManager.selectTab(privateTabToSelect)
             }
         }
 
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
-            if let tab = tab {
-                self.tabManager.selectTab(tab)
-            }
-        }
+        refreshStore()
+
+//        if isPrivate {
+//            getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+//                let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
+//                if let tab = tab {
+//                    self.tabManager.selectTab(tab)
+//                }
+//            }
+//
+//        }
 
         let notificationObject = [Tab.privateModeKey: isPrivate]
         NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
