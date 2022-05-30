@@ -1232,7 +1232,7 @@
 "Onboarding.IntroAction.v102" = "Comenzar";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
-"Onboarding.IntroDescriptionPart1.v102" = "Independiente. Sin fines de lucro. Para hacer el bien.";
+"Onboarding.IntroDescriptionPart1.v102" = "Independiente. Sin fines de lucro. Para siempre.";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
 "Onboarding.IntroDescriptionPart2.v102" = "Comprometidos con la promesa de un mejor Internet para todas y todos.";
