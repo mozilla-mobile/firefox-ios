@@ -2614,6 +2614,26 @@ awesomebar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2022-11-10"
+  search_result_tap:
+    type: event
+    description: |
+      Record type of search item tap from the
+      list of results of awesomebar search.
+    extra_keys:
+      type:
+        description: |
+          Type: history-item, remote-tab, opened-tab,
+          bookmark-item, search-suggestion
+        type: string
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3751
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10867
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2022-12-01"
 
 # Device specific metrics
 
