@@ -61,6 +61,7 @@ public struct ImageIdentifiers {
     public static let sendToDevice = "menu-Send-to-Device"
     public static let settings = "menu-Settings"
     public static let share = "action_share"
+    public static let sponsoredStar = "sponsored-star"
     public static let stackedTabsIcon = "recently_closed"
     public static let sync = "menu-sync"
     public static let syncedDevicesIcon = "synced_devices"

@@ -17,8 +17,8 @@ struct PocketStory {
     let priority: Int?
     let context: String?
     let rawImageSrc: URL?
-    let shim: Shim?
-    let caps: Caps?
+    let shim: PocketSponsoredStory.Shim?
+    let caps: PocketSponsoredStory.Caps?
     let sponsor: String?
 }
 
