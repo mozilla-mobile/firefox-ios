@@ -567,13 +567,22 @@ extension FirefoxHomeViewController {
         guard let historyCell = cell as? FxHomeHistoryHighlightsCollectionCell else { return UICollectionViewCell() }
 
         guard let items = viewModel.historyHighlightsViewModel.historyItems, !items.isEmpty else { return UICollectionViewCell() }
-        viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
+
+        viewModel.historyHighlightsViewModel.onShortTap = { [weak self] highlight in
             guard let url = highlight.siteUrl else {
                 self?.openHistoryHighligtsSearchGroup(item: highlight)
                 return
             }
 
-            self?.homePanelDelegate?.homePanel(didSelectURL: url, visitType: .link, isGoogleTopSite: false)
+            self?.homePanelDelegate?.homePanel(didSelectURL: url,
+                                               visitType: .link,
+                                               isGoogleTopSite: false)
+        }
+
+        viewModel.historyHighlightsViewModel.onLongPress = { [weak self] (highlightItem, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(for: highlightItem,
+                                                       with: sourceView,
+                                                       sectionType: .historyHighlights)
         }
 
         historyCell.viewModel = viewModel.historyHighlightsViewModel

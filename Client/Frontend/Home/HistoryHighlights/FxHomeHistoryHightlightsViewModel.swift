@@ -17,7 +17,8 @@ class FxHomeHistoryHightlightsViewModel {
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
 
-    var onTapItem: ((HighlightItem) -> Void)?
+    var onShortTap: ((HighlightItem) -> Void)?
+    var onLongPress: ((HighlightItem, UIView?) -> Void)?
 
     // MARK: - Variables
     /// We calculate the number of columns dynamically based on the numbers of items
@@ -80,7 +81,7 @@ class FxHomeHistoryHightlightsViewModel {
         if foregroundBVC.urlBar.inOverlayMode {
             foregroundBVC.urlBar.leaveOverlayMode()
         }
-        onTapItem?(highlight)
+        onShortTap?(highlight)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .historyHighlightsItemOpened)
     }
 
@@ -89,6 +90,12 @@ class FxHomeHistoryHightlightsViewModel {
         siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
             completion(image)
         }
+    }
+
+    func getItemDetailsAt(index: Int) -> HighlightItem? {
+        guard let selectedItem = historyItems?[safe: index] else { return nil }
+
+        return selectedItem
     }
 
     // MARK: - Private Methods

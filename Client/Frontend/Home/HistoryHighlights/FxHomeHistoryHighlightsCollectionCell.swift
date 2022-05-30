@@ -48,6 +48,7 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        collectionView.addGestureRecognizer(longPressRecognizer)
     }
 
     required init?(coder: NSCoder) {
@@ -88,6 +89,25 @@ class FxHomeHistoryHighlightsCollectionCell: UICollectionViewCell, ReusableCell 
         let section = NSCollectionLayoutSection(group: verticalGroup)
         section.orthogonalScrollingBehavior = .continuous
         return section
+    }
+
+    // MARK: - Gestures
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+    }()
+
+    @objc private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+
+        let point = longPressGestureRecognizer.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: point),
+              let viewModel = viewModel,
+              let longPressAction = viewModel.onLongPress,
+              let selectedItem = viewModel.getItemDetailsAt(index: indexPath.row)
+        else { return }
+
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        longPressAction(selectedItem, sourceView)
     }
 }
 
