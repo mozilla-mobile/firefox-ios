@@ -8,6 +8,9 @@ import Foundation
 // to handle click and cell setup
 protocol FxHomeSectionHandler {
 
+    func configure(_ collectionView: UICollectionView,
+                   at indexPath: IndexPath) -> UICollectionViewCell
+
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell
 
@@ -17,6 +20,13 @@ protocol FxHomeSectionHandler {
 }
 
 extension FxHomeSectionHandler {
+
+    // Default configure use the FirefoxHomeSectionType cellIdentifier, when there's only one cell type in that section
+    func configure(_ collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
+        let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
+        return configure(cell, at: indexPath)
+    }
 
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,

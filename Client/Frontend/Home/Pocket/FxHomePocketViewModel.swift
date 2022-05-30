@@ -8,6 +8,14 @@ import Shared
 
 class FxHomePocketViewModel {
 
+    struct UX {
+        static let numberOfItemsInColumn = 3
+        static let discoverMoreMaxFontSize: CGFloat = 26 // Title 3 xxxLarge
+        static let numberOfItemsInSection = 11
+        static let fractionalWidthiPhonePortrait: CGFloat = 29/30
+        static let fractionalWidthiPhoneLanscape: CGFloat = 7/15
+    }
+
     // MARK: - Properties
 
     private let profile: Profile
@@ -32,9 +40,9 @@ class FxHomePocketViewModel {
         if UIDevice.current.userInterfaceIdiom == .pad {
             return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
         } else if UIWindow.isLandscape {
-            return .fractionalWidth(FxHomePocketCollectionCellUX.fractionalWidthiPhoneLanscape)
+            return .fractionalWidth(UX.fractionalWidthiPhoneLanscape)
         } else {
-            return .fractionalWidth(FxHomePocketCollectionCellUX.fractionalWidthiPhonePortrait)
+            return .fractionalWidth(UX.fractionalWidthiPhonePortrait)
         }
     }
 
@@ -89,7 +97,7 @@ class FxHomePocketViewModel {
     // MARK: - Private
 
     private func getPocketSites() -> Success {
-        return pocketAPI.globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
+        return pocketAPI.globalFeed(items: UX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
             self.pocketStories = pocketStory
             return succeed()
         }
@@ -108,18 +116,42 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
                                  titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
                                  isButtonHidden: true)
     }
-    // TODO: Laurie
-//    var isEnabled: Bool {
-//        // For Pocket, the user preference check returns a user preference if it exists in
-//        // UserDefaults, and, if it does not, it will return a default preference based on
-//        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
-//        guard featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser) else { return false }
-//
-//        return true
-//    }
+
+    static var section: NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: FxHomePocketViewModel.widthDimension,
+            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+        )
+
+        let subItems = Array(repeating: item, count: UX.numberOfItemsInColumn)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
+        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
+                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        section.orthogonalScrollingBehavior = .continuous
+        return section
+    }
+
+    var numberOfItemsInSection: Int {
+        return numberOfCells
+    }
 
     var isEnabled: Bool {
-        return false
+        // For Pocket, the user preference check returns a user preference if it exists in
+        // UserDefaults, and, if it does not, it will return a default preference based on
+        // a (nimbus pocket section enabled && Pocket.isLocaleSupported) check
+        guard featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser) else { return false }
+
+        return true
     }
 
     var hasData: Bool {
@@ -133,4 +165,55 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     var shouldReloadSection: Bool { return true }
+}
+
+// MARK: FxHomeSectionHandler
+extension FxHomePocketViewModel: FxHomeSectionHandler {
+
+    func configure(_ collectionView: UICollectionView,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+
+        recordSectionHasShown()
+
+        if isStoryCell(index: indexPath.row) {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxHomeHorizontalCell
+            let pocketStory = pocketStories[indexPath.row]
+            let cellViewModel = FxHomeHorizontalCellViewModel(titleText: pocketStory.title,
+                                                              descriptionText: domainAndReadingTimeForStory(atIndex: indexPath.row),
+                                                              tag: indexPath.item,
+                                                              hasFavicon: false)
+
+            cell.configure(viewModel: cellViewModel)
+            cell.setFallBackFaviconVisibility(isHidden: true)
+            cell.heroImage.sd_setImage(with: pocketStory.imageURL)
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomePocketDiscoverMoreCell.cellIdentifier, for: indexPath) as! FxHomePocketDiscoverMoreCell
+            cell.itemTitle.text = .FirefoxHomepage.Pocket.DiscoverMore
+            return cell
+        }
+    }
+
+    func configure(_ cell: UICollectionViewCell,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+        // Setup is done through configure(collectionView:indexPath:), shouldn't be called
+        return UICollectionViewCell()
+    }
+
+    func didSelectItem(at indexPath: IndexPath,
+                       homePanelDelegate: HomePanelDelegate?,
+                       libraryPanelDelegate: LibraryPanelDelegate?) {
+
+        guard let showSiteWithURLHandler = onTapTileAction else { return }
+
+        if isStoryCell(index: indexPath.row) {
+            recordTapOnStory(index: indexPath.row)
+
+            let siteUrl = pocketStories[indexPath.row].url
+            showSiteWithURLHandler(siteUrl)
+
+        } else {
+            showSiteWithURLHandler(Pocket.MoreStoriesURL)
+        }
+    }
 }

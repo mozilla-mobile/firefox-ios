@@ -95,7 +95,7 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         switch self {
         case .logoHeader: return FxHomeLogoHeaderCell.cellIdentifier
         case .topSites: return TopSiteCollectionCell.cellIdentifier
-        case .pocket: return FxHomePocketCollectionCell.cellIdentifier
+        case .pocket: return "" // Pocket has more than 1 cell type
         case .jumpBackIn: return FxHomeJumpBackInCollectionCell.cellIdentifier
         case .recentlySaved: return FxHomeRecentlySavedCell.cellIdentifier
         case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.cellIdentifier
@@ -103,16 +103,16 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
         }
     }
 
-    var cellType: UICollectionViewCell.Type {
-        switch self {
-        case .logoHeader: return FxHomeLogoHeaderCell.self
-        case .topSites: return TopSiteCollectionCell.self
-        case .pocket: return FxHomePocketCollectionCell.self
-        case .jumpBackIn: return FxHomeJumpBackInCollectionCell.self
-        case .recentlySaved: return FxHomeRecentlySavedCell.self
-        case .historyHighlights: return FxHomeHistoryHighlightsCollectionCell.self
-        case .customizeHome: return FxHomeCustomizeHomeView.self
-        }
+    static var cellTypes: [ReusableCell.Type] {
+        return [FxHomeLogoHeaderCell.self,
+                TopSiteCollectionCell.self,
+                FxHomeHorizontalCell.self,
+                FxHomePocketDiscoverMoreCell.self,
+                FxHomeJumpBackInCollectionCell.self,
+                FxHomeRecentlySavedCell.self,
+                FxHomeHistoryHighlightsCollectionCell.self,
+                FxHomeCustomizeHomeView.self
+        ]
     }
 
     init(at indexPath: IndexPath) {

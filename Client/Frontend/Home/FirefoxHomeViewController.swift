@@ -60,6 +60,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         }
 
         viewModel.delegate = self
+        collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -86,8 +87,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        FirefoxHomeSectionType.allCases.forEach {
-            collectionView.register($0.cellType, forCellWithReuseIdentifier: $0.cellIdentifier)
+        FirefoxHomeSectionType.cellTypes.forEach {
+            collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
         }
         collectionView?.register(ASHeaderView.self,
                                  forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -168,6 +169,27 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
             return section
         }
         return layout
+    }
+
+    // MARK: Long press
+
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+    }()
+
+    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+
+        // TODO: Laurie - Long press for pocket and top sites
+
+        let point = longPressGestureRecognizer.location(in: collectionView)
+//        guard let indexPath = collectionView.indexPathForItem(at: point),
+//              let viewModel = viewModel, let onLongPressTileAction = viewModel.onLongPressTileAction
+//        else { return }
+//
+//        let site = viewModel.getSitesDetail(for: indexPath.row)
+//        let sourceView = collectionView.cellForItem(at: indexPath)
+//        onLongPressTileAction(site, sourceView)
     }
 
     // MARK: - Helpers
@@ -380,31 +402,35 @@ extension FirefoxHomeViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
 
-        // TODO: Laurie - Change this to protocol comformance instead of switch
+        // TODO: Protocol laurie
         switch FirefoxHomeSectionType(indexPath.section) {
         case .logoHeader:
-            return viewModel.headerViewModel.configure(cell, at: indexPath)
+            return viewModel.headerViewModel.configure(collectionView, at: indexPath)
 
         case .topSites:
+            let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
             return configureTopSitesCell(cell, forIndexPath: indexPath)
 
         case .pocket:
-            return configurePocketItemCell(cell, forIndexPath: indexPath)
+            return viewModel.pocketViewModel.configure(collectionView, at: indexPath)
 
         case .jumpBackIn:
+            let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
             return configureJumpBackInCell(cell, forIndexPath: indexPath)
 
         case .recentlySaved:
-            return viewModel.recentlySavedViewModel.configure(cell, at: indexPath)
+            return viewModel.recentlySavedViewModel.configure(collectionView, at: indexPath)
 
         case .historyHighlights:
+            let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
             return configureHistoryHighlightsCell(cell, forIndexPath: indexPath)
 
         case .customizeHome:
-            return viewModel.customizeButtonViewModel.configure(cell, at: indexPath)
+            return viewModel.customizeButtonViewModel.configure(collectionView, at: indexPath)
         }
     }
 
@@ -415,17 +441,6 @@ extension FirefoxHomeViewController {
         topSiteCell.setNeedsLayout()
 
         return cell
-    }
-
-    private func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let pocketCell = cell as? FxHomePocketCollectionCell else { return UICollectionViewCell() }
-
-        viewModel.pocketViewModel.recordSectionHasShown()
-        pocketCell.viewModel = viewModel.pocketViewModel
-        pocketCell.reloadLayout()
-        pocketCell.setNeedsLayout()
-
-        return pocketCell
     }
 
     private func configureJumpBackInCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
@@ -484,11 +499,16 @@ extension FirefoxHomeViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
+        // TODO: Protocol laurie
         switch FirefoxHomeSectionType(indexPath.section) {
         case .recentlySaved:
             viewModel.recentlySavedViewModel.didSelectItem(at: indexPath,
                                                            homePanelDelegate: homePanelDelegate,
                                                            libraryPanelDelegate: libraryPanelDelegate)
+        case .pocket:
+            viewModel.pocketViewModel.didSelectItem(at: indexPath,
+                                                    homePanelDelegate: homePanelDelegate,
+                                                    libraryPanelDelegate: libraryPanelDelegate)
         default:
             break
         }
@@ -506,6 +526,8 @@ extension FirefoxHomeViewController {
             // Collection view should only actually reload its data once the various
             // sections have data to display. As such, it must be done after the
             // `updateData` call, which is, itself, async.
+
+            // TODO: Laurie
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
