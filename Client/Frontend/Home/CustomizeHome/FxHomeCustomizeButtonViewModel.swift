@@ -20,7 +20,7 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
         return ASHeaderViewModel.emptyHeader
     }
 
-    var section: NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -32,7 +32,7 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
         return NSCollectionLayoutSection(group: group)
     }
 
-    var numberOfItemsInSection: Int {
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
         return 1
     }
 

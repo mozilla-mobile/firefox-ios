@@ -161,13 +161,12 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout {
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-            // TODO: Laurie pass in the traitCollection from layoutEnvironment?
 
             guard let viewModel = self.viewModel.getSectionViewModel(section: sectionIndex), viewModel.shouldShow else {
                 return nil
             }
 
-            let section = viewModel.section
+            let section = viewModel.section(for: layoutEnvironment.traitCollection)
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardLeadingInset,
                                                             bottom: 0, trailing: 0)
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -193,6 +192,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
         // TODO: Laurie - Long press for pocket and top sites
 
+        // POCKET
         let point = longPressGestureRecognizer.location(in: collectionView)
         //        guard let indexPath = collectionView.indexPathForItem(at: point),
         //              let viewModel = viewModel, let onLongPressTileAction = viewModel.onLongPressTileAction
@@ -201,6 +201,19 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         //        let site = viewModel.getSitesDetail(for: indexPath.row)
         //        let sourceView = collectionView.cellForItem(at: indexPath)
         //        onLongPressTileAction(site, sourceView)
+
+ // TOPSITE
+//            guard longPressGestureRecognizer.state == .began else { return }
+//
+//            let point = longPressGestureRecognizer.location(in: collectionView)
+//            guard let indexPath = collectionView.indexPathForItem(at: point),
+//                  let viewModel = viewModel,
+//                  let tileLongPressedHandler = viewModel.tileLongPressedHandler,
+//                  let site = viewModel.tileManager.getSiteDetail(index: indexPath.row)
+//            else { return }
+//
+//            let sourceView = collectionView.cellForItem(at: indexPath)
+//            tileLongPressedHandler(site, sourceView)
     }
 
     // MARK: - Helpers
@@ -372,7 +385,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
         return headerView
     }
 
-    //
+    // Laurie
     //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
     //        // This removes extra space since insetForSectionAt is called for all sections even if they are not showing
     //        // Root cause is that numberOfSections is always returned as FirefoxHomeSectionType.allCases
@@ -404,50 +417,15 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.updateEnabledSections()
-        return viewModel.getSectionViewModel(section: section)?.numberOfItemsInSection ?? 0
+        return viewModel.getSectionViewModel(section: section)?.numberOfItemsInSection(for: traitCollection) ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        // TODO: Protocol laurie
-        switch FirefoxHomeSectionType(indexPath.section) {
-        case .logoHeader:
-            return viewModel.headerViewModel.configure(collectionView, at: indexPath)
-
-        case .topSites:
-            let identifier = FirefoxHomeSectionType(indexPath.section).cellIdentifier
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
-            return configureTopSitesCell(cell, forIndexPath: indexPath)
-
-        case .pocket:
-            return viewModel.pocketViewModel.configure(collectionView, at: indexPath)
-
-        case .jumpBackIn:
-            return viewModel.jumpBackInViewModel.configure(collectionView, at: indexPath)
-
-        case .recentlySaved:
-            return viewModel.recentlySavedViewModel.configure(collectionView, at: indexPath)
-
-        case .historyHighlights:
-            return viewModel.historyHighlightsViewModel.configure(collectionView, at: indexPath)
-
-        case .customizeHome:
-            return viewModel.customizeButtonViewModel.configure(collectionView, at: indexPath)
+        guard let viewModel = viewModel.getSectionViewModel(section: indexPath.section) as? FxHomeSectionHandler else {
+            return UICollectionViewCell()
         }
-    }
 
-    func configureTopSitesCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        guard let topSiteCell = cell as? TopSiteCollectionCell else { return UICollectionViewCell() }
-        topSiteCell.viewModel = viewModel.topSiteViewModel
-        topSiteCell.reloadLayout()
-        topSiteCell.setNeedsLayout()
-
-        return cell
-    }
-
-    private func buildSite(from highlight: HighlightItem) -> Site {
-        let itemURL = highlight.siteUrl?.absoluteString ?? ""
-        return Site(url: itemURL, title: highlight.displayTitle)
+        return viewModel.configure(collectionView, at: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -585,6 +563,11 @@ private extension FirefoxHomeViewController {
                                      extras: nil)
 
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
+    }
+
+    private func buildSite(from highlight: HighlightItem) -> Site {
+        let itemURL = highlight.siteUrl?.absoluteString ?? ""
+        return Site(url: itemURL, title: highlight.displayTitle)
     }
 
     @objc func openTabTray(_ sender: UIButton) {

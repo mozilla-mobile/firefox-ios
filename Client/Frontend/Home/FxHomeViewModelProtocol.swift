@@ -10,9 +10,9 @@ protocol FXHomeViewModelProtocol {
     var sectionType: FirefoxHomeSectionType { get }
 
     // Layout section so FirefoxHomeViewController view controller can setup the section
-    var section: NSCollectionLayoutSection { get }
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection
 
-    var numberOfItemsInSection: Int { get }
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int
 
     // The header view model to setup the header for this section
     var headerViewModel: ASHeaderViewModel { get }
@@ -41,23 +41,6 @@ extension FXHomeViewModelProtocol {
 
     var shouldShow: Bool {
         return isEnabled && hasData
-    }
-
-    // TODO: Laurie
-    var section: NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .estimated(100))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(100))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-
-        return NSCollectionLayoutSection(group: group)
-    }
-
-    var numberOfItemsInSection: Int {
-        return 0
     }
 
     func updateData(completion: @escaping () -> Void) {}

@@ -134,7 +134,7 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
         return !isPrivate
     }
 
-    var section: NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(UX.estimatedCellHeight))
@@ -152,7 +152,7 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
         return section
     }
 
-    var numberOfItemsInSection: Int {
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
         guard let count = historyItems?.count else {
             return 0
         }

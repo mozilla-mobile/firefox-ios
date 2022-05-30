@@ -30,7 +30,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let shadowRadius: CGFloat = 6
         static let widthSafeSpace: CGFloat = 16
-        static let Spacing: CGFloat = 8
+        static let spacing: CGFloat = 8
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
@@ -60,9 +60,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
-        // Limiting max size to accomodate for non-self-sizing parent cell.
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                        maxSize: 18)
+                                                                        maxSize: 43)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
         titleLabel.numberOfLines = 1
         titleLabel.backgroundColor = UIColor.clear
@@ -70,9 +70,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
-        // Limiting max size to accomodate for non-self-sizing parent cell.
         sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                            maxSize: 18)
+                                                                            maxSize: 43)
+        sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
         sponsoredLabel.numberOfLines = 1
         sponsoredLabel.isHidden = true
@@ -176,7 +176,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(selectedOverlay)
 
         NSLayoutConstraint.activate([
-            descriptionWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.Spacing),
+            descriptionWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.spacing),
             descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.widthSafeSpace),
             descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),

@@ -217,11 +217,11 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
         return !isPrivate
     }
 
-    var numberOfItemsInSection: Int {
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
         return jumpBackInList.itemsToDisplay
     }
 
-    var section: NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
@@ -233,7 +233,8 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
             heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
         )
 
-        let count = min(FirefoxHomeJumpBackInViewModel.maxNumberOfItemsInColumn, numberOfItemsInSection)
+        let itemsNumber = numberOfItemsInSection(for: traitCollection)
+        let count = min(FirefoxHomeJumpBackInViewModel.maxNumberOfItemsInColumn, itemsNumber)
         let subItems = Array(repeating: item, count: count)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
         group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing

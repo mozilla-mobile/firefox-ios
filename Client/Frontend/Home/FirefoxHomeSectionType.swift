@@ -82,8 +82,8 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
     var cellIdentifier: String {
         switch self {
         case .logoHeader: return FxHomeLogoHeaderCell.cellIdentifier
-        case .topSites: return TopSiteCollectionCell.cellIdentifier
-        case .pocket: return "" // Pocket has more than 1 cell type
+        case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
+        case .pocket: return "" // Pocket has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .jumpBackIn: return FxHomeHorizontalCell.cellIdentifier
         case .recentlySaved: return FxHomeRecentlySavedCell.cellIdentifier
         case .historyHighlights: return HistoryHighlightsCell.cellIdentifier
@@ -93,7 +93,8 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
 
     static var cellTypes: [ReusableCell.Type] {
         return [FxHomeLogoHeaderCell.self,
-                TopSiteCollectionCell.self,
+                TopSiteItemCell.self,
+                EmptyTopSiteCell.self,
                 FxHomeHorizontalCell.self,
                 FxHomePocketDiscoverMoreCell.self,
                 FxHomeRecentlySavedCell.self,

@@ -494,7 +494,6 @@
 		8AB5958C28414DF60090F4AE /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB5958B28414DF60090F4AE /* ActionButton.swift */; };
 		8AB8571D27D929350075C173 /* FxHomeTopSitesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571C27D929350075C173 /* FxHomeTopSitesViewModel.swift */; };
 		8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */; };
-		8AB8572327D935ED0075C173 /* TopSiteCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */; };
 		8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */; };
 		8AB8572C27D945FA0075C173 /* FxHomeTopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8572B27D945FA0075C173 /* FxHomeTopSitesManager.swift */; };
 		8AB8572E27D94A1A0075C173 /* UXSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */; };
@@ -2849,7 +2848,6 @@
 		8AB5958B28414DF60090F4AE /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		8AB8571C27D929350075C173 /* FxHomeTopSitesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeTopSitesViewModel.swift; sourceTree = "<group>"; };
 		8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTopSiteCell.swift; sourceTree = "<group>"; };
-		8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCollectionCell.swift; sourceTree = "<group>"; };
 		8AB8572827D9411A0075C173 /* DataObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataObserver.swift; sourceTree = "<group>"; };
 		8AB8572B27D945FA0075C173 /* FxHomeTopSitesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxHomeTopSitesManager.swift; sourceTree = "<group>"; };
 		8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UXSizeClass.swift; sourceTree = "<group>"; };
@@ -5578,7 +5576,6 @@
 				8AB8571C27D929350075C173 /* FxHomeTopSitesViewModel.swift */,
 				8A2D593D27DC0AA100713EC9 /* HomeTopSite.swift */,
 				8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */,
-				8AB8572227D935ED0075C173 /* TopSiteCollectionCell.swift */,
 				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
 			);
 			path = TopSites;
@@ -9207,7 +9204,6 @@
 				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,
 				8A01891C275E9C2A00923EFE /* ClearHistoryHelper.swift in Sources */,
-				8AB8572327D935ED0075C173 /* TopSiteCollectionCell.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */,
 				96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */,

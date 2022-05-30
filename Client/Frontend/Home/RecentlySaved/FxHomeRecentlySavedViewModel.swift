@@ -111,7 +111,7 @@ extension FxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggabl
                                  buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved)
     }
 
-    var section: NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(UX.cellWidth),
             heightDimension: .estimated(UX.cellHeight)
@@ -132,7 +132,7 @@ extension FxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggabl
         return section
     }
 
-    var numberOfItemsInSection: Int {
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
         return recentItems.count
     }
 
