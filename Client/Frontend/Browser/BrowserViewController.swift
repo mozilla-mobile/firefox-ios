@@ -374,7 +374,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         KeyboardHelper.defaultHelper.addDelegate(self)
-
+        trackAccessibility()
         setupNotifications()
         addSubviews()
 
@@ -2594,5 +2594,30 @@ extension BrowserViewController: FeatureFlaggable {
 extension BrowserViewController {
     public static func foregroundBVC() -> BrowserViewController {
         return (UIApplication.shared.delegate as! AppDelegate).browserViewController
+    }
+}
+
+extension BrowserViewController {
+    func trackAccessibility() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .voiceOver,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isVoiceOverRunning.rawValue: UIAccessibility.isVoiceOverRunning.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .switchControl,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isSwitchControlRunning.rawValue: UIAccessibility.isSwitchControlRunning.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .reduceTransparency,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isReduceTransparencyEnabled.rawValue: UIAccessibility.isReduceTransparencyEnabled.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .reduceMotion,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isReduceMotionEnabled.rawValue: UIAccessibility.isReduceMotionEnabled.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .invertColors,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description])
     }
 }
