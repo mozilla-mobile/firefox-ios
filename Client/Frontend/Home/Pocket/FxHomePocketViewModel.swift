@@ -10,7 +10,7 @@ class FxHomePocketViewModel {
 
     struct UX {
         static let numberOfItemsInColumn = 3
-        static let discoverMoreMaxFontSize: CGFloat = 26 // Title 3 xxxLarge
+        static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 xxxLarge
         static let numberOfItemsInSection = 11
         static let fractionalWidthiPhonePortrait: CGFloat = 0.93
         static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
@@ -142,7 +142,9 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
         section.boundarySupplementaryItems = [header]
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardInset,
+
+        let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
                                                         bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         return section

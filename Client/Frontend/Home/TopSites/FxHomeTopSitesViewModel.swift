@@ -196,6 +196,8 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+        refreshData(for: traitCollection)
+
         let sectionDimension = getSectionDimension(for: traitCollection)
         let items = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
         return items
@@ -216,8 +218,10 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
         let sectionDimension = getSectionDimension(for: traitCollection)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionDimension.numberOfTilesPerRow)
         let section = NSCollectionLayoutSection(group: group)
+
+        let leadingInset = FirefoxHomeViewModel.UX.topSiteLeadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                        leading: 0,
+                                                        leading: leadingInset,
                                                         bottom: FirefoxHomeViewModel.UX.spacingBetweenSections - TopSiteItemCell.UX.bottomSpace,
                                                         trailing: 0)
 

@@ -34,6 +34,9 @@ struct FxHomeHorizontalCellViewModel {
 /// A cell used in FxHomeScreen's Jump Back In and Pocket sections
 class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
+    private var faviconCenterConstraint: NSLayoutConstraint?
+    private var faviconFirstBaselineConstraint: NSLayoutConstraint?
+
     // MARK: - UI Elements
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
@@ -104,7 +107,8 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
         applyTheme()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .DynamicFontChanged])
         setupLayout()
     }
 
@@ -199,11 +203,23 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
             faviconImage.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.height),
             faviconImage.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.width),
-
-            descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor).priority(UILayoutPriority(999))
         ])
 
+        faviconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor).priority(UILayoutPriority(999))
+        faviconFirstBaselineConstraint = descriptionLabel.firstBaselineAnchor.constraint(equalTo: faviconImage.bottomAnchor,
+                                                                                         constant: -FxHomeHorizontalCellUX.faviconSize.height / 2)
+
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
+
+        adjustLayout()
+    }
+
+    private func adjustLayout() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+
+        // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
+        faviconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
+        faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
     }
 }
 
@@ -232,6 +248,8 @@ extension FxHomeHorizontalCell: Notifiable {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
+        case .DynamicFontChanged:
+            adjustLayout()
         default: break
         }
     }

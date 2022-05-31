@@ -135,7 +135,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         isFillerCell = options.isFillerCell
 
         if let corners = options.corners {
-            contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
+            addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
         }
 
         if options.shouldAddShadow {

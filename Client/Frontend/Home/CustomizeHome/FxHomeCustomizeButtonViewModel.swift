@@ -29,8 +29,9 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
                                                heightDimension: .estimated(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
+        let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardInset,
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
                                                         bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
         return section
     }

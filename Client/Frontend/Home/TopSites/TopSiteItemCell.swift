@@ -81,7 +81,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
         sponsoredLabel.numberOfLines = 1
-        sponsoredLabel.isHidden = true
     }
 
     private lazy var faviconBG: UIView = .build { view in
@@ -143,7 +142,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         imageView.backgroundColor = UIColor.clear
 
         titleLabel.text = nil
-        sponsoredLabel.isHidden = true
+        sponsoredLabel.text = nil
         pinViewHolder.isHidden = true
         pinImageView.isHidden = true
     }
@@ -226,7 +225,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         guard topSite.isSponsoredTile else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
-        sponsoredLabel.isHidden = false
     }
 }
 

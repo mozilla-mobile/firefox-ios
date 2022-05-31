@@ -50,7 +50,9 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardInset,
+
+        let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
                                                         bottom: UX.botttomSpacing, trailing: 0)
 
         return section

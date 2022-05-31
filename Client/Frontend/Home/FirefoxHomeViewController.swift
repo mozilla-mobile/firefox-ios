@@ -116,12 +116,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         super.viewWillTransition(to: size, with: coordinator)
 
         wallpaperView.updateImageForOrientationChange()
-    }
-
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransition(to: newCollection, with: coordinator)
-
-        reloadOnRotation(newCollection, with: coordinator)
+        reloadOnRotation()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -195,25 +190,13 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
     // MARK: - Helpers
 
-    private func reloadOnRotation(_ newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        for (index, _) in viewModel.shownSections.enumerated() {
-            let viewModel  = viewModel.getSectionViewModel(shownSection: index)
-            viewModel?.refreshData(for: newCollection)
+    private func reloadOnRotation() {
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
-        coordinator.animate(alongsideTransition: { context in
-            // The contextual menu does not behave correctly. Dismiss it when rotating.
-            if let _ = self.presentedViewController as? PhotonActionSheet {
-                self.presentedViewController?.dismiss(animated: true, completion: nil)
-            }
-
-            self.collectionView.collectionViewLayout.invalidateLayout()
-            self.collectionView.reloadData()
-        }, completion: { _ in
-            // TODO: Laurie still necessary to reload here?
-            // Workaround: label positions are not correct without additional reload
-            self.collectionView?.reloadData()
-        })
+        // Adjust layout for rotation, cells needs to be relayout
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
 
     private func adjustPrivacySensitiveSections(notification: Notification) {

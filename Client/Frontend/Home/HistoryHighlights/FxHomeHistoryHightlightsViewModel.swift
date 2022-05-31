@@ -154,7 +154,9 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
         section.boundarySupplementaryItems = [header]
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardInset,
+
+        let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
                                                         bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
 

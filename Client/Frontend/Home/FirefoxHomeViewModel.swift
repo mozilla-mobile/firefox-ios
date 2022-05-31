@@ -13,6 +13,26 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     struct UX {
         static let spacingBetweenSections: CGFloat = 32
         static let standardInset: CGFloat = 18
+        static let iPadInset: CGFloat = 50
+        static let iPadTopSiteInset: CGFloat = 25
+
+        static func leadingInset(traitCollection: UITraitCollection) -> CGFloat {
+            guard UIDevice.current.userInterfaceIdiom != .phone else {
+                return standardInset
+            }
+
+            // Handles multitasking on iPad
+            return traitCollection.horizontalSizeClass == .regular ? iPadInset: standardInset
+        }
+
+        static func topSiteLeadingInset(traitCollection: UITraitCollection) -> CGFloat {
+            guard UIDevice.current.userInterfaceIdiom != .phone else {
+                return 0
+            }
+
+            // Handles multitasking on iPad
+            return traitCollection.horizontalSizeClass == .regular ? iPadTopSiteInset : 0
+        }
     }
 
     // MARK: - Properties
