@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import UIKit
 
 /// The filtered jumpBack in list to display to the user.
 /// Only one group is displayed
@@ -29,14 +30,14 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         static let iPadHorizontalSpacing: CGFloat = 48
         static let iPadCellSpacing: CGFloat = 16
         static let iPhoneLandscapeCellWidth: CGFloat = 0.475
-        static let iPhonePortraitCellWidth: CGFloat = 0.95
+        static let iPhonePortraitCellWidth: CGFloat = 0.93
     }
 
     // MARK: - Properties
-    var onTapGroup: ((Tab) -> Void)?
-    var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     var headerButtonAction: ((UIButton) -> Void)?
+    var onTapGroup: ((Tab) -> Void)?
 
+    private var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     private var recentTabs: [Tab] = [Tab]()
     private var recentGroups: [ASGroup<Tab>]?
     private let isZeroSearch: Bool
@@ -68,8 +69,12 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     }
 
     // The maximum number of items to display in the whole section
-    static var maxItemsToDisplay: Int {
-        return UIDevice.current.userInterfaceIdiom == .pad ? 3 : (UIWindow.isLandscape ? 4 : 2)
+    func getMaxItemsToDisplay(isPortrait: Bool) -> Int {
+        guard UIDevice.current.userInterfaceIdiom != .pad else {
+            return 3
+        }
+
+        return isPortrait ? 2 : 4
     }
 
     static var maxNumberOfItemsInColumn: Int {
@@ -161,10 +166,9 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         return recentTabs
     }
 
-    /// Update data with tab and search term group managers
+    /// Update data with tab and search term group managers, saving it in view model for further usage
     private func updateJumpBackInData(completion: @escaping () -> Void) {
         recentTabs = tabManager.recentlyAccessedNormalTabs
-        let maxItemsToDisplay = FirefoxHomeJumpBackInViewModel.maxItemsToDisplay
 
         if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
             SearchTermGroupsUtility.getTabGroups(with: profile,
@@ -172,16 +176,10 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
                                                  using: .orderedDescending) { [weak self] groups, _ in
                 guard let strongSelf = self else { completion(); return }
                 strongSelf.recentGroups = groups
-                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(
-                    from: strongSelf.recentTabs,
-                    withMaxItemsToDisplay: maxItemsToDisplay,
-                    and: groups)
                 completion()
             }
 
         } else {
-            jumpBackInList = createJumpBackInList(from: recentTabs,
-                                                  withMaxItemsToDisplay: maxItemsToDisplay)
             completion()
         }
     }
@@ -210,6 +208,7 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+        refreshData(for: traitCollection)
         return jumpBackInList.itemsToDisplay
     }
 
@@ -234,13 +233,20 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
                                                       bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
-
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                heightDimension: .estimated(34))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
+                                                                 elementKind: UICollectionView.elementKindSectionHeader,
+                                                                 alignment: .top)
+        section.boundarySupplementaryItems = [header]
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardInset,
+                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         return section
     }
 
     var hasData: Bool {
-        return jumpBackInList.itemsToDisplay != 0
+        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
     }
 
     func updateData(completion: @escaping () -> Void) {
@@ -252,9 +258,10 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     }
 
     func refreshData(for traitCollection: UITraitCollection) {
+        let isPortrait = traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular
         jumpBackInList = createJumpBackInList(
             from: recentTabs,
-            withMaxItemsToDisplay: FirefoxHomeJumpBackInViewModel.maxItemsToDisplay,
+            withMaxItemsToDisplay: getMaxItemsToDisplay(isPortrait: isPortrait),
             and: recentGroups)
     }
 

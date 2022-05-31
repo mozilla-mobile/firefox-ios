@@ -29,7 +29,10 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
                                                heightDimension: .estimated(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
-        return NSCollectionLayoutSection(group: group)
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardInset,
+                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
+        return section
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {

@@ -5,7 +5,8 @@
 import UIKit
 
 struct ASHeaderViewModel {
-    var inset: CGFloat = FirefoxHomeViewModel.UX.standardLeadingInset
+    var leadingInset: CGFloat = 0
+    var trailingInset: CGFloat = FirefoxHomeViewModel.UX.standardInset
     var title: String?
     var titleA11yIdentifier: String?
     var isButtonHidden: Bool
@@ -25,6 +26,9 @@ class ASHeaderView: UICollectionReusableView {
     struct UX {
         static let maxTitleLabelTextSize: CGFloat = 55 // Style title3 - AX5
         static let maxMoreButtonTextSize: CGFloat = 49 // Style subheadline - AX5
+        static let inBetweenSpace: CGFloat = 12
+        static let bottomSpace: CGFloat = 10
+        static let bottomButtonSpace: CGFloat = 6
     }
 
     static var cellIdentifier: String = "CellIdentifier"
@@ -45,6 +49,7 @@ class ASHeaderView: UICollectionReusableView {
                                                                                 maxSize: UX.maxMoreButtonTextSize)
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
+        button.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
 
     // MARK: - Variables
@@ -54,7 +59,6 @@ class ASHeaderView: UICollectionReusableView {
         }
     }
 
-    static let verticalInsets: CGFloat = 4
     private var viewModel: ASHeaderViewModel?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
@@ -71,13 +75,13 @@ class ASHeaderView: UICollectionReusableView {
 
     func setConstraints(viewModel: ASHeaderViewModel) {
         NSLayoutConstraint.activate([
-            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -viewModel.inset),
+            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomButtonSpace),
+            moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -viewModel.trailingInset),
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: viewModel.inset),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: moreButton.leadingAnchor, constant: -12),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: viewModel.leadingInset),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: moreButton.leadingAnchor, constant: -UX.inBetweenSpace),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
         ])
 
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)

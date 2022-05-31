@@ -216,6 +216,11 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
         let sectionDimension = getSectionDimension(for: traitCollection)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionDimension.numberOfTilesPerRow)
         let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                        leading: 0,
+                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections - TopSiteItemCell.UX.bottomSpace,
+                                                        trailing: 0)
+
         return section
     }
 

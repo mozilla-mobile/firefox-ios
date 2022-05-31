@@ -125,6 +125,15 @@ extension FxHomeRecentlySavedViewModel: FXHomeViewModelProtocol, FeatureFlaggabl
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                heightDimension: .estimated(34))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
+                                                                 elementKind: UICollectionView.elementKindSectionHeader,
+                                                                 alignment: .top)
+        section.boundarySupplementaryItems = [header]
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardInset,
+                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
+
         let isIPad = UIDevice.current.userInterfaceIdiom == .pad
         section.interGroupSpacing = isIPad ? UX.iPadGeneralSpacing: UX.generalSpacing
         section.orthogonalScrollingBehavior = .continuous

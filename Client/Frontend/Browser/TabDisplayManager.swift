@@ -498,7 +498,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
                                                                       withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
                                                                       for: indexPath) as? ASHeaderView {
 
-            let viewModel = ASHeaderViewModel(inset: 15,
+            let viewModel = ASHeaderViewModel(leadingInset: 15,
                                               title: .TabTrayOtherTabsSectionHeader,
                                               titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
                                               isButtonHidden: true)

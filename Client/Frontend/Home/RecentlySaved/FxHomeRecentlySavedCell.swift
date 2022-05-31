@@ -11,10 +11,9 @@ class FxHomeRecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationT
         static let generalCornerRadius: CGFloat = 12
         static let bookmarkTitleMaxFontSize: CGFloat = 43
         static let generalSpacing: CGFloat = 8
-        static let heroImageHeight: CGFloat = 92
-        static let heroImageWidth: CGFloat = 110
-        static let recentlySavedCellShadowRadius: CGFloat = 4
-        static let recentlySavedCellShadowOffset: CGFloat = 2
+        static let heroImageSize: CGSize = CGSize(width: 150, height: 92)
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset: CGFloat = 2
     }
 
     // MARK: - UI Elements
@@ -66,11 +65,13 @@ class FxHomeRecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationT
     // MARK: - Helpers
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
-        contentView.layer.shadowRadius = UX.recentlySavedCellShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.recentlySavedCellShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
+        contentView.layer.cornerRadius = UX.generalCornerRadius
+        let shadowRect = CGRect(width: UX.heroImageSize.width, height: UX.heroImageSize.height)
+        contentView.layer.shadowPath = UIBezierPath(rect: shadowRect).cgPath
+        contentView.layer.shadowRadius = UX.shadowRadius
 
         contentView.addSubviews(heroImage, itemTitle)
 
@@ -78,8 +79,8 @@ class FxHomeRecentlySavedCell: UICollectionViewCell, ReusableCell, NotificationT
             heroImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             heroImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageHeight),
-            heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageWidth),
+            heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
+            heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
 
             itemTitle.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: UX.generalSpacing),
             itemTitle.leadingAnchor.constraint(equalTo: heroImage.leadingAnchor),

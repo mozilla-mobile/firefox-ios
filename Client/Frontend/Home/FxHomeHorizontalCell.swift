@@ -126,6 +126,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         setFallBackFaviconVisibility(isHidden: false)
         applyTheme()
 
+        faviconImage.isHidden = false
         descriptionContainer.addArrangedViewToTop(faviconImage)
     }
 
@@ -141,7 +142,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             faviconImage.image = viewModel.favIconImage
         } else {
             descriptionContainer.removeArrangedSubview(faviconImage)
-            faviconImage.image = nil
+            faviconImage.isHidden = true
         }
     }
 

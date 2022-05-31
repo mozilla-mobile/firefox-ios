@@ -7,6 +7,10 @@ import Shared
 
 class FxHomeLogoHeaderViewModel {
 
+    struct UX {
+        static let botttomSpacing: CGFloat = 12
+    }
+
     private let profile: Profile
     var onTapAction: ((UIButton) -> Void)?
 
@@ -45,7 +49,11 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
                                                heightDimension: .estimated(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
-        return NSCollectionLayoutSection(group: group)
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardInset,
+                                                        bottom: UX.botttomSpacing, trailing: 0)
+
+        return section
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {

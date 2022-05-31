@@ -171,17 +171,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
                 return nil
             }
 
-            let section = viewModel.section(for: layoutEnvironment.traitCollection)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: FirefoxHomeViewModel.UX.standardLeadingInset,
-                                                            bottom: 0, trailing: 0)
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                    heightDimension: .estimated(34))
-            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
-                                                                     elementKind: UICollectionView.elementKindSectionHeader,
-                                                                     alignment: .top)
-            section.boundarySupplementaryItems = [header]
-
-            return section
+            return viewModel.section(for: layoutEnvironment.traitCollection)
         }
         return layout
     }
