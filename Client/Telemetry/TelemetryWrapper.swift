@@ -459,7 +459,6 @@ extension TelemetryWrapper {
         case readingPanel = "reading-panel"
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
-        case yourLibrarySection = "your-library-section"
         case jumpBackInSectionShowAll = "jump-back-in-section-show-all"
         case jumpBackInSectionTabOpened = "jump-back-in-section-tab-opened"
         case jumpBackInSectionGroupOpened = "jump-back-in-section-group-opened"
@@ -905,10 +904,6 @@ extension TelemetryWrapper {
         case (.action, .view, .firefoxHomepage, .fxHomepageOrigin, let extras):
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.firefoxHomepageOrigin[homePageOrigin].add()
-            }
-        case (.action, .tap, .firefoxHomepage, .yourLibrarySection, let extras):
-            if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
-                GleanMetrics.FirefoxHomePage.yourLibrary[panel].add()
             }
         case (.action, .open, .firefoxHomepage, .openHomeFromAwesomebar, _):
             GleanMetrics.FirefoxHomePage.openFromAwesomebar.add()

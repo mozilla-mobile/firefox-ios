@@ -474,7 +474,9 @@ private extension FirefoxHomeViewController {
         return Site(url: itemURL, title: highlight.displayTitle)
     }
 
-    @objc func openTabTray(_ sender: UIButton) {
+    func openTabTray(_ sender: UIButton) {
+        homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: nil)
+
         if sender.accessibilityIdentifier == a11y.MoreButtons.jumpBackIn {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
@@ -482,10 +484,9 @@ private extension FirefoxHomeViewController {
                                          value: .jumpBackInSectionShowAll,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
         }
-        homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: nil)
     }
 
-    @objc func openBookmarks(_ sender: UIButton) {
+    func openBookmarks(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
 
         if sender.accessibilityIdentifier == a11y.MoreButtons.recentlySaved {
@@ -494,52 +495,20 @@ private extension FirefoxHomeViewController {
                                          object: .firefoxHomepage,
                                          value: .recentlySavedSectionShowAll,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
-        } else {
-            // TODO: Laurie - remove
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .yourLibrarySection,
-                                         extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.bookmarksPanel.rawValue])
         }
     }
 
-    @objc func openHistory(_ sender: UIButton) {
+    func openHistory(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
+
         if sender.accessibilityIdentifier == a11y.MoreButtons.historyHighlights {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .historyHighlightsShowAll)
 
-        } else {
-            // TODO: Laurie - remove
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .yourLibrarySection,
-                                         extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.historyPanel.rawValue])
         }
     }
-
-    // TODO: Laurie - remove
-    //    @objc func openReadingList(_ sender: UIButton) {
-    //        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
-    //        TelemetryWrapper.recordEvent(category: .action,
-    //                                     method: .tap,
-    //                                     object: .firefoxHomepage,
-    //                                     value: .yourLibrarySection,
-    //                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.readingListPanel.rawValue])
-    //    }
-
-    //    @objc func openDownloads(_ sender: UIButton) {
-    //        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
-    //        TelemetryWrapper.recordEvent(category: .action,
-    //                                     method: .tap,
-    //                                     object: .firefoxHomepage,
-    //                                     value: .yourLibrarySection,
-    //                                     extras: [TelemetryWrapper.EventObject.libraryPanel.rawValue: TelemetryWrapper.EventValue.downloadsPanel.rawValue])
-    //    }
 
     func openCustomizeHomeSettings() {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeHomepage)
