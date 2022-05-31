@@ -277,4 +277,13 @@ extension FxHomeTopSitesViewModel: FxHomeSectionHandler {
 
         tilePressed(site: site, position: indexPath.row)
     }
+
+    func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
+        guard let tileLongPressedHandler = tileLongPressedHandler,
+              let site = tileManager.getSiteDetail(index: indexPath.row)
+        else { return }
+
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        tileLongPressedHandler(site, sourceView)
+    }
 }

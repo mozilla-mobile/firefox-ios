@@ -221,4 +221,12 @@ extension FxHomePocketViewModel: FxHomeSectionHandler {
             showSiteWithURLHandler(Pocket.MoreStoriesURL)
         }
     }
+
+    func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
+        guard let onLongPressTileAction = onLongPressTileAction else { return }
+
+        let site = getSitesDetail(for: indexPath.row)
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        onLongPressTileAction(site, sourceView)
+    }
 }

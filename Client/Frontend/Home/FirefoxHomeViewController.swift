@@ -185,30 +185,12 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
 
-        // TODO: Laurie - Long press for pocket and top sites
-
-        // POCKET
         let point = longPressGestureRecognizer.location(in: collectionView)
-        //        guard let indexPath = collectionView.indexPathForItem(at: point),
-        //              let viewModel = viewModel, let onLongPressTileAction = viewModel.onLongPressTileAction
-        //        else { return }
-        //
-        //        let site = viewModel.getSitesDetail(for: indexPath.row)
-        //        let sourceView = collectionView.cellForItem(at: indexPath)
-        //        onLongPressTileAction(site, sourceView)
+        guard let indexPath = collectionView.indexPathForItem(at: point),
+              let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? FxHomeSectionHandler
+        else { return }
 
-        // TOPSITE
-        //            guard longPressGestureRecognizer.state == .began else { return }
-        //
-        //            let point = longPressGestureRecognizer.location(in: collectionView)
-        //            guard let indexPath = collectionView.indexPathForItem(at: point),
-        //                  let viewModel = viewModel,
-        //                  let tileLongPressedHandler = viewModel.tileLongPressedHandler,
-        //                  let site = viewModel.tileManager.getSiteDetail(index: indexPath.row)
-        //            else { return }
-        //
-        //            let sourceView = collectionView.cellForItem(at: indexPath)
-        //            tileLongPressedHandler(site, sourceView)
+        viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
     }
 
     // MARK: - Helpers

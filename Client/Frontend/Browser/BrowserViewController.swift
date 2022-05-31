@@ -1781,8 +1781,7 @@ extension BrowserViewController: HomePanelDelegate {
         }
 
         // If we are showing toptabs a user can just use the top tab bar
-        // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard !topTabsVisible, !urlBar.inOverlayMode else {
+        guard !topTabsVisible else {
             return
         }
 

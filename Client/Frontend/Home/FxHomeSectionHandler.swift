@@ -17,6 +17,8 @@ protocol FxHomeSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?)
+
+    func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath)
 }
 
 extension FxHomeSectionHandler {
@@ -34,5 +36,9 @@ extension FxHomeSectionHandler {
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
         // Action on cell is sometimes handled with a button, or gesture recognizers with closures
+    }
+
+    func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
+        // Not all sections have long press
     }
 }
