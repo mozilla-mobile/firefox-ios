@@ -238,21 +238,8 @@ features:
         type: Map<TabTraySection, Boolean>
         default:
           {
-            "inactive-tabs": false,
+            "inactive-tabs": true,
           }
-    defaults:
-      - channel: beta
-        value: {
-          "sections-enabled": {
-            "inactive-tabs": true
-          }
-        }
-      - channel: developer
-        value: {
-          "sections-enabled": {
-            "inactive-tabs": true
-          }
-        }
   messaging:
     description: >
       Configuration for the messaging system.
