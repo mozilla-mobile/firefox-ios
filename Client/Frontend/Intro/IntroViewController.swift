@@ -9,6 +9,15 @@ import Shared
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
     var viewModel: IntroViewModel
+    let profile: Profile
+    var onboardingCards = [OnboardingCardViewController]()
+
+    struct UX {
+        static let closeButtonSize: CGFloat = 44
+        static let closeButtonPadding: CGFloat = 24
+        static let pageControlHeight: CGFloat = 40
+        static let pageControlBottomPadding: CGFloat = 20
+    }
 
     // MARK: - Var related to onboarding
     private lazy var closeButton: UIButton = .build { button in
@@ -37,8 +46,9 @@ class IntroViewController: UIViewController, OnViewDismissable {
     var didFinishClosure: ((IntroViewController, FxAPageType?) -> Void)?
 
     // MARK: Initializer
-    init(viewModel: IntroViewModel) {
+    init(viewModel: IntroViewModel, profile: Profile) {
         self.viewModel = viewModel
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -62,12 +72,25 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
     // MARK: View setup
     private func setupPageController() {
-        let firstViewController = OnboardingCardViewController(viewModel: viewModel.getCardViewModel(index: 0),
-                                                               delegate: self)
-        pageController.setViewControllers([firstViewController],
-                                          direction: .forward,
-                                          animated: true,
-                                          completion: nil)
+        // Create onboarding card views
+        var cardViewController: OnboardingCardViewController
+        for (index, cardType) in viewModel.enabledCards.enumerated() {
+            if cardType == .wallpapers {
+                cardViewController = WallpaperCardViewController(viewModel: viewModel.getCardViewModel(index: index),
+                                                                      delegate: self)
+            } else {
+                cardViewController = OnboardingCardViewController(viewModel: viewModel.getCardViewModel(index: index),
+                                                                      delegate: self)
+            }
+            onboardingCards.append(cardViewController)
+        }
+
+        if let firstViewController = onboardingCards.first {
+            pageController.setViewControllers([firstViewController],
+                                              direction: .forward,
+                                              animated: true,
+                                              completion: nil)
+        }
     }
 
     private func setupLayout() {
@@ -77,15 +100,16 @@ class IntroViewController: UIViewController, OnViewDismissable {
         view.addSubviews(pageControl, closeButton)
 
         NSLayoutConstraint.activate([
-            pageControl.heightAnchor.constraint(equalToConstant: 40),
+            pageControl.heightAnchor.constraint(equalToConstant: UX.pageControlHeight),
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                constant: -UX.pageControlBottomPadding),
             pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 24),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            closeButton.widthAnchor.constraint(equalToConstant: 44),
-            closeButton.heightAnchor.constraint(equalToConstant: 44)
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonPadding),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
         ])
     }
 
@@ -96,12 +120,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
     private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
         guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
 
-        let cardViewModel = viewModel.getCardViewModel(index: index)
-        if index == viewModel.enabledCards.firstIndex(of: .wallpapers) {
-            return WallpaperCardViewController(viewModel: cardViewModel, delegate: self)
-        } else {
-            return OnboardingCardViewController(viewModel: cardViewModel, delegate: self)
-        }
+        return onboardingCards[index]
     }
 
     // Used to programatically set the pageViewController to show next card
@@ -166,8 +185,31 @@ extension IntroViewController: OnboardingCardDelegate {
         case .welcome, .wallpapers:
             moveToNextPage(cardType: cardType)
         case .signSync:
-            didFinishClosure?(self, .emailLoginFlow)
+            presentSignToSync()
+
         }
+    }
+
+    private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
+                                  flowType: FxAPageType = .emailLoginFlow,
+                                  referringPage: ReferringPage = .onboarding) {
+        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
+                                                                                      flowType: flowType,
+                                                                                      referringPage: referringPage,
+                                                                                      profile: profile)
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(dismissSignInViewController))
+        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        self.present(controller, animated: true, completion: nil)
+    }
+
+    @objc func dismissSignInViewController() {
+        self.dismiss(animated: false, completion: nil)
+        didFinishClosure?(self, nil)
     }
 }
 

@@ -41,9 +41,9 @@ class WallpaperCardViewController: OnboardingCardViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fractionalWidth),
                                               heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: UX.itemInset,
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                      leading: UX.itemInset,
-                                                     bottom: UX.itemInset,
+                                                     bottom: 0,
                                                      trailing: UX.itemInset)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -73,13 +73,20 @@ class WallpaperCardViewController: OnboardingCardViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        setWallpaper()
+    }
+
     override func setupView() {
         super.setupView()
         contentStackView.insertArrangedView(collectionView, position: 2)
         view.addSubview(wallpaperImageView)
 
+        let collectionViewHeight = UIDevice.current.userInterfaceIdiom == .pad ? ViewControllerConsts.PreferredSize.IntroViewController.height / 3 : view.frame.height / 3
         NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: 260).priority(.defaultLow),
+            collectionView.heightAnchor.constraint(equalToConstant: collectionViewHeight).priority(.defaultLow),
 
             wallpaperImageView.topAnchor.constraint(equalTo: view.topAnchor),
             wallpaperImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -93,6 +100,11 @@ class WallpaperCardViewController: OnboardingCardViewController {
     @objc override func primaryAction() {
         wallpaperManager.updateSelectedWallpaperIndex(to: selectedWallpaper)
         super.primaryAction()
+    }
+
+    private func setWallpaper() {
+        let previewImage = wallpaperManager.getImageAt(index: selectedWallpaper, inLandscape: false)
+        wallpaperImageView.image = previewImage
     }
 }
 
@@ -114,10 +126,8 @@ extension WallpaperCardViewController: UICollectionViewDelegateFlowLayout, UICol
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
-        // Once a tile is selected update imageview
 
         selectedWallpaper = indexPath.row
-        let previewImage = wallpaperManager.getImageAt(index: selectedWallpaper, inLandscape: false)
-        wallpaperImageView.image = previewImage
+        setWallpaper()
     }
 }

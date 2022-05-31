@@ -12,13 +12,7 @@ struct IntroViewModel {
         case signSync
     }
 
-    var shouldShowNewOnboarding: Bool {
-        return true
-    }
-
-    var enabledCards: [OnboardingCards] {
-        return OnboardingCards.allCases
-    }
+    var enabledCards: [OnboardingCards]  = OnboardingCards.allCases
 
     func getCardViewModel(index: Int) -> OnboardingCardProtocol {
         let currentCard = enabledCards[index]

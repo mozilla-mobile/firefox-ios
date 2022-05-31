@@ -4,44 +4,6 @@
 
 import UIKit
 
-protocol OnboardingCardProtocol {
-    var cardType: IntroViewModel.OnboardingCards { get set }
-    var image: UIImage? { get set }
-    var title: String { get set }
-    var description: String? { get set }
-    var primaryAction: String { get set }
-    var secondaryAction: String? { get set }
-    var a11yIdRoot: String { get set }
-}
-
-struct OnboardingCardViewModel: OnboardingCardProtocol {
-    var cardType: IntroViewModel.OnboardingCards
-    var image: UIImage?
-    var title: String
-    var description: String?
-    var primaryAction: String
-    var secondaryAction: String?
-    var a11yIdRoot: String
-    var welcomeCardBoldText: String = .Onboarding.IntroDescriptionPart1
-
-    init(cardType: IntroViewModel.OnboardingCards,
-         image: UIImage?,
-         title: String,
-         description: String?,
-         primaryAction: String,
-         secondaryAction: String?,
-         a11yIdRoot: String) {
-
-        self.cardType = cardType
-        self.image = image
-        self.title = title
-        self.description = description
-        self.primaryAction = primaryAction
-        self.secondaryAction = secondaryAction
-        self.a11yIdRoot = a11yIdRoot
-    }
-}
-
 protocol OnboardingCardDelegate: AnyObject {
     func showNextPage(_ cardType: IntroViewModel.OnboardingCards)
     func primaryAction(_ cardType: IntroViewModel.OnboardingCards)
@@ -55,6 +17,8 @@ class OnboardingCardViewController: UIViewController {
         static let buttonHeight: CGFloat = 45
         static let buttonCornerRadius: CGFloat = 13
         static let stackViewHorizontalPadding: CGFloat = 20
+        static let stackViewVerticalPadding: CGFloat = 80
+        static let scrollViewVerticalPadding: CGFloat = 50
     }
 
     var viewModel: OnboardingCardProtocol
@@ -178,24 +142,24 @@ class OnboardingCardViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
 
             scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
             scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.scrollViewVerticalPadding),
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
             scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
-            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: 100),
+            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: UX.stackViewVerticalPadding),
             contentStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewHorizontalPadding),
-            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: containerView.bottomAnchor, constant: -100),
+            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: containerView.bottomAnchor, constant: -UX.stackViewVerticalPadding),
             contentStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewHorizontalPadding),
             contentStackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 

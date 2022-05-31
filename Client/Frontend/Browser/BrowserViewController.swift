@@ -2176,18 +2176,10 @@ extension BrowserViewController {
 
     private func showProperIntroVC() {
         let introViewModel = IntroViewModel()
-        let introViewController = IntroViewController(viewModel: introViewModel)
+        let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-            controller.dismiss(animated: true) {
-                if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                    _ = self.navigationController?.popToRootViewController(animated: true)
-                }
-                if let flow = fxaLoginFlow {
-                    let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
-                    self.presentSignInViewController(fxaParams, flowType: flow, referringPage: .onboarding)
-                }
-            }
+            controller.dismiss(animated: true)
         }
         self.introVCPresentHelper(introViewController: introViewController)
     }
