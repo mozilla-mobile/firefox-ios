@@ -41,11 +41,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
-        let title = variables.getText("settings-title") ?? .AppSettingsTitle
-        let suffix = variables.getString("settings-title-punctuation") ?? ""
-
-        navigationItem.title = "\(title)\(suffix)"
+        navigationItem.title = String.AppSettingsTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: .AppSettingsDone,
             style: .done,

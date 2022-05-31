@@ -38,8 +38,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             (DownloadedFilesClearable(), false), // Don't clear downloaded files by default
         ]
 
-        if let experimental = Experiments.shared.getVariables(featureId: .search).getVariables("spotlight"),
-           experimental.getBool("enabled") == true { // i.e. defaults to false
+        let spotlightConfig = FxNimbus.shared.features.spotlightSearch.value()
+        if spotlightConfig.enabled {
             items.append((SpotlightClearable(), false)) // On device only, so don't clear by default.)
         }
 

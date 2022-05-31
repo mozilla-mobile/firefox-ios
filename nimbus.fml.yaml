@@ -69,76 +69,77 @@ features:
         value: {
           "setting": after-four-hours
         }
+  spotlight-search:
+    description: Add pages as items findable with Spotlight.
+    variables:
+      enabled:
+        description: If this is true, then on each page load adds a new item to Spotlight.
+        type: Boolean
+        default: false
+      searchable-content:
+        type: Option<PageContent>
+        default: text-excerpt
+        description: >
+          The text content that is made searchable.
+          If this is `null` then no additional content is used, and only the title and URL will be used.
+      icon-type:
+        type: Option<IconType>
+        default: letter
+        description: >
+          The icon that is displayed next to the item in the search results.
+          If this is `null`, then no icon is displayed.
+      keep-for-days:
+        type: Option<Int>
+        default: null
+        description: >
+          Number of days to keep the item before automatic deletion.
+          If this is left `null`, then it is left to iOS's default.
+    defaults:
+      - value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true
+          icon-type: screenshot
+
   search:
-    description: The search feature
+    description: >
+      Configuring the functionality to do with search.
+      This will be separated into smaller sub-features in later releases.
     variables:
       awesome-bar:
-        description: "This property is covers the properties related to the awesome-bar"
         type: AwesomeBar
-        default:
-          {
-            "use-page-content": false,
-            "search-highlights": false,
-            "position": {
-              "is-position-feature-enabled": true,
-              "is-bottom": true
-            }
-          }
-      spotlight:
-        description: "This property is covers the properties related to the spotlight"
-        type: Spotlight
-        default:
-          {
-            "enabled": false,
-            "description": "",
-            "use-html-content": true,
-            "icon": "letter",
-            "keep-for-days": null
-          }
+        description: Configuring the awesome bar.
+        default: {}
     defaults:
-      - channel: beta
-        value: {
-          "awesome-bar": {
-            "search-highlights": true,
-            "position": {
-              "is-position-feature-enabled": true,
-              "is-bottom": true
-            }
-          }
-        }
+      - value:
+          awesome-bar:
+            use-page-content: false
+            search-highlights: false
+            position:
+                is-position-feature-enabled: true
+                is-bottom: true
       - channel: developer
-        value: {
-          "awesome-bar": {
-            "search-highlights": true,
-            "position": {
-              "is-position-feature-enabled": true,
-              "is-bottom": true
-            }
-          }
-        }
-  nimbus-validation:
-    description: "A feature that does not correspond to an application feature suitable for showing
-      that Nimbus is working."
-    variables:
-      settings-title:
-        description: The title of displayed in the Settings screen and app menu.
-        type: String
-        default: "app_menu_settings_title"
-      settings-title-punctuation:
-        description: The emoji displayed in the Settings screen title.
-        type: String
-        default: ""
-      settings-icon:
-        description: The drawable displayed in the app menu for Settings
-        type: String
-        default: "menu-Settings"
-
+        value:
+          awesome-bar:
+            search-highlights: true
+            position:
+              is-position-feature-enabled: true
+              is-bottom: true
+      - channel: beta
+        value:
+          awesome-bar:
+            search-highlights: true
+            position:
+              is-position-feature-enabled: true
+              is-bottom: true
   homescreenFeature:
     description: The homescreen that the user goes to when they press home or new tab.
     variables:
       sections-enabled:
-        description: "This property provides a lookup table of whether or not the given section should be enabled.
-          If the section is enabled, it should be toggleable in the settings screen, and on by default."
+        description: >
+          This property provides a lookup table of whether or not the given section should be enabled.
+          If the section is enabled, it should be toggleable in the settings screen, and on by default.
         type: Map<HomeScreenSection, Boolean>
         default:
           {
@@ -149,8 +150,9 @@ features:
             "pocket": true
           }
       sponsored-tiles:
-        description: "This property defines the sponsored tile feature on the
-        homepage, which is not a section therein."
+        description: >
+          This property defines the sponsored tile feature on the
+          homepage, which is not a section therein.
         type: SponsoredTiles
         default:
           {
@@ -158,8 +160,9 @@ features:
             "max-number-of-tiles": 2
           }
       wallpaper-feature:
-        description: "This property defines the wallpaper feature on the
-        homepage, which is not a section therein."
+        description: >
+          This property defines the wallpaper feature on the
+          homepage, which is not a section therein.
         type: GeneralFeature
         default:
           {
@@ -251,7 +254,7 @@ features:
           }
         }
   messaging:
-    description: |
+    description: >
       Configuration for the messaging system.
 
       In practice this is a set of growable lookup tables for the
@@ -348,27 +351,28 @@ types:
           default: false
 
     AwesomeBar:
-      description: "Represents the awesome bar object"
+      description: A configuration option for the awesome bar. Part of the `search` feature.
       fields:
+        min-search-term:
+          description: The minimum number of characters that the user types before searching in the page.
+          type: Int
+          default: 3
         use-page-content:
-          description: "Whether or not to use page content"
+          description: Search in the open tab's text content when typing.
           type: Boolean
           default: false
-          required: true
         search-highlights:
           description: "Whether or not search highlights are enabled"
           type: Boolean
           default: false
         position:
-          description: "This property defines whether or not the feature is
-          enabled, and the position of the search bar"
+          description: >
+            This property defines whether or not the feature is
+            enabled, and the position of the search bar
           type: SearchBarPositionFeature
           default:
-            {
-              "is-position-feature-enabled": true,
-              "is-bottom": true
-            }
-
+            is-position-feature-enabled: true
+            is-bottom: true
     SearchBarPositionFeature:
       description: "The configuration for the bottom search bar on the homescreen"
       fields:
@@ -408,11 +412,11 @@ types:
           # This should never be defaulted.
           default: ""
         title:
-          type: Option<String>
+          type: Option<Text>
           description: "The title text displayed to the user"
           default: null
         text:
-          type: String
+          type: Text
           description: "The message text displayed to the user"
           # This should never be defaulted.
           default: ""
@@ -421,7 +425,7 @@ types:
           description: "Indicates if this message is the control message, if true shouldn't be displayed"
           default: false
         button-label:
-          type: Option<String>
+          type: Option<Text>
           description: >
             The text on the button. If no text
             is present, the whole message is clickable.
@@ -463,44 +467,26 @@ types:
             before it is expired.
           default: 5
 
-    Spotlight:
-      description: "An object representing the spotlight"
-      fields:
-        enabled:
-          type: Boolean
-          description: "Describes whether spotlight is enabled"
-          default: false
-          required: true
-        description:
-          type: String
-          default: ""
-          description: "Is the description of spotlight"
-          required: true
-        use-html-content:
-          type: Boolean
-          default: true
-          description: "Describes whether spotlight should use html content"
-          required: true
-        icon:
-          type: IconType
-          default: letter
-          description: "Describes the icon of spotlight"
-        keep-for-days:
-          type: Option<Int>
-          default: null
-          description: "Number of days to keep"
-          required: true
-
   enums:
     IconType:
-      description: The different types of icons
+      description: The icon that will be added to the item in the device's search engine.
       variants:
         screenshot:
-          description: A screenshot icon
+          description: A screenshot of the page at load time.
         favicon:
-          description: A favicon icon
+          description: The favicon of the page
         letter:
-          description: A letter icon
+          description: An icon generated from the first letter of the base domain.
+
+    PageContent:
+      description: The page content that will be added as an item in the device's search engine.
+      variants:
+        text-excerpt:
+          description: Only use the first paragraph
+        text-content:
+          description: Use all the page as text
+        html-content:
+          description: Use all the page as HTML
 
     MessageSurfaceId:
       description: >

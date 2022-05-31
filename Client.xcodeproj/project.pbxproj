@@ -234,7 +234,6 @@
 		39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */; };
 		39EB469A1E26DDB4006346E8 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39EF434E260A73950011E22E /* Experiments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF434D260A73950011E22E /* Experiments.swift */; };
-		39EF4363260CEE5E0011E22E /* ExperimentConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF4362260CEE5E0011E22E /* ExperimentConstants.swift */; };
 		39EF4378260CF5A30011E22E /* AppDelegate+Experiments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF4377260CF5A30011E22E /* AppDelegate+Experiments.swift */; };
 		39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39F4C0F92045D87400746155 /* FocusHelper.js */; };
 		39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F4C1092045DB2E00746155 /* FocusHelper.swift */; };
@@ -2103,7 +2102,6 @@
 		39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducerTests.swift; sourceTree = "<group>"; };
 		39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxScreenGraph.swift; sourceTree = "<group>"; };
 		39EF434D260A73950011E22E /* Experiments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experiments.swift; sourceTree = "<group>"; };
-		39EF4362260CEE5E0011E22E /* ExperimentConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentConstants.swift; sourceTree = "<group>"; };
 		39EF4377260CF5A30011E22E /* AppDelegate+Experiments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Experiments.swift"; sourceTree = "<group>"; };
 		39F4C0F92045D87400746155 /* FocusHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = FocusHelper.js; sourceTree = "<group>"; };
 		39F4C1092045DB2E00746155 /* FocusHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusHelper.swift; sourceTree = "<group>"; };
@@ -5305,7 +5303,6 @@
 			children = (
 				9636D92627F5D71A00771F5E /* Messaging */,
 				39EF434D260A73950011E22E /* Experiments.swift */,
-				39EF4362260CEE5E0011E22E /* ExperimentConstants.swift */,
 				3964F5FB2656D2B500065278 /* initial_experiments.json */,
 				C80685D026A0C93900DCD895 /* UserResearch.swift */,
 				D51EA5B82640697100334331 /* Settings */,
@@ -9032,7 +9029,6 @@
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
-				39EF4363260CEE5E0011E22E /* ExperimentConstants.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
 				8A6B77CE2811CD11001110D2 /* URLCaching.swift in Sources */,
