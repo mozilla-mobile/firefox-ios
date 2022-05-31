@@ -170,7 +170,6 @@ disabled_rules: # rule identifiers to exclude from running
   - todo
   - toggle_bool
   - trailing_closure
-  - trailing_semicolon
   - type_body_length
   - type_contents_order
   - type_name
@@ -190,7 +189,6 @@ disabled_rules: # rule identifiers to exclude from running
   - valid_ibinspectable
   - vertical_parameter_alignment
   - vertical_parameter_alignment_on_call
-  - void_return
   - weak_delegate
   - xct_specific_matcher
   - xctfail_message

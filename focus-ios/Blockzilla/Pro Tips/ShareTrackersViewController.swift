@@ -8,8 +8,8 @@ import SnapKit
 class ShareTrackersViewController: UIViewController {
 
     private let trackerTitle: String
-    private let shareTap: (UIButton) -> ()
-    init(trackerTitle: String, shareTap: @escaping (UIButton) -> ()) {
+    private let shareTap: (UIButton) -> Void
+    init(trackerTitle: String, shareTap: @escaping (UIButton) -> Void) {
         self.trackerTitle = trackerTitle
         self.shareTap = shareTap
         super.init(nibName: nil, bundle: nil)

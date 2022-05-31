@@ -14,7 +14,7 @@ class TipsPageViewController: UIViewController {
     private var currentPageController: UIPageViewController?
 
     private var tipManager: TipManager
-    private let tipTappedAction: (TipManager.Tip) -> ()
+    private let tipTappedAction: (TipManager.Tip) -> Void
     private let tapOutsideAction: () -> Void
 
     private func createPageController() -> UIPageViewController {
@@ -31,7 +31,7 @@ class TipsPageViewController: UIViewController {
 
     init(
         tipManager: TipManager,
-        tipTapped: @escaping (TipManager.Tip) -> (),
+        tipTapped: @escaping (TipManager.Tip) -> Void,
         tapOutsideAction: @escaping () -> Void) {
             self.tipManager = tipManager
             self.tipTappedAction = tipTapped

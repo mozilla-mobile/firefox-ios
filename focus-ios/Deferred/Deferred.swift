@@ -12,7 +12,7 @@ import Foundation
 public var DeferredDefaultQueue = DispatchQueue.global(qos: .default)
 
 open class Deferred<T> {
-    typealias UponBlock = (DispatchQueue, (T) -> ())
+    typealias UponBlock = (DispatchQueue, (T) -> Void)
     private typealias Protected = (protectedValue: T?, uponBlocks: [UponBlock])
 
     private var protected: LockProtected<Protected>
@@ -57,7 +57,7 @@ open class Deferred<T> {
         return protected.withReadLock { $0.protectedValue }
     }
 
-    public func uponQueue(_ queue: DispatchQueue, block: @escaping (T) -> ()) {
+    public func uponQueue(_ queue: DispatchQueue, block: @escaping (T) -> Void) {
         let maybeValue: T? = protected.withWriteLock { data in
             if data.protectedValue == nil {
                 data.uponBlocks.append( (queue, block) )
@@ -104,7 +104,7 @@ extension Deferred {
 }
 
 extension Deferred {
-    public func upon(_ block: @escaping (T) ->()) {
+    public func upon(_ block: @escaping (T) -> Void) {
         uponQueue(defaultQueue, block: block)
     }
 
@@ -132,7 +132,7 @@ public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
     var results: [T] = []
     results.reserveCapacity(deferreds.count)
 
-    var block: ((T) -> ())!
+    var block: ((T) -> Void)!
     block = { t in
         results.append(t)
         if results.count == deferreds.count {
