@@ -213,8 +213,8 @@ class BoolSetting: Setting, FeatureFlaggable {
         self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
-    convenience init(with featureFlagID: NimbusFeatureFlagID, titleText: NSAttributedString) {
-        self.init(prefs: nil, defaultValue: nil, attributedTitleText: titleText, featureFlagName: featureFlagID)
+    convenience init(with featureFlagID: NimbusFeatureFlagID, titleText: NSAttributedString, settingDidChange: ((Bool) -> Void)? = nil) {
+        self.init(prefs: nil, defaultValue: nil, attributedTitleText: titleText, featureFlagName: featureFlagID, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -228,6 +228,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
+        control.isEnabled = enabled
 
         displayBool(control)
         if let title = title {
@@ -240,6 +241,10 @@ class BoolSetting: Setting, FeatureFlaggable {
         }
         cell.accessoryView = PaddedSwitch(switchView: control)
         cell.selectionStyle = .none
+
+        if !enabled {
+            cell.subviews.forEach { $0.alpha = 0.5 }
+        }
     }
 
     @objc func switchValueChanged(_ control: UISwitch) {
