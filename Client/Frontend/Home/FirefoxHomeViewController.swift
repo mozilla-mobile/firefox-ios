@@ -159,6 +159,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         collectionView.dataSource = self
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
+        collectionView.accessibilityIdentifier = a11y.collectionView
         contentStackView.addArrangedSubview(collectionView)
     }
 
