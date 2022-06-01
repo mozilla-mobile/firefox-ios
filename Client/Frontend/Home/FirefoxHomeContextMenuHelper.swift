@@ -89,15 +89,13 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
                                      iconString: ImageIdentifiers.actionRemove,
                                      tapHandler: { _ in
 
-            print(highlightItem)
-            print("ROUX - delete!")
-//            self.viewModel.topSiteViewModel.removePinTopSite(site)
+            self.viewModel.historyHighlightsViewModel.delete(highlightItem)
+            // ROUX
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
 //                self?.viewModel.topSiteViewModel.hideURLFromTopSites(site)
 //            }
 //
-//            self.sendTopSiteContextualTelemetry(type: .remove)
-//        }).items]
+            self.sendTopSiteContextualTelemetry(type: .remove)
         }).items]
     }
 
@@ -275,5 +273,14 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
     private func sendTopSiteContextualTelemetry(type: ContextualActionType) {
         let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
+    }
+
+    private func sendHistoryHighlightContextualTelemetry(type: ContextualActionType) {
+        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .historyHighlightContextualMenu,
+                                     value: nil,
+                                     extras: extras)
     }
 }

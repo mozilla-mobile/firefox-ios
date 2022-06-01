@@ -98,6 +98,18 @@ class FxHomeHistoryHightlightsViewModel {
         return selectedItem
     }
 
+    func delete(_ item: HighlightItem) {
+        let deletionUtility = HistoryDeletionUtility(with: profile)
+        let urls = extractDeletableURLs(from: item)
+
+        deletionUtility.delete(urls) { success in
+            if success {
+                print("ROUX - I deleted everything \(urls)")
+                // ROUX - reload sections on main thread
+            }
+        }
+    }
+
     // MARK: - Private Methods
 
     private func loadItems(completion: @escaping () -> Void) {
@@ -107,6 +119,20 @@ class FxHomeHistoryHightlightsViewModel {
             self?.historyItems = highlights
             completion()
         }
+    }
+
+    private func extractDeletableURLs(from item: HighlightItem) -> [String] {
+        var urls = [String]()
+        if item.type == .item, let url = item.siteUrl?.absoluteString {
+            urls = [url]
+
+        } else if item.type == .group, let items = item.group {
+            items.forEach { groupedItem in
+                if let url = groupedItem.siteUrl?.absoluteString { urls.append(url) }
+            }
+        }
+
+        return urls
     }
 }
 
