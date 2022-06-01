@@ -13,6 +13,7 @@ private enum SearchListSection: Int, CaseIterable {
     case remoteTabs
     case openedTabs
     case bookmarksAndHistory
+    case searchHighlights
 }
 
 private struct SearchViewControllerUX {
@@ -55,7 +56,7 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener, FeatureFlaggable {
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
@@ -67,6 +68,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
+    private var searchHighlights = [HighlightItem]()
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -84,13 +86,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
-    var experimental: Variables?
+    var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
 
-    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager) {
+    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
         self.viewModel = viewModel
         self.tabManager = tabManager
-        self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
+        self.searchFeature = featureConfig
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -140,6 +142,21 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
+    private func loadSearchHighlights() {
+        guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
+
+        HistoryHighlightsManager.searchHighlightsData(searchQuery: searchQuery,
+                                                      profile: profile,
+                                                      tabs: tabManager.tabs,
+                                                      resultCount: 3) { results in
+            guard let results = results else {
+                return
+            }
+            self.searchHighlights = results
+            self.tableView.reloadData()
+        }
+    }
+
     @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
 
@@ -150,6 +167,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.viewWillAppear(animated)
         reloadSearchEngines()
         reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchFeature.recordExposure()
     }
 
     private func layoutSearchEngineScrollView() {
@@ -374,10 +396,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 $0 && content.range(of: $1, options: .caseInsensitive) != nil
             }
         }
+        let config = searchFeature.value().awesomeBar
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
-        let searchInContent = (experimental?.getBool("use-page-content") ?? false)
-            && searchTerms.find { $0.count >= 3 } != nil
+        let searchInContent = config.usePageContent
+            && searchTerms.find { $0.count >= config.minSearchTerm } != nil
 
         filteredOpenedTabs = currentTabs.filter { tab in
             guard let url = tab.url ?? tab.sessionData?.urls.last,
@@ -389,8 +412,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     searchInContent ? tab.readabilityResult?.textContent : nil,
                     url.absoluteString
                 ]
-                .filter { $0 != nil }
-                .map { $0! }
+                .compactMap { $0 }
 
             let text = lines.joined(separator: "\n")
             return find(in: text)
@@ -429,6 +451,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             tableView.reloadData()
             return
         }
+
+        loadSearchHighlights()
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
@@ -478,6 +502,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
+            recordSearchListSelectionTelemetry(type: .searchSuggestions)
             // Assume that only the default search engine can provide search suggestions.
             let engine = searchEngines.defaultEngine
             guard let suggestion = suggestions?[indexPath.row] else { return }
@@ -487,17 +512,25 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
+            recordSearchListSelectionTelemetry(type: .openedTabs)
             let tab = self.filteredOpenedTabs[indexPath.row]
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
+            recordSearchListSelectionTelemetry(type: .remoteTabs)
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
+                recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
+                                                   isBookmark: site.bookmarked ?? false)
                 if let url = URL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
-                    TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
                 }
+            }
+        case .searchHighlights:
+            if let url = searchHighlights[indexPath.row].siteUrl {
+                recordSearchListSelectionTelemetry(type: .searchHighlights)
+                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         }
     }
@@ -527,6 +560,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return filteredRemoteClientTabs.count
         case .bookmarksAndHistory:
             return data.count
+        case .searchHighlights:
+            return searchHighlights.count
         }
     }
 
@@ -637,6 +672,21 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
+        case .searchHighlights:
+            let highlightItem = searchHighlights[indexPath.row]
+            let urlString = highlightItem.siteUrl?.absoluteString ?? ""
+            cell = twoLineCell
+            twoLineCell.descriptionLabel.isHidden = false
+            twoLineCell.titleLabel.text = highlightItem.displayTitle
+            twoLineCell.descriptionLabel.text = urlString
+            twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+            twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+            twoLineCell.leftImageView.contentMode = .center
+            twoLineCell.leftImageView.setImageAndBackground(forIcon: Favicon(url: urlString), website: highlightItem.siteUrl) { [weak twoLineCell] in
+                twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+            }
+            twoLineCell.accessoryView = nil
+            cell = twoLineCell
         }
         return cell
     }
@@ -660,6 +710,37 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             )
         }
         return searchAppendImage
+    }
+}
+
+// MARK: - Telemetry
+private extension SearchViewController {
+     func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
+        let key = TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue
+        switch type {
+        case .searchSuggestions:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
+        case .remoteTabs:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.remoteTab.rawValue])
+        case .openedTabs:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.openedTab.rawValue])
+        case .bookmarksAndHistory:
+            let extra = isBookmark ? TelemetryWrapper.EventValue.bookmarkItem.rawValue :
+                        TelemetryWrapper.EventValue.historyItem.rawValue
+            TelemetryWrapper.recordEvent(category: .action, method: .tap,
+                                         object: .awesomebarResults, extras: [key: extra])
+        case .searchHighlights:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .open,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
+        }
     }
 }
 

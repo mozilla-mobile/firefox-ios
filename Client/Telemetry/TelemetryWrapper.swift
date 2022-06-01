@@ -307,6 +307,7 @@ extension TelemetryWrapper {
     public enum EventObject: String {
         case app = "app"
         case bookmark = "bookmark"
+        case awesomebarResults = "awesomebar-results"
         case bookmarksPanel = "bookmarks-panel"
         case download = "download"
         case downloadLinkButton = "download-link-button"
@@ -425,12 +426,12 @@ extension TelemetryWrapper {
         case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
         case awesomebarLocation = "awesomebar-position"
+        case searchHighlights = "search-highlights"
     }
 
     public enum EventValue: String {
         case activityStream = "activity-stream"
         case appMenu = "app-menu"
-        case awesomebarResults = "awesomebar-results"
         case browser = "browser"
         case contextMenu = "context-menu"
         case downloadCompleteToast = "download-complete-toast"
@@ -498,6 +499,11 @@ extension TelemetryWrapper {
         case messageInteracted = "message-interacted"
         case messageExpired = "message-expired"
         case messageMalformed = "message-malformed"
+        case historyItem =  "history-item"
+        case remoteTab = "remote-tab"
+        case openedTab = "opened-tab"
+        case bookmarkItem = "bookmark-item"
+        case searchSuggestion = "search-suggestion"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -507,6 +513,7 @@ extension TelemetryWrapper {
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
         case tabsQuantity = "tabsQuantity"
+        case awesomebarSearchTapType = "awesomebarSearchTapType"
 
         case preference = "pref"
         case preferenceChanged = "to"
@@ -668,6 +675,15 @@ extension TelemetryWrapper {
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
 
+        // MARK: Awesomebar Search Results
+        case (.action, .tap, .awesomebarResults, _, let extras):
+            if let tapValue = extras?[EventExtraKey.awesomebarSearchTapType.rawValue] as? String {
+                let awesomebarExtraValue = GleanMetrics.Awesomebar.SearchResultTapExtra(type: tapValue)
+                GleanMetrics.Awesomebar.searchResultTap.record(awesomebarExtraValue)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object,
+                                            value: value, extras: extras)
+            }
         // MARK: Default Browser
         case (.action, .tap, .dismissDefaultBrowserCard, _, _):
             GleanMetrics.DefaultBrowserCard.dismissPressed.add()
