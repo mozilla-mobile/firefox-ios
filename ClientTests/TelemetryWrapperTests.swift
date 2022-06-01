@@ -240,7 +240,7 @@ extension XCTestCase {
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
     }
 
-    func testUuidMetricMetricSuccess(metric: UuidMetricType,
+    func testUuidMetricSuccess(metric: UuidMetricType,
                               expectedValue: UUID,
                               failureMessage: String,
                               file: StaticString = #file,

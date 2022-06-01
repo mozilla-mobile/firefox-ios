@@ -120,7 +120,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
                 return
             }
 
-            self.testUuidMetricMetricSuccess(metric: GleanMetrics.TopSite.contextId,
+            self.testUuidMetricSuccess(metric: GleanMetrics.TopSite.contextId,
                                              expectedValue: uuid,
                                              failureMessage: "Should have contextId of \(uuid)")
             expectation.fulfill()
