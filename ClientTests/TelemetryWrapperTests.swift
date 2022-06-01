@@ -239,4 +239,13 @@ extension XCTestCase {
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
     }
+
+    func testUuidMetricMetricSuccess(metric: UuidMetricType,
+                              expectedValue: UUID,
+                              failureMessage: String,
+                              file: StaticString = #file,
+                              line: UInt = #line) {
+        XCTAssertTrue(metric.testHasValue(), "Should have value on uuid metric")
+        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage)
+    }
 }
