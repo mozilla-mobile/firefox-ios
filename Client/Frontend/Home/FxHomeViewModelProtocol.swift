@@ -30,6 +30,7 @@ protocol FXHomeViewModelProtocol {
     func updateData(completion: @escaping () -> Void)
 
     // Refresh data after reloadOnRotation, so layout can be adjusted
+    // Can also be used to prepare data for a specific trait collection when UI is ready to show
     func refreshData(for traitCollection: UITraitCollection)
 
     // Update section that are privacy sensitive, only implement when needed

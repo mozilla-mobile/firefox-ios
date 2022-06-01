@@ -9,7 +9,6 @@ protocol FirefoxHomeViewModelDelegate: AnyObject {
 }
 
 class FirefoxHomeViewModel: FeatureFlaggable {
-
     struct UX {
         static let spacingBetweenSections: CGFloat = 32
         static let standardInset: CGFloat = 18
