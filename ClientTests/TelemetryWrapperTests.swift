@@ -241,11 +241,16 @@ extension XCTestCase {
     }
 
     func testUuidMetricSuccess(metric: UuidMetricType,
-                              expectedValue: UUID,
-                              failureMessage: String,
-                              file: StaticString = #file,
-                              line: UInt = #line) {
+                               expectedValue: UUID,
+                               failureMessage: String,
+                               file: StaticString = #file,
+                               line: UInt = #line) {
+
+        guard let value = try? metric.testGetValue() else {
+            XCTFail("Expected contextId to be configured")
+            return
+        }
         XCTAssertTrue(metric.testHasValue(), "Should have value on uuid metric")
-        XCTAssertEqual(try! metric.testGetValue(), expectedValue, failureMessage)
+        XCTAssertEqual(value, expectedValue, failureMessage)
     }
 }
