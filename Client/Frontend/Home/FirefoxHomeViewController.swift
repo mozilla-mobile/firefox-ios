@@ -341,7 +341,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
         }
 
         // Jump back in header specific setup
-        if FirefoxHomeSectionType(indexPath.section) == .jumpBackIn {
+        if sectionViewModel.sectionType == .jumpBackIn {
             viewModel.jumpBackInViewModel.sendImpressionTelemetry()
             prepareJumpBackInContextualHint(onView: headerView)
         }
