@@ -29,6 +29,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         static let bannerTitleMaxFontSize: CGFloat = 55
         static let descriptionTextMaxFontSize: CGFloat = 49
         static let buttonMaxFontSize: CGFloat = 53
+        static let buttonEdgeSpacing: CGFloat = 16
         static let bottomCardSafeSpace: CGFloat = 8
     }
 
@@ -68,6 +69,8 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         button.layer.masksToBounds = true
         button.accessibilityIdentifier = a11y.ctaButton
         button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: UX.buttonEdgeSpacing,
+                                                bottom: 0, right: UX.buttonEdgeSpacing)
         button.makeDynamicHeightSupport()
     }
 
