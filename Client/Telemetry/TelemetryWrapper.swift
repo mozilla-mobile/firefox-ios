@@ -459,6 +459,7 @@ extension TelemetryWrapper {
         case readingPanel = "reading-panel"
         case downloadsPanel = "downloads-panel"
         case syncPanel = "sync-panel"
+        case yourLibrarySection = "your-library-section"
         case jumpBackInSectionShowAll = "jump-back-in-section-show-all"
         case jumpBackInSectionTabOpened = "jump-back-in-section-tab-opened"
         case jumpBackInSectionGroupOpened = "jump-back-in-section-group-opened"

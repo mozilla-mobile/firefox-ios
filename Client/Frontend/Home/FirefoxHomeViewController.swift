@@ -28,8 +28,15 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
-    lazy var homeTabBanner: HomeTabBanner = .build { card in
+    private lazy var homeTabBanner: HomeTabBanner = .build { card in
         card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+    }
+
+    // Content stack views contains the home tab banner and collection view.
+    // Home tab banner cannot be added to collection view since it's pinned at the top of the view.
+    lazy var contentStackView: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.axis = .vertical
     }
 
     var currentTab: Tab? {
@@ -68,7 +75,8 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
                                        .TopTabsTabClosed,
                                        .TabsTrayDidClose,
                                        .TabsTrayDidSelectHomeTab,
-                                       .TabsPrivacyModeChanged])
+                                       .TabsPrivacyModeChanged,
+                                       .DynamicFontChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -84,20 +92,25 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureCollectionView()
         configureWallpaperView()
+        configureContentStackView()
+        configureCollectionView()
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
 
-        if shouldDisplayHomeTabBanner {
-            showHomeTabBanner()
-        }
-
         applyTheme()
         setupSectionsAction()
         reloadAll()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if shouldDisplayHomeTabBanner {
+            showHomeTabBanner()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -117,6 +130,9 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
         wallpaperView.updateImageForOrientationChange()
         reloadOnRotation()
+
+        // Adjust home tab banner height on rotation
+        homeTabBanner.adjustMaxHeight(size.height * 0.6)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -143,7 +159,17 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         collectionView.dataSource = self
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
-        view.addSubview(collectionView)
+        contentStackView.addArrangedSubview(collectionView)
+    }
+
+    func configureContentStackView() {
+        view.addSubview(contentStackView)
+        NSLayoutConstraint.activate([
+            contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     func configureWallpaperView() {
@@ -192,11 +218,11 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
     private func reloadOnRotation() {
         if let _ = self.presentedViewController as? PhotonActionSheet {
-            self.presentedViewController?.dismiss(animated: false, completion: nil)
+            presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
         // Adjust layout for rotation, cells needs to be relayout
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 
     private func adjustPrivacySensitiveSections(notification: Notification) {
@@ -279,19 +305,11 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     }
 
     private func showHomeTabBanner() {
-        view.addSubview(homeTabBanner)
-        NSLayoutConstraint.activate([
-            homeTabBanner.topAnchor.constraint(equalTo: view.topAnchor),
-            homeTabBanner.bottomAnchor.constraint(equalTo: collectionView.topAnchor),
-            homeTabBanner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            homeTabBanner.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            homeTabBanner.heightAnchor.constraint(equalToConstant: 264),
+        guard !contentStackView.subviews.contains(homeTabBanner) else { return }
 
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
+        contentStackView.addArrangedViewToTop(homeTabBanner)
 
+        homeTabBanner.adjustMaxHeight(view.frame.height * 0.7)
         homeTabBanner.dismissClosure = { [weak self] in
             self?.dismissHomeTabBanner()
         }
@@ -594,11 +612,18 @@ extension FirefoxHomeViewController: Notifiable {
             switch notification.name {
             case .TabsPrivacyModeChanged:
                 self.adjustPrivacySensitiveSections(notification: notification)
+
             case .TabsTrayDidClose,
                     .TopTabsTabClosed,
                     .TabsTrayDidSelectHomeTab,
                     .HomePanelPrefsChanged:
                 self.reloadAll()
+
+            case .DynamicFontChanged:
+                self.homeTabBanner.adjustMaxHeight(self.view.frame.height * 0.7)
+                self.homeTabBanner.setNeedsLayout()
+                self.homeTabBanner.layoutIfNeeded()
+
             default: break
             }
         }
