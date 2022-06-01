@@ -187,7 +187,7 @@ workflows:
                 pwd
                 echo "-- test-without-building --"
 
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "UnitTests" "test-without-building"
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "UnitTest" "test-without-building"
     - deploy-to-bitrise-io@2: { }
   1_git_clone_and_post_clone:
     steps:
