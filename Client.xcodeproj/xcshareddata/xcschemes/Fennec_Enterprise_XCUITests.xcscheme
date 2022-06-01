@@ -209,6 +209,12 @@
          <TestPlanReference
             reference = "container:Smoketest2.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Client.xcodeproj/UnitTests.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:XCUITests/UnitTest.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
