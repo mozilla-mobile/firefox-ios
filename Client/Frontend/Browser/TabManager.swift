@@ -50,8 +50,14 @@ extension TabManager: TabEventHandler {
     }
 }
 
+protocol TabManagerProtocol {
+    var recentlyAccessedNormalTabs: [Tab] { get }
+
+    func selectTab(_ tab: Tab?, previous: Tab?)
+}
+
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class TabManager: NSObject, FeatureFlaggable {
+class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
     // MARK: - Variables
     fileprivate var delegates = [WeakTabManagerDelegate]()

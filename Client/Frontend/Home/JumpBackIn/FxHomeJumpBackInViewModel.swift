@@ -28,21 +28,27 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     var onTapGroup: ((Tab) -> Void)?
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
 
+    weak var browserBarViewDelegate: BrowserBarViewDelegate?
+
     private var recentTabs: [Tab] = [Tab]()
+    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
+
     private var recentGroups: [ASGroup<Tab>]?
+
     private let isZeroSearch: Bool
     private let profile: Profile
-    private let tabManager: TabManager
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var isPrivate: Bool
+    private let tabManager: TabManagerProtocol
 
-    init(isZeroSearch: Bool = false,
-         profile: Profile,
-         isPrivate: Bool,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager
+    init(
+        isZeroSearch: Bool = false,
+        profile: Profile,
+        isPrivate: Bool,
+        tabManager: TabManagerProtocol = BrowserViewController.foregroundBVC().tabManager
     ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.isPrivate = isPrivate
         self.isPrivate = isPrivate
         self.tabManager = tabManager
     }
@@ -80,34 +86,43 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         jumpBackInList = createJumpBackInList(
             from: recentTabs,
             withMaxItemsToDisplay: FirefoxHomeJumpBackInViewModel.maxItemsToDisplay,
-            and: recentGroups)
+            and: recentGroups
+        )
     }
 
     func switchTo(group: ASGroup<Tab>) {
-        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
-            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        guard let delegate = browserBarViewDelegate, delegate.inOverlayMode else {
+            return
         }
+        delegate.leaveOverlayMode(didCancel: false)
+
         guard let firstTab = group.groupedItems.first else { return }
 
         onTapGroup?(firstTab)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .jumpBackInSectionGroupOpened,
-                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .firefoxHomepage,
+            value: .jumpBackInSectionGroupOpened,
+            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        )
     }
 
     func switchTo(tab: Tab) {
-        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
-            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        guard let delegate = browserBarViewDelegate, delegate.inOverlayMode else {
+            return
         }
-        tabManager.selectTab(tab)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .jumpBackInSectionTabOpened,
-                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+        delegate.leaveOverlayMode(didCancel: false)
+
+        tabManager.selectTab(tab, previous: nil)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .firefoxHomepage,
+            value: .jumpBackInSectionTabOpened,
+            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        )
     }
 
     func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
@@ -124,16 +139,19 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
 
     // MARK: - Private
 
-    private func createJumpBackInList(from tabs: [Tab],
-                                      withMaxItemsToDisplay maxItems: Int,
-                                      and groups: [ASGroup<Tab>]? = nil
+    private func createJumpBackInList(
+        from tabs: [Tab],
+        withMaxItemsToDisplay maxItems: Int,
+        and groups: [ASGroup<Tab>]? = nil
     ) -> JumpBackInList {
         let recentGroup = groups?.first
         let groupCount = recentGroup != nil ? 1 : 0
-        let recentTabs = filter(tabs: tabs,
-                                from: recentGroup,
-                                usingGroupCount: groupCount,
-                                withMaxItemsToDisplay: maxItems)
+        let recentTabs = filter(
+            tabs: tabs,
+            from: recentGroup,
+            usingGroupCount: groupCount,
+            withMaxItemsToDisplay: maxItems
+        )
 
         return JumpBackInList(group: recentGroup, tabs: recentTabs)
     }
@@ -166,21 +184,27 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
         let maxItemsToDisplay = FirefoxHomeJumpBackInViewModel.maxItemsToDisplay
 
         if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
-            SearchTermGroupsUtility.getTabGroups(with: profile,
-                                                 from: recentTabs,
-                                                 using: .orderedDescending) { [weak self] groups, _ in
+            SearchTermGroupsUtility.getTabGroups(
+                with: profile,
+                from: recentTabs,
+                using: .orderedDescending
+            ) { [weak self] groups, _ in
                 guard let strongSelf = self else { completion(); return }
+
                 strongSelf.recentGroups = groups
                 strongSelf.jumpBackInList = strongSelf.createJumpBackInList(
                     from: strongSelf.recentTabs,
                     withMaxItemsToDisplay: maxItemsToDisplay,
-                    and: groups)
+                    and: groups
+                )
                 completion()
             }
 
         } else {
-            jumpBackInList = createJumpBackInList(from: recentTabs,
-                                                  withMaxItemsToDisplay: maxItemsToDisplay)
+            jumpBackInList = createJumpBackInList(
+                from: recentTabs,
+                withMaxItemsToDisplay: maxItemsToDisplay
+            )
             completion()
         }
     }
@@ -206,7 +230,9 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     func updateData(completion: @escaping () -> Void) {
         // Has to be on main due to tab manager needing main tread
         // This can be fixed when tab manager has been revisited
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
             self.updateJumpBackInData(completion: completion)
         }
     }

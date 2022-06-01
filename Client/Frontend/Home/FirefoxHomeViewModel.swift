@@ -9,7 +9,6 @@ protocol FirefoxHomeViewModelDelegate: AnyObject {
 }
 
 class FirefoxHomeViewModel: FeatureFlaggable {
-
     struct UX {
         static let topSitesHeight: CGFloat = 90
         static let homeHorizontalCellHeight: CGFloat = 120

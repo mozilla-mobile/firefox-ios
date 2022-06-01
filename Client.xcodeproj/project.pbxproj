@@ -571,6 +571,7 @@
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
 		BA6E311FBCA7A2157F48568A /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E371A3948814CAA0C83E4 /* Telemetry.swift */; };
+		BA6E327D482C60B7776F1630 /* FirefoxHomeJumpBackInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E325D53E21B6F758DDA6E /* FirefoxHomeJumpBackInViewModelTests.swift */; };
 		BA6E3BF4B5AC115E7DBCAA5E /* FxATelemtryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E376117A53502756759A2 /* FxATelemtryTests.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
@@ -3268,6 +3269,7 @@
 		B9F246E38F80F257C59CEC4A /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		BA05405089CFDC6097258640 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		BA354251BD3FFF63A161E385 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		BA6E325D53E21B6F758DDA6E /* FirefoxHomeJumpBackInViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxHomeJumpBackInViewModelTests.swift; sourceTree = "<group>"; };
 		BA6E371A3948814CAA0C83E4 /* Telemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Telemetry.swift; sourceTree = "<group>"; };
 		BA6E376117A53502756759A2 /* FxATelemtryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxATelemtryTests.swift; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
@@ -5691,6 +5693,30 @@
 			path = GeneralizedTableView;
 			sourceTree = "<group>";
 		};
+		BA6E332ADD776728B4C58DDF /* Frontend */ = {
+			isa = PBXGroup;
+			children = (
+				BA6E3F717432C02E147869A7 /* Home */,
+			);
+			path = Frontend;
+			sourceTree = "<group>";
+		};
+		BA6E3E02F9900749F7CAFDC9 /* JumpBackIn */ = {
+			isa = PBXGroup;
+			children = (
+				BA6E325D53E21B6F758DDA6E /* FirefoxHomeJumpBackInViewModelTests.swift */,
+			);
+			path = JumpBackIn;
+			sourceTree = "<group>";
+		};
+		BA6E3F717432C02E147869A7 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				BA6E3E02F9900749F7CAFDC9 /* JumpBackIn */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		C82A94E3269CB74500624AA7 /* FeatureFlags */ = {
 			isa = PBXGroup;
 			children = (
@@ -6935,6 +6961,7 @@
 				5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */,
 				8AD3E43A28062C3700EAB4DC /* FirefoxHomeViewControllerTests.swift */,
 				C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */,
+				BA6E332ADD776728B4C58DDF /* Frontend */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
 			);
 			path = ClientTests;
@@ -9491,6 +9518,7 @@
 				43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */,
 				8AE1E1D927B1BD380024C45E /* UIStackViewExtensionsTests.swift in Sources */,
 				3B6F40181DC7849C00656CC6 /* FxHomeTopSitesViewModelTests.swift in Sources */,
+				BA6E327D482C60B7776F1630 /* FirefoxHomeJumpBackInViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

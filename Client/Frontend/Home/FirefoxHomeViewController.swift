@@ -15,6 +15,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
+    weak var browserBarViewDelegate: BrowserBarViewDelegate?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     private let flowLayout = UICollectionViewFlowLayout()
@@ -47,6 +48,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         self.viewModel = FirefoxHomeViewModel(profile: profile,
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate)
+        self.viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)

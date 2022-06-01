@@ -30,6 +30,12 @@ enum ReferringPage {
     case tabTray
 }
 
+protocol BrowserBarViewDelegate: AnyObject {
+    var inOverlayMode: Bool { get }
+
+    func leaveOverlayMode(didCancel cancel: Bool)
+}
+
 class BrowserViewController: UIViewController {
 
     private enum UX {
@@ -858,6 +864,7 @@ class BrowserViewController: UIViewController {
                 isZeroSearch: !inline)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self
+            firefoxHomeViewController.browserBarViewDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController
             addChild(firefoxHomeViewController)
             view.addSubview(firefoxHomeViewController.view)
@@ -2593,7 +2600,22 @@ extension BrowserViewController: FeatureFlaggable {
 
 extension BrowserViewController {
     public static func foregroundBVC() -> BrowserViewController {
-        return (UIApplication.shared.delegate as! AppDelegate).browserViewController
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let browserViewController = appDelegate.browserViewController else {
+            fatalError("Unable unwrap BrowserViewController")
+        }
+
+        return browserViewController
+    }
+}
+
+extension BrowserViewController: BrowserBarViewDelegate {
+    var inOverlayMode: Bool {
+        return urlBar.inOverlayMode
+    }
+
+    func leaveOverlayMode(didCancel cancel: Bool) {
+        urlBar.leaveOverlayMode(didCancel: cancel)
     }
 }
 
