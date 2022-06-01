@@ -184,10 +184,10 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     }
 
     func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { [weak self]
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
-            guard let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex), viewModel.shouldShow else {
+            guard let self = self, let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex), viewModel.shouldShow else {
                 return nil
             }
 
