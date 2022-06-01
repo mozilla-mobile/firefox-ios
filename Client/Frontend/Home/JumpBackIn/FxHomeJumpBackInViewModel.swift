@@ -45,6 +45,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     private let tabManager: TabManager
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var isPrivate: Bool
+    private var hasSentJumpBackInSectionEvent = false
 
     init(isZeroSearch: Bool = false,
          profile: Profile,
@@ -125,6 +126,17 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     func getHeroImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
         siteImageHelper.fetchImageFor(site: site, imageType: .heroImage, shouldFallback: false) { image in
             completion(image)
+        }
+    }
+
+    func sendImpressionTelemetry() {
+        if !hasSentJumpBackInSectionEvent {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .jumpBackInImpressions,
+                                         value: nil,
+                                         extras: nil)
+            hasSentJumpBackInSectionEvent = true
         }
     }
 

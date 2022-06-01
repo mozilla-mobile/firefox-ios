@@ -18,7 +18,6 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
-    private var hasSentJumpBackInSectionEvent = false
     private var isZeroSearch: Bool
     private var viewModel: FirefoxHomeViewModel
     private var contextMenuHelper: FirefoxHomeContextMenuHelper
@@ -69,7 +68,6 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
         viewModel.delegate = self
 
-        // TODO: .TabClosed notif should be in JumpBackIn view only to reload it's data, but can't right now since doesn't self-size
         setupNotifications(forObserver: self,
                            observing: [.HomePanelPrefsChanged,
                                        .TopTabsTabClosed,
@@ -337,26 +335,19 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
                 ofKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: ASHeaderView.cellIdentifier,
                 for: indexPath) as? ASHeaderView,
-              let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
+              let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
         else {
             return UICollectionReusableView()
         }
 
         // Jump back in header specific setup
         if FirefoxHomeSectionType(indexPath.section) == .jumpBackIn {
-            if !hasSentJumpBackInSectionEvent {
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .view,
-                                             object: .jumpBackInImpressions,
-                                             value: nil,
-                                             extras: nil)
-                hasSentJumpBackInSectionEvent = true
-            }
+            viewModel.jumpBackInViewModel.sendImpressionTelemetry()
             prepareJumpBackInContextualHint(onView: headerView)
         }
 
         // Configure header only if section is shown
-        let headerViewModel = viewModel.shouldShow ? viewModel.headerViewModel : ASHeaderViewModel.emptyHeader
+        let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : ASHeaderViewModel.emptyHeader
         headerView.configure(viewModel: headerViewModel)
         return headerView
     }
