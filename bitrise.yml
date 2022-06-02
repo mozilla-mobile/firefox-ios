@@ -27,7 +27,7 @@ workflows:
           title: Pull artifacts
           inputs:
             - verbose: true
-            - artifact_sources: stage_2.*
+            - artifact_sources: .*
       - script@1.1:
           title: Deploy Artifacts
           inputs:

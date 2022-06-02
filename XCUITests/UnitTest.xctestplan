@@ -20,6 +20,7 @@
       }
     },
     {
+      "enabled" : false,
       "skippedTests" : [
         "ETPCoverSheetTests",
         "TestFavicons\/testFaviconFetcherParse()"
@@ -38,6 +39,9 @@
       }
     },
     {
+      "skippedTests" : [
+        "RustLoginsTests"
+      ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
         "identifier" : "2FCAE2231ABB51F800877008",
@@ -52,6 +56,10 @@
       }
     },
     {
+      "skippedTests" : [
+        "MetaGlobalTests",
+        "StateTests"
+      ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
         "identifier" : "282731671ABC9BE700AA1954",
