@@ -94,13 +94,16 @@ class FxHomePocketViewModel {
 
     // MARK: - Private
 
-    private func getPocketSites() -> Success {
-        return pocketAPI.globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
+    private func getPocketSites(completion: @escaping () -> Void) {
+        pocketAPI
+            .globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
+            .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
             let globalTemp = pocketStory.map(PocketStory.init)
+            self?.pocketStoriesViewModels = []
             for story in globalTemp {
-                self.bind(pocketStoryViewModel: .init(story: story))
+                self?.bind(pocketStoryViewModel: .init(story: story))
             }
-            return succeed()
+            completion()
         }
     }
 
@@ -130,9 +133,7 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     func updateData(completion: @escaping () -> Void) {
-        getPocketSites().uponQueue(.main) { _ in
-            completion()
-        }
+        getPocketSites(completion: completion)
     }
 
     var shouldReloadSection: Bool { return true }
