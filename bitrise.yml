@@ -6,6 +6,7 @@ pipelines:
     stages:
       - stage_1: {}
       - stage_2: {}
+      - stage_3: {}
 stages:
   stage_1:
     workflows:
@@ -15,7 +16,49 @@ stages:
       - build_and_test_1_SmokeTest2: {}
       - build_and_test_2_SmokeTest: {}
       - build_and_test_3_UnitTest: {}
+  stage_3:
+    workflows:
+      - deploy: {}
 workflows:
+  deply:
+    steps:
+      - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+          title: Pull artifacts
+          inputs:
+            - verbose: true
+            - artifact_sources: stage_2.*
+      - script@1.1:
+          title: Deploy Artifacts
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                set -euxo pipefail
+                
+                echo "==== MOVE FILES TO DEPLOY DIR ===="
+                echo "$BITRISE_ARTIFACT_PATHS"
+                
+                cd /tmp
+                MYDIR=`pwd`/tmp/Users/vagrant/git/xcodebuild.xcresult
+                i=1
+                IFS='|'
+                read -ra FILES <<< "$BITRISE_ARTIFACT_PATHS"
+                for f in ${FILES[@]}
+                do
+                  if [ "${f: -4}" = ".zip" ]; then
+                    echo "Processing $f"
+            
+                    rm -rf tmp
+                    mkdir tmp
+                    unzip "$f" -d tmp
+                    
+                    echo "--Trainer--"
+                    mkdir "${BITRISE_TEST_RESULT_DIR}/test_${i}"
+                    trainer --path "${MYDIR}" --output_directory "${BITRISE_TEST_RESULT_DIR}/test_${i}" || : echo "{ \"test-name\": \"Tests ${i}\" }" > "${BITRISE_TEST_RESULT_DIR}/test_${i}/test-info.json"
+            
+                    ((i++))
+                  fi
+                done
+      - deploy-to-bitrise-io@2: {}
   configure_build:
     before_run:
     - 1_git_clone_and_post_clone
@@ -1144,7 +1187,7 @@ app:
 meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-        machine_type_id: g2.4core
+        machine_type_id: g2.8core
 
 trigger_map:
 - push_branch: main
@@ -1155,7 +1198,5 @@ trigger_map:
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
-#- push_branch: '*'
-#  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   workflow: RunUnitTests
