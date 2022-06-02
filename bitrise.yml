@@ -20,7 +20,7 @@ stages:
     workflows:
       - deploy: {}
 workflows:
-  deply:
+  deploy:
     steps:
       - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
           title: Pull artifacts
