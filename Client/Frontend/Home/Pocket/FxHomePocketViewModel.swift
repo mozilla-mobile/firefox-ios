@@ -94,36 +94,6 @@ class FxHomePocketViewModel {
 
     // MARK: - Private
 
-//    private func getPocketSites() -> Success {
-//        pocketAPI
-//            .globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
-//            .bindQueue(.main) { [weak self] global in
-//                guard let self = self else { return succeed() }
-//                return self.pocketAPI.sponsoredFeed().bindQueue(.main) { (sponsored: [PocketSponsoredStory]) -> Success in
-//                    // Convert global feed to PocketStory
-//                    var globalTemp = global.map(PocketStory.init)
-//
-//                    // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-//                    var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
-//
-//                    // Making sure we insert a sponsored story at a valid index
-//                    let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-//                    sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
-//                    sponsoredTemp.removeFirst()
-//
-//                    let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-//                    sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
-//                    sponsoredTemp.removeFirst()
-//
-//                    // Add the story in the view models list
-//                    for story in globalTemp {
-//                        self.bind(pocketStoryViewModel: .init(story: story))
-//                    }
-//                    return succeed()
-//                }
-//            }
-//    }
-
     private func getPocketSites() -> Success {
         return pocketAPI.globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
             let globalTemp = pocketStory.map(PocketStory.init)
