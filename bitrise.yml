@@ -241,8 +241,10 @@ workflows:
                 echo "-- compress --"
                 
                 cd "${BITRISE_DEPLOY_DIR}/"
-                exec zip -qr "${BITRISE_DEPLOY_DIR}/TestResults.zip" "/Users/vagrant/git/xcodebuild.xcresult"
-    - deploy-to-bitrise-io@2: { }
+                exec zip -0 -qr "${BITRISE_DEPLOY_DIR}/TestResults.zip" "/Users/vagrant/git/xcodebuild.xcresult"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/TestResults.zip"
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
