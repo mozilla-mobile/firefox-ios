@@ -73,7 +73,7 @@ workflows:
         inputs:
         - xcode_project: Client.xcodeproj
         - target: Client
-        - shards: '2'
+        - shards: '3'
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: SmokeXCUITests.xctestplan
         - debug_mode: 'true'
@@ -232,6 +232,16 @@ workflows:
                 echo "-- test-without-building --"
 
                 xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "UnitTest" "test-without-building"
+    - script@1.1:
+          title: Compress Result Bundle
+          is_always_run: true
+          inputs:
+            - content: |-
+                set -euxo pipefail
+                echo "-- compress --"
+                
+                cd "${BITRISE_DEPLOY_DIR}/"
+                exec zip -qr "${BITRISE_DEPLOY_DIR}/TestResults.zip" "/Users/vagrant/git/xcodebuild.xcresult"
     - deploy-to-bitrise-io@2: { }
   1_git_clone_and_post_clone:
     steps:
