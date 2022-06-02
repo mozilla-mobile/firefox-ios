@@ -94,6 +94,8 @@ public struct AccessibilityIdentifiers {
         static let welcomeCard = "WelcomeCard"
         static let wallpapersCard = "WallpapersCard"
         static let signSyncCard = "SignSyncCard"
+        static let closeButton = "CloseButton"
+        static let pageControl = "PageControl"
     }
 
     struct Settings {

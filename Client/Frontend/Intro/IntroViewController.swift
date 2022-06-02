@@ -25,6 +25,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
         button.setImage(closeImage, for: .normal)
         button.tintColor = .secondaryLabel
         button.addTarget(self, action: #selector(self.closeOnboarding), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.closeButton
     }
 
     private lazy var pageController: UIPageViewController = {
@@ -40,6 +41,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
         pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
         pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
         pageControl.isUserInteractionEnabled = false
+        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.pageControl
     }
 
     // Closure delegate
@@ -203,12 +205,12 @@ extension IntroViewController: OnboardingCardDelegate {
                                          action: #selector(dismissSignInViewController))
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
-        self.present(controller, animated: true, completion: nil)
+        self.present(controller, animated: true)
     }
 
     @objc func dismissSignInViewController() {
         self.dismiss(animated: false, completion: nil)
-        didFinishClosure?(self, nil)
+        closeOnboarding()
     }
 }
 
