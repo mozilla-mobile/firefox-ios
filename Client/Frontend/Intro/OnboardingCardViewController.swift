@@ -79,8 +79,10 @@ class OnboardingCardViewController: UIViewController {
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
     }
 
-    private lazy var primaryButton: UIButton = .build { button in
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+    private lazy var primaryButton: ResizableButton = .build { button in
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+            withTextStyle: .callout,
+            maxSize: 51)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.backgroundColor = UIColor.Photon.Blue50
         button.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
@@ -89,8 +91,10 @@ class OnboardingCardViewController: UIViewController {
         button.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)PrimaryButton"
     }
 
-    private lazy var secondaryButton: UIButton = .build { button in
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+    private lazy var secondaryButton: ResizableButton = .build { button in
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+            withTextStyle: .callout,
+            maxSize: 51)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.backgroundColor = UIColor.Photon.LightGrey30
         button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
@@ -144,17 +148,17 @@ class OnboardingCardViewController: UIViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
 
             scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
             scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.scrollViewVerticalPadding),
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
             scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
             contentStackView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: UX.stackViewVerticalPadding),
@@ -163,8 +167,8 @@ class OnboardingCardViewController: UIViewController {
             contentStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewHorizontalPadding),
             contentStackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 
-            primaryButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
-            secondaryButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight)
+            primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
+            secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight)
         ])
 
         contentStackView.setContentHuggingPriority(.defaultLow, for: .vertical)

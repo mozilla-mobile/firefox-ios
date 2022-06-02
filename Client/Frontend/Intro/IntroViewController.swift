@@ -100,7 +100,6 @@ class IntroViewController: UIViewController, OnViewDismissable {
         view.addSubviews(pageControl, closeButton)
 
         NSLayoutConstraint.activate([
-            pageControl.heightAnchor.constraint(equalToConstant: UX.pageControlHeight),
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                 constant: -UX.pageControlBottomPadding),
