@@ -241,7 +241,7 @@ workflows:
                 echo "-- compress --"
                 
                 cd "${BITRISE_DEPLOY_DIR}/"
-                exec zip -0 -qr "${BITRISE_DEPLOY_DIR}/TestResults.zip" "/Users/vagrant/git/xcodebuild.xcresult"
+                exec zip -0 -qr "${BITRISE_SOURCE_DIR}/TestResults.zip" "/Users/vagrant/git/xcodebuild.xcresult"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/TestResults.zip"
