@@ -33,7 +33,7 @@ class URLBar: UIView {
             updateViews()
 
             if oldValue == .editing {
-                _ = urlText.resignFirstResponder()
+                _ = urlTextField.resignFirstResponder()
                 delegate?.urlBarDidDismiss(self)
             } else if state == .editing {
                 delegate?.urlBarDidFocus(self)
@@ -71,8 +71,8 @@ class URLBar: UIView {
     private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
     private let toolset = BrowserToolset()
-    private let urlText = URLTextField()
-    var draggableUrlTextView: UIView { return urlText }
+    private let urlTextField = URLTextField()
+    var draggableUrlTextView: UIView { return urlTextField }
     private let truncatedUrlText = UITextView()
     private let urlBarBorderView = UIView()
     private let urlBarBackgroundView = UIView()
@@ -159,7 +159,7 @@ class URLBar: UIView {
         addSubview(toolset.deleteButton)
         addSubview(toolset.contextMenuButton)
 
-        urlText.isUserInteractionEnabled = false
+        urlTextField.isUserInteractionEnabled = false
         urlBarBackgroundView.addSubview(textAndLockContainer)
 
         let gestureRecognizer = UITapGestureRecognizer()
@@ -221,19 +221,19 @@ class URLBar: UIView {
         clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
-        urlText.font = .body15
-        urlText.tintColor = .primaryText
-        urlText.textColor = .primaryText
-        urlText.keyboardType = .webSearch
-        urlText.autocapitalizationType = .none
-        urlText.autocorrectionType = .no
-        urlText.rightView = clearButton
-        urlText.rightViewMode = .whileEditing
-        urlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
-        urlText.autocompleteDelegate = self
-        urlText.accessibilityIdentifier = "URLBar.urlText"
-        urlText.placeholder = UIConstants.strings.urlTextPlaceholder
-        textAndLockContainer.addSubview(urlText)
+        urlTextField.font = .body15
+        urlTextField.tintColor = .primaryText
+        urlTextField.textColor = .primaryText
+        urlTextField.keyboardType = .webSearch
+        urlTextField.autocapitalizationType = .none
+        urlTextField.autocorrectionType = .no
+        urlTextField.rightView = clearButton
+        urlTextField.rightViewMode = .whileEditing
+        urlTextField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
+        urlTextField.autocompleteDelegate = self
+        urlTextField.accessibilityIdentifier = "URLBar.urlText"
+        urlTextField.placeholder = UIConstants.strings.urlTextPlaceholder
+        textAndLockContainer.addSubview(urlTextField)
 
         shieldIcon.tintColor = .primaryText
         shieldIcon.contentMode = .center
@@ -314,7 +314,7 @@ class URLBar: UIView {
 
             expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
 
-            showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
+            showLeftBarViewConstraints.append(make.leading.lessThanOrEqualTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
 
             hideLeftBarViewConstraints.append(make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset).constraint)
 
@@ -349,7 +349,7 @@ class URLBar: UIView {
             make.center.equalToSuperview()
         }
 
-        urlText.snp.makeConstraints { make in
+        urlTextField.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(shieldIcon.snp.trailing).offset(5)
 
@@ -426,20 +426,21 @@ class URLBar: UIView {
     }
 
     @objc public func activateTextField() {
-        urlText.isUserInteractionEnabled = true
-        urlText.becomeFirstResponder()
+        urlTextField.isUserInteractionEnabled = true
+        urlTextField.becomeFirstResponder()
+        highlightText(urlTextField)
         isEditing = true
     }
 
     private func displayClearButton(shouldDisplay: Bool, animated: Bool = true) {
         // Prevent the rightView's position from being animated
-        urlText.rightView?.layer.removeAllAnimations()
-        urlText.rightView?.animateHidden(!shouldDisplay, duration: animated ? UIConstants.layout.urlBarTransitionAnimationDuration : 0)
+        urlTextField.rightView?.layer.removeAllAnimations()
+        urlTextField.rightView?.animateHidden(!shouldDisplay, duration: animated ? UIConstants.layout.urlBarTransitionAnimationDuration : 0)
     }
 
     public func dismissTextField() {
-        urlText.isUserInteractionEnabled = false
-        urlText.endEditing(true)
+        urlTextField.isUserInteractionEnabled = false
+        urlTextField.endEditing(true)
     }
 
     public func setHighlightWhatsNew(shouldHighlight: Bool) {
@@ -459,7 +460,7 @@ class URLBar: UIView {
     @objc func paste(clipboardString: String) {
         isEditing = true
         activateTextField()
-        urlText.text = clipboardString
+        urlTextField.text = clipboardString
     }
 
     @objc func pasteAndGo(clipboardString: String) {
@@ -486,7 +487,7 @@ class URLBar: UIView {
     func addCustomMenu() {
         var items = [UIMenuItem]()
 
-        if urlText.text != nil, urlText.text?.isEmpty == false {
+        if urlTextField.text != nil, urlTextField.text?.isEmpty == false {
             let copyItem = UIMenuItem(title: UIConstants.strings.copyMenuButton, action: #selector(copyLink))
             items.append(copyItem)
         }
@@ -504,7 +505,7 @@ class URLBar: UIView {
     }
     var url: URL? = nil {
         didSet {
-            if !urlText.isEditing {
+            if !urlTextField.isEditing {
                 setTextToURL()
                 updateUrlIcons()
             }
@@ -550,11 +551,11 @@ class URLBar: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Since the URL text field is smaller and centered on iPads, make sure
         // that touching the surrounding area will trigger editing.
-        if urlText.isUserInteractionEnabled,
+        if urlTextField.isUserInteractionEnabled,
             let touch = touches.first {
             let point = touch.location(in: urlBarBorderView)
             if urlBarBorderView.bounds.contains(point) {
-                urlText.becomeFirstResponder()
+                urlTextField.becomeFirstResponder()
                 return
             }
         }
@@ -568,7 +569,7 @@ class URLBar: UIView {
     }
 
     func fillUrlBar(text: String) {
-        urlText.text = text
+        urlTextField.text = text
     }
 
     private func updateUrlIcons() {
@@ -641,7 +642,7 @@ class URLBar: UIView {
             backgroundColor = .clear
 
             editingURLTextConstrains.forEach { $0.deactivate() }
-            urlText.snp.makeConstraints { make in
+            urlTextField.snp.makeConstraints { make in
                 make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlTextOffset)
             }
 
@@ -652,7 +653,7 @@ class URLBar: UIView {
 
             if isIPadRegularDimensions && inBrowsingMode {
                 leftBarViewLayoutGuide.snp.makeConstraints { make in
-                    editingURLTextConstrains.append(make.leading.equalTo(urlText).offset(-UIConstants.layout.urlTextOffset).constraint)
+                    editingURLTextConstrains.append(make.leading.equalTo(urlTextField).offset(-UIConstants.layout.urlTextOffset).constraint)
                 }
                 editingURLTextConstrains.forEach { $0.activate() }
                 toolset.stopReloadButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
@@ -684,7 +685,7 @@ class URLBar: UIView {
             self.urlBarBorderView.backgroundColor = borderColor
         }, completion: { finished in
             if finished {
-                if let isEmpty = self.urlText.text?.isEmpty {
+                if let isEmpty = self.urlTextField.text?.isEmpty {
                     self.displayClearButton(shouldDisplay: !isEmpty)
                 }
             }
@@ -760,7 +761,7 @@ class URLBar: UIView {
     }
 
     @objc private func didPressClear() {
-        urlText.text = nil
+        urlTextField.text = nil
         userInputText = nil
         displayClearButton(shouldDisplay: false)
         delegate?.urlBar(self, didEnterText: "")
@@ -780,7 +781,7 @@ class URLBar: UIView {
     }
 
     private func deactivate() {
-        urlText.text = nil
+        urlTextField.text = nil
         displayClearButton(shouldDisplay: false)
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
@@ -800,8 +801,14 @@ class URLBar: UIView {
         let fullUrl = components?.url?.absoluteString
         let truncatedURL = components?.host
         let displayText = truncatedURL
-        urlText.text = displayFullUrl ? fullUrl : displayText
+        urlTextField.text = displayFullUrl ? fullUrl : displayText
         truncatedUrlText.text = truncatedURL
+    }
+    private func highlightText(_ textField: UITextField) {
+        guard textField.text != nil else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
+            textField.selectAll(nil)
+        }
     }
 
     private func activateConstraints(_ activate: Bool, shownConstraints: [Constraint]?, hiddenConstraints: [Constraint]?) {
