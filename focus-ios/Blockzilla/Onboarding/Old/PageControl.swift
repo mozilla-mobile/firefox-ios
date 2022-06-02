@@ -41,7 +41,7 @@ class PageControl: UIView {
         }
 
         // Enable the buttons to be tapped to switch to a new page
-        buttonArray.forEach() { button in
+        buttonArray.forEach { button in
             button.addTarget(self, action: #selector(selected(sender:)), for: .touchUpInside)
         }
 
