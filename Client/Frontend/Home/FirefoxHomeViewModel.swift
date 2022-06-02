@@ -9,6 +9,7 @@ protocol FirefoxHomeViewModelDelegate: AnyObject {
 }
 
 class FirefoxHomeViewModel: FeatureFlaggable {
+
     struct UX {
         static let spacingBetweenSections: CGFloat = 32
         static let standardInset: CGFloat = 18
@@ -114,11 +115,33 @@ class FirefoxHomeViewModel: FeatureFlaggable {
                                      extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
     }
 
+    // MARK: - Fetch section data
+
     func updateData() {
         childViewModels.forEach { section in
             guard section.isEnabled else { return }
             self.updateData(section: section)
         }
+    }
+
+    private func updateData(section: FXHomeViewModelProtocol) {
+        section.updateData {
+            // Once section has data loaded with new data, we check if it needs to show
+            guard section.shouldShow else { return }
+
+            self.delegate?.reloadSection(section: section)
+        }
+    }
+
+    // MARK: - Manage sections and order
+
+    /// Add the section if it doesn't
+    func reloadSection(_ section: FXHomeViewModelProtocol, with collectionView: UICollectionView) {
+        if !shownSections.contains(section.sectionType) {
+            addShownSection(section: section.sectionType)
+        }
+
+        collectionView.reloadData()
     }
 
     func addShownSection(section: FirefoxHomeSectionType) {
@@ -141,28 +164,6 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         return indexes.count
     }
 
-    /// Reload the section directly if it exists, otherwise add it to the enabled section
-    func reloadSection(_ section: FXHomeViewModelProtocol, with collectionView: UICollectionView) {
-        let index = shownSections.firstIndex(of: section.sectionType)
-        if shownSections.contains(section.sectionType), let index = index {
-            let indexSet = IndexSet([index])
-            collectionView.reloadSections(indexSet)
-
-        } else {
-            addShownSection(section: section.sectionType)
-            collectionView.reloadData()
-        }
-    }
-
-    private func updateData(section: FXHomeViewModelProtocol) {
-        section.updateData {
-            // Once section has data loaded with new data, we check if it needs to show
-            guard section.shouldShow else { return }
-
-            self.delegate?.reloadSection(section: section)
-        }
-    }
-
     func updateEnabledSections() {
         shownSections.removeAll()
 
@@ -171,12 +172,15 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         }
     }
 
+    // MARK: - Section ViewModel helper
+
     func getSectionViewModel(shownSection: Int) -> FXHomeViewModelProtocol? {
         let actualSectionNumber = shownSections[shownSection].rawValue
         return childViewModels[safe: actualSectionNumber]
     }
 }
 
+// MARK: - FxHomeTopSitesViewModelDelegate
 extension FirefoxHomeViewModel: FxHomeTopSitesViewModelDelegate {
     func reloadTopSites() {
         updateData(section: topSiteViewModel)

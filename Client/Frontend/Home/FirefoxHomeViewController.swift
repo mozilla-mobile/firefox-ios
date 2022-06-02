@@ -382,10 +382,9 @@ extension FirefoxHomeViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
     func reloadAll() {
-        collectionView.reloadData()
 
-        DispatchQueue.global(qos: .userInteractive).async {
-            self.viewModel.updateData()
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            self?.viewModel.updateData()
         }
     }
 }
