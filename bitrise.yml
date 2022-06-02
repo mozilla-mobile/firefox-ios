@@ -13,10 +13,11 @@ stages:
       - configure_build: {}
   stage_2:
     workflows:
-      - build_and_test_1_SmokeTest2: {}
-      - build_and_test_2_SmokeTest: {}
+     # - build_and_test_1_SmokeTest2: {}
+     # - build_and_test_2_SmokeTest: {}
       - build_and_test_3_UnitTest: {}
   stage_3:
+    should_always_run: true
     workflows:
       - deploy: {}
 workflows:
@@ -1187,7 +1188,7 @@ app:
 meta:
       bitrise.io:
         stack: osx-xcode-13.2.x
-        machine_type_id: g2.8core
+        machine_type_id: g2.4core
 
 trigger_map:
 - push_branch: main
