@@ -185,7 +185,6 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
             ctaButton.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
             ctaButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
             ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.standardSpacing),
-            ctaButton.widthAnchor.constraint(equalToConstant: UX.learnHowButtonSize.width),
             ctaButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.learnHowButtonSize.height),
         ])
 

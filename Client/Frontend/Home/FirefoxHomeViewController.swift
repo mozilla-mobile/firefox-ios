@@ -33,9 +33,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
-    private lazy var homeTabBanner: HomeTabBanner = .build { card in
-        card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-    }
+    private var homeTabBanner: HomeTabBanner?
 
     // Content stack views contains the home tab banner and collection view.
     // Home tab banner cannot be added to collection view since it's pinned at the top of the view.
@@ -137,7 +135,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         reloadOnRotation()
 
         // Adjust home tab banner height on rotation
-        homeTabBanner.adjustMaxHeight(size.height * 0.6)
+        homeTabBanner?.adjustMaxHeight(size.height * 0.6)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -244,7 +242,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     }
 
     func applyTheme() {
-        homeTabBanner.applyTheme()
+        homeTabBanner?.applyTheme()
         view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 
@@ -338,7 +336,10 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     }
 
     private func showHomeTabBanner() {
-        guard !contentStackView.subviews.contains(homeTabBanner) else { return }
+        createHomeTabBannerCard()
+
+        guard let homeTabBanner = homeTabBanner,
+                !contentStackView.subviews.contains(homeTabBanner) else { return }
 
         contentStackView.addArrangedViewToTop(homeTabBanner)
 
@@ -348,14 +349,17 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         }
     }
 
+    private func createHomeTabBannerCard() {
+        guard homeTabBanner == nil else { return }
+
+        homeTabBanner = .build { card in
+            card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        }
+    }
+
     public func dismissHomeTabBanner() {
-        homeTabBanner.removeFromSuperview()
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        homeTabBanner?.removeFromSuperview()
+        homeTabBanner = nil
     }
 }
 
@@ -649,9 +653,9 @@ extension FirefoxHomeViewController: Notifiable {
                 self.reloadAll()
 
             case .DynamicFontChanged:
-                self.homeTabBanner.adjustMaxHeight(self.view.frame.height * 0.7)
-                self.homeTabBanner.setNeedsLayout()
-                self.homeTabBanner.layoutIfNeeded()
+                self.homeTabBanner?.adjustMaxHeight(self.view.frame.height * 0.7)
+                self.homeTabBanner?.setNeedsLayout()
+                self.homeTabBanner?.layoutIfNeeded()
 
             default: break
             }
