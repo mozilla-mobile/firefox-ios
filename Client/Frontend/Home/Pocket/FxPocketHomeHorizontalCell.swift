@@ -8,7 +8,7 @@ class FxPocketHomeHorizontalCellViewModel {
     var title: String { story.title }
     var imageURL: URL { story.imageURL }
     var url: URL? { story.url }
-    var sponsor: String? { "Sponsorsss" } // story.sponsor }
+    var sponsor: String? { story.sponsor }
     var description: String {
         if let sponsor = story.sponsor {
             return sponsor
@@ -134,14 +134,12 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.text = viewModel.description
 
         heroImageView.sd_setImage(with: viewModel.imageURL)
-        sponsoredStack.isHidden = false
-//        descriptionLabel.font = viewModel.sponsor == nil
-//        ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-//                                                        maxSize: UX.siteFontSize)
-//        : DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-//                                                            maxSize: UX.siteFontSize)
-        descriptionLabel.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                                                  maxSize: UX.siteFontSize)
+        sponsoredStack.isHidden = viewModel.sponsor == nil
+        descriptionLabel.font = viewModel.sponsor == nil
+        ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                        maxSize: UX.siteFontSize)
+        : DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+                                                            maxSize: UX.siteFontSize)
 
         titleLabel.textColor = .defaultTextColor
         descriptionLabel.textColor = viewModel.sponsor == nil ? .defaultTextColor : .sponsoredDescriptionColor
