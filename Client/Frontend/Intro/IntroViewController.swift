@@ -16,7 +16,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
         static let closeButtonSize: CGFloat = 44
         static let closeButtonPadding: CGFloat = 24
         static let pageControlHeight: CGFloat = 40
-        static let pageControlBottomPadding: CGFloat = 20
+        static let pageControlBottomPadding: CGFloat = 8
     }
 
     // MARK: - Var related to onboarding

@@ -13,12 +13,11 @@ class OnboardingCardViewController: UIViewController {
 
     struct UX {
         static let stackViewSpacing: CGFloat = 16
-        static let stackViewSpacingButtons: CGFloat = 80
+        static let stackViewSpacingButtons: CGFloat = 40
         static let buttonHeight: CGFloat = 45
         static let buttonCornerRadius: CGFloat = 13
-        static let stackViewHorizontalPadding: CGFloat = 20
-        static let stackViewVerticalPadding: CGFloat = 80
-        static let scrollViewVerticalPadding: CGFloat = 50
+        static let stackViewPadding: CGFloat = 20
+        static let scrollViewVerticalPadding: CGFloat = 62
     }
 
     var viewModel: OnboardingCardProtocol
@@ -32,6 +31,10 @@ class OnboardingCardViewController: UIViewController {
     }
 
     lazy var containerView: UIView = .build { stack in
+        stack.backgroundColor = .clear
+    }
+
+    lazy var contentContainerView: UIView = .build { stack in
         stack.backgroundColor = .clear
     }
 
@@ -77,6 +80,13 @@ class OnboardingCardViewController: UIViewController {
             maxSize: 53)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
+    }
+
+    lazy var buttonStackView: UIStackView = .build { stack in
+        stack.backgroundColor = .clear
+        stack.distribution = .fill
+        stack.spacing = UX.stackViewSpacing
+        stack.axis = .vertical
     }
 
     private lazy var primaryButton: ResizableButton = .build { button in
@@ -136,11 +146,13 @@ class OnboardingCardViewController: UIViewController {
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionBoldLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
-        contentStackView.setCustomSpacing(UX.stackViewSpacingButtons, after: descriptionLabel)
-        contentStackView.addArrangedSubview(primaryButton)
-        contentStackView.addArrangedSubview(secondaryButton)
+        contentContainerView.addSubviews(contentStackView)
 
-        containerView.addSubviews(contentStackView)
+        buttonStackView.addArrangedSubview(primaryButton)
+        buttonStackView.addArrangedSubview(secondaryButton)
+
+        containerView.addSubviews(contentContainerView)
+        containerView.addSubviews(buttonStackView)
         scrollView.addSubviews(containerView)
         view.addSubview(scrollView)
 
@@ -148,30 +160,41 @@ class OnboardingCardViewController: UIViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
 
             scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
             scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor).priority(.defaultLow),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.scrollViewVerticalPadding),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
-            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: UX.stackViewVerticalPadding),
-            contentStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewHorizontalPadding),
-            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: containerView.bottomAnchor, constant: -UX.stackViewVerticalPadding),
-            contentStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewHorizontalPadding),
-            contentStackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            // Content view wrapper around text
+            contentContainerView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            contentContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewPadding),
+            contentContainerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -UX.stackViewSpacingButtons),
+            contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
+
+            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: UX.stackViewPadding),
+            contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -UX.stackViewPadding).priority(.defaultLow),
+            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+            contentStackView.centerYAnchor.constraint(equalTo: contentContainerView.centerYAnchor),
+
+            buttonStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewPadding),
+            buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),
+            buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
 
             primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight)
         ])
 
-        contentStackView.setContentHuggingPriority(.defaultLow, for: .vertical)
+//        containerView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private func updateLayout() {
