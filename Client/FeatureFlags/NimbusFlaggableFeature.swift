@@ -16,12 +16,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case jumpBackIn
     case pocket
-    case sponsoredPocket
     case pullToRefresh
     case recentlySaved
     case reportSiteIssue
     case searchHighlights
     case shakeToRestore
+    case sponsoredPocket
     case sponsoredTiles
     case startAtHome
     case tabTrayGroups
