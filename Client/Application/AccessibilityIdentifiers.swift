@@ -23,6 +23,8 @@ public struct AccessibilityIdentifiers {
 
     struct FirefoxHomepage {
 
+        static let collectionView = "FxCollectionView"
+
         struct HomeTabBanner {
             static let ctaButton = "HomeTabBanner.ctaButton"
         }
@@ -48,7 +50,6 @@ public struct AccessibilityIdentifiers {
         }
 
         struct TopSites {
-            static let section = "TopSitesSection"
             static let itemCell = "TopSitesCell"
         }
     }

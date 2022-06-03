@@ -9,7 +9,7 @@ let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "mozilla", "bookmark
 let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter"]
 
 class ActivityStreamTest: BaseTestCase {
-    let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section]
+    let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
 
     let testWithDB = ["testActivityStreamPages","testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
@@ -51,14 +51,16 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testDefaultSites() {
         waitForExistence(TopSiteCellgroup, timeout: 10)
+        XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
+
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         // Check their names so that test is added to Smoketest
-        XCTAssertTrue(TopSiteCellgroup.cells["Twitter"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["Amazon"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["Wikipedia"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["YouTube"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["Facebook"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["Twitter"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["Amazon"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["Wikipedia"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["YouTube"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["Facebook"].exists)
     }
 
     func testTopSites2Add() {
@@ -72,7 +74,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSites3RemoveDefaultTopSite() {
-        TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
+        app.collectionViews.cells.staticTexts[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
 
         // Tap on Remove and check that now there should be only 4 default top sites
         selectOptionFromContextMenu(option: "Remove")
@@ -96,7 +98,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells.element(boundBy: 0), timeout: 10)
+        waitForExistence(TopSiteCellgroup, timeout: 10)
         if iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
             app.textFields.element(boundBy: 0).tap()
@@ -113,8 +115,8 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
         navigator.performAction(Action.CloseURLBarOpen)
@@ -123,29 +125,29 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        waitForExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
     func testTopSitesShiftAfterRemovingOne() {
         // Check top site in first and second cell
-        let topSiteFirstCell = app.collectionViews.cells.collectionViews.cells.element(boundBy: 0).label
-        let topSiteSecondCell = app.collectionViews.cells.collectionViews.cells.element(boundBy: 1).label
+        let topSiteFirstCell = app.collectionViews.cells.element(boundBy: 1).label
+        let topSiteSecondCell = app.collectionViews.cells.element(boundBy: 2).label
 
         XCTAssertTrue(topSiteFirstCell == allDefaultTopSites[0])
         XCTAssertTrue(topSiteSecondCell == allDefaultTopSites[1])
 
         // Remove facebook top sites, first cell
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells.element(boundBy: 0), timeout: 3)
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells.element(boundBy: 0).press(forDuration:1)
+        waitForExistence(app.collectionViews.cells.element(boundBy: 1), timeout: 3)
+        app.collectionViews.cells.element(boundBy: 1).press(forDuration:1)
         selectOptionFromContextMenu(option: "Remove")
 
         // Check top site in first cell now
-        waitForExistence(app.collectionViews.cells.collectionViews.cells.element(boundBy: 0))
-        let topSiteCells = TopSiteCellgroup.cells
-        let topSiteFirstCellAfter = app.collectionViews.cells.collectionViews.cells.element(boundBy: 0).label
-        XCTAssertTrue(topSiteFirstCellAfter == topSiteCells["youtube"].label, "First top site does not match")
+        waitForExistence(app.collectionViews.cells.element(boundBy: 1))
+        let topSiteCells = app.collectionViews.cells.staticTexts
+        let topSiteFirstCellAfter = app.collectionViews.cells.element(boundBy: 1).label
+        XCTAssertTrue(topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label, "First top site does not match")
     }
 
     // Smoketest
@@ -154,12 +156,11 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on apple top site, second cell
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["Apple"], timeout: 3)
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["Apple"].press(forDuration:1)
+        waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 3)
+        app.collectionViews.cells.staticTexts["Apple"].press(forDuration:1)
         app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
-        XCTAssertFalse(app.staticTexts["apple"].exists)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
@@ -187,8 +188,8 @@ class ActivityStreamTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells.element(boundBy: 3), timeout: 3)
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells.element(boundBy: 3).press(forDuration:1)
+        waitForExistence(app.collectionViews.cells.element(boundBy: 4), timeout: 3)
+        app.collectionViews.cells.element(boundBy: 4).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in a Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
@@ -214,9 +215,10 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
-        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].exists)
-        let numberOfTopSites = TopSiteCellgroup.cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).count
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        let numberOfTopSites = app.collectionViews.cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).count
+
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
 

@@ -28,6 +28,10 @@ extension ReusableCell where Self: UITableViewHeaderFooterView {
     static var cellIdentifier: String { return String(describing: self) }
 }
 
+extension ReusableCell where Self: UICollectionReusableView {
+    static var cellIdentifier: String { return String(describing: self) }
+}
+
 extension UICollectionView: Loggable {
 
     func dequeueReusableCell<T: ReusableCell>(cellType: T.Type, for indexPath: IndexPath) -> T? {
