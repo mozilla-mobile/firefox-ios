@@ -39,6 +39,8 @@ workflows:
                 echo "$BITRISE_ARTIFACT_PATHS"
                 
                 cd /tmp
+                echo "what in tmp"
+                ls tmp
                 MYDIR=`pwd`/tmp/Users/vagrant/git/xcodebuild.xcresult
                 i=1
                 IFS='|'

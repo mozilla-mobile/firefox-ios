@@ -40,7 +40,8 @@
     },
     {
       "skippedTests" : [
-        "RustLoginsTests"
+        "RustLoginsTests",
+        "TestSQLiteHistory\/testHistoryTable()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
