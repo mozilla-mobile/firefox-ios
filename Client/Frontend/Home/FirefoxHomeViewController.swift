@@ -189,7 +189,9 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         let layout = UICollectionViewCompositionalLayout { [weak self]
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
-            guard let self = self, let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex), viewModel.shouldShow else {
+            guard let self = self,
+                    let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
+                    viewModel.shouldShow else {
                 return nil
             }
 
@@ -363,9 +365,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
                 withReuseIdentifier: ASHeaderView.cellIdentifier,
                 for: indexPath) as? ASHeaderView,
               let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
-        else {
-            return UICollectionReusableView()
-        }
+        else { return UICollectionReusableView() }
 
         // Jump back in header specific setup
         if sectionViewModel.sectionType == .jumpBackIn {

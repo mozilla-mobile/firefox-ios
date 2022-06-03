@@ -17,7 +17,7 @@ extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
     }
 
     var headerViewModel: ASHeaderViewModel {
-        return ASHeaderViewModel.emptyHeader
+        return .emptyHeader
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {

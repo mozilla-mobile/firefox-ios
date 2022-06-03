@@ -164,9 +164,7 @@ extension FxHomeHistoryHightlightsViewModel: FXHomeViewModelProtocol, FeatureFla
     }
 
     func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
-        guard let count = historyItems?.count else {
-            return 0
-        }
+        guard let count = historyItems?.count else {  return 0 }
 
         // If there are less than or equal items to the max number of items allowed per column,
         // we can return the standard count, as we don't need to display filler cells.

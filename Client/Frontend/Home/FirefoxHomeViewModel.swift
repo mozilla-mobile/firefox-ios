@@ -17,18 +17,14 @@ class FirefoxHomeViewModel: FeatureFlaggable {
         static let iPadTopSiteInset: CGFloat = 25
 
         static func leadingInset(traitCollection: UITraitCollection) -> CGFloat {
-            guard UIDevice.current.userInterfaceIdiom != .phone else {
-                return standardInset
-            }
+            guard UIDevice.current.userInterfaceIdiom != .phone else { return standardInset }
 
             // Handles multitasking on iPad
-            return traitCollection.horizontalSizeClass == .regular ? iPadInset: standardInset
+            return traitCollection.horizontalSizeClass == .regular ? iPadInset : standardInset
         }
 
         static func topSiteLeadingInset(traitCollection: UITraitCollection) -> CGFloat {
-            guard UIDevice.current.userInterfaceIdiom != .phone else {
-                return 0
-            }
+            guard UIDevice.current.userInterfaceIdiom != .phone else { return 0 }
 
             // Handles multitasking on iPad
             return traitCollection.horizontalSizeClass == .regular ? iPadTopSiteInset : 0

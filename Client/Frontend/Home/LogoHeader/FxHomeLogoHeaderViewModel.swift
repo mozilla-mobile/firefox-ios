@@ -37,7 +37,7 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     var headerViewModel: ASHeaderViewModel {
-        return ASHeaderViewModel.emptyHeader
+        return .emptyHeader
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {

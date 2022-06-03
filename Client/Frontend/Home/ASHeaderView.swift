@@ -15,13 +15,12 @@ struct ASHeaderViewModel {
     var buttonA11yIdentifier: String?
 
     static var emptyHeader: ASHeaderViewModel {
-        return ASHeaderViewModel(title: nil,
-                                 isButtonHidden: true)
+        return ASHeaderViewModel(title: nil, isButtonHidden: true)
     }
 }
 
 // Firefox home view controller header view
-class ASHeaderView: UICollectionReusableView {
+class ASHeaderView: UICollectionReusableView, ReusableCell {
 
     struct UX {
         static let maxTitleLabelTextSize: CGFloat = 55 // Style title3 - AX5
@@ -30,8 +29,6 @@ class ASHeaderView: UICollectionReusableView {
         static let bottomSpace: CGFloat = 10
         static let bottomButtonSpace: CGFloat = 6
     }
-
-    static var cellIdentifier: String = "CellIdentifier"
 
     // MARK: - UIElements
     lazy var titleLabel: UILabel = .build { label in
