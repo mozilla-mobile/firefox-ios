@@ -58,12 +58,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.JumpBackInSection
         case .pocket:
             return FlagKeys.ASPocketStories
-        case .sponsoredPocket:
-            return FlagKeys.ASSponsoredPocketStories
         case .pullToRefresh:
             return FlagKeys.PullToRefresh
         case .recentlySaved:
             return FlagKeys.RecentlySavedSection
+        case .sponsoredPocket:
+            return FlagKeys.ASSponsoredPocketStories
         case .sponsoredTiles:
             return FlagKeys.SponsoredShortcuts
         case .startAtHome:
