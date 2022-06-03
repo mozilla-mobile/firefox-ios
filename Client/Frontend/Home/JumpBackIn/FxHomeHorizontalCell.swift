@@ -6,21 +6,6 @@ import Foundation
 import Storage
 import UIKit
 
-struct FxHomeHorizontalCellUX {
-    static let cellHeight: CGFloat = 112
-    static let cellWidth: CGFloat = 350
-    static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
-    static let interGroupSpacing: CGFloat = 8
-    static let generalCornerRadius: CGFloat = 12
-    static let titleFontSize: CGFloat = 49 // Style subheadline - AX5
-    static let siteFontSize: CGFloat = 43 // Style caption1 - AX5
-    static let stackViewShadowRadius: CGFloat = 4
-    static let stackViewShadowOffset: CGFloat = 2
-    static let heroImageSize =  CGSize(width: 108, height: 80)
-    static let fallbackFaviconSize = CGSize(width: 56, height: 56)
-    static let faviconSize = CGSize(width: 24, height: 24)
-}
-
 struct FxHomeHorizontalCellViewModel {
     let titleText: String
     let descriptionText: String
@@ -34,6 +19,22 @@ struct FxHomeHorizontalCellViewModel {
 /// A cell used in FxHomeScreen's Jump Back In and Pocket sections
 class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
+    struct UX {
+        static let cellHeight: CGFloat = 112
+        static let cellWidth: CGFloat = 350
+        static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
+        static let interGroupSpacing: CGFloat = 8
+        static let generalCornerRadius: CGFloat = 12
+        static let titleFontSize: CGFloat = 49 // Style subheadline - AX5
+        static let sponsoredFontSize: CGFloat = 49 // Style subheadline - AX5
+        static let siteFontSize: CGFloat = 43 // Style caption1 - AX5
+        static let stackViewShadowRadius: CGFloat = 4
+        static let stackViewShadowOffset: CGFloat = 2
+        static let heroImageSize =  CGSize(width: 108, height: 80)
+        static let fallbackFaviconSize = CGSize(width: 56, height: 56)
+        static let faviconSize = CGSize(width: 24, height: 24)
+    }
+
     private var faviconCenterConstraint: NSLayoutConstraint?
     private var faviconFirstBaselineConstraint: NSLayoutConstraint?
 
@@ -42,14 +43,14 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
+        imageView.layer.cornerRadius = UX.generalCornerRadius
         imageView.backgroundColor = .clear
     }
 
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   maxSize: FxHomeHorizontalCellUX.titleFontSize)
+                                                                   maxSize: UX.titleFontSize)
         label.numberOfLines = 2
     }
 
@@ -66,13 +67,13 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
+        imageView.layer.cornerRadius = UX.generalCornerRadius
     }
 
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   maxSize: FxHomeHorizontalCellUX.siteFontSize)
+                                                                   maxSize: UX.siteFontSize)
         label.textColor = .label
     }
 
@@ -156,9 +157,9 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
-        contentView.layer.shadowRadius = FxHomeHorizontalCellUX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: FxHomeHorizontalCellUX.stackViewShadowOffset)
+        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.shadowRadius = UX.stackViewShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
 
@@ -175,8 +176,8 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
             // Image container, hero image and fallback
             imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            imageContainer.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.heroImageSize.height),
-            imageContainer.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.heroImageSize.width),
+            imageContainer.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
+            imageContainer.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
             imageContainer.topAnchor.constraint(equalTo: itemTitle.topAnchor),
             imageContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16),
 
@@ -187,11 +188,11 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
             fallbackFaviconBackground.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor),
             fallbackFaviconBackground.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor),
-            fallbackFaviconBackground.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.heroImageSize.height),
-            fallbackFaviconBackground.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.heroImageSize.width),
+            fallbackFaviconBackground.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
+            fallbackFaviconBackground.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
 
-            fallbackFaviconImage.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.fallbackFaviconSize.height),
-            fallbackFaviconImage.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.fallbackFaviconSize.width),
+            fallbackFaviconImage.heightAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.height),
+            fallbackFaviconImage.widthAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.width),
             fallbackFaviconImage.centerXAnchor.constraint(equalTo: fallbackFaviconBackground.centerXAnchor),
             fallbackFaviconImage.centerYAnchor.constraint(equalTo: fallbackFaviconBackground.centerYAnchor),
 
@@ -201,13 +202,13 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
 
-            faviconImage.heightAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.height),
-            faviconImage.widthAnchor.constraint(equalToConstant: FxHomeHorizontalCellUX.faviconSize.width),
+            faviconImage.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
+            faviconImage.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
         ])
 
         faviconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor).priority(UILayoutPriority(999))
         faviconFirstBaselineConstraint = descriptionLabel.firstBaselineAnchor.constraint(equalTo: faviconImage.bottomAnchor,
-                                                                                         constant: -FxHomeHorizontalCellUX.faviconSize.height / 2)
+                                                                                         constant: -UX.faviconSize.height / 2)
 
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
 

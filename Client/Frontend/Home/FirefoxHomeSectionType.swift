@@ -42,9 +42,10 @@ enum FirefoxHomeSectionType: Int, CaseIterable {
                 EmptyTopSiteCell.self,
                 FxHomeHorizontalCell.self,
                 FxHomePocketDiscoverMoreCell.self,
+                FxPocketHomeHorizontalCell.self,
                 FxHomeRecentlySavedCell.self,
                 HistoryHighlightsCell.self,
-                FxHomeCustomizeHomeView.self
+                FxHomeCustomizeHomeView.self,
         ]
     }
 

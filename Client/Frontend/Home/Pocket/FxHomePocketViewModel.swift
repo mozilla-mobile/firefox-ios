@@ -14,11 +14,13 @@ class FxHomePocketViewModel {
         static let numberOfItemsInSection = 11
         static let fractionalWidthiPhonePortrait: CGFloat = 0.93
         static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
+        static let numberOfSponsoredItemsInSection = 2
+        static let indexOfFirstSponsoredItem = 1
+        static let indexOfSecondSponsoredItem = 9
     }
 
     // MARK: - Properties
 
-    private let profile: Profile
     private let pocketAPI = Pocket()
 
     private let isZeroSearch: Bool
@@ -26,19 +28,33 @@ class FxHomePocketViewModel {
 
     var onTapTileAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
+    var onScroll: (() -> Void)?
 
-    init(profile: Profile, isZeroSearch: Bool) {
-        self.profile = profile
+    private(set) var pocketStoriesViewModels: [FxPocketHomeHorizontalCellViewModel] = []
+
+    init(pocketStoriesViewModel: [FxPocketHomeHorizontalCellViewModel] = [], isZeroSearch: Bool) {
         self.isZeroSearch = isZeroSearch
+        self.pocketStoriesViewModels = pocketStoriesViewModel
+        for pocketStoryViewModel in pocketStoriesViewModel {
+            bind(pocketStoryViewModel: pocketStoryViewModel)
+        }
     }
 
-    var pocketStories: [PocketStory] = []
+    private func bind(pocketStoryViewModel: FxPocketHomeHorizontalCellViewModel) {
+        pocketStoryViewModel.onTap = { [weak self] indexPath in
+            self?.recordTapOnStory(index: indexPath.row)
+            let siteUrl = self?.pocketStoriesViewModels[indexPath.row].url
+            siteUrl.map { self?.onTapTileAction?($0) }
+        }
+
+        pocketStoriesViewModels.append(pocketStoryViewModel)
+    }
 
     // The dimension of a cell
     // Fractions for iPhone to only show a slight portion of the next column
     static var widthDimension: NSCollectionLayoutDimension {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
+            return .absolute(FxPocketHomeHorizontalCell.UX.cellWidth) // iPad
         } else if UIWindow.isLandscape {
             return .fractionalWidth(UX.fractionalWidthiPhoneLanscape)
         } else {
@@ -47,7 +63,7 @@ class FxHomePocketViewModel {
     }
 
     var numberOfCells: Int {
-        return pocketStories.count != 0 ? pocketStories.count + 1 : 0
+        return pocketStoriesViewModels.count != 0 ? pocketStoriesViewModels.count + 1 : 0
     }
 
     static var numberOfItemsInColumn: CGFloat {
@@ -55,12 +71,12 @@ class FxHomePocketViewModel {
     }
 
     func isStoryCell(index: Int) -> Bool {
-        return index < pocketStories.count
+        return index < pocketStoriesViewModels.count
     }
 
     func getSitesDetail(for index: Int) -> Site {
         if isStoryCell(index: index) {
-            return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+            return Site(url: pocketStoriesViewModels[index].url?.absoluteString ?? "", title: pocketStoriesViewModels[index].title)
         } else {
             return Site(url: Pocket.MoreStoriesURL.absoluteString, title: .FirefoxHomepage.Pocket.DiscoverMore)
         }
@@ -87,20 +103,23 @@ class FxHomePocketViewModel {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: extras)
     }
 
-    func domainAndReadingTimeForStory(atIndex: Int) -> String {
-        let pocketStory = pocketStories[atIndex]
-        let domainAndReadingTime = "\(pocketStory.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, pocketStory.timeToRead))"
-
-        return domainAndReadingTime
-    }
-
     // MARK: - Private
 
-    private func getPocketSites() -> Success {
-        return pocketAPI.globalFeed(items: UX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
-            self.pocketStories = pocketStory
-            return succeed()
+    private func getPocketSites(completion: @escaping () -> Void) {
+        pocketAPI
+            .globalFeed(items: UX.numberOfItemsInSection)
+            .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
+            let globalTemp = pocketStory.map(PocketStory.init)
+            self?.pocketStoriesViewModels = []
+            for story in globalTemp {
+                self?.bind(pocketStoryViewModel: .init(story: story))
+            }
+            completion()
         }
+    }
+
+    func showDiscoverMore() {
+        onTapTileAction?(Pocket.MoreStoriesURL)
     }
 }
 
@@ -120,20 +139,20 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+            heightDimension: .estimated(FxPocketHomeHorizontalCell.UX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: FxHomePocketViewModel.widthDimension,
-            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+            heightDimension: .estimated(FxPocketHomeHorizontalCell.UX.cellHeight)
         )
 
         let subItems = Array(repeating: item, count: UX.numberOfItemsInColumn)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
+        group.interItemSpacing = FxPocketHomeHorizontalCell.UX.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
+                                                      bottom: 0, trailing: FxPocketHomeHorizontalCell.UX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -142,6 +161,9 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
         section.boundarySupplementaryItems = [header]
+        section.visibleItemsInvalidationHandler = { (visibleItems, point, env) -> Void in
+            self.onScroll?()
+        }
 
         let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
@@ -164,13 +186,11 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     var hasData: Bool {
-        return !pocketStories.isEmpty
+        return !pocketStoriesViewModels.isEmpty
     }
 
     func updateData(completion: @escaping () -> Void) {
-        getPocketSites().uponQueue(.main) { _ in
-            completion()
-        }
+        getPocketSites(completion: completion)
     }
 }
 
@@ -183,16 +203,9 @@ extension FxHomePocketViewModel: FxHomeSectionHandler {
         recordSectionHasShown()
 
         if isStoryCell(index: indexPath.row) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxHomeHorizontalCell
-            let pocketStory = pocketStories[indexPath.row]
-            let cellViewModel = FxHomeHorizontalCellViewModel(titleText: pocketStory.title,
-                                                              descriptionText: domainAndReadingTimeForStory(atIndex: indexPath.row),
-                                                              tag: indexPath.item,
-                                                              hasFavicon: false)
-
-            cell.configure(viewModel: cellViewModel)
-            cell.setFallBackFaviconVisibility(isHidden: true)
-            cell.heroImage.sd_setImage(with: pocketStory.imageURL)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxPocketHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxPocketHomeHorizontalCell
+            cell.configure(viewModel: pocketStoriesViewModels[indexPath.row])
+            cell.tag = indexPath.item
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomePocketDiscoverMoreCell.cellIdentifier, for: indexPath) as! FxHomePocketDiscoverMoreCell
@@ -211,16 +224,11 @@ extension FxHomePocketViewModel: FxHomeSectionHandler {
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
 
-        guard let showSiteWithURLHandler = onTapTileAction else { return }
-
         if isStoryCell(index: indexPath.row) {
-            recordTapOnStory(index: indexPath.row)
-
-            let siteUrl = pocketStories[indexPath.row].url
-            showSiteWithURLHandler(siteUrl)
+            pocketStoriesViewModels[indexPath.row].onTap(indexPath)
 
         } else {
-            showSiteWithURLHandler(Pocket.MoreStoriesURL)
+            showDiscoverMore()
         }
     }
 

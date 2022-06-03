@@ -46,9 +46,9 @@ class FxHomePocketDiscoverMoreCell: UICollectionViewCell, ReusableCell {
     // MARK: - Helpers
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = FxHomeHorizontalCellUX.generalCornerRadius
-        contentView.layer.shadowRadius = FxHomeHorizontalCellUX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: FxHomeHorizontalCellUX.stackViewShadowOffset)
+        contentView.layer.cornerRadius = FxPocketHomeHorizontalCell.UX.generalCornerRadius
+        contentView.layer.shadowRadius = FxPocketHomeHorizontalCell.UX.stackViewShadowRadius
+        contentView.layer.shadowOffset = CGSize(width: 0, height: FxPocketHomeHorizontalCell.UX.stackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
 

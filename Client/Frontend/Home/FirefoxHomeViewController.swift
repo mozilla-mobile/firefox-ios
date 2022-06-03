@@ -253,6 +253,31 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
     }
 
+    func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
+        guard let window = UIWindow.keyWindow else { return }
+        for cell in cells {
+            // For every story cell get it's frame relative to the window
+            let targetRect = cell.superview.map { window.convert(cell.frame, from: $0) } ?? .zero
+
+            // TODO: If visibility ratio is over 50% sponsored content can be marked as seen by the user
+            let _ = targetRect.visibilityRatio(relativeTo: relativeRect)
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Find visible pocket cells that holds pocket stories
+        let cells = self.collectionView.visibleCells.filter { $0.reuseIdentifier == FxPocketHomeHorizontalCell.cellIdentifier }
+
+        // Relative frame is the collectionView frame plus the status bar height
+        let relativeRect = CGRect(
+            x: collectionView.frame.minX,
+            y: collectionView.frame.minY,
+            width: collectionView.frame.width,
+            height: collectionView.frame.height + UIWindow.statusBarHeight
+        )
+        updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: relativeRect)
+    }
+
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
@@ -446,6 +471,12 @@ private extension FirefoxHomeViewController {
 
         viewModel.pocketViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
             self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .pocket)
+        }
+
+        viewModel.pocketViewModel.onScroll = { [weak self] in
+            guard let window = UIWindow.keyWindow, let self = self else { return }
+            let cells = self.collectionView.visibleCells.filter { $0.reuseIdentifier == FxPocketHomeHorizontalCell.cellIdentifier }
+            self.updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: window.bounds)
         }
 
         // Customize home

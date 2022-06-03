@@ -67,7 +67,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     // The dimension of a cell
     static var widthDimension: NSCollectionLayoutDimension {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
+            return .absolute(FxHomeHorizontalCell.UX.cellWidth) // iPad
         } else if UIWindow.isLandscape {
             return .fractionalWidth(UX.iPhoneLandscapeCellWidth) // iPhone in landscape
         } else {
@@ -247,22 +247,22 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+            heightDimension: .estimated(FxHomeHorizontalCell.UX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: FirefoxHomeJumpBackInViewModel.widthDimension,
-            heightDimension: .estimated(FxHomeHorizontalCellUX.cellHeight)
+            heightDimension: .estimated(FxHomeHorizontalCell.UX.cellHeight)
         )
 
         let itemsNumber = numberOfItemsInSection(for: traitCollection)
         let count = min(FirefoxHomeJumpBackInViewModel.maxNumberOfItemsInColumn, itemsNumber)
         let subItems = Array(repeating: item, count: count)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = FxHomeHorizontalCellUX.interItemSpacing
+        group.interItemSpacing = FxHomeHorizontalCell.UX.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
+                                                      bottom: 0, trailing: FxHomeHorizontalCell.UX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
