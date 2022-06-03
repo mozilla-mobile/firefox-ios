@@ -94,34 +94,33 @@ class FxHomePocketViewModel {
 
     // MARK: - Private
 
-    private func getPocketSites() -> Success {
+    private func getPocketSites(completion: @escaping () -> Void) {
         pocketAPI
             .globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
-            .both(pocketAPI.sponsoredFeed())
-            .bindQueue(.main) { [weak self] global, sponsored in
-                // Convert global feed to PocketStory
-                var globalTemp = global.map(PocketStory.init)
+            .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
+                var globalTemp = pocketStory.map(PocketStory.init)
+                self?.pocketAPI.sponsoredFeed().uponQueue(.main) { sponsored in
+                    if self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true {
+                        // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+                        var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
 
-                if self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true {
-                    // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                    var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
+                        // Making sure we insert a sponsored story at a valid index
+                        let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
+                        sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
+                        sponsoredTemp.removeFirst()
 
-                    // Making sure we insert a sponsored story at a valid index
-                    let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-                    sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
-                    sponsoredTemp.removeFirst()
+                        let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
+                        sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
+                        sponsoredTemp.removeFirst()
+                    }
 
-                    let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-                    sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
-                    sponsoredTemp.removeFirst()
+                    self?.pocketStoriesViewModels = []
+                    // Add the story in the view models list
+                    for story in globalTemp {
+                        self?.bind(pocketStoryViewModel: .init(story: story))
+                    }
+                    completion()
                 }
-
-                self?.pocketStoriesViewModels = []
-                // Add the story in the view models list
-                for story in globalTemp {
-                    self?.bind(pocketStoryViewModel: .init(story: story))
-                }
-                return succeed()
             }
     }
 
@@ -151,9 +150,7 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     func updateData(completion: @escaping () -> Void) {
-        getPocketSites().uponQueue(.main) { _ in
-            completion()
-        }
+        getPocketSites(completion: completion)
     }
 
     var shouldReloadSection: Bool { return true }
