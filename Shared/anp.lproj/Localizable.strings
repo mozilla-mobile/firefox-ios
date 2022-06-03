@@ -19,6 +19,9 @@
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite" = "शीर्ष साइट्स पर पिन करोॅ";
 
+/* The title for removing a shortcut action */
+"ActivityStream.ContextMenu.RemoveFromShortcuts" = "शॉर्टकट से हटाबोॅ";
+
 /* The title for removing a pinned topsite action */
 "ActivityStream.ContextMenu.RemovePinTopsite" = "पिन करल साइट हटाबोॅ";
 
@@ -27,6 +30,9 @@
 
 /* The description of a highlight if it is a site the user has visited */
 "ActivityStream.Highlights.Visited" = "देखलोॅ गेल";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "हाल में सहेजल गेल";
 
 /* Section title label for recently bookmarked websites */
 "ActivityStream.NewRecentBookmarks.Title" = "हाल केॅ बुकमार्कस";
@@ -42,6 +48,12 @@
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "हाल में देखलोॅ गेल";
+
+/* Section title for the Recently Saved section. This shows websites that have had a save action. Right now it is just bookmarks but it could be used for other things like the reading list in the future. */
+"ActivityStream.RecentlySaved.SectionTitle" = "हाल में सहेजल गेल";
+
+/* When long pressing an item in the Recently Visited section, this is the title of the button that appears, letting the user know to remove that particular item from the menu. */
+"ActivityStream.RecentlyVisited.RemoveButton.Title" = "हटैइयै";
 
 /* label showing how many rows of topsites are shown. %d represents a number */
 "ActivityStream.TopSites.RowCount" = "पंक्ति: %d";
@@ -104,6 +116,9 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "बुकमार्कस";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "जोड़ियै";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "संपादित करोॅ";
 
@@ -121,6 +136,9 @@
 
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "फोल्डर रो नाम";
+
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "डेस्कटॉप बुकमार्कस";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "नया बुकमार्क";
@@ -212,6 +230,9 @@
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "नया टैब में खोलोॅ";
 
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenLinkInNewTabButtonTitle" = "लिंक नया टैब मे खोलियै";
+
 /* Context menu item for saving an image */
 "ContextMenu.SaveImageButtonTitle" = "चित्र सहेजोॅ";
 
@@ -249,6 +270,9 @@
    Title for default search engine picker.
    Title for default search engine settings section. */
 "Default Search Engine" = "डिफॉल्ट सर्च इंजन";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "बंद करियै";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "डिसप्ले सेटिंग्स";
@@ -339,6 +363,12 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefox होम पेज";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "हटैइयै";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "सेटिंग्स";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "आगू बढ़ावोॅ";
@@ -463,6 +493,9 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "हाल में बंद करलोॅ गेल";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "होम";
+
 /* Button cancelling changes setting the home page for the first time. */
 "HomePage.Set.Dialog.Cancel" = "रद्द करोॅ";
 
@@ -480,6 +513,9 @@
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "नया गोपनीय टैब मे खोलियै";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "नया गोपनीय टैब में खोलियै";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "नया टैब मे खोलियै";
@@ -534,6 +570,9 @@
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "अभी तुरंत";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "लिंक डाउनलोड करियै";
 
 /* History tableview section header */
 "Last month" = "अंतिम महिना";
