@@ -333,7 +333,7 @@
 "Dark" = "Tmavé";
 
 /* Accessibility label for button decreasing font size in display settings of reader mode */
-"Decrease text size" = "Zmenšit velikost písma";
+"Decrease text size" = "Zmenšit písmo";
 
 /* Accessibility label for default search engine setting.
    Title for default search engine picker.
@@ -710,7 +710,7 @@
 "InactiveTabs.TabTray.CloseButtonTitle" = "Zavřít všechny neaktivní panely";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
-"Increase text size" = "Zvětšit velikost písma";
+"Increase text size" = "Zvětšit písmo";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "právě teď";

@@ -1,24 +1,24 @@
 /* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
-"Add to Bookmarks" = "Adder marcapaginas";
+"Add to Bookmarks" = "Adder al marcapaginas";
 
 /* Label for preview action on Tab Tray Tab to close the current tab */
-"Close Tab" = "Clauder le scheda";
+"Close Tab" = "Clauder scheda";
 
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
-"Copy URL" = "Copiar le URL";
+"Copy URL" = "Copiar URL";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
 "Menu.SendLinkToDevice" = "Inviar le ligamine a un apparato";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
-"Open Last Bookmark" = "Aperir le ultime marcapaginas";
+"Open Last Bookmark" = "Aperir ultime marcapagina";
 
 /* String describing the action of opening the last tab sent to Firefox from the home screen Quick Actions via 3D Touch */
-"Open Last Tab" = "Aperir le ultime scheda";
+"Open Last Tab" = "Aperir ultime scheda";
 
 /* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
 "Preview of %@" = "Vista preliminar de %@";
 
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
-"Send to Device" = "Inviar al apparato";
+"Send to Device" = "Inviar a un apparato";
 

@@ -30,6 +30,12 @@ enum ReferringPage {
     case tabTray
 }
 
+protocol BrowserBarViewDelegate: AnyObject {
+    var inOverlayMode: Bool { get }
+
+    func leaveOverlayMode(didCancel cancel: Bool)
+}
+
 class BrowserViewController: UIViewController {
 
     private enum UX {
@@ -374,7 +380,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         KeyboardHelper.defaultHelper.addDelegate(self)
-
+        trackAccessibility()
         setupNotifications()
         addSubviews()
 
@@ -858,6 +864,7 @@ class BrowserViewController: UIViewController {
                 isZeroSearch: !inline)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self
+            firefoxHomeViewController.browserBarViewDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController
             addChild(firefoxHomeViewController)
             view.addSubview(firefoxHomeViewController.view)
@@ -2593,6 +2600,46 @@ extension BrowserViewController: FeatureFlaggable {
 
 extension BrowserViewController {
     public static func foregroundBVC() -> BrowserViewController {
-        return (UIApplication.shared.delegate as! AppDelegate).browserViewController
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let browserViewController = appDelegate.browserViewController else {
+            fatalError("Unable unwrap BrowserViewController")
+        }
+
+        return browserViewController
+    }
+}
+
+extension BrowserViewController: BrowserBarViewDelegate {
+    var inOverlayMode: Bool {
+        return urlBar.inOverlayMode
+    }
+
+    func leaveOverlayMode(didCancel cancel: Bool) {
+        urlBar.leaveOverlayMode(didCancel: cancel)
+    }
+}
+
+extension BrowserViewController {
+    func trackAccessibility() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .voiceOver,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isVoiceOverRunning.rawValue: UIAccessibility.isVoiceOverRunning.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .switchControl,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isSwitchControlRunning.rawValue: UIAccessibility.isSwitchControlRunning.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .reduceTransparency,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isReduceTransparencyEnabled.rawValue: UIAccessibility.isReduceTransparencyEnabled.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .reduceMotion,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isReduceMotionEnabled.rawValue: UIAccessibility.isReduceMotionEnabled.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .invertColors,
+                                     object: .app,
+                                     extras: [TelemetryWrapper.EventExtraKey.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description])
     }
 }

@@ -31,17 +31,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
     var rootViewController: UIViewController!
-    weak var profile: Profile?
     var tabManager: TabManager!
     var applicationCleanlyBackgrounded = true
-    var shutdownWebServer: DispatchSourceTimer?
-    var orientationLock = UIInterfaceOrientationMask.all
-    weak var application: UIApplication?
-    var launchOptions: [AnyHashable: Any]?
-
     var receivedURLs = [URL]()
-    var telemetry: TelemetryWrapper?
-    var adjustHelper: AdjustHelper?
+
+    weak var profile: Profile?
+    weak var application: UIApplication?
+
+    private var shutdownWebServer: DispatchSourceTimer?
+    private var orientationLock = UIInterfaceOrientationMask.all
+    private var launchOptions: [AnyHashable: Any]?
+    private var telemetry: TelemetryWrapper?
+    private var adjustHelper: AdjustHelper?
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
@@ -76,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return startApplication(application, withLaunchOptions: launchOptions)
     }
 
-    func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
+    private func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
         log.info("startApplication begin")
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
@@ -291,7 +292,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return shouldPerformAdditionalDelegateHandling
     }
 
-    func updateSessionCount() {
+    private func updateSessionCount() {
         var sessionCount: Int32 = 0
 
         // Get the session count from preferences
