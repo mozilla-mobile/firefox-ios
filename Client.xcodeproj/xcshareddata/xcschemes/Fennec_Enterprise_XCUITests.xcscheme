@@ -212,6 +212,12 @@
          <TestPlanReference
             reference = "container:XCUITests/UnitTest.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Smoketest3.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Smoketest4.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference

@@ -4,11 +4,11 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THREESHOLD_UNIT_TEST=140
-THREESHOLD_XCUITEST=140
+THREESHOLD_UNIT_TEST=350
+THREESHOLD_XCUITEST=350
 
 
-WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|ld: warning:|<unknown>:0: warning:|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`
+WARNING_COUNT=`egrep '^(\/.+:[0-9+:[0-9]+:.|warning:|⚠️|ld: warning:|<unknown>:0: warning:|fatal|===)' "$BUILD_LOG_FILE" | uniq | wc -l`
 
 if  [ $2 == "unit-test" ]; then
     if [ $WARNING_COUNT -ge $THREESHOLD_UNIT_TEST ]; then

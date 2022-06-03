@@ -20,9 +20,10 @@
       }
     },
     {
-      "enabled" : false,
       "skippedTests" : [
         "ETPCoverSheetTests",
+        "TabManagerTests\/testDeleteSelectedTab()",
+        "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
         "TestFavicons\/testFaviconFetcherParse()"
       ],
       "target" : {
@@ -40,8 +41,7 @@
     },
     {
       "skippedTests" : [
-        "RustLoginsTests",
-        "TestSQLiteHistory\/testHistoryTable()"
+        "RustLoginsTests\/testUpdateLogin()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
@@ -58,8 +58,11 @@
     },
     {
       "skippedTests" : [
-        "MetaGlobalTests",
-        "StateTests"
+        "MetaGlobalTests\/testHappyOptimisticStateMachine()",
+        "MetaGlobalTests\/testMetaGlobalAndCryptoKeysFresh()",
+        "MetaGlobalTests\/testMetaGlobalModified()",
+        "MetaGlobalTests\/testUpdatedCryptoKeys()",
+        "StateTests\/testPickling()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
