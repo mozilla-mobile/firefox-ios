@@ -97,10 +97,11 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(group: ASGroup<Tab>) {
-        guard let delegate = browserBarViewDelegate, delegate.inOverlayMode else {
-            return
+        guard let delegate = browserBarViewDelegate else { return }
+
+        if delegate.inOverlayMode {
+            delegate.leaveOverlayMode(didCancel: false)
         }
-        delegate.leaveOverlayMode(didCancel: false)
 
         guard let firstTab = group.groupedItems.first else { return }
 
@@ -116,10 +117,11 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(tab: Tab) {
-        guard let delegate = browserBarViewDelegate, delegate.inOverlayMode else {
-            return
+        guard let delegate = browserBarViewDelegate else { return }
+
+        if delegate.inOverlayMode {
+            delegate.leaveOverlayMode(didCancel: false)
         }
-        delegate.leaveOverlayMode(didCancel: false)
 
         tabManager.selectTab(tab, previous: nil)
         TelemetryWrapper.recordEvent(

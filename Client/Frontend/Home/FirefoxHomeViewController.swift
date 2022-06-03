@@ -16,7 +16,12 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    weak var browserBarViewDelegate: BrowserBarViewDelegate?
+    weak var browserBarViewDelegate: BrowserBarViewDelegate? {
+        didSet {
+            viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
+        }
+    }
+
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     private var isZeroSearch: Bool
@@ -55,7 +60,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         self.viewModel = FirefoxHomeViewModel(profile: profile,
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate)
-        self.viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
+
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
