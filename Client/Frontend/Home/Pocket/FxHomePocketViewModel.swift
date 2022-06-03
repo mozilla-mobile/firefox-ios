@@ -10,7 +10,6 @@ class FxHomePocketViewModel {
 
     // MARK: - Properties
 
-    private let profile: Profile
     private let pocketAPI = Pocket()
 
     private let isZeroSearch: Bool
@@ -18,13 +17,27 @@ class FxHomePocketViewModel {
 
     var onTapTileAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
+    var onScroll: (([UICollectionViewCell]) -> Void)?
 
-    init(profile: Profile, isZeroSearch: Bool) {
-        self.profile = profile
+    private(set) var pocketStoriesViewModels: [FxPocketHomeHorizontalCellViewModel] = []
+
+    init(pocketStoriesViewModel: [FxPocketHomeHorizontalCellViewModel] = [], isZeroSearch: Bool) {
         self.isZeroSearch = isZeroSearch
+        self.pocketStoriesViewModels = pocketStoriesViewModel
+        for pocketStoryViewModel in pocketStoriesViewModel {
+            bind(pocketStoryViewModel: pocketStoryViewModel)
+        }
     }
 
-    var pocketStories: [PocketStory] = []
+    private func bind(pocketStoryViewModel: FxPocketHomeHorizontalCellViewModel) {
+        pocketStoryViewModel.onTap = { [weak self] indexPath in
+            self?.recordTapOnStory(index: indexPath.row)
+            let siteUrl = self?.pocketStoriesViewModels[indexPath.row].url
+            siteUrl.map { self?.onTapTileAction?($0) }
+        }
+
+        pocketStoriesViewModels.append(pocketStoryViewModel)
+    }
 
     // The dimension of a cell
     // Fractions for iPhone to only show a slight portion of the next column
@@ -39,7 +52,7 @@ class FxHomePocketViewModel {
     }
 
     var numberOfCells: Int {
-        return pocketStories.count != 0 ? pocketStories.count + 1 : 0
+        return pocketStoriesViewModels.count != 0 ? pocketStoriesViewModels.count + 1 : 0
     }
 
     static var numberOfItemsInColumn: CGFloat {
@@ -47,12 +60,12 @@ class FxHomePocketViewModel {
     }
 
     func isStoryCell(index: Int) -> Bool {
-        return index < pocketStories.count
+        return index < pocketStoriesViewModels.count
     }
 
     func getSitesDetail(for index: Int) -> Site {
         if isStoryCell(index: index) {
-            return Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+            return Site(url: pocketStoriesViewModels[index].url?.absoluteString ?? "", title: pocketStoriesViewModels[index].title)
         } else {
             return Site(url: Pocket.MoreStoriesURL.absoluteString, title: .FirefoxHomepage.Pocket.DiscoverMore)
         }
@@ -79,20 +92,23 @@ class FxHomePocketViewModel {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: extras)
     }
 
-    func domainAndReadingTimeForStory(atIndex: Int) -> String {
-        let pocketStory = pocketStories[atIndex]
-        let domainAndReadingTime = "\(pocketStory.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, pocketStory.timeToRead))"
-
-        return domainAndReadingTime
-    }
-
     // MARK: - Private
 
-    private func getPocketSites() -> Success {
-        return pocketAPI.globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection).bindQueue(.main) { pocketStory in
-            self.pocketStories = pocketStory
-            return succeed()
+    private func getPocketSites(completion: @escaping () -> Void) {
+        pocketAPI
+            .globalFeed(items: FxHomePocketCollectionCellUX.numberOfItemsInSection)
+            .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
+            let globalTemp = pocketStory.map(PocketStory.init)
+            self?.pocketStoriesViewModels = []
+            for story in globalTemp {
+                self?.bind(pocketStoryViewModel: .init(story: story))
+            }
+            completion()
         }
+    }
+
+    func showDiscoverMore() {
+        onTapTileAction?(Pocket.MoreStoriesURL)
     }
 }
 
@@ -113,13 +129,11 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     var hasData: Bool {
-        return !pocketStories.isEmpty
+        return !pocketStoriesViewModels.isEmpty
     }
 
     func updateData(completion: @escaping () -> Void) {
-        getPocketSites().uponQueue(.main) { _ in
-            completion()
-        }
+        getPocketSites(completion: completion)
     }
 
     var shouldReloadSection: Bool { return true }
