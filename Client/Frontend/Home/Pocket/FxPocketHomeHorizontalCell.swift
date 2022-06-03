@@ -143,6 +143,10 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
         titleLabel.textColor = .defaultTextColor
         descriptionLabel.textColor = viewModel.sponsor == nil ? .defaultTextColor : .sponsoredDescriptionColor
+
+        if viewModel.sponsor != nil {
+            configureSponsoredStack()
+        }
     }
 
     private func setupLayout() {
@@ -153,21 +157,12 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
 
-        contentView.addSubviews(titleLabel, sponsoredStack, descriptionLabel, heroImageView)
+        contentView.addSubviews(titleLabel, descriptionLabel, heroImageView)
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: heroImageView.trailingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-
-            sponsoredIconContainer.centerYAnchor.constraint(equalTo: sponsoredIcon.centerYAnchor),
-            sponsoredIconContainer.leadingAnchor.constraint(equalTo: sponsoredIcon.leadingAnchor),
-            sponsoredIconContainer.trailingAnchor.constraint(equalTo: sponsoredIcon.trailingAnchor),
-
-            sponsoredStack.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: 8),
-            sponsoredStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            sponsoredStack.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            sponsoredStack.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -4),
 
             heroImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             heroImageView.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
@@ -179,6 +174,20 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+        ])
+    }
+
+    private func configureSponsoredStack() {
+        contentView.addSubview(sponsoredStack)
+        NSLayoutConstraint.activate([
+            sponsoredIconContainer.centerYAnchor.constraint(equalTo: sponsoredIcon.centerYAnchor),
+            sponsoredIconContainer.leadingAnchor.constraint(equalTo: sponsoredIcon.leadingAnchor),
+            sponsoredIconContainer.trailingAnchor.constraint(equalTo: sponsoredIcon.trailingAnchor),
+
+            sponsoredStack.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: 8),
+            sponsoredStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            sponsoredStack.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            sponsoredStack.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -4),
         ])
 
         sponsoredImageCenterConstraint = sponsoredLabel.centerYAnchor.constraint(equalTo: sponsoredIconContainer.centerYAnchor).priority(UILayoutPriority(999))
