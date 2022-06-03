@@ -189,11 +189,16 @@ extension FxHomeTopSitesViewModelTests {
 }
 
 // MARK: FakeTraitCollection
-private class FakeTraitCollection: UITraitCollection {
+class FakeTraitCollection: UITraitCollection {
 
     var overridenHorizontalSizeClass: UIUserInterfaceSizeClass = .regular
     override var horizontalSizeClass: UIUserInterfaceSizeClass {
         return overridenHorizontalSizeClass
+    }
+
+    var overridenVerticalSizeClass: UIUserInterfaceSizeClass = .regular
+    override var verticalSizeClass: UIUserInterfaceSizeClass {
+        return overridenVerticalSizeClass
     }
 }
 

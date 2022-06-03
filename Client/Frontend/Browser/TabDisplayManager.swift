@@ -493,13 +493,19 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if let _ = tabGroups {
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier, for: indexPath) as! ASHeaderView
-            view.remakeConstraint(type: .otherGroupTabs)
+        if let _ = tabGroups,
+           let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                      withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
+                                                                      for: indexPath) as? ASHeaderView {
+
+            let viewModel = ASHeaderViewModel(leadingInset: 15,
+                                              title: .TabTrayOtherTabsSectionHeader,
+                                              titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
+                                              isButtonHidden: true)
+
+            view.configure(viewModel: viewModel)
             view.title = .TabTrayOtherTabsSectionHeader
             view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
-            view.moreButton.isHidden = true
-            view.titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.filteredTabs
 
             return view
         }

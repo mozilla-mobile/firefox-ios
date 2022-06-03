@@ -5,21 +5,30 @@
 import MozillaAppServices
 
 protocol FirefoxHomeViewModelDelegate: AnyObject {
-    func reloadSection(index: Int?)
+    func reloadSection(section: FXHomeViewModelProtocol)
 }
 
 class FirefoxHomeViewModel: FeatureFlaggable {
+
     struct UX {
-        static let topSitesHeight: CGFloat = 90
-        static let homeHorizontalCellHeight: CGFloat = 120
-        static let recentlySavedCellHeight: CGFloat = 136
-        static let historyHighlightsCellHeight: CGFloat = 68
-        static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 15)
-        static let spacingBetweenSections: CGFloat = 24
-        static let sectionInsetsForIpad: CGFloat = 101
-        static let minimumInsets: CGFloat = 15
-        static let customizeHomeHeight: CGFloat = 100
-        static let logoHeaderHeight: CGFloat = 85
+        static let spacingBetweenSections: CGFloat = 32
+        static let standardInset: CGFloat = 18
+        static let iPadInset: CGFloat = 50
+        static let iPadTopSiteInset: CGFloat = 25
+
+        static func leadingInset(traitCollection: UITraitCollection) -> CGFloat {
+            guard UIDevice.current.userInterfaceIdiom != .phone else { return standardInset }
+
+            // Handles multitasking on iPad
+            return traitCollection.horizontalSizeClass == .regular ? iPadInset : standardInset
+        }
+
+        static func topSiteLeadingInset(traitCollection: UITraitCollection) -> CGFloat {
+            guard UIDevice.current.userInterfaceIdiom != .phone else { return 0 }
+
+            // Handles multitasking on iPad
+            return traitCollection.horizontalSizeClass == .regular ? iPadTopSiteInset : 0
+        }
     }
 
     // MARK: - Properties
@@ -37,14 +46,14 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     let nimbus: FxNimbus
     let profile: Profile
     var isZeroSearch: Bool
-    var enabledSections = [FirefoxHomeSectionType]()
+    var shownSections = [FirefoxHomeSectionType]()
     weak var delegate: FirefoxHomeViewModelDelegate?
 
     // Child View models
     private var childViewModels: [FXHomeViewModelProtocol]
     var headerViewModel: FxHomeLogoHeaderViewModel
     var topSiteViewModel: FxHomeTopSitesViewModel
-    var recentlySavedViewModel: FirefoxHomeRecentlySavedViewModel
+    var recentlySavedViewModel: FxHomeRecentlySavedViewModel
     var jumpBackInViewModel: FirefoxHomeJumpBackInViewModel
     var historyHighlightsViewModel: FxHomeHistoryHightlightsViewModel
     var pocketViewModel: FxHomePocketViewModel
@@ -66,7 +75,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
             isZeroSearch: isZeroSearch,
             profile: profile,
             isPrivate: isPrivate)
-        self.recentlySavedViewModel = FirefoxHomeRecentlySavedViewModel(
+        self.recentlySavedViewModel = FxHomeRecentlySavedViewModel(
             isZeroSearch: isZeroSearch,
             profile: profile)
         self.historyHighlightsViewModel = FxHomeHistoryHightlightsViewModel(
@@ -86,36 +95,89 @@ class FirefoxHomeViewModel: FeatureFlaggable {
 
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
+
+        updateEnabledSections()
     }
 
     // MARK: - Interfaces
 
+    func recordViewAppeared() {
+        nimbus.features.homescreenFeature.recordExposure()
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .firefoxHomepage,
+                                     value: .fxHomepageOrigin,
+                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+    }
+
+    // MARK: - Fetch section data
+
     func updateData() {
         childViewModels.forEach { section in
             guard section.isEnabled else { return }
-            self.update(section: section)
+            self.updateData(section: section)
         }
+    }
+
+    private func updateData(section: FXHomeViewModelProtocol) {
+        section.updateData {
+            // Once section has data loaded with new data, we check if it needs to show
+            guard section.shouldShow else { return }
+
+            self.delegate?.reloadSection(section: section)
+        }
+    }
+
+    // MARK: - Manage sections and order
+
+    /// Add the section if it doesn't
+    func reloadSection(_ section: FXHomeViewModelProtocol, with collectionView: UICollectionView) {
+        if !shownSections.contains(section.sectionType) {
+            addShownSection(section: section.sectionType)
+        }
+
+        collectionView.reloadData()
+    }
+
+    func addShownSection(section: FirefoxHomeSectionType) {
+        let positionToInsert = getPositionToInsert(section: section)
+        if positionToInsert >= shownSections.count {
+            shownSections.append(section)
+        } else {
+            shownSections.insert(section, at: positionToInsert)
+        }
+    }
+
+    func removeShownSection(section: FirefoxHomeSectionType) {
+        if let index = shownSections.firstIndex(of: section) {
+            shownSections.remove(at: index)
+        }
+    }
+
+    func getPositionToInsert(section: FirefoxHomeSectionType) -> Int {
+        let indexes = shownSections.filter { $0.rawValue < section.rawValue }
+        return indexes.count
     }
 
     func updateEnabledSections() {
-        enabledSections.removeAll()
+        shownSections.removeAll()
 
         childViewModels.forEach {
-            if $0.shouldShow { enabledSections.append($0.sectionType) }
+            if $0.shouldShow { shownSections.append($0.sectionType) }
         }
     }
 
-    private func update(section: FXHomeViewModelProtocol) {
-        section.updateData {
-            guard section.shouldReloadSection else { return }
-            let index = self.enabledSections.firstIndex(of: section.sectionType)
-            self.delegate?.reloadSection(index: index)
-        }
+    // MARK: - Section ViewModel helper
+
+    func getSectionViewModel(shownSection: Int) -> FXHomeViewModelProtocol? {
+        let actualSectionNumber = shownSections[shownSection].rawValue
+        return childViewModels[safe: actualSectionNumber]
     }
 }
 
+// MARK: - FxHomeTopSitesViewModelDelegate
 extension FirefoxHomeViewModel: FxHomeTopSitesViewModelDelegate {
     func reloadTopSites() {
-        update(section: topSiteViewModel)
+        updateData(section: topSiteViewModel)
     }
 }

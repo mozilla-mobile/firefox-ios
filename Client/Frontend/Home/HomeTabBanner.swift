@@ -20,9 +20,23 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         static let cardSize = CGSize(width: 360, height: 224)
         static let logoSize = CGSize(width: 64, height: 64)
         static let learnHowButtonSize: CGSize = CGSize(width: 304, height: 44)
+        static let textSpacing: CGFloat = 10
+        static let cardCornerRadius: CGFloat = 12
+        static let dismissButtonSize = CGSize(width: 16, height: 16)
+        static let dismissButtonSpacing: CGFloat = 12
+        static let standardSpacing: CGFloat = 16
+        static let buttonCornerRadius: CGFloat = 8
+        static let bannerTitleMaxFontSize: CGFloat = 55
+        static let descriptionTextMaxFontSize: CGFloat = 49
+        static let buttonMaxFontSize: CGFloat = 53
+        static let buttonEdgeSpacing: CGFloat = 16
+        static let bottomCardSafeSpace: CGFloat = 8
     }
 
     // MARK: - Properties
+
+    private var heightConstraint: NSLayoutConstraint?
+    private var maxHeight: CGFloat = CGFloat.greatestFiniteMagnitude
 
     public var dismissClosure: (() -> Void)?
     var message: GleanPlumbMessage?
@@ -31,26 +45,33 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
     private lazy var bannerTitle: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
+                                                                       maxSize: UX.bannerTitleMaxFontSize)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var descriptionText: UILabel = .build { label in
-        label.numberOfLines = 4
+        label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                   maxSize: UX.descriptionTextMaxFontSize)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var ctaButton: UIButton = .build { [weak self] button in
         button.backgroundColor = UIColor.Photon.Blue50
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = 8
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+                                                                                    maxSize: UX.buttonMaxFontSize)
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.layer.masksToBounds = true
         button.accessibilityIdentifier = a11y.ctaButton
         button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: UX.buttonEdgeSpacing,
+                                                bottom: 0, right: UX.buttonEdgeSpacing)
+        button.makeDynamicHeightSupport()
     }
 
     private lazy var image: UIImageView = .build { imageView in
@@ -70,11 +91,18 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         stackView.addArrangedSubview(self.bannerTitle)
         stackView.addArrangedSubview(self.descriptionText)
         stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = -16
+        stackView.alignment = .fill
+        stackView.distribution = .fillProportionally
+        stackView.spacing = UX.textSpacing
     }
 
-    private lazy var scrollView: UIScrollView = .build { view in
+    private lazy var cardView: UIView = .build { view in
+        view.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
+        view.layer.cornerRadius = UX.cardCornerRadius
+        view.layer.masksToBounds = true
+    }
+
+    private lazy var scrollView: FadeScrollView = .build { view in
         view.backgroundColor = .clear
     }
 
@@ -82,26 +110,26 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         view.backgroundColor = .clear
     }
 
-    private lazy var cardView: UIView = .build { view in
-        view.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
-        view.layer.cornerRadius = 12
-        view.layer.masksToBounds = true
-    }
-
     // MARK: - Inits
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.message = messagingManager.getNextMessage(for: .newTabCard)
-
         setupLayout()
-        applyMessage()
+
+        message = messagingManager.getNextMessage(for: .newTabCard)
+        if let message = message {
+            applyGleanMessage(message)
+        } else {
+            applyDefaultCard()
+        }
     }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Layout
 
     private func setupLayout() {
         cardView.addSubviews(ctaButton, image, textStackView, dismissButton)
@@ -132,48 +160,78 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
             contentGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             contentGuide.widthAnchor.constraint(equalTo: frameGuide.widthAnchor),
 
-            cardView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
-            cardView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),
-            cardView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor, constant: 20),
-            cardView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -20),
+            cardView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.standardSpacing),
+            cardView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.bottomCardSafeSpace),
+            cardView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor, constant: UX.standardSpacing),
+            cardView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -UX.standardSpacing),
             cardView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             cardView.widthAnchor.constraint(equalToConstant: UX.cardSize.width),
-            cardView.heightAnchor.constraint(equalToConstant: UX.cardSize.height),
 
-            image.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 48),
-            image.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            image.centerYAnchor.constraint(equalTo: textStackView.centerYAnchor),
+            image.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
             image.widthAnchor.constraint(equalToConstant: UX.logoSize.width),
             image.heightAnchor.constraint(equalToConstant: UX.logoSize.height),
 
             textStackView.topAnchor.constraint(equalTo: dismissButton.bottomAnchor),
-            textStackView.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16),
-            textStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            textStackView.bottomAnchor.constraint(equalTo: ctaButton.topAnchor, constant: -8),
+            textStackView.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: UX.standardSpacing),
+            textStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
+            textStackView.bottomAnchor.constraint(equalTo: ctaButton.topAnchor, constant: -UX.standardSpacing),
 
-            dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 8),
-            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -8),
-            dismissButton.heightAnchor.constraint(equalToConstant: 16),
-            dismissButton.widthAnchor.constraint(equalToConstant: 16),
+            dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.dismissButtonSpacing),
+            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.dismissButtonSpacing),
+            dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
+            dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
 
-            ctaButton.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
-            ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -8),
-            ctaButton.widthAnchor.constraint(equalToConstant: UX.learnHowButtonSize.width),
-            ctaButton.heightAnchor.constraint(equalToConstant: UX.learnHowButtonSize.height)
+            ctaButton.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.standardSpacing),
+            ctaButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
+            ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.standardSpacing),
+            ctaButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.learnHowButtonSize.height),
         ])
+
+        heightConstraint = heightAnchor.constraint(equalToConstant: 999)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // Set the view height based on card height, needed since we have dynamic height
+        // of a scroll view in a stack view
+        guard cardView.frame.height != 0 else { return }
+
+        let idealHeight = cardView.frame.height + UX.standardSpacing + UX.bottomCardSafeSpace
+        let newHeight = min(maxHeight, idealHeight)
+
+        heightConstraint?.constant = newHeight
+        heightConstraint?.isActive = true
+    }
+
+    // Currently limiting the banner height so user can still access the collection view (on bigger font sizes)
+    // If banner content is greater than max threshold, the banner will scroll
+    func adjustMaxHeight(_ maxHeight: CGFloat) {
+        self.maxHeight = maxHeight
+    }
+
+    func applyTheme() {
+        cardView.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
+        bannerTitle.textColor = UIColor.theme.homeTabBanner.textColor
+        descriptionText.textColor = UIColor.theme.homeTabBanner.textColor
+        dismissButton.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
+        backgroundColor = .clear
+    }
+
+    // MARK: - Message setup
+
+    /// Default card (evergreen message) is applied when there's no GleanPlumbMessage available
+    private func applyDefaultCard() {
+        bannerTitle.text = BannerCopy.HomeTabBannerTitle
+        descriptionText.text = BannerCopy.HomeTabBannerDescription
+        ctaButton.setTitle(BannerCopy.HomeTabBannerButton, for: .normal)
+
+        TelemetryWrapper.recordEvent(category: .information, method: .view, object: .homeTabBannerEvergreen)
     }
 
     /// Apply message data, including handling of cases where certain parts of the message are missing.
-    private func applyMessage() {
-        /// If no messages exist, continue using our evergreen message.
-        guard let message = message else {
-            bannerTitle.text = BannerCopy.HomeTabBannerTitle
-            descriptionText.text = BannerCopy.HomeTabBannerDescription
-            ctaButton.setTitle(BannerCopy.HomeTabBannerButton, for: .normal)
-
-            TelemetryWrapper.recordEvent(category: .information, method: .view, object: .homeTabBannerEvergreen)
-            return
-        }
-
+    private func applyGleanMessage(_ message: GleanPlumbMessage) {
         if let buttonLabel = message.data.buttonLabel {
             ctaButton.setTitle(buttonLabel, for: .normal)
         } else {
@@ -193,6 +251,8 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         descriptionText.text = message.data.text
         messagingManager.onMessageDisplayed(message)
     }
+
+    // MARK: Actions
 
     @objc private func dismissCard() {
         self.dismissClosure?()
@@ -227,14 +287,5 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         }
 
         messagingManager.onMessagePressed(message)
-    }
-
-    func applyTheme() {
-        cardView.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
-        bannerTitle.textColor = UIColor.theme.homeTabBanner.textColor
-        descriptionText.textColor = UIColor.theme.homeTabBanner.textColor
-        dismissButton.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
-        containerView.backgroundColor = .clear
-        backgroundColor = .clear
     }
 }

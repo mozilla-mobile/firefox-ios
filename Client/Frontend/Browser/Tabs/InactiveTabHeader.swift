@@ -46,11 +46,6 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
         }
     }
 
-    var titleInsets: CGFloat {
-        let isHomeHeaderInset = (UIScreen.main.bounds.size.width == frame.size.width) && UIDevice.current.userInterfaceIdiom == .pad
-        return isHomeHeaderInset ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeViewModel.UX.minimumInsets
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
         applyTheme()

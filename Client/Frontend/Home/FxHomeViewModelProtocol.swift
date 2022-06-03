@@ -9,6 +9,14 @@ protocol FXHomeViewModelProtocol {
 
     var sectionType: FirefoxHomeSectionType { get }
 
+    // Layout section so FirefoxHomeViewController view controller can setup the section
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection
+
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int
+
+    // The header view model to setup the header for this section
+    var headerViewModel: ASHeaderViewModel { get }
+
     // Returns true when section needs to load data and show itself
     var isEnabled: Bool { get }
 
@@ -18,11 +26,12 @@ protocol FXHomeViewModelProtocol {
     // Returns true when section has data and is enabled
     var shouldShow: Bool { get }
 
-    // Update section data, completes when data has finished loading
+    // Update section data from backend, completes when data has finished loading
     func updateData(completion: @escaping () -> Void)
 
-    // If we need to reload the section after data was loaded
-    var shouldReloadSection: Bool { get }
+    // Refresh data after reloadOnRotation, so layout can be adjusted
+    // Can also be used to prepare data for a specific trait collection when UI is ready to show
+    func refreshData(for traitCollection: UITraitCollection)
 
     // Update section that are privacy sensitive, only implement when needed
     func updatePrivacyConcernedSection(isPrivate: Bool)
@@ -37,7 +46,7 @@ extension FXHomeViewModelProtocol {
 
     func updateData(completion: @escaping () -> Void) {}
 
-    var shouldReloadSection: Bool { return false }
+    func refreshData(for traitCollection: UITraitCollection) {}
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {}
 }

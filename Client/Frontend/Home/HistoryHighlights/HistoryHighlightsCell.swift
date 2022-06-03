@@ -67,14 +67,14 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     let itemTitle: UILabel = .build { label in
-        // Limiting max size to accomodate for non-self-sizing parent cell.
+        // Limiting max size since background/shadow of cell can't support self-sizing (shadow doesn't follow)
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    maxSize: 23)
         label.adjustsFontForContentSizeCategory = true
     }
 
     let itemDescription: UILabel = .build { label in
-        // Limiting max size to accomodate for non-self-sizing parent cell.
+        // Limiting max size since background/shadow of cell can't support self-sizing (shadow doesn't follow)
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    maxSize: 18)
         label.adjustsFontForContentSizeCategory = true
@@ -135,7 +135,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         isFillerCell = options.isFillerCell
 
         if let corners = options.corners {
-            contentView.addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
+            addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)
         }
 
         if options.shouldAddShadow {

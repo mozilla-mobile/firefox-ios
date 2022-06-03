@@ -4,18 +4,23 @@
 
 import Foundation
 
-fileprivate struct HomeViewUX {
-    static let settingsButtonHeight: CGFloat = 36
-    static let settingsButtonTopAnchorSpace: CGFloat = 28
-}
-
 class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
+
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
+    private struct UX {
+        static let buttonHeight: CGFloat = 36
+        static let buttonMaxFontSize: CGFloat = 49
+        static let buttonTrailingSpace: CGFloat = 12
+    }
+
     // MARK: - UI Elements
-    let goToSettingsButton: UIButton = .build { button in
+    private let goToSettingsButton: ActionButton = .build { button in
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .subheadline,
+                                                                                    maxSize: UX.buttonMaxFontSize)
+        button.makeDynamicHeightSupport()
+
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = a11y.customizeHome
     }
@@ -42,16 +47,22 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - UI Setup
+
     func setupView() {
         contentView.backgroundColor = .clear
         contentView.addSubview(goToSettingsButton)
 
         NSLayoutConstraint.activate([
-            goToSettingsButton.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-            goToSettingsButton.heightAnchor.constraint(equalToConstant: HomeViewUX.settingsButtonHeight),
-            goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: HomeViewUX.settingsButtonTopAnchorSpace),
-            goToSettingsButton.centerXAnchor.constraint(equalTo: centerXAnchor)
+            goToSettingsButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
+            goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor),
+            goToSettingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            goToSettingsButton.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -UX.buttonTrailingSpace)
         ])
+    }
+
+    func configure(onTapAction: ((UIButton) -> Void)?) {
+        goToSettingsButton.touchUpAction = onTapAction
     }
 }
 

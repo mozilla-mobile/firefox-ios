@@ -39,6 +39,15 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         subject.browserBarViewDelegate = mockBrowserBarViewDelegate
     }
 
+    override func tearDown() {
+        super.tearDown()
+        stubBrowserViewController = nil
+        mockBrowserBarViewDelegate = nil
+        mockTabManager = nil
+        mockBrowserProfile = nil
+        subject = nil
+    }
+
     func test_switchToGroup_noBrowserDelegate_doNothing() {
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
         subject.browserBarViewDelegate = nil
@@ -69,9 +78,9 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertFalse(completionDidRun)
     }
 
-    func test_switchToGroup_notInOverlayMode_doNothing() {
+    func test_switchToGroup_inOverlayMode_leavesOverlayMode() {
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
-        mockBrowserBarViewDelegate.inOverlayMode = false
+        mockBrowserBarViewDelegate.inOverlayMode = true
         var completionDidRun = false
         subject.onTapGroup = { tab in
             completionDidRun = true
@@ -79,7 +88,8 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
 
         subject.switchTo(group: group)
 
-        XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
+        XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
+        XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 1)
         XCTAssertFalse(completionDidRun)
     }
 
@@ -109,7 +119,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertTrue(mockTabManager.lastSelectedTabs.isEmpty)
     }
 
-    func test_switchToTab_notInOverlayMode_doNothing() {
+    func test_switchToTab_notInOverlayMode_switchTabs() {
         let tab = Tab(bvc: stubBrowserViewController)
         mockBrowserBarViewDelegate.inOverlayMode = false
 
@@ -117,7 +127,18 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
 
         XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
         XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 0)
-        XCTAssertTrue(mockTabManager.lastSelectedTabs.isEmpty)
+        XCTAssertFalse(mockTabManager.lastSelectedTabs.isEmpty)
+    }
+
+    func test_switchToTab_inOverlayMode_leaveOverlayMode() {
+        let tab = Tab(bvc: stubBrowserViewController)
+        mockBrowserBarViewDelegate.inOverlayMode = true
+
+        subject.switchTo(tab: tab)
+
+        XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
+        XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 1)
+        XCTAssertFalse(mockTabManager.lastSelectedTabs.isEmpty)
     }
 
     func test_switchToTab_tabManagerSelectsTab() {
@@ -134,7 +155,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(mockTabManager.lastSelectedTabs[0], tab1)
     }
 
-    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_max2() {
+    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_onIphoneLayout_has2() {
         subject.featureFlags.set(feature: .tabTrayGroups, to: false)
         let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
         let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
@@ -142,7 +163,41 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
         let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
 
+        // iPhone layout
+        let trait = FakeTraitCollection()
+        trait.overridenHorizontalSizeClass = .compact
+        trait.overridenVerticalSizeClass = .regular
+
         subject.updateData {
+            // Refresh data for specific layout
+            self.subject.refreshData(for: trait)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(subject.jumpBackInList.tabs.count, 2, "iPhone portrait has 2 tabs in it's jumpbackin layout")
+        XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
+        XCTAssertEqual(subject.jumpBackInList.tabs[1], tab2)
+        XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab3))
+    }
+
+    func test_updateData_tabTrayGroupsDisabled_stubRecentTabsWithStartingURLs_oniPhoneLandscapeLayout_has3() {
+        subject.featureFlags.set(feature: .tabTrayGroups, to: false)
+        let tab1 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox1.com")
+        let tab2 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox2.com")
+        let tab3 = Tab(bvc: stubBrowserViewController, urlString: "www.firefox3.com")
+        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
+        let expectation = XCTestExpectation(description: "Main queue fires; updateJumpBackInData(completion:) is called.")
+
+        // Ipad layout
+        let trait = FakeTraitCollection()
+        trait.overridenHorizontalSizeClass = .regular
+        trait.overridenVerticalSizeClass = .regular
+
+        subject.updateData {
+            // Refresh data for specific layout
+            self.subject.refreshData(for: trait)
             expectation.fulfill()
         }
 
@@ -151,9 +206,11 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
             XCTFail("Incorrect number of tabs in subject")
             return
         }
+
+        XCTAssertEqual(subject.jumpBackInList.tabs.count, 3, "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4")
         XCTAssertEqual(subject.jumpBackInList.tabs[0], tab1)
         XCTAssertEqual(subject.jumpBackInList.tabs[1], tab2)
-        XCTAssertFalse(subject.jumpBackInList.tabs.contains(tab3))
+        XCTAssertEqual(subject.jumpBackInList.tabs[2], tab3)
     }
 }
 

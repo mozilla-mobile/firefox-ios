@@ -3,37 +3,17 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Shared
 
-class FxHomeLogoHeaderViewModel {
-
-    struct UX {
-        static let botttomSpacing: CGFloat = 12
-    }
-
-    private let profile: Profile
+/// Customize button is always present at the bottom of the page
+class FxHomeCustomizeButtonViewModel {
     var onTapAction: ((UIButton) -> Void)?
-
-    init(profile: Profile) {
-        self.profile = profile
-    }
-
-    func shouldRunLogoAnimation() -> Bool {
-        let localesAnimationIsAvailableFor = ["en_US", "es_US"]
-        guard profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil,
-              !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
-              localesAnimationIsAvailableFor.contains(Locale.current.identifier)
-        else { return false }
-
-        return true
-    }
 }
 
 // MARK: FXHomeViewModelProtocol
-extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
+extension FxHomeCustomizeButtonViewModel: FXHomeViewModelProtocol {
 
     var sectionType: FirefoxHomeSectionType {
-        return .logoHeader
+        return .customizeHome
     }
 
     var headerViewModel: ASHeaderViewModel {
@@ -49,12 +29,10 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
                                                heightDimension: .estimated(100))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
-        let section = NSCollectionLayoutSection(group: group)
-
         let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
+        let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
-                                                        bottom: UX.botttomSpacing, trailing: 0)
-
+                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
         return section
     }
 
@@ -63,15 +41,18 @@ extension FxHomeLogoHeaderViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        return true
     }
 }
 
-extension FxHomeLogoHeaderViewModel: FxHomeSectionHandler {
+// MARK: FxHomeSectionHandler
+extension FxHomeCustomizeButtonViewModel: FxHomeSectionHandler {
 
-    func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let logoHeaderCell = cell as? FxHomeLogoHeaderCell else { return UICollectionViewCell() }
-        logoHeaderCell.configure(onTapAction: onTapAction)
-        return logoHeaderCell
+    func configure(_ cell: UICollectionViewCell,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+        guard let customizeHomeCell = cell as? FxHomeCustomizeHomeView else { return UICollectionViewCell() }
+        customizeHomeCell.configure(onTapAction: onTapAction)
+        return customizeHomeCell
     }
+
 }

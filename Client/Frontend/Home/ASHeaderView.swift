@@ -4,42 +4,49 @@
 
 import UIKit
 
-// MARK: - Section Header View
-public struct FirefoxHomeHeaderViewUX {
-    static var insets: CGFloat {
-        let iPadInsets = FirefoxHomeViewModel.UX.sectionInsetsForIpad + FirefoxHomeViewModel.UX.minimumInsets
-        return UIDevice.current.userInterfaceIdiom == .pad ? iPadInsets : FirefoxHomeViewModel.UX.minimumInsets
+struct ASHeaderViewModel {
+    var leadingInset: CGFloat = 0
+    var trailingInset: CGFloat = FirefoxHomeViewModel.UX.standardInset
+    var title: String?
+    var titleA11yIdentifier: String?
+    var isButtonHidden: Bool
+    var buttonTitle: String?
+    var buttonAction: ((UIButton) -> Void)?
+    var buttonA11yIdentifier: String?
+
+    static var emptyHeader: ASHeaderViewModel {
+        return ASHeaderViewModel(title: nil, isButtonHidden: true)
+    }
+}
+
+// Firefox home view controller header view
+class ASHeaderView: UICollectionReusableView, ReusableCell {
+
+    struct UX {
+        static let maxTitleLabelTextSize: CGFloat = 55 // Style title3 - AX5
+        static let maxMoreButtonTextSize: CGFloat = 49 // Style subheadline - AX5
+        static let inBetweenSpace: CGFloat = 12
+        static let bottomSpace: CGFloat = 10
+        static let bottomButtonSpace: CGFloat = 6
     }
 
-    static let titleTopInset: CGFloat = 5
-    static let sectionHeaderSize: CGFloat = 20
-    static let maxTitleLabelTextSize: CGFloat = 55 // Style title3 - AX5
-    static let maxMoreButtonTextSize: CGFloat = 49 // Style subheadline - AX5
-}
-
-enum ASHeaderViewType {
-    case otherGroupTabs
-    case normal
-}
-
-// Activity Stream header view
-class ASHeaderView: UICollectionReusableView {
     // MARK: - UIElements
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       maxSize: FirefoxHomeHeaderViewUX.maxTitleLabelTextSize)
+                                                                       maxSize: UX.maxTitleLabelTextSize)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
-    lazy var moreButton: UIButton = .build { button in
+    lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                                maxSize: FirefoxHomeHeaderViewUX.maxMoreButtonTextSize)
+                                                                                maxSize: UX.maxMoreButtonTextSize)
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
+        button.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
 
     // MARK: - Variables
@@ -49,14 +56,7 @@ class ASHeaderView: UICollectionReusableView {
         }
     }
 
-    var titleInsets: CGFloat {
-        let isHomeHeaderInset = UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad
-        return isHomeHeaderInset ? FirefoxHomeHeaderViewUX.insets : FirefoxHomeViewModel.UX.minimumInsets
-    }
-
-    static let verticalInsets: CGFloat = 4
-    var sectionType: ASHeaderViewType = .normal
-    private var titleLeadingConstraint: NSLayoutConstraint?
+    private var viewModel: ASHeaderViewModel?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     // MARK: - Initializers
@@ -65,24 +65,24 @@ class ASHeaderView: UICollectionReusableView {
         addSubview(titleLabel)
         addSubview(moreButton)
 
+        applyTheme()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
+    }
+
+    func setConstraints(viewModel: ASHeaderViewModel) {
         NSLayoutConstraint.activate([
-            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
-            moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -titleInsets),
+            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomButtonSpace),
+            moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -viewModel.trailingInset),
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: moreButton.leadingAnchor, constant: -FirefoxHomeHeaderViewUX.titleTopInset),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: viewModel.leadingInset),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: moreButton.leadingAnchor, constant: -UX.inBetweenSpace),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
         ])
 
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
-
-        titleLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: titleInsets)
-        titleLeadingConstraint?.isActive = true
-
-        applyTheme()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -103,9 +103,20 @@ class ASHeaderView: UICollectionReusableView {
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
     }
 
-    func remakeConstraint(type: ASHeaderViewType) {
-        let inset = type == .otherGroupTabs ? 15 : titleInsets
-        titleLeadingConstraint?.constant = inset
+    func configure(viewModel: ASHeaderViewModel) {
+        self.viewModel = viewModel
+
+        title = viewModel.title
+        titleLabel.accessibilityIdentifier = viewModel.titleA11yIdentifier
+
+        moreButton.isHidden = viewModel.isButtonHidden
+        if !viewModel.isButtonHidden {
+            moreButton.setTitle(.RecentlySavedShowAllText, for: .normal)
+            moreButton.touchUpAction = viewModel.buttonAction
+            moreButton.accessibilityIdentifier = viewModel.buttonA11yIdentifier
+        }
+
+        setConstraints(viewModel: viewModel)
     }
 }
 

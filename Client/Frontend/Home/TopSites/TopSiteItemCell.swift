@@ -14,7 +14,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     // MARK: - Variables
 
     private var homeTopSite: HomeTopSite?
-    private var titleLabelLeadingConstraint: NSLayoutConstraint?
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     struct UX {
@@ -29,8 +28,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let shadowRadius: CGFloat = 6
-        static let widthSafeSpace: CGFloat = 16
-        static let Spacing: CGFloat = 8
+        static let topSpace: CGFloat = 8
+        static let textSafeSpace: CGFloat = 4
+        static let bottomSpace: CGFloat = 10
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
@@ -39,8 +39,11 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     }
 
     // Holds the title and the pin image of the top site
-    private lazy var titlePinWrapper: UIView = .build { view in
-        view.backgroundColor = .clear
+    private lazy var titlePinWrapper: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fillProportionally
     }
 
     // Holds the titlePinWrapper and the Sponsored text for a sponsored tile
@@ -48,6 +51,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         stackView.backgroundColor = .clear
         stackView.axis = .vertical
         stackView.alignment = .center
+        stackView.distribution = .fillProportionally
     }
 
     private lazy var pinViewHolder: UIView = .build { view in
@@ -56,26 +60,27 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var pinImageView: UIImageView = .build { imageView in
         imageView.image = UIImage.templateImageNamed(ImageIdentifiers.pinSmall)
+        imageView.isHidden = true
     }
 
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
-        // Limiting max size to accomodate for non-self-sizing parent cell.
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                        maxSize: 18)
+                                                                        maxSize: 26)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
         titleLabel.numberOfLines = 1
         titleLabel.backgroundColor = UIColor.clear
+        titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
 
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
-        // Limiting max size to accomodate for non-self-sizing parent cell.
         sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                            maxSize: 18)
+                                                                            maxSize: 26)
+        sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
         sponsoredLabel.numberOfLines = 1
-        sponsoredLabel.isHidden = true
     }
 
     private lazy var faviconBG: UIView = .build { view in
@@ -137,10 +142,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         imageView.backgroundColor = UIColor.clear
 
         titleLabel.text = nil
-        titleLabelLeadingConstraint?.isActive = true
-        sponsoredLabel.isHidden = true
+        sponsoredLabel.text = nil
         pinViewHolder.isHidden = true
-        pinImageView.removeFromSuperview()
+        pinImageView.isHidden = true
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -166,20 +170,23 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
-        titlePinWrapper.addSubview(titleLabel)
-        titlePinWrapper.addSubview(pinViewHolder)
+        titlePinWrapper.addArrangedSubview(pinViewHolder)
+        titlePinWrapper.addArrangedSubview(titleLabel)
+        pinViewHolder.addSubview(pinImageView)
+
         descriptionWrapper.addArrangedSubview(titlePinWrapper)
         descriptionWrapper.addArrangedSubview(sponsoredLabel)
         contentView.addSubview(descriptionWrapper)
+
         faviconBG.addSubview(imageView)
         contentView.addSubview(faviconBG)
         contentView.addSubview(selectedOverlay)
 
         NSLayoutConstraint.activate([
-            descriptionWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.Spacing),
-            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.widthSafeSpace),
-            descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            descriptionWrapper.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.topSpace),
+            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomSpace),
+            descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.textSafeSpace),
+            descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.textSafeSpace),
 
             faviconBG.topAnchor.constraint(equalTo: contentView.topAnchor),
             faviconBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -196,27 +203,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             selectedOverlay.trailingAnchor.constraint(equalTo: faviconBG.trailingAnchor),
             selectedOverlay.bottomAnchor.constraint(equalTo: faviconBG.bottomAnchor),
 
-            pinViewHolder.leadingAnchor.constraint(equalTo: titlePinWrapper.leadingAnchor),
             pinViewHolder.bottomAnchor.constraint(equalTo: titleLabel.firstBaselineAnchor, constant: UX.pinAlignmentSpacing),
 
-            titleLabel.topAnchor.constraint(equalTo: titlePinWrapper.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: pinViewHolder.trailingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: titlePinWrapper.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: titlePinWrapper.bottomAnchor)
-        ])
-
-        titlePinWrapper.setContentHuggingPriority(UILayoutPriority(250), for: .vertical)
-        titleLabelLeadingConstraint = titleLabel.leadingAnchor.constraint(equalTo: titlePinWrapper.leadingAnchor)
-        titleLabelLeadingConstraint?.isActive = true
-    }
-
-    private func configurePinnedSite(_ topSite: HomeTopSite) {
-        guard topSite.isPinned else { return }
-        pinViewHolder.addSubview(pinImageView)
-        pinViewHolder.isHidden = false
-        titleLabelLeadingConstraint?.isActive = false
-
-        NSLayoutConstraint.activate([
             pinViewHolder.leadingAnchor.constraint(equalTo: pinImageView.leadingAnchor),
             pinViewHolder.trailingAnchor.constraint(equalTo: pinImageView.trailingAnchor, constant: UX.titleOffset),
             pinViewHolder.topAnchor.constraint(equalTo: pinImageView.topAnchor),
@@ -227,11 +215,16 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         ])
     }
 
+    private func configurePinnedSite(_ topSite: HomeTopSite) {
+        guard topSite.isPinned else { return }
+        pinViewHolder.isHidden = false
+        pinImageView.isHidden = false
+    }
+
     private func configureSponsoredSite(_ topSite: HomeTopSite) {
         guard topSite.isSponsoredTile else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
-        sponsoredLabel.isHidden = false
     }
 }
 
