@@ -209,6 +209,32 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel, GleanPlu
         currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode() : nil
     }
 
+    func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {
+        guard let window = UIWindow.keyWindow else { return }
+        for cell in cells {
+            // For every story cell get it's frame relative to the window
+            let targetRect = cell.superview.map { window.convert(cell.frame, from: $0) } ?? .zero
+
+            // TODO: If visibility ratio is over 50% sponsored content can be marked as seen by the user
+            let _ = targetRect.visibilityRatio(relativeTo: relativeRect)
+        }
+    }
+
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Find the pocket cell if visible that holds pocket stories
+        let cell = self.collectionView.visibleCells.first { $0 is FxHomePocketCollectionCell } as? FxHomePocketCollectionCell
+        // Find visible pocket story cells
+        let cells = cell?.collectionView.visibleCells ?? []
+        // Relative frame is the collectionView frame plus the status bar height
+        let relativeRect = CGRect(
+            x: collectionView.frame.minX,
+            y: collectionView.frame.minY,
+            width: collectionView.frame.width,
+            height: collectionView.frame.height + UIWindow.statusBarHeight
+        )
+        updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: relativeRect)
+    }
+
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
@@ -528,6 +554,11 @@ extension FirefoxHomeViewController {
 
         viewModel.pocketViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
             self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .pocket)
+        }
+
+        viewModel.pocketViewModel.onScroll = { [weak self] cells in
+            guard let window = UIWindow.keyWindow else { return }
+            self?.updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: window.bounds)
         }
 
         viewModel.pocketViewModel.recordSectionHasShown()

@@ -1,0 +1,726 @@
+{
+    "settings": {
+        "feature_flags": {
+            "spoc_v2": true,
+            "collections": false
+        },
+        "spocsPerNewTabs": 1,
+        "domainAffinityParameterSets": {
+            "default": {
+                "recencyFactor": 0.5,
+                "frequencyFactor": 0.5,
+                "combinedDomainFactor": 0.5,
+                "perfectFrequencyVisits": 10,
+                "perfectCombinedDomainScore": 2,
+                "multiDomainBoost": 0,
+                "itemScoreFactor": 1
+            },
+            "fully-personalized": {
+                "recencyFactor": 0.5,
+                "frequencyFactor": 0.5,
+                "combinedDomainFactor": 0.5,
+                "perfectFrequencyVisits": 10,
+                "perfectCombinedDomainScore": 2,
+                "itemScoreFactor": 0.01,
+                "multiDomainBoost": 0
+            },
+            "fully-personalized-domains": {
+                "recencyFactor": 0.5,
+                "frequencyFactor": 0.5,
+                "combinedDomainFactor": 0.5,
+                "perfectFrequencyVisits": 1,
+                "perfectCombinedDomainScore": 10,
+                "itemScoreFactor": 0.01,
+                "multiDomainBoost": 0
+            }
+        },
+        "timeSegments": [
+            {
+                "id": "week-1",
+                "startTime": 432000,
+                "endTime": 0,
+                "weightPosition": 1
+            },
+            {
+                "id": "week-2",
+                "startTime": 864000,
+                "endTime": 432000,
+                "weightPosition": 1
+            },
+            {
+                "id": "week-3",
+                "startTime": 1296000,
+                "endTime": 864000,
+                "weightPosition": 1
+            },
+            {
+                "id": "week-4",
+                "startTime": 1728000,
+                "endTime": 1296000,
+                "weightPosition": 1
+            },
+            {
+                "id": "week-5",
+                "startTime": 2160000,
+                "endTime": 1728000,
+                "weightPosition": 1
+            },
+            {
+                "id": "week-6",
+                "startTime": 2592000,
+                "endTime": 2160000,
+                "weightPosition": 1
+            }
+        ]
+    },
+    "spocs": [
+        {
+            "id": 218154214,
+            "flight_id": 189213247,
+            "campaign_id": 8692089,
+            "title": "Mortgage Rates at 3.5% Fixed – No Hidden Points or Fees",
+            "url": "https://www.lendgo.com/la/?tg_ref=poffna&rate=3.50&apr=3.79&rt=f&lt=15&camp_id=rate2&keyword=takeMeHome2&sub2=Mortgage_Rates_at_3.5%_Fixed_–_No_Hidden_Points_or_Fees::Takes_2_minutes_to_see_lenders_that_will_likely_approve_your_loan_&_offer_super-low_rates._(3.79%_APR)",
+            "domain": "lendgo.com",
+            "excerpt": "Takes 2 minutes to see lenders that will likely approve your loan & offer super-low rates. (3.79% APR)",
+            "priority": 3,
+            "context": "Sponsored by Lendgo",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/efa9be2bc4904769b79a640da6b3deea.jpg",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/efa9be2bc4904769b79a640da6b3deea.jpg&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2IjoxNTA2NTA0LCJhdCI6MzYxNywiYnQiOjAsImNtIjo4NjkyMDg5LCJjaCI6MzY4NDgsImNrIjp7fSwiY3IiOjg5MTE0MjE1LCJkaSI6IjYyNGVkMTBiMWRmMzQzMTU4ZWE5NjZiNDFiZGIyZDIyIiwiZGoiOjAsImlpIjoiOTEwYWZkNTdkNWE5NDVlMmE5MDJiZjY0NDkxNDljNGMiLCJkbSI6MywiZmMiOjIxODE1NDIxNCwiZmwiOjE4OTIxMzI0NywiaXAiOiIzNC4yMzMuODYuMjIyIiwia3ciOiJ1cyx1cy1jYSIsIm1rIjoidXMiLCJudyI6MTAyNTAsInBjIjoxLjksIm9wIjoxLjksImVjIjoxLjksImdtIjowLCJlcCI6bnVsbCwicHIiOjE0NzUxOCwicnQiOjIsInJzIjo1MDAsInNhIjoidW5kZWZpbmVkIiwic2IiOiJpLTBjM2UyMjQ3ODQ3MWY2NmYxIiwic3AiOjExMDY0NSwic3QiOjEwNzAwOTgsInVrIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwiem4iOjIxNzk5NSwidHMiOjE2NTI3MTEwNzMyMzUsInBuIjoic3BvY3MiLCJnYyI6dHJ1ZSwiZ0MiOnRydWUsImdzIjoibm9uZSIsImRjIjoxLCJ0eiI6IlVUQyIsInVyIjpudWxsfQ,cKqY6vDxu3fyS0Ls7b5gbmLj4O8",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2IjoxNTA2NTA0LCJhdCI6MzYxNywiYnQiOjAsImNtIjo4NjkyMDg5LCJjaCI6MzY4NDgsImNrIjp7fSwiY3IiOjg5MTE0MjE1LCJkaSI6IjYyNGVkMTBiMWRmMzQzMTU4ZWE5NjZiNDFiZGIyZDIyIiwiZGoiOjAsImlpIjoiOTEwYWZkNTdkNWE5NDVlMmE5MDJiZjY0NDkxNDljNGMiLCJkbSI6MywiZmMiOjIxODE1NDIxNCwiZmwiOjE4OTIxMzI0NywiaXAiOiIzNC4yMzMuODYuMjIyIiwia3ciOiJ1cyx1cy1jYSIsIm1rIjoidXMiLCJudyI6MTAyNTAsInBjIjoxLjksIm9wIjoxLjksImVjIjoxLjksImdtIjowLCJlcCI6bnVsbCwicHIiOjE0NzUxOCwicnQiOjIsInJzIjo1MDAsInNhIjoidW5kZWZpbmVkIiwic2IiOiJpLTBjM2UyMjQ3ODQ3MWY2NmYxIiwic3AiOjExMDY0NSwic3QiOjEwNzAwOTgsInVrIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwiem4iOjIxNzk5NSwidHMiOjE2NTI3MTEwNzMyMzYsInBuIjoic3BvY3MiLCJnYyI6dHJ1ZSwiZ0MiOnRydWUsImdzIjoibm9uZSIsImRjIjoxLCJ0eiI6IlVUQyIsImJhIjoxLCJmcSI6MX0,q58vMP53wodJX3-uSXioFjMTg8g",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2IjoxNTA2NTA0LCJhdCI6MzYxNywiYnQiOjAsImNtIjo4NjkyMDg5LCJjaCI6MzY4NDgsImNrIjp7fSwiY3IiOjg5MTE0MjE1LCJkaSI6IjYyNGVkMTBiMWRmMzQzMTU4ZWE5NjZiNDFiZGIyZDIyIiwiZGoiOjAsImlpIjoiOTEwYWZkNTdkNWE5NDVlMmE5MDJiZjY0NDkxNDljNGMiLCJkbSI6MywiZmMiOjIxODE1NDIxNCwiZmwiOjE4OTIxMzI0NywiaXAiOiIzNC4yMzMuODYuMjIyIiwia3ciOiJ1cyx1cy1jYSIsIm1rIjoidXMiLCJudyI6MTAyNTAsInBjIjoxLjksIm9wIjoxLjksImVjIjoxLjksImdtIjowLCJlcCI6bnVsbCwicHIiOjE0NzUxOCwicnQiOjIsInJzIjo1MDAsInNhIjoidW5kZWZpbmVkIiwic2IiOiJpLTBjM2UyMjQ3ODQ3MWY2NmYxIiwic3AiOjExMDY0NSwic3QiOjEwNzAwOTgsInVrIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwiem4iOjIxNzk5NSwidHMiOjE2NTI3MTEwNzMyMzYsInBuIjoic3BvY3MiLCJnYyI6dHJ1ZSwiZ0MiOnRydWUsImdzIjoibm9uZSIsImRjIjoxLCJ0eiI6IlVUQyIsImV0IjoxN30,Ln2jR8xj9yGPBlmh_dMJRQ7aNwc",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2IjoxNTA2NTA0LCJhdCI6MzYxNywiYnQiOjAsImNtIjo4NjkyMDg5LCJjaCI6MzY4NDgsImNrIjp7fSwiY3IiOjg5MTE0MjE1LCJkaSI6IjYyNGVkMTBiMWRmMzQzMTU4ZWE5NjZiNDFiZGIyZDIyIiwiZGoiOjAsImlpIjoiOTEwYWZkNTdkNWE5NDVlMmE5MDJiZjY0NDkxNDljNGMiLCJkbSI6MywiZmMiOjIxODE1NDIxNCwiZmwiOjE4OTIxMzI0NywiaXAiOiIzNC4yMzMuODYuMjIyIiwia3ciOiJ1cyx1cy1jYSIsIm1rIjoidXMiLCJudyI6MTAyNTAsInBjIjoxLjksIm9wIjoxLjksImVjIjoxLjksImdtIjowLCJlcCI6bnVsbCwicHIiOjE0NzUxOCwicnQiOjIsInJzIjo1MDAsInNhIjoidW5kZWZpbmVkIiwic2IiOiJpLTBjM2UyMjQ3ODQ3MWY2NmYxIiwic3AiOjExMDY0NSwic3QiOjEwNzAwOTgsInVrIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwiem4iOjIxNzk5NSwidHMiOjE2NTI3MTEwNzMyMzYsInBuIjoic3BvY3MiLCJnYyI6dHJ1ZSwiZ0MiOnRydWUsImdzIjoibm9uZSIsImRjIjoxLCJ0eiI6IlVUQyIsImV0IjoyMH0,WDCxS3USN3F44IIkszeohrsumVo"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "Lendgo",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 215769881,
+            "flight_id": 191804207,
+            "campaign_id": 1315172,
+            "title": "Keto Lovers: 7 Reasons People Are Switching to This Meal Kit",
+            "url": "https://i.geistm.com/l/GC_7ReasonsKetoV2_Journiest?bcid=627bd19d043d1d7cc2c083f5&bhid=627bd24b043d1d7cc2c08645&utm_content=PKT_A_7ReasonsKetoV2_Journiest_5112022_Mushrooms_130Off_627bd19d043d1d7cc2c083f5_627bd24b043d1d7cc2c08645&tv=su4&ct=NAT-PK-PROS-130OFF5WEEK-051&utm_medium=DB&utm_source=pocket~geistm&utm_campaign=PKT_A_7ReasonsKetoV2_Journiest_5112022_Mushrooms_130Off",
+            "domain": "journiest.com",
+            "excerpt": "Spring Special Offer: Get $130 off including free shipping.",
+            "priority": 3,
+            "context": "Sponsored by Green Chef",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/87b87afe7a164f429e667ce96d115fa8.jpg",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/87b87afe7a164f429e667ce96d115fa8.jpg&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2Ijo1NDU1MTUsImF0IjozNjE3LCJidCI6MCwiY20iOjEzMTUxNzIsImNoIjozNjg0OCwiY2siOnt9LCJjciI6ODg2OTQxNTYsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6MSwiaWkiOiJiM2VkMzAzYWM4ODA0NTMyOWZjOTU5ODEzZDFhMzBlZiIsImRtIjozLCJmYyI6MjE1NzY5ODgxLCJmbCI6MTkxODA0MjA3LCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjIsIm9wIjoyLCJlYyI6MiwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzNiwicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwidXIiOm51bGx9,vV5TFeZKi9xBYnSQqXH1NXQa-aE",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2Ijo1NDU1MTUsImF0IjozNjE3LCJidCI6MCwiY20iOjEzMTUxNzIsImNoIjozNjg0OCwiY2siOnt9LCJjciI6ODg2OTQxNTYsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6MSwiaWkiOiJiM2VkMzAzYWM4ODA0NTMyOWZjOTU5ODEzZDFhMzBlZiIsImRtIjozLCJmYyI6MjE1NzY5ODgxLCJmbCI6MTkxODA0MjA3LCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjIsIm9wIjoyLCJlYyI6MiwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzNiwicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiYmEiOjEsImZxIjoxfQ,DnDCAC_ypWJfs6Em_FKCPbK93C4",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2Ijo1NDU1MTUsImF0IjozNjE3LCJidCI6MCwiY20iOjEzMTUxNzIsImNoIjozNjg0OCwiY2siOnt9LCJjciI6ODg2OTQxNTYsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6MSwiaWkiOiJiM2VkMzAzYWM4ODA0NTMyOWZjOTU5ODEzZDFhMzBlZiIsImRtIjozLCJmYyI6MjE1NzY5ODgxLCJmbCI6MTkxODA0MjA3LCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjIsIm9wIjoyLCJlYyI6MiwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzNiwicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiZXQiOjE3fQ,93QDco8dasuk4cWty77Fp0X6t9Y",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2Ijo1NDU1MTUsImF0IjozNjE3LCJidCI6MCwiY20iOjEzMTUxNzIsImNoIjozNjg0OCwiY2siOnt9LCJjciI6ODg2OTQxNTYsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6MSwiaWkiOiJiM2VkMzAzYWM4ODA0NTMyOWZjOTU5ODEzZDFhMzBlZiIsImRtIjozLCJmYyI6MjE1NzY5ODgxLCJmbCI6MTkxODA0MjA3LCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjIsIm9wIjoyLCJlYyI6MiwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzNiwicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiZXQiOjIwfQ,gqaNVb1o-ZNgHs3o1kjGSbBfDSM"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "Green Chef",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 212666693,
+            "flight_id": 189204662,
+            "campaign_id": 1766427,
+            "title": "Want To Travel Practically Free? This Card Is for You.",
+            "url": "https://www.comparecards.com/?splitterid=coca-guide-discover-it-miles&mtaid=8B7F5&esourceid=6467796&utm_source=pocket&tar=ffnewtab&grp=discover-it-miles&utm_content=want+to+travel+practically+free+this+card+is+for+you&adt=dayairport&placement_name=ffnewtab&ad_headline=want+to+travel+practically+free+this+card+is+for+you&ad_image_name=dayairport&utm_medium=native&pla=getpocket.com&bdst=cpm",
+            "domain": "comparecards.com",
+            "excerpt": "Earn 3 Miles for every $1 spent, 0% APR for 14 months, no annual fee, and no blackout dates.",
+            "priority": 3,
+            "context": "Sponsored by CompareCards",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/89539bf379dc46a4bc9dab84c8046795.jpg",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/89539bf379dc46a4bc9dab84c8046795.jpg&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2Ijo4OTg4MDQsImF0IjozNjE3LCJidCI6MCwiY20iOjE3NjY0MjcsImNoIjozNjg0OCwiY2siOnt9LCJjciI6ODgyMzY1MzUsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6MiwiaWkiOiJiYWZmY2RkZDhkNGI0YmY1YjVlMzc3ZGYzZGUxMDlhZCIsImRtIjozLCJmYyI6MjEyNjY2NjkzLCJmbCI6MTg5MjA0NjYyLCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjEuNzUsIm9wIjoxLjc1LCJlYyI6MS43NSwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzNywicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwidXIiOm51bGx9,6KW_co1_7sleWpoilWN619P68nk",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2Ijo4OTg4MDQsImF0IjozNjE3LCJidCI6MCwiY20iOjE3NjY0MjcsImNoIjozNjg0OCwiY2siOnt9LCJjciI6ODgyMzY1MzUsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6MiwiaWkiOiJiYWZmY2RkZDhkNGI0YmY1YjVlMzc3ZGYzZGUxMDlhZCIsImRtIjozLCJmYyI6MjEyNjY2NjkzLCJmbCI6MTg5MjA0NjYyLCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjEuNzUsIm9wIjoxLjc1LCJlYyI6MS43NSwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzNywicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiYmEiOjEsImZxIjoxfQ,11w15U0fhpQQxAhrU74mfCdCCZg",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2Ijo4OTg4MDQsImF0IjozNjE3LCJidCI6MCwiY20iOjE3NjY0MjcsImNoIjozNjg0OCwiY2siOnt9LCJjciI6ODgyMzY1MzUsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6MiwiaWkiOiJiYWZmY2RkZDhkNGI0YmY1YjVlMzc3ZGYzZGUxMDlhZCIsImRtIjozLCJmYyI6MjEyNjY2NjkzLCJmbCI6MTg5MjA0NjYyLCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjEuNzUsIm9wIjoxLjc1LCJlYyI6MS43NSwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzNywicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiZXQiOjE3fQ,xE57HTll5tG1qrT-BcsT3Gz7pLk",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2Ijo4OTg4MDQsImF0IjozNjE3LCJidCI6MCwiY20iOjE3NjY0MjcsImNoIjozNjg0OCwiY2siOnt9LCJjciI6ODgyMzY1MzUsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6MiwiaWkiOiJiYWZmY2RkZDhkNGI0YmY1YjVlMzc3ZGYzZGUxMDlhZCIsImRtIjozLCJmYyI6MjEyNjY2NjkzLCJmbCI6MTg5MjA0NjYyLCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjEuNzUsIm9wIjoxLjc1LCJlYyI6MS43NSwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzNywicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiZXQiOjIwfQ,LuTnMOXUZSgQWhk72Xdyua4xFg8"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "CompareCards",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 203680355,
+            "flight_id": 191806247,
+            "campaign_id": 6137120,
+            "title": "Does Factor Offer the Best Ready-To-Eat Meals?",
+            "url": "https://i.geistm.com/l/Factor_Competitors_Topdust?utm_content=60dce4a54cc636042521041b_6266f0ce6f4051041d992c2f&bcid=6266f0ce6f4051041d992c2f&bhid=60dce4a54cc636042521041b&utm_campaign=PKT_A_Competitors_Topdust_PS_Split_SalmonSoup_050322&utm_source={network.name)~geistm&campaignid=62719fde043d1d7cc2a948a2&BT=CPC&utm_medium=cpm&utm_term=PKT_A_Competitors_Topdust_PS_Split_SalmonSoup_050322&referral=Factor272248",
+            "domain": "topdust.com",
+            "excerpt": "Factor vs. Freshly: Here's what you need to know.",
+            "priority": 3,
+            "context": "Sponsored by Factor",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/613bb4434f1b470faa28dbde7d9314ef.png",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/613bb4434f1b470faa28dbde7d9314ef.png&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2IjoxMzIzOTQzLCJhdCI6MzYxNywiYnQiOjAsImNtIjo2MTM3MTIwLCJjaCI6MzY4NDgsImNrIjp7fSwiY3IiOjc5ODk3NTg4LCJkaSI6IjYyNGVkMTBiMWRmMzQzMTU4ZWE5NjZiNDFiZGIyZDIyIiwiZGoiOjMsImlpIjoiYTIwZDgyYmViMDE2NDc1OTk4YjkzMWMwYzkzOWE0YWYiLCJkbSI6MywiZmMiOjIwMzY4MDM1NSwiZmwiOjE5MTgwNjI0NywiaXAiOiIzNC4yMzMuODYuMjIyIiwia3ciOiJ1cyx1cy1jYSIsIm1rIjoidXMiLCJudyI6MTAyNTAsInBjIjoyLCJvcCI6MiwiZWMiOjIsImdtIjowLCJlcCI6bnVsbCwicHIiOjE0NzUxOCwicnQiOjIsInJzIjo1MDAsInNhIjoidW5kZWZpbmVkIiwic2IiOiJpLTBjM2UyMjQ3ODQ3MWY2NmYxIiwic3AiOjExMDY0NSwic3QiOjEwNzAwOTgsInVrIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwiem4iOjIxNzk5NSwidHMiOjE2NTI3MTEwNzMyMzcsInBuIjoic3BvY3MiLCJnYyI6dHJ1ZSwiZ0MiOnRydWUsImdzIjoibm9uZSIsImRjIjoxLCJ0eiI6IlVUQyIsInVyIjpudWxsfQ,AwFexqhI-OKJPX4kaYUesz1ETLs",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2IjoxMzIzOTQzLCJhdCI6MzYxNywiYnQiOjAsImNtIjo2MTM3MTIwLCJjaCI6MzY4NDgsImNrIjp7fSwiY3IiOjc5ODk3NTg4LCJkaSI6IjYyNGVkMTBiMWRmMzQzMTU4ZWE5NjZiNDFiZGIyZDIyIiwiZGoiOjMsImlpIjoiYTIwZDgyYmViMDE2NDc1OTk4YjkzMWMwYzkzOWE0YWYiLCJkbSI6MywiZmMiOjIwMzY4MDM1NSwiZmwiOjE5MTgwNjI0NywiaXAiOiIzNC4yMzMuODYuMjIyIiwia3ciOiJ1cyx1cy1jYSIsIm1rIjoidXMiLCJudyI6MTAyNTAsInBjIjoyLCJvcCI6MiwiZWMiOjIsImdtIjowLCJlcCI6bnVsbCwicHIiOjE0NzUxOCwicnQiOjIsInJzIjo1MDAsInNhIjoidW5kZWZpbmVkIiwic2IiOiJpLTBjM2UyMjQ3ODQ3MWY2NmYxIiwic3AiOjExMDY0NSwic3QiOjEwNzAwOTgsInVrIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwiem4iOjIxNzk5NSwidHMiOjE2NTI3MTEwNzMyMzcsInBuIjoic3BvY3MiLCJnYyI6dHJ1ZSwiZ0MiOnRydWUsImdzIjoibm9uZSIsImRjIjoxLCJ0eiI6IlVUQyIsImJhIjoxLCJmcSI6MX0,ABh4uD31mkEfYeTW3QSK7rWC-dE",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2IjoxMzIzOTQzLCJhdCI6MzYxNywiYnQiOjAsImNtIjo2MTM3MTIwLCJjaCI6MzY4NDgsImNrIjp7fSwiY3IiOjc5ODk3NTg4LCJkaSI6IjYyNGVkMTBiMWRmMzQzMTU4ZWE5NjZiNDFiZGIyZDIyIiwiZGoiOjMsImlpIjoiYTIwZDgyYmViMDE2NDc1OTk4YjkzMWMwYzkzOWE0YWYiLCJkbSI6MywiZmMiOjIwMzY4MDM1NSwiZmwiOjE5MTgwNjI0NywiaXAiOiIzNC4yMzMuODYuMjIyIiwia3ciOiJ1cyx1cy1jYSIsIm1rIjoidXMiLCJudyI6MTAyNTAsInBjIjoyLCJvcCI6MiwiZWMiOjIsImdtIjowLCJlcCI6bnVsbCwicHIiOjE0NzUxOCwicnQiOjIsInJzIjo1MDAsInNhIjoidW5kZWZpbmVkIiwic2IiOiJpLTBjM2UyMjQ3ODQ3MWY2NmYxIiwic3AiOjExMDY0NSwic3QiOjEwNzAwOTgsInVrIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwiem4iOjIxNzk5NSwidHMiOjE2NTI3MTEwNzMyMzcsInBuIjoic3BvY3MiLCJnYyI6dHJ1ZSwiZ0MiOnRydWUsImdzIjoibm9uZSIsImRjIjoxLCJ0eiI6IlVUQyIsImV0IjoxN30,V5mGmuDRPGRvmTE1tep7_B-bpEU",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2IjoxMzIzOTQzLCJhdCI6MzYxNywiYnQiOjAsImNtIjo2MTM3MTIwLCJjaCI6MzY4NDgsImNrIjp7fSwiY3IiOjc5ODk3NTg4LCJkaSI6IjYyNGVkMTBiMWRmMzQzMTU4ZWE5NjZiNDFiZGIyZDIyIiwiZGoiOjMsImlpIjoiYTIwZDgyYmViMDE2NDc1OTk4YjkzMWMwYzkzOWE0YWYiLCJkbSI6MywiZmMiOjIwMzY4MDM1NSwiZmwiOjE5MTgwNjI0NywiaXAiOiIzNC4yMzMuODYuMjIyIiwia3ciOiJ1cyx1cy1jYSIsIm1rIjoidXMiLCJudyI6MTAyNTAsInBjIjoyLCJvcCI6MiwiZWMiOjIsImdtIjowLCJlcCI6bnVsbCwicHIiOjE0NzUxOCwicnQiOjIsInJzIjo1MDAsInNhIjoidW5kZWZpbmVkIiwic2IiOiJpLTBjM2UyMjQ3ODQ3MWY2NmYxIiwic3AiOjExMDY0NSwic3QiOjEwNzAwOTgsInVrIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwiem4iOjIxNzk5NSwidHMiOjE2NTI3MTEwNzMyMzcsInBuIjoic3BvY3MiLCJnYyI6dHJ1ZSwiZ0MiOnRydWUsImdzIjoibm9uZSIsImRjIjoxLCJ0eiI6IlVUQyIsImV0IjoyMH0,SPZFchDBbDFRRwx2NFexkbKw9jU"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "Factor",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 134169053,
+            "flight_id": 126127182,
+            "campaign_id": 1733170,
+            "title": "Wondering About Job Prospects Within Cybersecurity?",
+            "url": "https://scs.georgetown.edu/programs/484/online/online-masters-in-cybersecurity-risk-management/career-outlook?utm_source=pocket&utm_medium=native&utm_campaign=fy22-dmi-cyrm-native-pocket-pros-gen-img-outlook-1",
+            "domain": "georgetown.edu",
+            "excerpt": "Georgetown University broke down the career outlook, including job postings, average salaries, and projected growth.",
+            "priority": 3,
+            "context": "Sponsored by Georgetown University",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/a171ad33cc4047c79ca72183f21a7cf3.jpg",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/a171ad33cc4047c79ca72183f21a7cf3.jpg&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2Ijo4OTM3MjMsImF0IjozNjE3LCJidCI6MCwiY20iOjE3MzMxNzAsImNoIjozNjg0OCwiY2siOnt9LCJjciI6NzA5Mzg0MTEsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6NCwiaWkiOiJiNmJkNzVkZWFjMjM0MGViOTBiYmFhYTJkYzM5MjA5NSIsImRtIjozLCJmYyI6MTM0MTY5MDUzLCJmbCI6MTI2MTI3MTgyLCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjEuNzUsIm9wIjoxLjc1LCJlYyI6MS43NSwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzOCwicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwidXIiOm51bGx9,eg6EPI4D7Y40f-_9bXGfliqf47c",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2Ijo4OTM3MjMsImF0IjozNjE3LCJidCI6MCwiY20iOjE3MzMxNzAsImNoIjozNjg0OCwiY2siOnt9LCJjciI6NzA5Mzg0MTEsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6NCwiaWkiOiJiNmJkNzVkZWFjMjM0MGViOTBiYmFhYTJkYzM5MjA5NSIsImRtIjozLCJmYyI6MTM0MTY5MDUzLCJmbCI6MTI2MTI3MTgyLCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjEuNzUsIm9wIjoxLjc1LCJlYyI6MS43NSwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzOCwicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiYmEiOjEsImZxIjoxfQ,5_0cv47Sh9qOPGjqVoNxmHLy5Ck",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2Ijo4OTM3MjMsImF0IjozNjE3LCJidCI6MCwiY20iOjE3MzMxNzAsImNoIjozNjg0OCwiY2siOnt9LCJjciI6NzA5Mzg0MTEsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6NCwiaWkiOiJiNmJkNzVkZWFjMjM0MGViOTBiYmFhYTJkYzM5MjA5NSIsImRtIjozLCJmYyI6MTM0MTY5MDUzLCJmbCI6MTI2MTI3MTgyLCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjEuNzUsIm9wIjoxLjc1LCJlYyI6MS43NSwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzOCwicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiZXQiOjE3fQ,vtmJnUqCtdPM4NBgwUsB0IdC06Q",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2Ijo4OTM3MjMsImF0IjozNjE3LCJidCI6MCwiY20iOjE3MzMxNzAsImNoIjozNjg0OCwiY2siOnt9LCJjciI6NzA5Mzg0MTEsImRpIjoiNjI0ZWQxMGIxZGYzNDMxNThlYTk2NmI0MWJkYjJkMjIiLCJkaiI6NCwiaWkiOiJiNmJkNzVkZWFjMjM0MGViOTBiYmFhYTJkYzM5MjA5NSIsImRtIjozLCJmYyI6MTM0MTY5MDUzLCJmbCI6MTI2MTI3MTgyLCJpcCI6IjM0LjIzMy44Ni4yMjIiLCJrdyI6InVzLHVzLWNhIiwibWsiOiJ1cyIsIm53IjoxMDI1MCwicGMiOjEuNzUsIm9wIjoxLjc1LCJlYyI6MS43NSwiZ20iOjAsImVwIjpudWxsLCJwciI6MTQ3NTE4LCJydCI6MiwicnMiOjUwMCwic2EiOiJ1bmRlZmluZWQiLCJzYiI6ImktMGMzZTIyNDc4NDcxZjY2ZjEiLCJzcCI6MTEwNjQ1LCJzdCI6MTA3MDA5OCwidWsiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJ6biI6MjE3OTk1LCJ0cyI6MTY1MjcxMTA3MzIzOCwicG4iOiJzcG9jcyIsImdjIjp0cnVlLCJnQyI6dHJ1ZSwiZ3MiOiJub25lIiwiZGMiOjEsInR6IjoiVVRDIiwiZXQiOjIwfQ,orNGhjotapNySEwR2iqvNwWNeuU"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "Georgetown University",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 207375053,
+            "flight_id": 191739655,
+            "campaign_id": 56469793,
+            "title": "Paying Full Price on Amazon is so 2021 — Do This in 2022",
+            "url": "https://cos-rd.com/zf/50/7394?campaign=OST01_PocketNewTabOST-Amazon&creative=DamagedVan2-PayingFullPriceOnAmazonIsSo2021DoThisIn2022-ThisSimpleTrickCanSaveTonsOfMoneyOnAmazonButMostPrimeMembersAreIgnoringIt-20220506-OST",
+            "domain": "onlineshoppingtools.com",
+            "excerpt": "This simple trick can save tons of money on Amazon, but most Prime members are ignoring it.",
+            "priority": 3,
+            "context": "Sponsored by Online Shopping Tools™",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/f2a4c1eb42bd4fb5a16ba9843feee465.jpg",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/f2a4c1eb42bd4fb5a16ba9843feee465.jpg&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2IjoxOTYzNzY5LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1NjQ2OTc5MywiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NzYwMDY1MiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo1LCJpaSI6ImZkYTA1MWY5NTJlMzQzYjBhNzI5OWRhMWQwZDZkYjU1IiwiZG0iOjMsImZjIjoyMDczNzUwNTMsImZsIjoxOTE3Mzk2NTUsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM4LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJ1ciI6bnVsbH0,DeszNmQPxFu3BCRvJez3BDrP1kE",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2IjoxOTYzNzY5LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1NjQ2OTc5MywiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NzYwMDY1MiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo1LCJpaSI6ImZkYTA1MWY5NTJlMzQzYjBhNzI5OWRhMWQwZDZkYjU1IiwiZG0iOjMsImZjIjoyMDczNzUwNTMsImZsIjoxOTE3Mzk2NTUsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM4LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJiYSI6MSwiZnEiOjF9,y5iukZRR4B01BhD1MdX1bysOoHM",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2IjoxOTYzNzY5LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1NjQ2OTc5MywiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NzYwMDY1MiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo1LCJpaSI6ImZkYTA1MWY5NTJlMzQzYjBhNzI5OWRhMWQwZDZkYjU1IiwiZG0iOjMsImZjIjoyMDczNzUwNTMsImZsIjoxOTE3Mzk2NTUsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM4LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MTd9,SbcnriES9FMbYX2f4V9_PXRDFD0",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2IjoxOTYzNzY5LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1NjQ2OTc5MywiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NzYwMDY1MiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo1LCJpaSI6ImZkYTA1MWY5NTJlMzQzYjBhNzI5OWRhMWQwZDZkYjU1IiwiZG0iOjMsImZjIjoyMDczNzUwNTMsImZsIjoxOTE3Mzk2NTUsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM4LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MjB9,dWSVLfqF6_z3r5iWmy1GoBgghus"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "Online Shopping Tools™",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 199948927,
+            "flight_id": 191738838,
+            "campaign_id": 59140315,
+            "title": "Do This Before You Renew Amazon Prime (It’s Genius)",
+            "url": "https://cos-rd.com/zf/50/7400?campaign=PocketCOS-2022&creative=DamagedPackage2-DoThisBeforeYouRenewAmazonPrimeItSGenius-ThisSimpleTrickCanSaveTonsOfMoneyOnAmazonButMostPrimeMembersAreIgnoringIt-20220419",
+            "domain": "capitaloneshopping.com",
+            "excerpt": "This simple trick can save tons of money on Amazon, but most Prime members are ignoring it.",
+            "priority": 3,
+            "context": "Sponsored by Capital One Shopping",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/25560d86604149e38662c658e443fffe.jpg",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/25560d86604149e38662c658e443fffe.jpg&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2IjoxOTc1NTU5LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1OTE0MDMxNSwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAxODIyMiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo2LCJpaSI6IjcwY2JjMWUwYTAzNzRmMTZiOTkxYjM1MjVlYWFlYmFlIiwiZG0iOjMsImZjIjoxOTk5NDg5MjcsImZsIjoxOTE3Mzg4MzgsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJ1ciI6bnVsbH0,qj7paohH3gBNrdmOb9bNQY2qUUc",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2IjoxOTc1NTU5LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1OTE0MDMxNSwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAxODIyMiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo2LCJpaSI6IjcwY2JjMWUwYTAzNzRmMTZiOTkxYjM1MjVlYWFlYmFlIiwiZG0iOjMsImZjIjoxOTk5NDg5MjcsImZsIjoxOTE3Mzg4MzgsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJiYSI6MSwiZnEiOjF9,1yCej-VtcW9LSoyijxVMdFSTdfE",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2IjoxOTc1NTU5LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1OTE0MDMxNSwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAxODIyMiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo2LCJpaSI6IjcwY2JjMWUwYTAzNzRmMTZiOTkxYjM1MjVlYWFlYmFlIiwiZG0iOjMsImZjIjoxOTk5NDg5MjcsImZsIjoxOTE3Mzg4MzgsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MTd9,JGmj1dqf64aOfP9ljBoxFyXgHpc",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2IjoxOTc1NTU5LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1OTE0MDMxNSwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAxODIyMiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo2LCJpaSI6IjcwY2JjMWUwYTAzNzRmMTZiOTkxYjM1MjVlYWFlYmFlIiwiZG0iOjMsImZjIjoxOTk5NDg5MjcsImZsIjoxOTE3Mzg4MzgsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MjB9,OSHQ11t_7smd_7UX_ktyatStD6o"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "Capital One Shopping",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 199949511,
+            "flight_id": 191739319,
+            "campaign_id": 59140872,
+            "title": "Hands Down One of the Best Cards for Good Credit",
+            "url": "https://market-trk.com/zf/50/7384?campaign=SOV03_PocketNewTabWFAC&creative=2BlackCards-HandsDownOneOfTheBestCardsForGoodCredit-GetAnEasy200SignUpBonusUnlimited2CashBackOnPurchasesAllWithNoAnnualFee-20220214",
+            "domain": "comparecredit.com",
+            "excerpt": "Get an easy $200 sign up bonus & unlimited 2% cash back on purchases, all with no annual fee.",
+            "priority": 3,
+            "context": "Sponsored by CompareCredit™",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/09cfab58b5f5430b8ae68f5ecd64b279.jpg",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/09cfab58b5f5430b8ae68f5ecd64b279.jpg&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2IjoxOTc1NTY3LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1OTE0MDg3MiwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAxODY5MywiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo3LCJpaSI6ImM3NjMyNmQ4N2QxMDRlYTE5YWFhYjA2N2QxYjY2ZmRjIiwiZG0iOjMsImZjIjoxOTk5NDk1MTEsImZsIjoxOTE3MzkzMTksImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJ1ciI6bnVsbH0,VpfApOruydWDJZXMkj2SP8gHHpk",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2IjoxOTc1NTY3LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1OTE0MDg3MiwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAxODY5MywiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo3LCJpaSI6ImM3NjMyNmQ4N2QxMDRlYTE5YWFhYjA2N2QxYjY2ZmRjIiwiZG0iOjMsImZjIjoxOTk5NDk1MTEsImZsIjoxOTE3MzkzMTksImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJiYSI6MSwiZnEiOjF9,rIYJeySFI1Nkpj7SXpg6qHTgOSY",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2IjoxOTc1NTY3LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1OTE0MDg3MiwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAxODY5MywiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo3LCJpaSI6ImM3NjMyNmQ4N2QxMDRlYTE5YWFhYjA2N2QxYjY2ZmRjIiwiZG0iOjMsImZjIjoxOTk5NDk1MTEsImZsIjoxOTE3MzkzMTksImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MTd9,6ZDzt_qsieLDEE8omNQT3pMURRQ",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2IjoxOTc1NTY3LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1OTE0MDg3MiwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAxODY5MywiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo3LCJpaSI6ImM3NjMyNmQ4N2QxMDRlYTE5YWFhYjA2N2QxYjY2ZmRjIiwiZG0iOjMsImZjIjoxOTk5NDk1MTEsImZsIjoxOTE3MzkzMTksImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MjB9,B7KPFADfrfnmNily5cgcrKqfG_4"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "CompareCredit™",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 212342117,
+            "flight_id": 189209624,
+            "campaign_id": 58445949,
+            "title": "5 Pieces of Dumb Financial Advice That Most People Believe",
+            "url": "https://partners.thepennyhoarder.com/dumb-financial-advice-prt/?aff_id=342&utm_source=firefox&utm_medium=paidnative&aff_sub3=dumb-financial-advice",
+            "domain": "thepennyhoarder.com",
+            "excerpt": "It can be difficult to figure out what money advice to listen to.",
+            "priority": 3,
+            "context": "Sponsored by The Penny Hoarder",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/f09b6983d04b4811b9e762f73c1522cc.jpg",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/f09b6983d04b4811b9e762f73c1522cc.jpg&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2IjoxOTcyNTA1LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1ODQ0NTk0OSwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4ODA3MDgxNiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo4LCJpaSI6ImY2NjEyZGM0MzY3MDRkZjliMGI3ZDBlNWE4NDc3YmQzIiwiZG0iOjMsImZjIjoyMTIzNDIxMTcsImZsIjoxODkyMDk2MjQsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6NCwib3AiOjQsImVjIjo0LCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjM5LCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJ1ciI6bnVsbH0,SftbyLlWHsAYaq2VUqsfRXw-g6U",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2IjoxOTcyNTA1LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1ODQ0NTk0OSwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4ODA3MDgxNiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo4LCJpaSI6ImY2NjEyZGM0MzY3MDRkZjliMGI3ZDBlNWE4NDc3YmQzIiwiZG0iOjMsImZjIjoyMTIzNDIxMTcsImZsIjoxODkyMDk2MjQsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6NCwib3AiOjQsImVjIjo0LCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjQwLCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJiYSI6MSwiZnEiOjF9,VacUIG56js0cDgdBoPnctcdc7aE",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2IjoxOTcyNTA1LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1ODQ0NTk0OSwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4ODA3MDgxNiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo4LCJpaSI6ImY2NjEyZGM0MzY3MDRkZjliMGI3ZDBlNWE4NDc3YmQzIiwiZG0iOjMsImZjIjoyMTIzNDIxMTcsImZsIjoxODkyMDk2MjQsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6NCwib3AiOjQsImVjIjo0LCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjQwLCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MTd9,TPvn68R4I0p0l6Ew_5n-HZZlOcg",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2IjoxOTcyNTA1LCJhdCI6MzYxNywiYnQiOjAsImNtIjo1ODQ0NTk0OSwiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4ODA3MDgxNiwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo4LCJpaSI6ImY2NjEyZGM0MzY3MDRkZjliMGI3ZDBlNWE4NDc3YmQzIiwiZG0iOjMsImZjIjoyMTIzNDIxMTcsImZsIjoxODkyMDk2MjQsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6NCwib3AiOjQsImVjIjo0LCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjQwLCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MjB9,iKjvfxKDApwKDFKCN15ZFvcKoEw"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "The Penny Hoarder",
+            "min_score": 0.1,
+            "item_score": 0.2
+        },
+        {
+            "id": 200024175,
+            "flight_id": 191809885,
+            "campaign_id": 15948157,
+            "title": "5 Reasons You Need Grammarly",
+            "url": "https://i.geistm.com/l/GRAM_5Reasons_PremiumPurveyor?utm_content=6228d3176f0594783b196938_6228d26a6f0594783b1967ab&bcid=6228d26a6f0594783b1967ab&bhid=6228d3176f0594783b196938&utm_campaign=PKT_D_GRAM_5Reasons_PremiumPurveyor_RON_030922&utm_source=GeistM&campaignid=6228d0b56f0594783b1962dd&BT=CPC",
+            "domain": "premiumpurveyor.com",
+            "excerpt": "These editors recommend Grammarly's desktop app.",
+            "priority": 3,
+            "context": "Sponsored by Grammarly",
+            "raw_image_src": "https://s.zkcdn.net/Advertisers/950b942de6ea4fb2b98d0e9c1985e42f.png",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=https%3A//s.zkcdn.net/Advertisers/950b942de6ea4fb2b98d0e9c1985e42f.png&resize=w618-h310",
+            "shim": {
+                "click": "0,eyJ2IjoiMS4xMCIsImF2IjoxNjU0MzgzLCJhdCI6MzYxNywiYnQiOjAsImNtIjoxNTk0ODE1NywiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAzOTAxMCwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo5LCJpaSI6ImYyOTBkZDA4M2Q1NjQyYTE4NGE0NTI5ZTc4MzBlMWRkIiwiZG0iOjMsImZjIjoyMDAwMjQxNzUsImZsIjoxOTE4MDk4ODUsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjQwLCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJ1ciI6bnVsbH0,2ki2iNoJrozwuxAq1HZSdvZpzRQ",
+                "impression": "1,eyJ2IjoiMS4xMCIsImF2IjoxNjU0MzgzLCJhdCI6MzYxNywiYnQiOjAsImNtIjoxNTk0ODE1NywiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAzOTAxMCwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo5LCJpaSI6ImYyOTBkZDA4M2Q1NjQyYTE4NGE0NTI5ZTc4MzBlMWRkIiwiZG0iOjMsImZjIjoyMDAwMjQxNzUsImZsIjoxOTE4MDk4ODUsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjQwLCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJiYSI6MSwiZnEiOjF9,dYVge9a08aXtb7qM4c6AazSUjwo",
+                "delete": "2,eyJ2IjoiMS4xMCIsImF2IjoxNjU0MzgzLCJhdCI6MzYxNywiYnQiOjAsImNtIjoxNTk0ODE1NywiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAzOTAxMCwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo5LCJpaSI6ImYyOTBkZDA4M2Q1NjQyYTE4NGE0NTI5ZTc4MzBlMWRkIiwiZG0iOjMsImZjIjoyMDAwMjQxNzUsImZsIjoxOTE4MDk4ODUsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjQwLCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MTd9,S5F-b50MxH032Sfu8h1ON3oczFo",
+                "save": "2,eyJ2IjoiMS4xMCIsImF2IjoxNjU0MzgzLCJhdCI6MzYxNywiYnQiOjAsImNtIjoxNTk0ODE1NywiY2giOjM2ODQ4LCJjayI6e30sImNyIjo4NTAzOTAxMCwiZGkiOiI2MjRlZDEwYjFkZjM0MzE1OGVhOTY2YjQxYmRiMmQyMiIsImRqIjo5LCJpaSI6ImYyOTBkZDA4M2Q1NjQyYTE4NGE0NTI5ZTc4MzBlMWRkIiwiZG0iOjMsImZjIjoyMDAwMjQxNzUsImZsIjoxOTE4MDk4ODUsImlwIjoiMzQuMjMzLjg2LjIyMiIsImt3IjoidXMsdXMtY2EiLCJtayI6InVzIiwibnciOjEwMjUwLCJwYyI6Miwib3AiOjIsImVjIjoyLCJnbSI6MCwiZXAiOm51bGwsInByIjoxNDc1MTgsInJ0IjoyLCJycyI6NTAwLCJzYSI6InVuZGVmaW5lZCIsInNiIjoiaS0wYzNlMjI0Nzg0NzFmNjZmMSIsInNwIjoxMTA2NDUsInN0IjoxMDcwMDk4LCJ1ayI6IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjYxNDE3NDAwMCIsInpuIjoyMTc5OTUsInRzIjoxNjUyNzExMDczMjQwLCJwbiI6InNwb2NzIiwiZ2MiOnRydWUsImdDIjp0cnVlLCJncyI6Im5vbmUiLCJkYyI6MSwidHoiOiJVVEMiLCJldCI6MjB9,unzPJ6Ha_ajDVCOsuZAXhOabSCg"
+            },
+            "parameter_set": "default",
+            "caps": {
+                "lifetime": 50,
+                "campaign": {
+                    "count": 10,
+                    "period": 86400
+                },
+                "flight": {
+                    "count": 10,
+                    "period": 86400
+                }
+            },
+            "domain_affinities": {},
+            "personalization_models": {
+                "arts_and_entertainment": 1,
+                "autos_and_vehicles": 1,
+                "beauty_and_fitness": 1,
+                "blogging_resources_and_services": 1,
+                "books_and_literature": 1,
+                "business_and_industrial": 1,
+                "computers_and_electronics": 1,
+                "finance": 1,
+                "food_and_drink": 1,
+                "games": 1,
+                "health": 1,
+                "hobbies_and_leisure": 1,
+                "home_and_garden": 1,
+                "internet_and_telecom": 1,
+                "jobs_and_education": 1,
+                "law_and_government": 1,
+                "online_communities": 1,
+                "people_and_society": 1,
+                "pets_and_animals": 1,
+                "real_estate": 1,
+                "reference": 1,
+                "science": 1,
+                "shopping": 1,
+                "sports": 1,
+                "travel": 1
+            },
+            "sponsor": "Grammarly",
+            "min_score": 0.1,
+            "item_score": 0.2
+        }
+    ],
+    "__debug__": {
+        "placements": [
+            {
+                "divName": "spocs",
+                "networkId": 10250,
+                "siteId": 1070098,
+                "adTypes": [
+                    2401,
+                    3617
+                ],
+                "zoneIds": [
+                    217995
+                ],
+                "count": 10,
+                "eventIds": [
+                    17,
+                    20
+                ]
+            }
+        ],
+        "user": {
+            "key": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        "keywords": [
+            "US",
+            "US-CA"
+        ]
+    }
+}
