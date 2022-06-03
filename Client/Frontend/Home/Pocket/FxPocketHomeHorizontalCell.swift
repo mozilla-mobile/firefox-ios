@@ -8,7 +8,7 @@ class FxPocketHomeHorizontalCellViewModel {
     var title: String { story.title }
     var imageURL: URL { story.imageURL }
     var url: URL? { story.url }
-    var sponsor: String? { story.sponsor }
+    var sponsor: String? { "Sponsorsss" } // story.sponsor }
     var description: String {
         if let sponsor = story.sponsor {
             return sponsor
@@ -44,6 +44,8 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)
         static let faviconSize = CGSize(width: 24, height: 24)
+        static let sponsoredIconSize = CGSize(width: 12, height: 12)
+        static let sponsoredStackSpacing: CGFloat = 8
     }
 
     // MARK: - UI Elements
@@ -63,27 +65,33 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     }
 
     private lazy var sponsoredStack: UIStackView = .build { stackView in
-        stackView.addArrangedSubview(self.sponsoredIcon)
+        stackView.addArrangedSubview(self.sponsoredIconContainer)
         stackView.addArrangedSubview(self.sponsoredLabel)
         stackView.axis = .horizontal
-        stackView.spacing = 8
+        stackView.spacing = UX.sponsoredStackSpacing
+        stackView.alignment = .leading
+        stackView.distribution = .fillProportionally
+    }
+
+    private lazy var sponsoredIconContainer: UIView = .build { view in
+        view.addSubview(self.sponsoredIcon)
+        view.backgroundColor = .clear
     }
 
     private lazy var sponsoredLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                maxSize: UX.sponsoredFontSize)
+                                                                   maxSize: UX.sponsoredFontSize)
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .FirefoxHomepage.Pocket.Sponsored
     }
 
     private lazy var sponsoredIcon: UIImageView = .build { image in
         image.image = UIImage(named: ImageIdentifiers.sponsoredStar)
         NSLayoutConstraint.activate([
-            image.heightAnchor.constraint(equalToConstant: 12),
-            image.widthAnchor.constraint(equalToConstant: 12)
+            image.heightAnchor.constraint(equalToConstant: UX.sponsoredIconSize.height),
+            image.widthAnchor.constraint(equalToConstant: UX.sponsoredIconSize.width)
         ])
     }
 
@@ -93,10 +101,18 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
                                                                    maxSize: UX.siteFontSize)
     }
 
+    // MARK: - Variables
+    var notificationCenter: NotificationCenter = NotificationCenter.default
+    private var sponsoredImageCenterConstraint: NSLayoutConstraint?
+    private var sponsoredImageFirstBaselineConstraint: NSLayoutConstraint?
+
     // MARK: - Inits
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
+
         setupLayout()
     }
 
@@ -118,12 +134,14 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.text = viewModel.description
 
         heroImageView.sd_setImage(with: viewModel.imageURL)
-        sponsoredStack.isHidden = viewModel.sponsor == nil
-        descriptionLabel.font = viewModel.sponsor == nil
-        ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                        maxSize: UX.siteFontSize)
-        : DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                            maxSize: UX.siteFontSize)
+        sponsoredStack.isHidden = false
+//        descriptionLabel.font = viewModel.sponsor == nil
+//        ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+//                                                        maxSize: UX.siteFontSize)
+//        : DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+//                                                            maxSize: UX.siteFontSize)
+        descriptionLabel.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+                                                                                  maxSize: UX.siteFontSize)
 
         titleLabel.textColor = .defaultTextColor
         descriptionLabel.textColor = viewModel.sponsor == nil ? .defaultTextColor : .sponsoredDescriptionColor
@@ -144,6 +162,11 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             titleLabel.leadingAnchor.constraint(equalTo: heroImageView.trailingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
+            sponsoredIconContainer.centerYAnchor.constraint(equalTo: sponsoredIcon.centerYAnchor),
+            sponsoredIconContainer.leadingAnchor.constraint(equalTo: sponsoredIcon.leadingAnchor),
+            sponsoredIconContainer.trailingAnchor.constraint(equalTo: sponsoredIcon.trailingAnchor),
+
+            sponsoredStack.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: 8),
             sponsoredStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             sponsoredStack.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             sponsoredStack.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -4),
@@ -152,13 +175,29 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
             heroImageView.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
             heroImageView.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
             heroImageView.topAnchor.constraint(equalTo: titleLabel.topAnchor),
-            heroImageView.bottomAnchor.constraint(greaterThanOrEqualTo: contentView.bottomAnchor, constant: -16),
+            heroImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16),
 
             descriptionLabel.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: 8),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
         ])
+
+        sponsoredImageCenterConstraint = sponsoredLabel.centerYAnchor.constraint(equalTo: sponsoredIconContainer.centerYAnchor).priority(UILayoutPriority(999))
+        sponsoredImageFirstBaselineConstraint = sponsoredLabel.firstBaselineAnchor.constraint(equalTo: sponsoredIconContainer.bottomAnchor,
+                                                                                              constant: -UX.sponsoredIconSize.height / 2)
+
+        sponsoredLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
+
+        adjustLayout()
+    }
+
+    private func adjustLayout() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+
+        // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
+        sponsoredImageCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
+        sponsoredImageFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
     }
 }
 
@@ -189,6 +228,17 @@ fileprivate extension UIColor {
                 return UIColor.Photon.DarkGrey30
             default:
                 return .white
+        }
+    }
+}
+
+// MARK: - Notifiable
+extension FxPocketHomeHorizontalCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
         }
     }
 }
