@@ -263,7 +263,7 @@
 "Onboarding.Incognito.Title" = "Więcej niż tylko incognito";
 
 /* Text for a label that indicates the description of protection section from onboarding screen. */
-"Onboarding.Protection.Description" = "Skonfiguruj ustawienia, aby samodzielnie zdecydować, jak dużo lub jak mało udostępniasz.";
+"Onboarding.Protection.Description" = "Skonfiguruj ustawienia, by samodzielnie zdecydować, jak dużo lub jak mało udostępniasz.";
 
 /* Text for a label that indicates the title of protection section from onboarding screen. */
 "Onboarding.Protection.Title" = "Ochrona według własnego uznania";
@@ -629,16 +629,16 @@
 "Tip.SitesNotWorking.Title" = "Strona nie zawiera treści lub działa dziwnie?";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Przejdź do ustawień, aby zarządzać konkretnymi opcjami prywatności i bezpieczeństwa.";
+"TooltipBodyText.ContextMenu" = "Przejdź do ustawień, by zarządzać konkretnymi opcjami prywatności i bezpieczeństwa.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Domyślne ustawienia zapewniają silną ochronę, ale łatwo można dostosować je do własnych potrzeb.";
 
 /* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ uniemożliwił tej witrynie szpiegowanie Cię. Stuknij tarczę, aby dowiedzieć się, co zablokowaliśmy.";
+"TooltipBodyText.ShieldIcon" = "%@ uniemożliwił tej witrynie szpiegowanie Cię. Stuknij tarczę, by dowiedzieć się, co zablokowaliśmy.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon" = "Stuknij przycisk kosza w dowolnej chwili, aby usunąć wszystkie ślady obecnej sesji.";
+"TooltipBodyText.TrashIcon" = "Stuknij przycisk kosza w dowolnej chwili, by usunąć wszystkie ślady obecnej sesji.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Ochrona jest włączona!";
