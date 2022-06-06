@@ -922,10 +922,6 @@ extension TelemetryWrapper {
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.firefoxHomepageOrigin[homePageOrigin].add()
             }
-        case (.action, .tap, .firefoxHomepage, .yourLibrarySection, let extras):
-            if let panel = extras?[EventObject.libraryPanel.rawValue] as? String {
-                GleanMetrics.FirefoxHomePage.yourLibrary[panel].add()
-            }
         case (.action, .open, .firefoxHomepage, .openHomeFromAwesomebar, _):
             GleanMetrics.FirefoxHomePage.openFromAwesomebar.add()
         case (.action, .open, .firefoxHomepage, .openHomeFromPhotonMenuButton, _):

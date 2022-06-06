@@ -15,7 +15,7 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     // MARK: - UI Elements
-    lazy var logoButton: UIButton = .build { button in
+    lazy var logoButton: ActionButton = .build { button in
         button.setTitle("", for: .normal)
         button.backgroundColor = .clear
         button.accessibilityIdentifier = a11y.logoButton
@@ -49,11 +49,15 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(logoButton)
 
         NSLayoutConstraint.activate([
+            logoButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
             logoButton.widthAnchor.constraint(equalToConstant: LogoViewUX.imageWidth),
-            logoButton.heightAnchor.constraint(equalToConstant: LogoViewUX.imageHeight),
             logoButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             logoButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
+    }
+
+    func configure(onTapAction: ((UIButton) -> Void)?) {
+        logoButton.touchUpAction = onTapAction
     }
 
     // MARK: - Animation
