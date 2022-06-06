@@ -113,14 +113,14 @@ class FxHomePocketViewModel {
                 self?.pocketAPI.sponsoredFeed().uponQueue(.main) { sponsored in
                     if self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true {
                         // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                        var sponsoredTemp = sponsored.map(PocketStory.init).prefix(FxHomePocketCollectionCellUX.numberOfSponsoredItemsInSection)
+                        var sponsoredTemp = sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection)
 
                         // Making sure we insert a sponsored story at a valid index
-                        let firstIndex = min(FxHomePocketCollectionCellUX.indexOfFirstSponsoredItem, globalTemp.endIndex)
+                        let firstIndex = min(UX.indexOfFirstSponsoredItem, globalTemp.endIndex)
                         sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
                         sponsoredTemp.removeFirst()
 
-                        let secondIndex = min(FxHomePocketCollectionCellUX.indexOfSecondSponsoredItem, globalTemp.endIndex)
+                        let secondIndex = min(UX.indexOfSecondSponsoredItem, globalTemp.endIndex)
                         sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
                         sponsoredTemp.removeFirst()
                     }
