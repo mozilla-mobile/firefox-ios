@@ -104,6 +104,31 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
         waitForExpectations(timeout: 5.0)
     }
+
+    // MARK: ContexId
+    func testContextIdImpressionTopSite() {
+        SponsoredTileTelemetry.setupContextId()
+        let contile = ContileProviderMock.defaultSuccessData[0]
+        let topSite = SponsoredTile(contile: contile)
+
+        let expectation = expectation(description: "The top sites ping was sent")
+        GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
+
+            guard let contextId =  SponsoredTileTelemetry.contextId,
+                    let uuid = UUID(uuidString: contextId) else {
+                XCTFail("Expected contextId to be configured")
+                return
+            }
+
+            self.testUuidMetricSuccess(metric: GleanMetrics.TopSite.contextId,
+                                       expectedValue: uuid,
+                                       failureMessage: "Should have contextId of \(uuid)")
+            expectation.fulfill()
+        }
+
+        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
+        waitForExpectations(timeout: 5.0)
+    }
 }
 
 // MARK: Helper methods

@@ -685,7 +685,7 @@ top_site:
       A UUID that is unjoinable with other browser metrics. This ID will not be
       shared with AdM, only for internal uses. This ID is shared across all
       contextual services features.
-    lifetime: ping
+    lifetime: application
     send_in_pings:
       - topsites-impression
     bugs:
