@@ -64,7 +64,7 @@ class TabsButton: UIButton {
     }()
 
     fileprivate lazy var borderView: UIImageView = {
-        let border = UIImageView(image: UIImage(named: "nav-tabcounter")?.withRenderingMode(.alwaysTemplate))
+        let border = UIImageView(image: UIImage(named: ImageIdentifiers.navTabCounter)?.withRenderingMode(.alwaysTemplate))
         border.tintColor = UIColor.theme.browser.tint
         return border
     }()
