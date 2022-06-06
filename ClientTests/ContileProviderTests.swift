@@ -180,7 +180,7 @@ private extension ContileProviderTests {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: configuration)
-        let cache = URLCache(memoryCapacity: 1000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
+        let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
 
         let provider = ContileProvider()
         provider.urlSession = session
