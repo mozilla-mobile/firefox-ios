@@ -41,13 +41,6 @@ class FirstRunTourTests: BaseTestCase {
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
     }
 
-    private func tapStartBrowsingButton() {
-        app.buttons["startBrowsingButtonSyncView"].tap()
-        // User starts in HomePanelScreen with the default Top Sites
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        waitForExistence(topSites)
-    }
-    
     func testStartBrowsingFromThirdScreen() {
         navigator.goto(FirstRun)
         goToNextScreen()
@@ -57,7 +50,7 @@ class FirstRunTourTests: BaseTestCase {
 
     func testCloseTour() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section]
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         waitForExistence(topSites)
     }
     
@@ -79,7 +72,7 @@ class FirstRunTourTests: BaseTestCase {
     private func tapStartBrowsingButton() {
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         // User starts in HomePanelScreen with the default Top Sites
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section]
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         waitForExistence(topSites)
     }
 }
