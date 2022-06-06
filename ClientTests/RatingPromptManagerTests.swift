@@ -20,6 +20,9 @@ class RatingPromptManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        if let bundleID = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundleID)
+        }
         urlOpenerSpy = URLOpenerSpy()
     }
 
