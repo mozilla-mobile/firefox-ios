@@ -59,53 +59,6 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     func configure(onTapAction: ((UIButton) -> Void)?) {
         logoButton.touchUpAction = onTapAction
     }
-
-    // MARK: - Animation
-    public func runLogoAnimation() {
-        animateLogo(withDelay: 0) {
-            self.animateLogo(withDelay: 0.5) {
-                self.userDefaults.set(true, forKey: PrefsKeys.WallpaperLogoHasShownAnimation)
-            }
-        }
-    }
-
-    private func animateLogo(withDelay delay: TimeInterval, completionHandler: @escaping () -> Void) {
-        let angle: CGFloat = .pi/32
-        let numberOfFrames: Double = 6
-        let frameDuration = Double(1/numberOfFrames)
-
-        // The number of keyframes added in this keyframe block are equal to the
-        // `numberOfFrames`. But each keyframe needs to change angle for the
-        // respective animation to move through the keyframes. Instead of doing this
-        // manually, we can automate it given that we treat the `relativeStartTimeModifier`
-        // as an index (ie, starting at 0) and the `numberOfFrames` as a `.count`
-        // meaning that the correct index is found at `x - 1`.
-        UIView.animateKeyframes(withDuration: 1, delay: delay, options: []) {
-
-            var relativeStartTimeModifier = 0.0
-            repeat {
-
-                let adjustedAngle = (relativeStartTimeModifier.remainder(dividingBy: 2) == 0) ? +angle : -angle
-                let newStartTime = frameDuration*relativeStartTimeModifier
-
-                UIView.addKeyframe(withRelativeStartTime: newStartTime,
-                                   relativeDuration: frameDuration) {
-
-                    if relativeStartTimeModifier < numberOfFrames - 1 {
-                        self.logoButton.transform = CGAffineTransform(rotationAngle: adjustedAngle)
-
-                    } else if relativeStartTimeModifier == numberOfFrames - 1 {
-                        self.logoButton.transform = CGAffineTransform.identity
-                    }
-                }
-
-                relativeStartTimeModifier += 1.0
-            } while relativeStartTimeModifier < numberOfFrames
-
-        } completion: { _ in
-            completionHandler()
-        }
-    }
 }
 
 // MARK: - Theme
