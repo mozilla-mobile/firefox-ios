@@ -193,8 +193,6 @@ class OnboardingCardViewController: UIViewController {
             primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight)
         ])
-
-//        containerView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private func updateLayout() {

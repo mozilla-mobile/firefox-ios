@@ -8,9 +8,9 @@ import Shared
 
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
-    var viewModel: IntroViewModel
-    let profile: Profile
-    var onboardingCards = [OnboardingCardViewController]()
+    private var viewModel: IntroViewModel
+    private let profile: Profile
+    private var onboardingCards = [OnboardingCardViewController]()
 
     struct UX {
         static let closeButtonSize: CGFloat = 44
