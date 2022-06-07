@@ -77,12 +77,13 @@ class IntroViewController: UIViewController, OnViewDismissable {
         // Create onboarding card views
         var cardViewController: OnboardingCardViewController
         for (index, cardType) in viewModel.enabledCards.enumerated() {
+            let viewModel = viewModel.getCardViewModel(index: index)
             if cardType == .wallpapers {
-                cardViewController = WallpaperCardViewController(viewModel: viewModel.getCardViewModel(index: index),
-                                                                      delegate: self)
+                cardViewController = WallpaperCardViewController(viewModel: viewModel,
+                                                                 delegate: self)
             } else {
-                cardViewController = OnboardingCardViewController(viewModel: viewModel.getCardViewModel(index: index),
-                                                                      delegate: self)
+                cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                                                                  delegate: self)
             }
             onboardingCards.append(cardViewController)
         }
@@ -187,7 +188,6 @@ extension IntroViewController: OnboardingCardDelegate {
             moveToNextPage(cardType: cardType)
         case .signSync:
             presentSignToSync()
-
         }
     }
 
