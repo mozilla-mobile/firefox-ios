@@ -155,7 +155,7 @@ class TabTrayViewController: UIViewController {
     init(tabTrayDelegate: TabTrayDelegate? = nil,
          profile: Profile,
          tabToFocus: Tab? = nil,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+         tabManager: TabManager,
          and notificationCenter: NotificationCenter = NotificationCenter.default,
          with nimbus: FxNimbus = FxNimbus.shared
     ) {

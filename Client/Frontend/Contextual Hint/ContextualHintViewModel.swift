@@ -16,10 +16,6 @@ enum ContextualHintViewType: String {
     case jumpBackIn = "JumpBackIn"
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
-
-    var hintExtraForToolbarLocation: String {
-        BrowserViewController.foregroundBVC().isBottomSearchBar ? "ToolbarLocationBottom" : "ToolbarLocationTop"
-    }
 }
 
 class ContextualHintViewModel {
@@ -154,7 +150,7 @@ class ContextualHintViewModel {
 
     // MARK: - Telemetry
     func sendTelemetryEvent(for eventType: CFRTelemetryEvent) {
-        let hintTypeExtra = hintType == .toolbarLocation ? hintType.hintExtraForToolbarLocation : hintType.rawValue
+        let hintTypeExtra = hintType == .toolbarLocation ? getToolbarLocation() : hintType.rawValue
         let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: hintTypeExtra]
 
         switch eventType {
@@ -182,6 +178,15 @@ class ContextualHintViewModel {
                                          extras: extra)
             hasSentTelemetryEvent = true
         }
+    }
+
+    private func getToolbarLocation() -> String {
+        guard SearchBarSettingsViewModel.isEnabled,
+              SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom else {
+                  return "ToolbarLocationTop"
+              }
+
+        return "ToolbarLocationBottom"
     }
 
     // MARK: - Present

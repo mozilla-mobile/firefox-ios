@@ -27,7 +27,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     private var isZeroSearch: Bool
     private var viewModel: FirefoxHomeViewModel
     private var contextMenuHelper: FirefoxHomeContextMenuHelper
-
+    private var tabManager: TabManager
     private var wallpaperManager: WallpaperManager
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
@@ -43,18 +43,19 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     }
 
     var currentTab: Tab? {
-        let tabManager = BrowserViewController.foregroundBVC().tabManager
         return tabManager.selectedTab
     }
 
     // MARK: - Initializers
     init(profile: Profile,
+         tabManager: TabManager,
          isZeroSearch: Bool = false,
          wallpaperManager: WallpaperManager = WallpaperManager()
     ) {
         self.isZeroSearch = isZeroSearch
+        self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
-        let isPrivate = BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? true
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = FirefoxHomeViewModel(profile: profile,
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate)

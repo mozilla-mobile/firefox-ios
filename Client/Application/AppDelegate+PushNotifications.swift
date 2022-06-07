@@ -77,8 +77,8 @@ extension AppDelegate {
         }
 
         // Check if the app is foregrounded, _also_ verify the BVC is initialized. Most BVC functions depend on viewDidLoad() having run –if not, they will crash.
-        if UIApplication.shared.applicationState == .active && BrowserViewController.foregroundBVC().isViewLoaded {
-            BrowserViewController.foregroundBVC().loadQueuedTabs(receivedURLs: receivedURLs)
+        if UIApplication.shared.applicationState == .active && browserViewController.isViewLoaded {
+            browserViewController.loadQueuedTabs(receivedURLs: receivedURLs)
             receivedURLs.removeAll()
         }
     }

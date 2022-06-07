@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Shared
 
-class TabToolbar: UIView {
+class TabToolbar: UIView, FeatureFlaggable {
 
     // MARK: - Variables
 
@@ -22,7 +22,13 @@ class TabToolbar: UIView {
     let actionButtons: [NotificationThemeable & UIButton]
 
     private var isBottomSearchBar: Bool {
-        return BrowserViewController.foregroundBVC().isBottomSearchBar
+        guard SearchBarSettingsViewModel.isEnabled else { return false }
+
+        if let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) {
+            return position == .bottom
+        }
+
+        return false
     }
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
