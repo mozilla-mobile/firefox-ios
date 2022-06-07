@@ -106,9 +106,9 @@ class FxHomePocketViewModel {
     // MARK: - Private
 
     func updatePocketStoryViewModels(with stories: [PocketStory]) {
-        self.pocketStoriesViewModels = []
+        pocketStoriesViewModels = []
         for story in stories {
-            self.bind(pocketStoryViewModel: .init(story: story))
+            bind(pocketStoryViewModel: .init(story: story))
         }
     }
 
