@@ -126,7 +126,9 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO"
       language = "en"
-      region = "US">
+      region = "US"
+      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES">
       <PreActions>
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
@@ -154,6 +156,71 @@
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "2FA435FA1ABB83B4008031D1"
+            BuildableName = "libAccount.a"
+            BlueprintName = "Account"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+            BuildableName = "Client.app"
+            BlueprintName = "Client"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F8324A042649A188007E4BFA"
+            BuildableName = "CredentialProvider.appex"
+            BlueprintName = "CredentialProvider"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "397848DA1ED86605004C0C0B"
+            BuildableName = "NotificationService.appex"
+            BlueprintName = "NotificationService"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "2FCAE2191ABB51F800877008"
+            BuildableName = "libStorage.a"
+            BlueprintName = "Storage"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E69DB0741E97DEA9008A67E6"
+            BuildableName = "libSyncTelemetry.a"
+            BlueprintName = "SyncTelemetry"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "047F9B2624E1FE1C00CD7DF7"
+            BuildableName = "WidgetKitExtension.appex"
+            BlueprintName = "WidgetKitExtension"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F84B22481A0920C600AAB793"
+            BuildableName = "ShareTo.appex"
+            BlueprintName = "ShareTo"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "390527491C874D35007E0BB7"
+            BuildableName = "Today.appex"
+            BlueprintName = "Today"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "YES">
