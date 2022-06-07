@@ -101,7 +101,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         let pocketSponsoredSetting = BoolSetting(with: .sponsoredPocket,
                                         titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.SponsoredPocket))
-        pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(.pocket, checking: .userOnly)
+        pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(.pocket, checking: .buildAndUser)
 
         let pocketSetting = BoolSetting(
             with: .pocket,
