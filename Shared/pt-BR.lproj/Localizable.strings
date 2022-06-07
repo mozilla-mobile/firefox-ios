@@ -1421,7 +1421,7 @@
 "Search or enter address" = "Pesquise ou digite um endereço";
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
-"Search.Awesomebar.SwitchToTab" = "Alternar para aba";
+"Search.Awesomebar.SwitchToTab" = "Mudar para aba";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
 "Search.SuggestSectionTitle.v102" = "Sugestões Firefox";
