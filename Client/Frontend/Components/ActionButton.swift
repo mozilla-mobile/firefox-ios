@@ -6,7 +6,11 @@ import Foundation
 
 // A conveniance button class to add a closure as an action on a button instead of a selector
 class ActionButton: UIButton {
-    var touchUpAction: ((UIButton) -> Void)?
+    var touchUpAction: ((UIButton) -> Void)? {
+        didSet {
+            setupButton()
+        }
+    }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:)") }
     override init(frame: CGRect) {
@@ -14,7 +18,7 @@ class ActionButton: UIButton {
         setupButton()
     }
 
-    func setupButton() {
+    private func setupButton() {
         addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
     }
 
