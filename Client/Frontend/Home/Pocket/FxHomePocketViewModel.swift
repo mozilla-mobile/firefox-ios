@@ -116,7 +116,7 @@ class FxHomePocketViewModel {
         pocketAPI
             .globalFeed(items: UX.numberOfItemsInSection)
             .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
-                var globalTemp = pocketStory.map(PocketStory.init)
+                var globalTemp = pocketStory.map(PocketStory())
 
                 // Check if sponsored stories are enabled, otherwise drop api call
                 guard self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true else {
