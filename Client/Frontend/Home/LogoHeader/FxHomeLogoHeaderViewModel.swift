@@ -17,16 +17,6 @@ class FxHomeLogoHeaderViewModel {
     init(profile: Profile) {
         self.profile = profile
     }
-
-    func shouldRunLogoAnimation() -> Bool {
-        let localesAnimationIsAvailableFor = ["en_US", "es_US"]
-        guard profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil,
-              !UserDefaults.standard.bool(forKey: PrefsKeys.WallpaperLogoHasShownAnimation),
-              localesAnimationIsAvailableFor.contains(Locale.current.identifier)
-        else { return false }
-
-        return true
-    }
 }
 
 // MARK: FXHomeViewModelProtocol

@@ -119,7 +119,6 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
     override func viewDidAppear(_ animated: Bool) {
         viewModel.recordViewAppeared()
-        animateFirefoxLogo()
 
         super.viewDidAppear(animated)
     }
@@ -287,16 +286,6 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
-    }
-
-    private func animateFirefoxLogo() {
-        guard viewModel.headerViewModel.shouldRunLogoAnimation(),
-              let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell
-        else { return }
-
-        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
-            cell.runLogoAnimation()
-        })
     }
 
     // MARK: - Contextual hint
