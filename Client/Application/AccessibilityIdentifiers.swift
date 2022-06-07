@@ -90,6 +90,14 @@ public struct AccessibilityIdentifiers {
         }
     }
 
+    struct Onboarding {
+        static let welcomeCard = "WelcomeCard"
+        static let wallpapersCard = "WallpapersCard"
+        static let signSyncCard = "SignSyncCard"
+        static let closeButton = "CloseButton"
+        static let pageControl = "PageControl"
+    }
+
     struct Settings {
         static let tableViewController = "AppSettingsTableViewController.tableView"
 

@@ -8,25 +8,49 @@ import Shared
 
 class IntroViewController: UIViewController, OnViewDismissable {
     var onViewDismissed: (() -> Void)?
-    // private var
-    // Private views
-    private lazy var welcomeCard: IntroScreenWelcomeView = {
-        let welcomeCardView = IntroScreenWelcomeView()
-        welcomeCardView.translatesAutoresizingMaskIntoConstraints = false
-        welcomeCardView.clipsToBounds = true
-        return welcomeCardView
+    private var viewModel: IntroViewModel
+    private let profile: Profile
+    private var onboardingCards = [OnboardingCardViewController]()
+
+    struct UX {
+        static let closeButtonSize: CGFloat = 44
+        static let closeButtonPadding: CGFloat = 24
+        static let pageControlHeight: CGFloat = 40
+        static let pageControlBottomPadding: CGFloat = 8
+    }
+
+    // MARK: - Var related to onboarding
+    private lazy var closeButton: UIButton = .build { button in
+        let closeImage = UIImage(named: ImageIdentifiers.closeLargeButton)
+        button.setImage(closeImage, for: .normal)
+        button.tintColor = .secondaryLabel
+        button.addTarget(self, action: #selector(self.closeOnboarding), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.closeButton
+    }
+
+    private lazy var pageController: UIPageViewController = {
+        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        pageVC.dataSource = self
+        pageVC.delegate = self
+        return pageVC
     }()
-    private lazy var syncCard: IntroScreenSyncView = {
-        let syncCardView = IntroScreenSyncView()
-        syncCardView.translatesAutoresizingMaskIntoConstraints = false
-        syncCardView.clipsToBounds = true
-        return syncCardView
-    }()
+
+    private lazy var pageControl: UIPageControl = .build { pageControl in
+        pageControl.currentPage = 0
+        pageControl.numberOfPages = self.viewModel.enabledCards.count
+        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
+        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
+        pageControl.isUserInteractionEnabled = false
+        pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.pageControl
+    }
+
     // Closure delegate
     var didFinishClosure: ((IntroViewController, FxAPageType?) -> Void)?
 
     // MARK: Initializer
-    init() {
+    init(viewModel: IntroViewModel, profile: Profile) {
+        self.viewModel = viewModel
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -36,7 +60,10 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        initialViewSetup()
+
+        view.backgroundColor = UIColor.theme.browser.background
+        setupPageController()
+        setupLayout()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -46,68 +73,147 @@ class IntroViewController: UIViewController, OnViewDismissable {
     }
 
     // MARK: View setup
-    private func initialViewSetup() {
-        setupIntroView()
-    }
-
-    // onboarding intro view
-    private func setupIntroView() {
-        // Initialize
-        view.addSubview(syncCard)
-        view.addSubview(welcomeCard)
-
-        // Constraints
-        setupWelcomeCard()
-        setupSyncCard()
-    }
-
-    private func setupWelcomeCard() {
-        NSLayoutConstraint.activate([
-            welcomeCard.topAnchor.constraint(equalTo: view.topAnchor),
-            welcomeCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            welcomeCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            welcomeCard.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-
-        // Buton action closures
-        // Next button action
-        welcomeCard.nextClosure = {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.welcomeCard.alpha = 0
-            }) { _ in
-                self.welcomeCard.isHidden = true
-                TelemetryWrapper.recordEvent(category: .action, method: .view, object: .syncScreenView)
+    private func setupPageController() {
+        // Create onboarding card views
+        var cardViewController: OnboardingCardViewController
+        for (index, cardType) in viewModel.enabledCards.enumerated() {
+            let viewModel = viewModel.getCardViewModel(index: index)
+            if cardType == .wallpapers {
+                cardViewController = WallpaperCardViewController(viewModel: viewModel,
+                                                                 delegate: self)
+            } else {
+                cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                                                                  delegate: self)
             }
+            onboardingCards.append(cardViewController)
         }
-        // Close button action
-        welcomeCard.closeClosure = {
-            self.didFinishClosure?(self, nil)
-        }
-        // Sign in button closure
-        welcomeCard.signInClosure = {
-            self.didFinishClosure?(self, .emailLoginFlow)
-        }
-        // Sign up button closure
-        welcomeCard.signUpClosure = {
-            self.didFinishClosure?(self, .emailLoginFlow)
+
+        if let firstViewController = onboardingCards.first {
+            pageController.setViewControllers([firstViewController],
+                                              direction: .forward,
+                                              animated: true,
+                                              completion: nil)
         }
     }
 
-    private func setupSyncCard() {
+    private func setupLayout() {
+        addChild(pageController)
+        view.addSubview(pageController.view)
+        pageController.didMove(toParent: self)
+        view.addSubviews(pageControl, closeButton)
+
         NSLayoutConstraint.activate([
-            syncCard.topAnchor.constraint(equalTo: view.topAnchor),
-            syncCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            syncCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            syncCard.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                constant: -UX.pageControlBottomPadding),
+            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.closeButtonPadding),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
         ])
-        // Start browsing button action
-        syncCard.startBrowsing = {
+    }
+
+    @objc private func closeOnboarding() {
+        didFinishClosure?(self, nil)
+    }
+
+    private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
+        guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
+
+        return onboardingCards[index]
+    }
+
+    // Used to programatically set the pageViewController to show next card
+    private func moveToNextPage(cardType: IntroViewModel.OnboardingCards) {
+        if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
+            pageControl.currentPage = cardType.rawValue + 1
+            pageController.setViewControllers([nextViewController], direction: .forward, animated: true)
+        }
+    }
+
+    // Due to restrictions with PageViewController we need to get the index of the current view controller
+    // to calculate the next view controller
+    private func getCardIndex(viewController: OnboardingCardViewController) -> Int? {
+        let cardType = viewController.viewModel.cardType
+
+        guard let index = viewModel.enabledCards.firstIndex(of: cardType) else {
+            return nil
+        }
+
+        return index
+    }
+}
+
+// MARK: UIPageViewControllerDataSource & UIPageViewControllerDelegate
+extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+
+        guard let onboardingVC = viewController as? OnboardingCardViewController,
+              let index = getCardIndex(viewController: onboardingVC) else {
+              return nil
+        }
+
+        pageControl.currentPage = index
+        return getNextOnboardingCard(index: index, goForward: false)
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+
+        guard let onboardingVC = viewController as? OnboardingCardViewController,
+              let index = getCardIndex(viewController: onboardingVC) else {
+              return nil
+        }
+
+        pageControl.currentPage = index
+        return getNextOnboardingCard(index: index, goForward: true)
+
+    }
+}
+
+extension IntroViewController: OnboardingCardDelegate {
+    func showNextPage(_ cardType: IntroViewModel.OnboardingCards) {
+        guard cardType != viewModel.enabledCards.last else {
             self.didFinishClosure?(self, nil)
+            return
         }
-        // Sign-up browsing button action
-        syncCard.signUp = {
-            self.didFinishClosure?(self, .emailLoginFlow)
+
+        moveToNextPage(cardType: cardType)
+    }
+
+    func primaryAction(_ cardType: IntroViewModel.OnboardingCards) {
+        switch cardType {
+        case .welcome, .wallpapers:
+            moveToNextPage(cardType: cardType)
+        case .signSync:
+            presentSignToSync()
         }
+    }
+
+    private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
+                                  flowType: FxAPageType = .emailLoginFlow,
+                                  referringPage: ReferringPage = .onboarding) {
+        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
+                                                                                      flowType: flowType,
+                                                                                      referringPage: referringPage,
+                                                                                      profile: profile)
+        let controller: DismissableNavigationViewController
+        let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(dismissSignInViewController))
+        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        controller.onViewDismissed = {
+            self.closeOnboarding()
+        }
+        self.present(controller, animated: true)
+    }
+
+    @objc func dismissSignInViewController() {
+        self.dismiss(animated: false, completion: nil)
+        closeOnboarding()
     }
 }
 
