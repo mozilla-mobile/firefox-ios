@@ -523,11 +523,11 @@ class TabManagerTests: XCTestCase {
             }
             return tab
         }
-        let _ = addTab(false) // not visited
+        _ = addTab(false) // not visited
         let tab1 = addTab(true)
-        let _ = addTab(true)
+        _ = addTab(true)
         let tab3 = addTab(true)
-        let _ = addTab(false) // not visited
+        _ = addTab(false) // not visited
 
         manager.selectTab(tab1)
         tab1.parent = tab3
