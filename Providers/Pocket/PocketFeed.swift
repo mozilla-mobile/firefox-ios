@@ -53,15 +53,15 @@ class Pocket: FeatureFlaggable, URLCaching {
         }
     }
 
-    private func getGlobalFeed(items: Int = 2) -> Deferred<Array<PocketFeedStory>> {
-        let deferred = Deferred<Array<PocketFeedStory>>()
+    private func getGlobalFeed(items: Int = 2) -> Deferred<[PocketFeedStory]> {
+        let deferred = Deferred<[PocketFeedStory]>()
 
         guard let request = createGlobalFeedRequest(items: items) else {
             deferred.fill([])
             return deferred
         }
 
-        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? Array<[String: Any]> {
+        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? [[String: Any]] {
             deferred.fill(PocketFeedStory.parseJSON(list: items))
             return deferred
         }
@@ -74,7 +74,7 @@ class Pocket: FeatureFlaggable, URLCaching {
             self.cache(response: response, for: request, with: data)
 
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-            guard let items = json?["recommendations"] as? Array<[String: Any]> else {
+            guard let items = json?["recommendations"] as? [[String: Any]] else {
                 return deferred.fill([])
             }
 
@@ -113,13 +113,13 @@ class Pocket: FeatureFlaggable, URLCaching {
         return featureFlags.isCoreFeatureEnabled(.useMockData) && (pocketKey == "" || pocketKey == nil)
     }
 
-    private func getMockDataFeed(count: Int = 2) -> Deferred<Array<PocketFeedStory>> {
-        let deferred = Deferred<Array<PocketFeedStory>>()
+    private func getMockDataFeed(count: Int = 2) -> Deferred<[PocketFeedStory]> {
+        let deferred = Deferred<[PocketFeedStory]>()
         let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json")
         let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
 
         let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-        guard let items = json?["recommendations"] as? Array<[String: Any]> else {
+        guard let items = json?["recommendations"] as? [[String: Any]] else {
             deferred.fill([])
             return deferred
         }

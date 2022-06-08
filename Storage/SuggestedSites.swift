@@ -24,7 +24,7 @@ open class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
     fileprivate init() {
         let locale = Locale.current
         let sites = DefaultSuggestedSites.sites[locale.identifier] ??
-                    DefaultSuggestedSites.sites["default"]! as Array<SuggestedSiteData>
+                    DefaultSuggestedSites.sites["default"]! as [SuggestedSiteData]
         let tiles = sites.map({ data -> SuggestedSite in
             var site = data
             if let domainMap = DefaultSuggestedSites.urlMap[data.url], let localizedURL = domainMap[locale.identifier] {

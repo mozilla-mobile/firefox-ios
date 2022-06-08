@@ -19,7 +19,7 @@ struct PocketFeedStory {
     let storyDescription: String
     let imageURL: URL
 
-    static func parseJSON(list: Array<[String: Any]>) -> [PocketFeedStory] {
+    static func parseJSON(list: [[String: Any]]) -> [PocketFeedStory] {
         return list.compactMap({ (storyDict) -> PocketFeedStory? in
             guard let urlS = storyDict["url"] as? String,
                   let domain = storyDict["domain"] as? String,
