@@ -44,7 +44,10 @@ extension FXHomeViewModelProtocol {
         return isEnabled && hasData
     }
 
-    func updateData(completion: @escaping () -> Void) {}
+    func updateData(completion: @escaping () -> Void) {
+        // When no data has to be loaded for a section, call completion right away
+        completion()
+    }
 
     func refreshData(for traitCollection: UITraitCollection) {}
 
