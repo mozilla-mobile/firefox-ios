@@ -10,14 +10,14 @@ extension Tab {
         private static let file: URL = {
             let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
-        } ()
+        }()
 
         private static var baseDomainList: Set<String> = {
             if let hosts = NSKeyedUnarchiver.unarchiveObject(withFile: ChangeUserAgent.file.path) as? Set<String> {
                 return hosts
             }
             return Set<String>()
-        } ()
+        }()
 
         static func clear() {
             try? FileManager.default.removeItem(at: Tab.ChangeUserAgent.file)

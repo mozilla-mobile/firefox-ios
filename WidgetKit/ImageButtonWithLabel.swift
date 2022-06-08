@@ -67,7 +67,7 @@ struct ImageButtonWithLabel: View {
                         .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
                 }
 
-                VStack (alignment: .center, spacing: 50.0) {
+                VStack(alignment: .center, spacing: 50.0) {
                     HStack(alignment: .top) {
                         VStack(alignment: .leading) {
                             if isSmall {
