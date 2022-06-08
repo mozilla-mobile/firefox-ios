@@ -16,6 +16,9 @@ class FxPocketHomeHorizontalCellViewModel {
             return "\(story.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, story.timeToRead ?? 0))"
         }
     }
+    var accessibilityLabel: String {
+        return "\(title), \(description)"
+    }
 
     var onTap: (IndexPath) -> Void = { _ in }
 
@@ -113,6 +116,9 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
 
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
+
         setupLayout()
     }
 
@@ -132,6 +138,7 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     func configure(viewModel: FxPocketHomeHorizontalCellViewModel) {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
+        accessibilityLabel = viewModel.accessibilityLabel
 
         heroImageView.sd_setImage(with: viewModel.imageURL)
         sponsoredStack.isHidden = viewModel.sponsor == nil

@@ -52,6 +52,18 @@ public struct AccessibilityIdentifiers {
         struct TopSites {
             static let itemCell = "TopSitesCell"
         }
+
+        struct Pocket {
+            static let itemCell = "PocketCell"
+        }
+
+        struct HistoryHighlights {
+            static let itemCell = "HistoryHighlightsCell"
+        }
+
+        struct JumpBackIn {
+            static let itemCell = "JumpBackInCell"
+        }
     }
 
     struct GeneralizedIdentifiers {
