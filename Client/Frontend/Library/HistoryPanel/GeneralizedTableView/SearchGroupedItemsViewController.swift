@@ -106,7 +106,7 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
     // MARK: - TableView datasource helpers
 
     private func configureDatasource() {
-        diffableDatasource = UITableViewDiffableDataSource<Sections, AnyHashable> (tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+        diffableDatasource = UITableViewDiffableDataSource<Sections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else { return nil }
 
             if let site = item as? Site {
