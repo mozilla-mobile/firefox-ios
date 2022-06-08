@@ -145,12 +145,10 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
         let wallpaperAppSupportDirectoryPath = appSupportPath.appendingPathComponent("wallpapers")
 
         do {
-            try fileManager.removeItem(at: wallpaperAppSupportDirectoryPath)
             try fileManager.moveItem(at: wallpaperDocumentDirectoryPath,
                              to: wallpaperAppSupportDirectoryPath)
-            try fileManager.removeItem(at: wallpaperDocumentDirectoryPath)
-
             completion(true)
+
         } catch let error {
             browserLog.debug("Error migrating the folder: \(error.localizedDescription)")
             completion(false)

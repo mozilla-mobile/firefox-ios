@@ -13,9 +13,37 @@ class WallpaperMigrationUtilityTests: XCTestCase {
     private let migrationKey = PrefsKeys.LegacyFeatureFlags.WallpaperDirectoryMigrationCheck
 
     override func setUp() {
+        removeAllFolders()
     }
 
     override func tearDown() {
+        removeAllFolders()
+    }
+
+    func testRemovingAllFoldersOnSetup() {
+        verifyFoldersHaveBeenDeleted()
+    }
+
+    func testCreatingAFolder() {
+        verifyFoldersHaveBeenDeleted()
+
+        let fileManager = FileManager.default
+        guard let appSupportPath = path(for: .applicationSupport),
+              let docsPath = path(for: .documents)
+        else {
+            XCTFail("Could not create paths")
+            return
+        }
+
+        var isDirectory: ObjCBool = true
+        createFolderAt(path: docsPath)
+        createFolderAt(path: appSupportPath)
+
+        XCTAssertTrue(fileManager.fileExists(atPath: docsPath.path,
+                                              isDirectory: &isDirectory))
+        XCTAssertTrue(fileManager.fileExists(atPath: appSupportPath.path,
+                                              isDirectory: &isDirectory))
+
     }
 
     func testMigrationKeyDoesntExist() {
@@ -23,19 +51,60 @@ class WallpaperMigrationUtilityTests: XCTestCase {
         XCTAssertNil(profile.prefs.boolForKey(migrationKey))
     }
 
-    func testPerformedCheck() throws {
+    func testMigrationFlow() {
+        verifyFoldersHaveBeenDeleted()
+
         let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
-
+        createFolderAt(path: path(for: .documents))
         WallpaperMigrationUtility(with: profile).attemptMigration()
-        let key = try XCTUnwrap(profile.prefs.boolForKey(migrationKey))
+        guard let key = profile.prefs.boolForKey(migrationKey) else {
+            XCTFail("No key exists when a key should exist for WallpaperMigrationCheck")
+            return
+        }
 
-        XCTAssertTrue(key, "After a succesful migration, the key should be set to true, but it is not.")
+        XCTAssertTrue(key, "After a migration, the key should be set to true, but it is not.")
+
+        // Verify that the folder moved, and no longer exists in the
+        // previous place.
+        let fileManager = FileManager.default
+        guard let appSupportPath = path(for: .applicationSupport),
+              let docsPath = path(for: .documents)
+        else {
+            XCTFail("Could not create paths")
+            return
+        }
+
+        var isDirectory: ObjCBool = true
+        XCTAssertFalse(fileManager.fileExists(atPath: docsPath.path,
+                                              isDirectory: &isDirectory))
+        XCTAssertTrue(fileManager.fileExists(atPath: appSupportPath.path,
+                                              isDirectory: &isDirectory))
     }
 
     // MARK: - Helpers
-    private func createFolderAt(path directoryPath: URL) {
+    private func verifyFoldersHaveBeenDeleted(file: StaticString = #filePath, line: UInt = #line) {
         let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: directoryPath.path) {
+
+        guard let appSupportPath = path(for: .applicationSupport)?.path,
+              let docsPath = path(for: .documents)?.path
+        else {
+            XCTFail("Could not create paths")
+            return
+        }
+
+        var isDirectory: ObjCBool = true
+        XCTAssertFalse(fileManager.fileExists(atPath: docsPath,
+                                              isDirectory: &isDirectory))
+        XCTAssertFalse(fileManager.fileExists(atPath: appSupportPath,
+                                              isDirectory: &isDirectory))
+    }
+
+    private func createFolderAt(path directoryPath: URL?) {
+        guard let directoryPath = directoryPath else { return }
+
+        let fileManager = FileManager.default
+        var isDirectory: ObjCBool = true
+        if !fileManager.fileExists(atPath: directoryPath.path, isDirectory: &isDirectory) {
             do {
                 try fileManager.createDirectory(atPath: directoryPath.path,
                                                 withIntermediateDirectories: true,
@@ -52,11 +121,21 @@ class WallpaperMigrationUtilityTests: XCTestCase {
               let docsDir = path(for: .documents)
         else { return }
 
-        do {
-            try fileManager.removeItem(at: appSupportDir)
-            try fileManager.removeItem(at: docsDir)
-        } catch let error {
-            XCTFail("Deleting docs error: \(error.localizedDescription)")
+        var isDirectory: ObjCBool = true
+        if fileManager.fileExists(atPath: docsDir.path, isDirectory: &isDirectory) {
+            do {
+                try fileManager.removeItem(at: docsDir)
+            } catch let error {
+                XCTFail("Deleting docs directory error: \(error.localizedDescription)")
+            }
+        }
+
+        if fileManager.fileExists(atPath: appSupportDir.path, isDirectory: &isDirectory) {
+            do {
+                try fileManager.removeItem(at: appSupportDir)
+            } catch let error {
+                XCTFail("Deleting App Support directory error: \(error.localizedDescription)")
+            }
         }
     }
 
@@ -77,12 +156,5 @@ class WallpaperMigrationUtilityTests: XCTestCase {
         case .applicationSupport:
             return appSupportPath.appendingPathComponent("wallpapers")
         }
-
-//        do {
-//            try fileManager.removeItem(at: wallpaperAppSupportDirectoryPath)
-//            try fileManager.moveItem(at: wallpaperDocumentDirectoryPath,
-//                             to: wallpaperAppSupportDirectoryPath)
-//            try fileManager.removeItem(at: wallpaperDocumentDirectoryPath)
-//        }
     }
 }
