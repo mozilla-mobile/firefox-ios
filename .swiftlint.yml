@@ -3,8 +3,6 @@ disabled_rules: # rule identifiers to exclude from running
 - trailing_comma
 - syntactic_sugar
 - statement_position
-- redundant_objc_attribute
-- redundant_discardable_let
 - protocol_property_accessors_order
 - private_over_fileprivate
 - no_space_in_method_call

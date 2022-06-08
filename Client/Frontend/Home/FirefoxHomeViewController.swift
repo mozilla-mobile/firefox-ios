@@ -265,7 +265,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
             let targetRect = cell.superview.map { window.convert(cell.frame, from: $0) } ?? .zero
 
             // TODO: If visibility ratio is over 50% sponsored content can be marked as seen by the user
-            let _ = targetRect.visibilityRatio(relativeTo: relativeRect)
+            _ = targetRect.visibilityRatio(relativeTo: relativeRect)
         }
     }
 

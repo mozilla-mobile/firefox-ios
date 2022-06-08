@@ -74,7 +74,7 @@ class DownloadTests: XCTestCase {
             XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.noNewData)
 
             // More records. Start again.
-            let _ = batcher.reset().value
+            _ = batcher.reset().value
 
             let ic2 = InfoCollections(collections: ["clients": ts2])
             server.storeRecords(records: [rec2], inCollection: "clients", now: ts2)
