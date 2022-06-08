@@ -79,6 +79,8 @@ class TabManager: NSObject, FeatureFlaggable {
         }
     }
 
+    var closure: (() -> Void)?
+
     fileprivate(set) var tabs = [Tab]()
     fileprivate var _selectedIndex = -1
 
@@ -271,6 +273,7 @@ class TabManager: NSObject, FeatureFlaggable {
             TabEvent.post(.didGainFocus, for: tab)
             tab.applyTheme()
         }
+        closure?()
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
     }
 
