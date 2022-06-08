@@ -72,6 +72,7 @@ public struct PrefsKeys {
         public static let TopSiteSection = "topSitesKey"
 
         public static let MigrationCheck = "MigrationCheck"
+        public static let WallpaperDirectoryMigrationCheck = "WallpaperDirectoryMigrationCheck"
     }
 
     // Firefox contextual hint

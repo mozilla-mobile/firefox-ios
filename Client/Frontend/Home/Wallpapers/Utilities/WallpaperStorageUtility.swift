@@ -130,4 +130,30 @@ class WallpaperStorageUtility: WallpaperFilePathProtocol, Loggable {
             browserLog.debug("WallpaperStorageUtility - error deleting folder for \(key)")
         }
     }
+
+    // MARK: - Migration
+    func migrateResources(completion: (Bool) -> Void) {
+        let fileManager = FileManager.default
+        guard let documentPath = fileManager.urls(for: .documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first,
+              let appSupportPath = fileManager.urls(for: .applicationSupportDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
+        else {
+            browserLog.debug("Wallpaper migration error")
+            return
+        }
+
+        let wallpaperDocumentDirectoryPath = documentPath.appendingPathComponent("wallpapers")
+        let wallpaperAppSupportDirectoryPath = appSupportPath.appendingPathComponent("wallpapers")
+
+        do {
+            try fileManager.removeItem(at: wallpaperAppSupportDirectoryPath)
+            try fileManager.moveItem(at: wallpaperDocumentDirectoryPath,
+                             to: wallpaperAppSupportDirectoryPath)
+            try fileManager.removeItem(at: wallpaperDocumentDirectoryPath)
+
+            completion(true)
+        } catch let error {
+            browserLog.debug("Error migrating the folder: \(error.localizedDescription)")
+            completion(false)
+        }
+    }
 }
