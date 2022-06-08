@@ -1,7 +1,6 @@
 disabled_rules: # rule identifiers to exclude from running
 # Auto-correctable rules
 - trailing_comma
-- statement_position
 - protocol_property_accessors_order
 - private_over_fileprivate
 - mark
