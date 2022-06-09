@@ -170,21 +170,21 @@ private extension Array where Element == Site {
     ///   - sites: The top sites to add the sponsored tile to
     mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile], maxNumberOfSponsoredTile: Int) {
         guard maxNumberOfSponsoredTile > 0 else { return }
-        var siteAdded = 0
+        var siteAddedCount = 0
 
         for (index, _) in contiles.enumerated() {
 
-            guard siteAdded < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
+            guard siteAddedCount < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
             let site = SponsoredTile(contile: contile)
 
             // Show the next sponsored site if site is already present in the pinned sites
             guard !siteIsAlreadyPresent(site: site) else { continue }
 
-            insert(site, at: 0)
-            siteAdded += 1
+            insert(site, at: siteAddedCount)
+            siteAddedCount += 1
 
             // Do not add more sponsored tile if we reach the maximum
-            guard siteAdded < maxNumberOfSponsoredTile else { break }
+            guard siteAddedCount < maxNumberOfSponsoredTile else { break }
         }
     }
 
