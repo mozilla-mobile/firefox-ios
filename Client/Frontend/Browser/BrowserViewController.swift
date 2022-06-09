@@ -152,7 +152,17 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
-    var keyboardPressesHandler = KeyboardPressesHandler()
+
+    private var keyboardPressesHandlerValue: Any?
+
+    @available(iOS 13.4, *)
+    func keyboardPressesHandler() -> KeyboardPressesHandler {
+        guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
+            keyboardPressesHandlerValue = KeyboardPressesHandler()
+            return keyboardPressesHandlerValue as! KeyboardPressesHandler
+        }
+        return keyboardPressesHandlerValue
+    }
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
@@ -1712,7 +1722,7 @@ extension BrowserViewController: LibraryPanelDelegate {
         guard let tab = tabManager.selectedTab else { return }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
+        if  #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
             libraryDrawerViewController?.close()
             return
         }
@@ -1773,7 +1783,7 @@ extension BrowserViewController: HomePanelDelegate {
         }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
+        if #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
             return
         }
 
@@ -2377,12 +2387,16 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        keyboardPressesHandler.handlePressesBegan(presses, with: event)
+        if #available(iOS 13.4, *) {
+            keyboardPressesHandler().handlePressesBegan(presses, with: event)
+        }
         super.pressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        keyboardPressesHandler.handlePressesEnded(presses, with: event)
+        if #available(iOS 13.4, *) {
+            keyboardPressesHandler().handlePressesEnded(presses, with: event)
+        }
         super.pressesEnded(presses, with: event)
     }
 }
