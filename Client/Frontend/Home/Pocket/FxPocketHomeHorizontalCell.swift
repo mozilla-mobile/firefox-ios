@@ -16,6 +16,9 @@ class FxPocketHomeHorizontalCellViewModel {
             return "\(story.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, story.timeToRead ?? 0))"
         }
     }
+    var accessibilityLabel: String {
+        return "\(title), \(description)"
+    }
 
     var onTap: (IndexPath) -> Void = { _ in }
 
@@ -37,7 +40,7 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
         static let titleFontSize: CGFloat = 49 // Style subheadline - AX5
-        static let sponsoredFontSize: CGFloat = 49 // Style subheadline - AX5
+        static let sponsoredMaxFontSize: CGFloat = 49 // Style subheadline - AX5
         static let siteFontSize: CGFloat = 43 // Style caption1 - AX5
         static let stackViewShadowRadius: CGFloat = 4
         static let stackViewShadowOffset: CGFloat = 2
@@ -80,8 +83,8 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
 
     private lazy var sponsoredLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   maxSize: UX.sponsoredFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                                   maxSize: UX.sponsoredMaxFontSize)
         label.textColor = .secondaryLabel
         label.numberOfLines = 1
         label.text = .FirefoxHomepage.Pocket.Sponsored
@@ -113,6 +116,9 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
 
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
+
         setupLayout()
     }
 
@@ -132,6 +138,7 @@ class FxPocketHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     func configure(viewModel: FxPocketHomeHorizontalCellViewModel) {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
+        accessibilityLabel = viewModel.accessibilityLabel
 
         heroImageView.sd_setImage(with: viewModel.imageURL)
         sponsoredStack.isHidden = viewModel.sponsor == nil

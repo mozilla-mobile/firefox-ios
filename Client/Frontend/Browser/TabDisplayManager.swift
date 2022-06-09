@@ -118,7 +118,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         // Get list of tabs corresponding to the uuids from tab display order
         decodedTabUUID.forEach { tabUUID in
-            if let tabIndex = filteredTabCopy.firstIndex (where: { t in
+            if let tabIndex = filteredTabCopy.firstIndex(where: { t in
                 t.tabUUID == tabUUID
             }) {
                 regularOrderedTabs.append(filteredTabCopy[tabIndex])
@@ -1025,8 +1025,7 @@ extension TabDisplayOrder {
                 let jsonDecoder = JSONDecoder()
                 let order = try jsonDecoder.decode(TabDisplayOrder.self, from: tabDisplayOrder)
                 return order
-            }
-            catch let error as NSError {
+            } catch let error as NSError {
                 SentryIntegration.shared.send(message: "Error: Unable to decode tab display order", tag: SentryTag.tabDisplayManager, severity: .error, description: error.debugDescription)
             }
         }

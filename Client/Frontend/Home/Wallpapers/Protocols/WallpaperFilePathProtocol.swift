@@ -31,7 +31,7 @@ extension WallpaperFilePathProtocol {
                     with fileManager: FileManager = FileManager.default
     ) -> URL? {
         guard let basePath = fileManager.urls(
-            for: .documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
+            for: .applicationSupportDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
         else {
             browserLog.debug("WallpaperFilePathProtocol - error fetching basePath for application")
             return nil

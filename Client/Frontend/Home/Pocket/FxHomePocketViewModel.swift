@@ -105,17 +105,43 @@ class FxHomePocketViewModel {
 
     // MARK: - Private
 
+    func updatePocketStoryViewModels(with stories: [PocketStory]) {
+        pocketStoriesViewModels = []
+        for story in stories {
+            bind(pocketStoryViewModel: .init(story: story))
+        }
+    }
+
     private func getPocketSites(completion: @escaping () -> Void) {
         pocketAPI
             .globalFeed(items: UX.numberOfItemsInSection)
             .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
-            let globalTemp = pocketStory.map(PocketStory.init)
-            self?.pocketStoriesViewModels = []
-            for story in globalTemp {
-                self?.bind(pocketStoryViewModel: .init(story: story))
+                var globalTemp = pocketStory.map(PocketStory.init)
+
+                // Check if sponsored stories are enabled, otherwise drop api call
+                guard self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true else {
+                    self?.updatePocketStoryViewModels(with: globalTemp)
+                    completion()
+                    return
+                }
+
+                self?.pocketAPI.sponsoredFeed().uponQueue(.main) { sponsored in
+                    // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+                    var sponsoredTemp = sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection)
+
+                    // Making sure we insert a sponsored story at a valid index
+                    let firstIndex = min(UX.indexOfFirstSponsoredItem, globalTemp.endIndex)
+                    sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
+                    sponsoredTemp.removeFirst()
+
+                    let secondIndex = min(UX.indexOfSecondSponsoredItem, globalTemp.endIndex)
+                    sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
+                    sponsoredTemp.removeFirst()
+
+                    self?.updatePocketStoryViewModels(with: globalTemp)
+                    completion()
+                }
             }
-            completion()
-        }
     }
 
     func showDiscoverMore() {

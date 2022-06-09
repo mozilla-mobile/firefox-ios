@@ -42,6 +42,7 @@ public struct PrefsKeys {
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
+        public static let ASSponsoredPocketStories = "ASSponsoredPocketStoriesUserPrefsKey"
         public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let HistoryGroups = "HistoryGroupsUserPrefsKey"
@@ -72,6 +73,7 @@ public struct PrefsKeys {
         public static let TopSiteSection = "topSitesKey"
 
         public static let MigrationCheck = "MigrationCheck"
+        public static let WallpaperDirectoryMigrationCheck = "WallpaperDirectoryMigrationCheck"
     }
 
     // Firefox contextual hint
@@ -114,7 +116,6 @@ public struct PrefsKeys {
     public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
     public static let WallpaperManagerCurrentWallpaperImageLandscape = "WallpaperManagerCurrentWallpaperImageLandscape"
     public static let WallpaperManagerLogoSwitchPreference = "WallpaperManagerLogoSwitchPreference"
-    public static let WallpaperLogoHasShownAnimation = "WallpaperLogoHasShownAnimation"
 }
 
 public struct PrefsDefaults {

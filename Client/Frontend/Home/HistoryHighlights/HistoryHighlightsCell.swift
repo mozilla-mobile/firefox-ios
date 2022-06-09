@@ -19,6 +19,13 @@ struct HistoryHighlightsViewModel {
     let hideBottomLine: Bool
     let isFillerCell: Bool
     let shouldAddShadow: Bool
+    var accessibilityLabel: String {
+        if let description = description {
+            return "\(title), \(description)"
+        } else {
+            return title
+        }
+    }
 
     init(title: String,
          description: String?,
@@ -110,6 +117,9 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell
+
         applyTheme()
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
@@ -133,6 +143,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         }
         bottomLine.alpha = options.hideBottomLine ? 0 : 1
         isFillerCell = options.isFillerCell
+        accessibilityLabel = options.accessibilityLabel
 
         if let corners = options.corners {
             addRoundedCorners([corners], radius: RecentlyVisitedCellUX.generalCornerRadius)

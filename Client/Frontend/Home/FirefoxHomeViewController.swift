@@ -27,7 +27,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     private var isZeroSearch: Bool
     private var viewModel: FirefoxHomeViewModel
     private var contextMenuHelper: FirefoxHomeContextMenuHelper
-
+    private var tabManager: TabManager
     private var wallpaperManager: WallpaperManager
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
@@ -43,18 +43,19 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     }
 
     var currentTab: Tab? {
-        let tabManager = BrowserViewController.foregroundBVC().tabManager
         return tabManager.selectedTab
     }
 
     // MARK: - Initializers
     init(profile: Profile,
+         tabManager: TabManager,
          isZeroSearch: Bool = false,
          wallpaperManager: WallpaperManager = WallpaperManager()
     ) {
         self.isZeroSearch = isZeroSearch
+        self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
-        let isPrivate = BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? true
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = FirefoxHomeViewModel(profile: profile,
                                               isZeroSearch: isZeroSearch,
                                               isPrivate: isPrivate)
@@ -118,7 +119,6 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
     override func viewDidAppear(_ animated: Bool) {
         viewModel.recordViewAppeared()
-        animateFirefoxLogo()
 
         super.viewDidAppear(animated)
     }
@@ -265,7 +265,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
             let targetRect = cell.superview.map { window.convert(cell.frame, from: $0) } ?? .zero
 
             // TODO: If visibility ratio is over 50% sponsored content can be marked as seen by the user
-            let _ = targetRect.visibilityRatio(relativeTo: relativeRect)
+            _ = targetRect.visibilityRatio(relativeTo: relativeRect)
         }
     }
 
@@ -286,16 +286,6 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
-    }
-
-    private func animateFirefoxLogo() {
-        guard viewModel.headerViewModel.shouldRunLogoAnimation(),
-              let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? FxHomeLogoHeaderCell
-        else { return }
-
-        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
-            cell.runLogoAnimation()
-        })
     }
 
     // MARK: - Contextual hint

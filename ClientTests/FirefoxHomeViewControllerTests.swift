@@ -31,7 +31,8 @@ class FirefoxHomeViewControllerTests: XCTestCase {
 
     func testFirefoxHomeViewController_simpleCreation_hasNoLeaks() {
         let profile = MockProfile()
-        let firefoxHomeViewController = FirefoxHomeViewController(profile: profile)
+        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let firefoxHomeViewController = FirefoxHomeViewController(profile: profile, tabManager: tabManager)
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }

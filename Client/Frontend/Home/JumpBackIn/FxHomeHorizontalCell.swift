@@ -13,6 +13,9 @@ struct FxHomeHorizontalCellViewModel {
     var hasFavicon: Bool // Pocket has no favicon
     var favIconImage: UIImage?
     var heroImage: UIImage?
+    var accessibilityLabel: String {
+        return "\(titleText), \(descriptionText)"
+    }
 }
 
 // MARK: - FxHomeHorizontalCell
@@ -26,7 +29,6 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
         static let titleFontSize: CGFloat = 49 // Style subheadline - AX5
-        static let sponsoredFontSize: CGFloat = 49 // Style subheadline - AX5
         static let siteFontSize: CGFloat = 43 // Style caption1 - AX5
         static let stackViewShadowRadius: CGFloat = 4
         static let stackViewShadowOffset: CGFloat = 2
@@ -106,6 +108,9 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell
+
         applyTheme()
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged,
@@ -142,6 +147,7 @@ class FxHomeHorizontalCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = viewModel.titleText
         heroImage.image = viewModel.heroImage
         descriptionLabel.text = viewModel.descriptionText
+        accessibilityLabel = viewModel.accessibilityLabel
 
         if viewModel.hasFavicon {
             faviconImage.image = viewModel.favIconImage

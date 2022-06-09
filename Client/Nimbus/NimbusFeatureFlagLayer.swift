@@ -23,6 +23,7 @@ final class NimbusFeatureFlagLayer {
 
         case .jumpBackIn,
                 .pocket,
+                .sponsoredPocket,
                 .recentlySaved,
                 .historyHighlights,
                 .topSites:
