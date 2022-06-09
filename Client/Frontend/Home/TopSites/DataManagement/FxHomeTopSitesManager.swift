@@ -124,11 +124,11 @@ class FxHomeTopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
         return Int(preferredNumberOfRows ?? defaultNumberOfRows)
     }
 
-    private func addSponsoredTiles(sites: inout [Site], availableSpacesCount: Int) {
+    func addSponsoredTiles(sites: inout [Site], availableSpacesCount: Int) {
         guard shouldShowSponsoredTiles else { return }
 
-        // Google tile has precedence over Sponsored Tiles
-        let sponsoredTileSpaces = availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount
+        // Google tile has precedence over Sponsored Tiles, if Google tile is present
+        let sponsoredTileSpaces = googleTopSiteManager.shouldAddGoogleTopSite(availableSpacesCount: availableSpacesCount) ? availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount : availableSpacesCount
         if sponsoredTileSpaces > 0 {
             let maxNumberOfTiles = nimbusSponoredTiles.getMaxNumberOfTiles()
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
