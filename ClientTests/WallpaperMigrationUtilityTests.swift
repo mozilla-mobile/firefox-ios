@@ -21,13 +21,13 @@ class WallpaperMigrationUtilityTests: XCTestCase {
     }
 
     func testRemovingAllFoldersOnSetup() {
-        verifyFoldersHaveBeenDeleted()
+        verifyFoldersHaveBeenDeleted(with: FileManager.default)
     }
 
     func testCreatingAFolder() {
-        verifyFoldersHaveBeenDeleted()
-
         let fileManager = FileManager.default
+        verifyFoldersHaveBeenDeleted(with: fileManager)
+
         guard let appSupportPath = path(for: .applicationSupport),
               let docsPath = path(for: .documents)
         else {
@@ -52,7 +52,8 @@ class WallpaperMigrationUtilityTests: XCTestCase {
     }
 
     func testMigrationFlow() {
-        verifyFoldersHaveBeenDeleted()
+        let fileManager = FileManager.default
+        verifyFoldersHaveBeenDeleted(with: fileManager)
 
         let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
         createFolderAt(path: path(for: .documents))
@@ -66,40 +67,101 @@ class WallpaperMigrationUtilityTests: XCTestCase {
 
         // Verify that the folder moved, and no longer exists in the
         // previous place.
+        verifyAppSupportDirExistsAndDocsDirDoesNot(with: fileManager)
+    }
+
+    func testMigrationFlowIfNoFolderExists() {
         let fileManager = FileManager.default
-        guard let appSupportPath = path(for: .applicationSupport),
-              let docsPath = path(for: .documents)
-        else {
-            XCTFail("Could not create paths")
+        verifyFoldersHaveBeenDeleted(with: fileManager)
+
+        let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
+        WallpaperMigrationUtility(with: profile).attemptMigration()
+        guard let key = profile.prefs.boolForKey(migrationKey) else {
+            XCTFail("No key exists when a key should exist for WallpaperMigrationCheck")
             return
         }
 
-        var isDirectory: ObjCBool = true
-        XCTAssertFalse(fileManager.fileExists(atPath: docsPath.path,
-                                              isDirectory: &isDirectory))
-        XCTAssertTrue(fileManager.fileExists(atPath: appSupportPath.path,
-                                              isDirectory: &isDirectory))
+        XCTAssertTrue(key, "WallpaperMigrationCheck should be true if no folder exists, but it is `false`")
+    }
+
+    func testMigrationFlowIfAppSupportFolderAlreadyExists() {
+        let fileManager = FileManager.default
+        verifyFoldersHaveBeenDeleted(with: fileManager)
+
+        let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
+        createFolderAt(path: path(for: .applicationSupport))
+        WallpaperMigrationUtility(with: profile).attemptMigration()
+        guard let key = profile.prefs.boolForKey(migrationKey) else {
+            XCTFail("No key exists when a key should exist for WallpaperMigrationCheck")
+            return
+        }
+
+        XCTAssertTrue(key, "After a migration, the key should be set to true, but it is not.")
+
+        verifyAppSupportDirExistsAndDocsDirDoesNot(with: fileManager)
+    }
+
+    func testMigrationFlowIfBothDirectoriesAlreadyExist() {
+        let fileManager = FileManager.default
+        verifyFoldersHaveBeenDeleted(with: fileManager)
+
+        let profile = MockProfile(databasePrefix: "wallpaperMigrationTests")
+        createFolderAt(path: path(for: .applicationSupport))
+        createFolderAt(path: path(for: .documents))
+        WallpaperMigrationUtility(with: profile).attemptMigration()
+        guard let key = profile.prefs.boolForKey(migrationKey) else {
+            XCTFail("No key exists when a key should exist for WallpaperMigrationCheck")
+            return
+        }
+
+        XCTAssertTrue(key, "After a migration, the key should be set to true, but it is not.")
+
+        verifyAppSupportDirExistsAndDocsDirDoesNot(with: fileManager)
     }
 
     // MARK: - Helpers
-    private func verifyFoldersHaveBeenDeleted(file: StaticString = #filePath, line: UInt = #line) {
-        let fileManager = FileManager.default
-
+    private func verifyFoldersHaveBeenDeleted(with fileManager: FileManager, file: StaticString = #filePath, line: UInt = #line) {
         guard let appSupportPath = path(for: .applicationSupport)?.path,
               let docsPath = path(for: .documents)?.path
         else {
-            XCTFail("Could not create paths")
+            XCTFail("Could not create paths", file: file, line: line)
             return
         }
 
         var isDirectory: ObjCBool = true
         XCTAssertFalse(fileManager.fileExists(atPath: docsPath,
-                                              isDirectory: &isDirectory))
+                                              isDirectory: &isDirectory),
+                       file: file,
+                       line: line)
         XCTAssertFalse(fileManager.fileExists(atPath: appSupportPath,
-                                              isDirectory: &isDirectory))
+                                              isDirectory: &isDirectory),
+                       file: file,
+                       line: line)
     }
 
-    private func createFolderAt(path directoryPath: URL?) {
+    private func verifyAppSupportDirExistsAndDocsDirDoesNot(with fileManager: FileManager, file: StaticString = #filePath, line: UInt = #line) {
+        guard let appSupportPath = path(for: .applicationSupport),
+              let docsPath = path(for: .documents)
+        else {
+            XCTFail("Could not create paths", file: file, line: line)
+            return
+        }
+
+        var isDirectory: ObjCBool = true
+        XCTAssertFalse(fileManager.fileExists(atPath: docsPath.path,
+                                              isDirectory: &isDirectory),
+                       file: file,
+                       line: line)
+        XCTAssertTrue(fileManager.fileExists(atPath: appSupportPath.path,
+                                             isDirectory: &isDirectory),
+                      file: file,
+                      line: line)
+    }
+
+    private func createFolderAt(path directoryPath: URL?,
+                                file: StaticString = #filePath,
+                                line: UInt = #line
+    ) {
         guard let directoryPath = directoryPath else { return }
 
         let fileManager = FileManager.default
@@ -110,7 +172,9 @@ class WallpaperMigrationUtilityTests: XCTestCase {
                                                 withIntermediateDirectories: true,
                                                 attributes: nil)
             } catch {
-                XCTFail("Could not create directory at \(directoryPath.absoluteString)")
+                XCTFail("Could not create directory at \(directoryPath.absoluteString)",
+                        file: file,
+                        line: line)
             }
         }
     }
@@ -152,9 +216,9 @@ class WallpaperMigrationUtilityTests: XCTestCase {
 
         switch directoryType {
         case .documents:
-            return documentPath.appendingPathComponent("wallpapers")
+            return documentPath.appendingPathComponent(WallpaperStorageUtility.directoryName)
         case .applicationSupport:
-            return appSupportPath.appendingPathComponent("wallpapers")
+            return appSupportPath.appendingPathComponent(WallpaperStorageUtility.directoryName)
         }
     }
 }
