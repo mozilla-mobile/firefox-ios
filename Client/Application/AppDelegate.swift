@@ -111,6 +111,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
 
+        // Migrate wallpaper folder
+        WallpaperMigrationUtility(with: profile).attemptMigration()
+
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
