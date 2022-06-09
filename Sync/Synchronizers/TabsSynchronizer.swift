@@ -197,7 +197,7 @@ extension RemoteTab {
         }
         return [
             "title": title,
-            "icon": icon?.absoluteString as Any? ?? NSNull(),
+            "iconURL": icon,
             "urlHistory": tabHistory,
             "lastUsed": millisecondsToSeconds(lastUsed)
         ]

@@ -35,7 +35,7 @@ open class TabsPayload: CleartextPayloadJSON {
                 return nil
             }
 
-            return RemoteTab(clientGUID: guid, URL: urls[0], title: self.title, history: urls, lastUsed: self.lastUsed, icon: self.icon?.asURL)
+            return RemoteTab(clientGUID: guid, URL: urls[0], title: self.title, history: urls, lastUsed: self.lastUsed, icon: self.icon ?? "")
         }
 
         class func remoteTabFromJSON(_ json: JSON, clientGUID: GUID) -> RemoteTab? {

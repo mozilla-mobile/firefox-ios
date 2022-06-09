@@ -393,7 +393,7 @@ class Tab: NSObject {
                 title: tab.displayTitle,
                 history: history,
                 lastUsed: Date.now(),
-                icon: nil)
+                icon: tab.currentFaviconUrl?.absoluteString ?? "")
         } else if let sessionData = tab.sessionData, !sessionData.urls.isEmpty {
             let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reversed())
             if let displayURL = history.first {
@@ -402,7 +402,7 @@ class Tab: NSObject {
                     title: tab.displayTitle,
                     history: history,
                     lastUsed: sessionData.lastUsedTime,
-                    icon: nil)
+                    icon: tab.currentFaviconUrl?.absoluteString ?? "")
             }
         }
 

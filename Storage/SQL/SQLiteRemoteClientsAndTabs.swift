@@ -25,6 +25,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let os = row["os"] as? String
         let version = row["version"] as? String
         let fxaDeviceId = row["fxaDeviceId"] as? String
+
         return RemoteClient(guid: guid, name: name, modified: mod, type: type, formfactor: form, os: os, version: version, fxaDeviceId: fxaDeviceId)
     }
 
@@ -45,7 +46,10 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let title = row["title"] as! String
         let history = SQLiteRemoteClientsAndTabs.convertStringToHistory(row["history"] as? String)
         let lastUsed = row.getTimestamp("last_used")!
-        return RemoteTab(clientGUID: clientGUID, URL: url, title: title, history: history, lastUsed: lastUsed, icon: nil)
+        /// If we have a saved faviconURL we provide it here. Otherwise, the site expecting it should have a fallback.
+        let icon = row["iconURL"] as? String ?? ""
+
+        return RemoteTab(clientGUID: clientGUID, URL: url, title: title, history: history, lastUsed: lastUsed, icon: icon)
     }
 
     class func convertStringToHistory(_ history: String?) -> [URL] {
@@ -98,14 +102,15 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     tab.URL.absoluteString,
                     tab.title,
                     SQLiteRemoteClientsAndTabs.convertHistoryToString(tab.history),
-                    NSNumber(value: tab.lastUsed)
+                    NSNumber(value: tab.lastUsed),
+                    tab.icon,
                 ]
 
                 let lastInsertedRowID = connection.lastInsertedRowID
 
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
-                try connection.executeChange("INSERT INTO tabs (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args)
+                try connection.executeChange("INSERT INTO tabs (client_guid, url, title, history, last_used, iconURL) VALUES (?, ?, ?, ?, ?, ?)", withArgs: args)
 
                 if connection.lastInsertedRowID == lastInsertedRowID {
                     log.debug("Unable to INSERT RemoteTab!")

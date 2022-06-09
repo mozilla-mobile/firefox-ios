@@ -103,7 +103,7 @@ private extension RemoteTabsPanelTests {
                           title: "Mozilla",
                           history: [],
                           lastUsed: 1,
-                          icon: nil)]
+                          icon: "")]
     }
 
     func panelRefreshWithExpectation(panel: RemoteTabsPanel, completion: @escaping () -> Void) {

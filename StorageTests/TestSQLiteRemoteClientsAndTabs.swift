@@ -17,24 +17,24 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()
         let u11 = URL(string: "http://test.com/test1")!
-        let tab11 = RemoteTab(clientGUID: client1GUID, URL: u11, title: "Test 1", history: [    ], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
+        let tab11 = RemoteTab(clientGUID: client1GUID, URL: u11, title: "Test 1", history: [    ], lastUsed: (now - OneMinuteInMilliseconds), icon: "")
 
         let u12 = URL(string: "http://test.com/test2")!
-        let tab12 = RemoteTab(clientGUID: client1GUID, URL: u12, title: "Test 2", history: [], lastUsed: (now - OneHourInMilliseconds), icon: nil)
+        let tab12 = RemoteTab(clientGUID: client1GUID, URL: u12, title: "Test 2", history: [], lastUsed: (now - OneHourInMilliseconds), icon: "")
 
-        let tab21 = RemoteTab(clientGUID: client2GUID, URL: u11, title: "Test 1", history: [], lastUsed: (now - OneDayInMilliseconds), icon: nil)
+        let tab21 = RemoteTab(clientGUID: client2GUID, URL: u11, title: "Test 1", history: [], lastUsed: (now - OneDayInMilliseconds), icon: "")
 
         let u22 = URL(string: "http://different.com/test2")!
-        let tab22 = RemoteTab(clientGUID: client2GUID, URL: u22, title: "Different Test 2", history: [], lastUsed: now + OneHourInMilliseconds, icon: nil)
+        let tab22 = RemoteTab(clientGUID: client2GUID, URL: u22, title: "Different Test 2", history: [], lastUsed: now + OneHourInMilliseconds, icon: "")
 
         let client1 = RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1", fxaDeviceId: "fxa1")
         let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin", version: "55.0.1", fxaDeviceId: "fxa2")
 
         let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1", fxaDeviceId: "fxa3")
         let localUrl1 = URL(string: "http://test.com/testlocal1")!
-        let localTab1 = RemoteTab(clientGUID: nil, URL: localUrl1, title: "Local test 1", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
+        let localTab1 = RemoteTab(clientGUID: nil, URL: localUrl1, title: "Local test 1", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: "")
         let localUrl2 = URL(string: "http://test.com/testlocal2")!
-        let localTab2 = RemoteTab(clientGUID: nil, URL: localUrl2, title: "Local test 2", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
+        let localTab2 = RemoteTab(clientGUID: nil, URL: localUrl2, title: "Local test 2", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: "")
 
         // Tabs are ordered most-recent-first.
         self.clientsAndTabs = [ClientAndTabs(client: client1, tabs: [tab11, tab12]),

@@ -143,7 +143,14 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 40    // Issue #4776.
+
+    /// When there's a change in any part of the schema, this should be incremented.
+    /// Then, the `update(db, from)` method needs to be adjusted for the schema edits made (new table, new column in table etc.)
+    ///
+    /// `SwiftData.swift`'s `prepareSchema` should detect the version mismatch and run `BrowserSchema`'s update method.
+    ///
+    /// Note: The schema version does NOT correspond to the app version.
+    static let DefaultVersion = 41
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -326,7 +333,8 @@ open class BrowserSchema: Schema {
             url TEXT NOT NULL,
             title TEXT,
             history TEXT,
-            last_used INTEGER
+            last_used INTEGER,
+            iconURL TEXT
         )
         """
 
@@ -1417,6 +1425,16 @@ open class BrowserSchema: Schema {
             if !self.run(db, queries: [
                 faviconSiteURLsCreate,
                 ]) {
+                return false
+            }
+        }
+
+        /// An update was made to the tabs table to have iconURL for v102 onwards.
+        /// If users are updating from v101 to v102, we need to update the table to support this new column.
+        if from < 41 && to >= 41 {
+            if !self.run(db, queries: [
+                "ALTER TABLE tabs ADD COLUMN iconURL TEXT",
+            ]) {
                 return false
             }
         }
