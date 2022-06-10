@@ -513,7 +513,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
             // Allow plain text types.
             // Note the format of data URLs is `data:[<media type>][;base64],<data>` with empty <media type> indicating plain text.
-            if url.hasPrefix("data:;base64,") || url.hasPrefix("data:,") || url.hasPrefix("data:text/plain,") || url.hasPrefix("data:text/plain;") {
+            if url.hasPrefix("data:;base64,") || url.hasPrefix("data:,")
+                || url.hasPrefix("data:text/plain,") || url.hasPrefix("data:text/plain;")
+                || url.hasPrefix("data:text/html,") || url.hasPrefix("data:text/html;") {
                 decisionHandler(.allow)
                 return
             }
