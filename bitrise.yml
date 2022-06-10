@@ -32,7 +32,7 @@ workflows:
         inputs:
         - xcode_project: Client.xcodeproj
         - target: Client
-        - shards: '6'
+        - shards: '3'
         - scheme: Fennec_Enterprise_XCUITests
         - test_plan: SmokeXCUITests.xctestplan
         - debug_mode: 'true'
