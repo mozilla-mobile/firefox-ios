@@ -114,7 +114,7 @@ extension BrowserViewController {
                                      extras: ["action": "new-tab"])
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func newPrivateTabKeyCommand() {
@@ -125,8 +125,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: true)
-        keyboardPressesHandler.reset()
-    }
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }    }
 
     @objc private func newNormalTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
@@ -134,7 +133,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: false)
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func closeTabKeyCommand() {
@@ -146,7 +145,7 @@ extension BrowserViewController {
             return
         }
         tabManager.removeTab(currentTab)
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func undoLastTabClosedKeyCommand() {
@@ -191,7 +190,7 @@ extension BrowserViewController {
             tabManager.selectTab(firstTab)
         }
 
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func previousTabKeyCommand() {
@@ -210,7 +209,7 @@ extension BrowserViewController {
             tabManager.selectTab(lastTab)
         }
 
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func selectFirstTab() {
@@ -269,10 +268,10 @@ extension BrowserViewController {
 
         if tabs.count > number {
             tabManager.selectTab(tabs[number])
-            keyboardPressesHandler.reset()
+            if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
         } else if let lastTab = tabs.last {
             tabManager.selectTab(lastTab)
-            keyboardPressesHandler.reset()
+            if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
         }
     }
 
@@ -389,19 +388,19 @@ extension BrowserViewController {
     }
 
     // MARK: Keyboards + Link click shortcuts
-
+    @available(iOS 13.4, *)
     func navigateLinkShortcutIfNeeded(url: URL) -> Bool {
         var shouldCancelHandler = false
 
         // Open tab in background || Open in new tab
-        if keyboardPressesHandler.isOnlyCmdPressed || keyboardPressesHandler.isCmdAndShiftPressed {
+        if keyboardPressesHandler().isOnlyCmdPressed || keyboardPressesHandler().isCmdAndShiftPressed {
             guard let isPrivate = tabManager.selectedTab?.isPrivate else { return shouldCancelHandler }
-            let selectNewTab = !keyboardPressesHandler.isOnlyCmdPressed && keyboardPressesHandler.isCmdAndShiftPressed
+            let selectNewTab = !keyboardPressesHandler().isOnlyCmdPressed && keyboardPressesHandler().isCmdAndShiftPressed
             homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
             shouldCancelHandler = true
 
         // Download Link
-        } else if keyboardPressesHandler.isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
+        } else if keyboardPressesHandler().isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
             // This checks if download is a blob, if yes, begin blob download process
             if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
                 // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()

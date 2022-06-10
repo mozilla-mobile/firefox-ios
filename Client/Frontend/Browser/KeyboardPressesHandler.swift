@@ -12,9 +12,9 @@ import UIKit
 ///
 /// A better solution would be using pointer:
 /// https://developer.apple.com/documentation/uikit/pointer_interactions/integrating_pointer_interactions_into_your_ipad_app
+@available(iOS 13.4, *)
 class KeyboardPressesHandler {
 
-    @available(iOS 13.4, *)
     private lazy var keysPressed: [UIKeyboardHIDUsage] = []
 
     var isOnlyCmdPressed: Bool {
@@ -39,35 +39,21 @@ class KeyboardPressesHandler {
 
     // Needed on some UIKeyCommands shortcuts - when a tab changed is involved
     func reset() {
-        if #available(iOS 13.4, *) {
-            keysPressed.removeAll()
-        }
+        keysPressed.removeAll()
     }
 
     // MARK: Private
 
     private var isCmdPressed: Bool {
-        if #available(iOS 13.4, *) {
-            return keysPressed.contains(.keyboardLeftGUI) || keysPressed.contains(.keyboardRightGUI)
-        } else {
-            return false
-        }
+        return keysPressed.contains(.keyboardLeftGUI) || keysPressed.contains(.keyboardRightGUI)
     }
 
     private var isShiftPressed: Bool {
-        if #available(iOS 13.4, *) {
-            return keysPressed.contains(.keyboardLeftShift) || keysPressed.contains(.keyboardRightShift)
-        } else {
-            return false
-        }
+        return keysPressed.contains(.keyboardLeftShift) || keysPressed.contains(.keyboardRightShift)
     }
 
     private var isOptionPressed: Bool {
-        if #available(iOS 13.4, *) {
-            return keysPressed.contains(.keyboardLeftAlt) || keysPressed.contains(.keyboardRightAlt)
-        } else {
-            return false
-        }
+        return keysPressed.contains(.keyboardLeftAlt) || keysPressed.contains(.keyboardRightAlt)
     }
 
     /// Handle keyboard presses to determine certain commands
@@ -76,8 +62,6 @@ class KeyboardPressesHandler {
     ///   - event: The event to which the presses belong
     ///   - pressedIfFound: Determines if we should press or not the keys that were found
     private func handlePress(_ presses: Set<UIPress>, with event: UIPressesEvent?, pressedIfFound: Bool) {
-        guard #available(iOS 13.4, *) else { return }
-
         for press in presses {
             guard let key = press.key?.keyCode else { continue }
 
