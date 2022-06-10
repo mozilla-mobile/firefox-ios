@@ -357,17 +357,6 @@ extension TelemetryWrapper {
         case onboardingSecondaryButton = "onboarding-card-secondary-button"
         case onboardingSelectWallpaper = "onboarding-select-wallpaper"
         case onboarding = "onboarding"
-        case welcomeScreenView = "welcome-screen-view"
-        case welcomeScreenClose = "welcome-screen-close"
-        case welcomeScreenSignIn = "welcome-screen-sign-in"
-        case welcomeScreenSignUp = "welcome-screen-sign-up"
-        case welcomeScreenNext = "welcome-screen-next"
-        case syncScreenView = "sync-screen-view"
-        case syncScreenSignUp = "sync-screen-sign-up"
-        case syncScreenStartBrowse = "sync-screen-start-browse"
-        case dismissedOnboarding = "dismissed-onboarding"
-        case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
-        case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
@@ -758,28 +747,6 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-        case (.action, .press, .dismissedOnboarding, _, let extras):
-            if let slideNum = extras?["slide-num"] as? Int32 {
-                GleanMetrics.Onboarding.finish.record(GleanMetrics.Onboarding.FinishExtra(slideNum: slideNum))
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .view, .welcomeScreenView, _, _):
-            GleanMetrics.Onboarding.welcomeScreen.add()
-        case(.action, .press, .welcomeScreenSignUp, _, _):
-            GleanMetrics.Onboarding.welcomeScreenSignUp.add()
-        case (.action, .press, .welcomeScreenSignIn, _, _):
-            GleanMetrics.Onboarding.welcomeScreenSignIn.add()
-        case(.action, .press, .welcomeScreenNext, _, _):
-            GleanMetrics.Onboarding.welcomeScreenNext.add()
-        case(.action, .press, .welcomeScreenClose, _, _):
-            GleanMetrics.Onboarding.welcomeScreenClose.add()
-        case(.action, .view, .syncScreenView, _, _):
-            GleanMetrics.Onboarding.syncScreen.add()
-        case(.action, .press, .syncScreenSignUp, _, _):
-            GleanMetrics.Onboarding.syncScreenSignUp.add()
-        case(.action, .press, .syncScreenStartBrowse, _, _):
-            GleanMetrics.Onboarding.syncScreenBrowse.add()
 
         // MARK: Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
