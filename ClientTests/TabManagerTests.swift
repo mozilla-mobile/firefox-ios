@@ -371,7 +371,7 @@ class TabManagerTests: XCTestCase {
                 }
             }
         }
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
     }
 
     func testDeleteLastTab_selectsThePrevious() {
