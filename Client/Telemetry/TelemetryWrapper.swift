@@ -350,6 +350,12 @@ extension TelemetryWrapper {
         case appMenu = "app_menu"
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
+        // MARK: New Onboarding
+        case onboardingClose = "onboarding-close"
+        case onboardingCardView = "onboarding-card-view"
+        case onboardingPrimaryButton = "onboarding-card-primary-button"
+        case onboardingSecondaryButton = "onboarding-card-secondary-button"
+        case onboardingSelectWallpaper = "onboarding-select-wallpaper"
         case onboarding = "onboarding"
         case welcomeScreenView = "welcome-screen-view"
         case welcomeScreenClose = "welcome-screen-close"
@@ -548,6 +554,9 @@ extension TelemetryWrapper {
         case isReduceTransparencyEnabled = "is-reduce-transparency-enabled"
         case isReduceMotionEnabled = "is-reduce-motion-enabled"
         case isInvertColorsEnabled = "is-invert-colors-enabled"
+
+        // Onboarding
+        case cardType = "card-type"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -713,6 +722,42 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         // MARK: Onboarding
+        case (.action, .view, .onboardingCardView, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: type)
+                GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingPrimaryButton, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: type)
+                GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingSecondaryButton, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: type)
+                GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingSelectWallpaper, .wallpaperSelected, let extras):
+            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
+               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
+                GleanMetrics.Onboarding.wallpaperSelected.record(
+                    GleanMetrics.Onboarding.WallpaperSelectedExtra(wallpaperName: name,
+                                                                   wallpaperType: type))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .press, .onboardingClose, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                GleanMetrics.Onboarding.closeTap.record(GleanMetrics.Onboarding.CloseTapExtra(cardType: type))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         case (.action, .press, .dismissedOnboarding, _, let extras):
             if let slideNum = extras?["slide-num"] as? Int32 {
                 GleanMetrics.Onboarding.finish.record(GleanMetrics.Onboarding.FinishExtra(slideNum: slideNum))

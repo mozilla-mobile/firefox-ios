@@ -496,6 +496,91 @@ key_commands:
     expires: "2022-11-12"
 # Onboarding metrics
 onboarding:
+  card_view:
+    type: event
+    description: |
+      Records when an onboarding card is shown
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / wallpapers / sign to sync)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-10"
+  primary_button_tap:
+    type: event
+    description: |
+      Records when the primary button is tap during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / wallpapers / sign to sync)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-10"
+  secondary_button_tap:
+    type: event
+    description: |
+      Records when the secondary button is tap during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / wallpapers / sign to sync)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-10"
+  wallpaper_selected:
+    type: event
+    description: |
+      Recorded when the user selects a wallpaper from
+      the wallpaper onboarding screen.
+    extra_keys:
+      wallpaper_name:
+        type: string
+        description: |
+          The name of the wallpaper set.
+      wallpaper_type:
+        type: string
+        description: |
+          The name of the wallpaper set.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-10"
+  close_tap:
+    type: event
+    description: |
+      Records when the user closes the onboarding.
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          The card presented when the onboarding was closed
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-10"
   finish:
     type: event
     description:
