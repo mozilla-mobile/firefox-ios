@@ -19,8 +19,6 @@ class FxHomeCustomizeHomeView: UICollectionViewCell, ReusableCell {
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .subheadline,
                                                                                     maxSize: UX.buttonMaxFontSize)
-        button.makeDynamicHeightSupport()
-
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = a11y.customizeHome
     }

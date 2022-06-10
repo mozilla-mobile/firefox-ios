@@ -5,7 +5,7 @@
 import Foundation
 
 // A conveniance button class to add a closure as an action on a button instead of a selector
-class ActionButton: UIButton {
+class ActionButton: ResizableButton {
     var touchUpAction: ((UIButton) -> Void)? {
         didSet {
             setupButton()

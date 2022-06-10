@@ -61,7 +61,7 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
-    private lazy var ctaButton: UIButton = .build { [weak self] button in
+    private lazy var ctaButton: ResizableButton = .build { [weak self] button in
         button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                                     maxSize: UX.buttonMaxFontSize)
@@ -71,7 +71,6 @@ class HomeTabBanner: UIView, GleanPlumbMessageManagable {
         button.addTarget(self, action: #selector(self?.handleCTA), for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: UX.buttonEdgeSpacing,
                                                 bottom: 0, right: UX.buttonEdgeSpacing)
-        button.makeDynamicHeightSupport()
     }
 
     private lazy var image: UIImageView = .build { imageView in
