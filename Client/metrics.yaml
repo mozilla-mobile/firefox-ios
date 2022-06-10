@@ -623,7 +623,7 @@ onboarding:
     expires: "2023-01-01"
 
 # Top Site
-top_site:
+top_sites:
   tile_pressed:
     type: event
     description: |
