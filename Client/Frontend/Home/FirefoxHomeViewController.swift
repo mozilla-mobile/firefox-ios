@@ -231,7 +231,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     // MARK: - Helpers
 
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
-    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-verse)
+    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
     private func reloadOnRotation() {
         if let _ = self.presentedViewController as? PhotonActionSheet {
