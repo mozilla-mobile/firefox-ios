@@ -201,6 +201,10 @@ class BrowserViewController: UIViewController {
         applyTheme()
     }
 
+    @objc func didTapUndoCloseAllTabToast(notification: Notification) {
+        leaveOverlayMode(didCancel: true)
+    }
+
     @objc func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
@@ -450,6 +454,8 @@ class BrowserViewController: UIViewController {
                                                name: .DisplayThemeChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchBarPositionDidChange),
                                                name: .SearchBarPositionDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didTapUndoCloseAllTabToast),
+                                               name: .DidTapUndoCloseAllTabToast, object: nil)
     }
 
     func addSubviews() {
