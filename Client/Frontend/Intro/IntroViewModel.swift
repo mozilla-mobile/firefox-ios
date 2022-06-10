@@ -69,7 +69,7 @@ struct IntroViewModel {
         let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
 
         TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
+                                     method: .tap,
                                      object: .onboardingClose,
                                      extras: extra)
     }

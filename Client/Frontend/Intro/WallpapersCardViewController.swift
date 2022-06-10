@@ -130,7 +130,7 @@ extension WallpaperCardViewController: UICollectionViewDelegateFlowLayout, UICol
         selectedWallpaper = indexPath.row
         setWallpaper()
 
-        let extra = wallpaperManager.getWallpaperTelemeryAt(index: selectedWallpaper)
+        let extra = wallpaperManager.getWallpaperTelemetryAt(index: selectedWallpaper)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .onboardingSelectWallpaper,

@@ -720,28 +720,27 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .onboardingPrimaryButton, _, let extras):
             if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: type)
-                GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
+                let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: type)
+                GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .tap, .onboardingSecondaryButton, _, let extras):
             if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
-                let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: type)
-                GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
+                let cardTypeExtra = GleanMetrics.Onboarding.SecondaryButtonTapExtra(cardType: type)
+                GleanMetrics.Onboarding.secondaryButtonTap.record(cardTypeExtra)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case (.action, .tap, .onboardingSelectWallpaper, .wallpaperSelected, let extras):
             if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
                let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
-                GleanMetrics.Onboarding.wallpaperSelected.record(
-                    GleanMetrics.Onboarding.WallpaperSelectedExtra(wallpaperName: name,
-                                                                   wallpaperType: type))
+                let wallpaperExtra = GleanMetrics.Onboarding.WallpaperSelectedExtra(wallpaperName: name, wallpaperType: type)
+                GleanMetrics.Onboarding.wallpaperSelected.record(wallpaperExtra)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-        case (.action, .press, .onboardingClose, _, let extras):
+        case (.action, .tap, .onboardingClose, _, let extras):
             if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
                 GleanMetrics.Onboarding.closeTap.record(GleanMetrics.Onboarding.CloseTapExtra(cardType: type))
             } else {

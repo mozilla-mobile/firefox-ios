@@ -86,7 +86,7 @@ struct WallpaperManager {
         return inLandscape ? image.landscape : image.portrait
     }
 
-    public func getWallpaperTelemeryAt(index: Int) -> [String: String] {
+    public func getWallpaperTelemetryAt(index: Int) -> [String: String] {
         return dataManager.availableWallpapers[index].telemetryMetadata
     }
 
