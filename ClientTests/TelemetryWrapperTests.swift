@@ -23,24 +23,24 @@ class TelemetryWrapperTests: XCTestCase {
         let extras = [topSitePositionKey: "\(1)", topSiteTileTypeKey: "history-based"]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil, extras: extras)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSite.tilePressed)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.tilePressed)
     }
 
     func test_topSiteTileWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil)
-        XCTAssertFalse(GleanMetrics.TopSite.tilePressed.testHasValue())
+        XCTAssertFalse(GleanMetrics.TopSites.tilePressed.testHasValue())
     }
 
     func test_topSiteContextualMenu_GleanIsCalled() {
         let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: FirefoxHomeContextMenuHelper.ContextualActionType.settings.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSite.contextualMenu)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contextualMenu)
     }
 
     func test_topSiteContextualMenuWithoutExtra_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: nil)
-        XCTAssertFalse(GleanMetrics.TopSite.contextualMenu.testHasValue())
+        XCTAssertFalse(GleanMetrics.TopSites.contextualMenu.testHasValue())
     }
 
     // MARK: - Preferences
