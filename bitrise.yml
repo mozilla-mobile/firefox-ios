@@ -218,6 +218,7 @@ workflows:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: SmokeTest3
+    - deploy-to-bitrise-io@2: {}
   build_and_test_4_SmokeTest4:
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
