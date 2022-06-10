@@ -124,11 +124,11 @@ class FxHomeTopSitesManager: FeatureFlaggable, HasNimbusSponsoredTiles {
         return Int(preferredNumberOfRows ?? defaultNumberOfRows)
     }
 
-    private func addSponsoredTiles(sites: inout [Site], availableSpacesCount: Int) {
+    func addSponsoredTiles(sites: inout [Site], availableSpacesCount: Int) {
         guard shouldShowSponsoredTiles else { return }
 
-        // Google tile has precedence over Sponsored Tiles
-        let sponsoredTileSpaces = availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount
+        // Google tile has precedence over Sponsored Tiles, if Google tile is present
+        let sponsoredTileSpaces = googleTopSiteManager.shouldAddGoogleTopSite(availableSpacesCount: availableSpacesCount) ? availableSpacesCount - GoogleTopSiteManager.Constants.reservedSpaceCount : availableSpacesCount
         if sponsoredTileSpaces > 0 {
             let maxNumberOfTiles = nimbusSponoredTiles.getMaxNumberOfTiles()
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
@@ -170,21 +170,21 @@ private extension Array where Element == Site {
     ///   - sites: The top sites to add the sponsored tile to
     mutating func addSponsoredTiles(sponsoredTileSpaces: Int, contiles: [Contile], maxNumberOfSponsoredTile: Int) {
         guard maxNumberOfSponsoredTile > 0 else { return }
-        var siteAdded = 0
+        var siteAddedCount = 0
 
         for (index, _) in contiles.enumerated() {
 
-            guard siteAdded < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
+            guard siteAddedCount < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
             let site = SponsoredTile(contile: contile)
 
             // Show the next sponsored site if site is already present in the pinned sites
             guard !siteIsAlreadyPresent(site: site) else { continue }
 
-            insert(site, at: 0)
-            siteAdded += 1
+            insert(site, at: siteAddedCount)
+            siteAddedCount += 1
 
             // Do not add more sponsored tile if we reach the maximum
-            guard siteAdded < maxNumberOfSponsoredTile else { break }
+            guard siteAddedCount < maxNumberOfSponsoredTile else { break }
         }
     }
 
