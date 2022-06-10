@@ -28,31 +28,31 @@ class SponsoredTileTelemetry {
     static func setupContextId() {
         // Use existing client UUID, if doesn't exists create a new one
         if let stringContextId = contextId, let clientUUID = UUID(uuidString: stringContextId) {
-            GleanMetrics.TopSite.contextId.set(clientUUID)
+            GleanMetrics.TopSites.contextId.set(clientUUID)
         } else {
             let newUUID = UUID()
-            GleanMetrics.TopSite.contextId.set(newUUID)
+            GleanMetrics.TopSites.contextId.set(newUUID)
             contextId = newUUID.uuidString
         }
     }
 
     static func sendImpressionTelemetry(tile: SponsoredTile, position: Int) {
-        let extra = GleanMetrics.TopSite.ContileImpressionExtra(position: Int32(position), source: SponsoredTileTelemetry.source)
-        GleanMetrics.TopSite.contileImpression.record(extra)
+        let extra = GleanMetrics.TopSites.ContileImpressionExtra(position: Int32(position), source: SponsoredTileTelemetry.source)
+        GleanMetrics.TopSites.contileImpression.record(extra)
 
-        GleanMetrics.TopSite.contileTileId.set(Int64(tile.tileId))
-        GleanMetrics.TopSite.contileAdvertiser.set(tile.title)
-        GleanMetrics.TopSite.contileReportingUrl.set(tile.impressionURL)
+        GleanMetrics.TopSites.contileTileId.set(Int64(tile.tileId))
+        GleanMetrics.TopSites.contileAdvertiser.set(tile.title)
+        GleanMetrics.TopSites.contileReportingUrl.set(tile.impressionURL)
         GleanMetrics.Pings.shared.topsitesImpression.submit()
     }
 
     static func sendClickTelemetry(tile: SponsoredTile, position: Int) {
-        let extra = GleanMetrics.TopSite.ContileClickExtra(position: Int32(position), source: SponsoredTileTelemetry.source)
-        GleanMetrics.TopSite.contileClick.record(extra)
+        let extra = GleanMetrics.TopSites.ContileClickExtra(position: Int32(position), source: SponsoredTileTelemetry.source)
+        GleanMetrics.TopSites.contileClick.record(extra)
 
-        GleanMetrics.TopSite.contileTileId.set(Int64(tile.tileId))
-        GleanMetrics.TopSite.contileAdvertiser.set(tile.title)
-        GleanMetrics.TopSite.contileReportingUrl.set(tile.clickURL)
+        GleanMetrics.TopSites.contileTileId.set(Int64(tile.tileId))
+        GleanMetrics.TopSites.contileAdvertiser.set(tile.title)
+        GleanMetrics.TopSites.contileReportingUrl.set(tile.clickURL)
         GleanMetrics.Pings.shared.topsitesImpression.submit()
     }
 }
