@@ -234,6 +234,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             } else {
                 if prevNumberOfRecords == 0 {
                     tableView.isScrollEnabled = true
+                    DispatchQueue.main.async { self.tableView.backgroundView = nil }
                 }
             }
             self.tableView.reloadData()
