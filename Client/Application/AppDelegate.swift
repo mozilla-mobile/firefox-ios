@@ -34,12 +34,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tabManager: TabManager!
     var applicationCleanlyBackgrounded = true
     var receivedURLs = [URL]()
-
+    var orientationLock = UIInterfaceOrientationMask.all
+    
     weak var profile: Profile?
     weak var application: UIApplication?
 
     private var shutdownWebServer: DispatchSourceTimer?
-    private var orientationLock = UIInterfaceOrientationMask.all
     private var launchOptions: [AnyHashable: Any]?
     private var telemetry: TelemetryWrapper?
     private var adjustHelper: AdjustHelper?
@@ -555,6 +555,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+
+    // Orientation lock for views that use new modal presenter
+    func application(_ application: UIApplication,
+                     supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return self.orientationLock
+    }
 }
 
 // MARK: - Root View Controller Animations
@@ -567,35 +573,6 @@ extension AppDelegate: UINavigationControllerDelegate {
             return TrayToBrowserAnimator()
         default:
             return nil
-        }
-    }
-}
-
-extension AppDelegate: MFMailComposeViewControllerDelegate {
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        // Dismiss the view controller and start the app up
-        controller.dismiss(animated: true, completion: nil)
-        _ = startApplication(application!, withLaunchOptions: self.launchOptions)
-    }
-}
-
-// Orientation lock for views that use new modal presenter
-extension AppDelegate {
-    /// ref: https://stackoverflow.com/questions/28938660/
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return self.orientationLock
-    }
-
-    struct AppUtility {
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
-            if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                delegate.orientationLock = orientation
-            }
-        }
-
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation: UIInterfaceOrientation) {
-            self.lockOrientation(orientation)
-            UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
         }
     }
 }
