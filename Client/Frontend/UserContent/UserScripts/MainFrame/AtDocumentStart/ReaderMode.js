@@ -43,7 +43,7 @@ function checkReadability() {
         return;
       }
 
-      var Readability = require("readability/Readability.js");
+      var {Readability} = require("@mozilla/readability");
 
       var uri = {
         spec: document.location.href,
@@ -68,6 +68,12 @@ function checkReadability() {
       var doc = new DOMParser().parseFromString(docStr, "text/html");
       var readability = new Readability(uri, doc, { debug: DEBUG });
       readabilityResult = readability.parse();
+
+      if (!readabilityResult) {
+        debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
+        return;
+      }
 
       // Sanitize the title to prevent a malicious page from inserting HTML in the `<title>`.
       readabilityResult.title = escapeHTML(readabilityResult.title);
