@@ -132,7 +132,10 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         super.viewWillTransition(to: size, with: coordinator)
 
         wallpaperView.updateImageForOrientationChange()
-        reloadOnRotation()
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            reloadOnRotation()
+        }
 
         // Adjust home tab banner height on rotation
         homeTabBanner?.adjustMaxHeight(size.height * 0.6)
@@ -141,6 +144,11 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyTheme()
+
+        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+            || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            reloadOnRotation()
+        }
     }
 
     // MARK: - Layout
@@ -222,6 +230,9 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
     // MARK: - Helpers
 
+    /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
+    /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
+    /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
     private func reloadOnRotation() {
         if let _ = self.presentedViewController as? PhotonActionSheet {
             presentedViewController?.dismiss(animated: false, completion: nil)
