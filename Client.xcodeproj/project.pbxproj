@@ -12021,6 +12021,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
 			};
@@ -12049,6 +12050,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12312,6 +12314,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12335,6 +12338,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12359,6 +12363,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12382,6 +12387,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12472,6 +12478,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Sentry-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12495,6 +12502,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Sentry-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12519,6 +12527,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Sentry-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12542,6 +12551,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Sentry-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12567,6 +12577,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Snapkit-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12590,6 +12601,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Snapkit-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12614,6 +12626,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Snapkit-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12637,6 +12650,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Snapkit-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12662,6 +12676,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "SDWebImage-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12685,6 +12700,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "SDWebImage-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12709,6 +12725,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "SDWebImage-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12732,6 +12749,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "SDWebImage-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12757,6 +12775,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "XCGLogger-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12780,6 +12799,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "XCGLogger-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12804,6 +12824,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "XCGLogger-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12827,6 +12848,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "XCGLogger-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12852,6 +12874,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Fuzi-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12875,6 +12898,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Fuzi-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12899,6 +12923,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Fuzi-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12922,6 +12947,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Fuzi-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12947,6 +12973,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12970,6 +12997,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -12994,6 +13022,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -13017,6 +13046,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "RustMozillaAppServices-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -13055,6 +13085,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+					"-fprofile-instr-generate",
+				);
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Firefox;
@@ -13073,6 +13108,10 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -13127,6 +13166,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -13201,6 +13241,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
 			};
@@ -13342,6 +13383,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+					"-fprofile-instr-generate",
+				);
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Enterprise;
@@ -13361,6 +13407,10 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -13413,6 +13463,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -13463,6 +13514,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				DEFINES_MODULE = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
 			};
@@ -13595,6 +13647,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+					"-fprofile-instr-generate",
+				);
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = FirefoxBeta;
@@ -13613,6 +13670,10 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -13666,6 +13727,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
@@ -13744,6 +13806,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_TESTABILITY = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
@@ -14073,6 +14136,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+					"-fprofile-instr-generate",
+				);
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;
@@ -14092,6 +14160,10 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lxml2",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
