@@ -193,7 +193,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             // left-align the engines on iphones, center on ipad
             if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
                 make.leading.equalTo(self.searchEngineScrollView).priority(1000)
-                make.width.greaterThanOrEqualTo(self.view)
             } else {
                 make.leading.greaterThanOrEqualTo(self.searchEngineScrollView).priority(1000)
             }
