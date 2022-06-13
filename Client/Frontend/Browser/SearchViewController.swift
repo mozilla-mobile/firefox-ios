@@ -271,7 +271,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
             make.size.equalTo(SearchViewControllerUX.FaviconSize)
-            //offset the left edge to align with search results
+            // offset the left edge to align with search results
             make.leading.equalTo(leftEdge).offset(SearchViewControllerUX.SuggestionMargin * 2)
             make.top.equalTo(self.searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
             make.bottom.equalTo(self.searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
