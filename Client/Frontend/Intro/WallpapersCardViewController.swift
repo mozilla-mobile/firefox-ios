@@ -103,6 +103,11 @@ class WallpaperCardViewController: OnboardingCardViewController {
     }
 
     private func setWallpaper() {
+        let currentIndex = IndexPath(row: selectedWallpaper, section: 0)
+        collectionView.selectItem(at: currentIndex,
+                                  animated: false,
+                                  scrollPosition: [])
+
         let previewImage = wallpaperManager.getImageAt(index: selectedWallpaper, inLandscape: false)
         wallpaperImageView.image = previewImage
     }
@@ -125,8 +130,6 @@ extension WallpaperCardViewController: UICollectionViewDelegateFlowLayout, UICol
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) { cell.isSelected = true }
-
         selectedWallpaper = indexPath.row
         setWallpaper()
     }
