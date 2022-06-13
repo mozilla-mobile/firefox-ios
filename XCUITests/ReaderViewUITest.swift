@@ -224,7 +224,7 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReaderListOptions() {
-        sleep(3)
+        sleep(5)
         addContentToReaderView()
         // Check that Settings layouts options are shown
         waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)

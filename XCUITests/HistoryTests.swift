@@ -81,13 +81,14 @@ class HistoryTests: BaseTestCase {
 
     // Smoketest
     func testClearPrivateDataButtonDisabled() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         //Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
+        waitForExistence(app.tables.cells["ClearPrivateData"], timeout: 10)
         app.alerts.buttons["OK"].tap()
         
         //Wait for OK pop-up to disappear after confirming
