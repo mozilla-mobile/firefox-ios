@@ -9,7 +9,7 @@ import WebKit
 /// and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
 /// method.
 
-/// Note that this most of handler is still in BrowserViewController+WebViewDelegates, this is a work in progress
+/// Note that this is a work in progress to remove navigation handler code from BrowserViewController+WebViewDelegates
 struct WebviewNavigationHandler {
 
     enum Scheme: String {
