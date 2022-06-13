@@ -302,7 +302,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 make.top.equalTo(self.searchEngineScrollViewContent)
                 make.bottom.equalTo(self.searchEngineScrollViewContent)
                 if engine === self.searchEngines.quickSearchEngines.last {
-                    make.trailing.lessThanOrEqualTo(self.searchEngineScrollViewContent)
+                    make.trailing.equalTo(self.searchEngineScrollViewContent)
                 }
             }
             leftEdge = engineButton.snp.trailing
