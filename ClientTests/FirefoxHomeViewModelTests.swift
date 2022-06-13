@@ -28,7 +28,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
         viewModel.updateData()
 
         let expectation = expectation(description: "Wait for sections to be reloaded")
-        expectation.expectedFulfillmentCount = 2
+        expectation.expectedFulfillmentCount = 4
         reloadSectionCompleted = { section in
             ensureMainThread {
                 viewModel.reloadSection(section, with: collectionView)
@@ -38,7 +38,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
 
         waitForExpectations(timeout: 1.0, handler: nil)
 
-        XCTAssertEqual(viewModel.shownSections.count, 4)
+        XCTAssertEqual(viewModel.shownSections.count, 6)
     }
 
     // MARK: Orders of sections
