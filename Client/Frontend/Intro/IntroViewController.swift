@@ -192,6 +192,15 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
+    // Extra step to make sure pageControl.currentPage is the right index card
+    // because UIPageViewControllerDataSource call fails
+    func pageChanged(_ cardType: IntroViewModel.OnboardingCards) {
+        if let cardIndex = viewModel.enabledCards.firstIndex(of: cardType),
+           cardIndex != pageControl.currentPage {
+            pageControl.currentPage = cardIndex
+        }
+    }
+
     private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
                                   flowType: FxAPageType = .emailLoginFlow,
                                   referringPage: ReferringPage = .onboarding) {
