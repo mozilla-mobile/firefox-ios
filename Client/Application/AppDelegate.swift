@@ -111,6 +111,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
 
+        // Migrate wallpaper folder
+        WallpaperMigrationUtility(with: profile).attemptMigration()
+
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
@@ -175,7 +178,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
-        browserViewController.updateState = .coldStart
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -209,9 +211,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        var shouldPerformAdditionalDelegateHandling = true
-
         UIScrollView.doBadSwizzleStuff()
 
         window!.makeKeyAndVisible()
@@ -220,14 +219,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
             Logger.syncLogger.deleteOldLogsDownToSizeLimit()
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
-        }
-
-        // If a shortcut was launched, display its information and take the appropriate action
-        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
-
-            QuickActions.sharedInstance.launchedShortcutItem = shortcutItem
-            // This will block "performActionForShortcutItem:completionHandler" from being called.
-            shouldPerformAdditionalDelegateHandling = false
         }
 
         pushNotificationSetup()
@@ -289,7 +280,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         updateSessionCount()
         adjustHelper?.setupAdjust()
 
-        return shouldPerformAdditionalDelegateHandling
+        return true
     }
 
     private func updateSessionCount() {
@@ -318,7 +309,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC())
+            NavigationPath.handle(nav: routerpath, with: self.browserViewController)
         }
         return true
     }
@@ -349,20 +340,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             setUpWebServer(profile)
         }
 
-        BrowserViewController.foregroundBVC().firefoxHomeViewController?.reloadAll()
+        browserViewController.firefoxHomeViewController?.reloadAll()
 
-        // Resume file downloads.
-        // TODO: iOS 13 needs to iterate all the BVCs.
-        BrowserViewController.foregroundBVC().downloadQueue.resumeAll()
-
-        // handle quick actions is available
-        let quickActions = QuickActions.sharedInstance
-        if let shortcut = quickActions.launchedShortcutItem {
-            // dispatch asynchronously so that BVC is all set up for handling new tabs
-            // when we try and open them
-            quickActions.handleShortCutItem(shortcut, withBrowserViewController: BrowserViewController.foregroundBVC())
-            quickActions.launchedShortcutItem = nil
-        }
+        /// When transitioning to scenes, each scene's BVC needs to resume its file download queue.
+        browserViewController.downloadQueue.resumeAll()
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
@@ -371,7 +352,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             // We could load these here, but then we have to futz with the tab counter
             // and making NSURLRequests.
-            BrowserViewController.foregroundBVC().loadQueuedTabs(receivedURLs: self.receivedURLs)
+            self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
             self.receivedURLs.removeAll()
             application.applicationIconBadgeNumber = 0
         }
@@ -404,7 +385,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Pause file downloads.
         // TODO: iOS 13 needs to iterate all the BVCs.
-        BrowserViewController.foregroundBVC().downloadQueue.pauseAll()
+        browserViewController.downloadQueue.pauseAll()
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -492,9 +473,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        let bvc = BrowserViewController.foregroundBVC()
         if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
-            bvc.openBlankNewTab(focusLocationField: false)
+            browserViewController.openBlankNewTab(focusLocationField: false)
             return true
         }
 
@@ -513,11 +493,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // it is recommended that links contain the `deep_link` query parameter. This link will also
             // be url encoded.
             if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
-                bvc.switchToTabForURLOrOpen(url)
+                browserViewController.switchToTabForURLOrOpen(url)
                 return true
             }
 
-            bvc.switchToTabForURLOrOpen(url)
+            browserViewController.switchToTabForURLOrOpen(url)
             return true
         }
 
@@ -527,7 +507,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let userInfo = userActivity.userInfo,
                 let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
                 let url = URL(string: urlString) {
-                bvc.switchToTabForURLOrOpen(url)
+                browserViewController.switchToTabForURLOrOpen(url)
                 return true
             }
         }
@@ -535,8 +515,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return false
     }
 
+    /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
+    ///
+    /// This method can handle a quick action from both app launch and when the app becomes active. However, the system calls launch methods first if the app `launches`
+    /// and gives you a chance to handle the shortcut there. If it's not handled there, this method is called in the activation process with the shortcut item.
+    ///
+    /// Quick actions / shortcut items are handled here as long as our two launch methods return `true`. If either of them return `false`, this method
+    /// won't be called to handle shortcut items.
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: BrowserViewController.foregroundBVC())
+        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
 
         completionHandler(handledShortCutItem)
     }
@@ -589,12 +576,6 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
         // Dismiss the view controller and start the app up
         controller.dismiss(animated: true, completion: nil)
         _ = startApplication(application!, withLaunchOptions: self.launchOptions)
-    }
-}
-
-extension UIApplication {
-    static var isInPrivateMode: Bool {
-        return BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? false
     }
 }
 

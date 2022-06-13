@@ -35,7 +35,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testWebViewContextMenu () throws {
-        throw XCTSkip ("Failing a lot and now new strings here")
+        throw XCTSkip("Failing a lot and now new strings here")
         // Drag the context menu up to show all the options
         func drag() {
             let window = XCUIApplication().windows.element(boundBy: 0)

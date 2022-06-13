@@ -118,7 +118,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         // Get list of tabs corresponding to the uuids from tab display order
         decodedTabUUID.forEach { tabUUID in
-            if let tabIndex = filteredTabCopy.firstIndex (where: { t in
+            if let tabIndex = filteredTabCopy.firstIndex(where: { t in
                 t.tabUUID == tabUUID
             }) {
                 regularOrderedTabs.append(filteredTabCopy[tabIndex])
@@ -493,13 +493,19 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if let _ = tabGroups {
-            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier, for: indexPath) as! ASHeaderView
-            view.remakeConstraint(type: .otherGroupTabs)
+        if let _ = tabGroups,
+           let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                      withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
+                                                                      for: indexPath) as? ASHeaderView {
+
+            let viewModel = ASHeaderViewModel(leadingInset: 15,
+                                              title: .TabTrayOtherTabsSectionHeader,
+                                              titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
+                                              isButtonHidden: true)
+
+            view.configure(viewModel: viewModel)
             view.title = .TabTrayOtherTabsSectionHeader
             view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
-            view.moreButton.isHidden = true
-            view.titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.filteredTabs
 
             return view
         }
@@ -1019,8 +1025,7 @@ extension TabDisplayOrder {
                 let jsonDecoder = JSONDecoder()
                 let order = try jsonDecoder.decode(TabDisplayOrder.self, from: tabDisplayOrder)
                 return order
-            }
-            catch let error as NSError {
+            } catch let error as NSError {
                 SentryIntegration.shared.send(message: "Error: Unable to decode tab display order", tag: SentryTag.tabDisplayManager, severity: .error, description: error.debugDescription)
             }
         }

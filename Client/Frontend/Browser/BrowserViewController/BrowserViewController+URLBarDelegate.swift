@@ -32,9 +32,11 @@ extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
-                                                           profile: profile,
-                                                           tabToFocus: tabToFocus)
+        self.tabTrayViewController = TabTrayViewController(
+            tabTrayDelegate: self,
+            profile: profile,
+            tabToFocus: tabToFocus,
+            tabManager: tabManager)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)

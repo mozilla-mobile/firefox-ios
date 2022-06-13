@@ -582,7 +582,7 @@ extension HistoryPanelWithGroups: UITableViewDelegate {
             header.addGestureRecognizer(tapGesture)
 
             // let historySectionsWithGroups
-            let _ = viewModel.searchTermGroups.map { group in
+            _ = viewModel.searchTermGroups.map { group in
                 viewModel.groupBelongsToSection(asGroup: group)
             }
         }

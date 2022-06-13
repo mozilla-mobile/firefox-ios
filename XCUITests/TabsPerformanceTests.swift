@@ -2,7 +2,7 @@ import XCTest
 
 class TabsPerformanceTest: BaseTestCase {
 
-    let fixtures:[String:String] = ["testPerfTabs20startup": "tabsState20.archive", "testPerfTabs20tabTray":"tabsState20.archive", "testPerfTabs1280startup": "tabsState1280.archive", "testPerfTabs1280tabTray":"tabsState1280.archive"]
+    let fixtures:[String:String] = ["testPerfTabs_1_20startup": "tabsState20.archive", "testPerfTabs_3_20tabTray":"tabsState20.archive", "testPerfTabs_2_1280startup": "tabsState1280.archive", "testPerfTabs_4_1280tabTray":"tabsState1280.archive"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out function name
@@ -32,7 +32,7 @@ class TabsPerformanceTest: BaseTestCase {
     // 1 perf test per tabsStateArchive of size: 20, 1280
     // Taking the edges, low and high load. For more values in the middle
     // check the available archives
-    func testPerfTabs20startup() {
+    func testPerfTabs_1_20startup() {
         if #available(iOS 13.0, *) {
             measure(metrics: [
                 XCTMemoryMetric(),
@@ -46,7 +46,7 @@ class TabsPerformanceTest: BaseTestCase {
         }
     }
 
-    func testPerfTabs1280startup() {
+    func testPerfTabs_2_1280startup() {
         if #available(iOS 13.0, *) {
             measure(metrics: [
                 XCTMemoryMetric(),
@@ -60,7 +60,7 @@ class TabsPerformanceTest: BaseTestCase {
         }
     }
 
-    func testPerfTabs20tabTray() {
+    func testPerfTabs_3_20tabTray() {
         if #available(iOS 13.0, *) {
             app.launch()
             waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
@@ -72,13 +72,15 @@ class TabsPerformanceTest: BaseTestCase {
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
                 // go to tab tray
+                waitForExistence(app.buttons["TabToolbar.tabsButton"])
                 app.buttons["TabToolbar.tabsButton"].tap()
+                waitForExistence(app.buttons["doneButtonTabTray"])
                 app.buttons["doneButtonTabTray"].tap()
             }
         }
     }
 
-    func testPerfTabs1280tabTray() {
+    func testPerfTabs_4_1280tabTray() {
         if #available(iOS 13.0, *) {
             app.launch()
             navigator.performAction(Action.CloseURLBarOpen)

@@ -1570,8 +1570,7 @@ open class BrowserSchema: Schema {
         let chunks = chunk(pairs, by: BrowserDB.MaxVariableNumber - (BrowserDB.MaxVariableNumber % 2))
         for chunk in chunks {
             let ins =
-                "INSERT INTO \(tmpTable) (url, domain) VALUES " +
-                Array<String>(repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
+                "INSERT INTO \(tmpTable) (url, domain) VALUES " + [String](repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
             if !self.run(db, sql: ins, args: Array(chunk)) {
                 log.error("Couldn't insert domains into temporary table. Aborting migration.")
                 return false

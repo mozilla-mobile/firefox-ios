@@ -133,8 +133,8 @@ class TabTrayViewController: UIViewController {
     }()
 
     lazy var iPhoneNavigationMenuIdentifiers: UISegmentedControl = {
-        return UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel),
-                                          UIImage(named: "smallPrivateMask")!,
+        return UISegmentedControl(items: [UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: countLabel),
+                                          UIImage(named: ImageIdentifiers.privateMaskSmall)!,
                                           UIImage(named: ImageIdentifiers.syncedDevicesIcon)!])
     }()
 
@@ -155,7 +155,7 @@ class TabTrayViewController: UIViewController {
     init(tabTrayDelegate: TabTrayDelegate? = nil,
          profile: Profile,
          tabToFocus: Tab? = nil,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+         tabManager: TabManager,
          and notificationCenter: NotificationCenter = NotificationCenter.default,
          with nimbus: FxNimbus = FxNimbus.shared
     ) {
@@ -369,7 +369,7 @@ extension TabTrayViewController: Notifiable {
             case .UpdateLabelOnTabClosed:
                 guard let label = self?.countLabel else { return }
                 self?.countLabel.text = self?.viewModel.normalTabsCount
-                self?.iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: "nav-tabcounter")!.overlayWith(image: label), forSegmentAt: 0)
+                self?.iPhoneNavigationMenuIdentifiers.setImage(UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label), forSegmentAt: 0)
             default: break
             }
         }

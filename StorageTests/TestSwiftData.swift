@@ -76,7 +76,7 @@ class TestSwiftData: XCTestCase {
 
         // If we have a live cursor, this will step to the first result.
         // Stepping through a prepared statement without resetting it will lock the connection.
-        let _ = c[0]
+        _ = c[0]
 
         // Close the cursor after a delay if there's a close timeout set.
         if let closeTimeout = closeTimeout {
