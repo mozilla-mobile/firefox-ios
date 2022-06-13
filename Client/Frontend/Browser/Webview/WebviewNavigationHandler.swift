@@ -5,22 +5,32 @@
 import Foundation
 import WebKit
 
+protocol NavigationHandler {
+    var decisionHandler: (WKNavigationActionPolicy) -> Void { get }
+    func filterDataScheme(url: URL, navigationAction: WKNavigationAction)
+}
+
 /// This is the place where we decide what to do with a new navigation action. There are a number of special schemes
 /// and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
 /// method.
 
 /// Note that this is a work in progress to remove navigation handler code from BrowserViewController+WebViewDelegates
-struct WebviewNavigationHandler {
+struct WebviewNavigationHandler: NavigationHandler {
 
     enum Scheme: String {
         case data
     }
 
+    let decisionHandler: (WKNavigationActionPolicy) -> Void
+
+    init(decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        self.decisionHandler = decisionHandler
+    }
+
     /// Filter top-level data scheme
     /// https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
-    static func filterDataScheme(url: URL,
-                                 decidePolicyFor navigationAction: WKNavigationAction,
-                                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func filterDataScheme(url: URL,
+                          navigationAction: WKNavigationAction) {
 
         // Only filter top-level navigation, not on data URL subframes.
         // If target frame is nil, we filter as well.

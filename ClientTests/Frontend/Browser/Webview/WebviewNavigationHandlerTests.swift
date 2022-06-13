@@ -16,12 +16,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows subframes")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: false)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
+                                           navigationAction: policy)
     }
 
     func testFilterNullFrame() {
@@ -29,10 +29,11 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .cancel, "Doesnt allow null target frame")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+
         let policy = WKNavigationActionMock()
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_hasNoDataURL() {
@@ -40,12 +41,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .cancel, "Cancel no data URL on main frame")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_cancelGenericDataURL() {
@@ -53,12 +54,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .cancel, "Cancel generic data URL")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsImage() {
@@ -66,12 +67,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows image")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:image/")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:image/")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_cancelImageSVG() {
@@ -79,12 +80,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .cancel, "Cancel SVG + XML images")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:image/svg+xml")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:image/svg+xml")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsOtherImages() {
@@ -92,12 +93,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows jpg images")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:image/jpg")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:image/jpg")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsVideo() {
@@ -105,12 +106,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows video")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:video/")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:video/")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsApplicationPDF() {
@@ -118,12 +119,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows application PDF")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:application/pdf")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:application/pdf")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsApplicationJSON() {
@@ -131,12 +132,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows application JSON")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:application/json")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:application/json")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsBase64() {
@@ -144,12 +145,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows base 64")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:;base64,")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:;base64,")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsDataComma() {
@@ -157,12 +158,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows data comma")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:,")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:,")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsTextPlainComma() {
@@ -170,12 +171,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows text plain comma")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:text/plain,")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:text/plain,")!,
+                                           navigationAction: policy)
     }
 
     func testFilterMainFrame_allowsTextPlainSemicolon() {
@@ -183,12 +184,12 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows text plain semicolon")
         }
 
+        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        WebviewNavigationHandler.filterDataScheme(url: URL(string: "data:text/plain;")!,
-                                                  decidePolicyFor: policy,
-                                                  decisionHandler: handler)
+        navigationHandler.filterDataScheme(url: URL(string: "data:text/plain;")!,
+                                           navigationAction: policy)
     }
 }
 
