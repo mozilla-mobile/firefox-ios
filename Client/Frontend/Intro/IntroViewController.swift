@@ -117,6 +117,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
     @objc private func closeOnboarding() {
         didFinishClosure?(self, nil)
+        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
     private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {

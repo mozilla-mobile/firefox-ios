@@ -350,18 +350,13 @@ extension TelemetryWrapper {
         case appMenu = "app_menu"
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
+        // MARK: New Onboarding
+        case onboardingClose = "onboarding-close"
+        case onboardingCardView = "onboarding-card-view"
+        case onboardingPrimaryButton = "onboarding-card-primary-button"
+        case onboardingSecondaryButton = "onboarding-card-secondary-button"
+        case onboardingSelectWallpaper = "onboarding-select-wallpaper"
         case onboarding = "onboarding"
-        case welcomeScreenView = "welcome-screen-view"
-        case welcomeScreenClose = "welcome-screen-close"
-        case welcomeScreenSignIn = "welcome-screen-sign-in"
-        case welcomeScreenSignUp = "welcome-screen-sign-up"
-        case welcomeScreenNext = "welcome-screen-next"
-        case syncScreenView = "sync-screen-view"
-        case syncScreenSignUp = "sync-screen-sign-up"
-        case syncScreenStartBrowse = "sync-screen-start-browse"
-        case dismissedOnboarding = "dismissed-onboarding"
-        case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
-        case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case dismissDefaultBrowserOnboarding = "default-browser-onboarding"
@@ -548,6 +543,9 @@ extension TelemetryWrapper {
         case isReduceTransparencyEnabled = "is-reduce-transparency-enabled"
         case isReduceMotionEnabled = "is-reduce-motion-enabled"
         case isInvertColorsEnabled = "is-invert-colors-enabled"
+
+        // Onboarding
+        case cardType = "card-type"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
@@ -713,28 +711,41 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         // MARK: Onboarding
-        case (.action, .press, .dismissedOnboarding, _, let extras):
-            if let slideNum = extras?["slide-num"] as? Int32 {
-                GleanMetrics.Onboarding.finish.record(GleanMetrics.Onboarding.FinishExtra(slideNum: slideNum))
+        case (.action, .view, .onboardingCardView, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: type)
+                GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-        case (.action, .view, .welcomeScreenView, _, _):
-            GleanMetrics.Onboarding.welcomeScreen.add()
-        case(.action, .press, .welcomeScreenSignUp, _, _):
-            GleanMetrics.Onboarding.welcomeScreenSignUp.add()
-        case (.action, .press, .welcomeScreenSignIn, _, _):
-            GleanMetrics.Onboarding.welcomeScreenSignIn.add()
-        case(.action, .press, .welcomeScreenNext, _, _):
-            GleanMetrics.Onboarding.welcomeScreenNext.add()
-        case(.action, .press, .welcomeScreenClose, _, _):
-            GleanMetrics.Onboarding.welcomeScreenClose.add()
-        case(.action, .view, .syncScreenView, _, _):
-            GleanMetrics.Onboarding.syncScreen.add()
-        case(.action, .press, .syncScreenSignUp, _, _):
-            GleanMetrics.Onboarding.syncScreenSignUp.add()
-        case(.action, .press, .syncScreenStartBrowse, _, _):
-            GleanMetrics.Onboarding.syncScreenBrowse.add()
+        case (.action, .tap, .onboardingPrimaryButton, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: type)
+                GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingSecondaryButton, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                let cardTypeExtra = GleanMetrics.Onboarding.SecondaryButtonTapExtra(cardType: type)
+                GleanMetrics.Onboarding.secondaryButtonTap.record(cardTypeExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingSelectWallpaper, .wallpaperSelected, let extras):
+            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
+               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
+                let wallpaperExtra = GleanMetrics.Onboarding.WallpaperSelectedExtra(wallpaperName: name, wallpaperType: type)
+                GleanMetrics.Onboarding.wallpaperSelected.record(wallpaperExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingClose, _, let extras):
+            if let type = extras?[TelemetryWrapper.EventExtraKey.cardType.rawValue] as? String {
+                GleanMetrics.Onboarding.closeTap.record(GleanMetrics.Onboarding.CloseTapExtra(cardType: type))
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
 
         // MARK: Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):

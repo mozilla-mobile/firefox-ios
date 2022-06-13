@@ -12,6 +12,9 @@ protocol OnboardingCardProtocol {
     var primaryAction: String { get set }
     var secondaryAction: String? { get set }
     var a11yIdRoot: String { get set }
+
+    func sendCardViewTelemetry()
+    func sendTelemetryButton(isPrimaryAction: Bool)
 }
 
 struct OnboardingCardViewModel: OnboardingCardProtocol {
@@ -39,5 +42,26 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
         self.primaryAction = primaryAction
         self.secondaryAction = secondaryAction
         self.a11yIdRoot = a11yIdRoot
+    }
+
+    func sendCardViewTelemetry() {
+        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .onboardingCardView,
+                                     value: nil,
+                                     extras: extra)
+    }
+
+    func sendTelemetryButton(isPrimaryAction: Bool) {
+        let eventObject = isPrimaryAction ? TelemetryWrapper.EventObject.onboardingPrimaryButton : TelemetryWrapper.EventObject.onboardingSecondaryButton
+        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: eventObject,
+                                     value: nil,
+                                     extras: extra)
     }
 }

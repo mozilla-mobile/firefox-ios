@@ -496,131 +496,91 @@ key_commands:
     expires: "2022-11-12"
 # Onboarding metrics
 onboarding:
-  finish:
+  card_view:
     type: event
-    description:
-      The user taps starts browsing and ends the onboarding experience.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/SDK-321
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8904
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-    data_sensitivity:
-      - interaction
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-      - tlong@mozilla.com
-    expires: "2023-01-01"
+    description: |
+      Records when an onboarding card is shown
     extra_keys:
-      slide_num:
-        description:
-          The current onboarding slide number being viewed when
-          onboarding is dismissed.
-        type: quantity
-  welcome_screen:
-    type: counter
-    description: |
-      The number of times a user is shown the first screen, the
-      welcome screen, from the onboarding process.
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / wallpapers / sign to sync)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3011
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-  welcome_screen_sign_up:
-    type: counter
+    expires: "2022-12-10"
+  primary_button_tap:
+    type: event
     description: |
-      The number of times a user taps the sign up button in
-      onboarding's first screen, the welcome screen.
+      Records when the primary button is tap during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / wallpapers / sign to sync)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3011
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-  welcome_screen_sign_in:
-    type: counter
+    expires: "2022-12-10"
+  secondary_button_tap:
+    type: event
     description: |
-      The number of times a user taps on the Sign In button in
-      onboarding's first screen, the welcome screen.
+      Records when the secondary button is tap during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / wallpapers / sign to sync)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3011
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-  welcome_screen_next:
-    type: counter
+    expires: "2022-12-10"
+  wallpaper_selected:
+    type: event
     description: |
-      The number of times a user taps on the next button in
-      onboarding's first screen, the welcome screen.
+      Recorded when the user selects a wallpaper from
+      the wallpaper onboarding screen.
+    extra_keys:
+      wallpaper_name:
+        type: string
+        description: |
+          The name of the wallpaper set.
+      wallpaper_type:
+        type: string
+        description: |
+          The name of the wallpaper set.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3011
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-  welcome_screen_close:
-    type: counter
+    expires: "2022-12-10"
+  close_tap:
+    type: event
     description: |
-      The number of times a user taps on the close button in
-      onboarding's first screen, the welcome screen.
+      Records when the user closes the onboarding.
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          The card presented when the onboarding was closed
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3011
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-  sync_screen:
-    type: counter
-    description: |
-      The number of times a user is shown the second screen, the
-      Sync Screen, from the onboarding process.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3011
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-  sync_screen_sign_up:
-    type: counter
-    description: |
-      The number of times a user taps on the sign up button in
-      onboarding's second screen, the Sync Screen.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3011
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
-  sync_screen_browse:
-    type: counter
-    description: |
-      The number of times a user taps on the start browsing button
-      in onboarding's second screen, the Sync Screen.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3011
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9016
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-01-01"
+    expires: "2022-12-10"
 
 # Top Site
 top_sites:

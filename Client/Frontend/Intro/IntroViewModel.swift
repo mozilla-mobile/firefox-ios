@@ -10,6 +10,14 @@ struct IntroViewModel {
         case welcome
         case wallpapers
         case signSync
+
+        var telemetryValue: String {
+            switch self {
+            case .welcome: return "welcome"
+            case .wallpapers: return "wallpaper"
+            case .signSync: return "signToSync"
+            }
+        }
     }
 
     var enabledCards: [OnboardingCards]  = OnboardingCards.allCases
@@ -55,5 +63,14 @@ struct IntroViewModel {
         }
 
         return nil
+    }
+
+    func sendCloseButtonTelemetry(index: Int) {
+        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingClose,
+                                     extras: extra)
     }
 }

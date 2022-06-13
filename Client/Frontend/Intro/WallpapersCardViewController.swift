@@ -132,5 +132,12 @@ extension WallpaperCardViewController: UICollectionViewDelegateFlowLayout, UICol
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedWallpaper = indexPath.row
         setWallpaper()
+
+        let extra = wallpaperManager.getWallpaperTelemetryAt(index: selectedWallpaper)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingSelectWallpaper,
+                                     value: .wallpaperSelected,
+                                     extras: extra)
     }
 }
