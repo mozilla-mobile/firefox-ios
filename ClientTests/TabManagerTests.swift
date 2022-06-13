@@ -328,7 +328,77 @@ class TabManagerTests: XCTestCase {
         }
     }
 
-    func testDeleteSelectedTab() {
+    func testDeleteSelectedTab_ParentTabIfItWasMostRecentlyVisited() {
+
+        func addTab(_ visit: Bool) -> Tab {
+            let tab = manager.addTab()
+            if visit {
+                tab.lastExecutedTime = Date.now()
+            }
+            return tab
+        }
+
+        _ = addTab(false) // not visited
+        let tab1 = addTab(true)
+        _ = addTab(true)
+        let tab3 = addTab(true)
+        _ = addTab(false) // not visited
+
+        // starting at tab1, we should be selecting
+        // [ tab3, tab4, tab2, tab0 ]
+
+        manager.selectTab(tab1)
+        tab1.parent = tab3
+
+        removeTabAndAssert(tab: manager.selectedTab!) {
+            XCTAssertEqual(self.manager.selectedTab, tab3)
+        }
+    }
+
+    func testDeleteSelectedTab_NextToTheRight() {
+
+        func addTab(_ visit: Bool) -> Tab {
+            let tab = manager.addTab()
+            if visit {
+                tab.lastExecutedTime = Date.now()
+            }
+            return tab
+        }
+
+        _ = addTab(false) // not visited
+        _ = addTab(true)
+        let tab3 = addTab(true)
+        let tab4 = addTab(false) // not visited
+
+        manager.selectTab(tab3)
+
+        removeTabAndAssert(tab: manager.selectedTab!) {
+            XCTAssertEqual(self.manager.selectedTab, tab4)
+        }
+    }
+
+    func testDeleteSelectedTab_NextToTheLeftWhenNoneToTheRight() {
+
+        func addTab(_ visit: Bool) -> Tab {
+            let tab = manager.addTab()
+            if visit {
+                tab.lastExecutedTime = Date.now()
+            }
+            return tab
+        }
+
+        _ = addTab(false) // not visited
+        let tab2 = addTab(true)
+        let tab4 = addTab(false) // not visited
+
+        manager.selectTab(tab4)
+
+        removeTabAndAssert(tab: manager.selectedTab!) {
+            XCTAssertEqual(self.manager.selectedTab, tab2)
+        }
+    }
+
+    func testDeleteSelectedTab_LastOneLeft() {
 
         func addTab(_ visit: Bool) -> Tab {
             let tab = manager.addTab()
@@ -339,39 +409,13 @@ class TabManagerTests: XCTestCase {
         }
 
         let tab0 = addTab(false) // not visited
-        let tab1 = addTab(true)
         let tab2 = addTab(true)
-        let tab3 = addTab(true)
-        let tab4 = addTab(false) // not visited
 
-        // starting at tab1, we should be selecting
-        // [ tab3, tab4, tab2, tab0 ]
+        manager.selectTab(tab2)
 
-        manager.selectTab(tab1)
-        tab1.parent = tab3
-
-        let expectation = self.expectation(description: "Tabs are removed")
-        manager.removeTab(manager.selectedTab!) {
-            // Rule: parent tab if it was the most recently visited
-            XCTAssertEqual(self.manager.selectedTab, tab3)
-
-            self.manager.removeTab(self.manager.selectedTab!) {
-                // Rule: next to the right.
-                XCTAssertEqual(self.manager.selectedTab, tab4)
-
-                self.manager.removeTab(self.manager.selectedTab!) {
-                    // Rule: next to the left, when none to the right
-                    XCTAssertEqual(self.manager.selectedTab, tab2)
-
-                    self.manager.removeTab(self.manager.selectedTab!) {
-                        // Rule: last one left.
-                        XCTAssertEqual(self.manager.selectedTab, tab0)
-                        expectation.fulfill()
-                    }
-                }
-            }
+        removeTabAndAssert(tab: manager.selectedTab!) {
+            XCTAssertEqual(self.manager.selectedTab, tab0)
         }
-        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testDeleteLastTab_selectsThePrevious() {
