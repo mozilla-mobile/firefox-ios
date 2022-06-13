@@ -22,6 +22,7 @@ class ResizableButton: UIButton {
 
     func commonInit() {
         titleLabel?.numberOfLines = 0
+        titleLabel?.adjustsFontForContentSizeCategory = true
         titleLabel?.lineBreakMode = .byWordWrapping
         contentEdgeInsets = UIEdgeInsets(top: 0,
                                          left: UX.buttonEdgeSpacing,
