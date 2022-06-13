@@ -31,8 +31,17 @@ fileprivate enum StringLastUpdatedAppVersion {
 }
 
 // MARK: - Localization helper function
-fileprivate func MZLocalizedString(_ key: String, tableName: String? = nil, value: String = "", comment: String, lastUpdated: StringLastUpdatedAppVersion) -> String {
-    return NSLocalizedString(key, tableName: tableName, bundle: Strings.bundle, value: value, comment: comment)
+fileprivate func MZLocalizedString(_ key: String,
+                                   tableName: String? = nil,
+                                   value: String = "",
+                                   comment: String,
+                                   lastUpdated: StringLastUpdatedAppVersion
+) -> String {
+    return NSLocalizedString(key,
+                             tableName: tableName,
+                             bundle: Strings.bundle,
+                             value: value,
+                             comment: comment)
 }
 
 /// This file contains all strings for Firefox iOS.

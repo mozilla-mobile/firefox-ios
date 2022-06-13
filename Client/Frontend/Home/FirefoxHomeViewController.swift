@@ -472,11 +472,12 @@ private extension FirefoxHomeViewController {
                                                isGoogleTopSite: false)
         }
 
-        viewModel.historyHighlightsViewModel.onLongPress = { [weak self] (highlightItem, sourceView) in
+        viewModel.historyHighlightsViewModel.historyHighlightLongPressHandler = { [weak self] (highlightItem, sourceView) in
             self?.contextMenuHelper.presentContextMenu(for: highlightItem,
                                                        with: sourceView,
                                                        sectionType: .historyHighlights)
         }
+
         viewModel.historyHighlightsViewModel.headerButtonAction = { [weak self] button in
             self?.openHistory(button)
         }
@@ -637,6 +638,7 @@ extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
     func reloadSection(section: FXHomeViewModelProtocol) {
         ensureMainThread { [weak self] in
             guard let self = self else { return }
+            self.viewModel.updateEnabledSections()
             self.viewModel.reloadSection(section, with: self.collectionView)
         }
     }

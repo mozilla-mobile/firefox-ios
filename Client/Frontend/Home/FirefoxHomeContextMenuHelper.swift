@@ -90,11 +90,6 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
                                      tapHandler: { _ in
 
             self.viewModel.historyHighlightsViewModel.delete(highlightItem)
-            // ROUX
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-//                self?.viewModel.topSiteViewModel.hideURLFromTopSites(site)
-//            }
-//
             self.sendTopSiteContextualTelemetry(type: .remove)
         }).items]
     }
