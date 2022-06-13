@@ -1,0 +1,75 @@
+{
+  "configurations" : [
+    {
+      "id" : "47D2FCAD-AC90-4E1C-BC4B-2B62F2EEC5E5",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "2FA436041ABB83B4008031D1",
+        "name" : "AccountTests"
+      }
+    },
+    {
+      "skippedTests" : [
+        "ETPCoverSheetTests",
+        "TabManagerTests\/testDeleteSelectedTab()",
+        "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
+        "TestFavicons\/testFaviconFetcherParse()"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "F84B21D21A090F8100AAB793",
+        "name" : "ClientTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "E6F9650B1B2F1CF20034B023",
+        "name" : "SharedTests"
+      }
+    },
+    {
+      "skippedTests" : [
+        "RustLoginsTests\/testUpdateLogin()"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "2FCAE2231ABB51F800877008",
+        "name" : "StorageTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "E69DB07C1E97DEA9008A67E6",
+        "name" : "SyncTelemetryTests"
+      }
+    },
+    {
+      "skippedTests" : [
+        "MetaGlobalTests\/testHappyOptimisticStateMachine()",
+        "MetaGlobalTests\/testMetaGlobalAndCryptoKeysFresh()",
+        "MetaGlobalTests\/testMetaGlobalModified()",
+        "MetaGlobalTests\/testUpdatedCryptoKeys()",
+        "StateTests\/testPickling()"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "282731671ABC9BE700AA1954",
+        "name" : "SyncTests"
+      }
+    }
+  ],
+  "version" : 1
+}
