@@ -141,6 +141,12 @@ class OnboardingCardViewController: UIViewController {
         updateLayout()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        viewModel.sendCardViewTelemetry()
+    }
+
     func setupView() {
         contentStackView.addArrangedSubview(imageView)
         contentStackView.addArrangedSubview(titleLabel)
@@ -218,10 +224,12 @@ class OnboardingCardViewController: UIViewController {
     }
 
     @objc func primaryAction() {
+        viewModel.sendTelemetryButton(isPrimaryAction: true)
         delegate?.primaryAction(viewModel.cardType)
     }
 
     @objc func secondaryAction() {
+        viewModel.sendTelemetryButton(isPrimaryAction: false)
         delegate?.showNextPage(viewModel.cardType)
     }
 }

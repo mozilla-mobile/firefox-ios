@@ -160,6 +160,54 @@ class TelemetryWrapperTests: XCTestCase {
         TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: nil)
         XCTAssertFalse(GleanMetrics.Tabs.privateTabsQuantity.testHasValue())
     }
+
+    // MARK: - Onboarding
+
+    func test_onboardingCardViewWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .onboardingCardView, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+    }
+
+    func test_onboardingPrimaryButtonWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingPrimaryButton, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
+    }
+
+    func test_onboardingSecondaryButtonWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingSecondaryButton, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
+    }
+
+    func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
+        let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
+        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
+        let extras = [wallpaperNameKey: "defaultBackground",
+                      wallpaperTypeKey: "default"]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingSelectWallpaper,
+                                     value: .wallpaperSelected,
+                                     extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelected)
+    }
+
+    func test_onboardingCloseWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingClose, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
