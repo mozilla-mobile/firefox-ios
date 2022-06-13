@@ -477,6 +477,8 @@
 		8A161413282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */; };
 		8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */; };
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
+		8A29E8F02857890100D0DE25 /* WebviewNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A29E8EF2857890100D0DE25 /* WebviewNavigationHandler.swift */; };
+		8A29E8F428578A3200D0DE25 /* WebviewNavigationHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A29E8F328578A3200D0DE25 /* WebviewNavigationHandlerTests.swift */; };
 		8A2B1A5D28216C4D0061216B /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5A28216C4C0061216B /* Debug.xcconfig */; };
 		8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5B28216C4C0061216B /* Common.xcconfig */; };
 		8A2B1A5F28216C4D0061216B /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5C28216C4D0061216B /* Release.xcconfig */; };
@@ -2867,6 +2869,8 @@
 		8A161412282C2F8F00DDBB02 /* NimbusSponsoredTileLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusSponsoredTileLayer.swift; sourceTree = "<group>"; };
 		8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandler.swift; sourceTree = "<group>"; };
 		8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandlerTests.swift; sourceTree = "<group>"; };
+		8A29E8EF2857890100D0DE25 /* WebviewNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewNavigationHandler.swift; sourceTree = "<group>"; };
+		8A29E8F328578A3200D0DE25 /* WebviewNavigationHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewNavigationHandlerTests.swift; sourceTree = "<group>"; };
 		8A2B1A5A28216C4C0061216B /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
 		8A2B1A5B28216C4C0061216B /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
 		8A2B1A5C28216C4D0061216B /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Configuration/Release.xcconfig; sourceTree = "<group>"; };
@@ -5650,6 +5654,30 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		8A29E8EE285788D600D0DE25 /* Webview */ = {
+			isa = PBXGroup;
+			children = (
+				8A29E8EF2857890100D0DE25 /* WebviewNavigationHandler.swift */,
+			);
+			path = Webview;
+			sourceTree = "<group>";
+		};
+		8A29E8F128578A1700D0DE25 /* Browser */ = {
+			isa = PBXGroup;
+			children = (
+				8A29E8F228578A2100D0DE25 /* Webview */,
+			);
+			path = Browser;
+			sourceTree = "<group>";
+		};
+		8A29E8F228578A2100D0DE25 /* Webview */ = {
+			isa = PBXGroup;
+			children = (
+				8A29E8F328578A3200D0DE25 /* WebviewNavigationHandlerTests.swift */,
+			);
+			path = Webview;
+			sourceTree = "<group>";
+		};
 		8A33222027DFE64C008F809E /* TestingHelperClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -5813,6 +5841,15 @@
 			sourceTree = "<group>";
 		};
 		BA6E3F717432C02E147869A7 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				8A29E8F128578A1700D0DE25 /* Browser */,
+				BA6E3F717432C02E147869A7 /* Home */,
+			);
+			path = Frontend;
+			sourceTree = "<group>";
+		};
+		BA6E3E02F9900749F7CAFDC9 /* JumpBackIn */ = {
 			isa = PBXGroup;
 			children = (
 				BA6E325D53E21B6F758DDA6E /* FirefoxHomeJumpBackInViewModelTests.swift */,
@@ -6370,6 +6407,7 @@
 				C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */,
 				E653422C1C5944F90039DD9E /* BrowserPrompts.swift */,
 				C8F457A61F1FD75A000CB895 /* BrowserViewController */,
+				8A29E8EE285788D600D0DE25 /* Webview */,
 				D3A994951A3686BD008AD1AC /* BrowserViewController.swift */,
 				C4F3B2991CFCF93A00966259 /* ButtonToast.swift */,
 				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
@@ -9390,6 +9428,7 @@
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
 				EB9854FF2422686F0040F24B /* AppDelegate+PushNotifications.swift in Sources */,
 				DFACBF85277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift in Sources */,
+				8A29E8F02857890100D0DE25 /* WebviewNavigationHandler.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				D04CD74B216CF86B004FF5B0 /* DevicePickerViewController.swift in Sources */,
@@ -9718,6 +9757,7 @@
 				8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */,
 				8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */,
 				28D52E2F1BCDF53900187A1D /* ResetTests.swift in Sources */,
+				8A29E8F428578A3200D0DE25 /* WebviewNavigationHandlerTests.swift in Sources */,
 				8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */,
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
 				D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */,
