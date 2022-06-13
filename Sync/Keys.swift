@@ -135,7 +135,7 @@ open class Keys: Equatable {
         return KeysPayload(json)
     }
 
-    public static func ==(lhs: Keys, rhs: Keys) -> Bool {
+    public static func == (lhs: Keys, rhs: Keys) -> Bool {
         return lhs.valid == rhs.valid &&
             lhs.defaultBundle == rhs.defaultBundle &&
             lhs.collectionKeys == rhs.collectionKeys
@@ -164,4 +164,3 @@ public struct RecordEncrypter<T: CleartextPayloadJSON> {
         self.factory = factory
     }
 }
-

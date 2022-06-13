@@ -37,7 +37,6 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView)
     func urlBarDidLongPressLocation(_ urlBar: URLBarView)
     func urlBarDidPressQRButton(_ urlBar: URLBarView)
-    func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton)
     func urlBarDidTapShield(_ urlBar: URLBarView)
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView)
@@ -46,7 +45,6 @@ protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String)
     // Returns either (search query, true) or (url, false).
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
-    func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton)
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
 }
 
@@ -162,7 +160,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         searchIconImageView.clipsToBounds = true
         return searchIconImageView
     }()
-    
+
     var appMenuButton = ToolbarButton()
     var bookmarksButton = ToolbarButton()
     var homeButton = ToolbarButton()
@@ -176,7 +174,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         return backButton
     }()
 
-    lazy var actionButtons: [NotificationThemeable & UIButton] = [self.tabsButton, self.homeButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.multiStateButton]
+    lazy var actionButtons: [NotificationThemeable & UIButton] = [self.tabsButton, self.homeButton, self.bookmarksButton, self.appMenuButton, self.addNewTabButton, self.forwardButton, self.backButton, self.multiStateButton]
 
     var currentURL: URL? {
         get {
@@ -193,11 +191,8 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
     }
 
-    var profile: Profile? = nil
-    private var isBottomSearchBar: Bool {
-        BrowserViewController.foregroundBVC().isBottomSearchBar
-    }
-    
+    var profile: Profile
+
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
@@ -209,19 +204,22 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         commonInit()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func updateSearchEngineImage() {
-        guard let profile = profile else { return }
         self.searchIconImageView.image = profile.searchEngines.defaultEngine.image
+    }
+
+    private func isBottomSearchBar() -> Bool {
+        guard SearchBarSettingsViewModel.isEnabled else { return false }
+        return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
     }
 
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
-        
+
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
          homeButton, bookmarksButton, appMenuButton, addNewTabButton, forwardButton, backButton,
          multiStateButton, locationContainer, searchIconImageView].forEach {
@@ -229,7 +227,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
 
         updateSearchEngineImage()
-        
+
         privateModeBadge.add(toParent: self)
         appMenuBadge.add(toParent: self)
         warningMenuBadge.add(toParent: self)
@@ -269,7 +267,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         searchIconImageView.snp.remakeConstraints { make in
             let heightMin = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
             make.height.greaterThanOrEqualTo(heightMin)
@@ -301,7 +299,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         addNewTabButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.tabsButton.snp.leading)
             make.centerY.equalTo(self)
@@ -319,7 +317,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         privateModeBadge.layout(onButton: tabsButton)
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
@@ -329,7 +327,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         super.updateConstraints()
 
         line.snp.remakeConstraints { make in
-            if isBottomSearchBar {
+            if isBottomSearchBar() {
                 make.top.equalTo(self).offset(0)
             } else {
                 make.bottom.equalTo(self)
@@ -340,7 +338,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
 
         progressBar.snp.remakeConstraints { make in
-            if isBottomSearchBar {
+            if isBottomSearchBar() {
                 make.bottom.equalTo(snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
             } else {
                 make.top.equalTo(snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
@@ -362,7 +360,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
                 make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
-                make.top.bottom.right.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
+                make.top.bottom.trailing.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidthSelected))
                 make.leading.equalTo(self.searchIconImageView.snp.trailing)
             }
             self.locationTextField?.snp.remakeConstraints { make in
@@ -438,10 +436,10 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         locationTextField = nil
     }
 
-    // Ideally we'd split this implementation in two, one URLBarView with a toolbar and one without
-    // However, switching views dynamically at runtime is a difficult. For now, we just use one view
-    // that can show in either mode.
-    func setShowToolbar(_ shouldShow: Bool) {
+    /// Ideally we'd split this implementation in two, one URLBarView with a toolbar and one without
+    /// However, switching views dynamically at runtime is a difficult. For now, we just use one view
+    /// that can show in either mode. For the reload button, we hide it on iPad (apart from multitasking mode)
+    func setShowToolbar(_ shouldShow: Bool, hideReloadButton: Bool) {
         toolbarIsShowing = shouldShow
         setNeedsUpdateConstraints()
         // when we transition from portrait to landscape, calling this here causes
@@ -449,7 +447,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
         }
-        locationView.reloadButton.isHidden = false
+        locationView.reloadButton.isHidden = hideReloadButton
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -469,11 +467,13 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         progressBar.setProgress(0, animated: false)
     }
 
-    func updateReaderModeState(_ state: ReaderModeState) {
+    /// We hide reload button on iPad, but not in multitasking mode
+    func updateReaderModeState(_ state: ReaderModeState, hideReloadButton: Bool) {
         locationView.readerModeState = state
-        locationView.reloadButton.isHidden = false
+        locationView.reloadButton.isHidden = hideReloadButton
     }
-    
+
+    /// We hide reload button on iPad, but not in multitasking mode
     func shouldHideReloadButton(_ isHidden: Bool) {
         locationView.reloadButton.isHidden = isHidden
     }
@@ -606,7 +606,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
             $0.badge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
             $0.backdrop.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : BadgeWithBackdrop.backdropAlpha
         }
-        
+
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
@@ -730,7 +730,7 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
         let state = locationView.reloadButton.isHidden ? .reload : locationView.reloadButton.reloadButtonState
-        
+
         switch state {
         case .reload:
             delegate?.urlBarDidPressReload(self)
@@ -749,14 +749,6 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
-    }
-
-    func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
-        delegate?.urlBarDidPressPageOptions(self, from: tabLocationView.pageOptionsButton)
-    }
-
-    func tabLocationViewDidLongPressPageOptions(_ tabLocationView: TabLocationView) {
-        delegate?.urlBarDidLongPressPageOptions(self, from: tabLocationView.pageOptionsButton)
     }
 
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {
@@ -849,7 +841,7 @@ extension URLBarView: PrivateModeUI {
         if UIDevice.current.userInterfaceIdiom != .pad {
             privateModeBadge.show(isPrivate)
         }
-        
+
         locationActiveBorderColor = UIColor.theme.urlbar.activeBorder(isPrivate)
         progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start(isPrivate), endColor: UIColor.theme.loadingBar.end(isPrivate))
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)

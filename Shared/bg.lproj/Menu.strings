@@ -19,6 +19,9 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "Отваряне в раздел";
 
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"Menu.OpenHomePageAction.Title" = "Начало";
+
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "Настройки";
 

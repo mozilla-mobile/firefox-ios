@@ -59,7 +59,7 @@ public extension UIImageView {
     func setFavicon(forSite site: Site, completion: @escaping () -> Void ) {
         setImageAndBackground(forIcon: site.icon, website: site.tileURL, completion: completion)
     }
-    
+
    /*
     * If the webpage has low-res favicon, use defaultFavIcon
     */
@@ -81,7 +81,7 @@ public extension UIImageView {
             return (FaviconFetcher.defaultFavicon, .white)
         }
     }
-    
+
     func setImageColor(color: UIColor) {
         let templateImage = self.image?.withRenderingMode(.alwaysTemplate)
         self.image = templateImage
@@ -108,7 +108,7 @@ extension UIImage {
         image.draw(CGRect(origin: CGPoint.zero, size: image.frame.size))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        
+
         return newImage
     }
 

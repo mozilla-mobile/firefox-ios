@@ -113,6 +113,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Adreça i cerca";
 
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Barra d'adreces";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "Envia sempre";
 
@@ -149,6 +152,15 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Adreces d'interès";
 
+/* A label indicating the action of adding a web page as a bookmark. */
+"Bookmarks.Actions.Add" = "Afegeix";
+
+/* A label indicating the action of bookmarking all currently open non private tabs. */
+"Bookmarks.Actions.BookmarkAllTabs" = "Afegeix totes les pestanyes a les adreces d'interès";
+
+/* A label indicating the action of bookmarking the current tab. */
+"Bookmarks.Actions.BookmarkCurrentTab" = "Afegeix la pestanya actual a les adreces d'interès";
+
 /* The button on the snackbar to edit a bookmark after adding it. */
 "Bookmarks.Edit.Button" = "Edita";
 
@@ -167,6 +179,12 @@
 /* The label for the title of the new folder */
 "Bookmarks.FolderName.Label" = "Nom de la carpeta";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Adreces de l'escriptori";
+
+/* A label indicating all bookmarks that were recently added. */
+"Bookmarks.Menu.RecentlyBookmarked" = "Afegides recentment";
+
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Adreça d'interès nova";
 
@@ -175,6 +193,9 @@
 
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Separador nou";
+
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Cerqueu adreces d'interès";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Títol";
@@ -210,7 +231,7 @@
 "Changes color theme." = "Canvia el tema de color.";
 
 /* Accessibility hint for the font type buttons in reader mode display settings */
-"Changes font type." = "Canvia el tipus de lletra.";
+"Changes font type." = "Canvia la lletra.";
 
 /* The button to open a new tab with the copied link */
 "ClipboardToast.GoToCopiedLink.Button" = "Vés";
@@ -269,11 +290,23 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Comparteix l'enllaç";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Ara podeu moure la barra d'eines cap a la part inferior, així és més fàcil d'introduir-hi informació";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "Per a facilitar la introducció d'informació, ara la barra d'eines es troba a la part inferior de manera predeterminada.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Amb la pàgina d’inici del Firefox personalitzada, ara és més fàcil continuar des d’on ho havíeu deixat. Hi trobareu les pestanyes, les adreces d’interès i els resultats de cerca recents.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Paràmetres de la barra d'eines";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Aquí s’hi mouen les pestanyes que no heu vist des de fa dues setmanes.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Desactiveu-ho als paràmetres";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "No s'ha pogut afegir la pàgina a la llista de lectura";
@@ -312,6 +345,9 @@
    Title for default search engine picker.
    Title for default search engine settings section. */
 "Default Search Engine" = "Motor de cerca per defecte";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Tanca";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Paràmetres de visualització";
@@ -412,6 +448,30 @@
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Personalitza la pàgina d’inici";
 
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Descobriu-ne més";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d min";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Articles suggerents";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Elimina";
+
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "Llocs: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Paràmetres";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Els nostres patrocinadors i la vostra privadesa";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Patrocinat";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Endavant";
 
@@ -508,6 +568,9 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "S'ha desconnectat un dispositiu del Firefox Sync";
 
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logotip del Firefox, canvieu el fons de pantalla.";
+
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Sincronitzeu les pestanyes obertes, adreces d'interès i contrasenyes d'altres dispositius.";
 
@@ -575,7 +638,7 @@
 "HomePage.Set.Dialog.Cancel" = "Cancel·la";
 
 /* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Podeu canviar-ho en qualsevol moment en els Paràmetres.";
+"HomePage.Set.Dialog.Message" = "Podeu canviar-ho en qualsevol moment en els Paràmetres";
 
 /* Button accepting changes setting the home page for the first time. */
 "HomePage.Set.Dialog.OK" = "Defineix com a pàgina d'inici";
@@ -591,6 +654,9 @@
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "Obre en una pestanya privada nova";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Obre en una pestanya privada";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Obre en una pestanya nova";
@@ -658,6 +724,84 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "ara";
 
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Mida real";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Afegeix a les adreces d'interès";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Neteja l'historial recent";
+
+/* A label indicating the keyboard shortcut of downloading a link the user taps on. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.DownloadLink" = "Enllaç de baixada";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Torna a cercar";
+
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "Pestanya normal nova";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInBackground" = "Obre l'enllaç en segon pla";
+
+/* A label indicating the keyboard shortcut of opening a link in a new tab and switching to that tab at the same time. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.OpenLinkInNewTab" = "Obre l'enllaç en una pestanya nova";
+
+/* A label indicating the keyboard shortcut of saving the current web page in a format of the user's choice. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.SavePageAs" = "Anomena i desa la pàgina…";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Adreces d'interès";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do within a web page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Edit" = "Edita";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take on, and within, a Tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.File" = "Fitxer";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Historial";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Eines";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do regarding the viewing experience of a webpage. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.View" = "Visualitza";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Finestra";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Paràmetres";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Mostra les adreces d'interès";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Mostra les baixades";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Mostra la primera pestanya";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Mostra l'historial";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Mostra l'última pestanya";
+
+/* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowTabNumber" = "Mostra la pestanya número 1-9";
+
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Desfés el tancament de la pestanya";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Amplia";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Redueix";
+
 /* History tableview section header */
 "Last month" = "El darrer mes";
 
@@ -666,6 +810,36 @@
 
 /* History tableview section header */
 "Last week" = "La darrera setmana";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Cancel·la";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Suprimeix";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Voleu suprimir tots els llocs de«%@»?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Suprimeix l'historial (inclou l'historial sincronitzat d'altres dispositius), les galetes i altres dades de navegació.";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "No s'ha trobat cap historial coincident";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Pestanyes tancades recentment";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Escriviu els termes de la cerca";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Sincronitzat d'altres dispositius";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Historial sincronitzat";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Més antic";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Llicències";
@@ -789,8 +963,14 @@
    Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Marca com a no llegit";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "Afegeix a les adreces d'interès";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "S'ha afegit l'adreça d'interès";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Afegeix";
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "S'ha fixat a Llocs principals";
@@ -798,11 +978,14 @@
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "S'ha afegit a les dreceres";
 
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Afegeix";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "S'ha afegit a la llista de lectura";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "Fes una còpia de seguretat i sincronitza les dades";
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Afegeix a les dreceres";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Adreces d'interès";
@@ -812,6 +995,9 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "S'ha copiat l'URL al porta-retalls";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Personalitza la pàgina d’inici";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Baixades";
@@ -828,6 +1014,9 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "El Firefox bloca els elements de seguiment entre llocs, els elements de seguiment social, els miners de criptomonedes, els generadors d'empremtes digitals i el contingut que fa seguiment.";
 
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Ajuda";
+
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Historial";
 
@@ -836,6 +1025,9 @@
 
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
 "Menu.ManageAccount.Label" = "Gestiona el compte %@";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Pestanya nova";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "Desactiva el mode nocturn";
@@ -876,14 +1068,41 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "S'ha suprimit l'adreça d'interès";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "Elimina";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "Elimina de les dreceres";
+
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "S'ha eliminat de Llocs principals";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "S'ha eliminat de les dreceres";
+"Menu.RemovePin.Confirm2.v99" = "S'ha eliminat de les dreceres";
+
+/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
+"Menu.RemoveReadingList.AlternateLabel.v99" = "Elimina de la llista de lectura";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "S'ha eliminat de la llista de lectura";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Elimina";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Comparteix";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.SignInToSync.Label.v99" = "Inicia la sessió al Sync";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "S’ha enviat la pestanya";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Adreces d'interès";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Inici";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Blocat";
@@ -910,7 +1129,7 @@
 "Menu.TrackingProtectionBlocking.Description" = "El Firefox ha blocat les parts de la pàgina que podrien fer el seguiment de la vostra navegació.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloca els elements us fan el seguiment";
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloca els elements que us fan el seguiment";
 
 /* The title that shows the number of cross-site cookies blocked */
 "Menu.TrackingProtectionCrossSiteCookies.Title" = "Galetes de seguiment entre llocs";
@@ -1009,6 +1228,18 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "D'acord";
 
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "Primers passos";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "Compromesos amb la promesa d'una Internet millor per a tothom.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "Ara no";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "Trieu un fons de pantalla del Firefox";
+
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Comença a navegar";
 
@@ -1094,6 +1325,9 @@
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motors de cerca ràpida";
 
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Valoreu-nos a l'App Store";
+
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "llegit";
 
@@ -1155,7 +1389,10 @@
 "ScanQRCode.InvalidDataError.Message" = "Les dades no són vàlides";
 
 /* Text of the prompt user to setup the camera authorization. */
-"ScanQRCode.PermissionError.Message" = "Doneu permís al Firefox per accedir a la càmera del dispositiu a «Configuració -> Privacitat -> Càmera».";
+"ScanQRCode.PermissionError.Message" = "Doneu permís al Firefox per accedir a la càmera del dispositiu en «Configuració» -> «Privacitat» -> «Càmera».";
+
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Aneu a «Configuració» > «Firefox». Doneu permís al Firefox per accedir a la càmera.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Escaneja un codi QR";
@@ -1416,8 +1653,11 @@
 /* General settings section title */
 "Settings.General.SectionName" = "General";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Trieu què voleu que es mostri com a pantalla d'inici.";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description" = "Trieu quin contingut voleu veure en la pàgina d'inici del Firefox.";
+"Settings.Home.Option.Description.v101" = "Trieu què voleu incloure en la pantalla d'inici del Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Torneu a la pestanya";
@@ -1430,9 +1670,6 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "Visitat recentment";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "Cerques recents";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Dreceres";
@@ -1453,13 +1690,73 @@
 "Settings.Home.Option.StartAtHome.Title" = "Pantalla d'obertura";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "Pàgina d'inici del Firefox";
+"Settings.Home.Option.Title.v101" = "Inclou a la pàgina d'inici";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Fons de pantalla";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Fons de pantalla del Firefox, patró ametista.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Fons de pantalla del Firefox, patró de dunes de platja.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Fons de pantalla del Firefox, patró ceruli.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Fons de pantalla clar per defecte.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Fons de pantalla del Firefox, patró de sortida del sol.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Commutador per alternar el fons de pantalla de la pàgina d’inici";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fons de pantalla del Firefox, patró de turons al capvespre.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "PANTALLA D'OBERTURA";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Canvieu el fons de pantalla tocant el logotip de la pàgina d'inici del Firefox";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Fons de pantalla";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "S'ha actualitzat el fons de pantalla!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Mostra";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Esborra";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Pàgina d'inici";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Files";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Files";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Dreceres";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Dreceres";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Dreceres patrocinades";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Desactivades";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Activades";
 
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "Paràmetres de la pàgina d'inici";
@@ -1548,6 +1845,9 @@
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "Trieu què voleu que es carregui en obrir una pestanya nova";
 
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Bloca les imatges";
+
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "En obrir el Firefox";
 
@@ -1626,8 +1926,11 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Estudis";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Pestanyes inactives";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Les pestanyes que no hàgiu vist des de fa dues setmanes es mouran a la secció d’inactives.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Grups de pestanyes";
@@ -1637,6 +1940,15 @@
 
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "Pestanyes";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "Part inferior";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Barra d’eines";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Part superior";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Entesos";
@@ -1899,9 +2211,6 @@
 
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Altres pestanyes";
-
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Pestanyes privades";
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Les pestanyes estaran disponibles aquí durant 30 dies. Passat aquest temps, es tancaran automàticament.";

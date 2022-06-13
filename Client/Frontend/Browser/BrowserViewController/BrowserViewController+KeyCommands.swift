@@ -26,18 +26,13 @@ extension BrowserViewController {
     }
 
     private func showPanel(_ panel: LibraryPanelType) {
-        guard let libraryViewController = self.libraryViewController else {
-            showLibrary(panel: panel)
-            return
-        }
-
-        libraryViewController.selectedPanel = panel
+        showLibrary(panel: panel)
     }
 
     @objc private func openClearHistoryPanelKeyCommand() {
         guard let libraryViewController = self.libraryViewController else {
             let clearHistoryHelper = ClearHistoryHelper(profile: profile, tabManager: tabManager)
-            clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: {})
+            clearHistoryHelper.showClearRecentHistory(onViewController: self, didComplete: nil)
             return
         }
 
@@ -119,6 +114,7 @@ extension BrowserViewController {
                                      extras: ["action": "new-tab"])
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func newPrivateTabKeyCommand() {
@@ -129,8 +125,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: true)
-        keyboardPressesHandler.reset()
-    }
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }    }
 
     @objc private func newNormalTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
@@ -138,7 +133,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: false)
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func closeTabKeyCommand() {
@@ -150,6 +145,7 @@ extension BrowserViewController {
             return
         }
         tabManager.removeTab(currentTab)
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func undoLastTabClosedKeyCommand() {
@@ -194,7 +190,7 @@ extension BrowserViewController {
             tabManager.selectTab(firstTab)
         }
 
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func previousTabKeyCommand() {
@@ -213,7 +209,7 @@ extension BrowserViewController {
             tabManager.selectTab(lastTab)
         }
 
-        keyboardPressesHandler.reset()
+        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
     }
 
     @objc private func selectFirstTab() {
@@ -272,10 +268,10 @@ extension BrowserViewController {
 
         if tabs.count > number {
             tabManager.selectTab(tabs[number])
-            keyboardPressesHandler.reset()
+            if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
         } else if let lastTab = tabs.last {
             tabManager.selectTab(lastTab)
-            keyboardPressesHandler.reset()
+            if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
         }
     }
 
@@ -351,17 +347,18 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(findInPageAgainKeyCommand), input: "g", modifierFlags: .command, discoverabilityTitle: shortcuts.FindAgain),
 
             // View
+            UIKeyCommand(action: #selector(zoomIn), input: "=", modifierFlags: .command),
             UIKeyCommand(action: #selector(zoomIn), input: "+", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomIn),
             UIKeyCommand(action: #selector(zoomOut), input: "-", modifierFlags: .command, discoverabilityTitle: shortcuts.ZoomOut),
             UIKeyCommand(action: #selector(resetZoom), input: "0", modifierFlags: .command, discoverabilityTitle: shortcuts.ActualSize),
             UIKeyCommand(action: #selector(reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: shortcuts.ReloadPage),
-            
+
             // History
             UIKeyCommand(action: #selector(goBackKeyCommand), input: "[", modifierFlags: .command, discoverabilityTitle: shortcuts.Back),
             UIKeyCommand(action: #selector(openClearHistoryPanelKeyCommand), input: "\u{8}", modifierFlags: [.shift, .command], discoverabilityTitle: shortcuts.ClearRecentHistory),
             UIKeyCommand(action: #selector(goForwardKeyCommand), input: "]", modifierFlags: .command, discoverabilityTitle: shortcuts.Forward),
             UIKeyCommand(action: #selector(showHistoryKeyCommand), input: "y", modifierFlags: .command, discoverabilityTitle: shortcuts.ShowHistory),
-            
+
             // Bookmarks
             UIKeyCommand(action: #selector(showBookmarksKeyCommand), input: "o", modifierFlags: [.shift, .command], discoverabilityTitle: shortcuts.ShowBookmarks),
             UIKeyCommand(action: #selector(addBookmarkKeyCommand), input: "d", modifierFlags: .command, discoverabilityTitle: shortcuts.AddBookmark),
@@ -391,19 +388,19 @@ extension BrowserViewController {
     }
 
     // MARK: Keyboards + Link click shortcuts
-
+    @available(iOS 13.4, *)
     func navigateLinkShortcutIfNeeded(url: URL) -> Bool {
         var shouldCancelHandler = false
 
         // Open tab in background || Open in new tab
-        if keyboardPressesHandler.isOnlyCmdPressed || keyboardPressesHandler.isCmdAndShiftPressed {
+        if keyboardPressesHandler().isOnlyCmdPressed || keyboardPressesHandler().isCmdAndShiftPressed {
             guard let isPrivate = tabManager.selectedTab?.isPrivate else { return shouldCancelHandler }
-            let selectNewTab = !keyboardPressesHandler.isOnlyCmdPressed && keyboardPressesHandler.isCmdAndShiftPressed
+            let selectNewTab = !keyboardPressesHandler().isOnlyCmdPressed && keyboardPressesHandler().isCmdAndShiftPressed
             homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
             shouldCancelHandler = true
 
         // Download Link
-        } else if keyboardPressesHandler.isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
+        } else if keyboardPressesHandler().isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
             // This checks if download is a blob, if yes, begin blob download process
             if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
                 // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()

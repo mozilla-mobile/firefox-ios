@@ -7,9 +7,15 @@ import WebKit
 
 class ClearHistoryHelper {
 
+    enum DateOptions {
+        // case hour
+        case today
+        case yesterday
+    }
+
     private let profile: Profile
     private let tabManager: TabManager
-    
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -19,19 +25,30 @@ class ClearHistoryHelper {
     /// - Parameters:
     ///   - viewController: The view controller the clear history prompt is shown on
     ///   - didComplete: Did complete a recent history clear up action
-    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: @escaping () -> Void) {
-        func remove(hoursAgo: Int) {
-            if let date = Calendar.current.date(byAdding: .hour, value: -hoursAgo, to: Date()) {
-                let types = WKWebsiteDataStore.allWebsiteDataTypes()
-                WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date, completionHandler: {})
+    func showClearRecentHistory(onViewController viewController: UIViewController, didComplete: ((Date?) -> Void)? = nil) {
+        func remove(dateOption: DateOptions) {
+            var date: Date?
+            switch dateOption {
+            case .today:
+                date = Date()
+            case .yesterday:
+                date = Calendar.current.date(byAdding: .hour, value: -24, to: Date())
+            }
 
-                self.profile.history.removeHistoryFromDate(date).uponQueue(.main) { _ in
-                    didComplete()
+            if let date = date {
+                let startOfDay = Calendar.current.startOfDay(for: date)
+                let types = WKWebsiteDataStore.allWebsiteDataTypes()
+                WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: startOfDay, completionHandler: {})
+
+                self.profile.history.removeHistoryFromDate(date).uponQueue(.global(qos: .userInteractive)) { result in
+                    guard let completion = didComplete else { return }
+                    self.profile.recentlyClosedTabs.removeTabsFromDate(startOfDay)
+                    completion(startOfDay)
                 }
             }
         }
 
-        let alert = UIAlertController(title: .ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: .LibraryPanel.History.ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
 
         // This will run on the iPad-only, and sets the alert to be centered with no arrow.
         guard let view = viewController.view else { return }
@@ -41,20 +58,24 @@ class ClearHistoryHelper {
             popoverController.permittedArrowDirections = []
         }
 
-        [(String.ClearHistoryMenuOptionTheLastHour, 1),
-         (String.ClearHistoryMenuOptionToday, 24),
-         (String.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {
+        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
+        [(String.ClearHistoryMenuOptionToday, DateOptions.today),
+         (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)].forEach {
             (name, time) in
             let action = UIAlertAction(title: name, style: .destructive) { _ in
-                remove(hoursAgo: time)
+                remove(dateOption: time)
             }
             alert.addAction(action)
         }
         alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
             let types = WKWebsiteDataStore.allWebsiteDataTypes()
             WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
-            self.profile.history.clearHistory().uponQueue(.main) { _ in
-                didComplete()
+            self.profile.history.clearHistory().uponQueue(.global(qos: .userInteractive)) { _ in
+                // INT64_MAX represents the oldest possible time that AS would have
+                self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in
+                    guard let completion = didComplete else { return }
+                    completion(nil)
+                }
             }
             self.profile.recentlyClosedTabs.clearTabs()
             self.tabManager.clearAllTabsHistory()

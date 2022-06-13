@@ -30,22 +30,24 @@ protocol TopTabsDelegate: AnyObject {
 }
 
 class TopTabsViewController: UIViewController {
+
+    // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var topTabDisplayManager: TabDisplayManager!
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.Identifier
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
     var profile: Profile
-    
+
+    // MARK: - UI ELements
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
-        collectionView.register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
-        collectionView.register(InactiveTabCell.self, forCellWithReuseIdentifier: InactiveTabCell.Identifier)
+        collectionView.register(cellType: TopTabCell.self)
+        collectionView.register(cellType: InactiveTabCell.self)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
         collectionView.clipsToBounds = true
         collectionView.accessibilityIdentifier = "Top Tabs View"
-        collectionView.semanticContentAttribute = .forceLeftToRight
         return collectionView
     }()
 
@@ -80,20 +82,26 @@ class TopTabsViewController: UIViewController {
         delegate.tabSelectionDelegate = topTabDisplayManager
         return delegate
     }()
-    
+
     private lazy var topTabFader: TopTabFader = {
         let fader = TopTabFader()
         fader.semanticContentAttribute = .forceLeftToRight
-        
+
         return fader
     }()
 
+    // MARK: - Inits
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 
-        topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TopTabCell.Identifier, tabDisplayType: .TopTabTray, profile: profile)
+        topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
+                                                 tabManager: self.tabManager,
+                                                 tabDisplayer: self,
+                                                 reuseID: TopTabCell.cellIdentifier,
+                                                 tabDisplayType: .TopTabTray,
+                                                 profile: profile)
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }
@@ -123,7 +131,7 @@ class TopTabsViewController: UIViewController {
 
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
-  
+
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
         view.addSubview(tabsButton)
@@ -162,13 +170,13 @@ class TopTabsViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(topTabFader)
         }
-        
+
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
@@ -226,19 +234,19 @@ class TopTabsViewController: UIViewController {
             }
         }
     }
-    
+
     private func handleFadeOutAfterTabSelection() {
         guard let currentTab = tabManager.selectedTab, let index = topTabDisplayManager.dataStore.index(of: currentTab), !collectionView.frame.isEmpty else {
             return
         }
-        
+
         // Check wether first or last tab is being selected.
         if index == 0 {
             topTabFader.setFader(forSides: .right)
-            
+
         } else if index == topTabDisplayManager.dataStore.count - 1 {
             topTabFader.setFader(forSides: .left)
-            
+
         } else if collectionView.contentSize.width <= collectionView.frame.size.width { // all tabs are visible
             topTabFader.setFader(forSides: .none)
         }
@@ -267,6 +275,7 @@ extension TopTabsViewController: TabDisplayer {
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
         topTabDisplayManager.closeActionPerformed(forCell: cell)
+        NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil)
     }
 }
 
@@ -299,16 +308,16 @@ extension TopTabsViewController: TopTabsScrollDelegate {
         let offsetX = scrollView.contentOffset.x
         let scrollViewWidth = scrollView.frame.size.width
         let scrollViewContentSize = scrollView.contentSize.width
-        
+
         let reachedLeftEnd = offsetX == 0
         let reachedRightEnd = (scrollViewContentSize - offsetX) == scrollViewWidth
-        
+
         if reachedLeftEnd {
             topTabFader.setFader(forSides: .right)
-            
+
         } else if reachedRightEnd {
             topTabFader.setFader(forSides: .left)
-            
+
         } else {
             topTabFader.setFader(forSides: .both)
         }
@@ -322,4 +331,3 @@ extension TopTabsViewController {
         return topTabDisplayManager
     }
 }
-

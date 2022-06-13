@@ -272,6 +272,12 @@ extension URL {
         return host.flatMap { publicSuffixFromHost($0, withAdditionalParts: 0) }
     }
 
+    /// Creates a short domain version of a link's url
+    /// e.g. url: http://www.foosite.com  =>  "foosite"
+    public var shortDomain: String? {
+        return host.flatMap { shortDomain($0, etld: publicSuffix ?? "") }
+    }
+
     public func isWebPage(includeDataURIs: Bool = true) -> Bool {
         let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
         return scheme.map { schemes.contains($0) } ?? false
@@ -301,7 +307,7 @@ extension URL {
         }
         return self
     }
-    
+
     public func isEqual(_ url: URL) -> Bool {
         if self == url {
             return true
@@ -316,11 +322,11 @@ extension URL {
         }
         return urls[0] == urls[1]
     }
-    
+
     public var isFxHomeUrl: Bool {
         return absoluteString.hasPrefix("internal://local/about/home")
     }
-    
+
 }
 
 // Extensions to deal with ReaderMode URLs
@@ -499,9 +505,29 @@ public struct InternalURL {
     }
 }
 
-//MARK: Private Helpers
+// MARK: Private Helpers
 private extension URL {
-    func publicSuffixFromHost( _ host: String, withAdditionalParts additionalPartCount: Int) -> String? {
+
+    /// Creates a short domain version of a link's url
+    /// e.g. url: http://www.foosite.com  =>  "foosite"
+    /// - Parameters:
+    ///   - host: hostname
+    ///   - etld: top level domain to remove from host
+    /// - Returns: The short version of the domain
+    func shortDomain(_ host: String, etld: String) -> String? {
+        // Check edge case where the host is either a single or double '.'.
+        if host.isEmpty || NSString(string: host).lastPathComponent == "." {
+            return ""
+        }
+
+        // Clean up the url by removing www.
+        var hostname = host.replacingOccurrences(of: "www.", with: "")
+        hostname = hostname.replacingOccurrences(of: ".\(etld)", with: "")
+
+        return hostname
+    }
+
+    func publicSuffixFromHost(_ host: String, withAdditionalParts additionalPartCount: Int) -> String? {
         if host.isEmpty {
             return nil
         }

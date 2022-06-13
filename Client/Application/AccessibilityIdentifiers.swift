@@ -12,16 +12,22 @@ import Foundation
 /// `.accessibilityIdentifier` identifiers from the client and the tests
 /// should be move here and updated throughout the app.
 public struct AccessibilityIdentifiers {
-    
-    struct BottomToolbar {
+
+    struct Toolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
-    }
-    
-    struct TabToolbar {
         static let homeButton = "TabToolbar.homeButton"
+        static let trackingProtection = "TabLocationView.trackingProtectionButton"
+        static let readerModeButton = "TabLocationView.readerModeButton"
+        static let reloadButton = "TabLocationView.reloadButton"
     }
 
     struct FirefoxHomepage {
+
+        static let collectionView = "FxCollectionView"
+
+        struct HomeTabBanner {
+            static let ctaButton = "HomeTabBanner.ctaButton"
+        }
 
         struct OtherButtons {
             static let logoButton = "FxHomeLogoButton"
@@ -40,11 +46,26 @@ public struct AccessibilityIdentifiers {
             static let recentlySaved = "recentlySavedTitle"
             static let historyHighlights = "historyHightlightsTitle"
             static let pocket = "pocketTitle"
-            static let library = "libraryTitle"
             static let topSites = "topSitesTitle"
         }
+
+        struct TopSites {
+            static let itemCell = "TopSitesCell"
+        }
+
+        struct Pocket {
+            static let itemCell = "PocketCell"
+        }
+
+        struct HistoryHighlights {
+            static let itemCell = "HistoryHighlightsCell"
+        }
+
+        struct JumpBackIn {
+            static let itemCell = "JumpBackInCell"
+        }
     }
-    
+
     struct GeneralizedIdentifiers {
         public static let back = "Back"
     }
@@ -53,6 +74,40 @@ public struct AccessibilityIdentifiers {
         static let filteredTabs = "filteredTabs"
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
+        static let syncedTabs = "Synced Tabs"
+    }
+
+    struct LibraryPanels {
+        static let bookmarksView = "LibraryPanels.Bookmarks"
+        static let historyView = "LibraryPanels.History"
+        static let downloadsView = "LibraryPanels.Downloads"
+        static let readingListView = "LibraryPanels.ReadingList"
+        static let segmentedControl = "librarySegmentControl"
+        static let topLeftButton = "libraryPanelTopLeftButton"
+        static let topRightButton = "libraryPanelTopRightButton"
+        static let bottomLeftButton = "libraryPanelBottomLeftButton"
+        static let bottomRightButton = "bookmarksPanelBottomRightButton"
+        static let bottomSearchButton = "historyBottomSearchButton"
+        static let bottomDeleteButton = "historyBottomDeleteButton"
+
+        struct HistoryPanel {
+            static let tableView = "History List"
+            static let clearHistoryCell = "HistoryPanel.clearHistory"
+            static let recentlyClosedCell = "HistoryPanel.recentlyClosedCell"
+            static let syncedHistoryCell = "HistoryPanel.syncedHistoryCell"
+        }
+
+        struct GroupedList {
+            static let tableView = "grouped-items-table-view"
+        }
+    }
+
+    struct Onboarding {
+        static let welcomeCard = "WelcomeCard"
+        static let wallpapersCard = "WallpapersCard"
+        static let signSyncCard = "SignSyncCard"
+        static let closeButton = "CloseButton"
+        static let pageControl = "PageControl"
     }
 
     struct Settings {
@@ -69,11 +124,16 @@ public struct AccessibilityIdentifiers {
             }
 
             struct CustomizeFirefox {
-                static let shortcuts = ""
+                struct Shortcuts {
+                    static let settingsPage = "TopSitesSettings"
+                    static let topSitesRows = "TopSitesRows"
+                }
+
                 static let jumpBackIn = "Jump Back In"
                 static let recentlySaved = "Recently Saved"
-                static let recentSearches = "Recent Searches"
+                static let recentVisited = "Recently Visited"
                 static let recommendedByPocket = "Recommended by Pocket"
+                static let wallpaper = "WallpaperSettings"
             }
         }
 

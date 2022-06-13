@@ -64,7 +64,7 @@ open class Cursor<T>: TypedCursor {
 
     open func makeIterator() -> AnyIterator<T?> {
         var nextIndex = 0
-        return AnyIterator() {
+        return AnyIterator {
             if nextIndex >= self.count || self.status != CursorStatus.success {
                 return nil
             }
@@ -89,7 +89,7 @@ open class Cursor<T>: TypedCursor {
 /*
  * A cursor implementation that wraps an array.
  */
-open class ArrayCursor<T> : Cursor<T> {
+open class ArrayCursor<T>: Cursor<T> {
     fileprivate var data: [T]
 
     open override var count: Int {

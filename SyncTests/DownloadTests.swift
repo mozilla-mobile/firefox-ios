@@ -7,7 +7,6 @@ import Shared
 @testable import Sync
 
 import XCTest
-import SwiftyJSON
 
 func identity<T>(x: T) -> T {
     return x
@@ -57,7 +56,7 @@ class DownloadTests: XCTestCase {
 
         let ex = expectation(description: "batcher")
         let fetch1 = batcher.go(ic1, limit: 1)
-        fetch1.upon() { result in
+        fetch1.upon { result in
             ex.fulfill()
 
             // We are now off-main, and .value is safe to call from here on
@@ -75,7 +74,7 @@ class DownloadTests: XCTestCase {
             XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.noNewData)
 
             // More records. Start again.
-            let _ = batcher.reset().value
+            _ = batcher.reset().value
 
             let ic2 = InfoCollections(collections: ["clients": ts2])
             server.storeRecords(records: [rec2], inCollection: "clients", now: ts2)

@@ -72,25 +72,6 @@ open class MockTabQueue: TabQueue {
     }
 }
 
-open class MockPanelDataObservers: PanelDataObservers {
-    override init(profile: Client.Profile) {
-        super.init(profile: profile)
-        self.activityStream = MockActivityStreamDataObserver(profile: profile)
-    }
-}
-
-open class MockActivityStreamDataObserver: DataObserver {
-    public func refreshIfNeeded(forceTopSites topSites: Bool) {
-    }
-
-    public var profile: Client.Profile
-    public weak var delegate: DataObserverDelegate?
-
-    init(profile: Client.Profile) {
-        self.profile = profile
-    }
-}
-
 class MockFiles: FileAccessor {
     init() {
         let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -113,10 +94,6 @@ open class MockProfile: Client.Profile {
 
     fileprivate var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
 
-    public lazy var panelDataObservers: PanelDataObservers = {
-        return MockPanelDataObservers(profile: self)
-    }()
-
     var db: BrowserDB
     var readingListDB: BrowserDB
 
@@ -125,13 +102,13 @@ open class MockProfile: Client.Profile {
     init(databasePrefix: String = "mock") {
         files = MockFiles()
         syncManager = MockSyncManager()
-        
+
         let oldLoginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
         try? files.remove("\(databasePrefix)_logins.db")
-        
+
         let newLoginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_loginsPerField.db").path
         try? files.remove("\(databasePrefix)_loginsPerField.db")
-        
+
         logins = RustLogins(sqlCipherDatabasePath: oldLoginsDatabasePath, databasePath: newLoginsDatabasePath)
         _ = logins.reopenIfClosed()
         db = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
@@ -236,8 +213,9 @@ open class MockProfile: Client.Profile {
         return deferMaybe([])
     }
 
+    var mockClientAndTabs = [ClientAndTabs]()
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return deferMaybe([])
+        return deferMaybe(mockClientAndTabs)
     }
 
     public func cleanupHistoryIfNeeded() {}
@@ -249,6 +227,6 @@ open class MockProfile: Client.Profile {
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         return succeed()
     }
-    
+
     public func sendQueuedSyncEvents() {}
 }

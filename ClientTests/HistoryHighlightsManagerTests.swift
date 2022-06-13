@@ -24,7 +24,7 @@ class HistoryHighlightsTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        
+
         profile._shutdown()
         profile = nil
         tabManager = nil
@@ -151,19 +151,19 @@ class HistoryHighlightsTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func testSingleHistoryHighlightCount_withGroupingEnabled() {
+    func testSingleHistoryHighlight_withGroupingEnabled() {
         emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
                          ("amazon", ""),
-                         ("mozilla", "group"),
-                         ("amazon", "group")]
+                         ("mozilla", "/group"),
+                         ("amazon", "/group")]
         createHistoryEntry(siteEntry: testSites)
-
-        let expectation = expectation(description: "Highlights")
         // 2 groups and 1 invidual item
         let expectedCount = 3
+
+        let expectation = expectation(description: "Highlights")
 
         manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
 
@@ -173,21 +173,24 @@ class HistoryHighlightsTests: XCTestCase {
             }
 
             XCTAssertEqual(highlights.count, expectedCount, "There should be three history highlight")
+            XCTAssertNotNil((highlights[0] as? HistoryHighlight), "Expected History highlight as the first item")
+            XCTAssertNotNil((highlights[1] as? ASGroup<HistoryHighlight>), "Expected group as second item")
+            XCTAssertNotNil((highlights[2] as? ASGroup<HistoryHighlight>), "Expected group as second item")
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func testSingleHistoryHighlightOrder_withGroupingEnabled() {
+    func testSingleHistoryHighlightOrder_withMoreSingleItemEach() {
         emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
-                         ("amazon", ""),
-                         ("mozilla", "/group"),
-                         ("amazon", "/group")]
+                         ("apple", ""),
+                         ("mozilla", "/group")]
         createHistoryEntry(siteEntry: testSites)
+        let expectedCount = 3
 
         let expectation = expectation(description: "Highlights")
 
@@ -198,15 +201,106 @@ class HistoryHighlightsTests: XCTestCase {
                 return
             }
 
+            XCTAssertEqual(highlights.count, expectedCount, "There should be two history highlight")
             XCTAssertNotNil((highlights[0] as? HistoryHighlight), "Expected History highlight as the first item")
             XCTAssertNotNil((highlights[1] as? ASGroup<HistoryHighlight>), "Expected group as second item")
-            XCTAssertNotNil((highlights[2] as? ASGroup<HistoryHighlight>), "Expected group as second item")
+            XCTAssertNotNil((highlights[2] as? HistoryHighlight), "Expected History highlight as the first item")
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 5, handler: nil)
     }
 
+    func testSingleHistoryHighlightOrder_withTwoItemEach() {
+        emptyDB()
+
+        let testSites = [("mozilla", ""),
+                         ("wikipedia", ""),
+                         ("apple", ""),
+                         ("mozilla", "/group"),
+                         ("apple", "/group"),
+                         ("google", "/group")]
+        createHistoryEntry(siteEntry: testSites)
+        let expectedCount = 4
+
+        let expectation = expectation(description: "Highlights")
+
+        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+
+            guard let highlights = highlights else {
+                XCTFail("Highlights should not be nil.")
+                return
+            }
+
+            XCTAssertEqual(highlights.count, expectedCount, "There should be two history highlight")
+            XCTAssertNotNil((highlights[0] as? HistoryHighlight), "Expected History highlight as the first item")
+            XCTAssertNotNil((highlights[1] as? ASGroup<HistoryHighlight>), "Expected group as second item")
+            XCTAssertNotNil((highlights[2] as? HistoryHighlight), "Expected History highlight as the first item")
+            XCTAssertNotNil((highlights[3] as? ASGroup<HistoryHighlight>), "Expected group as second item")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func testSingleHistoryHighlightOrder_OnlySingleItems() {
+        emptyDB()
+
+        let testSites = [("mozilla", ""),
+                         ("wikipedia", ""),
+                         ("apple", "")]
+        createHistoryEntry(siteEntry: testSites)
+        let expectedCount = 3
+
+        let expectation = expectation(description: "Highlights")
+
+        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+
+            guard let highlights = highlights else {
+                XCTFail("Highlights should not be nil.")
+                return
+            }
+
+            XCTAssertEqual(highlights.count, expectedCount, "There should be two history highlight")
+            XCTAssertNotNil((highlights[0] as? HistoryHighlight), "Expected History highlight as the first item")
+            XCTAssertNotNil((highlights[1] as? HistoryHighlight), "Expected History highlight as second item")
+            XCTAssertNotNil((highlights[2] as? HistoryHighlight), "Expected History highlight as the first item")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func testSingleHistoryHighlightOrder_OnlyGroupItems() {
+        emptyDB()
+
+        let testSites = [("mozilla", ""),
+                         ("mozilla", "/group"),
+                         ("wikipedia", ""),
+                         ("wikipedia", "/group"),
+                         ("apple", ""),
+                         ("apple", "/group")]
+        createHistoryEntry(siteEntry: testSites)
+        let expectedCount = 3
+
+        let expectation = expectation(description: "Highlights")
+
+        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+
+            guard let highlights = highlights else {
+                XCTFail("Highlights should not be nil.")
+                return
+            }
+
+            XCTAssertEqual(highlights.count, expectedCount, "There should be two history highlight")
+            XCTAssertNotNil((highlights[0] as? ASGroup<HistoryHighlight>), "Expected group as the first item")
+            XCTAssertNotNil((highlights[1] as? ASGroup<HistoryHighlight>), "Expected group as second item")
+            XCTAssertNotNil((highlights[2] as? ASGroup<HistoryHighlight>), "Expected group as the first item")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
+    }
 
     // MARK: - Helper functions
 
@@ -232,7 +326,7 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     private func createTabs(named name: String) -> Tab {
-        guard let url = URL(string:"https://www.\(name).com/") else {
+        guard let url = URL(string: "https://www.\(name).com/") else {
             return tabManager.addTab()
         }
 

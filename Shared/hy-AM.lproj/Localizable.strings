@@ -287,8 +287,17 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Կիսվել հղումով";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Այժմ կարող եք գործիքագոտին տեղափոխել ներքև, որպեսզի ավելի հեշտ լինի մուտքագրել տեղեկատվություն";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "Տեղեկությունների մուտքագրումը հեշտացնելու համար գործիքագոտին այժմ լռելյայնորեն ներքևում է:";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Ձեր անհատականացված Firefox-ի տնային էջն այժմ հեշտացնում է աշխատանքը շարունակելու այն կետից, որում կանգնել եք: Գտեք ձեր վերջին ներդիրները, էջանիշերը և որոնման արդյունքները:";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Ներդիրի կարգավորումներ";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Երկու շաբաթ չնայած էջանիշերը տեղափոխվում են այստեղ:";
@@ -432,6 +441,15 @@
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Հարմարեցնել տնային էջը";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Բացահայտեք ավելին";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Մտահանգման պատմություններով";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Հեռացնել";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Փոխանցել";
@@ -694,6 +712,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Նորից Գտնել";
 
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "Նոր նորմալ ներդիր";
+
 /* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.OpenLinkInBackground" = "Բացեք հղումը հետին պլանում";
 
@@ -745,6 +766,9 @@
 /* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowTabNumber" = "Ցուցադրել ներդիրի համարը՝ 1-9";
 
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Հետարկել փակված ներդիրը";
+
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Մեծացնել";
 
@@ -760,6 +784,9 @@
 /* History tableview section header */
 "Last week" = "Վերջին շաբաթը";
 
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Հին";
+
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Արտոնագրեր";
 
@@ -770,7 +797,7 @@
 "Load original page" = "Բեռնել սկզբնական էջը";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "Բովանդակության բեռնում...";
+"Loading content…" = "Բովանդակության բեռնում…";
 
 /* Authentication prompt log in button */
 "Log in" = "Մուտք գորխել";
@@ -827,7 +854,7 @@
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Թարմացնե՞լ մուտքագրումը %@-ի համար:";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Թարմացնե՞լ %1$@ մուտքագրումը %@-ի համար:";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Թարմացնե՞լ %1$@ մուտքագրումը %2$@-ի համար:";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Պահպանել մուտքագրումը";
@@ -893,9 +920,6 @@
 
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Ավելացվել է ընթերցման ցուցակում";
-
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "Կրկնօրինակեք և համաժամացրեք տվյալները";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Էջանիշեր";
@@ -972,9 +996,6 @@
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Հեռացված է լավագույն կայքերից";
 
-/* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "Հեռացվել է դյուրանցումներից";
-
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Ներդիրն ուղարկված է";
 
@@ -982,7 +1003,7 @@
 "Menu.TrackingProtection.BlockedTitle" = "Արգելափակված է";
 
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
-"Menu.TrackingProtection.Details.Verifier" = "Հաստատել է %S-ի կողմից";
+"Menu.TrackingProtection.Details.Verifier" = "Հաստատել է %@-ի կողմից";
 
 /* Message in menu when no trackers blocked. */
 "Menu.TrackingProtection.NoTrackersBlockedTitle" = "Firefox-ը այս էջում հայտնի հետագծիչներ չի հայտնաբերել։";
@@ -1512,9 +1533,6 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Գլխավոր";
 
-/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description" = "Ընտրեք բովանդակությունը, որը տեսնում եք Firefox-ի գլխավոր էջում:";
-
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Վերադառնալ";
 
@@ -1526,9 +1544,6 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "Վերջերս այցելված";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "Վերջին որոնումները";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Դյուրանցումներ";
@@ -1548,8 +1563,23 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "Ողջյունի պատուհան";
 
-/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "Firefox-ի Տնային էջը";
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Պաստառներ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Գլխավոր էջի պաստառի ցիկլի միացում";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "ԲԱՑՎՈՂ ԷԿՐԱՆ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Պաստառներ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Պաստառն արդիացվեց:";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Տեսք";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Մաքրել";
@@ -1722,7 +1752,7 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Ուսումնասիրություններ";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Ոչ ակտիվ ներդիրներ";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
@@ -1733,6 +1763,15 @@
 
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "Ներդիրներ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "Ներքևում";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Գործիքագոտի";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Վերևում";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Լավ, հասկացա";
@@ -1907,7 +1946,7 @@
 "Sync.Syncing.Label" = "Համաժամեցում";
 
 /* Message displayed when the user's account is syncing with ellipsis at the end */
-"Sync.SyncingEllipsis.Label" = "Համաժամեցում...";
+"Sync.SyncingEllipsis.Label" = "Համաժամեցում…";
 
 /* Panel accessibility label */
 "Synced Tabs" = "Համաժամեցված ներդիրներ";
@@ -1995,9 +2034,6 @@
 
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Այլ ներդիրներ";
-
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Մասնավոր ներդիրներ";
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Ներդիրներն այստեղ հասանելի են 30 օրվա ընթացքում: Այդ ժամանակից հետո ներդիրներ ինքնաշխատ կփակվեն:";

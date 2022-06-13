@@ -22,7 +22,12 @@ class DomainAutocompleteTest: BaseTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB, LaunchArguments.SkipContextualHintJumpBackIn]
+            launchArguments = [LaunchArguments.SkipIntro,
+                               LaunchArguments.SkipWhatsNew,
+                               LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.LoadDatabasePrefix + historyDB,
+                               LaunchArguments.SkipContextualHints,
+                               LaunchArguments.TurnOffTabGroupsInUserPreferences]
         }
         super.setUp()
     }
@@ -76,7 +81,7 @@ class DomainAutocompleteTest: BaseTestCase {
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
 
-        waitForExistence(app.cells["TopSitesCell"])
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
     // Ensure that the scheme is included in the autocompletion.

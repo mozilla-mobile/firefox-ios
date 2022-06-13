@@ -91,7 +91,7 @@ extension EventTests {
 
 // Don't have a need for this in the app but is great for testing!
 extension Event: Equatable {
-    public static func ==(left: Event, right: Event) -> Bool {
+    public static func == (left: Event, right: Event) -> Bool {
         let propsAreEqual = (left.category == right.category) &&
                             (left.method == right.method) &&
                             (left.object == right.object) &&
@@ -100,4 +100,3 @@ extension Event: Equatable {
         return propsAreEqual
     }
 }
-

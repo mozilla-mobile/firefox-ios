@@ -59,10 +59,10 @@
 "Intro.Slides.Welcome.Description.v2" = "Szybki, prywatny i po Twojej stronie";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
-"Intro.Slides.Welcome.Title.v2" = "Witaj w Firefoksie";
+"Intro.Slides.Welcome.Title.v2" = "Witamy w Firefoksie";
 
 /* See http://mzl.la/1T8gxwo */
-"Start Browsing" = "Rozpocznij przeglądanie";
+"Start Browsing" = "Zacznij przeglądać Internet";
 
 /* The button that opens the sign in page for sync. See http://mzl.la/1T8gxwo */
 "Turn on Sync…" = "Włącz synchronizację…";

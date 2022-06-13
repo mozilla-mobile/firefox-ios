@@ -258,7 +258,7 @@
 "ContextMenu.OpenInNewTabButtonTitle" = "Fosgail ann an taba ùr";
 
 /* Context menu item for opening a link in a new private tab */
-"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Fosgail an ceangal ann an taba prìobhaideach ùr";
+"ContextMenu.OpenLinkInNewPrivateTabButtonTitle" = "Fosgail an ceangal le taba prìobhaideach ùr";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenLinkInNewTabButtonTitle" = "Fosgail an ceangal ann an taba ùr";
@@ -801,9 +801,6 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Air a chur ris an liosta-leughaidh";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "Lethbhreac-glèidhidh ’s sioncronachadh an dàta";
-
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Comharran-lìn";
 
@@ -878,9 +875,6 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Air a thoirt air falbh o bhrod nan làrach";
-
-/* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "Chaidh a thoirt air falbh on na h-ath-ghoiridean";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Chaidh an taba a chur";
@@ -1416,9 +1410,6 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Coitcheann";
 
-/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description" = "Tagh susbaint a chì thu air duilleag-dhachaigh Firefox.";
-
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Till gu far an robh thu";
 
@@ -1430,9 +1421,6 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "Air tadhal orra o chionn goirid";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "Luirg o chionn goirid";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Ath-ghoiridean";
@@ -1451,9 +1439,6 @@
 
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "An sgrìn fosglaidh";
-
-/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "Duilleag-dhachaigh Firefox";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Falamhaich";
@@ -1626,7 +1611,7 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Rannsachadh";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Tabaichean neo-ghnìomhach";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
@@ -1899,9 +1884,6 @@
 
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Tabaichean eile";
-
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Tabaichean prìobhaideach";
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Bidh na tabaichean ri làimh dhut an-seo fad 30 latha. Thèid na tabaichean a dhùnadh gu fèin-obrachail an uairsin.";

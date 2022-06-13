@@ -6,12 +6,11 @@
 @testable import Client
 import Foundation
 
-import SwiftyJSON
 import XCTest
 
 class FxAPushMessageTest: XCTestCase {
     func createHandler(_ profile: Profile = MockProfile()) -> FxAPushMessageHandler {
-        
+
         return FxAPushMessageHandler(with: profile)
     }
 }

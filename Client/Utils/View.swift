@@ -14,12 +14,12 @@ extension UIView {
     /// - Parameter builder: A function that takes the newly created view.
     ///
     /// Usage:
-    /// ~~~
-    /// private let button: UIButton = .build { button in
-    ///     button.setTitle("Tap me!", for state: .normal)
-    ///     button.backgroundColor = .systemPink
-    /// }
-    /// ~~~
+    /// ```
+    ///    private let button: UIButton = .build { button in
+    ///        button.setTitle("Tap me!", for state: .normal)
+    ///        button.backgroundColor = .systemPink
+    ///    }
+    /// ```
     static func build<T: UIView>(_ builder: ((T) -> Void)? = nil) -> T {
         let view = T()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -32,9 +32,9 @@ extension UIView {
     /// - Parameter views: A variadic parameter taking in a list of views to be added.
     ///
     /// Usage:
-    /// ~~~
-    /// view.addSubviews(headerView, contentView, footerView)
-    /// ~~~
+    /// ```
+    ///    view.addSubviews(headerView, contentView, footerView)
+    /// ```
     func addSubviews(_ views: UIView...) {
         views.forEach(addSubview)
     }

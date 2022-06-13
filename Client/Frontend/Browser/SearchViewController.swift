@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 import Storage
-import MozillaAppServices
+import Glean
 import Telemetry
 
 private enum SearchListSection: Int, CaseIterable {
@@ -13,6 +13,7 @@ private enum SearchListSection: Int, CaseIterable {
     case remoteTabs
     case openedTabs
     case bookmarksAndHistory
+    case searchHighlights
 }
 
 private struct SearchViewControllerUX {
@@ -55,7 +56,7 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener, FeatureFlaggable {
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
@@ -67,7 +68,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
-    
+    private var searchHighlights = [HighlightItem]()
+
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
     private let searchEngineContainerView = UIView()
@@ -77,22 +79,22 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private lazy var bookmarkedBadge: UIImage = {
         return UIImage(named: "bookmark_results")!
     }()
-    
+
     private lazy var openAndSyncTabBadge: UIImage = {
         return UIImage(named: "sync_open_tab")!
     }()
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
-    var experimental: Variables?
+    var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
 
-    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager) {
+    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
         self.viewModel = viewModel
         self.tabManager = tabManager
-        self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
+        self.searchFeature = featureConfig
         super.init(profile: profile)
-        
+
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
@@ -132,12 +134,27 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         blur.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-    
+
         searchEngineContainerView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
+    }
+
+    private func loadSearchHighlights() {
+        guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
+
+        HistoryHighlightsManager.searchHighlightsData(searchQuery: searchQuery,
+                                                      profile: profile,
+                                                      tabs: tabManager.tabs,
+                                                      resultCount: 3) { results in
+            guard let results = results else {
+                return
+            }
+            self.searchHighlights = results
+            self.tableView.reloadData()
+        }
     }
 
     @objc func dynamicFontChanged(_ notification: Notification) {
@@ -150,6 +167,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.viewWillAppear(animated)
         reloadSearchEngines()
         reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchFeature.recordExposure()
     }
 
     private func layoutSearchEngineScrollView() {
@@ -168,7 +190,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private func layoutSearchEngineScrollViewContent() {
         searchEngineScrollViewContent.snp.remakeConstraints { make in
             make.center.equalTo(self.searchEngineScrollView).priority(10)
-            //left-align the engines on iphones, center on ipad
+            // left-align the engines on iphones, center on ipad
             if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
                 make.leading.equalTo(self.searchEngineScrollView).priority(1000)
                 make.width.greaterThanOrEqualTo(self.view)
@@ -223,18 +245,23 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private func layoutTable() {
-        tableView.snp.remakeConstraints { make in
-            make.top.equalTo(self.view.snp.top)
-            make.leading.trailing.equalTo(self.view)
-            make.bottom.equalTo(self.searchEngineScrollView.snp.top)
-        }
+        // Note: We remove and re-add tableview from superview so that we can update
+        // the constraints to be aligned with Search Engine Scroll View top anchor
+        tableView.removeFromSuperview()
+        view.addSubviews(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: searchEngineScrollView.topAnchor)
+        ])
     }
 
     func reloadSearchEngines() {
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.snp.leading
 
-        //search settings icon
+        // search settings icon
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "quickSearch"), for: [])
         searchButton.imageView?.contentMode = .center
@@ -251,8 +278,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             make.bottom.equalTo(self.searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
         }
 
-        //search engines
+        // search engines
         leftEdge = searchButton.snp.trailing
+
         for engine in quickSearchEngines {
             let engineButton = UIButton()
             engineButton.setImage(engine.image, for: [])
@@ -311,10 +339,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         animateSearchEnginesWithKeyboard(state)
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        animateSearchEnginesWithKeyboard(state)
     }
 
-    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         animateSearchEnginesWithKeyboard(state)
     }
 
@@ -335,7 +364,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             self.view.layoutIfNeeded()
         })
     }
-    
+
     private func getCachedTabs() {
         assert(Thread.isMainThread)
         // Short circuit if the user is not logged in
@@ -354,7 +383,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             }
         }
     }
-    
+
     func searchTabs(for searchString: String) {
         let currentTabs = viewModel.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
 
@@ -369,10 +398,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 $0 && content.range(of: $1, options: .caseInsensitive) != nil
             }
         }
+        let config = searchFeature.value().awesomeBar
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
-        let searchInContent = (experimental?.getBool("use-page-content") ?? false)
-            && searchTerms.find { $0.count >= 3 } != nil
+        let searchInContent = config.usePageContent
+            && searchTerms.find { $0.count >= config.minSearchTerm } != nil
 
         filteredOpenedTabs = currentTabs.filter { tab in
             guard let url = tab.url ?? tab.sessionData?.urls.last,
@@ -384,14 +414,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     searchInContent ? tab.readabilityResult?.textContent : nil,
                     url.absoluteString
                 ]
-                .filter { $0 != nil }
-                .map { $0! }
+                .compactMap { $0 }
 
             let text = lines.joined(separator: "\n")
             return find(in: text)
         }
     }
-    
+
     func searchRemoteTabs(for searchString: String) {
         filteredRemoteClientTabs.removeAll()
         for remoteClientTab in remoteClientTabs {
@@ -415,7 +444,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return false
         }
     }
-    
+
     private func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
@@ -424,6 +453,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             tableView.reloadData()
             return
         }
+
+        loadSearchHighlights()
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
@@ -445,7 +476,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             } else {
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
-                self.suggestions?.removeAll(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) } )
+                self.suggestions?.removeAll(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) })
                 // First suggestion should be what the user is searching
                 self.suggestions?.insert(self.searchQuery, at: 0)
             }
@@ -473,6 +504,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
+            recordSearchListSelectionTelemetry(type: .searchSuggestions)
             // Assume that only the default search engine can provide search suggestions.
             let engine = searchEngines.defaultEngine
             guard let suggestion = suggestions?[indexPath.row] else { return }
@@ -482,17 +514,25 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
+            recordSearchListSelectionTelemetry(type: .openedTabs)
             let tab = self.filteredOpenedTabs[indexPath.row]
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .remoteTabs:
+            recordSearchListSelectionTelemetry(type: .remoteTabs)
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
+                recordSearchListSelectionTelemetry(type: .bookmarksAndHistory,
+                                                   isBookmark: site.bookmarked ?? false)
                 if let url = URL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
-                    TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
                 }
+            }
+        case .searchHighlights:
+            if let url = searchHighlights[indexPath.row].siteUrl {
+                recordSearchListSelectionTelemetry(type: .searchHighlights)
+                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         }
     }
@@ -522,6 +562,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return filteredRemoteClientTabs.count
         case .bookmarksAndHistory:
             return data.count
+        case .searchHighlights:
+            return searchHighlights.count
         }
     }
 
@@ -546,8 +588,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     func getAttributedBoldSearchSuggestions(searchPhrase: String, query: String) -> NSAttributedString {
-        let boldAttributes = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: DynamicFontHelper().DefaultStandardFont.pointSize)]
-        let regularAttributes = [NSAttributedString.Key.font : DynamicFontHelper().DefaultStandardFont]
+        let boldAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: DynamicFontHelper().DefaultStandardFont.pointSize)]
+        let regularAttributes = [NSAttributedString.Key.font: DynamicFontHelper().DefaultStandardFont]
         let attributedString = NSMutableAttributedString(string: "", attributes: regularAttributes)
         let phraseString = NSAttributedString(string: searchPhrase, attributes: regularAttributes)
         let suggestion = searchPhrase.components(separatedBy: query)
@@ -559,7 +601,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         attributedString.append(restOfSuggestion)
         return attributedString
     }
-    
+
     private func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell, oneLineCell: OneLineTableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
@@ -632,10 +674,25 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
+        case .searchHighlights:
+            let highlightItem = searchHighlights[indexPath.row]
+            let urlString = highlightItem.siteUrl?.absoluteString ?? ""
+            cell = twoLineCell
+            twoLineCell.descriptionLabel.isHidden = false
+            twoLineCell.titleLabel.text = highlightItem.displayTitle
+            twoLineCell.descriptionLabel.text = urlString
+            twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+            twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+            twoLineCell.leftImageView.contentMode = .center
+            twoLineCell.leftImageView.setImageAndBackground(forIcon: Favicon(url: urlString), website: highlightItem.siteUrl) { [weak twoLineCell] in
+                twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+            }
+            twoLineCell.accessoryView = nil
+            cell = twoLineCell
         }
         return cell
     }
-    
+
     @objc func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
@@ -655,6 +712,37 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             )
         }
         return searchAppendImage
+    }
+}
+
+// MARK: - Telemetry
+private extension SearchViewController {
+     func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
+        let key = TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue
+        switch type {
+        case .searchSuggestions:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
+        case .remoteTabs:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.remoteTab.rawValue])
+        case .openedTabs:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.openedTab.rawValue])
+        case .bookmarksAndHistory:
+            let extra = isBookmark ? TelemetryWrapper.EventValue.bookmarkItem.rawValue :
+                        TelemetryWrapper.EventValue.historyItem.rawValue
+            TelemetryWrapper.recordEvent(category: .action, method: .tap,
+                                         object: .awesomebarResults, extras: [key: extra])
+        case .searchHighlights:
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .open,
+                                         object: .awesomebarResults,
+                                         extras: [key: TelemetryWrapper.EventValue.searchSuggestion.rawValue])
+        }
     }
 }
 

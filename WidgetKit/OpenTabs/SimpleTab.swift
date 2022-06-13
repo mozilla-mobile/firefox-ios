@@ -25,15 +25,14 @@ extension SimpleTab {
                 let jsonDecoder = JSONDecoder()
                 let tabs = try jsonDecoder.decode([String: SimpleTab].self, from: tbs)
                 return tabs
-            }
-            catch {
+            } catch {
                 print("Error occured")
             }
         }
         return [String: SimpleTab]()
     }
-    
-    static func saveSimpleTab(tabs:[String: SimpleTab]?) {
+
+    static func saveSimpleTab(tabs: [String: SimpleTab]?) {
         guard let tabs = tabs, !tabs.isEmpty else {
             userDefaults.removeObject(forKey: PrefsKeys.WidgetKitSimpleTabKey)
             return
@@ -43,11 +42,11 @@ extension SimpleTab {
             userDefaults.set(encoded, forKey: PrefsKeys.WidgetKitSimpleTabKey)
         }
     }
-    
+
     static func convertToSimpleTabs(_ tabs: [SavedTab]) -> [String: SimpleTab] {
         var simpleTabs: [String: SimpleTab] = [:]
         for tab in tabs {
-            var url:URL?
+            var url: URL?
             // Set URL
             if tab.url != nil {
                 url = tab.url
@@ -55,19 +54,19 @@ extension SimpleTab {
             } else if tab.sessionData?.urls != nil {
                 url = tab.sessionData?.urls.last
             }
-            
+
             // Ignore `internal about` urls which corresponds to Home
             if url != nil, url!.absoluteString.starts(with: "internal://local/about/") {
                 continue
             }
-            
+
             // Set Title
             var title = tab.title ?? ""
             // There is no title then use the base url Ex https://www.mozilla.org/ will be short displayed as `mozilla`
             if title.isEmpty {
                 title = url?.shortDisplayString ?? ""
             }
-            
+
             // Key for simple tabs dictionary is tab UUID which is used to select proper tab when we send UUID to NavigationRouter class handle widget url
             let uuidVal = tab.UUID ?? ""
             let value = SimpleTab(title: title, url: url, lastUsedTime: tab.sessionData?.lastUsedTime ?? 0, faviconURL: tab.faviconURL, isPrivate: tab.isPrivate, uuid: uuidVal)
@@ -76,5 +75,3 @@ extension SimpleTab {
         return simpleTabs
     }
 }
-
-

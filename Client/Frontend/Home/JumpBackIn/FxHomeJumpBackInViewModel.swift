@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import UIKit
 
 /// The filtered jumpBack in list to display to the user.
 /// Only one group is displayed
@@ -22,43 +23,65 @@ struct JumpBackInList {
     }
 }
 
-class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
+class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
+
+    struct UX {
+        static let verticalCellSpacing: CGFloat = 8
+        static let iPadHorizontalSpacing: CGFloat = 48
+        static let iPadCellSpacing: CGFloat = 16
+        static let iPhoneLandscapeCellWidth: CGFloat = 0.475
+        static let iPhonePortraitCellWidth: CGFloat = 0.93
+    }
 
     // MARK: - Properties
+    var headerButtonAction: ((UIButton) -> Void)?
     var onTapGroup: ((Tab) -> Void)?
-    var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
-    var parentCollectionViewIndex: IndexPath?
 
+    weak var browserBarViewDelegate: BrowserBarViewDelegate?
+
+    var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     private var recentTabs: [Tab] = [Tab]()
-    private var recentGroups: [ASGroup<Tab>]?
-    private let isZeroSearch: Bool
-    private let profile: Profile
-    private let tabManager: TabManager
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
 
-    init(isZeroSearch: Bool = false,
-         profile: Profile,
-         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager) {
+    private var recentGroups: [ASGroup<Tab>]?
 
+    private let isZeroSearch: Bool
+    private let profile: Profile
+    private var isPrivate: Bool
+    private var hasSentJumpBackInSectionEvent = false
+    private let tabManager: TabManagerProtocol
+
+    init(
+        isZeroSearch: Bool = false,
+        profile: Profile,
+        isPrivate: Bool,
+        tabManager: TabManagerProtocol = BrowserViewController.foregroundBVC().tabManager
+    ) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.isPrivate = isPrivate
+        self.isPrivate = isPrivate
         self.tabManager = tabManager
     }
 
     // The dimension of a cell
     static var widthDimension: NSCollectionLayoutDimension {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            return .absolute(FxHomeHorizontalCellUX.cellWidth) // iPad
+            return .absolute(FxHomeHorizontalCell.UX.cellWidth) // iPad
         } else if UIWindow.isLandscape {
-            return .fractionalWidth(1/2) // iPhone in landscape
+            return .fractionalWidth(UX.iPhoneLandscapeCellWidth) // iPhone in landscape
         } else {
-            return .fractionalWidth(1) // iPhone in portrait
+            return .fractionalWidth(UX.iPhonePortraitCellWidth) // iPhone in portrait
         }
     }
 
     // The maximum number of items to display in the whole section
-    static var maxItemsToDisplay: Int {
-        return UIDevice.current.userInterfaceIdiom == .pad ? 3 : UIWindow.isLandscape ? 4 : 2
+    func getMaxItemsToDisplay(isPortrait: Bool) -> Int {
+        guard UIDevice.current.userInterfaceIdiom != .pad else {
+            return 3
+        }
+
+        return isPortrait ? 2 : 4
     }
 
     static var maxNumberOfItemsInColumn: Int {
@@ -73,56 +96,41 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
     }
 
-    /// Update data with tab and search term group managers
-    func updateData(completion: @escaping () -> Void) {
-        recentTabs = tabManager.recentlyAccessedNormalTabs
-
-        if featureFlags.isFeatureActiveForBuild(.groupedTabs),
-           featureFlags.userPreferenceFor(.groupedTabs) == UserFeaturePreference.enabled {
-            SearchTermGroupsManager.getTabGroups(with: profile,
-                                                 from: recentTabs,
-                                                 using: .orderedDescending) { [weak self] groups, _ in
-                guard let strongSelf = self else { completion(); return }
-                strongSelf.recentGroups = groups
-                strongSelf.jumpBackInList = strongSelf.createJumpBackInList(from: strongSelf.recentTabs, and: groups)
-                completion()
-            }
-        } else {
-            jumpBackInList = createJumpBackInList(from: recentTabs)
-            completion()
-        }
-    }
-
-    /// Refresh data for new layout
-    func refreshData() {
-        jumpBackInList = createJumpBackInList(from: recentTabs, and: recentGroups)
-    }
-
     func switchTo(group: ASGroup<Tab>) {
-        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
-            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        guard let delegate = browserBarViewDelegate else { return }
+
+        if delegate.inOverlayMode {
+            delegate.leaveOverlayMode(didCancel: false)
         }
+
         guard let firstTab = group.groupedItems.first else { return }
 
         onTapGroup?(firstTab)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .jumpBackInSectionGroupOpened,
-                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .firefoxHomepage,
+            value: .jumpBackInSectionGroupOpened,
+            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        )
     }
 
     func switchTo(tab: Tab) {
-        if BrowserViewController.foregroundBVC().urlBar.inOverlayMode {
-            BrowserViewController.foregroundBVC().urlBar.leaveOverlayMode()
+        guard let delegate = browserBarViewDelegate else { return }
+
+        if delegate.inOverlayMode {
+            delegate.leaveOverlayMode(didCancel: false)
         }
-        tabManager.selectTab(tab)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .jumpBackInSectionTabOpened,
-                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
+
+        tabManager.selectTab(tab, previous: nil)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .firefoxHomepage,
+            value: .jumpBackInSectionTabOpened,
+            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+        )
     }
 
     func getFaviconImage(forSite site: Site, completion: @escaping (UIImage?) -> Void) {
@@ -137,19 +145,44 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
     }
 
+    func sendImpressionTelemetry() {
+        if !hasSentJumpBackInSectionEvent {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .jumpBackInImpressions,
+                                         value: nil,
+                                         extras: nil)
+            hasSentJumpBackInSectionEvent = true
+        }
+    }
+
     // MARK: - Private
 
-    private func createJumpBackInList(from tabs: [Tab], and groups: [ASGroup<Tab>]? = nil) -> JumpBackInList {
+    private func createJumpBackInList(
+        from tabs: [Tab],
+        withMaxItemsToDisplay maxItems: Int,
+        and groups: [ASGroup<Tab>]? = nil
+    ) -> JumpBackInList {
         let recentGroup = groups?.first
         let groupCount = recentGroup != nil ? 1 : 0
-        let recentTabs = filter(tabs: tabs, from: recentGroup, usingGroupCount: groupCount)
+        let recentTabs = filter(
+            tabs: tabs,
+            from: recentGroup,
+            usingGroupCount: groupCount,
+            withMaxItemsToDisplay: maxItems
+        )
 
         return JumpBackInList(group: recentGroup, tabs: recentTabs)
     }
 
-    private func filter(tabs: [Tab], from recentGroup: ASGroup<Tab>?, usingGroupCount groupCount: Int) -> [Tab] {
+    private func filter(
+        tabs: [Tab],
+        from recentGroup: ASGroup<Tab>?,
+        usingGroupCount groupCount: Int,
+        withMaxItemsToDisplay maxItemsToDisplay: Int
+    ) -> [Tab] {
         var recentTabs = [Tab]()
-        let maxItemCount = FirefoxHomeJumpBackInViewModel.maxItemsToDisplay - groupCount
+        let maxItemCount = maxItemsToDisplay - groupCount
 
         for tab in tabs {
             // We must make sure to not include any 'solo' tabs that are also part of a group
@@ -162,5 +195,203 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlagsProtocol {
         }
 
         return recentTabs
+    }
+
+    /// Update data with tab and search term group managers, saving it in view model for further usage
+    private func updateJumpBackInData(completion: @escaping () -> Void) {
+        recentTabs = tabManager.recentlyAccessedNormalTabs
+
+        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
+            SearchTermGroupsUtility.getTabGroups(
+                with: profile,
+                from: recentTabs,
+                using: .orderedDescending
+            ) { [weak self] groups, _ in
+                guard let strongSelf = self else { completion(); return }
+
+                strongSelf.recentGroups = groups
+                completion()
+            }
+
+        } else {
+            completion()
+        }
+    }
+}
+
+// MARK: FXHomeViewModelProtocol
+extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
+
+    var sectionType: FirefoxHomeSectionType {
+        return .jumpBackIn
+    }
+
+    var headerViewModel: ASHeaderViewModel {
+        return ASHeaderViewModel(title: FirefoxHomeSectionType.jumpBackIn.title,
+                                 titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+                                 isButtonHidden: false,
+                                 buttonTitle: .RecentlySavedShowAllText,
+                                 buttonAction: headerButtonAction,
+                                 buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
+    }
+
+    var isEnabled: Bool {
+        guard featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) else { return false }
+
+        return !isPrivate
+    }
+
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+        refreshData(for: traitCollection)
+        return jumpBackInList.itemsToDisplay
+    }
+
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(FxHomeHorizontalCell.UX.cellHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: FirefoxHomeJumpBackInViewModel.widthDimension,
+            heightDimension: .estimated(FxHomeHorizontalCell.UX.cellHeight)
+        )
+
+        let itemsNumber = numberOfItemsInSection(for: traitCollection)
+        let count = min(FirefoxHomeJumpBackInViewModel.maxNumberOfItemsInColumn, itemsNumber)
+        let subItems = Array(repeating: item, count: count)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
+        group.interItemSpacing = FxHomeHorizontalCell.UX.interItemSpacing
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
+                                                      bottom: 0, trailing: FxHomeHorizontalCell.UX.interGroupSpacing)
+
+        let section = NSCollectionLayoutSection(group: group)
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                heightDimension: .estimated(34))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
+                                                                 elementKind: UICollectionView.elementKindSectionHeader,
+                                                                 alignment: .top)
+        section.boundarySupplementaryItems = [header]
+
+        let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
+                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
+        section.orthogonalScrollingBehavior = .continuous
+        return section
+    }
+
+    var hasData: Bool {
+        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
+    }
+
+    func updateData(completion: @escaping () -> Void) {
+        // Has to be on main due to tab manager needing main tread
+        // This can be fixed when tab manager has been revisited
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            self.updateJumpBackInData(completion: completion)
+        }
+    }
+
+    func refreshData(for traitCollection: UITraitCollection) {
+        let isPortrait = traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular
+        jumpBackInList = createJumpBackInList(
+            from: recentTabs,
+            withMaxItemsToDisplay: getMaxItemsToDisplay(isPortrait: isPortrait),
+            and: recentGroups)
+    }
+
+    func updatePrivacyConcernedSection(isPrivate: Bool) {
+        self.isPrivate = isPrivate
+    }
+}
+
+// MARK: FxHomeSectionHandler
+extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
+
+    func configure(_ cell: UICollectionViewCell,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+
+        guard let jumpBackInCell = cell as? FxHomeHorizontalCell else { return UICollectionViewCell() }
+
+        if indexPath.row == (jumpBackInList.itemsToDisplay - 1),
+           let group = jumpBackInList.group {
+            configureCellForGroups(group: group, cell: jumpBackInCell, indexPath: indexPath)
+        } else {
+            configureCellForTab(item: jumpBackInList.tabs[indexPath.row], cell: jumpBackInCell, indexPath: indexPath)
+        }
+
+        return cell
+    }
+
+    func didSelectItem(at indexPath: IndexPath,
+                       homePanelDelegate: HomePanelDelegate?,
+                       libraryPanelDelegate: LibraryPanelDelegate?) {
+
+        if indexPath.row == jumpBackInList.itemsToDisplay - 1,
+           let group = jumpBackInList.group {
+            switchTo(group: group)
+
+        } else {
+            let tab = jumpBackInList.tabs[indexPath.row]
+            switchTo(tab: tab)
+        }
+    }
+
+    private func configureCellForGroups(group: ASGroup<Tab>, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
+        let firstGroupItem = group.groupedItems.first
+        let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
+
+        let descriptionText = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
+        let faviconImage = UIImage(imageLiteralResourceName: ImageIdentifiers.stackedTabsIcon).withRenderingMode(.alwaysTemplate)
+        let cellViewModel = FxHomeHorizontalCellViewModel(titleText: group.searchTerm.localizedCapitalized,
+                                                          descriptionText: descriptionText,
+                                                          tag: indexPath.item,
+                                                          hasFavicon: true,
+                                                          favIconImage: faviconImage)
+        cell.configure(viewModel: cellViewModel)
+
+        getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+            cell.heroImage.image = image
+        }
+    }
+
+    private func configureCellForTab(item: Tab, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
+        let itemURL = item.lastKnownUrl?.absoluteString ?? ""
+        let site = Site(url: itemURL, title: item.displayTitle)
+        let descriptionText = site.tileURL.shortDisplayString.capitalized
+
+        let cellViewModel = FxHomeHorizontalCellViewModel(titleText: site.title,
+                                                          descriptionText: descriptionText,
+                                                          tag: indexPath.item,
+                                                          hasFavicon: true)
+        cell.configure(viewModel: cellViewModel)
+
+        /// Sets a small favicon in place of the hero image in case there's no hero image
+        getFaviconImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+            cell.faviconImage.image = image
+
+            if cell.heroImage.image == nil {
+                cell.fallbackFaviconImage.image = image
+            }
+        }
+
+        /// Replace the fallback favicon image when it's ready or available
+        getHeroImage(forSite: site) { image in
+            guard cell.tag == indexPath.item else { return }
+
+            // If image is a square use it as a favicon
+            if image?.size.width == image?.size.height {
+                cell.fallbackFaviconImage.image = image
+                return
+            }
+
+            cell.setFallBackFaviconVisibility(isHidden: true)
+            cell.heroImage.image = image
+        }
     }
 }

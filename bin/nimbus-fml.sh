@@ -8,7 +8,7 @@
 #
 # For more infomration, check out https://experimenter.info/fml-spec
 #
-# This script generates Swift definitions for all the experimentable features supported by Nimbus. 
+# This script generates Swift definitions for all the experimentable features supported by Nimbus.
 # It generates Swift code to be included in the final build.
 #
 # To use it in a Swift project, follow these steps:
@@ -60,7 +60,9 @@ helptext() {
 MANIFEST_PATH=
 OUTPUT_DIR="${SOURCE_ROOT}/${PROJECT}/Generated"
 NAMESPACE=
-AS_VERSION=v91.0.1
+AS_VERSION=v93.1.0
+AS_DOWNLOAD_URL="https://github.com/mozilla/application-services/releases/download/$AS_VERSION"
+FRESHEN_FML=
 
 while (( "$#" )); do
     case "$1" in
@@ -75,6 +77,15 @@ while (( "$#" )); do
         -h|--help)
             helptext
             exit 0
+            ;;
+        -a|--use-fml-version)
+            AS_VERSION=$2
+            FRESHEN_FML="true"
+            shift 2
+            ;;
+        -F|--fresh)
+            FRESHEN_FML="true"
+            shift 2
             ;;
         --) # end argument parsing
             shift
@@ -110,46 +121,97 @@ if [ -z "$PROJECT" ]; then
     echo "Execute this script as a build step in Xcode."
     exit 2
 fi
-if [ -z "$MOZ_BUNDLE_DISPLAY_NAME" ]; then
-    echo "Error: No \$MOZ_BUNDLE_DISPLAY_NAME defined."
+if [ -z "$CONFIGURATION" ]; then
+    echo "Error: No \$CONFIGURATION defined."
     echo "Execute this script as a build step in Xcode."
     exit 2
 fi
 
-# We create the nimbus-fml directory, which is gitignored, we use -p to make sure this doesn't fail if it already exists
-mkdir -p ${SOURCE_ROOT}/nimbus-fml
-# We now download the nimbus-fml from the github release
-curl -L https://github.com/mozilla/application-services/releases/download/${AS_VERSION}/nimbus-fml.zip --output ${SOURCE_ROOT}/nimbus-fml/nimbus-fml.zip
-# We also download the checksum
-curl -L https://github.com/mozilla/application-services/releases/download/${AS_VERSION}/nimbus-fml.sha256 --output ${SOURCE_ROOT}/nimbus-fml/nimbus-fml.sha256
-pushd ${SOURCE_ROOT}/nimbus-fml
-shasum --check nimbus-fml.sha256
-popd
+## We create the nimbus-fml directory, which is gitignored, we use -p to make sure this doesn't fail if it already exists
+FML_DIR="$SOURCE_ROOT/build/nimbus-tools"
 
-## Once the FML is downloaded, we need to unzip it, and run the appropriate nimbus-fml that reflects
-## the architecture of the device running this script.
-unzip -o ${SOURCE_ROOT}/nimbus-fml/nimbus-fml.zip -d ${SOURCE_ROOT}/nimbus-fml
-
-## We get the device's architecture
-ARCH=$(uname -m)
-BINARY_PATH=
-if [[ "$ARCH" == 'x86_64' ]]
-then
-    BINARY_PATH=${SOURCE_ROOT}/nimbus-fml/x86_64-apple-darwin/release/nimbus-fml
-elif [[ "$ARCH" == 'arm64' ]]
-then
-    BINARY_PATH=${SOURCE_ROOT}/nimbus-fml/aarch64-apple-darwin/release/nimbus-fml
-else
-    echo "Error: Unsupported architecture. This script can only run on Mac devices running x86_64 or arm64"
-    exit 2
+if [[ -f $FML_DIR/nimbus-fml.sha256 ]]; then
+    echo "Checking if we need to redownload the FML"
+    NEW_CHECKSUM=$(curl -L $AS_DOWNLOAD_URL/nimbus-fml.sha256)
+    OLD_CHECKSUM=$(cat $FML_DIR/nimbus-fml.sha256)
+    if [ ! "$OLD_CHECKSUM" == "$NEW_CHECKSUM" ]; then
+        echo "The checksums don't match, redownloading the new FML"
+        FRESHEN_FML="true"
+    fi
 fi
 
+if [ ! -z $FRESHEN_FML ]; then
+    rm -Rf "$FML_DIR"
+fi
+mkdir -p "$FML_DIR"
+if [[ ! -f "$FML_DIR/nimbus-fml.zip" ]] ; then
+    # We now download the nimbus-fml from the github release
+    curl -L $AS_DOWNLOAD_URL/nimbus-fml.zip --output "$FML_DIR/nimbus-fml.zip"
+    # We also download the checksum
+    curl -L $AS_DOWNLOAD_URL/nimbus-fml.sha256 --output "$FML_DIR/nimbus-fml.sha256"
+    pushd "${FML_DIR}"
+    shasum --check nimbus-fml.sha256
+    popd
+fi
 
-## The `MOZ_BUNDLE_DISPLAY_NAME` has the name of the scheme
-## we use it as a channel in the Feature Manifest. 
-## We seperate the first word of it, since Fennec builds sometimes have the user name after the scheme
-SCHEME=${MOZ_BUNDLE_DISPLAY_NAME%% *}
-$BINARY_PATH $MANIFEST_PATH -o $OUTPUT_DIR/FxNimbus.swift ios features --classname FxNimbus --channel $SCHEME
+## We definitely have a zip file on disk, but we might already have done the work of unzipping it.
+BINARY_PATH="$FML_DIR/nimbus-fml"
+if [[ ! -f "$BINARY_PATH" ]] ; then
+    ## So we've looked and there's no executable file of that name
+    ## Now work out what arch version of the executable we want.
+    ARCH=$(uname -m)
+    if [[ "$ARCH" == 'x86_64' ]]
+    then
+        EXE_ARCH=x86_64-apple-darwin
+    elif [[ "$ARCH" == 'arm64' ]]
+    then
+        EXE_ARCH=aarch64-apple-darwin
+    else
+        echo "Error: Unsupported architecture. This script can only run on Mac devices running x86_64 or arm64"
+        exit 2
+    fi
+    # -o overwrites a file (if the file existed but isn't executable)
+    # -j junks the path, so we don't have to have $EXE_ARCH/release/ in our directory
+    # -d outputs to the directory of our choice.
+    unzip -o -j "$FML_DIR/nimbus-fml.zip" $EXE_ARCH/release/nimbus-fml -d "$FML_DIR"
+fi
+
+#SCHEME=${MOZ_BUNDLE_DISPLAY_NAME%% *}
+SCHEME=${CONFIGURATION}
+## The `CONFIGURATION` to derive the channel used in the feature manifest.
+CHANNEL=
+case "${SCHEME}" in
+    Fennec)
+        CHANNEL="developer"
+        ;;
+    FirefoxBeta)
+        CHANNEL="beta"
+        ;;
+    Firefox)
+        CHANNEL="release"
+        ;;
+    *) # preserve positional arguments
+        CHANNEL="unknown"
+        ;;
+esac
+
+##################
+## Construct and run the command.
+##################
+# We'll generate the command, and output some nice copy/pastable version of the command to the Build console…
+CMD="$BINARY_PATH $MANIFEST_PATH -o $OUTPUT_DIR/FxNimbus.swift ios features --classname FxNimbus --channel $CHANNEL"
+echo "SOURCE_ROOT=$SOURCE_ROOT"
+# …truncating the absolute paths into something easier to read.
+echo ${CMD//"$SOURCE_ROOT"/\$SOURCE_ROOT}
+$CMD
+
+# Now generate the YAML that the `experimenter` server will use to keep up to date.
+# This file, `.experimenter.yaml` **must** be checked into source control, and kept up-to-date.
+# Experimenter will download it regularly/nightly.
+# (FWIW: I don't think the `channel` is needed in this command, but if it is, we need the release version).
+CMD="$BINARY_PATH $MANIFEST_PATH -o $SOURCE_ROOT/.experimenter.yaml experimenter --channel release"
+echo ${CMD//"$SOURCE_ROOT"/\$SOURCE_ROOT}
+$CMD
 
 # The FML doesn't currenlty support adding a custom import, so we do this in this script.
 # See: https://mozilla-hub.atlassian.net/browse/EXP-2199

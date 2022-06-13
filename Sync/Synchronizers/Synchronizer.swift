@@ -126,17 +126,17 @@ public enum SyncNotStartedReason {
             return "sync.not_started.reason.no_account"
         case .offline:
             return "sync.not_started.reason.offline"
-        case .backoff(_):
+        case .backoff:
             return "sync.not_started.reason.backoff"
-        case .engineRemotelyNotEnabled(_):
+        case .engineRemotelyNotEnabled:
             return "sync.not_started.reason.remotely_not_enabled"
-        case .engineFormatOutdated(_):
+        case .engineFormatOutdated:
             return "sync.not_started.reason.format_outdated"
-        case .engineFormatTooNew(_):   // This'll disappear eventually; we'll wipe the server and upload m/g.
+        case .engineFormatTooNew:   // This'll disappear eventually; we'll wipe the server and upload m/g.
             return "sync.not_started.reason.format_too_new"
-        case .storageFormatOutdated(_):
+        case .storageFormatOutdated:
             return "sync.not_started.reason.storage_format_outdated"
-        case .storageFormatTooNew(_):  // This'll disappear eventually; we'll wipe the server and upload m/g.
+        case .storageFormatTooNew:  // This'll disappear eventually; we'll wipe the server and upload m/g.
             return "sync.not_started.reason.storage_format_too_new"
         case .stateMachineNotReady:                // Because we're not done implementing.
             return "sync.not_started.reason.state_machine_not_ready"

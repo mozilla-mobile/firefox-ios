@@ -113,6 +113,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Địa chỉ và tìm kiếm";
 
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Thanh địa chỉ";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "Luôn gửi";
 
@@ -287,8 +290,17 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Chia sẻ liên kết";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Giờ đây, bạn có thể di chuyển thanh công cụ xuống dưới cùng để nhập thông tin dễ dàng hơn";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
+"ContextualHint.SearchBarPlacement.NewUsers" = "Để giúp nhập thông tin dễ dàng hơn, thanh công cụ hiện sẽ ở dưới cùng theo mặc định.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.Homepage.PersonalizedHome" = "Trang chủ Firefox được cá nhân hóa của bạn giờ đây giúp bạn tiếp tục lại nơi bạn đã dừng lại dễ dàng hơn. Tìm các thẻ, dấu trang và kết quả tìm kiếm gần đây của bạn.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Cài đặt thanh công cụ";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Các thẻ bạn đã không xem trong hai tuần sẽ được chuyển đến đây.";
@@ -333,6 +345,9 @@
    Title for default search engine picker.
    Title for default search engine settings section. */
 "Default Search Engine" = "Công cụ tìm kiếm mặc định";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Đóng";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Cài đặt hiển thị";
@@ -433,6 +448,30 @@
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Tùy chỉnh trang chủ";
 
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Khám phá thêm nữa";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d phút";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Những câu chuyện kích động tư tưởng";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Xóa";
+
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "Trang web: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Cài đặt";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Nhà tài trợ của chúng tôi & quyền riêng tư của bạn";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Được tài trợ";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Tiến";
 
@@ -529,6 +568,9 @@
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Một thiết bị đã ngắt kết nối khỏi Đồng bộ hóa Firefox";
 
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, thay đổi hình nền.";
+
 /* A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing. */
 "Get your open tabs, bookmarks, and passwords from your other devices." = "Nhận các thẻ, dấu trang và mật khẩu đang mở của bạn từ các thiết bị khác của bạn.";
 
@@ -613,6 +655,9 @@
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab" = "Mở trong thẻ riêng tư mới";
 
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Mở trong một thẻ riêng tư";
+
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Mở trong thẻ mới";
 
@@ -694,6 +739,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Tìm lại";
 
+/* A label indicating the keyboard shortcut of opening a new non-private tab, switching the user to that tab and Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.NewNormalTab" = "Thẻ bình thường mới";
+
 /* A label indicating the keyboard shortcut of opening a link in a new tab while staying on the currently selected tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.OpenLinkInBackground" = "Mở liên kết trong nền";
 
@@ -745,6 +793,9 @@
 /* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowTabNumber" = "Hiển thị số thẻ 1-9";
 
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Mở lại thẻ vừa đóng";
+
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Phóng to";
 
@@ -759,6 +810,36 @@
 
 /* History tableview section header */
 "Last week" = "Tuần trước";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Hủy bỏ";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Xóa";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Xóa tất cả các trang web trong %@?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Xóa lịch sử (bao gồm cả lịch sử được đồng bộ hóa từ các thiết bị khác), cookie và dữ liệu duyệt web khác.";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Không tìm thấy lịch sử";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Thẻ mới đóng gần đây";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Nhập từ tìm kiếm";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing only browser history from other devices that are synced with the user's Firefox account. */
+"LibraryPanel.History.SyncedFromOtherDevices.v99" = "Được đồng bộ hóa từ thiết bị khác";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Lịch sử đã đồng bộ hóa";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Cũ hơn";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Giấy phép";
@@ -882,8 +963,14 @@
    Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Đánh dấu là chưa đọc";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "Thêm dấu trang";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Đã thêm đánh dấu";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Thêm";
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Đã ghim vào các trang web hàng đầu";
@@ -891,11 +978,14 @@
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "Đã thêm vào lối tắt";
 
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Thêm";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Đã thêm vào danh sách đọc";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "Sao lưu và đồng bộ hóa dữ liệu";
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Thêm vào lối tắt";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Dấu trang";
@@ -905,6 +995,9 @@
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Đã sao chép URL vào bộ nhớ tạm";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Tùy chỉnh trang chủ";
 
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Tải xuống";
@@ -921,6 +1014,9 @@
 /* Description for having strict ETP protection with ITP offered in iOS14+ */
 "Menu.EnhancedTrackingProtectionStrictWithITP.Title" = "Firefox chặn các trình theo dõi trên nhiều trang web, trình theo dõi xã hội, trình mật mã, vân tay và nội dung theo dõi.";
 
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Trợ giúp";
+
 /* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
 "Menu.History.Label" = "Lịch sử";
 
@@ -929,6 +1025,9 @@
 
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
 "Menu.ManageAccount.Label" = "Quản lý tài khoản %@";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Thẻ mới";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "Tắt chế độ ban đêm";
@@ -969,14 +1068,41 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Đã xóa đánh dấu";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "Xóa";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "Xóa khỏi lối tắt";
+
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Đã xóa khỏi các trang web hàng đầu";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "Đã xóa khỏi lối tắt";
+"Menu.RemovePin.Confirm2.v99" = "Đã xóa khỏi lối tắt";
+
+/* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
+"Menu.RemoveReadingList.AlternateLabel.v99" = "Xóa khỏi danh sách đọc";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "Đã xóa khỏi danh sách đọc";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Xóa";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Chia sẻ";
+
+/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
+"Menu.SignInToSync.Label.v99" = "Đăng nhập vào đồng bộ hóa";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Đã gửi thẻ";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Dấu trang";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Trang chủ";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Đã chặn";
@@ -1101,6 +1227,33 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "OK";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "Bắt đầu";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v102" = "Indie. Phi lợi nhuận. Tốt cho bạn.";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "Cam kết với lời hứa về một Internet tốt hơn cho tất cả mọi người.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "Không phải bây giờ";
+
+/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
+"Onboarding.SyncAction.v102" = "Đăng ký hoặc đăng nhập";
+
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "Tự động đồng bộ hóa các thẻ và dấu trang giữa các thiết bị để chuyển đổi thiết bị nhanh hơn.";
+
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "Đồng bộ hóa để theo kịp dòng chảy của bạn";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.WallpaperAction.v102" = "Cài đặt hình nền";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "Chọn Hình nền Firefox";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Bắt đầu duyệt web";
@@ -1253,6 +1406,9 @@
 /* Text of the prompt user to setup the camera authorization. */
 "ScanQRCode.PermissionError.Message" = "Vui lòng cho phép Firefox truy cập vào máy ảnh của thiết bị của bạn trong 'Cài đặt' -> 'Quyền riêng tư' -> 'Camera'.";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Đi tới ‘Cài đặt’ của thiết bị > ‘Firefox’. Cho phép Firefox truy cập máy ảnh.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Quét mã QR";
 
@@ -1266,6 +1422,9 @@
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "Chuyển sang thẻ";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Công cụ tìm kiếm mới sẽ xuất hiện trong thanh tìm kiếm nhanh.";
@@ -1512,8 +1671,11 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Tổng quát";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Chọn những gì hiển thị làm trang chủ.";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description" = "Chọn nội dung bạn sẽ thấy trên trang chủ Firefox.";
+"Settings.Home.Option.Description.v101" = "Chọn những gì được hiển thị trên trang chủ Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Trang đã xem gần đây";
@@ -1526,9 +1688,6 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "Đã xem gần đây";
-
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "Tìm kiếm gần đây";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Lối tắt";
@@ -1546,16 +1705,76 @@
 "Settings.Home.Option.StartAtHome.Never" = "Thẻ cuối cùng";
 
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
-"Settings.Home.Option.StartAtHome.Title" = "Khi mở ứng dụng, hãy vào";
+"Settings.Home.Option.StartAtHome.Title" = "Màn hình khi mở";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "Trang chủ Firefox";
+"Settings.Home.Option.Title.v101" = "Hiển thị trên trang chủ";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Hình nền";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Hình nền Firefox, mẫu thạch anh tím.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Hình nền Firefox, mô hình đồi bãi biển.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Hình nền Firefox, mẫu cerulean.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Hình nền rõ ràng mặc định.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Hình nền Firefox, mô hình mặt trời mọc.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Chuyển đổi xoay hình nền trang chủ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Hình nền Firefox, mô hình đồi hoàng hôn.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "MÀN HÌNH KHI MỞ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Thay đổi hình nền bằng cách nhấn vào biểu trưng trang chủ của Firefox";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Hình nền";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Đã cập nhật hình nền!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Xem";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "Xóa trắng";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Trang chủ";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Hàng";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Hàng";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Lối tắt";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Lối tắt";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Lối tắt được tài trợ";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Tắt";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Bật";
 
 /* Title displayed in header of the setting panel. */
 "Settings.HomePage.Title" = "Cài đặt trang chủ";
@@ -1644,6 +1863,9 @@
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "Chọn những gì để tải khi mở một thẻ mới";
 
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Chặn hình ảnh";
+
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Khi mở Firefox";
 
@@ -1722,8 +1944,11 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Nghiên cứu";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Thẻ không hoạt động";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Các thẻ bạn đã không xem trong hai tuần sẽ được chuyển sang phần không hoạt động.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Nhóm thẻ";
@@ -1733,6 +1958,15 @@
 
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "Thẻ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "Dưới cùng";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Thanh công cụ";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Trên cùng";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, đã hiểu";
@@ -1828,7 +2062,7 @@
 "Settings.WebsiteData.ButtonEdit" = "Chỉnh sửa";
 
 /* Button shows all websites on website data tableview */
-"Settings.WebsiteData.ButtonShowMore" = "Xem thêm";
+"Settings.WebsiteData.ButtonShowMore" = "Hiện thêm";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Hành động này sẽ xóa tất cả dữ liệu trang web của bạn. Nó không thể hoàn tác được.";
@@ -1995,9 +2229,6 @@
 
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "Các thẻ khác";
-
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Các thẻ riêng tư";
 
 /* Describes what the Recently Closed tabs behavior is for users unfamiliar with it. */
 "TabTray.RecentlyClosed.Description" = "Các thẻ có sẵn ở đây trong 30 ngày. Sau thời gian đó, các thẻ sẽ tự động bị đóng.";

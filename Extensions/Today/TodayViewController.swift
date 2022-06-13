@@ -47,10 +47,10 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabelV2, buttonImageName: "go-to-copied-link")
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         return button
-        }()
+    }()
 
-//MARK: Feature for V29
-// Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
+    // MARK: Feature for V29
+    // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.ClosePrivateTabsLabelV2, buttonImageName: "close-private-tabs")
         button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
@@ -72,9 +72,9 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
         viewModel.setViewDelegate(todayViewDelegate: self)
         NotificationCenter.default.addObserver(self, selector: #selector(preferredContentSizeChanged(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
-        
+
         let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
-        
+
         self.view.addSubview(effectView)
         effectView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)

@@ -4,12 +4,14 @@
 //
 //  Created by Felix Krause on 10/8/15.
 //
+
 // -----------------------------------------------------
 // IMPORTANT: When modifying this file, make sure to
 //            increment the version number at the very
 //            bottom of the file to notify users about
 //            the new SnapshotHelper.swift
 // -----------------------------------------------------
+
 import Foundation
 import XCTest
 
@@ -143,6 +145,7 @@ open class Snapshot: NSObject {
         }
 
         NSLog("snapshot: \(name)") // more information about this, check out https://docs.fastlane.tools/actions/snapshot/#how-does-it-work
+
         if Snapshot.waitForAnimations {
             sleep(1) // Waiting for the animation to be finished (kind of)
         }
@@ -162,7 +165,7 @@ open class Snapshot: NSObject {
             }
 
             let screenshot = XCUIScreen.main.screenshot()
-            #if os(iOS)
+            #if os(iOS) && !targetEnvironment(macCatalyst)
             let image = XCUIDevice.shared.orientation.isLandscape ?  fixLandscapeOrientation(image: screenshot.image) : screenshot.image
             #else
             let image = screenshot.image
@@ -193,11 +196,15 @@ open class Snapshot: NSObject {
         #if os(watchOS)
             return image
         #else
-            let format = UIGraphicsImageRendererFormat()
-            format.scale = image.scale
-            let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
-            return renderer.image { context in
-                image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+            if #available(iOS 10.0, *) {
+                let format = UIGraphicsImageRendererFormat()
+                format.scale = image.scale
+                let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
+                return renderer.image { context in
+                    image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+                }
+            } else {
+                return image
             }
         #endif
     }
@@ -299,4 +306,4 @@ private extension CGFloat {
 
 // Please don't remove the lines below
 // They are used to detect outdated configuration files
-// SnapshotHelperVersion [1.27]
+// SnapshotHelperVersion [1.28]

@@ -38,10 +38,10 @@ struct DBOnboardingUX {
 }
 
 class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable {
-    
+
     // MARK: - Properties
-    
-    var onViewDismissed: (() -> Void)? = nil
+
+    var onViewDismissed: (() -> Void)?
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
     let theme = LegacyThemeManager.instance
@@ -94,7 +94,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.adjustsFontSizeToFitWidth = true
     }
 
-    private lazy var descriptionLabel1: UILabel = .build() { [weak self] label in
+    private lazy var descriptionLabel1: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[1]
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)
@@ -123,41 +123,41 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     private lazy var goToSettingsButton: UIButton = .build { [weak self] button in
         guard let self = self else { return }
-        button.setTitle(.CoverSheetETPSettingsButton, for: .normal)
+        button.setTitle(.DefaultBrowserOnboardingButton, for: .normal)
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
-        button.accessibilityIdentifier = "DefaultBrowserCard.goToSettingsButton"
+        button.accessibilityIdentifier = "HomeTabBanner.goToSettingsButton"
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, maxSize: 40)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
     }
-    
+
     // Used to set the part of text in center 
     private var containerView = UIView()
-    
+
     // MARK: - Inits
-    
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         initialViewSetup()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Portrait orientation: lock enable
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Portrait orientation: lock disable
@@ -169,7 +169,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         onViewDismissed?()
         onViewDismissed = nil
     }
-    
+
     func initialViewSetup() {
         updateTheme()
 
@@ -177,49 +177,49 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         textView.addSubview(containerView)
         containerView.addSubviews(titleLabel, descriptionText, descriptionLabel1, descriptionLabel2, descriptionLabel3)
         view.addSubviews(textView, goToSettingsButton)
-        
+
         // Constraints
         setupView()
-        
+
         // Theme change notification
         NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .DisplayThemeChanged, object: nil)
     }
-    
+
     private func setupView() {
-        
+
         let textOffset = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
-            
+
             textView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
             textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36),
             textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -36),
             textView.bottomAnchor.constraint(equalTo: goToSettingsButton.topAnchor),
-            
+
             titleLabel.centerXAnchor.constraint(lessThanOrEqualTo: view.centerXAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            
+
             descriptionText.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: CGFloat(textOffset)),
             descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(textOffset)),
             descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: CGFloat(-textOffset)),
-            
+
             descriptionLabel1.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: CGFloat(textOffset)),
             descriptionLabel1.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
             descriptionLabel1.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
+
             descriptionLabel2.topAnchor.constraint(equalTo: descriptionLabel1.bottomAnchor, constant: CGFloat(textOffset)),
             descriptionLabel2.leadingAnchor.constraint(equalTo: descriptionLabel1.leadingAnchor),
             descriptionLabel2.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
+
             descriptionLabel3.topAnchor.constraint(equalTo: descriptionLabel2.bottomAnchor, constant: CGFloat(textOffset)),
             descriptionLabel3.leadingAnchor.constraint(equalTo: descriptionLabel2.leadingAnchor),
             descriptionLabel3.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-        
+
         if screenSize.height > 1000 {
             NSLayoutConstraint.activate([
                 goToSettingsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60),
@@ -241,19 +241,19 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         }
         goToSettingsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
-    
+
     // Button Actions
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
     }
-    
+
     @objc private func goToSettings() {
         viewModel.goToSettings?()
-        UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard") // Don't show default browser card if this button is clicked
+        UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage) // Don't show default browser card if this button is clicked
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
     }
-  
+
     // Theme
     @objc func updateTheme() {
         view.backgroundColor = .systemBackground
@@ -263,7 +263,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         descriptionLabel2.textColor = fxTextThemeColour
         descriptionLabel3.textColor = fxTextThemeColour
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

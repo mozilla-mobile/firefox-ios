@@ -23,7 +23,7 @@ extension UILabel {
         }
         attributedText = attributed
     }
-    
+
     func heightForLabel(_ label: UILabel, width: CGFloat, text: String?) -> CGFloat {
         guard let text = text else { return 0 }
 
@@ -186,16 +186,16 @@ private class PaddedSwitch: UIView {
 
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
-class BoolSetting: Setting, FeatureFlagsProtocol {
+class BoolSetting: Setting, FeatureFlaggable {
     let prefKey: String? // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
 
     fileprivate let prefs: Prefs?
     fileprivate let defaultValue: Bool?
     fileprivate let settingDidChange: ((Bool) -> Void)?
     fileprivate let statusText: NSAttributedString?
-    fileprivate let featureFlagName: FeatureFlagName?
+    fileprivate let featureFlagName: NimbusFeatureFlagID?
 
-    init(prefs: Prefs?, prefKey: String? = nil, defaultValue: Bool?, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, featureFlagName: FeatureFlagName? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    init(prefs: Prefs?, prefKey: String? = nil, defaultValue: Bool?, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, featureFlagName: NimbusFeatureFlagID? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         self.prefs = prefs
         self.prefKey = prefKey
         self.defaultValue = defaultValue
@@ -213,8 +213,8 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
-    convenience init(with featureFlagID: FeatureFlagName, titleText: NSAttributedString) {
-        self.init(prefs: nil, defaultValue: nil, attributedTitleText: titleText, featureFlagName: featureFlagID)
+    convenience init(with featureFlagID: NimbusFeatureFlagID, titleText: NSAttributedString, settingDidChange: ((Bool) -> Void)? = nil) {
+        self.init(prefs: nil, defaultValue: nil, attributedTitleText: titleText, featureFlagName: featureFlagID, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -228,6 +228,7 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
+        control.isEnabled = enabled
 
         displayBool(control)
         if let title = title {
@@ -240,6 +241,10 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         }
         cell.accessoryView = PaddedSwitch(switchView: control)
         cell.selectionStyle = .none
+
+        if !enabled {
+            cell.subviews.forEach { $0.alpha = 0.5 }
+        }
     }
 
     @objc func switchValueChanged(_ control: UISwitch) {
@@ -247,11 +252,11 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
         settingDidChange?(control.isOn)
 
         if let featureFlagName = featureFlagName {
-            guard let key = featureFlags.featureKey(for: featureFlagName) else { return }
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .change,
                                          object: .setting,
-                                         extras: ["pref": key as Any, "to": control.isOn])
+                                         extras: ["pref": featureFlagName.rawValue as Any,
+                                                  "to": control.isOn])
 
         } else {
             TelemetryWrapper.recordEvent(category: .action,
@@ -264,7 +269,7 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
     // These methods allow a subclass to control how the pref is saved
     func displayBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
-            control.isOn = featureFlags.userPreferenceFor(featureFlagName) == UserFeaturePreference.enabled
+            control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
         } else {
             guard let key = prefKey, let defaultValue = defaultValue else {
                 return
@@ -275,8 +280,7 @@ class BoolSetting: Setting, FeatureFlagsProtocol {
 
     func writeBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
-            let controlState = control.isOn ? UserFeaturePreference.enabled : UserFeaturePreference.disabled
-            featureFlags.setUserPreferenceFor(featureFlagName, to: controlState)
+            featureFlags.set(feature: featureFlagName, to: control.isOn)
 
         } else {
             guard let key = prefKey else {
@@ -686,7 +690,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
-        ////self.profile.rustAccount.refreshProfile()
+        //// self.profile.rustAccount.refreshProfile()
         // TODO [rustfxa] listen to notification and refresh profile
     }
 
@@ -789,4 +793,3 @@ class SettingsTableViewController: ThemedTableViewController {
         }
     }
 }
-

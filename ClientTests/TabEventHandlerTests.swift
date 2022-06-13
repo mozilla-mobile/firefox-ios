@@ -24,7 +24,6 @@ class TabEventHandlerTests: XCTestCase {
         XCTAssertFalse(handler.isFocused!)
     }
 
-
     func testBlankPopupURL() {
         let manager = BrowserViewController.foregroundBVC().tabManager
         let prefs = BrowserViewController.foregroundBVC().profile.prefs
@@ -53,7 +52,7 @@ class TabEventHandlerTests: XCTestCase {
 
         // Wait for tab count to increase by one with the popup open
         let actualTabCount = manager.tabs.count
-        let exists = NSPredicate() { obj, _ in
+        let exists = NSPredicate { obj, _ in
             let tabManager = obj as! TabManager
             return tabManager.tabs.count > actualTabCount
         }
@@ -72,11 +71,10 @@ class TabEventHandlerTests: XCTestCase {
     }
 }
 
-
 class DummyHandler: TabEventHandler {
     // This is not how this should be written in production — the handler shouldn't be keeping track
     // of individual tab state.
-    var isFocused: Bool? = nil
+    var isFocused: Bool?
 
     init() {
          register(self, forTabEvents: .didGainFocus, .didLoseFocus)

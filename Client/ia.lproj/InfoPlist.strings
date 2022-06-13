@@ -1,14 +1,14 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Isto te permitte prender e incargar photos.";
+"NSCameraUsageDescription" = "Firefox usa tu camera pro scannar codices QR e pro prender photos e videos.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox require ID de facie pro acceder a tu credentiales salvate.";
+"NSFaceIDUsageDescription" = "Firefox require Face ID pro acceder a tu credentiales salvate.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Le sitos web que tu visita pote requestar tu position geographic.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Isto te permitte prender e incargar videos.";
+"NSMicrophoneUsageDescription" = "Firefox usa tu microphono pro registrar e incargar audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Isto te permitte salvar photos.";

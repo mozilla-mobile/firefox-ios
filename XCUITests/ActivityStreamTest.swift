@@ -4,14 +4,14 @@
 
 import XCTest
 
-let defaultTopSite = ["topSiteLabel": "wikipedia", "bookmarkLabel": "Wikipedia"]
+let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "mozilla", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
-let allDefaultTopSites = ["facebook", "youtube", "amazon", "wikipedia", "twitter"]
+let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter"]
 
 class ActivityStreamTest: BaseTestCase {
-    let TopSiteCellgroup = XCUIApplication().cells["TopSitesCell"]
+    let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
 
-    let testWithDB = ["testActivityStreamPages","testTopSites2Add", "testTopSites4OpenInNewTab", "testTopSitesOpenInNewPrivateTab", "testTopSitesBookmarkNewTopSite", "testTopSitesShareNewTopSite", "testContextMenuInLandscape"]
+    let testWithDB = ["testActivityStreamPages","testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
     let pagesVisitediPad = "browserActivityStreamPagesiPad.db"
@@ -24,12 +24,22 @@ class ActivityStreamTest: BaseTestCase {
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
             if iPad() {
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPad, LaunchArguments.SkipContextualHintJumpBackIn]
+                launchArguments = [LaunchArguments.SkipIntro,
+                                   LaunchArguments.SkipWhatsNew,
+                                   LaunchArguments.SkipETPCoverSheet,
+                                   LaunchArguments.LoadDatabasePrefix + pagesVisitediPad,
+                                   LaunchArguments.SkipContextualHints]
             } else {
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone, LaunchArguments.SkipContextualHintJumpBackIn]
+                launchArguments = [LaunchArguments.SkipIntro,
+                                   LaunchArguments.SkipWhatsNew,
+                                   LaunchArguments.SkipETPCoverSheet,
+                                   LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone,
+                                   LaunchArguments.SkipContextualHints,
+                                   LaunchArguments.TurnOffTabGroupsInUserPreferences]
             }
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
+        launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
         super.setUp()
     }
 
@@ -40,15 +50,17 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testDefaultSites() {
-        waitForExistence(TopSiteCellgroup, timeout: 10)
+        waitForExistence(TopSiteCellgroup, timeout: 15)
+        XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
+
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         // Check their names so that test is added to Smoketest
-        XCTAssertTrue(TopSiteCellgroup.cells["twitter"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["amazon"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["wikipedia"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["youtube"].exists)
-        XCTAssertTrue(TopSiteCellgroup.cells["facebook"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["Twitter"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["Amazon"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["Wikipedia"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["YouTube"].exists)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["Facebook"].exists)
     }
 
     func testTopSites2Add() {
@@ -62,36 +74,31 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSites3RemoveDefaultTopSite() {
-        TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
+        app.collectionViews.cells.staticTexts[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
 
         // Tap on Remove and check that now there should be only 4 default top sites
         selectOptionFromContextMenu(option: "Remove")
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
     }
 
-    // Disabled due to issue #7611
-    /*func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
-        navigator.goto(BrowserTab)
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        // Workaround to have visited website in top sites
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        waitForExistence(app.cells.staticTexts["mozilla"])
-        XCTAssertTrue(app.cells.staticTexts["mozilla"].exists)
+    func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
+        waitForExistence(app.cells.staticTexts["Mozilla"])
+        XCTAssertTrue(app.cells.staticTexts["Mozilla"].exists)
         // A new site has been added to the top sites
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
 
+        waitForExistence(app.buttons["urlBar-cancel"])
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(BrowserTab)
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
-        XCTAssertFalse(app.cells.staticTexts["mozilla"].exists)
-    }*/
+        XCTAssertFalse(app.cells.staticTexts["Mozilla"].exists)
+    }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
-        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 0), timeout: 10)
+        waitForExistence(TopSiteCellgroup, timeout: 10)
         if iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
             app.textFields.element(boundBy: 0).tap()
@@ -101,16 +108,15 @@ class ActivityStreamTest: BaseTestCase {
         }
         waitUntilPageLoad()
         
-//        navigator.performAction(Action.PinToTopSitesPAM)
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
-        app.cells["action_pin"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
+        app.otherElements[ImageIdentifiers.addShortcut].tap()
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
         navigator.performAction(Action.CloseURLBarOpen)
@@ -119,94 +125,42 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        waitForExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
     func testTopSitesShiftAfterRemovingOne() {
         // Check top site in first and second cell
-        let topSiteFirstCell = app.collectionViews.cells.collectionViews.cells.element(boundBy: 0).label
-        let topSiteSecondCell = app.collectionViews.cells.collectionViews.cells.element(boundBy: 1).label
+        let topSiteFirstCell = app.collectionViews.cells.element(boundBy: 1).label
+        let topSiteSecondCell = app.collectionViews.cells.element(boundBy: 2).label
 
         XCTAssertTrue(topSiteFirstCell == allDefaultTopSites[0])
         XCTAssertTrue(topSiteSecondCell == allDefaultTopSites[1])
 
         // Remove facebook top sites, first cell
-        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 0), timeout: 3)
-        app.cells["TopSitesCell"].cells.element(boundBy: 0).press(forDuration:1)
+        waitForExistence(app.collectionViews.cells.element(boundBy: 1), timeout: 3)
+        app.collectionViews.cells.element(boundBy: 1).press(forDuration:1)
         selectOptionFromContextMenu(option: "Remove")
 
         // Check top site in first cell now
-        waitForExistence(app.collectionViews.cells.collectionViews.cells.element(boundBy: 0))
-        let topSiteCells = TopSiteCellgroup.cells
-        let topSiteFirstCellAfter = app.collectionViews.cells.collectionViews.cells.element(boundBy: 0).label
-        XCTAssertTrue(topSiteFirstCellAfter == topSiteCells["youtube"].label, "First top site does not match")
-    }
-
-    func testTopSites4OpenInNewTab() {
-        navigator.goto(HomePanelsScreen)
-        waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 5)
-        TopSiteCellgroup.cells["apple"].press(forDuration: 1)
-        app.tables["Context Menu"].cells["Open in New Tab"].tap()
-        // The new tab is open but curren screen is still Homescreen
-        XCTAssert(TopSiteCellgroup.exists)
-
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.goto(TabTray)
-        app.cells.staticTexts["Homepage"].firstMatch.tap()
-        waitForExistence(TopSiteCellgroup.cells["apple"])
-        navigator.nowAt(HomePanelsScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(TabTray)
-        if iPad() {
-            waitForExistence(app.cells.staticTexts["Apple"])
-            XCTAssertTrue(app.cells.staticTexts["Apple"].exists, "A new Tab has not been open")
-        } else {
-            waitForExistence(app.cells.staticTexts["Apple"])
-            XCTAssertTrue(app.cells.staticTexts["Apple"].exists, "A new Tab has not been open")
-        }
-    }
-
-    // Smoketest
-    func testTopSitesOpenInNewTabDefaultTopSite() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-        navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
-        // Open one of the sites from Topsites and wait until page is loaded
-        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
-        app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
-        selectOptionFromContextMenu(option: "Open in New Tab")
-        // Check that two tabs are open and one of them is the default top site one
-        // Needed for BB to work after iOS 13.3 update
-        sleep(1)
-        waitForNoExistence(app.tables["Context Menu"], timeoutValue: 15)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(TabTray)
-        var numTabsOpen: Int
-        if iPad() {
-            waitForExistence(app.cells.staticTexts["Wikipedia"], timeout: 5)
-            numTabsOpen = app.collectionViews.element(boundBy: 2).cells.count
-        } else {
-            waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"], timeout: 5)
-            numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
-        }
-        XCTAssertEqual(numTabsOpen, 2, "New tab not open")
+        waitForExistence(app.collectionViews.cells.element(boundBy: 1))
+        let topSiteCells = app.collectionViews.cells.staticTexts
+        let topSiteFirstCellAfter = app.collectionViews.cells.element(boundBy: 1).label
+        XCTAssertTrue(topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label, "First top site does not match")
     }
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on apple top site, second cell
-        waitForExistence(app.cells["TopSitesCell"].cells["apple"], timeout: 3)
-        app.cells["TopSitesCell"].cells["apple"].press(forDuration:1)
-        app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
+        waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 3)
+        app.collectionViews.cells.staticTexts["Apple"].press(forDuration:1)
+        app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
-        XCTAssertFalse(app.staticTexts["Apple"].exists)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
@@ -230,13 +184,13 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.BottomToolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
-        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
-        app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
-        selectOptionFromContextMenu(option: "Open in New Private Tab")
+        waitForExistence(app.collectionViews.cells.element(boundBy: 4), timeout: 3)
+        app.collectionViews.cells.element(boundBy: 4).press(forDuration:1)
+        selectOptionFromContextMenu(option: "Open in a Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
         // Workaroud needed after xcode 11.3 update Issue 5937
@@ -255,28 +209,16 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 
-    func testTopSites1ShareDefaultTopSite() {
-        TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!]
-            .press(forDuration: 1)
-
-        // Tap on Share option and verify that the menu is shown and it is possible to cancel it
-        selectOptionFromContextMenu(option: "Share")
-        // Comenting out until share sheet can be managed with automated tests issue #5477
-        if !iPad() {
-            waitForExistence( app.buttons["Close"], timeout: 10)
-            app.buttons["Close"].tap()
-        }
-    }
-
     private func selectOptionFromContextMenu(option: String) {
-        XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)
-        app.tables["Context Menu"].cells[option].tap()
+        XCTAssertTrue(app.tables["Context Menu"].cells.otherElements[option].exists)
+        app.tables["Context Menu"].cells.otherElements[option].tap()
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        waitForExistence(app.cells["TopSitesCell"])
-        XCTAssertTrue(app.cells["TopSitesCell"].exists)
-        let numberOfTopSites = TopSiteCellgroup.cells.matching(identifier: "TopSite").count
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        let numberOfTopSites = app.collectionViews.cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).count
+
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
 
@@ -288,8 +230,8 @@ class ActivityStreamTest: BaseTestCase {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
             navigator.performAction(Action.CloseURLBarOpen)
 
-            waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 5)
-            TopSiteCellgroup.cells["apple"].press(forDuration: 1)
+            waitForExistence(TopSiteCellgroup.cells["Apple"], timeout: 5)
+            TopSiteCellgroup.cells["Apple"].press(forDuration: 1)
 
             let contextMenuHeight = app.tables["Context Menu"].frame.size.height
             let parentViewHeight = app.otherElements["Action Sheet"].frame.size.height

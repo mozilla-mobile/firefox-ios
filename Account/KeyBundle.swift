@@ -5,8 +5,6 @@
 import Foundation
 import Shared
 
-import SwiftyJSON
-
 public let KeyLength = 32
 
 open class KeyBundle: Hashable {
@@ -143,7 +141,7 @@ open class KeyBundle: Hashable {
         hasher.combine(hmacKey.base64EncodedString)
     }
 
-    public static func ==(lhs: KeyBundle, rhs: KeyBundle) -> Bool {
+    public static func == (lhs: KeyBundle, rhs: KeyBundle) -> Bool {
         return lhs.encKey == rhs.encKey && lhs.hmacKey == rhs.hmacKey
     }
 }

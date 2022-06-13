@@ -24,7 +24,7 @@ class SavedTab: NSObject, NSCoding {
         let title: String = self.title ?? "null"
         let faviconURL: String = self.faviconURL ?? "null"
         let uuid: String = self.screenshotUUID?.uuidString ?? "null"
-        
+
         var json: [String: AnyObject] = [
             "title": title as AnyObject,
             "isPrivate": String(self.isPrivate) as AnyObject,
@@ -37,14 +37,14 @@ class SavedTab: NSObject, NSCoding {
             "createdAt": self.createdAt as AnyObject,
             "hasHomeScreenshot": String(self.hasHomeScreenshot) as AnyObject
         ]
-        
+
         if let sessionDataInfo = self.sessionData?.jsonDictionary {
             json["sessionData"] = sessionDataInfo as AnyObject?
         }
-        
+
         return json
     }
-    
+
     init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String, tabGroupData: TabGroupData?, createdAt: Timestamp?, hasHomeScreenshot: Bool) {
 
         self.screenshotUUID = screenshotUUID
@@ -61,7 +61,7 @@ class SavedTab: NSObject, NSCoding {
 
         super.init()
     }
-    
+
     required init?(coder: NSCoder) {
         self.sessionData = coder.decodeObject(forKey: "sessionData") as? SessionData
         self.screenshotUUID = coder.decodeObject(forKey: "screenshotUUID") as? UUID
@@ -75,7 +75,7 @@ class SavedTab: NSObject, NSCoding {
         self.createdAt = coder.decodeObject(forKey: "createdAt") as? Timestamp
         self.hasHomeScreenshot = coder.decodeBool(forKey: "hasHomeScreenshot")
     }
-    
+
     func encode(with coder: NSCoder) {
         coder.encode(sessionData, forKey: "sessionData")
         coder.encode(screenshotUUID, forKey: "screenshotUUID")
@@ -88,56 +88,5 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(tabGroupData, forKey: "tabGroupData")
         coder.encode(createdAt, forKey: "createdAt")
         coder.encode(hasHomeScreenshot, forKey: "hasHomeScreenshot")
-    }
-}
-
-public class TabGroupData: NSObject, NSCoding {
-    var tabAssociatedSearchTerm: String = ""
-    var tabAssociatedSearchUrl: String = ""
-    var tabAssociatedNextUrl: String = ""
-    var tabHistoryCurrentState = ""
-    var tabGroupTimerState = ""
-    
-    // Checks if there is any search term data
-    func isEmpty() -> Bool {
-        return tabAssociatedSearchTerm.isEmpty && tabAssociatedSearchUrl.isEmpty && tabAssociatedNextUrl.isEmpty
-    }
-
-   func tabHistoryMetadatakey() -> HistoryMetadataKey {
-       return HistoryMetadataKey(url: tabAssociatedSearchUrl, searchTerm: tabAssociatedSearchTerm, referrerUrl: tabAssociatedNextUrl)
-   }
-    
-    var jsonDictionary: [String: Any] {
-        return [
-            "tabAssociatedSearchTerm": String(self.tabAssociatedSearchTerm),
-            "tabAssociatedSearchUrl": String(self.tabAssociatedSearchUrl),
-            "tabAssociatedNextUrl": String(self.tabAssociatedNextUrl),
-            "tabHistoryCurrentState": String(self.tabHistoryCurrentState),
-            "tabGroupTimerState": String(self.tabGroupTimerState),
-        ]
-    }
-
-    init(searchTerm: String, searchUrl: String, nextReferralUrl: String, tabHistoryCurrentState: String, tabGroupTimerState: String) {
-        self.tabAssociatedSearchTerm = searchTerm
-        self.tabAssociatedSearchUrl = searchUrl
-        self.tabAssociatedNextUrl = nextReferralUrl
-        self.tabHistoryCurrentState = tabHistoryCurrentState
-        self.tabGroupTimerState = tabGroupTimerState
-    }
-
-    required public init?(coder: NSCoder) {
-        self.tabAssociatedSearchTerm = coder.decodeObject(forKey: "tabAssociatedSearchTerm") as? String ?? ""
-        self.tabAssociatedSearchUrl = coder.decodeObject(forKey: "tabAssociatedSearchUrl") as? String ?? ""
-        self.tabAssociatedNextUrl = coder.decodeObject(forKey: "tabAssociatedNextUrl") as? String ?? ""
-        self.tabHistoryCurrentState = coder.decodeObject(forKey: "tabHistoryCurrentState") as? String ?? ""
-        self.tabGroupTimerState = coder.decodeObject(forKey: "tabGroupTimerState") as? String ?? ""
-    }
-
-    public func encode(with coder: NSCoder) {
-        coder.encode(tabAssociatedSearchTerm, forKey: "tabAssociatedSearchTerm")
-        coder.encode(tabAssociatedSearchUrl, forKey: "tabAssociatedSearchUrl")
-        coder.encode(tabAssociatedNextUrl, forKey: "tabAssociatedNextUrl")
-        coder.encode(tabHistoryCurrentState, forKey: "tabHistoryCurrentState")
-        coder.encode(tabGroupTimerState, forKey: "tabGroupTimerState")
     }
 }

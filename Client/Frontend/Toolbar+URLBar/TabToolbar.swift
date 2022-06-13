@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Shared
 
-class TabToolbar: UIView {
+class TabToolbar: UIView, FeatureFlaggable {
 
     // MARK: - Variables
 
@@ -22,7 +22,13 @@ class TabToolbar: UIView {
     let actionButtons: [NotificationThemeable & UIButton]
 
     private var isBottomSearchBar: Bool {
-        return BrowserViewController.foregroundBVC().isBottomSearchBar
+        guard SearchBarSettingsViewModel.isEnabled else { return false }
+
+        if let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) {
+            return position == .bottom
+        }
+
+        return false
     }
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
@@ -49,11 +55,11 @@ class TabToolbar: UIView {
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - View Setup
 
     override func updateConstraints() {
@@ -74,7 +80,7 @@ class TabToolbar: UIView {
         multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
         addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
-        appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.BottomToolbar.settingsMenuButton
+        appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.settingsMenuButton
         accessibilityNavigationStyle = .combined
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
     }

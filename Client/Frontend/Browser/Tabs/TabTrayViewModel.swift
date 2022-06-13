@@ -20,34 +20,31 @@ class TabTrayViewModel {
 
     init(tabTrayDelegate: TabTrayDelegate? = nil,
          profile: Profile,
-         showChronTabs: Bool = false,
          tabToFocus: Tab? = nil,
          tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
 
-        if showChronTabs {
-            self.tabTrayView = ChronologicalTabsViewController(tabTrayDelegate: tabTrayDelegate, profile: self.profile)
-        } else {
-            self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate, tabToFocus: tabToFocus)
-        }
+        self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate, tabToFocus: tabToFocus)
         self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
     }
 
     func navTitle(for segmentIndex: Int, foriPhone: Bool) -> String? {
         if foriPhone {
             switch segmentIndex {
-            case 0, 1:
+            case 0:
                 return .TabTrayV2Title
+            case 1:
+                return .TabTrayPrivateBrowsingTitle
             case 2:
-                return .AppMenuSyncedTabsTitleString
+                return .AppMenu.AppMenuSyncedTabsTitleString
             default:
                 return nil
             }
         }
         return nil
     }
-    
+
     func reloadRemoteTabs() {
         syncedTabsController.forceRefreshTabs()
     }

@@ -37,14 +37,9 @@ public class RustPlaces {
             return nil
         } catch let err as NSError {
             if let placesError = err as? PlacesError {
-                switch placesError {
-                case .InternalPanic(let message):
-                    Sentry.shared.sendWithStacktrace(message: "Panicked when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: message)
-                default:
-                    Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
-                }
+                SentryIntegration.shared.sendWithStacktrace(message: "Places error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
             } else {
-                Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
             }
 
             return err
@@ -144,7 +139,7 @@ public class RustPlaces {
         do {
             try api?.migrateBookmarksFromBrowserDb(path: browserDB.databasePath)
         } catch let err as NSError {
-            Sentry.shared.sendWithStacktrace(message: "Error encountered while migrating bookmarks from BrowserDB", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
+            SentryIntegration.shared.sendWithStacktrace(message: "Error encountered while migrating bookmarks from BrowserDB", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
         }
     }
 
@@ -235,14 +230,12 @@ public class RustPlaces {
             return try connection.createFolder(parentGUID: parentGUID, title: title, position: position)
         }
     }
-    
 
     public func createSeparator(parentGUID: GUID, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createSeparator(parentGUID: parentGUID, position: position)
         }
     }
-
 
     @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
@@ -258,7 +251,7 @@ public class RustPlaces {
     }
 
     public func reopenIfClosed() -> NSError? {
-        var error: NSError?  = nil
+        var error: NSError?
 
         writerQueue.sync {
             guard !isOpen else { return }
@@ -269,14 +262,8 @@ public class RustPlaces {
         return error
     }
 
-    public func interrupt() {
-        api?.interrupt()
-    }
-
     public func forceClose() -> NSError? {
-        var error: NSError? = nil
-
-        api?.interrupt()
+        var error: NSError?
 
         writerQueue.sync {
             guard isOpen else { return }
@@ -301,12 +288,9 @@ public class RustPlaces {
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let placesError = err as? PlacesError {
-                    switch placesError {
-                    case .InternalPanic(let message):
-                        Sentry.shared.sendWithStacktrace(message: "Panicked when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: message)
-                    default:
-                        Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
-                    }
+                    SentryIntegration.shared.sendWithStacktrace(message: "Places error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
+                } else {
+                    SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
                 }
 
                 deferred.fill(Maybe(failure: err))
@@ -353,7 +337,7 @@ public class RustPlaces {
             return try connection.queryHistoryMetadata(query: query, limit: limit)
         }
     }
-    
+
     /**
         Title observations must be made first for any given url. Observe one fact at a time (e.g. just the viewTime, or just the documentType).
      */
@@ -380,6 +364,12 @@ public class RustPlaces {
     public func deleteHistoryMetadata(key: HistoryMetadataKey) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
             return try connection.deleteHistoryMetadata(key: key)
+        }
+    }
+
+    public func deleteVisitsFor(url: Url) -> Deferred<Maybe<Void>> {
+        return withWriter { connection in
+            return try connection.deleteVisitsFor(url: url)
         }
     }
 }

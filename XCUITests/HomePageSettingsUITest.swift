@@ -25,7 +25,12 @@ class HomePageSettingsUITests: BaseTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + prefilledTopSites, LaunchArguments.SkipContextualHintJumpBackIn]
+            launchArguments = [LaunchArguments.SkipIntro,
+                               LaunchArguments.SkipWhatsNew,
+                               LaunchArguments.SkipETPCoverSheet,
+                               LaunchArguments.LoadDatabasePrefix + prefilledTopSites,
+                               LaunchArguments.SkipContextualHints,
+                               LaunchArguments.TurnOffTabGroupsInUserPreferences]
         }
         super.setUp()
     }
@@ -59,7 +64,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
 
         //Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.buttons["TabToolbar.homeButton"]
+        let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
         waitForExistence(homePageMenuItem, timeout: 5)
         homePageMenuItem.tap()
         waitUntilPageLoad()
@@ -91,7 +96,7 @@ class HomePageSettingsUITests: BaseTestCase {
         enterWebPageAsHomepage(text: websiteUrl1)
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabScreen)
-        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.performAction(Action.GoToHomePage)
         waitForExistence(app.textFields["url"], timeout: 3)
@@ -101,7 +106,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.performAction(Action.GoToHomePage)
-        waitForExistence(app.collectionViews.cells["TopSitesCell"])
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
     func testSetCustomURLAsHome() {
@@ -115,7 +120,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Open a new tab and tap on Home option
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
         navigator.performAction(Action.GoToHomePage)
 
@@ -155,12 +160,29 @@ class HomePageSettingsUITests: BaseTestCase {
                 userState.numTopSitesRows = n
                 navigator.performAction(Action.SelectTopSitesRows)
                 XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Shortcuts, Rows: " + String(n))
-                navigator.performAction(Action.GoToHomePage)
-                navigator.performAction(Action.CloseURLBarOpen)
+                navigator.goto(HomePanelsScreen)
                 navigator.nowAt(NewTabScreen)
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
         }
+    }
+
+    func testDisableTopSitesSettingsRemovesSection() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HomeSettings)
+        app.staticTexts["Shortcuts"].tap()
+        XCTAssertTrue(app.switches["Shortcuts"].exists)
+        app.switches["Shortcuts"].tap()
+
+        navigator.goto(NewTabScreen)
+        app.buttons["Done"].tap()
+
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.logoButton])
+        waitForNoExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        waitForNoExistence(app.collectionViews.cells.staticTexts["YouTube"])
     }
     
     func testChangeHomeSettingsLabel() {
@@ -180,11 +202,12 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(SettingsScreen)
         XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Firefox Home")
     }
+
     //Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        waitForExistence(app.cells["TopSitesCell"])
-        XCTAssertTrue(app.cells["TopSitesCell"].exists)
-        let numberOfTopSites = app.cells["TopSitesCell"].collectionViews.cells.count
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        let numberOfTopSites = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].collectionViews.cells.count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
@@ -212,19 +235,20 @@ class HomePageSettingsUITests: BaseTestCase {
     func testCustomizeHomepage() {
         if !iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
-            app.cells.otherElements["Bookmarks"].swipeUp()
-            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage])
+            waitForExistence(app.collectionViews.firstMatch, timeout: 5)
+            app.collectionViews.firstMatch.swipeUp()
+            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: 5)
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
         // Verify default settings
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: 3)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: 20)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists)
         // Commented due to experimental features
         // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.jumpBackIn].value as! String, "1")
         // XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentlySaved].value as! String, "1")
-        XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentSearches].value as! String, "0")
+        XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String, "1")
         XCTAssertEqual(app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recommendedByPocket].value as! String, "1")
     }
 }

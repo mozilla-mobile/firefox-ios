@@ -45,7 +45,7 @@ public struct ReadingListItem: Equatable {
     }
 }
 
-public func ==(lhs: ReadingListItem, rhs: ReadingListItem) -> Bool {
+public func == (lhs: ReadingListItem, rhs: ReadingListItem) -> Bool {
     return lhs.id == rhs.id
         && lhs.lastModified == rhs.lastModified
         && lhs.url == rhs.url
@@ -55,4 +55,3 @@ public func ==(lhs: ReadingListItem, rhs: ReadingListItem) -> Bool {
         && lhs.archived == rhs.archived
         && lhs.favorite == rhs.favorite
 }
-

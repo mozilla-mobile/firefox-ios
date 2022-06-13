@@ -5,195 +5,144 @@
 import Shared
 
 // MARK: - Protocol
-protocol FeatureFlagsProtocol { }
+protocol FeatureFlaggable { }
 
-extension FeatureFlagsProtocol {
+extension FeatureFlaggable {
     var featureFlags: FeatureFlagsManager {
         return FeatureFlagsManager.shared
     }
 }
 
-// MARK: - FeatureFlagName
-/// An enum describing the featureID of all features, historical, avalable, or in development.
-/// Please add new features alphabetically.
-enum FeatureFlagName: String, CaseIterable {
-    case adjustEnvironmentProd
-    case bottomSearchBar
-    case chronologicalTabs
-    case inactiveTabs
-    case groupedTabs
-    case historyHighlights
-    case jumpBackIn
-    case nimbus
-    case pocket
-    case pullToRefresh
-    case recentlySaved
-    case shakeToRestore
-    case startAtHome
-    case reportSiteIssue
-    case wallpapers
+/// An enum representing the different types of checks we need to use for features.
+/// All Nimbus default values are stored in the `nimbus.fml.yaml`
+enum FlaggableFeatureCheckOptions {
+    /// Checking only Nimbus value for the build.
+    case buildOnly
+    /// Checking Nimbus value first, then whether or not the user has set a preference,
+    /// and, if no preference is set, the default Nimbus value.
+    case buildAndUser
+    /// Checking only the user preference. If no user preference exists,
+    /// then nimbus defaults are used.
+    case userOnly
 }
 
-/// Manages feature flags for the application.
-///
-/// To add a new feature flag, you must do four things:
-///
-/// 1. Add a name in the `FeatureFlagName` enum
-/// 2. Add a new `FlaggableFeature` in the ``FeatureFlagManager.initializeFeatures`` and add it
-/// to the `features` dictionary using its key.
-/// 3. Optional: If the feature is meant to be togglable, add a key for the feature
-/// in the `PrefsKeys` struct, and then also add it to the `FlaggableFeature.featureKey`
-/// function to allow the flag status to be changed.
-/// 4. Add the `FeatureFlagsProtocol` protocol to the class you wish to use the feature
-/// flag in, and access the required flag using `featureFlags.isFeatureActiveForBuild`.
-class FeatureFlagsManager {
+class FeatureFlagsManager: HasNimbusFeatureFlags {
 
     /// This Singleton should only be accessed directly in places where the
-    /// `FeatureFlagsProtocol` is not available. Otherwise, access to the feature
+    /// `FeatureFlaggable` is not available. Otherwise, access to the feature
     /// flags system should be done through the protocol, giving access to the
     /// `featureFlags` variable.
     static let shared = FeatureFlagsManager()
 
     // MARK: - Variables
-
     private var profile: Profile!
-    private var features: [FeatureFlagName: FlaggableFeature] = [:]
+    private var coreFeatures: [CoreFeatureFlagID: CoreFlaggableFeature] = [:]
 
     // MARK: - Public methods
-
-    /// Used as the main way to find out whether a feature is active or not,
-    /// specifically for the build.
-    public func isFeatureActiveForBuild(_ featureID: FeatureFlagName) -> Bool {
-        guard let feature = features[featureID] else { return false }
+    /// Used to find out whether a core feature is active or not.
+    public func isCoreFeatureEnabled(_ featureID: CoreFeatureFlagID) -> Bool {
+        guard let feature = coreFeatures[featureID] else { return false }
         return feature.isActiveForBuild()
     }
 
-    public func toggleBuildFeature(_ featureID: FeatureFlagName) {
-        features[featureID]?.toggleBuildFeature()
-    }
+    /// Used as the main way to find out whether a feature is active or not, checking
+    /// either just for the build, the build and user preferences, or just user
+    /// preferences (supported by Nimbus defaults).
+    public func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
+                                 checking channelsToCheck: FlaggableFeatureCheckOptions
+    ) -> Bool {
+        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
 
-    /// Retrieves a feature key for any specific feature, if it has one.
-    public func featureKey(for featureID: FeatureFlagName) -> String? {
-        return features[featureID]?.featureOptionsKey
-    }
+        let nimbusSetting = feature.isNimbusEnabled(using: nimbusFlags)
+        let userSetting = feature.isUserEnabled(using: nimbusFlags)
 
-    /// Main interface for accessing feature options.
-    ///
-    /// Function must have context when called: `let foo: Type = featureOption(.example)`
-    /// Any feature with an option attached must be listed, and further converted into
-    /// it's appropriate type in the switch statement.
-    public func userPreferenceFor<T>(_ featureID: FeatureFlagName) -> T? {
-        guard let feature = features[featureID],
-              let userSetting = feature.getUserPreference()
-        else { return nil }
-
-        switch featureID {
-        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
-        default: return UserFeaturePreference(rawValue: userSetting) as? T
+        switch channelsToCheck {
+        case .buildOnly:
+            return nimbusSetting
+        case .buildAndUser:
+            return nimbusSetting && userSetting
+        case .userOnly:
+            return userSetting
         }
     }
 
-    /// Main interface for setting a feature's state and options. Options are enums of
-    /// `FlaggableFeatureOptions` type and also conform to Int.
-    public func setUserPreferenceFor<T:FlaggableFeatureOptions>(_ featureID: FeatureFlagName, to option: T) {
+    /// Retrieves a custom state for any type of feature that has more than just a
+    /// binary state. Further information on return types can be found in
+    /// `FlaggableFeatureOptions`
+    public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
+
+        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
+                                             and: profile)
+        guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
 
         switch featureID {
+        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
+        case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
+        }
+    }
+
+    private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
+
+        switch featureID {
+        case .startAtHome: return .startAtHome
+        case .searchBarPosition: return .bottomSearchBar
+        }
+    }
+
+    /// Set a feature that has a binary state to on or off
+    public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool) {
+        // Do nothing if this is a non-binary feature
+        let nonbinaryStateFeatures: [NimbusFeatureFlagID] = [.startAtHome]
+        if nonbinaryStateFeatures.contains(featureID) { return }
+
+        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
+        feature.setUserPreference(to: desiredState)
+    }
+
+    /// Set a feature that has a custom state to that custom state. More information
+    /// on custom states can be found in `FlaggableFeatureOptions`
+    public func set<T: FlaggableFeatureOptions>(
+        feature featureID: NimbusFeatureFlagWithCustomOptionsID,
+        to desiredState: T
+    ) {
+
+        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
+                                             and: profile)
+        switch featureID {
         case .startAtHome:
-            if let option = option as? StartAtHomeSetting {
-                features[featureID]?.setUserPreferenceFor(option.rawValue)
+            if let option = desiredState as? StartAtHomeSetting {
+                feature.setUserPreference(to: option.rawValue)
             }
-        default:
-            if let option = option as? UserFeaturePreference {
-                features[featureID]?.setUserPreferenceFor(option.rawValue)
+
+        case .searchBarPosition:
+            if let option = desiredState as? SearchBarPosition {
+                feature.setUserPreference(to: option.rawValue)
             }
         }
     }
 
     /// Sets up features with default channel availablility. For ease of use, please add
-    /// new features alphabetically.
+    /// new features alphabetically. These features are only core features in the
+    /// application. See the relevant documentation on `CoreFlaggableFeature` and
+    /// `NimbusFlaggableFeature` for more explanation on the differences.
     ///
     /// This should ONLY be called when instatiating the feature flag system,
     /// and never again.
-    public func initializeFeatures(with profile: Profile) {
-        features.removeAll()
+    public func initializeDeveloperFeatures(with profile: Profile) {
+        self.profile = profile
 
-        let adjustEnvironmentProd = FlaggableFeature(withID: .adjustEnvironmentProd,
-                                                     and: profile,
-                                                     enabledFor: [.release])
-        features[.adjustEnvironmentProd] = adjustEnvironmentProd
+        coreFeatures.removeAll()
 
-        let bottomSearchBar = FlaggableFeature(withID: .bottomSearchBar,
-                                               and: profile,
-                                               enabledFor: [.release, .beta, .developer])
-        features[.bottomSearchBar] = bottomSearchBar
-        
-        let chronTabs = FlaggableFeature(withID: .chronologicalTabs,
-                                         and: profile,
-                                         enabledFor: [])
-        features[.chronologicalTabs] = chronTabs
+        let adjustEnvironmentProd = CoreFlaggableFeature(withID: .adjustEnvironmentProd,
+                                                         enabledFor: [.release, .beta])
+        coreFeatures[.adjustEnvironmentProd] = adjustEnvironmentProd
 
-        let inactiveTabs = FlaggableFeature(withID: .inactiveTabs,
-                                            and: profile,
-                                            enabledFor: [.developer, .beta])
-        features[.inactiveTabs] = inactiveTabs
+        let useMockData = CoreFlaggableFeature(withID: .useMockData,
+                                               enabledFor: [.developer])
+        coreFeatures[.useMockData] = useMockData
 
-        let groupedTabs = FlaggableFeature(withID: .groupedTabs,
-                                           and: profile,
-                                           enabledFor: [.developer])
-        features[.groupedTabs] = groupedTabs
-
-        let jumpBackIn = FlaggableFeature(withID: .jumpBackIn,
-                                          and: profile,
-                                          enabledFor: [.release, .beta, .developer])
-        features[.jumpBackIn] = jumpBackIn
-
-        /// Use the Nimbus experimentation platform. If this is `true` then
-        /// `Experiments.shared` provides access to Nimbus. If false, it is a dummy object.
-        let nimbus = FlaggableFeature(withID: .nimbus,
-                                      and: profile,
-                                      enabledFor: [.release, .beta, .developer])
-        features[.nimbus] = nimbus
-
-        let pocket = FlaggableFeature(withID: .pocket,
-                                      and: profile,
-                                      enabledFor: [.release, .beta, .developer])
-        features[.pocket] = pocket
-
-
-        let pullToRefresh = FlaggableFeature(withID: .pullToRefresh,
-                                             and: profile,
-                                             enabledFor: [.release ,.beta, .developer])
-        features[.pullToRefresh] = pullToRefresh
-
-        let recentlySaved = FlaggableFeature(withID: .recentlySaved,
-                                             and: profile,
-                                             enabledFor: [.release, .beta, .developer])
-        features[.recentlySaved] = recentlySaved
-
-        let historyHighlights = FlaggableFeature(withID: .historyHighlights,
-                                                 and: profile,
-                                                 enabledFor: [.developer])
-        features[.historyHighlights] = historyHighlights
-
-        let shakeToRestore = FlaggableFeature(withID: .shakeToRestore,
-                                              and: profile,
-                                              enabledFor: [.beta, .developer, .other])
-        features[.shakeToRestore] = shakeToRestore
-
-        let startAtHome = FlaggableFeature(withID: .startAtHome,
-                                           and: profile,
-                                           enabledFor: [.release, .beta, .developer])
-        features[.startAtHome] = startAtHome
-        
-        let reportSiteIssue = FlaggableFeature(withID: .reportSiteIssue,
-                                               and: profile,
-                                               enabledFor: [.beta, .developer])
-        
-        features[.reportSiteIssue] = reportSiteIssue
-
-        let wallpapers = FlaggableFeature(withID: .wallpapers,
-                                          and: profile,
-                                          enabledFor: [.beta, .developer])
-        features[.wallpapers] = wallpapers
+        let useStagingContileAPI = CoreFlaggableFeature(withID: .useStagingContileAPI,
+                                                        enabledFor: [.beta, .developer])
+        coreFeatures[.useStagingContileAPI] = useStagingContileAPI
     }
 }

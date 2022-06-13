@@ -1,9 +1,6 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Էջանշել այս էջը";
 
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction2.Title" = "Ավելացնել Էջանիշ";
-
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "Ավելացնել ընթերցման ցուցակում";
 
@@ -74,7 +71,7 @@
 "Menu.SeeAllAction.Title" = "Տեսնել բոլորը";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
-"Menu.SharePageAction.Title" = "Համօգտագործել էջը՝";
+"Menu.SharePageAction.Title" = "Համօգտագործել էջը՝…";
 
 /* Label for the button, displayed in the menu, used to open the tabs tray */
 "Menu.ShowTabs.Title" = "Ցուցադրել ներդիրները";

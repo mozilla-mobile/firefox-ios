@@ -12,7 +12,7 @@ enum WallpaperType {
 }
 
 extension WallpaperType: Equatable {
-    static func ==(lhs: WallpaperType, rhs: WallpaperType) -> Bool {
+    static func == (lhs: WallpaperType, rhs: WallpaperType) -> Bool {
         switch (lhs, rhs) {
         case (.defaultBackground, .defaultBackground):
             return true
@@ -67,6 +67,7 @@ enum WallpaperCollectionType: String, Codable {
     case firefox
     case firefoxOverlay
     case projectHouse
+    case v100Celebration
 }
 
 // MARK: - Wallpaper
@@ -132,5 +133,3 @@ struct Wallpaper: Codable, Equatable {
         }
     }
 }
-
-

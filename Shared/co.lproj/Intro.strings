@@ -29,7 +29,7 @@
 "Intro.Slides.Mail.Description" = "Impiegate qualsisia appiecazione (è micca solu Mail) cù Firefox.";
 
 /* Title for the fourth panel 'Mail' in the First Run tour. */
-"Intro.Slides.Mail.Title" = "Più di scelta per i vostri messaghji elettronichi";
+"Intro.Slides.Mail.Title" = "Ci hè una lettera per voi… cù l’ozzioni";
 
 /* Description for the 'Private Browsing' panel in the First Run tour. */
 "Intro.Slides.Private.Description" = "Picchichjate nant’à l’icona di maschera per passà in modu di navigazione privata.";
@@ -44,13 +44,13 @@
 "Intro.Slides.Safe.Sync.Title" = "Sincrunizazione assicurata";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Ricercate qualcosa di sfarente ? Sciglite un altru mutore di ricerca predefinitu (o aghjunghjite u vostru) in e Preferenze.";
+"Intro.Slides.Search.Description" = "Ricercate qualcosa di sfarente ? Sciglite un altru mutore di ricerca predefinitu (o aghjunghjite u vostru) in e Preferenze.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "Ricercate à a vostra manera";
 
 /* Description for the 'Sync' panel in the First Run tour. */
-"Intro.Slides.TrailheadSync.Description" = "Cunnittetevi à u vostu contu per lancià a sincrunizazione è accede à d’altri funzioni.";
+"Intro.Slides.TrailheadSync.Description" = "Cunnittitevi à u vostu contu per lancià a sincrunizazione è accede à d’altri funzioni.";
 
 /* Title for the second panel 'Sync' in the First Run tour. */
 "Intro.Slides.TrailheadSync.Title.v2" = "Sincrunizate e vostre indette, a vostra cronolugia è e vostre parolle d’intesa cù u vostru telefonu.";

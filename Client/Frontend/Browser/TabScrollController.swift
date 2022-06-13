@@ -7,7 +7,7 @@ import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
-class TabScrollingController: NSObject, FeatureFlagsProtocol {
+class TabScrollingController: NSObject, FeatureFlaggable {
     private enum ScrollDirection {
         case up
         case down
@@ -29,7 +29,7 @@ class TabScrollingController: NSObject, FeatureFlagsProtocol {
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? configureRefreshControl() : nil
+            featureFlags.isFeatureEnabled(.pullToRefresh, checking: .buildOnly) ? configureRefreshControl() : nil
         }
     }
 
@@ -373,13 +373,13 @@ extension TabScrollingController: UIScrollViewDelegate {
             return
         }
 
-        //scrollViewDidZoom will be called multiple times when a rotation happens.
+        // scrollViewDidZoom will be called multiple times when a rotation happens.
         // In that case ALWAYS reset to the minimum zoom level if the previous state was zoomed out (isZoomedOut=true)
         if isZoomedOut {
             scrollView.zoomScale = scrollView.minimumZoomScale
         } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) && self.lastZoomedScale != 0 {
-            //When we have manually zoomed in we want to preserve that scale.
-            //But sometimes when we rotate a larger zoomScale is appled. In that case apply the lastZoomedScale
+            // When we have manually zoomed in we want to preserve that scale.
+            // But sometimes when we rotate a larger zoomScale is appled. In that case apply the lastZoomedScale
             scrollView.zoomScale = self.lastZoomedScale
         }
     }
@@ -400,4 +400,3 @@ extension TabScrollingController: UIScrollViewDelegate {
         return true
     }
 }
-

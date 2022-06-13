@@ -4,6 +4,7 @@
 
 import Foundation
 
+// New keys should follow the name: "[nameOfTheFeature]Key" written with camel case
 public struct PrefsKeys {
     // When this pref is set (by the user) it overrides default behaviour which is just based on app locale.
     public static let KeyEnableChinaSyncService = "useChinaSyncService"
@@ -27,29 +28,65 @@ public struct PrefsKeys {
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyETPCoverSheetShowType = "etpCoverSheetShowType"
     public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
+    public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
-    public static let ChronTabsPrefKey = "chronTabsPrefKey"
-    public static let CustomWallpaperPrefKey = "customWallpaperPrefKey"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
     public static let SessionCount = "sessionCount"
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
-    public static let StartAtHome = "startAtHome"
-    public static let PullToRefresh = "pullToRefresh"
-    public static let KeySearchBarPosition = "SearchBarPosition"
+
+    // For ease of use, please list keys alphabetically.
+    public struct FeatureFlags {
+        public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
+        public static let ASSponsoredPocketStories = "ASSponsoredPocketStoriesUserPrefsKey"
+        public static let CustomWallpaper = "CustomWallpaperUserPrefsKey"
+        public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
+        public static let HistoryGroups = "HistoryGroupsUserPrefsKey"
+        public static let InactiveTabs = "InactiveTabsUserPrefsKey"
+        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let PullToRefresh = "PullToRefreshUserPrefsKey"
+        public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
+        public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
+        public static let StartAtHome = "StartAtHomeUserPrefsKey"
+        public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
+        public static let TabTrayGroups = "TabTrayGroupsUserPrefsKey"
+        public static let TopSiteSection = "TopSitesUserPrefsKey"
+    }
+
+    public struct LegacyFeatureFlags {
+        public static let ASPocketStories = "ASPocketStoriesVisible"
+        public static let CustomWallpaper = "customWallpaperPrefKey"
+        public static let HistoryHighlightsSection = "historyHighlightsSectionEnabled"
+        public static let HistoryGroups = "historyGroupsEnabled"
+        public static let InactiveTabs = "KeyInactiveTabs"
+        public static let JumpBackInSection = "jumpBackInSectionEnabled"
+        public static let PullToRefresh = "pullToRefresh"
+        public static let RecentlySavedSection = "recentlySavedSectionEnabled"
+        public static let KeySearchBarPosition = "SearchBarPosition"
+        public static let StartAtHome = "startAtHome"
+        public static let TabTrayGroups = "KeyEnableGroupedTabsKey"
+        public static let SponsoredShortcuts = "sponsoredShortcutsKey"
+        public static let TopSiteSection = "topSitesKey"
+
+        public static let MigrationCheck = "MigrationCheck"
+        public static let WallpaperDirectoryMigrationCheck = "WallpaperDirectoryMigrationCheck"
+    }
 
     // Firefox contextual hint
-    public static let ContextualHintJumpBackinKey = "ContextualHintJumpBackin"
+    public enum ContextualHints: String, CaseIterable {
+        case JumpBackinKey = "ContextualHintJumpBackin"
+        case InactiveTabsKey = "ContextualHintInactiveTabs"
+        case ToolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
+    }
 
     // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyNewTab = "NewTabPrefKey"
-    public static let ASPocketStoriesVisible = "ASPocketStoriesVisible"
     public static let ASLastInvalidation = "ASLastInvalidation"
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
@@ -61,15 +98,10 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
-    public static let RecentlySavedSectionEnabled = "recentlySavedSectionEnabled"
-    public static let JumpBackInSectionEnabled = "jumpBackInSectionEnabled"
-    public static let HistoryHighlightsSectionEnabled = "historyHighlightsSectionEnabled"
 
     // Tabs Tray
-    public static let KeyEnableInactiveTabs = "KeyInactiveTabs"
     public static let KeyInactiveTabsModel = "KeyInactiveTabsModelKey"
     public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRunKey"
-    public static let KeyEnableGroupedTabs = "KeyEnableGroupedTabsKey"
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
 
     // Widgetkit Key
@@ -84,7 +116,6 @@ public struct PrefsKeys {
     public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
     public static let WallpaperManagerCurrentWallpaperImageLandscape = "WallpaperManagerCurrentWallpaperImageLandscape"
     public static let WallpaperManagerLogoSwitchPreference = "WallpaperManagerLogoSwitchPreference"
-    public static let WallpaperLogoHasShownAnimation = "WallpaperLogoHasShownAnimation"
 }
 
 public struct PrefsDefaults {

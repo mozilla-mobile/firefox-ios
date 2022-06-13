@@ -8,7 +8,7 @@ import Shared
 
 private let log = Logger.browserLogger
 
-final class AdjustHelper {
+final class AdjustHelper: FeatureFlaggable {
 
     private static let adjustAppTokenKey = "AdjustAppToken"
     private let profile: Profile
@@ -47,7 +47,7 @@ final class AdjustHelper {
             return nil
         }
 
-        let isProd = FeatureFlagsManager.shared.isFeatureActiveForBuild(.adjustEnvironmentProd)
+        let isProd = featureFlags.isCoreFeatureEnabled(.adjustEnvironmentProd)
         let environment = isProd ? ADJEnvironmentProduction : ADJEnvironmentSandbox
         let config = ADJConfig(appToken: appToken, environment: environment)
         config?.logLevel = isProd ? ADJLogLevelSuppress : ADJLogLevelDebug

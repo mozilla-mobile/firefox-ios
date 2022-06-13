@@ -46,7 +46,7 @@ class SearchTests: XCTestCase {
         checkInvalidURL("javascript:")
         checkInvalidURL("javascript:alert(%22hi%22)")
         checkInvalidURL("ftp:")
-        
+
     }
 
     func testURIFixupPunyCode() {

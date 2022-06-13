@@ -19,25 +19,21 @@ class BackForwardTableViewCell: UITableViewCell {
         static let fontSize: CGFloat = 12.0
         static let textColor = UIColor.Photon.Grey80
     }
+    lazy var faviconView: UIImageView = .build { imageView in
+        imageView.image = FaviconFetcher.defaultFavicon
+        imageView.backgroundColor = UIColor.Photon.White100
+        imageView.layer.cornerRadius = 6
+        imageView.layer.borderWidth = 0.5
+        imageView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
+        imageView.layer.masksToBounds = true
+        imageView.contentMode = .center
+    }
 
-    lazy var faviconView: UIImageView = {
-        let faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
-        faviconView.backgroundColor = UIColor.Photon.White100
-        faviconView.layer.cornerRadius = 6
-        faviconView.layer.borderWidth = 0.5
-        faviconView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
-        faviconView.layer.masksToBounds = true
-        faviconView.contentMode = .center
-        return faviconView
-    }()
-
-    lazy var label: UILabel = {
-        let label = UILabel()
+    lazy var label: UILabel = .build { label in
         label.text = " "
         label.font = label.font.withSize(BackForwardViewCellUX.fontSize)
         label.textColor = UIColor.theme.tabTray.tabTitleText
-        return label
-    }()
+    }
 
     var connectingForwards = true
     var connectingBackwards = true
@@ -84,18 +80,15 @@ class BackForwardTableViewCell: UITableViewCell {
         contentView.addSubview(faviconView)
         contentView.addSubview(label)
 
-        faviconView.snp.makeConstraints { make in
-            make.height.equalTo(BackForwardViewCellUX.faviconWidth)
-            make.width.equalTo(BackForwardViewCellUX.faviconWidth)
-            make.centerY.equalTo(self)
-            make.leading.equalTo(self.safeArea.leading).offset(BackForwardViewCellUX.faviconPadding)
-        }
-
-        label.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.leading.equalTo(faviconView.snp.trailing).offset(BackForwardViewCellUX.labelPadding)
-            make.trailing.equalTo(self.safeArea.trailing).offset(-BackForwardViewCellUX.labelPadding)
-        }
+        NSLayoutConstraint.activate([
+            faviconView.heightAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
+            faviconView.widthAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
+            faviconView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            faviconView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: CGFloat(BackForwardViewCellUX.faviconPadding)),
+            label.centerYAnchor.constraint(equalTo: centerYAnchor),
+            label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(BackForwardViewCellUX.labelPadding)),
+            label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-BackForwardViewCellUX.labelPadding))
+        ])
 
     }
 

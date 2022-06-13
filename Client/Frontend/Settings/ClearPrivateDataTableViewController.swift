@@ -38,8 +38,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             (DownloadedFilesClearable(), false), // Don't clear downloaded files by default
         ]
 
-        if let experimental = Experiments.shared.getVariables(featureId: .search).getVariables("spotlight"),
-           experimental.getBool("enabled") == true { // i.e. defaults to false
+        let spotlightConfig = FxNimbus.shared.features.spotlightSearch.value()
+        if spotlightConfig.enabled {
             items.append((SpotlightClearable(), false)) // On device only, so don't clear by default.)
         }
 
@@ -157,6 +157,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                         self.tableView.deselectRow(at: indexPath, animated: true)
                 }
             }
+
             if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
                 profile.syncManager.hasSyncedHistory().uponQueue(.main) { yes in
                     // Err on the side of warning, but this shouldn't fail.
@@ -183,7 +184,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         var sectionTitle: String?
         if section == SectionToggles {
-            sectionTitle = .SettingsClearPrivateDataTitle
+            sectionTitle = .SettingsClearPrivateDataSectionName
         } else {
             sectionTitle = nil
         }

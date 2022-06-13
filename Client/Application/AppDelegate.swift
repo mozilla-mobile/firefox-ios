@@ -31,17 +31,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
     var rootViewController: UIViewController!
-    weak var profile: Profile?
     var tabManager: TabManager!
     var applicationCleanlyBackgrounded = true
-    var shutdownWebServer: DispatchSourceTimer?
-    var orientationLock = UIInterfaceOrientationMask.all
-    weak var application: UIApplication?
-    var launchOptions: [AnyHashable: Any]?
-
     var receivedURLs = [URL]()
-    var telemetry: TelemetryWrapper?
-    var adjustHelper: AdjustHelper?
+
+    weak var profile: Profile?
+    weak var application: UIApplication?
+
+    private var shutdownWebServer: DispatchSourceTimer?
+    private var orientationLock = UIInterfaceOrientationMask.all
+    private var launchOptions: [AnyHashable: Any]?
+    private var telemetry: TelemetryWrapper?
+    private var adjustHelper: AdjustHelper?
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
@@ -76,13 +77,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return startApplication(application, withLaunchOptions: launchOptions)
     }
 
-    func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
+    private func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
         log.info("startApplication begin")
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        Sentry.shared.setup(sendUsageData: sendUsageData)
+        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
 
         // Set the Firefox UA for browsing.
         setUserAgent()
@@ -103,12 +104,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let profile = getProfile(application)
 
         telemetry = TelemetryWrapper(profile: profile)
-        FeatureFlagsManager.shared.initializeFeatures(with: profile)
-        ThemeManager.shared.updateProfile(with: profile)
+
+        // Initialize the feature flag subsytem.
+        // Among other things, it toggles on and off Nimbus, Contile, Adjust.
+        // i.e. this must be run before initializing those systems.
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        FeatureFlagUserPrefsMigrationUtility(with: profile).attemptMigration()
+
+        // Migrate wallpaper folder
+        WallpaperMigrationUtility(with: profile).attemptMigration()
 
         // Start intialzing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
+
+        ThemeManager.shared.updateProfile(with: profile)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
@@ -121,7 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
-        
+
         setupRootViewController()
 
         // Add restoration class, the factory that will return the ViewController we
@@ -168,7 +178,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
-        browserViewController.updateState = .coldStart
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -202,9 +211,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        var shouldPerformAdditionalDelegateHandling = true
-
         UIScrollView.doBadSwizzleStuff()
 
         window!.makeKeyAndVisible()
@@ -215,23 +221,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
         }
 
-        // If a shortcut was launched, display its information and take the appropriate action
-        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
-
-            QuickActions.sharedInstance.launchedShortcutItem = shortcutItem
-            // This will block "performActionForShortcutItem:completionHandler" from being called.
-            shouldPerformAdditionalDelegateHandling = false
-        }
-
-        // Force the ToolbarTextField in LTR mode - without this change the UITextField's clear
-        // button will be in the incorrect position and overlap with the input text. Not clear if
-        // that is an iOS bug or not.
-        AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
-
         pushNotificationSetup()
-
-        // user research variable setup for Chron tabs user research
-        _ = ChronTabsUserResearch()
 
         if let profile = self.profile {
             let persistedCurrentVersion = InstallType.persistedCurrentVersion()
@@ -255,7 +245,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
             }
         }
-
 
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
             guard self.profile?.hasSyncableAccount() ?? false else {
@@ -291,10 +280,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         updateSessionCount()
         adjustHelper?.setupAdjust()
 
-        return shouldPerformAdditionalDelegateHandling
+        return true
     }
 
-    func updateSessionCount() {
+    private func updateSessionCount() {
         var sessionCount: Int32 = 0
 
         // Get the session count from preferences
@@ -313,14 +302,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
             var object = TelemetryWrapper.EventObject.url
-            if case .text(_) = routerpath {
+            if case .text = routerpath {
                 object = .searchText
             }
             TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
         }
 
         DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC())
+            NavigationPath.handle(nav: routerpath, with: self.browserViewController)
         }
         return true
     }
@@ -351,20 +340,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             setUpWebServer(profile)
         }
 
-        BrowserViewController.foregroundBVC().firefoxHomeViewController?.reloadAll()
+        browserViewController.firefoxHomeViewController?.reloadAll()
 
-        // Resume file downloads.
-        // TODO: iOS 13 needs to iterate all the BVCs.
-        BrowserViewController.foregroundBVC().downloadQueue.resumeAll()
-
-        // handle quick actions is available
-        let quickActions = QuickActions.sharedInstance
-        if let shortcut = quickActions.launchedShortcutItem {
-            // dispatch asynchronously so that BVC is all set up for handling new tabs
-            // when we try and open them
-            quickActions.handleShortCutItem(shortcut, withBrowserViewController: BrowserViewController.foregroundBVC())
-            quickActions.launchedShortcutItem = nil
-        }
+        /// When transitioning to scenes, each scene's BVC needs to resume its file download queue.
+        browserViewController.downloadQueue.resumeAll()
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
@@ -373,7 +352,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             // We could load these here, but then we have to futz with the tab counter
             // and making NSURLRequests.
-            BrowserViewController.foregroundBVC().loadQueuedTabs(receivedURLs: self.receivedURLs)
+            self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
             self.receivedURLs.removeAll()
             application.applicationIconBadgeNumber = 0
         }
@@ -406,9 +385,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Pause file downloads.
         // TODO: iOS 13 needs to iterate all the BVCs.
-        BrowserViewController.foregroundBVC().downloadQueue.pauseAll()
+        browserViewController.downloadQueue.pauseAll()
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
+        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.
@@ -430,7 +410,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
             guard let profile = profile else { return }
-            TopSitesHandler.writeWidgetKitTopSites(profile: profile)
+            TopSitesHelper.writeWidgetKitTopSites(profile: profile)
         }
     }
 
@@ -481,7 +461,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // readable from extensions, so they can just use the cached identifier.
 
         SDWebImageDownloader.shared.setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
-        //SDWebImage is setting accept headers that report we support webp. We don't
+        // SDWebImage is setting accept headers that report we support webp. We don't
         SDWebImageDownloader.shared.setValue("image/*;q=0.8", forHTTPHeaderField: "Accept")
 
         // Record the user agent for use by search suggestion clients.
@@ -493,9 +473,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        let bvc = BrowserViewController.foregroundBVC()
         if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
-            bvc.openBlankNewTab(focusLocationField: false)
+            browserViewController.openBlankNewTab(focusLocationField: false)
             return true
         }
 
@@ -514,11 +493,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // it is recommended that links contain the `deep_link` query parameter. This link will also
             // be url encoded.
             if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
-                bvc.switchToTabForURLOrOpen(url)
+                browserViewController.switchToTabForURLOrOpen(url)
                 return true
             }
 
-            bvc.switchToTabForURLOrOpen(url)
+            browserViewController.switchToTabForURLOrOpen(url)
             return true
         }
 
@@ -528,7 +507,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let userInfo = userActivity.userInfo,
                 let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
                 let url = URL(string: urlString) {
-                bvc.switchToTabForURLOrOpen(url)
+                browserViewController.switchToTabForURLOrOpen(url)
                 return true
             }
         }
@@ -536,8 +515,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return false
     }
 
+    /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
+    ///
+    /// This method can handle a quick action from both app launch and when the app becomes active. However, the system calls launch methods first if the app `launches`
+    /// and gives you a chance to handle the shortcut there. If it's not handled there, this method is called in the activation process with the shortcut item.
+    ///
+    /// Quick actions / shortcut items are handled here as long as our two launch methods return `true`. If either of them return `false`, this method
+    /// won't be called to handle shortcut items.
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: BrowserViewController.foregroundBVC())
+        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
 
         completionHandler(handledShortCutItem)
     }
@@ -593,12 +579,6 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 
-extension UIApplication {
-    static var isInPrivateMode: Bool {
-        return BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? false
-    }
-}
-
 // Orientation lock for views that use new modal presenter
 extension AppDelegate {
     /// ref: https://stackoverflow.com/questions/28938660/
@@ -613,7 +593,7 @@ extension AppDelegate {
             }
         }
 
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation: UIInterfaceOrientation) {
             self.lockOrientation(orientation)
             UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
         }

@@ -191,7 +191,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 v.backgroundColor = UIColor.clear
             }
         }
-        
+
         // Change re-order control tint color to match app theme
         for subViewA in cell.subviews where subViewA.classForCoder.description() == "UITableViewCellReorderControl" {
             for subViewB in subViewA.subviews {
@@ -257,7 +257,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             return sourceIndexPath
         }
 
-        //Can't drag/drop over "Add Custom Engine button"
+        // Can't drag/drop over "Add Custom Engine button"
         if sourceIndexPath.item + 1 == model.orderedEngines.count || proposedDestinationIndexPath.item + 1 == model.orderedEngines.count {
             return sourceIndexPath
         }

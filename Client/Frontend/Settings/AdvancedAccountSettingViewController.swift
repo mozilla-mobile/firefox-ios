@@ -40,7 +40,6 @@ fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
       }
   }
 
-
 class AdvancedAccountSettingViewController: SettingsTableViewController {
     fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
     fileprivate var customFxAContentURI: String?
@@ -61,8 +60,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
 
-        let useStage = BoolSetting(prefs: prefs, prefKey: PrefsKeys.UseStageServer, defaultValue: false, attributedTitleText: NSAttributedString(string: .AdvancedAccountUseStageServer, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
-        { isOn in
+        let useStage = BoolSetting(prefs: prefs, prefKey: PrefsKeys.UseStageServer, defaultValue: false, attributedTitleText: NSAttributedString(string: .AdvancedAccountUseStageServer, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])) { isOn in
             self.settings = self.generateSettings()
             self.tableView.reloadData()
         }
@@ -90,7 +88,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             customSyncTokenServerURISetting
         ]
 
-        var settings: [SettingSection] = [SettingSection(title:nil, children: [useStage])]
+        var settings: [SettingSection] = [SettingSection(title: nil, children: [useStage])]
 
         if !(prefs.boolForKey(PrefsKeys.UseStageServer) ?? false) {
             settings.append(SettingSection(title: nil, children: autoconfigSettings))

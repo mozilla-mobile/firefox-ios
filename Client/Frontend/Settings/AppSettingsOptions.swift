@@ -21,21 +21,8 @@ private var disclosureIndicator: UIImageView {
     return disclosureIndicator
 }
 
-// For great debugging!
-class HiddenSetting: Setting {
-    unowned let settings: SettingsTableViewController
-
-    init(settings: SettingsTableViewController) {
-        self.settings = settings
-        super.init(title: nil)
-    }
-
-    override var hidden: Bool {
-        return !ShowDebugSettings
-    }
-}
-
-// Sync setting for connecting a Firefox Account.  Shown when we don't have an account.
+// MARK: - ConnectSetting
+// Sync setting for connecting a Firefox Account. Shown when we don't have an account.
 class ConnectSetting: WithoutAccountSetting {
     override var accessoryView: UIImageView? { return disclosureIndicator }
 
@@ -60,6 +47,7 @@ class ConnectSetting: WithoutAccountSetting {
     }
 }
 
+// MARK: - SyncNowSetting
 class SyncNowSetting: WithAccountSetting {
     let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
@@ -224,7 +212,7 @@ class SyncNowSetting: WithAccountSetting {
                     cell.detailTextLabel?.attributedText = status
                     cell.accessoryView = nil
                 }
-            case .warning(_):
+            case .warning:
                 // add the amber warning symbol
                 // add a link to the MANA page
                 cell.detailTextLabel?.attributedText = nil
@@ -253,6 +241,7 @@ class SyncNowSetting: WithAccountSetting {
         // dimensions and color, then the scaled sync icon is added as a subview.
         imageView.contentMode = .center
         imageView.image = image
+        imageView.transform = CGAffineTransform(scaleX: -1, y: 1)
 
         cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
         cell.imageView?.image = syncIconWrapper
@@ -293,6 +282,7 @@ class SyncNowSetting: WithAccountSetting {
     }
 }
 
+// MARK: - AccountStatusSetting
 // Sync setting that shows the current Firefox Account status.
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
@@ -356,12 +346,34 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.layer.cornerRadius = (imageView.frame.height) / 2
             imageView.layer.masksToBounds = true
 
-            imageView.image = UIImage(named: "placeholder-avatar")!.createScaled(CGSize(width: 30, height: 30))
+            imageView.image = UIImage(named: ImageIdentifiers.placeholderAvatar)?.createScaled(CGSize(width: 30, height: 30))
 
             RustFirefoxAccounts.shared.avatar?.image.uponQueue(.main) { image in
                 imageView.image = image.createScaled(CGSize(width: 30, height: 30))
             }
         }
+    }
+}
+
+// MARK: - Hidden Settings
+/// Used for only for debugging purposes. These settings are hidden behind a
+/// 5-tap gesture on the Firefox version cell in the Settings Menu
+class HiddenSetting: Setting {
+    unowned let settings: SettingsTableViewController
+
+    init(settings: SettingsTableViewController) {
+        self.settings = settings
+        super.init(title: nil)
+    }
+
+    override var hidden: Bool {
+        return !ShowDebugSettings
+    }
+
+    func updateCell(_ navigationController: UINavigationController?) {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        tableView?.reloadData()
     }
 }
 
@@ -448,11 +460,11 @@ class FeatureSwitchSetting: BoolSetting {
 
 class ForceCrashSetting: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Force Crash", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "💥 Debug: Force Crash", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        Sentry.shared.crash()
+        SentryIntegration.shared.crash()
     }
 }
 
@@ -550,74 +562,60 @@ class ExperimentsSettings: HiddenSetting {
     }
 }
 
-class ToggleChronTabs: HiddenSetting, FeatureFlagsProtocol {
+class TogglePullToRefresh: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.chronologicalTabs) ? "OFF" : "ON"
-        return NSAttributedString(string: "Toggle chronological tabs \(toNewStatus)",
-                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.chronologicalTabs)
-        updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
-    }
-}
-
-class TogglePullToRefresh: HiddenSetting, FeatureFlagsProtocol {
-    override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.pullToRefresh) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle Pull to Refresh \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.pullToRefresh)
+        let newStatus = !featureFlags.isFeatureEnabled(.pullToRefresh, checking: .userOnly)
+        featureFlags.set(feature: .pullToRefresh, to: newStatus)
         updateCell(navigationController)
-    }
-
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
     }
 }
 
-class ToggleInactiveTabs: HiddenSetting, FeatureFlagsProtocol {
+class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override var title: NSAttributedString? {
-        let toNewStatus = featureFlags.isFeatureActiveForBuild(.inactiveTabs) ? "OFF" : "ON"
+        let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        featureFlags.toggleBuildFeature(.inactiveTabs)
+        let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
+        featureFlags.set(feature: .inactiveTabs, to: newStatus)
         InactiveTabModel.hasRunInactiveTabFeatureBefore = false
         updateCell(navigationController)
     }
+}
 
-    func updateCell(_ navigationController: UINavigationController?) {
-        let controller = navigationController?.topViewController
-        let tableView = (controller as? AppSettingsTableViewController)?.tableView
-        tableView?.reloadData()
+class ToggleHistoryGroups: HiddenSetting, FeatureFlaggable {
+    override var title: NSAttributedString? {
+        let toNewStatus = featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly) ? "OFF" : "ON"
+        return NSAttributedString(
+            string: "Toggle history groups \(toNewStatus)",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let newStatus = !featureFlags.isFeatureEnabled(.historyGroups, checking: .userOnly)
+        featureFlags.set(feature: .historyGroups, to: newStatus)
+        updateCell(navigationController)
     }
 }
 
-
-class ResetJumpBackInContextualHint: HiddenSetting {
+class ResetContextualHints: HiddenSetting {
     let profile: Profile
 
-    override var accessibilityIdentifier: String? { return "ResetJumpBackInContextualHint.Setting" }
+    override var accessibilityIdentifier: String? { return "ResetContextualHints.Setting" }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Reset: Jump back in contextual hint", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(
+            string: "Reset all contextual hints",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
-
 
     override init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -625,7 +623,9 @@ class ResetJumpBackInContextualHint: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        self.profile.prefs.removeObjectForKey(PrefsKeys.ContextualHintJumpBackinKey)
+        PrefsKeys.ContextualHints.allCases.forEach {
+            self.profile.prefs.removeObjectForKey($0.rawValue)
+        }
     }
 }
 
@@ -655,15 +655,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "\(AppName.longName) \(VersionSetting.appVersion) (\(VersionSetting.appBuildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    public static var appVersion: String {
-        return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-    }
-
-    public static var appBuildNumber: String {
-        return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
+        return NSAttributedString(string: "\(AppName.longName) \(AppInfo.appVersion) (\(AppInfo.buildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -722,7 +714,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
 class AppStoreReviewSetting: Setting {
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .RatingsPrompt.Settings.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .Settings.About.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -770,7 +762,7 @@ class SendFeedbackSetting: Setting {
     }
 
     override var url: URL? {
-        return URL(string: "https://mozilla.crowdicity.com/")
+        return URL(string: "https://connect.mozilla.org/")
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1097,20 +1089,10 @@ class NewTabPageSetting: Setting {
     }
 }
 
-fileprivate func getDisclosureIndicator() -> UIImageView {
-    let disclosureIndicator = UIImageView()
-    disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
-    disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
-    disclosureIndicator.sizeToFit()
-    return disclosureIndicator
-}
-
 class HomeSetting: Setting {
     let profile: Profile
 
-    override var accessoryView: UIImageView {
-        getDisclosureIndicator()
-    }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "Home" }
 
@@ -1123,7 +1105,7 @@ class HomeSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: .AppMenuOpenHomePageTitleString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .SettingsHomePageSectionName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1167,6 +1149,31 @@ class SiriPageSetting: Setting {
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
+}
+
+class NoImageModeSetting: BoolSetting {
+
+    init(settings: SettingsTableViewController) {
+        let noImageEnabled = NoImageModeHelper.isActivated(settings.profile.prefs)
+        let didChange = { (isEnabled: Bool) in
+            NoImageModeHelper.toggle(isEnabled: isEnabled,
+                                     profile: settings.profile,
+                                     tabManager: settings.tabManager)
+        }
+
+        super.init(
+            prefs: settings.profile.prefs,
+            prefKey: NoImageModePrefsKey.NoImageModeStatus,
+            defaultValue: noImageEnabled,
+            attributedTitleText: NSAttributedString(string: .Settings.Toggle.NoImageMode),
+            attributedStatusText: nil,
+            settingDidChange: { isEnabled in
+                didChange(isEnabled)
+            }
+        )
+    }
+
+    override var accessibilityIdentifier: String? { return "NoImageMode" }
 }
 
 @available(iOS 14.0, *)
@@ -1295,7 +1302,6 @@ class SearchBarSetting: Setting {
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
-
 
 extension BrowserViewController {
     /// ⚠️ !! WARNING !! ⚠️

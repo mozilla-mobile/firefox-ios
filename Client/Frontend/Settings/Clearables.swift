@@ -29,7 +29,7 @@ class ClearableError: MaybeErrorType {
 class HistoryClearable: Clearable {
     let profile: Profile
     let tabManager: TabManager
-    
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -46,12 +46,13 @@ class HistoryClearable: Clearable {
             SDImageCache.shared.clearDisk()
             SDImageCache.shared.clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
+            self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
-            
+
             self.tabManager.clearAllTabsHistory()
-            
+
             return Deferred(value: success)
         }
     }
@@ -96,7 +97,7 @@ class SpotlightClearable: Clearable {
 
     func clear() -> Success {
         let deferred = Success()
-        UserActivityHandler.clearSearchIndex() { _ in
+        UserActivityHandler.clearSearchIndex { _ in
             deferred.fill(Maybe(success: ()))
         }
         return deferred
@@ -162,14 +163,14 @@ class CookiesClearable: Clearable {
 }
 
 class TrackingProtectionClearable: Clearable {
-    //@TODO: re-using string because we are too late in cycle to change strings
+    // @TODO: re-using string because we are too late in cycle to change strings
     var label: String {
         return .SettingsTrackingProtectionSectionName
     }
 
     func clear() -> Success {
         let result = Success()
-        ContentBlocker.shared.clearSafelist() {
+        ContentBlocker.shared.clearSafelist {
             result.fill(Maybe(success: ()))
         }
         return result

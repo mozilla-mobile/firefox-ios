@@ -11,7 +11,7 @@
 "TodayWidget.CopiedLinkLabelFromPasteBoardV1" = "Enlace copiado del portapapeles";
 
 /* Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands */
-"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Cerrar pestañas privadas";
+"TodayWidget.DropDownMenuItemClearPrivateTabs" = "Eliminar pestañas privadas";
 
 /* Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands */
 "TodayWidget.DropDownMenuItemGoToCopiedLink" = "Ir al enlace copiado";
@@ -38,7 +38,7 @@
 "TodayWidget.GoToCopiedLinkLabelV4" = "Ir al enlace copiado";
 
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
-"TodayWidget.MoreTabsLabel" = "+%d Más...";
+"TodayWidget.MoreTabsLabel" = "+%d Más…";
 
 /* Open New Private Tab button label for medium size action */
 "TodayWidget.NewPrivateTabButtonLabelV2" = "Buscar en pestaña privada";

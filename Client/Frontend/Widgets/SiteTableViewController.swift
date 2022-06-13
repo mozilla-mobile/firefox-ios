@@ -12,11 +12,31 @@ struct SiteTableViewControllerUX {
     static let HeaderTextMargin = CGFloat(16)
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
+class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
+
+    var collapsibleState: ExpandButtonState? {
+        willSet(state) {
+            collapsibleImageView.image = state?.image?.tinted(withColor: UIColor.Photon.Blue50)
+        }
+    }
+
     let titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         label.textColor = UIColor.theme.tableView.headerTextDark
     }
+
+    let headerActionButton: UIButton = .build { button in
+        button.setTitle("Show all", for: .normal)
+        button.backgroundColor = .clear
+        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.isHidden = true
+    }
+
+    let collapsibleImageView: UIImageView = .build { imageView in
+        imageView.image = ExpandButtonState.down.image?.tinted(withColor: UIColor.Photon.Blue50)
+        imageView.isHidden = true
+    }
+
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
@@ -25,18 +45,25 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        
+
         translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
+        contentView.addSubviews(titleLabel, headerActionButton)
+        contentView.addSubviews(titleLabel, collapsibleImageView)
 
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
-        
+
         backgroundView = UIView()
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(SiteTableViewControllerUX.HeaderTextMargin)),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+
+            collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+
+            headerActionButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            headerActionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
         ])
 
         applyTheme()
@@ -92,14 +119,14 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         table.cellLayoutMarginsFollowReadableWidth = false
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
-        
-        if let _ = self as? HomePanelContextMenu {
+
+        if let _ = self as? LibraryPanelContextMenu {
             table.dragDelegate = self
         }
-        
+
         // Set an empty footer to prevent empty cells from appearing in the list.
         table.tableFooterView = UIView()
-        
+
         if #available(iOS 15.0, *) {
             table.sectionHeaderTopPadding = 0
         }
@@ -122,11 +149,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
+        setupView()
     }
 
     deinit {
@@ -149,6 +172,17 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         if let _ = self.presentedViewController as? PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
+    }
+
+    private func setupView() {
+        view.addSubview(tableView)
+
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     func reloadData() {
@@ -211,11 +245,15 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 }
 
 extension SiteTableViewController: UITableViewDragDelegate {
-    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard let homePanelVC = self as? HomePanelContextMenu, let site = homePanelVC.getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {
-            return []
-        }
 
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let panelVC = self as? LibraryPanelContextMenu,
+              let site = panelVC.getSiteDetails(for: indexPath),
+              let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url)
+        else { return [] }
+
+        // Telemetry is being sent to legacy, need to add it to metrics.yml
+        // Value should be something else than .homePanel
         TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
 
         let dragItem = UIDragItem(itemProvider: itemProvider)

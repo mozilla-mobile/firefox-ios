@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
-import SwiftyJSON
 import SyncTelemetry
 import Account
 import os.log
@@ -144,7 +143,7 @@ enum PushMessageType: String {
 }
 
 enum PushMessage: Equatable {
-    case commandReceived(tab: [String : String])
+    case commandReceived(tab: [String: String])
     case deviceConnected(String)
     case deviceDisconnected(String?)
     case profileUpdated
@@ -156,11 +155,11 @@ enum PushMessage: Equatable {
 
     var messageType: PushMessageType {
         switch self {
-        case .commandReceived(_):
+        case .commandReceived:
             return .commandReceived
-        case .deviceConnected(_):
+        case .deviceConnected:
             return .deviceConnected
-        case .deviceDisconnected(_):
+        case .deviceDisconnected:
             return .deviceDisconnected
         case .thisDeviceDisconnected:
             return .deviceDisconnected
@@ -173,7 +172,7 @@ enum PushMessage: Equatable {
         }
     }
 
-    public static func ==(lhs: PushMessage, rhs: PushMessage) -> Bool {
+    public static func == (lhs: PushMessage, rhs: PushMessage) -> Bool {
         guard lhs.messageType == rhs.messageType else {
             return false
         }

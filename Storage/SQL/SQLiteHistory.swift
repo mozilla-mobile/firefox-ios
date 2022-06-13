@@ -402,7 +402,7 @@ extension SQLiteHistory: BrowserHistory {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
         }
 
-        //do a fuzzy delete so dupes can be removed
+        // do a fuzzy delete so dupes can be removed
         let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
         return db.run([query]) >>== {
             return self.db.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
@@ -609,6 +609,33 @@ extension SQLiteHistory: BrowserHistory {
 
     public func getFrecentHistory() -> FrecentHistory {
         return SQLiteFrecentHistory(db: db, prefs: prefs)
+    }
+
+    public func getHistory(matching searchTerm: String,
+                           limit: Int,
+                           offset: Int,
+                           completion: @escaping ([Site]) -> Void) {
+
+        let query = """
+            SELECT hist.* FROM history hist
+            INNER JOIN history_fts historyFTS ON
+                historyFTS.rowid = hist.rowid
+            WHERE historyFTS.title LIKE ? OR
+                historyFTS.url LIKE ?
+            ORDER BY local_modified DESC
+            LIMIT \(limit)
+            OFFSET \(offset);
+            """
+
+        let args: Args = ["%\(searchTerm)%", "%\(searchTerm)%"]
+
+        db.runQueryConcurrently(query, args: args, factory: SQLiteHistory.basicHistoryColumnFactory).uponQueue(.main) { result in
+            guard result.isSuccess else {
+                completion([Site]())
+                return
+            }
+            completion(result.successValue?.asArray() ?? [Site]())
+        }
     }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {

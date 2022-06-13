@@ -1,7 +1,401 @@
-format_version: '6'
+format_version: '8'
 default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: ios
+pipelines:
+  pipeline_multiple_shards:
+    stages:
+      - stage_1: {}
+      - stage_2: {}
+stages:
+  stage_1:
+    workflows:
+      - configure_build: {}
+  stage_2:
+    workflows:
+      - build_and_test_1_SmokeTest2: {}
+      - build_and_test_2_SmokeTest: {}
+      - build_and_test_3_SmokeTest3: {}
+      - build_and_test_4_SmokeTest4: {}
+      - build_and_test_5_UnitTest: {}
+      - just_build_fennec_to_get_warnings: {}
 workflows:
+  configure_build:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
+        title: Bitrise Test Plan Sharder
+        inputs:
+        - xcode_project: Client.xcodeproj
+        - target: Client
+        - shards: '3'
+        - scheme: Fennec_Enterprise_XCUITests
+        - test_plan: SmokeXCUITests.xctestplan
+        - debug_mode: 'true'
+        - test_path: ''
+        - file_type: ".swift"
+    - script@1.1:
+        title: Build for Testing
+        inputs:
+        - content: |+
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            mkdir DerivedData
+                
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+            echo "show files"
+            ls
+            ls DerivedData/
+            ls DerivedData/Build/Products
+    - script@1.1:
+        title: Detect number of warnings
+        is_always_run: true
+        inputs:
+        - content: |
+            set -e
+            set -x
+
+            echo "bitrise_xcode"
+            echo "$BITRISE_XCODEBUILD_TEST_LOG_PATH"
+
+            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_test.log all)
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+
+            STR=$COUNT_XCUI
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+    - slack@3.1:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
+            Branch | ${BITRISE_GIT_BRANCH}
+            Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
+        - buttons: |
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    - script@1.1:
+        title: Compress Derived Data
+        is_always_run: true
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- compress --"
+                
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/XCUITests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest3.xctestplan" "$BITRISE_SOURCE_DIR/Smoketest4.xctestplan" "$BITRISE_SOURCE_DIR/xcodebuild.log" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" "$BITRISE_SOURCE_DIR/XCUITests/UnitTest.xctestplan" "$BITRISE_SOURCE_DIR/Client/"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
+  build_and_test_1_SmokeTest2:
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1.*
+    - script@1.1:
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+                
+            echo "$BITRISE_ARTIFACT_PATHS"
+                
+            echo "-- unzip -- "
+            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            echo "show dir"
+            ls
+    - script@1.1:
+          title: Test without Building
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                set -ex 
+                
+                ls -la
+                ls ./Users/vagrant/git/XCUITests
+                cp ./Users/vagrant/git/XCUITests/* .
+                mv ./Users/vagrant/git/* .
+                echo "-- test-without-building --"
+
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
+    - custom-test-results-export@0:
+        inputs:
+        - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
+        - test_name: Smoketest2
+    - deploy-to-bitrise-io@2: {}
+  build_and_test_2_SmokeTest:
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1.*
+    - script@1.1:
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+                
+            echo "$BITRISE_ARTIFACT_PATHS"
+                
+            echo "-- unzip -- "
+            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            echo "show dir"
+            ls
+    - script@1.1:
+          title: Test without Building
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                set -ex 
+
+                ls -la
+                ls ./Users/vagrant/git/XCUITests
+                cp ./Users/vagrant/git/XCUITests/* .
+                mv ./Users/vagrant/git/* .
+
+                echo "-- test-without-building --"
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
+    - custom-test-results-export@0:
+        inputs:
+        - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
+        - test_name: SmokeTest
+    - deploy-to-bitrise-io@2: {}
+  build_and_test_3_SmokeTest3:
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1.*
+    - script@1.1:
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+                
+            echo "$BITRISE_ARTIFACT_PATHS"
+                
+            echo "-- unzip -- "
+            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            echo "show dir"
+            ls
+    - script@1.1:
+          title: Test without Building
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                set -ex 
+                ls ./Users/vagrant/git/XCUITests
+                cp ./Users/vagrant/git/XCUITests/* .
+                mv ./Users/vagrant/git/* .
+                ls -la
+
+                echo "-- test-without-building --"
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "Smoketest3" "test-without-building"
+    - custom-test-results-export@0:
+        inputs:
+        - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
+        - test_name: SmokeTest3
+    - deploy-to-bitrise-io@2: {}
+  build_and_test_4_SmokeTest4:
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1.*
+    - script@1.1:
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+                
+            echo "$BITRISE_ARTIFACT_PATHS"
+                
+            echo "-- unzip -- "
+            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            echo "show dir"
+            ls
+    - script@1.1:
+          title: Test without Building
+          inputs:
+            - content: |
+                #!/usr/bin/env bash
+                set -ex 
+
+                ls ./Users/vagrant/git/XCUITests
+                cp ./Users/vagrant/git/XCUITests/* .
+                mv ./Users/vagrant/git/* .
+                ls -la
+
+                echo "-- test-without-building --"
+                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "Smoketest4" "test-without-building"
+    - custom-test-results-export@0:
+        inputs:
+        - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
+        - test_name: SmokeTest4
+    - deploy-to-bitrise-io@2: {}
+  build_and_test_5_UnitTest:
+    steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        title: Pull artifacts
+        inputs:
+        - verbose: true
+        - artifact_sources: stage_1.*
+    - script@1.1:
+        title: Unzip
+        inputs:
+        - content: |
+            set -euxo pipefail
+
+            echo "$BITRISE_ARTIFACT_PATHS"
+
+            echo "-- unzip -- "
+            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            echo "show dir"
+            ls
+    - script@1.1:
+        title: Test without Building
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -ex 
+
+            ls -la
+            ls ./Users/vagrant/git/XCUITests
+            cp ./Users/vagrant/git/XCUITests/* .
+            mv ./Users/vagrant/git/* .
+            ls -la
+
+            pwd
+            echo "-- test-without-building --"
+
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "UnitTest" "test-without-building"
+    - script@1.1:
+        title: Compress Result Bundle
+        is_always_run: true
+        inputs:
+        - content: |-
+                set -euxo pipefail
+                echo "-- compress --"
+                
+                cd "${BITRISE_DEPLOY_DIR}/"
+                exec zip -0 -qr "${BITRISE_SOURCE_DIR}/TestResults.zip" "/Users/vagrant/git/xcodebuild.xcresult"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/TestResults.zip"
+    - custom-test-results-export@0:
+        inputs:
+        - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
+        - test_name: Unit Test
+    - deploy-to-bitrise-io@2.0: {}
+  just_build_fennec_to_get_warnings:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - script@1.1:
+        title: Build for Warnings
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            mkdir DerivedData2
+                
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 11,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" | xcpretty | tee xcodebuild_fennec.log
+            echo "show files"
+            ls
+    - script@1.1:
+        title: Detect number of warnings
+        is_always_run: true
+        inputs:
+        - content: |
+            set -e
+            set -x
+            echo "$SHOW_WARNING_COUNT_XCUI"
+
+            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_fennec.log all)
+            envman add --key SHOW_WARNING_COUNT --value "$COUNT_XCUI"
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+
+            STR=$COUNT_XCUI
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+    - slack@3.1:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
+            Branch | ${BITRISE_GIT_BRANCH}
+            Warnings-in-code | ${SHOW_WARNING_COUNT}
+        - buttons: |
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+  send_slack_notification:
+    steps:
+    - slack@3.1:
+        #run_if: '{{getenv "SHOW_WARNING_IN_SLACK" | eq "Show_Warnings" }}'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
+            Branch | ${BITRISE_GIT_BRANCH}
+            Warnings-in-code | ${SHOW_WARNING_COUNT}
+            Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
+        - buttons: |
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
@@ -15,10 +409,10 @@ workflows:
             set -x
             BRANCH=$BITRISE_GIT_BRANCH
 
-            if [[ $BRANCH == update-cartfile-new-as-tag-* ]]
+            if [[ $BRANCH == update-spm-new-rust-component-tag-* ]]
             then
-                echo "Building with new A-S version"
-                envman add --key NEW_AS_VERSION --value New_AS_Version
+                echo "Building with new Rust-Component version"
+                envman add --key NEW_RC_VERSION --value New_RC_Version
             fi
         title: Save Branch Name
     - script@1:
@@ -57,6 +451,9 @@ workflows:
         - content: |-
             ./bootstrap.sh
         title: Run bootstrap
+    - swiftlint-extended@1:
+        inputs:
+        - linting_path: "$BITRISE_SOURCE_DIR"
     - script@1:
         inputs:
         - content: |-
@@ -300,7 +697,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-13.3.x
+        stack: osx-xcode-13.4.x
         machine_type_id: g2.4core
   RunAllXCUITests:
     steps: []
@@ -312,7 +709,7 @@ workflows:
     - 5_deploy_and_slack
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.4core
   RunSmokeXCUITestsiPad:
     steps:
@@ -447,7 +844,6 @@ workflows:
             # debug log
             set -x
             # workaround until 2.187 version is installed. Error with 2.186
-            fastlane update_fastlane
 
             ./l10n-screenshots.sh en-US
         title: Generate screenshots
@@ -525,7 +921,7 @@ workflows:
             # debug log
             set -x
             # workaround until 2.187 version is installed. Error with 2.186
-            fastlane update_fastlane
+            # fastlane update_fastlane
 
             ./l10n-screenshots.sh --test-without-building $MOZ_LOCALES
 
@@ -576,18 +972,18 @@ workflows:
             fi
         is_always_run: true
     - slack@3.1:
-        run_if: '{{getenv "NEW_AS_VERSION" | eq "New_AS_Version"}}'
+        run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version"}}'
         inputs:
         - channel: "#firefox-ios"
-        - text: Build status using latest A-S
+        - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
     description: >-
       This Workflow is to run tests (currently SmokeTest) when there is a merge
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
-        machine_type_id: g2.4core
+        stack: osx-xcode-13.2.x
+        machine_type_id: g2.8core
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -613,7 +1009,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-13.1.x
-        machine_type_id: g2.4core
+        machine_type_id: g2.8core
   SPM_Deploy_Prod_Beta:
     steps:
     - activate-ssh-key@4.1:
@@ -693,6 +1089,14 @@ workflows:
         - password: "$APPLE_ACCOUNT_PW"
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        title: Upload Firefox Prod Beta Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     - script@1:
         inputs:
         - content: |-
@@ -812,6 +1216,14 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - script@1:
+        title: Upload Firefox Beta Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:
         is_expand: false
@@ -901,6 +1313,14 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'Nightly FirefoxBeta: Xcode Archive & Export for iOS'
+    - script@1:
+        title: Upload NightlyBeta Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
     envs:
     - opts:
         is_expand: false
@@ -908,7 +1328,7 @@ workflows:
     description: This step is to build, archive and upload Firefox Release and Beta
     meta:
       bitrise.io:
-        stack: osx-xcode-13.1.x
+        stack: osx-xcode-13.2.x
         machine_type_id: g2.8core
 app:
   envs:
@@ -923,18 +1343,24 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '98.0'
+    BITRISE_RELEASE_VERSION: '101.1'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '98.0'
+    BITRISE_BETA_VERSION: '101.1'
+
+meta:
+      bitrise.io:
+        stack: osx-xcode-13.2.x
+        machine_type_id: g2.4core
+
 trigger_map:
 - push_branch: main
-  workflow: RunUnitTests
+  pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   workflow: RunUnitTests
-- push_branch: v98.0
+- push_branch: v101.1
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   workflow: RunUnitTests

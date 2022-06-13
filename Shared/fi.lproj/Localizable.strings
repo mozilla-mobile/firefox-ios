@@ -155,6 +155,9 @@
 /* The button to create a new separator */
 "Bookmarks.NewSeparator.Label" = "Uusi erotin";
 
+/* A label serving as a placeholder text in the search bar that's embedded in the Bookmarks menu. The placeholder text indicates that a user can search and filter bookmarks. */
+"Bookmarks.Search.SearchBookmarks" = "Etsi kirjanmerkeistä";
+
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Otsikko";
 
@@ -375,6 +378,12 @@
 
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefoxin aloitussivu";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Löydä lisää";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Poista";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Seuraava";
@@ -673,6 +682,9 @@
 /* A label indicating the keyboard shortcut of switching between the first nine tabs. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowTabNumber" = "Näytä välilehti numero 1-9";
 
+/* A label indicating the keyboard shortcut of reopening the last closed tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.UndoCloseTab" = "Kumoa välilehden sulkeminen";
+
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Lähennä";
 
@@ -687,6 +699,15 @@
 
 /* History tableview section header */
 "Last week" = "Viime viikko";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Poista";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Historiaa ei löytynyt";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Viimeksi suljetut välilehdet";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Lisenssit";
@@ -706,8 +727,14 @@
 /* Toggle logins syncing setting */
 "Logins" = "Kirjautumistiedot";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Lue lisää";
+
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "Jatka";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Lue lisää";
 
 /* Login detail view field name for the last modified date */
 "LoginsDetailView.LoginModified" = "Muokattu";
@@ -760,6 +787,9 @@
 /* Label displayed when a user searches and no matches can be found against the search query */
 "LoginsList.NoMatchingResult.Title" = "Ei hakua vastaavia kirjautumistietoja";
 
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Valitse salasana täytettäväksi";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "TALLENNETUT KIRJAUTUMISTIEDOT";
 
@@ -774,8 +804,14 @@
    Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Merkitse lukemattomaksi";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "Lisää kirjanmerkki";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Kirjanmerkki lisätty";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Lisää";
 
 /* Toast displayed to the user after adding the item to the Top Sites. */
 "Menu.AddPin.Confirm" = "Kiinnitetty ykkössivustoihin";
@@ -783,11 +819,11 @@
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "Menu.AddPin.Confirm2" = "Lisättiin oikoteihin";
 
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Lisää";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Lisätty lukulistaan";
-
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "Varmuuskopioi ja synkronoi tiedot";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Kirjanmerkit";
@@ -815,6 +851,9 @@
 
 /* Label for the button, displayed in the menu, takes you to screen to manage account when pressed. First argument is the display name for the current account */
 "Menu.ManageAccount.Label" = "Hallitse tiliä %@";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Uusi välilehti";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "Poista yötila käytöstä";
@@ -855,11 +894,17 @@
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "Poistettu ykkössivustoista";
 
-/* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "Poistettiin oikoteistä";
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Poista";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Jaa";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Välilehti lähetetty";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Kirjanmerkit";
 
 /* Title on tracking protection menu for blocked items. */
 "Menu.TrackingProtection.BlockedTitle" = "Estetty";
@@ -982,6 +1027,9 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "Okei";
 
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Aloita selaaminen";
+
 /* On the onboarding card, letting users know what's new in this version of Firefox, this is the title for the Jump Back In bullet point on the card
    The title for the new onboarding card letting users know what is new in Firefox iOS */
 "Onboarding.WhatsNew.Title" = "Mitä uutta Firefoxissa";
@@ -1045,6 +1093,9 @@
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Pikahakukoneet";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Arvostele App Storessa";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "luettu";
@@ -1455,6 +1506,9 @@
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "Valitse, mitä avataan, kun uusi välilehti avautuu";
 
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Estä kuvat";
+
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Kun avaat Firefoxin";
 
@@ -1761,9 +1815,6 @@
 
 /* Hardware shortcut open the selected tab from the tab tray. Shown in the Discoverability overlay when the hardware Command Key is held down. */
 "TabTray.OpenSelectedTab.KeyCodeTitle" = "Avaa valittu välilehti";
-
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "Yksityiset välilehdet";
 
 /* The title on the button to look at private tabs. */
 "TabTray.SegmentedControlTitles.PrivateTabs" = "Yksityinen";

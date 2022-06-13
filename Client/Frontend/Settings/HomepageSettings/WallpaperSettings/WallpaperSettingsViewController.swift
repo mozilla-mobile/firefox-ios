@@ -10,13 +10,13 @@ private struct WallpaperSettingsUX {
     static let collectionTitleFontMaxSize = 43.0
     static let switchTitleFontMaxSize = 53.0
     static let switchDescriptionFontMaxSize = 43.0
-    
+
     struct FractionalWidths {
         static let third: CGFloat = 1/3
         static let quarter: CGFloat = 1/4
         static let sixth: CGFloat = 1/6
     }
-    
+
     static let inset: CGFloat = 3.5
 }
 
@@ -50,7 +50,7 @@ class WallpaperSettingsViewController: UIViewController {
 
         return collectionView
     }()
-    
+
     // Switch
     private lazy var switchContainer: UIView = .build { _ in }
 
@@ -72,15 +72,6 @@ class WallpaperSettingsViewController: UIViewController {
 
     private lazy var switchLine: UIView = .build { _ in }
 
-    private lazy var switchDescription: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .caption1,
-            maxSize: WallpaperSettingsUX.switchDescriptionFontMaxSize)
-        label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
-        label.text = .Settings.Homepage.Wallpaper.SwitchDescription
-    }
-
     // MARK: - Variables
     var notificationCenter: NotificationCenter
     private var viewModel: WallpaperSettingsViewModel
@@ -97,7 +88,7 @@ class WallpaperSettingsViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         notificationCenter.removeObserver(self)
     }
@@ -125,7 +116,7 @@ class WallpaperSettingsViewController: UIViewController {
     ) {
         reloadLayout()
     }
-    
+
     // MARK: - View setup
     private func setupView() {
         view.addSubview(collectionTitle)
@@ -135,7 +126,6 @@ class WallpaperSettingsViewController: UIViewController {
         switchContainer.addSubview(switchTitle)
         switchContainer.addSubview(logoSwitch)
         switchContainer.addSubview(switchLine)
-        switchContainer.addSubview(switchDescription)
         view.addSubview(switchContainer)
 
         NSLayoutConstraint.activate([
@@ -171,18 +161,13 @@ class WallpaperSettingsViewController: UIViewController {
             switchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             switchContainer.topAnchor.constraint(equalTo: collectionContainer.bottomAnchor, constant: 8),
             switchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            switchDescription.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17),
-            switchDescription.topAnchor.constraint(equalTo: switchLine.bottomAnchor, constant: 8),
-            switchDescription.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -17),
-            switchDescription.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
     }
 
     private func setupCurrentState() {
         logoSwitch.isOn = viewModel.wallpaperManager.switchWallpaperFromLogoEnabled
     }
-    
+
     private func highlightCurrentlySelectedCell() {
         guard let rowIndex = viewModel.wallpaperManager.currentlySelectedWallpaperIndex else { return }
         let currentIndex = IndexPath(row: rowIndex, section: 0)
@@ -190,20 +175,20 @@ class WallpaperSettingsViewController: UIViewController {
                                   animated: false,
                                   scrollPosition: [])
     }
-    
+
     private func reloadLayout() {
         collectionView.collectionViewLayout = getCompositionalLayout()
         collectionView.collectionViewLayout.invalidateLayout()
         collectionView.reloadData()
         highlightCurrentlySelectedCell()
     }
-    
+
     private func getCompositionalLayout() -> UICollectionViewCompositionalLayout {
         typealias FractionalWidths = WallpaperSettingsUX.FractionalWidths
-        
+
         let deviceFractionalWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FractionalWidths.quarter : FractionalWidths.third
         let fractionalWidth: CGFloat = UIDevice.current.orientation.isLandscape ? FractionalWidths.sixth : deviceFractionalWidth
-        
+
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(fractionalWidth),
             heightDimension: .fractionalHeight(1))
@@ -216,7 +201,7 @@ class WallpaperSettingsViewController: UIViewController {
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalWidth(fractionalWidth))
-        
+
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitems: [item])
 
@@ -328,6 +313,5 @@ extension WallpaperSettingsViewController: NotificationThemeable {
         logoSwitch.tintColor = UIColor.theme.etpMenu.switchAndButtonTint
         logoSwitch.onTintColor = UIColor.theme.etpMenu.switchAndButtonTint
         switchLine.backgroundColor = UIColor.theme.etpMenu.horizontalLine
-        switchDescription.textColor = UIColor.theme.tableView.headerTextLight
     }
 }

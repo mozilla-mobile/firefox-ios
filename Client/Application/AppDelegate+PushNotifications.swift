@@ -77,8 +77,8 @@ extension AppDelegate {
         }
 
         // Check if the app is foregrounded, _also_ verify the BVC is initialized. Most BVC functions depend on viewDidLoad() having run –if not, they will crash.
-        if UIApplication.shared.applicationState == .active && BrowserViewController.foregroundBVC().isViewLoaded {
-            BrowserViewController.foregroundBVC().loadQueuedTabs(receivedURLs: receivedURLs)
+        if UIApplication.shared.applicationState == .active && browserViewController.isViewLoaded {
+            browserViewController.loadQueuedTabs(receivedURLs: receivedURLs)
             receivedURLs.removeAll()
         }
     }
@@ -95,7 +95,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
         if profile?.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
             profile?.removeAccount()
-            
+
             // show the notification
             completionHandler([.alert, .sound])
         } else {
@@ -111,6 +111,6 @@ extension AppDelegate {
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("failed to register. \(error)")
-        Sentry.shared.send(message: "Failed to register for APNS")
+        SentryIntegration.shared.send(message: "Failed to register for APNS")
     }
 }

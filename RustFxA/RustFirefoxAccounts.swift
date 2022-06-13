@@ -171,7 +171,7 @@ open class RustFirefoxAccounts {
 
             self?.update()
         }
-        
+
         NotificationCenter.default.addObserver(forName: .accountProfileUpdate, object: nil, queue: .main) { [weak self] notification in
             self?.update()
         }
@@ -181,7 +181,7 @@ open class RustFirefoxAccounts {
             if let error = notification.userInfo?["error"] as? Error {
                 info = error.localizedDescription
             }
-            Sentry.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
+            SentryIntegration.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
             self?.accountMigrationFailed = true
             NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
         }
@@ -279,7 +279,7 @@ open class RustFirefoxAccounts {
 
     public func disconnect() {
         guard let accountManager = accountManager.peek() else { return }
-        accountManager.logout() { _ in }
+        accountManager.logout { _ in }
         let prefs = RustFirefoxAccounts.prefs
         prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)

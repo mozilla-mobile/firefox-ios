@@ -21,7 +21,16 @@ class BaseTestCase: XCTestCase {
 
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
-    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.StageServer, LaunchArguments.SkipDefaultBrowserOnboarding, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)", LaunchArguments.SkipContextualHintJumpBackIn, LaunchArguments.ChronTabs]
+    var launchArguments = [LaunchArguments.ClearProfile,
+                           LaunchArguments.SkipIntro,
+                           LaunchArguments.SkipWhatsNew,
+                           LaunchArguments.SkipETPCoverSheet,
+                           LaunchArguments.StageServer,
+                           LaunchArguments.SkipDefaultBrowserOnboarding,
+                           LaunchArguments.DeviceName,
+                           "\(LaunchArguments.ServerPort)\(serverPort)",
+                           LaunchArguments.SkipContextualHints,
+                           LaunchArguments.TurnOffTabGroupsInUserPreferences]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
@@ -104,7 +113,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields["url"].press(forDuration: 2.0)
-        app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
+        app.tables["Context Menu"].cells[ImageIdentifiers.pasteAndGo].firstMatch.tap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30

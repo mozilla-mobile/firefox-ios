@@ -1469,7 +1469,7 @@ open class BrowserSchema: Schema {
         do {
             try db.executeChange(sql)
         } catch let err as NSError {
-            Sentry.shared.sendWithStacktrace(message: "Error dropping tableList table", tag: SentryTag.browserDB, severity: .error, description: "\(err.localizedDescription)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table", tag: SentryTag.browserDB, severity: .error, description: "\(err.localizedDescription)")
             return false
         }
 
@@ -1478,7 +1478,7 @@ open class BrowserSchema: Schema {
         do {
             try db.setVersion(previousVersion)
         } catch let err as NSError {
-            Sentry.shared.sendWithStacktrace(message: "Error setting database version", tag: SentryTag.browserDB, severity: .error, description: "\(err.localizedDescription)")
+            SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version", tag: SentryTag.browserDB, severity: .error, description: "\(err.localizedDescription)")
             return false
         }
 
@@ -1523,7 +1523,7 @@ open class BrowserSchema: Schema {
             } catch let err as NSError {
                 log.error("Error altering clients table: \(err.localizedDescription); SQL was \(sql)")
                 let extra = ["table": "clients", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
-                Sentry.shared.sendWithStacktrace(message: "Error altering table", tag: SentryTag.browserDB, severity: .error, extra: extra)
+                SentryIntegration.shared.sendWithStacktrace(message: "Error altering table", tag: SentryTag.browserDB, severity: .error, extra: extra)
                 return .failure
             }
         }
@@ -1535,7 +1535,7 @@ open class BrowserSchema: Schema {
             } catch let err as NSError {
                 log.error("Error altering clients table: \(err.localizedDescription); SQL was \(sql)")
                 let extra = ["table": "clients", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
-                Sentry.shared.sendWithStacktrace(message: "Error altering table", tag: SentryTag.browserDB, severity: .error, extra: extra)
+                SentryIntegration.shared.sendWithStacktrace(message: "Error altering table", tag: SentryTag.browserDB, severity: .error, extra: extra)
                 return .failure
             }
         }
@@ -1570,8 +1570,7 @@ open class BrowserSchema: Schema {
         let chunks = chunk(pairs, by: BrowserDB.MaxVariableNumber - (BrowserDB.MaxVariableNumber % 2))
         for chunk in chunks {
             let ins =
-                "INSERT INTO \(tmpTable) (url, domain) VALUES " +
-                Array<String>(repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
+                "INSERT INTO \(tmpTable) (url, domain) VALUES " + [String](repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
             if !self.run(db, sql: ins, args: Array(chunk)) {
                 log.error("Couldn't insert domains into temporary table. Aborting migration.")
                 return false

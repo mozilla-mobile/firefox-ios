@@ -12,8 +12,8 @@ protocol OnViewDismissable: AnyObject {
 }
 
 class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
-    var onViewDismissed: (() -> Void)? = nil
-    var onViewWillDisappear: (() -> Void)? = nil
+    var onViewDismissed: (() -> Void)?
+    var onViewWillDisappear: (() -> Void)?
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -28,16 +28,15 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
     }
 }
 
-extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
+extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil) {
-        Sentry.shared.clearBreadcrumbs()
-
         updateFindInPageVisibility(visible: false)
 
-        self.tabTrayViewController = TabTrayViewController(tabTrayDelegate: self,
-                                                           profile: profile,
-                                                           showChronTabs: shouldShowChronTabs(),
-                                                           tabToFocus: tabToFocus)
+        self.tabTrayViewController = TabTrayViewController(
+            tabTrayDelegate: self,
+            profile: profile,
+            tabToFocus: tabToFocus,
+            tabManager: tabManager)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
             let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
@@ -76,31 +75,6 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         ratingPromptManager.showRatingPromptIfNeeded()
     }
 
-    private func shouldShowChronTabs() -> Bool {
-        var shouldShowChronTabs = false // default don't show
-        let chronDebugValue = profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey)
-        let chronLPValue = chronTabsUserResearch?.chronTabsState ?? false
-
-        // Only allow chron tabs on iPhone
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            // Respect debug mode chron tab value on
-            if chronDebugValue != nil {
-                shouldShowChronTabs = chronDebugValue!
-            // Respect build channel based settings
-            } else if chronDebugValue == nil {
-                if featureFlags.isFeatureActiveForBuild(.chronologicalTabs) {
-                    shouldShowChronTabs = true
-                } else {
-                    // Respect LP value
-                    shouldShowChronTabs = chronLPValue
-                }
-                profile.prefs.setBool(shouldShowChronTabs, forKey: PrefsKeys.ChronTabsPrefKey)
-            }
-        }
-
-        return shouldShowChronTabs
-    }
-
     func urlBarDidPressReload(_ urlBar: URLBarView) {
         tabManager.selectedTab?.reload()
     }
@@ -112,67 +86,15 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         self.present(controller, animated: true, completion: nil)
     }
 
-    func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
-        guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString, !urlBar.inOverlayMode else { return }
-
-        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
-            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
-        }
-
-        let findInPageAction = {
-            self.updateFindInPageVisibility(visible: true)
-        }
-
-        let reportSiteIssue = {
-            self.openURLInNewTab(SupportUtils.URLForReportSiteIssue(self.urlBar.currentURL?.absoluteString))
-        }
-
-        let successCallback: (String, ButtonToastAction) -> Void = { (successMessage, toastAction) in
-            switch toastAction {
-            case .removeBookmark:
-                let toast = ButtonToast(labelText: successMessage, buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
-                    isButtonTapped ? self.addBookmark(url: urlString) : nil
-                }
-                self.show(toast: toast)
-            default:
-                SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
-            }
-        }
-
-        let deferredBookmarkStatus: Deferred<Maybe<Bool>> = fetchBookmarkStatus(for: urlString)
-        let deferredPinnedTopSiteStatus: Deferred<Maybe<Bool>> = fetchPinnedTopSiteStatus(for: urlString)
-
-        // Wait for both the bookmark status and the pinned status
-        deferredBookmarkStatus.both(deferredPinnedTopSiteStatus).uponQueue(.main) {
-            let isBookmarked = $0.successValue ?? false
-            let isPinned = $1.successValue ?? false
-            let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
-                                                 findInPage: findInPageAction, reportSiteIssue: reportSiteIssue, presentableVC: self, isBookmarked: isBookmarked,
-                                                 isPinned: isPinned, success: successCallback)
-            self.presentSheetWith(actions: pageActions, on: self, from: button)
-        }
-    }
-
-    func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
-        guard let tab = tabManager.selectedTab else { return }
-        guard let url = tab.canonicalURL?.displayURL, self.presentedViewController == nil else {
-            return
-        }
-
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        presentActivityViewController(url, tab: tab, sourceView: button, sourceRect: button.bounds, arrowDirection: .up)
-    }
-
     func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
             let etpViewModel = EnhancedTrackingProtectionMenuVM(tab: tab, profile: profile, tabManager: tabManager)
             etpViewModel.onOpenSettingsTapped = {
-                let settingsTableViewController = AppSettingsTableViewController()
-                settingsTableViewController.profile = self.profile
-                settingsTableViewController.tabManager = self.tabManager
-                settingsTableViewController.settingsDelegate = self
-                settingsTableViewController.deeplinkTo = .contentBlocker
+                let settingsTableViewController = AppSettingsTableViewController(
+                    with: self.profile,
+                    and: self.tabManager,
+                    delegate: self,
+                    deeplinkingTo: .contentBlocker)
 
                 let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
                 controller.presentingModalViewControllerDelegate = self
@@ -258,8 +180,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         }
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
+
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
+        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let viewModel = PhotonActionSheetViewModel(actions: [urlActions], closeButtonTitle: .CloseButtonTitle, modalStyle: style)
+        presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
     func locationActionsForURLBar(_ urlBar: URLBarView) -> [AccessibleAction] {
@@ -289,7 +214,9 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
         generator.impactOccurred()
 
         let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-        self.presentSheetWith(actions: [urlActions], on: self, from: urlBar, suppressPopover: shouldSuppress)
+        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let viewModel = PhotonActionSheetViewModel(actions: [urlActions], closeButtonTitle: .CloseButtonTitle, modalStyle: style)
+        self.presentSheetWith(viewModel: viewModel, on: self, from: urlBar)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
@@ -370,7 +297,11 @@ extension BrowserViewController: URLBarDelegate, FeatureFlagsProtocol {
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
             searchTelemetry?.shouldSetUrlTypeSearch = true
-            tab.updateTimerAndObserving(state: .navSearchLoaded, searchTerm: text, searchProviderUrl: searchURL.absoluteString, nextUrl: "")
+
+            let searchData = TabGroupData(searchTerm: text,
+                                          searchUrl: searchURL.absoluteString,
+                                          nextReferralUrl: "")
+            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.

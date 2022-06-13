@@ -20,7 +20,7 @@ class TabTrayViewControllerTests: XCTestCase {
 
         profile = TabManagerMockProfile()
         manager = TabManager(profile: profile, imageStore: nil)
-        tabTray = TabTrayViewController(tabTrayDelegate: nil, profile: profile, showChronTabs: false, tabToFocus: nil, tabManager: manager)
+        tabTray = TabTrayViewController(tabTrayDelegate: nil, profile: profile, tabToFocus: nil, tabManager: manager)
         gridTab = GridTabViewController(tabManager: manager, profile: profile)
         manager.addDelegate(gridTab)
     }
@@ -43,7 +43,7 @@ class TabTrayViewControllerTests: XCTestCase {
 
         // Wait for notification of .TabClosed when tab is removed
         weak var expectation = self.expectation(description: "notificationReceived")
-        NotificationCenter.default.addObserver(forName: .TabClosed, object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: .UpdateLabelOnTabClosed, object: nil, queue: nil) { notification in
             expectation?.fulfill()
         }
         manager.removeTab(tabToRemove)

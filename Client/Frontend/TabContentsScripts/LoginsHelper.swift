@@ -181,7 +181,7 @@ class LoginsHelper: TabContentScript {
             tab?.removeSnackbar(existingPrompt)
         }
 
-        snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: "key"))
+        snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: ImageIdentifiers.key))
         let dontSave = SnackButton(title: .LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton", bold: false) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
@@ -214,7 +214,7 @@ class LoginsHelper: TabContentScript {
             tab?.removeSnackbar(existingPrompt)
         }
 
-        snackBar = TimerSnackBar(text: formatted, img: UIImage(named: "key"))
+        snackBar = TimerSnackBar(text: formatted, img: UIImage(named: ImageIdentifiers.key))
         let dontSave = SnackButton(title: .LoginsHelperDontUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton", bold: false) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil

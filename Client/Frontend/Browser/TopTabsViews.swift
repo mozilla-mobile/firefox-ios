@@ -5,10 +5,10 @@
 import Foundation
 import Shared
 
-class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
+class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, ReusableCell {
 
-    static let Identifier = "TopTabCellIdentifier"
-    static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
+    // MARK: - Properties
+    static let ShadowOffsetSize: CGFloat = 2 // The shadow is used to hide the tab separator
 
     var isSelectedTab = false {
         didSet {
@@ -21,6 +21,9 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
         }
     }
 
+    weak var delegate: TopTabCellDelegate?
+
+    // MARK: - UI Elements
     let selectedBackground: UIView = {
         let view = UIView()
         view.clipsToBounds = false
@@ -37,7 +40,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
 
     let titleText: UILabel = {
         let titleText = UILabel()
-        titleText.textAlignment = .left
+        titleText.textAlignment = .natural
         titleText.isUserInteractionEnabled = false
         titleText.numberOfLines = 1
         titleText.lineBreakMode = .byCharWrapping
@@ -67,8 +70,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
         return closeButton
     }()
 
-    weak var delegate: TopTabCellDelegate?
-
+    // MARK: - Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -105,7 +107,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
     func configureWith(tab: Tab, isSelected selected: Bool) {
         isSelectedTab = selected
 
-        titleText.text = getTabTrayTitle(tab: tab)
+        titleText.text = tab.getTabTrayTitle()
         accessibilityLabel = getA11yTitleLabel(tab: tab)
         isAccessibilityElement = true
 
@@ -142,21 +144,21 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell {
 }
 
 class TopTabFader: UIView {
-    
+
     enum ActiveSide {
         case left
         case right
         case both
         case none
     }
-    
+
     private var activeSide: ActiveSide = .both
-    
+
     private lazy var hMaskLayer: CAGradientLayer = {
         let hMaskLayer = CAGradientLayer()
         let innerColor = UIColor.Photon.White100.cgColor
         let outerColor = UIColor(white: 1, alpha: 0.0).cgColor
-        
+
         hMaskLayer.anchorPoint = .zero
         hMaskLayer.startPoint = CGPoint(x: 0, y: 0.5)
         hMaskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
@@ -168,14 +170,14 @@ class TopTabFader: UIView {
         super.init(frame: .zero)
         layer.mask = hMaskLayer
     }
-    
+
     func setFader(forSides side: ActiveSide) {
         if activeSide != side {
             self.activeSide = side
             setNeedsLayout()
         }
     }
-    
+
     internal override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -186,17 +188,17 @@ class TopTabFader: UIView {
         switch activeSide {
         case .left:
             hMaskLayer.locations = [0.00, widthA, 1.0, 1.0]
-            
+
         case .right:
             hMaskLayer.locations = [0.00, 0.00, widthB, 1.0]
-            
+
         case .both:
             hMaskLayer.locations = [0.00, widthA, widthB, 1.0]
-            
+
         case .none:
             hMaskLayer.locations = [0.00, 0.00, 1.0, 1.0]
         }
-        
+
         hMaskLayer.frame = CGRect(width: frame.width, height: frame.height)
     }
 

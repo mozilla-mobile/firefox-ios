@@ -12,7 +12,7 @@ enum LibraryPanelMainState: Equatable {
 
     // When comparing states, we must also ensure we're comparing substates,
     // in the cases where they are present.
-    static func ==(lhs: LibraryPanelMainState, rhs: LibraryPanelMainState) -> Bool {
+    static func == (lhs: LibraryPanelMainState, rhs: LibraryPanelMainState) -> Bool {
         switch (lhs, rhs) {
         case (let .bookmarks(subState1), let .bookmarks(subState2)),
              (let .history(subState1), let .history(subState2)):
@@ -28,8 +28,8 @@ enum LibraryPanelMainState: Equatable {
     // Allows detecting whether we're changing main panels or not
     func panelIsDifferentFrom(_ newState: LibraryPanelMainState) -> Bool {
         switch (self, newState) {
-        case (.bookmarks(_), .bookmarks(_)),
-             (.history(_), .history(_)),
+        case (.bookmarks, .bookmarks),
+             (.history, .history),
              (.downloads, .downloads),
              (.readingList, .readingList):
             return false
@@ -46,6 +46,7 @@ enum LibraryPanelSubState {
     case inFolder
     case inFolderEditMode
     case itemEditMode
+    case search
 
     // The following two functions enable checking that substate moves are legal.
     // For example, you can move from .mainView to .inFolder, but not from
@@ -132,9 +133,9 @@ class LibraryPanelViewState {
 
     private func storeCurrentState() {
         switch state {
-        case .bookmarks(_):
+        case .bookmarks:
             bookmarksState = state
-        case .history(_):
+        case .history:
             historyState = state
         case .downloads, .readingList:
             return
@@ -146,7 +147,8 @@ class LibraryPanelViewState {
             self.state = category
         } else if newSubviewState.isChildState(of: oldSubviewState) || newSubviewState.isParentState(of: oldSubviewState) || oldSubviewState == newSubviewState {
             self.state = newState
+        } else if newSubviewState == .search || oldSubviewState == .search {
+            self.state = newState
         }
-
     }
 }

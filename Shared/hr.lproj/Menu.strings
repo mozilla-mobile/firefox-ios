@@ -1,9 +1,6 @@
 /* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
 "Menu.AddBookmarkAction.Title" = "Zabilježi ovu stranicu";
 
-/* Label for the button, displayed in the menu, used to create a bookmark for the current website. */
-"Menu.AddBookmarkAction2.Title" = "Dodaj zabilješku";
-
 /* Label for the button, displayed in the menu, used to add a page to the reading list. */
 "Menu.AddToReadingList.Title" = "Dodaj na popis za čitanje";
 

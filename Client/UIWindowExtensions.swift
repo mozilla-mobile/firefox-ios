@@ -35,4 +35,8 @@ extension UIWindow {
     static var interfaceOrientation: UIInterfaceOrientation? {
         keyWindow?.windowScene?.interfaceOrientation
     }
+
+    static var statusBarHeight: CGFloat {
+        keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+    }
 }

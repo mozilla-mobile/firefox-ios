@@ -755,7 +755,7 @@
 "Load original page" = "मूल पृष्ठ लोड करें";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
-"Loading content…" = "सामग्री लोड हो रही है ...";
+"Loading content…" = "सामग्री लोड हो रही है…";
 
 /* Authentication prompt log in button */
 "Log in" = "लॉग इन";
@@ -867,9 +867,6 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "पठन सूची में जोड़ा गया";
 
-/* Label for the button, displayed in the menu, takes you to sync sign in when pressed. */
-"Menu.BackUpAndSync.Label" = "बैकअप और डेटा सिंक करें";
-
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "बुकमार्क";
 
@@ -938,9 +935,6 @@
 
 /* Toast displayed to the user after removing the item from the Top Sites. */
 "Menu.RemovePin.Confirm" = "शीर्ष साइटों से हटाया गया";
-
-/* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2" = "शॉर्टकट से हटाया गया";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "टैब भेजा गया";
@@ -1476,9 +1470,6 @@
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
 "Settings.Home.Option.RecentlyVisited" = "हाल ही में देखे गए";
 
-/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recent Searches section on the Firefox homepage on or off */
-"Settings.Home.Option.RecentSearches" = "हाल के खोज";
-
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "शॉर्टकट";
 
@@ -1493,9 +1484,6 @@
 
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "खुलता हुआ स्क्रीन";
-
-/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
-"Settings.Home.Option.Title" = "फ़ायरफ़ॉक्स मुखपृष्ठ";
 
 /* Button in settings to clear the home page. */
 "Settings.HomePage.Clear.Button" = "खाली करें";
@@ -1659,7 +1647,7 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "अध्ययन";
 
-/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Inactive Tabs feature, a separate section of inactive tabs that appears in the Tab Tray, on or off */
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "निष्क्रिय टैब";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
@@ -1920,9 +1908,6 @@
 
 /* In the Tabs Tray, summoned from the homepage, the title for the section containing non-grouped tabs, which will appear below grouped tabs */
 "TabTray.OtherTabs.Title" = "अन्य टैब";
-
-/* The title for the tab tray in private mode */
-"TabTray.PrivateTitle" = "निजी टैब";
 
 /* Title for the recently closed tabs section. This section shows a list of all the tabs that have been recently closed. */
 "TabTray.RecentlyClosed.SectionTitle" = "हाल ही में बंद हुआ";
