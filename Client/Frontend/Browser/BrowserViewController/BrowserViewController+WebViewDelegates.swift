@@ -498,6 +498,13 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
         if url.scheme == "data" {
+
+            // Only filter top-level navigation, not on data URL subframes
+            guard navigationAction.targetFrame?.isMainFrame ?? false else {
+                decisionHandler(.allow)
+                return
+            }
+
             let url = url.absoluteString
             // Allow certain image types
             if url.hasPrefix("data:image/") && !url.hasPrefix("data:image/svg+xml") {
@@ -514,8 +521,7 @@ extension BrowserViewController: WKNavigationDelegate {
             // Allow plain text types.
             // Note the format of data URLs is `data:[<media type>][;base64],<data>` with empty <media type> indicating plain text.
             if url.hasPrefix("data:;base64,") || url.hasPrefix("data:,")
-                || url.hasPrefix("data:text/plain,") || url.hasPrefix("data:text/plain;")
-                || url.hasPrefix("data:text/html,") || url.hasPrefix("data:text/html;") {
+                || url.hasPrefix("data:text/plain,") || url.hasPrefix("data:text/plain;") {
                 decisionHandler(.allow)
                 return
             }
