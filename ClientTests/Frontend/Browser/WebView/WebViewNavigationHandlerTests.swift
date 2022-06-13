@@ -7,7 +7,7 @@
 import WebKit
 import XCTest
 
-class WebviewNavigationHandlerTests: XCTestCase {
+class WebViewNavigationHandlerTests: XCTestCase {
 
     // MARK: - Data scheme
 
@@ -16,7 +16,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows subframes")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: false)
 
@@ -29,7 +29,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .cancel, "Doesnt allow null target frame")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
 
         let policy = WKNavigationActionMock()
         navigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
@@ -41,7 +41,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .cancel, "Cancel no data URL on main frame")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -54,7 +54,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .cancel, "Cancel generic data URL")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -67,7 +67,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows image")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -80,7 +80,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .cancel, "Cancel SVG + XML images")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -93,7 +93,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows jpg images")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -106,7 +106,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows video")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -119,7 +119,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows application PDF")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -132,7 +132,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows application JSON")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -145,7 +145,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows base 64")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -158,7 +158,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows data comma")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -171,7 +171,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows text plain comma")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
@@ -184,7 +184,7 @@ class WebviewNavigationHandlerTests: XCTestCase {
             XCTAssertEqual(policy, .allow, "Allows text plain semicolon")
         }
 
-        let navigationHandler = WebviewNavigationHandler(decisionHandler: handler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 

@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-protocol NavigationHandler {
+protocol WebViewNavigationHandler {
     var decisionHandler: (WKNavigationActionPolicy) -> Void { get }
     func filterDataScheme(url: URL, navigationAction: WKNavigationAction)
 }
@@ -15,7 +15,7 @@ protocol NavigationHandler {
 /// method.
 
 /// Note that this is a work in progress to remove navigation handler code from BrowserViewController+WebViewDelegates
-struct WebviewNavigationHandler: NavigationHandler {
+struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
 
     enum Scheme: String {
         case data
