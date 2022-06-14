@@ -201,8 +201,9 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
             guard let self = self,
-                    let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
-                    viewModel.shouldShow else {
+                  let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
+                  viewModel.shouldShow
+            else {
                 return nil
             }
 
