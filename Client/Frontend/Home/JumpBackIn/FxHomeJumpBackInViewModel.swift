@@ -311,6 +311,16 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
 // MARK: FxHomeSectionHandler
 extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
 
+    func configure(_ collectionView: UICollectionView,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+
+        refreshData(for: collectionView.traitCollection)
+
+        let identifier = sectionType.cellIdentifier
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
+        return configure(cell, at: indexPath)
+    }
+
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
 
@@ -321,8 +331,6 @@ extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
             configureCellForGroups(group: group, cell: jumpBackInCell, indexPath: indexPath)
         } else if let item = jumpBackInList.tabs[safe: indexPath.row] {
             configureCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
-        } else {
-            return UICollectionViewCell()
         }
 
         return cell
