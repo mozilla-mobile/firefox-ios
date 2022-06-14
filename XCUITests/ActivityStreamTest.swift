@@ -184,7 +184,8 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        sleep(3)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)

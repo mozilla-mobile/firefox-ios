@@ -1351,7 +1351,7 @@ app:
 meta:
   bitrise.io:
     stack: osx-xcode-13.2.x
-    machine_type_id: g2.4core
+    machine_type_id: g2.8core
 
 trigger_map:
 - push_branch: main
