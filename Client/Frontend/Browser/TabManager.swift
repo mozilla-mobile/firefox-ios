@@ -79,8 +79,6 @@ class TabManager: NSObject, FeatureFlaggable {
         }
     }
 
-    var closure: (() -> Void)?
-
     fileprivate(set) var tabs = [Tab]()
     fileprivate var _selectedIndex = -1
 

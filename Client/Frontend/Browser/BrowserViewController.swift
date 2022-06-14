@@ -1968,17 +1968,13 @@ extension BrowserViewController: TabManagerDelegate {
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
 
-        tabManager.closure = { [weak self] in
-            guard let self = self else { return }
-            if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
-                if tab.url == nil, !tab.isRestoring {
-                    self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
-                } else {
-                    self.urlBar.leaveOverlayMode()
-                }
+        if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+            if tab.url == nil, !tab.isRestoring {
+                urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+            } else {
+                urlBar.leaveOverlayMode()
             }
         }
-
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
