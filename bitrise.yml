@@ -4,20 +4,20 @@ project_type: ios
 pipelines:
   pipeline_multiple_shards:
     stages:
-      - stage_1: {}
-      - stage_2: {}
+    - stage_1: {}
+    - stage_2: {}
 stages:
   stage_1:
     workflows:
-      - configure_build: {}
+    - configure_build: {}
   stage_2:
     workflows:
-      - build_and_test_1_SmokeTest2: {}
-      - build_and_test_2_SmokeTest: {}
-      - build_and_test_3_SmokeTest3: {}
-      - build_and_test_4_SmokeTest4: {}
-      - build_and_test_5_UnitTest: {}
-      - just_build_fennec_to_get_warnings: {}
+    - build_and_test_1_SmokeTest2: {}
+    - build_and_test_2_SmokeTest: {}
+    - build_and_test_3_SmokeTest3: {}
+    - build_and_test_4_SmokeTest4: {}
+    - build_and_test_5_UnitTest: {}
+    - just_build_fennec_to_get_warnings: {}
 workflows:
   configure_build:
     before_run:
@@ -41,7 +41,7 @@ workflows:
     - script@1.1:
         title: Build for Testing
         inputs:
-        - content: |+
+        - content: |
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
@@ -126,19 +126,19 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
-          title: Test without Building
-          inputs:
-            - content: |
-                #!/usr/bin/env bash
-                set -ex 
-                
-                ls -la
-                ls ./Users/vagrant/git/XCUITests
-                cp ./Users/vagrant/git/XCUITests/* .
-                mv ./Users/vagrant/git/* .
-                echo "-- test-without-building --"
+        title: Test without Building
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -ex 
 
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
+            ls -la
+            ls ./Users/vagrant/git/XCUITests
+            cp ./Users/vagrant/git/XCUITests/* .
+            mv ./Users/vagrant/git/* .
+            echo "-- test-without-building --"
+
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" test-without-building
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -164,19 +164,19 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
-          title: Test without Building
-          inputs:
-            - content: |
-                #!/usr/bin/env bash
-                set -ex 
+        title: Test without Building
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -ex 
 
-                ls -la
-                ls ./Users/vagrant/git/XCUITests
-                cp ./Users/vagrant/git/XCUITests/* .
-                mv ./Users/vagrant/git/* .
+            ls -la
+            ls ./Users/vagrant/git/XCUITests
+            cp ./Users/vagrant/git/XCUITests/* .
+            mv ./Users/vagrant/git/* .
 
-                echo "-- test-without-building --"
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
+            echo "-- test-without-building --"
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -202,18 +202,18 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
-          title: Test without Building
-          inputs:
-            - content: |
-                #!/usr/bin/env bash
-                set -ex 
-                ls ./Users/vagrant/git/XCUITests
-                cp ./Users/vagrant/git/XCUITests/* .
-                mv ./Users/vagrant/git/* .
-                ls -la
+        title: Test without Building
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -ex 
+            ls ./Users/vagrant/git/XCUITests
+            cp ./Users/vagrant/git/XCUITests/* .
+            mv ./Users/vagrant/git/* .
+            ls -la
 
-                echo "-- test-without-building --"
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "Smoketest3" "test-without-building"
+            echo "-- test-without-building --"
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "Smoketest3" "test-without-building"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -239,19 +239,19 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
-          title: Test without Building
-          inputs:
-            - content: |
-                #!/usr/bin/env bash
-                set -ex 
+        title: Test without Building
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -ex 
 
-                ls ./Users/vagrant/git/XCUITests
-                cp ./Users/vagrant/git/XCUITests/* .
-                mv ./Users/vagrant/git/* .
-                ls -la
+            ls ./Users/vagrant/git/XCUITests
+            cp ./Users/vagrant/git/XCUITests/* .
+            mv ./Users/vagrant/git/* .
+            ls -la
 
-                echo "-- test-without-building --"
-                xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "Smoketest4" "test-without-building"
+            echo "-- test-without-building --"
+            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 11,OS=latest" -testPlan "Smoketest4" "test-without-building"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -298,11 +298,11 @@ workflows:
         is_always_run: true
         inputs:
         - content: |-
-                set -euxo pipefail
-                echo "-- compress --"
-                
-                cd "${BITRISE_DEPLOY_DIR}/"
-                exec zip -0 -qr "${BITRISE_SOURCE_DIR}/TestResults.zip" "/Users/vagrant/git/xcodebuild.xcresult"
+            set -euxo pipefail
+            echo "-- compress --"
+
+            cd "${BITRISE_DEPLOY_DIR}/"
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/TestResults.zip" "/Users/vagrant/git/xcodebuild.xcresult"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/TestResults.zip"
@@ -697,7 +697,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-13.4.x
+        stack: osx-xcode-14.0.x
         machine_type_id: g2.4core
   RunAllXCUITests:
     steps: []
@@ -1349,9 +1349,9 @@ app:
     BITRISE_BETA_VERSION: '101.1'
 
 meta:
-      bitrise.io:
-        stack: osx-xcode-13.2.x
-        machine_type_id: g2.4core
+  bitrise.io:
+    stack: osx-xcode-13.2.x
+    machine_type_id: g2.4core
 
 trigger_map:
 - push_branch: main
