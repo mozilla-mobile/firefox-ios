@@ -301,7 +301,7 @@ class HistoryTests: BaseTestCase {
         // Workaround as the item does not appear if there is only that tab open
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
