@@ -995,7 +995,8 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
         case (.action, .view, .historyHighlightContextualMenu, _, let extras):
             if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
-                GleanMetrics.FirefoxHomePage.historyHighlightsContext.record(GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type))
+                let contextExtra = GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type)
+                GleanMetrics.FirefoxHomePage.historyHighlightsContext.record(contextExtra)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }

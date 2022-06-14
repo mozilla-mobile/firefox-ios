@@ -59,7 +59,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
                             completionHandler: @escaping () -> PhotonActionSheet?
     ) {
         guard let contextMenu = completionHandler() else { return }
-        self.delegate?.present(contextMenu, animated: true, completion: nil)
+        delegate?.present(contextMenu, animated: true, completion: nil)
     }
 
     func getContextMenuActions(for highlightItem: HighlightItem,
@@ -90,7 +90,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
                                      tapHandler: { _ in
 
             self.viewModel.historyHighlightsViewModel.delete(highlightItem)
-            self.sendTopSiteContextualTelemetry(type: .remove)
+            self.sendHistoryHighlightContextualTelemetry(type: .remove)
         }).items]
     }
 
@@ -270,7 +270,7 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
     }
 
-    private func sendHistoryHighlightContextualTelemetry(type: ContextualActionType) {
+    func sendHistoryHighlightContextualTelemetry(type: ContextualActionType) {
         let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,

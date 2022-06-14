@@ -18,7 +18,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.shownSections.count, 2)
     }
 
-    func testNumberOfSection_updatingData_adds2Sections() {
+    func testNumberOfSection_updatingData_adds4Sections() {
         let collectionView = UICollectionView(frame: CGRect.zero,
                                               collectionViewLayout: UICollectionViewLayout())
         let profile = MockProfile()
