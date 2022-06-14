@@ -121,7 +121,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
     private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
-        guard let url = tabUrl?.absoluteString else {
+        var url: String?
+
+        if let tabUrl = tabUrl, tabUrl.isReaderModeURL, let tabUrlDecoded = tabUrl.decodeReaderModeURL {
+            url = tabUrlDecoded.absoluteString
+        } else {
+            url = tabUrl?.absoluteString
+        }
+
+        guard let url = url else {
             dataLoadingCompletion?()
             return
         }
