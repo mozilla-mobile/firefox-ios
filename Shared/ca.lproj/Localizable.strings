@@ -231,7 +231,7 @@
 "Changes color theme." = "Canvia el tema de color.";
 
 /* Accessibility hint for the font type buttons in reader mode display settings */
-"Changes font type." = "Canvia el tipus de lletra.";
+"Changes font type." = "Canvia la lletra.";
 
 /* The button to open a new tab with the copied link */
 "ClipboardToast.GoToCopiedLink.Button" = "Vés";
@@ -345,6 +345,9 @@
    Title for default search engine picker.
    Title for default search engine settings section. */
 "Default Search Engine" = "Motor de cerca per defecte";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Tanca";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Paràmetres de visualització";
@@ -635,7 +638,7 @@
 "HomePage.Set.Dialog.Cancel" = "Cancel·la";
 
 /* Alert dialog body when the user opens the home page for the first time. */
-"HomePage.Set.Dialog.Message" = "Podeu canviar-ho en qualsevol moment en els Paràmetres.";
+"HomePage.Set.Dialog.Message" = "Podeu canviar-ho en qualsevol moment en els Paràmetres";
 
 /* Button accepting changes setting the home page for the first time. */
 "HomePage.Set.Dialog.OK" = "Defineix com a pàgina d'inici";
@@ -1126,7 +1129,7 @@
 "Menu.TrackingProtectionBlocking.Description" = "El Firefox ha blocat les parts de la pàgina que podrien fer el seguiment de la vostra navegació.";
 
 /* The description of the Tracking Protection menu item when tracking is enabled */
-"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloca els elements us fan el seguiment";
+"Menu.TrackingProtectionBlockingDisabled.Description" = "Bloca els elements que us fan el seguiment";
 
 /* The title that shows the number of cross-site cookies blocked */
 "Menu.TrackingProtectionCrossSiteCookies.Title" = "Galetes de seguiment entre llocs";
@@ -1224,6 +1227,18 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "D'acord";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "Primers passos";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "Compromesos amb la promesa d'una Internet millor per a tothom.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "Ara no";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "Trieu un fons de pantalla del Firefox";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Comença a navegar";

@@ -249,7 +249,7 @@ extension BrowserViewController: WKUIDelegate {
                     let changeCount = pasteboard.changeCount
                     let application = UIApplication.shared
                     var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
-                    taskId = application.beginBackgroundTask (expirationHandler: {
+                    taskId = application.beginBackgroundTask(expirationHandler: {
                         application.endBackgroundTask(taskId)
                     })
 
@@ -523,7 +523,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // Handle keyboard shortcuts on link presses from webpage navigation (ex: Cmd + Tap on Link)
-        if navigationAction.navigationType == .linkActivated, navigateLinkShortcutIfNeeded(url: url) {
+        if #available(iOS 13.4, *), navigationAction.navigationType == .linkActivated, navigateLinkShortcutIfNeeded(url: url) {
             decisionHandler(.cancel)
             return
         }

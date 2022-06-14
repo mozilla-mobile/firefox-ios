@@ -16,14 +16,7 @@ class TodayWidgetViewModel {
     }
 
     func updateCopiedLink() {
-        if !UIPasteboard.general.hasURLs {
-            guard let searchText = UIPasteboard.general.string else {
-                TodayModel.searchedText = nil
-                return
-            }
-            TodayModel.searchedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            self.AppearanceDelegate?.openContainingApp("?text=\(TodayModel.searchedText ?? "")", query: "open-text")
-        } else {
+        if UIPasteboard.general.hasURLs {
             UIPasteboard.general.asyncURL().uponQueue(.main) { res in
                 guard let url: URL? = res.successValue else {
                     TodayModel.copiedURL = nil
@@ -32,6 +25,13 @@ class TodayWidgetViewModel {
                 TodayModel.copiedURL = url
                 self.AppearanceDelegate?.openContainingApp("?url=\(TodayModel.copiedURL?.absoluteString.escape() ?? "")", query: "open-url")
             }
+        } else {
+            guard let searchText = UIPasteboard.general.string else {
+                TodayModel.searchedText = nil
+                return
+            }
+            TodayModel.searchedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            self.AppearanceDelegate?.openContainingApp("?text=\(TodayModel.searchedText ?? "")", query: "open-text")
         }
     }
 }

@@ -191,10 +191,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
     }
 
-    var profile: Profile?
-    private var isBottomSearchBar: Bool {
-        BrowserViewController.foregroundBVC().isBottomSearchBar
-    }
+    var profile: Profile
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
@@ -207,14 +204,17 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         commonInit()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func updateSearchEngineImage() {
-        guard let profile = profile else { return }
         self.searchIconImageView.image = profile.searchEngines.defaultEngine.image
+    }
+
+    private func isBottomSearchBar() -> Bool {
+        guard SearchBarSettingsViewModel.isEnabled else { return false }
+        return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
     }
 
     fileprivate func commonInit() {
@@ -327,7 +327,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         super.updateConstraints()
 
         line.snp.remakeConstraints { make in
-            if isBottomSearchBar {
+            if isBottomSearchBar() {
                 make.top.equalTo(self).offset(0)
             } else {
                 make.bottom.equalTo(self)
@@ -338,7 +338,7 @@ class URLBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
 
         progressBar.snp.remakeConstraints { make in
-            if isBottomSearchBar {
+            if isBottomSearchBar() {
                 make.bottom.equalTo(snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
             } else {
                 make.top.equalTo(snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)

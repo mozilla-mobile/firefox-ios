@@ -58,11 +58,11 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     func testGetAllRecords() {
-        let _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
         let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         if let record = createResult2.successValue {
-            let _ = updateRecord(record, unread: false)
+            _ = updateRecord(record, unread: false)
         }
 
         let getAllResult = readingList.getAvailableRecords().value
@@ -72,9 +72,9 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     func testGetNewRecords() {
-        let _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let _ = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         let getAllResult = getAllRecords()
         if let records = getAllResult.successValue {
             XCTAssertEqual(3, records.count)
@@ -109,16 +109,16 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     func testDeleteAllRecords() {
-        let _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let _ = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
 
         let getAllResult1 = readingList.getAvailableRecords().value
         if let records = getAllResult1.successValue {
             XCTAssertNotEqual(0, records.count)
         }
 
-        let _ = deleteAllRecords()
+        _ = deleteAllRecords()
 
         let getAllResult2 = getAllRecords()
         if let records = getAllResult2.successValue {

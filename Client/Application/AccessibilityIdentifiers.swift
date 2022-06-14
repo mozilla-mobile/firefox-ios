@@ -23,6 +23,8 @@ public struct AccessibilityIdentifiers {
 
     struct FirefoxHomepage {
 
+        static let collectionView = "FxCollectionView"
+
         struct HomeTabBanner {
             static let ctaButton = "HomeTabBanner.ctaButton"
         }
@@ -48,8 +50,19 @@ public struct AccessibilityIdentifiers {
         }
 
         struct TopSites {
-            static let section = "TopSitesSection"
             static let itemCell = "TopSitesCell"
+        }
+
+        struct Pocket {
+            static let itemCell = "PocketCell"
+        }
+
+        struct HistoryHighlights {
+            static let itemCell = "HistoryHighlightsCell"
+        }
+
+        struct JumpBackIn {
+            static let itemCell = "JumpBackInCell"
         }
     }
 
@@ -87,6 +100,14 @@ public struct AccessibilityIdentifiers {
         struct GroupedList {
             static let tableView = "grouped-items-table-view"
         }
+    }
+
+    struct Onboarding {
+        static let welcomeCard = "WelcomeCard"
+        static let wallpapersCard = "WallpapersCard"
+        static let signSyncCard = "SignSyncCard"
+        static let closeButton = "CloseButton"
+        static let pageControl = "PageControl"
     }
 
     struct Settings {

@@ -1,12 +1,12 @@
 /* The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android. */
-"Bookmarks Menu" = "نشانیاں مینیو";
+"Bookmarks Menu" = "بک مارکس مینیو";
 
 /* The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android. */
-"Bookmarks Toolbar" = "نشانیاں ٹول بار";
+"Bookmarks Toolbar" = "بک مارکس ٹول بار";
 
 /* The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android. */
-"Mobile Bookmarks" = "موبائل نشانیاں";
+"Mobile Bookmarks" = "موبائل بک مارکس";
 
 /* The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android. */
-"Unsorted Bookmarks" = "غیر چھانٹی شدہ نشانیاں";
+"Unsorted Bookmarks" = "غیر ترتیب شدہ بک مارکس";
 

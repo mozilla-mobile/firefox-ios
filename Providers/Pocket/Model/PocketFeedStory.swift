@@ -11,7 +11,7 @@ import Foundation
  For a sample feed item check ClientTests/pocketglobalfeed.json
  */
 
-struct PocketFeedStory: Equatable {
+struct PocketFeedStory {
     let title: String
     let url: URL
     let domain: String
@@ -19,7 +19,7 @@ struct PocketFeedStory: Equatable {
     let storyDescription: String
     let imageURL: URL
 
-    static func parseJSON(list: Array<[String: Any]>) -> [PocketFeedStory] {
+    static func parseJSON(list: [[String: Any]]) -> [PocketFeedStory] {
         return list.compactMap({ (storyDict) -> PocketFeedStory? in
             guard let urlS = storyDict["url"] as? String,
                   let domain = storyDict["domain"] as? String,

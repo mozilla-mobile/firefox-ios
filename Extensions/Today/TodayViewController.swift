@@ -47,10 +47,10 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabelV2, buttonImageName: "go-to-copied-link")
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         return button
-        }()
+    }()
 
-// MARK: Feature for V29
-// Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
+    // MARK: Feature for V29
+    // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.ClosePrivateTabsLabelV2, buttonImageName: "close-private-tabs")
         button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)

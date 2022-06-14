@@ -1,18 +1,9 @@
 disabled_rules: # rule identifiers to exclude from running
 # Auto-correctable rules
 - trailing_comma
-- syntactic_sugar
-- statement_position
-- redundant_objc_attribute
-- redundant_discardable_let
 - protocol_property_accessors_order
 - private_over_fileprivate
-- no_space_in_method_call
 - mark
-- legacy_nsgeometry_functions
-- legacy_constructor
-- legacy_constant
-- legacy_cggeometry_functions
 - control_statement
 
 # Disabled all default rules
@@ -116,6 +107,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - UITests/
   - XCUITests/
   - l10n-screenshots-dd/
+  - DerivedData/
 
 # reporter: "json" # reporter type (xcode, json, csv, checkstyle)
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)

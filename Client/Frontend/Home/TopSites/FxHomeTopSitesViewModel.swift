@@ -20,8 +20,7 @@ class FxHomeTopSitesViewModel {
 
     struct UX {
         static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
-        // This needs to be removed once we have self sizing sections
-        static let parentInterItemSpacing: CGFloat = 12
+        static let cellEstimatedSize: CGSize = CGSize(width: 100, height: 120)
     }
 
     struct SectionDimension {
@@ -98,11 +97,6 @@ class FxHomeTopSitesViewModel {
             }
             return numItems * 2
         }
-    }
-
-    func reloadData(for trait: UITraitCollection) {
-        sectionDimension = getSectionDimension(for: trait)
-        tileManager.calculateTopSiteData(numberOfTilesPerRow: sectionDimension.numberOfTilesPerRow)
     }
 
     func tilePressed(site: HomeTopSite, position: Int) {
@@ -189,26 +183,111 @@ extension FxHomeTopSitesViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
         return .topSites
     }
 
+    var headerViewModel: ASHeaderViewModel {
+        // Only show a header if the firefox browser logo isn't showing
+        let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
+        return ASHeaderViewModel(title: shouldShow ? FirefoxHomeSectionType.topSites.title: nil,
+                                 titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
+                                 isButtonHidden: true)
+    }
+
     var isEnabled: Bool {
         return featureFlags.isFeatureEnabled(.topSites, checking: .buildAndUser)
+    }
+
+    func numberOfItemsInSection(for traitCollection: UITraitCollection) -> Int {
+        refreshData(for: traitCollection)
+
+        let sectionDimension = getSectionDimension(for: traitCollection)
+        let items = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
+        return items
+    }
+
+    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.cellEstimatedSize.height)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.cellEstimatedSize.height)
+        )
+
+        let sectionDimension = getSectionDimension(for: traitCollection)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionDimension.numberOfTilesPerRow)
+        let section = NSCollectionLayoutSection(group: group)
+
+        let leadingInset = FirefoxHomeViewModel.UX.topSiteLeadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                        leading: leadingInset,
+                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections - TopSiteItemCell.UX.bottomSpace,
+                                                        trailing: 0)
+
+        return section
     }
 
     var hasData: Bool {
         return tileManager.hasData
     }
 
-    var shouldReloadSection: Bool {
-        return true
-    }
-
     func updateData(completion: @escaping () -> Void) {
         tileManager.loadTopSitesData(dataLoadingCompletion: completion)
     }
+
+    func refreshData(for traitCollection: UITraitCollection) {
+        sectionDimension = getSectionDimension(for: traitCollection)
+        tileManager.calculateTopSiteData(numberOfTilesPerRow: sectionDimension.numberOfTilesPerRow)
+    }
 }
 
-// MARK: FxHomeTopSitesManagerDelegate
+// MARK: - FxHomeTopSitesManagerDelegate
 extension FxHomeTopSitesViewModel: FxHomeTopSitesManagerDelegate {
     func reloadTopSites() {
         delegate?.reloadTopSites()
+    }
+}
+
+// MARK: - FxHomeSectionHandler
+extension FxHomeTopSitesViewModel: FxHomeSectionHandler {
+
+    func configure(_ collectionView: UICollectionView,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
+           let contentItem = tileManager.getSite(index: indexPath.row) {
+            cell.configure(contentItem, position: indexPath.row)
+            topSiteImpressionTelemetry(contentItem, position: indexPath.row)
+            return cell
+
+        } else if let cell = collectionView.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) {
+            return cell
+        }
+
+        return UICollectionViewCell()
+    }
+
+    func configure(_ cell: UICollectionViewCell,
+                   at indexPath: IndexPath) -> UICollectionViewCell {
+        // Setup is done through configure(collectionView:indexPath:), shouldn't be called
+        return UICollectionViewCell()
+    }
+
+    func didSelectItem(at indexPath: IndexPath,
+                       homePanelDelegate: HomePanelDelegate?,
+                       libraryPanelDelegate: LibraryPanelDelegate?) {
+
+        guard let site = tileManager.getSite(index: indexPath.row) else { return }
+
+        tilePressed(site: site, position: indexPath.row)
+    }
+
+    func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
+        guard let tileLongPressedHandler = tileLongPressedHandler,
+              let site = tileManager.getSiteDetail(index: indexPath.row)
+        else { return }
+
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        tileLongPressedHandler(site, sourceView)
     }
 }

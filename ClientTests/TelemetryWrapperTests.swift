@@ -23,24 +23,24 @@ class TelemetryWrapperTests: XCTestCase {
         let extras = [topSitePositionKey: "\(1)", topSiteTileTypeKey: "history-based"]
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil, extras: extras)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSite.tilePressed)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.tilePressed)
     }
 
     func test_topSiteTileWithoutExtras_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .topSiteTile, value: nil)
-        XCTAssertFalse(GleanMetrics.TopSite.tilePressed.testHasValue())
+        XCTAssertFalse(GleanMetrics.TopSites.tilePressed.testHasValue())
     }
 
     func test_topSiteContextualMenu_GleanIsCalled() {
         let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: FirefoxHomeContextMenuHelper.ContextualActionType.settings.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSite.contextualMenu)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contextualMenu)
     }
 
     func test_topSiteContextualMenuWithoutExtra_GleanIsNotCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: nil)
-        XCTAssertFalse(GleanMetrics.TopSite.contextualMenu.testHasValue())
+        XCTAssertFalse(GleanMetrics.TopSites.contextualMenu.testHasValue())
     }
 
     // MARK: - Preferences
@@ -160,6 +160,54 @@ class TelemetryWrapperTests: XCTestCase {
         TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: nil)
         XCTAssertFalse(GleanMetrics.Tabs.privateTabsQuantity.testHasValue())
     }
+
+    // MARK: - Onboarding
+
+    func test_onboardingCardViewWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .onboardingCardView, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+    }
+
+    func test_onboardingPrimaryButtonWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingPrimaryButton, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
+    }
+
+    func test_onboardingSecondaryButtonWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingSecondaryButton, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
+    }
+
+    func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
+        let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
+        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
+        let extras = [wallpaperNameKey: "defaultBackground",
+                      wallpaperTypeKey: "default"]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .onboardingSelectWallpaper,
+                                     value: .wallpaperSelected,
+                                     extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelected)
+    }
+
+    func test_onboardingCloseWithExtras_GleanIsCalled() {
+        let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
+        let extras = [cardTypeKey: "\(IntroViewModel.OnboardingCards.welcome.telemetryValue)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .onboardingClose, value: nil, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
@@ -238,5 +286,19 @@ extension XCTestCase {
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidState), 0)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidValue), 0)
+    }
+
+    func testUuidMetricSuccess(metric: UuidMetricType,
+                               expectedValue: UUID,
+                               failureMessage: String,
+                               file: StaticString = #file,
+                               line: UInt = #line) {
+
+        guard let value = try? metric.testGetValue() else {
+            XCTFail("Expected contextId to be configured")
+            return
+        }
+        XCTAssertTrue(metric.testHasValue(), "Should have value on uuid metric")
+        XCTAssertEqual(value, expectedValue, failureMessage)
     }
 }

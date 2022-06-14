@@ -290,7 +290,15 @@ extension String {
 // MARK: - Onboarding screens
 extension String {
     public struct Onboarding {
-
+        public static let IntroDescriptionPart1 = MZLocalizedString("Onboarding.IntroDescriptionPart1.v102", value: "Indie. Non-profit. For good.", comment: "String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant.", lastUpdated: .v102)
+        public static let IntroDescriptionPart2 = MZLocalizedString("Onboarding.IntroDescriptionPart2.v102", value: "Committed to the promise of a better Internet for everyone.", comment: "String used to describes what Firefox is on the first onboarding page in our Onboarding screens.", lastUpdated: .v102)
+        public static let IntroAction = MZLocalizedString("Onboarding.IntroAction.v102", value: "Get Started", comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding.", lastUpdated: .v102)
+        public static let WallpaperTitle = MZLocalizedString("Onboarding.WallpaperTitle.v102", value: "Choose a Firefox Wallpaper", comment: "Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers.", lastUpdated: .v102)
+        public static let WallpaperAction = MZLocalizedString("Onboarding.WallpaperAction.v102", value: "Set Wallpaper", comment: "Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper.", lastUpdated: .v102)
+        public static let LaterAction = MZLocalizedString("Onboarding.LaterAction.v102", value: "Not Now", comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.", lastUpdated: .v102)
+        public static let SyncTitle = MZLocalizedString("Onboarding.SyncTitle.v102", value: "Sync to Stay In Your Flow", comment: "Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing.", lastUpdated: .v102)
+        public static let SyncDescription = MZLocalizedString("Onboarding.SyncDescription.v102", value: "Automatically sync tabs and bookmarks across devices for seamless screen-hopping.", comment: "Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen.", lastUpdated: .v102)
+        public static let SyncAction = MZLocalizedString("Onboarding.SyncAction.v102", value: "Sign Up and Log In", comment: "Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding.", lastUpdated: .v102)
     }
 }
 
@@ -298,6 +306,13 @@ extension String {
 extension String {
     public struct PasswordsAndLogins {
 
+    }
+}
+
+// MARK: - Search
+extension String {
+    public struct Search {
+        public static let SuggestSectionTitle = MZLocalizedString("Search.SuggestSectionTitle.v102", value: "Firefox Suggest", comment: "When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions.", lastUpdated: .v102)
     }
 }
 
@@ -325,6 +340,7 @@ extension String {
                 public static let RecentlySaved = MZLocalizedString("Settings.Home.Option.RecentlySaved", value: "Recently Saved", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Shortcuts = MZLocalizedString("Settings.Home.Option.Shortcuts", value: "Shortcuts", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off", lastUpdated: .v39)
                 public static let Pocket = MZLocalizedString("Settings.Home.Option.Pocket", value: "Recommended by Pocket", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off", lastUpdated: .v39)
+                public static let SponsoredPocket = MZLocalizedString("Settings.Home.Option.SponsoredPocket", value: "Sponsored stories", comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off", lastUpdated: .v102)
                 public static let Title = MZLocalizedString("Settings.Home.Option.Title.v101", value: "Include on Homepage", comment: "In the settings menu, this is the title of the Firefox Homepage customization settings section", lastUpdated: .v101)
                 public static let Description = MZLocalizedString("Settings.Home.Option.Description.v101", value: "Choose what’s included on the Firefox homepage.", comment: "In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for.", lastUpdated: .v101)
                 public static let Wallpaper = MZLocalizedString("Settings.Home.Option.Wallpaper", value: "Wallpaper", comment: "In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application.", lastUpdated: .v98)
