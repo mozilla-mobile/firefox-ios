@@ -13085,11 +13085,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lxml2",
-					"-fprofile-instr-generate",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Firefox;
@@ -13383,11 +13379,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lxml2",
-					"-fprofile-instr-generate",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Enterprise;
@@ -13647,11 +13639,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lxml2",
-					"-fprofile-instr-generate",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = FirefoxBeta;
@@ -14136,11 +14124,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lxml2",
-					"-fprofile-instr-generate",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;
