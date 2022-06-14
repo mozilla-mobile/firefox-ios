@@ -65,6 +65,7 @@ class FirstRunTourTests: BaseTestCase {
 
     // MARK: Private
     private func goToNextScreen() {
+        waitForExistence(app.buttons["\(rootA11yId)PrimaryButton"], timeout: 10)
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
     }

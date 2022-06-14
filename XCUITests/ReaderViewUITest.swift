@@ -226,6 +226,7 @@ class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testAddToReaderListOptions() {
         sleep(10)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
         addContentToReaderView()
         // Check that Settings layouts options are shown
         waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)
