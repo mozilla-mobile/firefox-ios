@@ -319,8 +319,10 @@ extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
         if indexPath.row == (jumpBackInList.itemsToDisplay - 1),
            let group = jumpBackInList.group {
             configureCellForGroups(group: group, cell: jumpBackInCell, indexPath: indexPath)
+        } else if let item = jumpBackInList.tabs[safe: indexPath.row] {
+            configureCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
         } else {
-            configureCellForTab(item: jumpBackInList.tabs[indexPath.row], cell: jumpBackInCell, indexPath: indexPath)
+            return UICollectionViewCell()
         }
 
         return cell

@@ -121,9 +121,6 @@ class FirefoxHomeViewModel: FeatureFlaggable {
 
     private func updateData(section: FXHomeViewModelProtocol) {
         section.updateData {
-            // Once section has data loaded with new data, we check if it needs to show
-            guard section.shouldShow else { return }
-
             self.delegate?.reloadSection(section: section)
         }
     }
