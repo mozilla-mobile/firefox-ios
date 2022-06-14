@@ -7,6 +7,7 @@ import UIKit
 protocol OnboardingCardDelegate: AnyObject {
     func showNextPage(_ cardType: IntroViewModel.OnboardingCards)
     func primaryAction(_ cardType: IntroViewModel.OnboardingCards)
+    func pageChanged(_ cardType: IntroViewModel.OnboardingCards)
 }
 
 class OnboardingCardViewController: UIViewController {
@@ -144,6 +145,7 @@ class OnboardingCardViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        delegate?.pageChanged(viewModel.cardType)
         viewModel.sendCardViewTelemetry()
     }
 
