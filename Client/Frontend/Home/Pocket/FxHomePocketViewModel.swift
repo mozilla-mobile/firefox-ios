@@ -21,7 +21,8 @@ class FxHomePocketViewModel {
 
     // MARK: - Properties
 
-    private let pocketAPI = Pocket()
+    private let pocketAPI: Pocket
+    private let pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface
 
     private let isZeroSearch: Bool
     private var hasSentPocketSectionEvent = false
@@ -32,12 +33,10 @@ class FxHomePocketViewModel {
 
     private(set) var pocketStoriesViewModels: [FxPocketHomeHorizontalCellViewModel] = []
 
-    init(pocketStoriesViewModel: [FxPocketHomeHorizontalCellViewModel] = [], isZeroSearch: Bool) {
+    init(pocketAPI: Pocket, pocketSponsoredAPI: PocketSponsoredStoriesProviderInterface, isZeroSearch: Bool) {
         self.isZeroSearch = isZeroSearch
-        self.pocketStoriesViewModels = pocketStoriesViewModel
-        for pocketStoryViewModel in pocketStoriesViewModel {
-            bind(pocketStoryViewModel: pocketStoryViewModel)
-        }
+        self.pocketAPI = pocketAPI
+        self.pocketSponsoredAPI = pocketSponsoredAPI
     }
 
     private func bind(pocketStoryViewModel: FxPocketHomeHorizontalCellViewModel) {
@@ -105,43 +104,82 @@ class FxHomePocketViewModel {
 
     // MARK: - Private
 
-    func updatePocketStoryViewModels(with stories: [PocketStory]) {
-        pocketStoriesViewModels = []
-        for story in stories {
-            bind(pocketStoryViewModel: .init(story: story))
+//    func updatePocketStoryViewModels(with stories: [PocketStory]) {
+//        pocketStoriesViewModels = []
+//        for story in stories {
+//            bind(pocketStoryViewModel: .init(story: story))
+//        }
+//    }
+//
+//    private func getPocketSites(completion: @escaping () -> Void) {
+//        pocketAPI
+//            .globalFeed(items: UX.numberOfItemsInSection)
+//            .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
+//                var globalTemp = pocketStory.map(PocketStory.init)
+//
+//                // Check if sponsored stories are enabled, otherwise drop api call
+//                guard self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true else {
+//                    self?.updatePocketStoryViewModels(with: globalTemp)
+//                    completion()
+//                    return
+//                }
+//
+//                self?.pocketAPI.sponsoredFeed().uponQueue(.main) { sponsored in
+//                    // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+//                    var sponsoredTemp = sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection)
+//
+//                    // Making sure we insert a sponsored story at a valid index
+//                    let firstIndex = min(UX.indexOfFirstSponsoredItem, globalTemp.endIndex)
+//                    sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
+//                    sponsoredTemp.removeFirst()
+//
+//                    let secondIndex = min(UX.indexOfSecondSponsoredItem, globalTemp.endIndex)
+//                    sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
+//                    sponsoredTemp.removeFirst()
+//
+//                    self?.updatePocketStoryViewModels(with: globalTemp)
+//                    completion()
+//                }
+//            }
+//    }
+
+    // MARK: - TODO: Use settings toggle to determine if we show sponsored stories
+    var showSponsors = true
+
+    private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indexes: [Int]) {
+        for index in indexes {
+            // Making sure we insert a sponsored story at a valid index
+            let normalisedIndex = min(index, globalFeed.endIndex)
+            if let first = sponsored.first {
+                globalFeed.insert(first, at: normalisedIndex)
+                sponsored.removeAll(where: { $0 == first })
+            }
         }
     }
 
-    private func getPocketSites(completion: @escaping () -> Void) {
-        pocketAPI
-            .globalFeed(items: UX.numberOfItemsInSection)
-            .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
-                var globalTemp = pocketStory.map(PocketStory.init)
+    private func updatePocketSites() async {
+        do {
+            let global = try await pocketAPI.globalFeed(items: UX.numberOfItemsInSection)
 
-                // Check if sponsored stories are enabled, otherwise drop api call
-                guard self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true else {
-                    self?.updatePocketStoryViewModels(with: globalTemp)
-                    completion()
-                    return
-                }
+            // Convert global feed to PocketStory
+            var globalTemp = global.map(PocketStory.init)
+            let sponsored = try await pocketSponsoredAPI.fetchSponsoredStories()
 
-                self?.pocketAPI.sponsoredFeed().uponQueue(.main) { sponsored in
-                    // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-                    var sponsoredTemp = sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection)
-
-                    // Making sure we insert a sponsored story at a valid index
-                    let firstIndex = min(UX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-                    sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
-                    sponsoredTemp.removeFirst()
-
-                    let secondIndex = min(UX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-                    sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
-                    sponsoredTemp.removeFirst()
-
-                    self?.updatePocketStoryViewModels(with: globalTemp)
-                    completion()
-                }
+            if self.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true {
+                // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
+                var sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection))
+                self.insert(
+                    sponsored: &sponsoredTemp,
+                    into: &globalTemp,
+                    indexes: [UX.indexOfFirstSponsoredItem, UX.indexOfSecondSponsoredItem]
+                )
             }
+
+            // Add the story in the view models list
+            for story in globalTemp {
+                self.bind(pocketStoryViewModel: .init(story: story))
+            }
+        } catch { }
     }
 
     func showDiscoverMore() {
@@ -216,7 +254,10 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
     }
 
     func updateData(completion: @escaping () -> Void) {
-        getPocketSites(completion: completion)
+        Task {
+            await updatePocketSites()
+            completion()
+        }
     }
 }
 

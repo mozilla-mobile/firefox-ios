@@ -62,7 +62,7 @@ class Pocket: FeatureFlaggable, URLCaching {
             return completion(.failure(.failure))
         }
 
-        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? Array<[String: Any]> {
+        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? [[String: Any]] {
             return completion(.success(PocketFeedStory.parseJSON(list: items)))
         }
 
@@ -74,7 +74,7 @@ class Pocket: FeatureFlaggable, URLCaching {
             self.cache(response: response, for: request, with: data)
 
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-            guard let items = json?["recommendations"] as? Array<[String: Any]> else {
+            guard let items = json?["recommendations"] as? [[String: Any]] else {
                 return completion(.failure(.failure))
             }
 
@@ -116,7 +116,7 @@ class Pocket: FeatureFlaggable, URLCaching {
         let data = try! Data(contentsOf: URL(fileURLWithPath: path!))
 
         let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-        guard let items = json?["recommendations"] as? Array<[String: Any]> else {
+        guard let items = json?["recommendations"] as? [[String: Any]] else {
             return completion(.failure(.failure))
         }
 
