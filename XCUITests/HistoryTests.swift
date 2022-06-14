@@ -81,6 +81,7 @@ class HistoryTests: BaseTestCase {
 
     // Smoketest
     func testClearPrivateDataButtonDisabled() {
+        sleep(5)
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
