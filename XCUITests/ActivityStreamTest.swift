@@ -50,6 +50,7 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testDefaultSites() {
+        sleep(5)
         waitForExistence(TopSiteCellgroup, timeout: 35)
         XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
 
@@ -152,7 +153,8 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        sleep(3)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on apple top site, second cell
