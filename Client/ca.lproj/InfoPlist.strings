@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Això permet fer fotos i pujar-les.";
+"NSCameraUsageDescription" = "El Firefox usa la càmera per a escanejar codis QR i fer fotos i vídeos.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "El Firefox necessita el Face ID per accedir als vostres inicis de sessió desats.";

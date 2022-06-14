@@ -21,6 +21,7 @@
         "ClipBoardTests",
         "CopiedLinksTests",
         "DataManagementTests",
+        "DatabaseFixtureTest",
         "DatabaseFixtureTest\/testPerfBookmarks1000openMenu()",
         "DatabaseFixtureTest\/testPerfBookmarks1000startUp()",
         "DatabaseFixtureTest\/testPerfHistory4000openMenu()",

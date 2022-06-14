@@ -34,7 +34,7 @@ Building the code
     ```shell
     git clone https://github.com/mozilla-mobile/firefox-ios
     ```
-1. Pull in the project dependencies:
+1. Install Node.js dependencies, build user scripts and update content blocker:
     ```shell
     cd firefox-ios
     sh ./bootstrap.sh

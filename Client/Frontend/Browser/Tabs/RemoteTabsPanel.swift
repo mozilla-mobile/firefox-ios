@@ -202,18 +202,10 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.accessoryView = nil
 
-        // TODO: Load favicon image from remote tab (tab.faviconURL) https://mozilla-hub.atlassian.net/browse/FXIOS-3754
-        // Client image is temporary and should be removed once we have the favicon URL
-        // siteImageHelper is already in the class to load from URL, just need to uncomment code and adjust
-        let client = self.clientAndTabs[indexPath.section].client
-        let image = getClientImage(client: client)
-        cell.leftImageView.image = image
-        cell.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
-
-//        getFavIcon(for: tab) { [weak cell] image in
-//            cell.leftImageView.image = image
-//            cell.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
-//        }
+        getFavicon(for: tab) { [weak cell] image in
+            cell?.leftImageView.image = image
+            cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
+        }
 
         return cell
     }
@@ -225,23 +217,12 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         remoteTabPanel?.remotePanelDelegate?.remotePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
     }
 
-    private func getFavIcon(for remoteTab: RemoteTab, completion: @escaping (UIImage?) -> Void) {
-        let site = Site(url: remoteTab.faviconURL!, title: remoteTab.title)
+    private func getFavicon(for remoteTab: RemoteTab, completion: @escaping (UIImage?) -> Void) {
+        let faviconUrl = remoteTab.URL.absoluteString
+        let site = Site(url: faviconUrl, title: remoteTab.title)
         siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
             completion(image)
         }
-    }
-
-    private func getClientImage(client: RemoteClient) -> UIImage? {
-        let image: UIImage?
-        if client.type == "desktop" {
-            image = UIImage.templateImageNamed(ImageIdentifiers.deviceTypeDesktop)
-            image?.accessibilityLabel = .RemoteTabComputerAccessibilityLabel
-        } else {
-            image = UIImage.templateImageNamed(ImageIdentifiers.deviceTypeMobile)
-            image?.accessibilityLabel = .RemoteTabMobileAccessibilityLabel
-        }
-        return image
     }
 }
 

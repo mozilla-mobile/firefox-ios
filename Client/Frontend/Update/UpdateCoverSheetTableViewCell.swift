@@ -7,36 +7,33 @@ import Shared
 
 struct UpdateCoverSheetTableViewCellUX {
     struct ImageView {
-        static let paddingTop = 2
-        static let paddingLeft = 18
-        static let height = 30
+        static let paddingTop: CGFloat = 2
+        static let paddingLeft: CGFloat = 18
+        static let height: CGFloat = 30
     }
 
     struct DescriptionLabel {
-        static let paddingTop = 2
-        static let paddingTrailing = 18
-        static let bottom = -10
-        static let leading = 10
+        static let paddingTop: CGFloat = 2
+        static let paddingTrailing: CGFloat = -18
+        static let bottom: CGFloat = -10
+        static let leading: CGFloat = 10
     }
 }
 
 class UpdateCoverSheetTableViewCell: UITableViewCell {
     // Tableview cell items
-    var updateCoverSheetCellImageView: UIImageView = {
-        let imgView = UIImageView(image: #imageLiteral(resourceName: "darkModeUpdate"))
+    var updateCoverSheetCellImageView: UIImageView = .build { imgView in
+        imgView.image = #imageLiteral(resourceName: "darkModeUpdate")
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
-        return imgView
-    }()
-    var updateCoverSheetCellDescriptionLabel: UILabel = {
-        let label = UILabel()
+    }
+    var updateCoverSheetCellDescriptionLabel: UILabel = .build { label in
         label.text = .CoverSheetV22DarkModeTitle
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 0
-        return label
-    }()
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -49,20 +46,17 @@ class UpdateCoverSheetTableViewCell: UITableViewCell {
 
     private func initialViewSetup() {
         self.selectionStyle = .none
-        addSubview(updateCoverSheetCellImageView)
-        addSubview(updateCoverSheetCellDescriptionLabel)
-        updateCoverSheetCellImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.ImageView.paddingLeft)
-            make.height.width.equalTo(UpdateCoverSheetTableViewCellUX.ImageView.height)
-            make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.ImageView.paddingTop)
-        }
-
-        updateCoverSheetCellDescriptionLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTop)
-            make.trailing.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTrailing)
-            make.bottom.equalTo(snp.bottom).offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.bottom)
-            make.leading.equalTo(updateCoverSheetCellImageView.snp.trailing).offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.leading)
-        }
+        contentView.addSubviews(updateCoverSheetCellImageView, updateCoverSheetCellDescriptionLabel)
+        NSLayoutConstraint.activate([
+            updateCoverSheetCellImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: UpdateCoverSheetTableViewCellUX.ImageView.paddingLeft),
+            updateCoverSheetCellImageView.heightAnchor.constraint(equalToConstant: UpdateCoverSheetTableViewCellUX.ImageView.height),
+            updateCoverSheetCellImageView.widthAnchor.constraint(equalToConstant: UpdateCoverSheetTableViewCellUX.ImageView.height),
+            updateCoverSheetCellImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UpdateCoverSheetTableViewCellUX.ImageView.paddingTop),
+            updateCoverSheetCellDescriptionLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTop),
+            updateCoverSheetCellDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTrailing),
+            updateCoverSheetCellDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.bottom),
+            updateCoverSheetCellDescriptionLabel.leadingAnchor.constraint(equalTo: updateCoverSheetCellImageView.trailingAnchor, constant: UpdateCoverSheetTableViewCellUX.DescriptionLabel.leading)
+        ])
         fxThemeSupport()
     }
 

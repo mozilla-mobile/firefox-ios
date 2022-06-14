@@ -106,7 +106,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.performAction(Action.GoToHomePage)
-        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
     func testSetCustomURLAsHome() {
@@ -166,6 +166,24 @@ class HomePageSettingsUITests: BaseTestCase {
             }
         }
     }
+
+    func testDisableTopSitesSettingsRemovesSection() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HomeSettings)
+        app.staticTexts["Shortcuts"].tap()
+        XCTAssertTrue(app.switches["Shortcuts"].exists)
+        app.switches["Shortcuts"].tap()
+
+        navigator.goto(NewTabScreen)
+        app.buttons["Done"].tap()
+
+        waitForExistence(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.logoButton])
+        waitForNoExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        waitForNoExistence(app.collectionViews.cells.staticTexts["YouTube"])
+    }
     
     func testChangeHomeSettingsLabel() {
         navigator.performAction(Action.CloseURLBarOpen)
@@ -184,11 +202,12 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(SettingsScreen)
         XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Firefox Home")
     }
+
     //Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
-        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].exists)
-        let numberOfTopSites = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].collectionViews.cells.count
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        let numberOfTopSites = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].collectionViews.cells.count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 

@@ -571,8 +571,14 @@
 /* Toggle logins syncing setting */
 "Logins" = "Входящи данни";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Научете повече";
+
 /* Message shown when you enter Logins & Passwords without having a device passcode set. */
 "Logins.DevicePasscodeRequired.Message" = "За да бъдат запазвани и за да разрешите автоматичното попълване на регистрации, включете Face ID, Touch ID или паролата на устройството.";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Научете повече";
 
 /* Message shown when you enter Logins & Passwords for the first time. */
 "Logins.Onboarding.Message" = "Вашите регистрациите вече са защитени с Face ID, Touch ID или паролата на устройството.";
@@ -1171,6 +1177,9 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Действия чрез Siri";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Научете повече.";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Неактивни раздели";

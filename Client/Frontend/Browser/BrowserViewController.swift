@@ -30,6 +30,12 @@ enum ReferringPage {
     case tabTray
 }
 
+protocol BrowserBarViewDelegate: AnyObject {
+    var inOverlayMode: Bool { get }
+
+    func leaveOverlayMode(didCancel cancel: Bool)
+}
+
 class BrowserViewController: UIViewController {
 
     private enum UX {
@@ -146,7 +152,17 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
-    var keyboardPressesHandler = KeyboardPressesHandler()
+
+    private var keyboardPressesHandlerValue: Any?
+
+    @available(iOS 13.4, *)
+    func keyboardPressesHandler() -> KeyboardPressesHandler {
+        guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
+            keyboardPressesHandlerValue = KeyboardPressesHandler()
+            return keyboardPressesHandlerValue as! KeyboardPressesHandler
+        }
+        return keyboardPressesHandlerValue
+    }
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
@@ -193,6 +209,10 @@ class BrowserViewController: UIViewController {
 
     @objc func displayThemeChanged(notification: Notification) {
         applyTheme()
+    }
+
+    @objc func didTapUndoCloseAllTabToast(notification: Notification) {
+        leaveOverlayMode(didCancel: true)
     }
 
     @objc func searchBarPositionDidChange(notification: Notification) {
@@ -444,6 +464,8 @@ class BrowserViewController: UIViewController {
                                                name: .DisplayThemeChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchBarPositionDidChange),
                                                name: .SearchBarPositionDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didTapUndoCloseAllTabToast),
+                                               name: .DidTapUndoCloseAllTabToast, object: nil)
     }
 
     func addSubviews() {
@@ -855,9 +877,11 @@ class BrowserViewController: UIViewController {
 
             let firefoxHomeViewController = FirefoxHomeViewController(
                 profile: profile,
+                tabManager: tabManager,
                 isZeroSearch: !inline)
             firefoxHomeViewController.homePanelDelegate = self
             firefoxHomeViewController.libraryPanelDelegate = self
+            firefoxHomeViewController.browserBarViewDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController
             addChild(firefoxHomeViewController)
             view.addSubview(firefoxHomeViewController.view)
@@ -1704,7 +1728,7 @@ extension BrowserViewController: LibraryPanelDelegate {
         guard let tab = tabManager.selectedTab else { return }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
+        if  #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
             libraryDrawerViewController?.close()
             return
         }
@@ -1765,7 +1789,7 @@ extension BrowserViewController: HomePanelDelegate {
         }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if navigateLinkShortcutIfNeeded(url: url) {
+        if #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
             return
         }
 
@@ -1781,10 +1805,7 @@ extension BrowserViewController: HomePanelDelegate {
         }
 
         // If we are showing toptabs a user can just use the top tab bar
-        // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard !topTabsVisible, !urlBar.inOverlayMode else {
-            return
-        }
+        guard !topTabsVisible else { return }
 
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
@@ -2170,18 +2191,11 @@ extension BrowserViewController {
     }
 
     private func showProperIntroVC() {
-        let introViewController = IntroViewController()
+        let introViewModel = IntroViewModel()
+        let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-            controller.dismiss(animated: true) {
-                if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                    _ = self.navigationController?.popToRootViewController(animated: true)
-                }
-                if let flow = fxaLoginFlow {
-                    let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
-                    self.presentSignInViewController(fxaParams, flowType: flow, referringPage: .onboarding)
-                }
-            }
+            controller.dismiss(animated: true)
         }
         self.introVCPresentHelper(introViewController: introViewController)
     }
@@ -2379,12 +2393,16 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        keyboardPressesHandler.handlePressesBegan(presses, with: event)
+        if #available(iOS 13.4, *) {
+            keyboardPressesHandler().handlePressesBegan(presses, with: event)
+        }
         super.pressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        keyboardPressesHandler.handlePressesEnded(presses, with: event)
+        if #available(iOS 13.4, *) {
+            keyboardPressesHandler().handlePressesEnded(presses, with: event)
+        }
         super.pressesEnded(presses, with: event)
     }
 }
@@ -2593,7 +2611,22 @@ extension BrowserViewController: FeatureFlaggable {
 
 extension BrowserViewController {
     public static func foregroundBVC() -> BrowserViewController {
-        return (UIApplication.shared.delegate as! AppDelegate).browserViewController
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let browserViewController = appDelegate.browserViewController else {
+            fatalError("Unable unwrap BrowserViewController")
+        }
+
+        return browserViewController
+    }
+}
+
+extension BrowserViewController: BrowserBarViewDelegate {
+    var inOverlayMode: Bool {
+        return urlBar.inOverlayMode
+    }
+
+    func leaveOverlayMode(didCancel cancel: Bool) {
+        urlBar.leaveOverlayMode(didCancel: cancel)
     }
 }
 
