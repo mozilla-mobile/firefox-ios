@@ -207,7 +207,9 @@ class TopTabsViewController: UIViewController {
     }
 
     @objc func togglePrivateModeTapped() {
-        topTabDisplayManager.togglePrivateMode(isOn: !topTabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: true)
+        topTabDisplayManager.togglePrivateMode(isOn: !topTabDisplayManager.isPrivate,
+                                               createTabOnEmptyPrivateMode: true,
+                                               shouldSelectMostRecentTab: true)
         delegate?.topTabsDidTogglePrivateMode()
         self.privateModeButton.setSelected(topTabDisplayManager.isPrivate, animated: true)
     }
