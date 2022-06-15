@@ -1,0 +1,93 @@
+{
+  "configurations" : [
+    {
+      "id" : "565AB1DC-1E1E-454E-BAC1-C5D12E8F9FA7",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "ActivityStreamTest",
+        "AuthenticationTest",
+        "BaseTestCase",
+        "BookmarkingTests",
+        "BrowsingPDFTests",
+        "ClipBoardTests",
+        "CopiedLinksTests",
+        "DataManagementTests",
+        "DatabaseFixtureTest",
+        "DesktopModeTestsIpad",
+        "DesktopModeTestsIphone",
+        "DisplaySettingTests",
+        "DomainAutocompleteTest",
+        "DownloadFilesTests",
+        "DragAndDropTestIpad",
+        "DragAndDropTests",
+        "FindInPageTests",
+        "FirstRunTourTests",
+        "FxScreenGraphTests",
+        "HistoryTests",
+        "HomeButtonTests",
+        "HomePageSettingsUITests",
+        "IntegrationTests",
+        "IpadOnlyTestCase",
+        "IphoneOnlyTestCase",
+        "LibraryTestsIpad",
+        "MailAppSettingsTests",
+        "NavigationTest",
+        "NewTabSettingsTest",
+        "NightModeTests",
+        "NoImageTests",
+        "PhotonActionSheetTest",
+        "PocketTest",
+        "PrivateBrowsingTest",
+        "PrivateBrowsingTestIpad",
+        "ReaderViewTest\/testAddToReadingListPrivateMode()",
+        "ReaderViewTest\/testMarkAsReadAndUnreadFromReadingList()",
+        "ReaderViewTest\/testMarkAsReadAndUreadFromReaderView()",
+        "ReaderViewTest\/testOpenSavedForReadingLongPressInNewTab()",
+        "ReaderViewTest\/testRemoveFromReadingList()",
+        "ReaderViewTest\/testRemoveFromReadingView()",
+        "ReaderViewTest\/testRemoveSavedForReadingLongPress()",
+        "SaveLoginTest\/testDeleteLogin()",
+        "SaveLoginTest\/testDoNotSaveLogin()",
+        "SaveLoginTest\/testLoginsListFromBrowserTabMenu()",
+        "SaveLoginTest\/testSavedLoginSelectUnselect()",
+        "SaveLoginTest\/testSearchLogin()",
+        "ScreenGraphTest",
+        "SearchSettingsUITests",
+        "SearchTests\/testCopyPasteComplete()",
+        "SearchTests\/testDefaultSearchEngine()",
+        "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
+        "SearchTests\/testPromptPresence()",
+        "SearchTests\/testSearchIconOnAboutHome()",
+        "SearchTests\/testSearchWithFirefoxOption()",
+        "SettingsTest",
+        "SiteLoadTest",
+        "SyncUITests",
+        "TabCounterTests",
+        "TabsPerformanceTest",
+        "ThirdPartySearchTest",
+        "ToolbarTests",
+        "TopTabsTest",
+        "TopTabsTestIpad",
+        "TopTabsTestIphone",
+        "TrackingProtectionTests",
+        "WhatsNewTest"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "3BFE4B061D342FB800DDF53F",
+        "name" : "XCUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

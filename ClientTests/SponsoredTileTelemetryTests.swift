@@ -52,17 +52,17 @@ class SponsoredTileTelemetryTests: XCTestCase {
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
 
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.TopSite.contileImpression)
+            self.testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contileImpression)
 
-            self.testQuantityMetricSuccess(metric: GleanMetrics.TopSite.contileTileId,
+            self.testQuantityMetricSuccess(metric: GleanMetrics.TopSites.contileTileId,
                                            expectedValue: 1,
                                            failureMessage: "Should have contile id of \(contile.id)")
 
-            self.testStringMetricSuccess(metric: GleanMetrics.TopSite.contileAdvertiser,
+            self.testStringMetricSuccess(metric: GleanMetrics.TopSites.contileAdvertiser,
                                          expectedValue: contile.name,
                                          failureMessage: "Should have contile advertiser of \(contile.name)")
 
-            self.testUrlMetricSuccess(metric: GleanMetrics.TopSite.contileReportingUrl,
+            self.testUrlMetricSuccess(metric: GleanMetrics.TopSites.contileReportingUrl,
                                       expectedValue: contile.impressionUrl,
                                       failureMessage: "Should have contile url of \(contile.impressionUrl)")
 
@@ -84,17 +84,17 @@ class SponsoredTileTelemetryTests: XCTestCase {
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
 
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.TopSite.contileClick)
+            self.testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contileClick)
 
-            self.testQuantityMetricSuccess(metric: GleanMetrics.TopSite.contileTileId,
+            self.testQuantityMetricSuccess(metric: GleanMetrics.TopSites.contileTileId,
                                            expectedValue: 2,
                                            failureMessage: "Should have contile id of \(contile.id)")
 
-            self.testStringMetricSuccess(metric: GleanMetrics.TopSite.contileAdvertiser,
+            self.testStringMetricSuccess(metric: GleanMetrics.TopSites.contileAdvertiser,
                                          expectedValue: contile.name,
                                          failureMessage: "Should have contile advertiser of \(contile.name)")
 
-            self.testUrlMetricSuccess(metric: GleanMetrics.TopSite.contileReportingUrl,
+            self.testUrlMetricSuccess(metric: GleanMetrics.TopSites.contileReportingUrl,
                                       expectedValue: contile.clickUrl,
                                       failureMessage: "Should have contile url of \(contile.clickUrl)")
             expectation.fulfill()
@@ -120,7 +120,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
                 return
             }
 
-            self.testUuidMetricSuccess(metric: GleanMetrics.TopSite.contextId,
+            self.testUuidMetricSuccess(metric: GleanMetrics.TopSites.contextId,
                                        expectedValue: uuid,
                                        failureMessage: "Should have contextId of \(uuid)")
             expectation.fulfill()

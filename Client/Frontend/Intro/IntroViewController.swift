@@ -117,6 +117,7 @@ class IntroViewController: UIViewController, OnViewDismissable {
 
     @objc private func closeOnboarding() {
         didFinishClosure?(self, nil)
+        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
     private func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
@@ -188,6 +189,15 @@ extension IntroViewController: OnboardingCardDelegate {
             moveToNextPage(cardType: cardType)
         case .signSync:
             presentSignToSync()
+        }
+    }
+
+    // Extra step to make sure pageControl.currentPage is the right index card
+    // because UIPageViewControllerDataSource call fails
+    func pageChanged(_ cardType: IntroViewModel.OnboardingCards) {
+        if let cardIndex = viewModel.enabledCards.firstIndex(of: cardType),
+           cardIndex != pageControl.currentPage {
+            pageControl.currentPage = cardIndex
         }
     }
 

@@ -18,28 +18,29 @@ class FirefoxHomeViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.shownSections.count, 2)
     }
 
-    func testNumberOfSection_updatingData_adds2Sections() {
-        let collectionView = UICollectionView(frame: CGRect.zero,
-                                              collectionViewLayout: UICollectionViewLayout())
-        let profile = MockProfile()
-        let viewModel = FirefoxHomeViewModel(profile: profile,
-                                             isPrivate: false)
-        viewModel.delegate = self
-        viewModel.updateData()
-
-        let expectation = expectation(description: "Wait for sections to be reloaded")
-        expectation.expectedFulfillmentCount = 2
-        reloadSectionCompleted = { section in
-            ensureMainThread {
-                viewModel.reloadSection(section, with: collectionView)
-                expectation.fulfill()
-            }
-        }
-
-        waitForExpectations(timeout: 1.0, handler: nil)
-
-        XCTAssertEqual(viewModel.shownSections.count, 4)
-    }
+// TODO: Disabled until homepage's reload issue is solved next sprint.
+//    func testNumberOfSection_updatingData_adds2Sections() {
+//        let collectionView = UICollectionView(frame: CGRect.zero,
+//                                              collectionViewLayout: UICollectionViewLayout())
+//        let profile = MockProfile()
+//        let viewModel = FirefoxHomeViewModel(profile: profile,
+//                                             isPrivate: false)
+//        viewModel.delegate = self
+//        viewModel.updateData()
+//
+//        let expectation = expectation(description: "Wait for sections to be reloaded")
+//        expectation.expectedFulfillmentCount = 2
+//        reloadSectionCompleted = { section in
+//            ensureMainThread {
+//                viewModel.reloadSection(section, with: collectionView)
+//                expectation.fulfill()
+//            }
+//        }
+//
+//        waitForExpectations(timeout: 1.0, handler: nil)
+//
+//        XCTAssertEqual(viewModel.shownSections.count, 4)
+//    }
 
     // MARK: Orders of sections
     func testSectionOrder_addingJumpBackIn() {

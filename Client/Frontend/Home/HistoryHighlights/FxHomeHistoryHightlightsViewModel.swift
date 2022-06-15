@@ -6,6 +6,10 @@ import Foundation
 import Storage
 import UIKit
 
+protocol FxHomeHistoryHighlightsDelegate: AnyObject {
+    func reloadHighlights()
+}
+
 class FxHomeHistoryHightlightsViewModel {
 
     struct UX {
@@ -26,7 +30,9 @@ class FxHomeHistoryHightlightsViewModel {
     private var hasSentSectionEvent = false
 
     var onTapItem: ((HighlightItem) -> Void)?
+    var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
+    weak var delegate: FxHomeHistoryHighlightsDelegate?
 
     // MARK: - Variables
     /// We calculate the number of columns dynamically based on the numbers of items
@@ -86,11 +92,13 @@ class FxHomeHistoryHightlightsViewModel {
     }
 
     func switchTo(_ highlight: HighlightItem) {
-        if foregroundBVC.urlBar.inOverlayMode {
-            foregroundBVC.urlBar.leaveOverlayMode()
-        }
+        if foregroundBVC.urlBar.inOverlayMode { foregroundBVC.urlBar.leaveOverlayMode() }
+
         onTapItem?(highlight)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .firefoxHomepage, value: .historyHighlightsItemOpened)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .firefoxHomepage,
+                                     value: .historyHighlightsItemOpened)
     }
 
     // TODO: Good candidate for protocol because is used in JumpBackIn and here
@@ -100,15 +108,43 @@ class FxHomeHistoryHightlightsViewModel {
         }
     }
 
-    // MARK: - Private Methods
+    func getItemDetailsAt(index: Int) -> HighlightItem? {
+        guard let selectedItem = historyItems?[safe: index] else { return nil }
 
-    private func loadItems(completion: @escaping () -> Void) {
+        return selectedItem
+    }
+
+    func delete(_ item: HighlightItem) {
+        let deletionUtility = HistoryDeletionUtility(with: profile)
+        let urls = extractDeletableURLs(from: item)
+
+        deletionUtility.delete(urls) { [weak self] success in
+            if success { self?.delegate?.reloadHighlights() }
+        }
+    }
+
+    func loadItems(completion: @escaping () -> Void) {
         HistoryHighlightsManager.getHighlightsData(with: profile,
                                                    and: tabManager.tabs,
                                                    shouldGroupHighlights: true) { [weak self] highlights in
             self?.historyItems = highlights
             completion()
         }
+    }
+
+    // MARK: - Private Methods
+    private func extractDeletableURLs(from item: HighlightItem) -> [String] {
+        var urls = [String]()
+        if item.type == .item, let url = item.siteUrl?.absoluteString {
+            urls = [url]
+
+        } else if item.type == .group, let items = item.group {
+            items.forEach { groupedItem in
+                if let url = groupedItem.siteUrl?.absoluteString { urls.append(url) }
+            }
+        }
+
+        return urls
     }
 }
 
@@ -233,6 +269,15 @@ extension FxHomeHistoryHightlightsViewModel: FxHomeSectionHandler {
         if let highlight = historyItems?[safe: indexPath.row] {
             switchTo(highlight)
         }
+    }
+
+    func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
+        guard let longPressHandler = historyHighlightLongPressHandler,
+              let selectedItem = getItemDetailsAt(index: indexPath.row)
+        else { return }
+
+        let sourceView = collectionView.cellForItem(at: indexPath)
+        longPressHandler(selectedItem, sourceView)
     }
 
     // MARK: - Cell helper functions
@@ -373,5 +418,12 @@ extension FxHomeHistoryHightlightsViewModel: FxHomeSectionHandler {
 
         cell.updateCell(with: cellOptions)
         return cell
+    }
+}
+
+// MARK: - FxHomeTopSitesManagerDelegate
+extension FxHomeHistoryHightlightsViewModel: FxHomeHistoryHighlightsDelegate {
+    func reloadHighlights() {
+        delegate?.reloadHighlights()
     }
 }
