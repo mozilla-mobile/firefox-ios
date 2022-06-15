@@ -369,7 +369,13 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
             }
-            self.collectionView.reloadData()
+
+            let range = Range(uncheckedBounds: (0, self.collectionView.numberOfSections))
+            let indexSet = IndexSet(integersIn: range)
+            self.collectionView.reloadSections(indexSet)
+            
+//            self.collectionView.reloadData()
+            
             if evenIfHidden {
                 // reloadData() will reset the data for the collection view,
                 // but if called when offscreen it will not render properly,
@@ -382,6 +388,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 }
                 self.collectionView.reloadItems(at: indexPaths)
             }
+
             self.tabDisplayer?.focusSelectedTab()
         }
     }
