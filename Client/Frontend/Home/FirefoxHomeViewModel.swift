@@ -168,7 +168,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
     // MARK: - Section ViewModel helper
 
     func getSectionViewModel(shownSection: Int) -> FXHomeViewModelProtocol? {
-        let actualSectionNumber = shownSections[shownSection].rawValue
+        guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
         return childViewModels[safe: actualSectionNumber]
     }
 }
