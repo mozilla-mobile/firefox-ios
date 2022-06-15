@@ -6,7 +6,19 @@ import Foundation
 import WebKit
 
 protocol WebViewNavigationHandler {
+
+    // A completion handler block to call with the results about whether to allow or cancel the WebView navigation.
     var decisionHandler: (WKNavigationActionPolicy) -> Void { get }
+
+    /// Whether we should filter that URL for data scheme or not
+    /// - Returns: True when the URL needs to be filtered for the data scheme
+    func shouldFilterDataScheme(url: URL) -> Bool
+
+    /// Filter top-level data scheme has defined in:
+    /// https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
+    /// - Parameters:
+    ///   - url: url to filter the navigation action on
+    ///   - navigationAction: The navigation action that happened on that url, contains information about an action that may cause a navigation, used for making policy decisions.
     func filterDataScheme(url: URL, navigationAction: WKNavigationAction)
 }
 
@@ -27,8 +39,10 @@ struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
         self.decisionHandler = decisionHandler
     }
 
-    /// Filter top-level data scheme
-    /// https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
+    func shouldFilterDataScheme(url: URL) -> Bool {
+        return url.scheme == WebViewNavigationHandlerImplementation.Scheme.data.rawValue
+    }
+
     func filterDataScheme(url: URL,
                           navigationAction: WKNavigationAction) {
 
@@ -39,7 +53,7 @@ struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
             return
         }
 
-        let url = url.absoluteString
+        let url = url.absoluteString.lowercased()
         // Allow certain image types
         if url.hasPrefix("data:image/") && !url.hasPrefix("data:image/svg+xml") {
             decisionHandler(.allow)

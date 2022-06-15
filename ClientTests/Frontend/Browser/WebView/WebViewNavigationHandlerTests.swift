@@ -11,7 +11,27 @@ class WebViewNavigationHandlerTests: XCTestCase {
 
     // MARK: - Data scheme
 
-    func testDoesntFilterSubframes() {
+    func testShouldNotHandleNonDataSchemeURL() {
+        let handler: (WKNavigationActionPolicy) -> Void = { policy in
+            XCTFail("Handler should not be called")
+        }
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
+
+        let shouldFilter = navigationHandler.shouldFilterDataScheme(url: URL(string: "www.testURL.com")!)
+        XCTAssertTrue(shouldFilter)
+    }
+
+    func testShouldHandleDataSchemeURL() {
+        let handler: (WKNavigationActionPolicy) -> Void = { policy in
+            XCTFail("Handler should not be called")
+        }
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
+
+        let shouldFilter = navigationHandler.shouldFilterDataScheme(url: URL(string: "data:text/html,")!)
+        XCTAssertTrue(shouldFilter)
+    }
+
+    func testAllowsSubframes() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
             XCTAssertEqual(policy, .allow, "Allows subframes")
         }
@@ -20,7 +40,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: false)
 
-        navigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
+        navigationHandler.filterDataScheme(url: URL(string: "data:text/html,")!,
                                            navigationAction: policy)
     }
 
@@ -32,7 +52,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
 
         let policy = WKNavigationActionMock()
-        navigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
+        navigationHandler.filterDataScheme(url: URL(string: "data:text/html,")!,
                                            navigationAction: policy)
     }
 
@@ -45,7 +65,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
         let policy = WKNavigationActionMock()
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
-        navigationHandler.filterDataScheme(url: URL(string: "www.testurl.com")!,
+        navigationHandler.filterDataScheme(url: URL(string: "data:text/html,")!,
                                            navigationAction: policy)
     }
 
@@ -85,6 +105,19 @@ class WebViewNavigationHandlerTests: XCTestCase {
         policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
 
         navigationHandler.filterDataScheme(url: URL(string: "data:image/svg+xml")!,
+                                           navigationAction: policy)
+    }
+
+    func testFilterMainFrame_cancelImageSVGCaplocks() {
+        let handler: (WKNavigationActionPolicy) -> Void = { policy in
+            XCTAssertEqual(policy, .cancel, "Cancel SVG + XML images")
+        }
+
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
+        let policy = WKNavigationActionMock()
+        policy.overridenTargetFrame = WKFrameInfoMock(isMainFrame: true)
+
+        navigationHandler.filterDataScheme(url: URL(string: "data:image/SVG+xml")!,
                                            navigationAction: policy)
     }
 

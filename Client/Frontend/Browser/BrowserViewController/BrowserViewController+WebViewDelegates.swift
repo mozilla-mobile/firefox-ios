@@ -496,8 +496,8 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if url.scheme == WebViewNavigationHandlerImplementation.Scheme.data.rawValue {
-            let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: decisionHandler)
+        let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: decisionHandler)
+        if navigationHandler.shouldFilterDataScheme(url: url) {
             navigationHandler.filterDataScheme(url: url, navigationAction: navigationAction)
             return
         }
