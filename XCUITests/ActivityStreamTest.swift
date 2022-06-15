@@ -51,7 +51,7 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testDefaultSites() {
         sleep(15)
-        waitForExistence(TopSiteCellgroup, timeout: 35)
+        waitForExistence(TopSiteCellgroup, timeout: 60)
         XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
 
         // There should be 5 top sites by default
