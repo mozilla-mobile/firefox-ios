@@ -42,24 +42,33 @@ class PocketStoriesTests: XCTestCase {
         let PocketFeed = Pocket(endPoint: pocketAPI)
         let feedNumber = 11
 
-        PocketFeed.globalFeed(items: feedNumber).upon { result in
-            let items = result
-            XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
+        PocketFeed.globalFeed(items: feedNumber) { result in
+            switch result {
+                case .success(let items):
+                    XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
+                case .failure:
+                    XCTFail()
+            }
             self.webServer.stop() // Stop the webserver so we can check caching
 
             // Try again now that the webserver is down
-            PocketFeed.globalFeed(items: feedNumber).upon { result in
-                let items = result
-                XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
-                let item = items.first
-                // These are all not optional so they should never be nil.
-                // But lets check in case someone decides to change something
-                XCTAssertNotNil(item?.domain, "Why")
-                XCTAssertNotNil(item?.imageURL, "You")
-                XCTAssertNotNil(item?.storyDescription, "Do")
-                XCTAssertNotNil(item?.title, "This")
-                XCTAssertNotNil(item?.url, "?")
-                expect.fulfill()
+            PocketFeed.globalFeed(items: feedNumber) { result in
+                switch result {
+                    case .success(let items):
+                        XCTAssertEqual(items.count, feedNumber, "We are fetching a static feed. There are \(feedNumber) items in it")
+                        let item = items.first
+                        // These are all not optional so they should never be nil.
+                        // But lets check in case someone decides to change something
+                        XCTAssertNotNil(item?.domain, "Why")
+                        XCTAssertNotNil(item?.imageURL, "You")
+                        XCTAssertNotNil(item?.storyDescription, "Do")
+                        XCTAssertNotNil(item?.title, "This")
+                        XCTAssertNotNil(item?.url, "?")
+                        expect.fulfill()
+
+                    case .failure:
+                        XCTFail()
+                }
             }
         }
         waitForExpectations(timeout: 10, handler: nil)

@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import Shared
+import UIKit
 
 class FxHomePocketViewModel {
 
@@ -29,7 +30,7 @@ class FxHomePocketViewModel {
 
     var onTapTileAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
-    var onScroll: (() -> Void)?
+    var onScroll: (([NSCollectionLayoutVisibleItem]) -> Void)?
 
     private(set) var pocketStoriesViewModels: [FxPocketHomeHorizontalCellViewModel] = []
 
@@ -103,46 +104,6 @@ class FxHomePocketViewModel {
     }
 
     // MARK: - Private
-
-//    func updatePocketStoryViewModels(with stories: [PocketStory]) {
-//        pocketStoriesViewModels = []
-//        for story in stories {
-//            bind(pocketStoryViewModel: .init(story: story))
-//        }
-//    }
-//
-//    private func getPocketSites(completion: @escaping () -> Void) {
-//        pocketAPI
-//            .globalFeed(items: UX.numberOfItemsInSection)
-//            .uponQueue(.main) { [weak self] (pocketStory: [PocketFeedStory]) -> Void in
-//                var globalTemp = pocketStory.map(PocketStory.init)
-//
-//                // Check if sponsored stories are enabled, otherwise drop api call
-//                guard self?.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true else {
-//                    self?.updatePocketStoryViewModels(with: globalTemp)
-//                    completion()
-//                    return
-//                }
-//
-//                self?.pocketAPI.sponsoredFeed().uponQueue(.main) { sponsored in
-//                    // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
-//                    var sponsoredTemp = sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection)
-//
-//                    // Making sure we insert a sponsored story at a valid index
-//                    let firstIndex = min(UX.indexOfFirstSponsoredItem, globalTemp.endIndex)
-//                    sponsoredTemp.first.map { globalTemp.insert($0, at: firstIndex) }
-//                    sponsoredTemp.removeFirst()
-//
-//                    let secondIndex = min(UX.indexOfSecondSponsoredItem, globalTemp.endIndex)
-//                    sponsoredTemp.first.map { globalTemp.insert($0, at: secondIndex) }
-//                    sponsoredTemp.removeFirst()
-//
-//                    self?.updatePocketStoryViewModels(with: globalTemp)
-//                    completion()
-//                }
-//            }
-//    }
-
     // MARK: - TODO: Use settings toggle to determine if we show sponsored stories
     var showSponsors = true
 
@@ -225,8 +186,9 @@ extension FxHomePocketViewModel: FXHomeViewModelProtocol, FeatureFlaggable {
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
         section.boundarySupplementaryItems = [header]
-        section.visibleItemsInvalidationHandler = { (visibleItems, point, env) -> Void in
-            self.onScroll?()
+        section.visibleItemsInvalidationHandler = { [weak self] (visibleItems, point, env) -> Void in
+            guard let self = self else { return }
+            self.onScroll?(visibleItems)
         }
 
         let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)

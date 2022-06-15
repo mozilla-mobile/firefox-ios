@@ -483,7 +483,7 @@ private extension FirefoxHomeViewController {
             self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .pocket)
         }
 
-        viewModel.pocketViewModel.onScroll = { [weak self] in
+        viewModel.pocketViewModel.onScroll = { [weak self] cells in
             guard let window = UIWindow.keyWindow, let self = self else { return }
             let cells = self.collectionView.visibleCells.filter { $0.reuseIdentifier == FxPocketHomeHorizontalCell.cellIdentifier }
             self.updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: window.bounds)
