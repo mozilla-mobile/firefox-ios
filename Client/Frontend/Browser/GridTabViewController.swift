@@ -578,6 +578,7 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         case .removedLastTab:
             // when removing the last tab (only in normal mode) we will automatically open a new tab.
             // When that happens focus it by dismissing the tab tray
+            notificationCenter.post(name: .TabsTrayDidClose, object: nil)
             if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
