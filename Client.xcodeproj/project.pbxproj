@@ -2870,7 +2870,6 @@
 		8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandler.swift; sourceTree = "<group>"; };
 		8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandlerTests.swift; sourceTree = "<group>"; };
 		8A29E8EF2857890100D0DE25 /* WebViewNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandler.swift; sourceTree = "<group>"; };
-		8A29E8F328578A3200D0DE25 /* WebViewNavigationHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandlerTests.swift; sourceTree = "<group>"; };
 		8A2B1A5A28216C4C0061216B /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
 		8A2B1A5B28216C4C0061216B /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
 		8A2B1A5C28216C4D0061216B /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Configuration/Release.xcconfig; sourceTree = "<group>"; };
@@ -5765,6 +5764,22 @@
 				39F4C1092045DB2E00746155 /* FocusHelper.swift */,
 			);
 			path = TabContentsScripts;
+			sourceTree = "<group>";
+		};
+		8AD8B692285A5AAA002F4740 /* Browser */ = {
+			isa = PBXGroup;
+			children = (
+				8AD8B693285A5AAF002F4740 /* WebView */,
+			);
+			path = Browser;
+			sourceTree = "<group>";
+		};
+		8AD8B693285A5AAF002F4740 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				8AD8B694285A62B0002F4740 /* WebViewNavigationHandlerTests.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 		8AE0BF4B2819B08D00F33EC4 /* TopSitesSettings */ = {
