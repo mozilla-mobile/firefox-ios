@@ -238,10 +238,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
-    private func getTabsAndUpdateInactiveState(showPrivateTabsToDisplay: Bool = false,
-                                               completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
-        let shouldShowPrivateTab = showPrivateTabsToDisplay ? showPrivateTabsToDisplay : self.isPrivate
-
+    private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
 
         // We should not make a single tab inactive as that would be the selected tab
@@ -359,23 +356,26 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return nil
     }
 
-    func refreshStore(evenIfHidden: Bool = false, showPrivateTabsToDisplay: Bool = false) {
+    func refreshStore(evenIfHidden: Bool = false, shouldAnimate: Bool = false) {
         operations.removeAll()
         dataStore.removeAll()
 
-        getTabsAndUpdateInactiveState(showPrivateTabsToDisplay: showPrivateTabsToDisplay) {
+        getTabsAndUpdateInactiveState {
             tabGroup, tabsToDisplay in
 
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
             }
 
-            let range = Range(uncheckedBounds: (0, self.collectionView.numberOfSections))
-            let indexSet = IndexSet(integersIn: range)
-            self.collectionView.reloadSections(indexSet)
-            
-//            self.collectionView.reloadData()
-            
+            if shouldAnimate {
+                UIView.transition(with: self.collectionView, duration: 0.27,
+                                  options: .transitionCrossDissolve, animations: {
+                    self.collectionView.reloadData()
+                }, completion: nil)
+            } else {
+                self.collectionView.reloadData()
+            }
+
             if evenIfHidden {
                 // reloadData() will reset the data for the collection view,
                 // but if called when offscreen it will not render properly,

@@ -282,7 +282,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 //            self.tabManager.selectTab(mostRecentNormalTab)
 //        }
 
-        tabDisplayManager.refreshStore()
+        tabDisplayManager.refreshStore(evenIfHidden: false, shouldAnimate: true)
 
         // If we are exiting private mode and we have the close private tabs option selected, make sure
         // we clear out all of the private tabs
