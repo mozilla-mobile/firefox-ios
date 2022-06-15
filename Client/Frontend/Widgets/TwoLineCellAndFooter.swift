@@ -43,7 +43,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.textAlignment = .left
+        label.textAlignment = .natural
         label.numberOfLines = 1
         return label
     }()
@@ -52,7 +52,7 @@ class TwoLineImageOverlayCell: UITableViewCell, NotificationThemeable, ReusableC
         let label = UILabel()
         label.textColor = UIColor.Photon.Grey40
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textAlignment = .left
+        label.textAlignment = .natural
         label.numberOfLines = 1
         return label
     }()
@@ -181,7 +181,7 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.textAlignment = .left
+        label.textAlignment = .natural
         label.numberOfLines = 1
         return label
     }()
@@ -190,7 +190,7 @@ class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
         let label = UILabel()
         label.textColor = UIColor.Photon.Grey40
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textAlignment = .left
+        label.textAlignment = .natural
         label.numberOfLines = 1
         return label
     }()
@@ -282,7 +282,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeabl
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textAlignment = .left
+        label.textAlignment = .natural
         label.numberOfLines = 1
         return label
     }()
@@ -290,7 +290,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeabl
     var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12.5, weight: .regular)
-        label.textAlignment = .left
+        label.textAlignment = .natural
         label.numberOfLines = 1
         return label
     }()

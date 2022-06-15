@@ -24,7 +24,7 @@ extension UIApplication {
  when the app performs a sync.
  */
 class AppSyncDelegate: SyncDelegate {
-    let app: UIApplication
+    private let app: UIApplication
 
     init(app: UIApplication) {
         self.app = app

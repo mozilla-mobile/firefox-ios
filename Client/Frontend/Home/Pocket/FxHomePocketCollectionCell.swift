@@ -9,6 +9,9 @@ struct FxHomePocketCollectionCellUX {
     static let numberOfItemsInColumn = 3
     static let discoverMoreMaxFontSize: CGFloat = 26 // Title 3 xxxLarge
     static let numberOfItemsInSection = 11
+    static let numberOfSponsoredItemsInSection = 2
+    static let indexOfFirstSponsoredItem = 1
+    static let indexOfSecondSponsoredItem = 9
     static let fractionalWidthiPhonePortrait: CGFloat = 29/30
     static let fractionalWidthiPhoneLanscape: CGFloat = 7/15
 }
@@ -16,7 +19,7 @@ struct FxHomePocketCollectionCellUX {
 class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Properties
-    var viewModel: FxHomePocketViewModel?
+    var viewModel: FxHomePocketViewModel!
 
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewCompositionalLayout(section: layoutSection)
@@ -26,9 +29,8 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
         collectionView.backgroundColor = UIColor.clear
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(FxHomeHorizontalCell.self, forCellWithReuseIdentifier: FxHomeHorizontalCell.cellIdentifier)
+        collectionView.register(FxPocketHomeHorizontalCell.self, forCellWithReuseIdentifier: FxPocketHomeHorizontalCell.cellIdentifier)
         collectionView.register(FxHomePocketDiscoverMoreCell.self, forCellWithReuseIdentifier: FxHomePocketDiscoverMoreCell.cellIdentifier)
-
         return collectionView
     }()
 
@@ -85,6 +87,9 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
                                                       bottom: 0, trailing: FxHomeHorizontalCellUX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
+        section.visibleItemsInvalidationHandler = { (visibleItems, point, env) -> Void in
+            self.viewModel.onScroll?(self.collectionView.visibleCells)
+        }
 
         section.orthogonalScrollingBehavior = .continuous
         return section
@@ -99,7 +104,7 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
 
         let point = longPressGestureRecognizer.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: point),
-              let viewModel = viewModel, let onLongPressTileAction = viewModel.onLongPressTileAction
+                let onLongPressTileAction = viewModel.onLongPressTileAction
         else { return }
 
         let site = viewModel.getSitesDetail(for: indexPath.row)
@@ -111,19 +116,14 @@ class FxHomePocketCollectionCell: UICollectionViewCell, ReusableCell {
 // MARK: - UICollectionViewDataSource
 extension FxHomePocketCollectionCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel?.numberOfCells ?? 0
+        return viewModel.numberOfCells
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let viewModel = viewModel else { return UICollectionViewCell() }
-
         if viewModel.isStoryCell(index: indexPath.row) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxHomeHorizontalCell
-            let pocketStory = viewModel.pocketStories[indexPath.row]
-            let cellViewModel = FxHomeHorizontalCellViewModel(titleText: pocketStory.title, descriptionText: viewModel.domainAndReadingTimeForStory(atIndex: indexPath.row), tag: indexPath.item, hasFavicon: false)
-            cell.configure(viewModel: cellViewModel)
-            cell.setFallBackFaviconVisibility(isHidden: true)
-            cell.heroImage.sd_setImage(with: pocketStory.imageURL)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxPocketHomeHorizontalCell.cellIdentifier, for: indexPath) as! FxPocketHomeHorizontalCell
+            cell.configure(viewModel: viewModel.pocketStoriesViewModels[indexPath.row])
+            cell.tag = indexPath.item
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FxHomePocketDiscoverMoreCell.cellIdentifier, for: indexPath) as! FxHomePocketDiscoverMoreCell
@@ -136,16 +136,10 @@ extension FxHomePocketCollectionCell: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension FxHomePocketCollectionCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let viewModel = viewModel, let showSiteWithURLHandler = viewModel.onTapTileAction else { return }
-
         if viewModel.isStoryCell(index: indexPath.row) {
-            viewModel.recordTapOnStory(index: indexPath.row)
-
-            let siteUrl = viewModel.pocketStories[indexPath.row].url
-            showSiteWithURLHandler(siteUrl)
-
+            viewModel.pocketStoriesViewModels[indexPath.row].onTap(indexPath)
         } else {
-            showSiteWithURLHandler(Pocket.MoreStoriesURL)
+            viewModel.showDiscoverMore()
         }
     }
 }

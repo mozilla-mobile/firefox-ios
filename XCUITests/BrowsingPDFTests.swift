@@ -93,23 +93,24 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.goto(NewTabScreen)
-        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["pdf995"])
-        XCTAssertTrue(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["pdf995"].exists)
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
+        waitForExistence(app.collectionViews.cells.staticTexts["pdf995"])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["pdf995"].exists)
 
         // Open pdf from pinned site
-        let pdfTopSite = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["pdf995"]
+        let pdfTopSite = app.collectionViews.cells.staticTexts["pdf995"]
         pdfTopSite.tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
 
         // Remove pdf pinned site
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["pdf995"])
+        waitForExistence(app.collectionViews.cells.staticTexts["pdf995"])
         pdfTopSite.press(forDuration: 1)
         waitForExistence(app.tables["Context Menu"].cells[ImageIdentifiers.removeFromShortcut])
         app.tables["Context Menu"].cells[ImageIdentifiers.removeFromShortcut].tap()
-        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
-        XCTAssertTrue(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells["pdf995"].exists)
+        waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts["pdf995"].exists)
     }
 
     func testBookmarkPDF() {

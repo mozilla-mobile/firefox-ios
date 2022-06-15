@@ -978,7 +978,7 @@ open class BrowserProfile: Profile {
                         let lastAccessTime = d.lastAccessTime == nil ? nil : UInt64(clamping: d.lastAccessTime!)
                         return RemoteDevice(id: d.id, name: d.displayName, type: t, isCurrentDevice: d.isCurrentDevice, lastAccessTime: lastAccessTime, availableCommands: nil)
                     }
-                    let _ = self.profile.remoteClientsAndTabs.replaceRemoteDevices(devices)
+                    _ = self.profile.remoteClientsAndTabs.replaceRemoteDevices(devices)
                 }
             }
 

@@ -86,13 +86,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     var suggestions: [String]? = []
     var savedQuery: String = ""
-    var experimental: Variables?
+    var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
 
-    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager) {
+    init(profile: Profile, viewModel: SearchViewModel, tabManager: TabManager, featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search ) {
         self.viewModel = viewModel
         self.tabManager = tabManager
-        self.experimental = Experiments.shared.getVariables(featureId: .search).getVariables("awesome-bar")
+        self.searchFeature = featureConfig
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -136,7 +136,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
 
         searchEngineContainerView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
@@ -169,10 +169,15 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         reloadData()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchFeature.recordExposure()
+    }
+
     private func layoutSearchEngineScrollView() {
         let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
         searchEngineScrollView.snp.remakeConstraints { make in
-            make.left.right.top.equalToSuperview()
+            make.leading.trailing.top.equalToSuperview()
             if keyboardHeight == 0 {
                 make.bottom.equalTo(view.safeArea.bottom)
             } else {
@@ -187,11 +192,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             make.center.equalTo(self.searchEngineScrollView).priority(10)
             // left-align the engines on iphones, center on ipad
             if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
-                make.left.equalTo(self.searchEngineScrollView).priority(1000)
+                make.leading.equalTo(self.searchEngineScrollView).priority(1000)
             } else {
-                make.left.greaterThanOrEqualTo(self.searchEngineScrollView).priority(1000)
+                make.leading.greaterThanOrEqualTo(self.searchEngineScrollView).priority(1000)
             }
-            make.right.lessThanOrEqualTo(self.searchEngineScrollView).priority(1000)
+            make.trailing.lessThanOrEqualTo(self.searchEngineScrollView).priority(1000)
             make.top.equalTo(self.searchEngineScrollView)
             make.bottom.equalTo(self.searchEngineScrollView)
         }
@@ -253,7 +258,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     func reloadSearchEngines() {
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
-        var leftEdge = searchEngineScrollViewContent.snp.left
+        var leftEdge = searchEngineScrollViewContent.snp.leading
 
         // search settings icon
         let searchButton = UIButton()
@@ -267,13 +272,14 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchButton.snp.makeConstraints { make in
             make.size.equalTo(SearchViewControllerUX.FaviconSize)
             // offset the left edge to align with search results
-            make.left.equalTo(leftEdge).offset(SearchViewControllerUX.SuggestionMargin * 2)
+            make.leading.equalTo(leftEdge).offset(SearchViewControllerUX.SuggestionMargin * 2)
             make.top.equalTo(self.searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
             make.bottom.equalTo(self.searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
         }
 
         // search engines
-        leftEdge = searchButton.snp.right
+        leftEdge = searchButton.snp.trailing
+
         for engine in quickSearchEngines {
             let engineButton = UIButton()
             engineButton.setImage(engine.image, for: [])
@@ -292,14 +298,14 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engineButton.snp.makeConstraints { make in
                 make.width.equalTo(SearchViewControllerUX.EngineButtonWidth)
                 make.height.equalTo(SearchViewControllerUX.EngineButtonHeight)
-                make.left.equalTo(leftEdge)
+                make.leading.equalTo(leftEdge)
                 make.top.equalTo(self.searchEngineScrollViewContent)
                 make.bottom.equalTo(self.searchEngineScrollViewContent)
                 if engine === self.searchEngines.quickSearchEngines.last {
-                    make.right.equalTo(self.searchEngineScrollViewContent)
+                    make.trailing.equalTo(self.searchEngineScrollViewContent)
                 }
             }
-            leftEdge = engineButton.snp.right
+            leftEdge = engineButton.snp.trailing
         }
     }
 
@@ -391,10 +397,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 $0 && content.range(of: $1, options: .caseInsensitive) != nil
             }
         }
+        let config = searchFeature.value().awesomeBar
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
-        let searchInContent = (experimental?.getBool("use-page-content") ?? false)
-            && searchTerms.find { $0.count >= 3 } != nil
+        let searchInContent = config.usePageContent
+            && searchTerms.find { $0.count >= config.minSearchTerm } != nil
 
         filteredOpenedTabs = currentTabs.filter { tab in
             guard let url = tab.url ?? tab.sessionData?.urls.last,
@@ -406,8 +413,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     searchInContent ? tab.readabilityResult?.textContent : nil,
                     url.absoluteString
                 ]
-                .filter { $0 != nil }
-                .map { $0! }
+                .compactMap { $0 }
 
             let text = lines.joined(separator: "\n")
             return find(in: text)

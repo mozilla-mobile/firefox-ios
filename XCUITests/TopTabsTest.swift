@@ -18,7 +18,7 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -106,8 +106,8 @@ class TopTabsTest: BaseTestCase {
         }
 
         // After removing only one tab it automatically goes to HomepanelView
-        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section])
-        XCTAssert(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section].cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssert(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
     }
 
     private func openNtabsFromTabTray(numTabs: Int) {
@@ -149,7 +149,7 @@ class TopTabsTest: BaseTestCase {
         waitForExistence(app.otherElements.buttons.staticTexts["Undo"])
         app.otherElements.buttons.staticTexts["Undo"].tap()
 
-        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.section], timeout: 5)
+        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 5)
         navigator.nowAt(BrowserTab)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)

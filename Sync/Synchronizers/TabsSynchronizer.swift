@@ -190,7 +190,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 }
 
 extension RemoteTab {
-    public func toDictionary() -> Dictionary<String, Any>? {
+    public func toDictionary() -> [String: Any]? {
         let tabHistory = history.compactMap { $0.absoluteString }
         if tabHistory.isEmpty {
             return nil

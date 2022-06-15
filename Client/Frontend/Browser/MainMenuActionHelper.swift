@@ -121,7 +121,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
     private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
-        guard let url = tabUrl?.absoluteString else {
+        var url: String?
+
+        if let tabUrl = tabUrl, tabUrl.isReaderModeURL, let tabUrlDecoded = tabUrl.decodeReaderModeURL {
+            url = tabUrlDecoded.absoluteString
+        } else {
+            url = tabUrl?.absoluteString
+        }
+
+        guard let url = url else {
             dataLoadingCompletion?()
             return
         }
@@ -389,13 +397,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     }
 
     private func getSettingsAction() -> PhotonRowActions {
-        // This method is being called when we the user sees the menu, not just when it's constructed.
-        // In that case, we can let sendExposureEvent default to true.
-        let variables = Experiments.shared.getVariables(featureId: .nimbusValidation)
-        // Get the title and icon for this feature from nimbus.
-        // We need to provide defaults if Nimbus doesn't provide them.
-        let title = variables.getText("settings-title") ?? .AppMenu.AppMenuSettingsTitleString
-        let icon = variables.getString("settings-icon") ?? ImageIdentifiers.settings
+        let title = String.AppMenu.AppMenuSettingsTitleString
+        let icon = ImageIdentifiers.settings
 
         let openSettings = SingleActionViewModel(title: title,
                                                  iconString: icon) { _ in

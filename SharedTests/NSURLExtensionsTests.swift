@@ -478,7 +478,7 @@ class NSURLExtensionsTests: XCTestCase {
             let url = URL(string: u)!
 
             let original = url.absoluteDisplayString
-            let matches = detector.matches(in: original, options: [], range: NSMakeRange(0, original.count))
+            let matches = detector.matches(in: original, options: [], range: NSRange(location: 0, length: original.count))
             guard matches.count > 0 else {
                 print("\(url) doesn't match as a URL")
                 continue
@@ -487,7 +487,7 @@ class NSURLExtensionsTests: XCTestCase {
             let modified = url.absoluteDisplayExternalString
             XCTAssertNotEqual(original, modified)
 
-            let newMatches = detector.matches(in: modified, options: [], range: NSMakeRange(0, modified.count))
+            let newMatches = detector.matches(in: modified, options: [], range: NSRange(location: 0, length: modified.count))
 
             XCTAssertEqual(0, newMatches.count, "\(modified) is not a valid URL")
         }
