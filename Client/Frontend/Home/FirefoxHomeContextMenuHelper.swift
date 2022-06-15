@@ -45,11 +45,33 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         var actions = [PhotonRowActions]()
         if sectionType == .topSites, let topSitesActions = getTopSitesActions(site: site) {
             actions = topSitesActions
+
         } else if sectionType == .pocket, let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
         }
 
         return actions
+    }
+
+    func presentContextMenu(for highlightItem: HighlightItem,
+                            with sourceView: UIView?,
+                            sectionType: FirefoxHomeSectionType,
+                            completionHandler: @escaping () -> PhotonActionSheet?
+    ) {
+        guard let contextMenu = completionHandler() else { return }
+        delegate?.present(contextMenu, animated: true, completion: nil)
+    }
+
+    func getContextMenuActions(for highlightItem: HighlightItem,
+                               with sourceView: UIView?,
+                               sectionType: FirefoxHomeSectionType
+    ) -> [PhotonRowActions]? {
+
+        guard sectionType == .historyHighlights,
+              let highlightsActions = getHistoryHighlightsActions(for: highlightItem)
+        else { return nil }
+
+        return highlightsActions
     }
 
     // MARK: - Default actions
@@ -58,6 +80,18 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
         return SingleActionViewModel(title: .OpenInNewPrivateTabContextMenuTitle, iconString: ImageIdentifiers.newPrivateTab) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }.items
+    }
+
+    // MARK: - History Highlights
+
+    private func getHistoryHighlightsActions(for highlightItem: HighlightItem) -> [PhotonRowActions]? {
+        return [SingleActionViewModel(title: .RemoveContextMenuTitle,
+                                     iconString: ImageIdentifiers.actionRemove,
+                                     tapHandler: { _ in
+
+            self.viewModel.historyHighlightsViewModel.delete(highlightItem)
+            self.sendHistoryHighlightContextualTelemetry(type: .remove)
+        }).items]
     }
 
     // MARK: - Pocket
@@ -234,5 +268,14 @@ class FirefoxHomeContextMenuHelper: HomePanelContextMenu {
     private func sendTopSiteContextualTelemetry(type: ContextualActionType) {
         let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
+    }
+
+    func sendHistoryHighlightContextualTelemetry(type: ContextualActionType) {
+        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .historyHighlightContextualMenu,
+                                     value: nil,
+                                     extras: extras)
     }
 }
