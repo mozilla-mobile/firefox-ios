@@ -95,6 +95,7 @@ class FirefoxHomeViewModel: FeatureFlaggable {
 
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
+        historyHighlightsViewModel.delegate = self
 
         updateEnabledSections()
     }
@@ -121,9 +122,6 @@ class FirefoxHomeViewModel: FeatureFlaggable {
 
     private func updateData(section: FXHomeViewModelProtocol) {
         section.updateData {
-            // Once section has data loaded with new data, we check if it needs to show
-            guard section.shouldShow else { return }
-
             self.delegate?.reloadSection(section: section)
         }
     }
@@ -179,5 +177,11 @@ class FirefoxHomeViewModel: FeatureFlaggable {
 extension FirefoxHomeViewModel: FxHomeTopSitesViewModelDelegate {
     func reloadTopSites() {
         updateData(section: topSiteViewModel)
+    }
+}
+
+extension FirefoxHomeViewModel: FxHomeHistoryHighlightsDelegate {
+    func reloadHighlights() {
+        updateData(section: historyHighlightsViewModel)
     }
 }
