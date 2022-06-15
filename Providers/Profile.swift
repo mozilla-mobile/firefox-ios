@@ -686,15 +686,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        /**
-         * Locking is managed by syncSeveral. Make sure you take and release these
-         * whenever you do anything Sync-ey.
-         */
-        fileprivate let syncLock = NSRecursiveLock()
-
         public var isSyncing: Bool {
-            syncLock.lock()
-            defer { syncLock.unlock() }
             return syncDisplayState != nil && syncDisplayState! == .inProgress
         }
 
@@ -715,8 +707,6 @@ open class BrowserProfile: Profile {
 
         fileprivate func endSyncing(_ result: SyncOperationResult) {
             // loop through statuses and fill sync state
-            syncLock.lock()
-            defer { syncLock.unlock() }
             log.info("Ending all queued syncs.")
 
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
@@ -797,8 +787,6 @@ open class BrowserProfile: Profile {
             }
 
             self.doInBackgroundAfter(300) {
-                self.syncLock.lock()
-                defer { self.syncLock.unlock() }
                 // If we're syncing already, then wait for sync to end,
                 // then reset the database on the same serial queue.
                 if let reducer = self.syncReducer, !reducer.isFilled {
@@ -846,14 +834,10 @@ open class BrowserProfile: Profile {
         }
 
         @objc func onStartSyncing(_ notification: NSNotification) {
-            syncLock.lock()
-            defer { syncLock.unlock() }
             syncDisplayState = .inProgress
         }
 
         @objc func onFinishSyncing(_ notification: NSNotification) {
-            syncLock.lock()
-            defer { syncLock.unlock() }
             if let syncState = syncDisplayState, syncState == .good {
                 self.lastSyncFinishTime = Date.now()
             }
@@ -1140,8 +1124,6 @@ open class BrowserProfile: Profile {
          * While a sync is ongoing, each engine from successive calls to this method will only be called once.
          */
         fileprivate func syncSeveral(why: SyncReason, synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
-            syncLock.lock()
-            defer { syncLock.unlock() }
 
             guard let (profile, deviceID) = self.getProfileAndDeviceId() else {
                 return deferMaybe(NoAccountError())
