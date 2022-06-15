@@ -1129,6 +1129,23 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+  history_highlights_context:
+    type: event
+    description: |
+        Records when a user clicks on a contextual
+        menu option on a history highlight
+    extra_keys:
+      type:
+        type: string
+        description: |
+          Type of contextual action
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-3147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11003
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-01-01"
 
 # Library
 library:

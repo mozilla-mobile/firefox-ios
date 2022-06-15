@@ -373,6 +373,7 @@ extension TelemetryWrapper {
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case topSiteTile = "top-site-tile"
         case topSiteContextualMenu = "top-site-contextual-menu"
+        case historyHighlightContextualMenu = "history-highlights-contextual-menu"
         case pocketStory = "pocket-story"
         case pocketSectionImpression = "pocket-section-impression"
         case library = "library"
@@ -614,7 +615,7 @@ extension TelemetryWrapper {
                                             value: value, extras: extras)
             }
 
-        // MARK: QR Codes
+        // MARK: - QR Codes
         case (.action, .scan, .qrCodeText, _, _),
              (.action, .scan, .qrCodeURL, _, _):
             GleanMetrics.QrCode.scanned.add()
@@ -992,6 +993,13 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
         case (.action, .view, .historyImpressions, _, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
+        case (.action, .view, .historyHighlightContextualMenu, _, let extras):
+            if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
+                let contextExtra = GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type)
+                GleanMetrics.FirefoxHomePage.historyHighlightsContext.record(contextExtra)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
 
         // MARK: - Wallpaper related
         case (.action, .tap, .firefoxHomepage, .cycleWallpaperButton, let extras):

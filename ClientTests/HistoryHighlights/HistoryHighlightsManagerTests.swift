@@ -12,14 +12,15 @@ class HistoryHighlightsTests: XCTestCase {
     typealias manager = HistoryHighlightsManager
 
     private var profile: MockProfile!
-    private var tabManager: TabManager!
+    private var entryProvider: HistoryHighlightsTestEntryProvider!
 
     override func setUp() {
         super.setUp()
 
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile._reopen()
-        tabManager = TabManager(profile: profile, imageStore: nil)
+        let tabManager = TabManager(profile: profile, imageStore: nil)
+        entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
     }
 
     override func tearDown() {
@@ -27,11 +28,11 @@ class HistoryHighlightsTests: XCTestCase {
 
         profile._shutdown()
         profile = nil
-        tabManager = nil
+        entryProvider = nil
     }
 
     func testEmptyRead() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let emptyRead = profile.places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(emptyRead.isSuccess)
@@ -40,8 +41,10 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testSingleDataExists() {
-        emptyDB()
-        setupData(forTestURL: "https://www.mozilla.com/", withTitle: "Mozilla Test", andViewTime: 1)
+        entryProvider.emptyDB()
+        entryProvider.setupData(forTestURL: "https://www.mozilla.com/",
+                                withTitle: "Mozilla Test",
+                                andViewTime: 1)
 
         let singleItemRead = profile.places.getHistoryMetadataSince(since: 0).value
         XCTAssertTrue(singleItemRead.isSuccess)
@@ -54,7 +57,7 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testHistoryHighlightsDontExist() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let expectation = expectation(description: "Highlights")
 
@@ -67,12 +70,12 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testHistoryHighlightCount() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
                          ("amazon", "")]
-        createHistoryEntry(siteEntry: testSites)
+        entryProvider.createHistoryEntry(siteEntry: testSites)
 
         let expectation = expectation(description: "Highlights")
         let expectedCount = 3
@@ -92,7 +95,7 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testHistoryHighlightCount_ForMoreThanNineResult() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
@@ -105,7 +108,7 @@ class HistoryHighlightsTests: XCTestCase {
                          ("testSite3", ""),
                          ("testSite4", ""),
                          ("testSite5", "")]
-        createHistoryEntry(siteEntry: testSites)
+        entryProvider.createHistoryEntry(siteEntry: testSites)
 
         let expectation = expectation(description: "Highlights")
         let expectedCount = 9
@@ -125,14 +128,14 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testSingleHistoryHighlightExists_RemovingOpenTab() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
                          ("amazon", "")]
-        createHistoryEntry(siteEntry: testSites)
+        entryProvider.createHistoryEntry(siteEntry: testSites)
 
-        let tabs = createTabs(named: "mozilla")
+        let tabs = entryProvider.createTabs(named: "mozilla")
 
         let expectation = expectation(description: "Highlights")
         let expectedCount = 2
@@ -152,14 +155,14 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testSingleHistoryHighlight_withGroupingEnabled() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
                          ("amazon", ""),
                          ("mozilla", "/group"),
                          ("amazon", "/group")]
-        createHistoryEntry(siteEntry: testSites)
+        entryProvider.createHistoryEntry(siteEntry: testSites)
         // 2 groups and 1 invidual item
         let expectedCount = 3
 
@@ -183,13 +186,13 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testSingleHistoryHighlightOrder_withMoreSingleItemEach() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
                          ("apple", ""),
                          ("mozilla", "/group")]
-        createHistoryEntry(siteEntry: testSites)
+        entryProvider.createHistoryEntry(siteEntry: testSites)
         let expectedCount = 3
 
         let expectation = expectation(description: "Highlights")
@@ -212,7 +215,7 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testSingleHistoryHighlightOrder_withTwoItemEach() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
@@ -220,7 +223,7 @@ class HistoryHighlightsTests: XCTestCase {
                          ("mozilla", "/group"),
                          ("apple", "/group"),
                          ("google", "/group")]
-        createHistoryEntry(siteEntry: testSites)
+        entryProvider.createHistoryEntry(siteEntry: testSites)
         let expectedCount = 4
 
         let expectation = expectation(description: "Highlights")
@@ -244,12 +247,12 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testSingleHistoryHighlightOrder_OnlySingleItems() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("wikipedia", ""),
                          ("apple", "")]
-        createHistoryEntry(siteEntry: testSites)
+        entryProvider.createHistoryEntry(siteEntry: testSites)
         let expectedCount = 3
 
         let expectation = expectation(description: "Highlights")
@@ -272,7 +275,7 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     func testSingleHistoryHighlightOrder_OnlyGroupItems() {
-        emptyDB()
+        entryProvider.emptyDB()
 
         let testSites = [("mozilla", ""),
                          ("mozilla", "/group"),
@@ -280,7 +283,7 @@ class HistoryHighlightsTests: XCTestCase {
                          ("wikipedia", "/group"),
                          ("apple", ""),
                          ("apple", "/group")]
-        createHistoryEntry(siteEntry: testSites)
+        entryProvider.createHistoryEntry(siteEntry: testSites)
         let expectedCount = 3
 
         let expectation = expectation(description: "Highlights")
@@ -300,76 +303,5 @@ class HistoryHighlightsTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 5, handler: nil)
-    }
-
-    // MARK: - Helper functions
-
-    private func emptyDB() {
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: 0).value.isSuccess)
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess)
-        XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess)
-    }
-
-    private func createHistoryEntry(siteEntry: [(String, String)]) {
-        for (siteText, suffix) in siteEntry {
-            let site = createWebsiteEntry(named: siteText, with: suffix)
-            add(site: site)
-            setupData(forTestURL: site.url, withTitle: site.title, andViewTime: 1)
-        }
-    }
-
-    private func createWebsiteEntry(named name: String, with sufix: String = "") -> Site {
-        let urlString = "https://www.\(name).com/\(sufix)"
-        let urlTitle = "\(name) test"
-
-        return Site(url: urlString, title: urlTitle)
-    }
-
-    private func createTabs(named name: String) -> Tab {
-        guard let url = URL(string: "https://www.\(name).com/") else {
-            return tabManager.addTab()
-        }
-
-        let urlRequest = URLRequest(url: url)
-        return tabManager.addTab(urlRequest)
-    }
-
-    private func add(site: Site) {
-        let visit = SiteVisit(site: site, date: Date.nowMicroseconds())
-        XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
-    }
-
-    private func setupData(forTestURL siteURL: String, withTitle title: String, andViewTime viewTime: Int32) {
-        let metadataKey1 = HistoryMetadataKey(url: siteURL, searchTerm: title, referrerUrl: nil)
-
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: nil,
-                documentType: nil,
-                title: title
-            )
-        ).value.isSuccess)
-
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: viewTime,
-                documentType: nil,
-                title: nil
-            )
-        ).value.isSuccess)
-
-        XCTAssertTrue(profile.places.noteHistoryMetadataObservation(
-            key: metadataKey1,
-            observation: HistoryMetadataObservation(
-                url: metadataKey1.url,
-                viewTime: nil,
-                documentType: .regular,
-                title: nil
-            )
-        ).value.isSuccess)
     }
 }
