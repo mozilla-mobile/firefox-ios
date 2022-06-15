@@ -233,6 +233,9 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         tableView.reloadData()
         delegate?.toggleInactiveTabSection(hasExpanded: hasExpanded)
 
+        // Post accessibility notification when the section was opened/closed
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
+
         if hasExpanded { delegate?.presentCFR() }
     }
 
