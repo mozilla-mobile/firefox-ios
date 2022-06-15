@@ -260,8 +260,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        tabDisplayManager.refreshStore(evenIfHidden: false, shouldAnimate: true)
-
         emptyPrivateTabsView.isHidden = tabDisplayManager.isPrivate && privateTabsAreEmpty() ? false : true
     }
 

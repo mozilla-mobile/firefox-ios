@@ -310,7 +310,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return filteredTabs.firstIndex(of: tab)
     }
 
-    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
+    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool,
+                           shouldSelectMostRecentTab: Bool = false) {
         guard isPrivate != isOn else { return }
 
         isPrivate = isOn
@@ -319,15 +320,24 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
-//        if !isPrivate, let mostRecentNormalTab = mostRecentTab(inTabs: tabManager.normalTabs) {
-//            self.tabManager.selectTab(mostRecentNormalTab)
-//        } else if createTabOnEmptyPrivateMode {
-//            // if private tabs is empty and we are transitioning to it add a tab
-//            if tabManager.privateTabs.isEmpty && isPrivate {
-//                let privateTabToSelect = tabManager.addTab(isPrivate: true)
-//                self.tabManager.selectTab(privateTabToSelect)
-//            }
-//        }
+        if createTabOnEmptyPrivateMode {
+            // if private tabs is empty and we are transitioning to it add a tab
+            if tabManager.privateTabs.isEmpty && isPrivate {
+                let privateTabToSelect = tabManager.addTab(isPrivate: true)
+                self.tabManager.selectTab(privateTabToSelect)
+            }
+        }
+
+        if shouldSelectMostRecentTab {
+            getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+                let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
+                if let tab = tab {
+                    self.tabManager.selectTab(tab)
+                }
+            }
+        }
+
+        refreshStore(evenIfHidden: false, shouldAnimate: true)
 
         let notificationObject = [Tab.privateModeKey: isPrivate]
         NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
