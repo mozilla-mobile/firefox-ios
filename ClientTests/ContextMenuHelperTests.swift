@@ -9,14 +9,21 @@ import XCTest
 
 class ContextMenuHelperTests: XCTestCase {
 
+    var profile: Profile!
+
     override func setUp() {
         super.setUp()
+        profile = MockProfile()
 
         Glean.shared.resetGlean(clearStores: true)
     }
 
+    override func tearDown() {
+        super.tearDown()
+        profile = nil
+    }
+
     func testHistoryHighlightsTelemetry() {
-        let profile = MockProfile()
         let viewModel = FirefoxHomeViewModel(profile: profile,
                                              isPrivate: false)
         let helper = FirefoxHomeContextMenuHelper(viewModel: viewModel)

@@ -123,9 +123,7 @@ class FxHomeHistoryHightlightsViewModel {
         }
     }
 
-    // MARK: - Private Methods
-
-    private func loadItems(completion: @escaping () -> Void) {
+    func loadItems(completion: @escaping () -> Void) {
         HistoryHighlightsManager.getHighlightsData(with: profile,
                                                    and: tabManager.tabs,
                                                    shouldGroupHighlights: true) { [weak self] highlights in
@@ -134,6 +132,7 @@ class FxHomeHistoryHightlightsViewModel {
         }
     }
 
+    // MARK: - Private Methods
     private func extractDeletableURLs(from item: HighlightItem) -> [String] {
         var urls = [String]()
         if item.type == .item, let url = item.siteUrl?.absoluteString {

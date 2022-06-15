@@ -8,6 +8,7 @@ import XCTest
 
 class HomeHistoryHighlightsViewModelTests: XCTestCase {
 
+    private var sut: FxHomeHistoryHightlightsViewModel!
     private var profile: MockProfile!
     private var tabManager: TabManager!
     private var entryProvider: HistoryHighlightsTestEntryProvider!
@@ -19,6 +20,9 @@ class HomeHistoryHighlightsViewModelTests: XCTestCase {
         profile._reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
         entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
+        sut = FxHomeHistoryHightlightsViewModel(with: profile,
+                                                isPrivate: false,
+                                                tabManager: tabManager)
     }
 
     override func tearDown() {
@@ -28,64 +32,57 @@ class HomeHistoryHighlightsViewModelTests: XCTestCase {
         profile = nil
         tabManager = nil
         entryProvider = nil
+        sut = nil
     }
 
     func testViewModelCreation_WithNoEntries() {
         entryProvider.emptyDB()
-        let viewModel = FxHomeHistoryHightlightsViewModel(with: profile,
-                                                          isPrivate: false,
-                                                          tabManager: tabManager)
-        delayTest {
-            XCTAssertNil(viewModel.historyItems)
+        let expectation = expectation(description: "Wait for items to be loaded")
+        sut.loadItems {
+            XCTAssertNil(self.sut.historyItems)
+            expectation.fulfill()
         }
+
+        waitForExpectations(timeout: 1.0)
     }
 
     func testViewModelCreation_WithOneEntry() {
         entryProvider.emptyDB()
         let testSites = [("mozilla", "")]
         entryProvider.createHistoryEntry(siteEntry: testSites)
+        let expectation = expectation(description: "Wait for items to be loaded")
 
-        let viewModel = FxHomeHistoryHightlightsViewModel(with: profile,
-                                                          isPrivate: false,
-                                                          tabManager: tabManager)
-        delayTest {
-            XCTAssertEqual(viewModel.historyItems?.count, 1)
+        sut.loadItems {
+            XCTAssertEqual(self.sut.historyItems?.count, 1)
+            expectation.fulfill()
         }
+
+        waitForExpectations(timeout: 5.0)
     }
 
     func testGetItems_isNil() {
         entryProvider.emptyDB()
-        let viewModel = FxHomeHistoryHightlightsViewModel(with: profile,
-                                                          isPrivate: false,
-                                                          tabManager: tabManager)
+        let expectation = expectation(description: "Wait for items to be loaded")
 
-        delayTest {
-            XCTAssertNil(viewModel.getItemDetailsAt(index: 0))
+        sut.loadItems {
+            XCTAssertNil(self.sut.getItemDetailsAt(index: 0))
+            expectation.fulfill()
         }
+        waitForExpectations(timeout: 5.0)
     }
 
     func testGetItems_isMozilla() {
         entryProvider.emptyDB()
         let testSites = [("mozilla", "")]
         entryProvider.createHistoryEntry(siteEntry: testSites)
-        let viewModel = FxHomeHistoryHightlightsViewModel(with: profile,
-                                                          isPrivate: false,
-                                                          tabManager: tabManager)
-
         let expectedString = "mozilla test"
+        let expectation = expectation(description: "Wait for items to be loaded")
 
-        delayTest {
-            XCTAssertEqual(viewModel.getItemDetailsAt(index: 0)?.displayTitle, expectedString)
+        sut.loadItems {
+            XCTAssertEqual(self.sut.getItemDetailsAt(index: 0)?.displayTitle, expectedString)
+            expectation.fulfill()
         }
-    }
 
-    private func delayTest(for seconds: TimeInterval = 1.0, then completion: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        let exp = expectation(description: "Test after \(seconds) seconds")
-        let result = XCTWaiter.wait(for: [exp], timeout: 1.0)
-        if result == XCTWaiter.Result.timedOut {
-            completion()
-        } else {
-            XCTFail("Delay interrupted", file: file, line: line)
-        }
+        waitForExpectations(timeout: 5.0)
     }
 }
