@@ -260,7 +260,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        emptyPrivateTabsView.isHidden = tabDisplayManager.isPrivate && privateTabsAreEmpty() ? false : true
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
     }
 
     fileprivate func privateTabsAreEmpty() -> Bool {
