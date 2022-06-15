@@ -76,6 +76,7 @@ public struct AccessibilityIdentifiers {
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
         static let syncedTabs = "Synced Tabs"
         static let inactiveTabHeader = "InactiveTabs.header"
+        static let inactiveTabDeleteButton = "InactiveTabs.deleteButton"
     }
 
     struct LibraryPanels {

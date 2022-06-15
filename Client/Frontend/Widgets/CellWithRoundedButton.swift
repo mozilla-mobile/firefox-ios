@@ -26,7 +26,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body)
-        button.setImage(UIImage(named: "trash-icon"), for: .normal)
+        button.setImage(UIImage(named: ImageIdentifiers.trashIconMonocrome), for: .normal)
         button.tintColor = .black
         button.backgroundColor = .Photon.LightGrey30
         button.setTitleColor(.black, for: .normal)
@@ -36,7 +36,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
         button.layer.cornerRadius = 13.5
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
-        button.accessibilityIdentifier = "roundedButton"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabDeleteButton
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -57,8 +57,9 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
         self.selectionStyle = .default
 
         contentView.addSubview(roundedButton)
-        roundedButton.contentEdgeInsets = UIEdgeInsets(top: 13.5, left: 43, bottom: 13.5, right: 43)
-        roundedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
+
+        roundedButton.setInsets(forContentPadding: UIEdgeInsets(top: 13.5, left: 13.5, bottom: 13.5, right: 13.5),
+                                imageTitlePadding: 11)
 
         let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
         let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
