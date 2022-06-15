@@ -52,7 +52,6 @@ class DownloadHelper: NSObject {
     fileprivate let request: URLRequest
     fileprivate let preflightResponse: URLResponse
     fileprivate let cookieStore: WKHTTPCookieStore
-    fileprivate let browserViewController: BrowserViewController
 
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
@@ -60,7 +59,7 @@ class DownloadHelper: NSObject {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
 
-    required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
+    required init?(request: URLRequest?, response: URLResponse, cookieStore: WKHTTPCookieStore, canShowInWebView: Bool, forceDownload: Bool) {
         guard let request = request else {
             return nil
         }
@@ -81,16 +80,15 @@ class DownloadHelper: NSObject {
         self.cookieStore = cookieStore
         self.request = request
         self.preflightResponse = response
-        self.browserViewController = browserViewController
     }
 
-    func open() {
+    func downloadViewModel(okAction: @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
         guard let host = request.url?.host else {
-            return
+            return nil
         }
 
         guard let download = HTTPDownload(cookieStore: cookieStore, preflightResponse: preflightResponse, request: request) else {
-            return
+            return nil
         }
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
@@ -112,7 +110,7 @@ class DownloadHelper: NSObject {
         }
 
         let downloadFileItem = SingleActionViewModel(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
-            self.browserViewController.downloadQueue.enqueue(download)
+            okAction(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
 
@@ -122,7 +120,7 @@ class DownloadHelper: NSObject {
                                                    title: download.filename,
                                                    modalStyle: .overCurrentContext)
 
-        browserViewController.presentSheetWith(viewModel: viewModel, on: browserViewController, from: browserViewController.urlBar)
+        return viewModel
     }
 }
 
