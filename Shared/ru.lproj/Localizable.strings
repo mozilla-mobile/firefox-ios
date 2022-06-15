@@ -455,7 +455,7 @@
 "FirefoxHome.Pocket.Minutes.v99" = "%d мин";
 
 /* This is the title of the Pocket section on Firefox Homepage. */
-"FirefoxHome.Pocket.SectionTitle" = "Истории, наводящие на размышления";
+"FirefoxHome.Pocket.SectionTitle" = "Истории, заставляющие задуматься";
 
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Удалить";
