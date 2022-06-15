@@ -268,9 +268,19 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 return
             }
 
-            let selectedTab = tabManager.selectedTab
+            var selectedTab = tabManager.selectedTab
             // Make sure selected tab has latest time
             selectedTab?.lastExecutedTime = Date.now()
+
+            // Special Case: When toggling from Private to Regular
+            // mode none of the regular tabs are selected,
+            // this is because toggling from one mode to another a user still
+            // has to tap on a tab to select in order to fully switch modes
+
+            if let firstTab = allTabs.first, firstTab.isPrivate != selectedTab?.isPrivate {
+                selectedTab = mostRecentTab(inTabs: tabManager.normalTabs)
+            }
+
             // update model
             inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
 
@@ -300,29 +310,34 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return filteredTabs.firstIndex(of: tab)
     }
 
-    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
+    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool,
+                           shouldSelectMostRecentTab: Bool = false) {
         guard isPrivate != isOn else { return }
 
         isPrivate = isOn
+
         UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
-        refreshStore()
-
         if createTabOnEmptyPrivateMode {
             // if private tabs is empty and we are transitioning to it add a tab
             if tabManager.privateTabs.isEmpty && isPrivate {
-                tabManager.addTab(isPrivate: true)
+                let privateTabToSelect = tabManager.addTab(isPrivate: true)
+                self.tabManager.selectTab(privateTabToSelect)
             }
         }
 
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
-            if let tab = tab {
-                self.tabManager.selectTab(tab)
+        if shouldSelectMostRecentTab {
+            getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+                let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
+                if let tab = tab {
+                    self.tabManager.selectTab(tab)
+                }
             }
         }
+
+        refreshStore(evenIfHidden: false, shouldAnimate: true)
 
         let notificationObject = [Tab.privateModeKey: isPrivate]
         NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
@@ -351,15 +366,26 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return nil
     }
 
-    func refreshStore(evenIfHidden: Bool = false) {
+    func refreshStore(evenIfHidden: Bool = false, shouldAnimate: Bool = false) {
         operations.removeAll()
         dataStore.removeAll()
 
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState {
+            tabGroup, tabsToDisplay in
+
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
             }
-            self.collectionView.reloadData()
+
+            if shouldAnimate {
+                UIView.transition(with: self.collectionView, duration: 0.27,
+                                  options: .transitionCrossDissolve, animations: {
+                    self.collectionView.reloadData()
+                })
+            } else {
+                self.collectionView.reloadData()
+            }
+
             if evenIfHidden {
                 // reloadData() will reset the data for the collection view,
                 // but if called when offscreen it will not render properly,
@@ -372,6 +398,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 }
                 self.collectionView.reloadItems(at: indexPaths)
             }
+
             self.tabDisplayer?.focusSelectedTab()
         }
     }
