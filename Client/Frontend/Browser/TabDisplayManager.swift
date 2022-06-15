@@ -238,7 +238,10 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
-    private func getTabsAndUpdateInactiveState(completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
+    private func getTabsAndUpdateInactiveState(showPrivateTabsToDisplay: Bool = false,
+                                               completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
+        let shouldShowPrivateTab = showPrivateTabsToDisplay ? showPrivateTabsToDisplay : self.isPrivate
+
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
 
         // We should not make a single tab inactive as that would be the selected tab
@@ -268,9 +271,19 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 return
             }
 
-            let selectedTab = tabManager.selectedTab
+            var selectedTab = tabManager.selectedTab
             // Make sure selected tab has latest time
             selectedTab?.lastExecutedTime = Date.now()
+
+            // Special Case: When toggling from Private to Regular
+            // mode none of the regular tabs are selected,
+            // this is because toggling from one mode to another a user still
+            // has to tap on a tab to select in order to fully switch modes
+
+            if let firstTab = allTabs.first, firstTab.isPrivate != selectedTab?.isPrivate {
+                selectedTab = mostRecentTab(inTabs: tabManager.normalTabs)
+            }
+
             // update model
             inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
 
@@ -309,15 +322,15 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
-        if !isPrivate, let mostRecentNormalTab = mostRecentTab(inTabs: tabManager.normalTabs) {
-            self.tabManager.selectTab(mostRecentNormalTab)
-        } else if createTabOnEmptyPrivateMode {
-            // if private tabs is empty and we are transitioning to it add a tab
-            if tabManager.privateTabs.isEmpty && isPrivate {
-                let privateTabToSelect = tabManager.addTab(isPrivate: true)
-                self.tabManager.selectTab(privateTabToSelect)
-            }
-        }
+//        if !isPrivate, let mostRecentNormalTab = mostRecentTab(inTabs: tabManager.normalTabs) {
+//            self.tabManager.selectTab(mostRecentNormalTab)
+//        } else if createTabOnEmptyPrivateMode {
+//            // if private tabs is empty and we are transitioning to it add a tab
+//            if tabManager.privateTabs.isEmpty && isPrivate {
+//                let privateTabToSelect = tabManager.addTab(isPrivate: true)
+//                self.tabManager.selectTab(privateTabToSelect)
+//            }
+//        }
 
         let notificationObject = [Tab.privateModeKey: isPrivate]
         NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
@@ -346,11 +359,13 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return nil
     }
 
-    func refreshStore(evenIfHidden: Bool = false) {
+    func refreshStore(evenIfHidden: Bool = false, showPrivateTabsToDisplay: Bool = false) {
         operations.removeAll()
         dataStore.removeAll()
 
-        getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+        getTabsAndUpdateInactiveState(showPrivateTabsToDisplay: showPrivateTabsToDisplay) {
+            tabGroup, tabsToDisplay in
+
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
             }
