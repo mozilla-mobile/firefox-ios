@@ -256,67 +256,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
 
     @objc func didTogglePrivateMode() {
-        let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-
-        let newOffset = CGPoint(x: 0.0, y: collectionView.contentOffset.y)
-        if self.otherBrowsingModeOffset.y > 0 {
-            collectionView.setContentOffset(self.otherBrowsingModeOffset, animated: false)
-        }
-        self.otherBrowsingModeOffset = newOffset
-        let fromView: UIView
-        if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotView(afterScreenUpdates: false) {
-            snapshot.frame = collectionView.frame
-            view.insertSubview(snapshot, aboveSubview: collectionView)
-            fromView = snapshot
-        } else {
-            fromView = emptyPrivateTabsView
-        }
-
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        tabDisplayManager.refreshStore()
-
-        // If we are exiting private mode and we have the close private tabs option selected, make sure
-        // we clear out all of the private tabs
-        let exitingPrivateMode = !tabDisplayManager.isPrivate && tabManager.shouldClearPrivateTabs()
-
-        collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()
-
-        let toView: UIView
-        if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotView(afterScreenUpdates: !exitingPrivateMode) {
-            emptyPrivateTabsView.isHidden = true
-            // when exiting private mode don't screenshot the collectionview (causes the UI to hang)
-            newSnapshot.frame = collectionView.frame
-            view.insertSubview(newSnapshot, aboveSubview: fromView)
-            collectionView.alpha = 0
-            toView = newSnapshot
-        } else {
-            emptyPrivateTabsView.isHidden = false
-            toView = emptyPrivateTabsView
-        }
-        toView.alpha = 0
-        toView.transform = scaleDownTransform
-
-        UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: { () -> Void in
-            fromView.transform = scaleDownTransform
-            fromView.alpha = 0
-            toView.transform = .identity
-            toView.alpha = 1
-        }) { finished in
-            if fromView != self.emptyPrivateTabsView {
-                fromView.removeFromSuperview()
-            }
-            if toView != self.emptyPrivateTabsView {
-                toView.removeFromSuperview()
-            }
-            self.collectionView.alpha = 1
-
-            // A final reload to ensure no animations happen while completing the transition.
-            self.tabDisplayManager.refreshStore()
-        }
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
     }
 
     fileprivate func privateTabsAreEmpty() -> Bool {
