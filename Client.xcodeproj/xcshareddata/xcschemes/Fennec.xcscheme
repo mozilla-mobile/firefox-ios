@@ -333,6 +333,12 @@
                <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">
                </Test>
+               <Test
+                  Identifier = "UIPasteboardExtensionsTests/testAddPNGImage()">
+               </Test>
+               <Test
+                  Identifier = "VersionSettingTests/testCopyAppVersion()">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference
