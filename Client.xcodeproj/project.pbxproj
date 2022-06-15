@@ -7044,6 +7044,7 @@
 				6AAC79B5285969A2003F9AE4 /* DownloadHelperTests.swift */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
+				6AAC79B5285969A2003F9AE4 /* DownloadHelperTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";

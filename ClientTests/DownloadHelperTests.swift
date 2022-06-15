@@ -61,44 +61,14 @@ class DownloadHelperTests: XCTestCase {
         XCTAssertNotNil(sut)
     }
 
-    func test_downloadViewModel_whenRequestURLIsWrong_deliversEmptyResult() {
-        let request = anyRequest(urlString: "wrong-url.com")
-        let sut = DownloadHelper(request: request, response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
-
-        let downloadViewModel = sut?.downloadViewModel(okAction: { _ in })
-
-        XCTAssertNil(downloadViewModel)
-    }
-
-    func test_downloadViewModel_deliversCorrectTitle() {
-        let response = anyResponse(urlString: "http://some-domain.com/some-image.jpg")
-        let sut = DownloadHelper(request: anyRequest(), response: response, cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
-
-        let downloadViewModel = sut?.downloadViewModel(okAction: { _ in })
-
-        XCTAssertEqual(downloadViewModel!.title!, "some-image.jpg")
-    }
-
-    func test_downloadViewModel_deliversCorrectCancelButtonTitle() {
-        let sut = DownloadHelper(request: anyRequest(), response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
-
-        let downloadViewModel = sut?.downloadViewModel(okAction: { _ in })
-
-        XCTAssertEqual(downloadViewModel!.closeButtonTitle, .CancelString)
-    }
-
     // MARK: - Helpers
 
-    private func anyRequest(urlString: String = "http://any-url.com") -> URLRequest {
-        return URLRequest(url: URL(string: urlString)!, cachePolicy: anyCachePolicy(), timeoutInterval: 60.0)
+    private func anyRequest() -> URLRequest {
+        return URLRequest(url: URL(string: "http://any-url.com")!, cachePolicy: anyCachePolicy(), timeoutInterval: 60.0)
     }
 
     private func anyResponse(mimeType: String?) -> URLResponse {
-        return URLResponse(url: URL(string: "http://some-domain.com/some-image.jpg")!, mimeType: mimeType, expectedContentLength: 10, textEncodingName: nil)
-    }
-
-    private func anyResponse(urlString: String) -> URLResponse {
-        return URLResponse(url: URL(string: urlString)!, mimeType: nil, expectedContentLength: 10, textEncodingName: nil)
+        return URLResponse(url: URL(string: "http://any-url.com")!, mimeType: mimeType, expectedContentLength: 10, textEncodingName: nil)
     }
 
     private func cookieStore() -> WKHTTPCookieStore {
