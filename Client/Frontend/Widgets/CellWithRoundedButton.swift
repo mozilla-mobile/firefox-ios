@@ -6,8 +6,7 @@ import Foundation
 
 struct CellWithRoundedButtonUX {
     static let ImageSize: CGFloat = 29
-    static let ImageCornerRadius: CGFloat = 6
-    static let HorizontalMargin: CGFloat = 16
+    static let BorderViewMargin: CGFloat = 16
 }
 
 class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCell {
@@ -26,13 +25,14 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
 
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body)
         button.setImage(UIImage(named: "trash-icon"), for: .normal)
         button.tintColor = .black
         button.backgroundColor = .Photon.LightGrey30
         button.setTitleColor(.black, for: .normal)
         button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
         button.titleLabel?.textAlignment = .center
+        button.titleLabel?.lineBreakMode = .byTruncatingTail
         button.layer.cornerRadius = 13.5
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
@@ -57,17 +57,18 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
         self.selectionStyle = .default
 
         contentView.addSubview(roundedButton)
+        roundedButton.contentEdgeInsets = UIEdgeInsets(top: 13.5, left: 43, bottom: 13.5, right: 43)
         roundedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
 
         let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
         let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
 
         NSLayoutConstraint.activate([
-            roundedButton.heightAnchor.constraint(equalToConstant: 50),
             roundedButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            roundedButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             roundedButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: trailingOffSet),
             roundedButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -leadingOffSet),
+            roundedButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            roundedButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
         ])
 
         selectedBackgroundView = selectedView
@@ -82,7 +83,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
     override func prepareForReuse() {
         super.prepareForReuse()
         self.selectionStyle = .default
-        separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+        separatorInset = UIEdgeInsets(top: 0, left: CellWithRoundedButtonUX.ImageSize + 2 * CellWithRoundedButtonUX.BorderViewMargin, bottom: 0, right: 0)
         applyTheme()
     }
 
