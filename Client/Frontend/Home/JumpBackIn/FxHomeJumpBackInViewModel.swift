@@ -314,8 +314,7 @@ extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
 
-        let identifier = sectionType.cellIdentifier
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: sectionType.cellIdentifier, for: indexPath)
         guard let jumpBackInCell = cell as? FxHomeHorizontalCell else { return UICollectionViewCell() }
 
         if indexPath.row == (jumpBackInList.itemsToDisplay - 1),
@@ -324,7 +323,7 @@ extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
         } else if let item = jumpBackInList.tabs[safe: indexPath.row] {
             configureCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
         } else {
-            // Fix in the meantime we implement FXIOS-4310 && FXIOS-4095 for the reloading of the homepage.
+            // TODO: Fix in the meantime we implement FXIOS-4310 && FXIOS-4095 for the reloading of the homepage.
             // We're in a state we shouldn't be in (an indexPath that gets configured when there's no tabs for it)
             // so for now we invalidate to avoid a crash. This happens only in a particular edge case,
             // but this code needs to be removed asap with proper homepage section reload.
