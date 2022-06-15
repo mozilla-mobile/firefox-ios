@@ -79,6 +79,14 @@ class DownloadHelperTests: XCTestCase {
         XCTAssertEqual(downloadViewModel!.title!, "some-image.jpg")
     }
 
+    func test_downloadViewModel_deliversCorrectCancelButtonTitle() {
+        let sut = DownloadHelper(request: anyRequest(), response: anyResponse(mimeType: nil), cookieStore: cookieStore(), canShowInWebView: true, forceDownload: false)
+
+        let downloadViewModel = sut?.downloadViewModel(okAction: { _ in })
+
+        XCTAssertEqual(downloadViewModel!.closeButtonTitle, .CancelString)
+    }
+
     // MARK: - Helpers
 
     private func anyRequest(urlString: String = "http://any-url.com") -> URLRequest {
