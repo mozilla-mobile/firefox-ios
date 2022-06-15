@@ -19,13 +19,19 @@ class OnboardingCardViewController: UIViewController {
         static let buttonCornerRadius: CGFloat = 13
         static let stackViewPadding: CGFloat = 20
         static let scrollViewVerticalPadding: CGFloat = 62
+
+        // small device
+        static let smallStackViewSpacing: CGFloat = 8
+        static let smallStackViewSpacingButtons: CGFloat = 16
+        static let smallScrollViewVerticalPadding: CGFloat = 20
     }
 
     var viewModel: OnboardingCardProtocol
     weak var delegate: OnboardingCardDelegate?
 
-    var nextClosure: ((IntroViewModel.OnboardingCards) -> Void)?
-    var primaryActionClosure: ((IntroViewModel.OnboardingCards) -> Void)?
+    var shouldUseSmallDeviceLayout: Bool {
+        return view.frame.height < 600
+    }
 
     private lazy var scrollView: UIScrollView = .build { view in
         view.backgroundColor = .clear
@@ -164,16 +170,20 @@ class OnboardingCardViewController: UIViewController {
         scrollView.addSubviews(containerView)
         view.addSubview(scrollView)
 
+        // Adapt layout for smaller screens
+        let scrollViewVerticalPadding = shouldUseSmallDeviceLayout ? UX.smallScrollViewVerticalPadding :  UX.scrollViewVerticalPadding
+        let stackViewSpacingButtons = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacingButtons :  UX.stackViewSpacingButtons
+
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: scrollViewVerticalPadding),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -scrollViewVerticalPadding),
 
             scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.scrollViewVerticalPadding),
+            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor, constant: scrollViewVerticalPadding),
             scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.scrollViewVerticalPadding),
+            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -scrollViewVerticalPadding),
             scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor).priority(.defaultLow),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
@@ -185,7 +195,7 @@ class OnboardingCardViewController: UIViewController {
             // Content view wrapper around text
             contentContainerView.topAnchor.constraint(equalTo: containerView.topAnchor),
             contentContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewPadding),
-            contentContainerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -UX.stackViewSpacingButtons),
+            contentContainerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -stackViewSpacingButtons),
             contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
 
             contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: UX.stackViewPadding),
@@ -201,6 +211,9 @@ class OnboardingCardViewController: UIViewController {
             primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight)
         ])
+
+        contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
+        buttonStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
     }
 
     private func updateLayout() {
