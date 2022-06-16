@@ -1,5 +1,5 @@
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox আপনার ক্যামেরা ব্যবহার করবে QR কোড স্ক্যান করার জন্য এবং ছবি তোলা এবং ভিডিও করার জন্য।";
+"NSCameraUsageDescription" = "Firefox আপনার ক্যামেরা ব্যবহার করবে QR কোড স্ক্যান করার জন্য এবং ছবি তোলা ও ভিডিও করার জন্য।";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "আপনার সংরক্ষিত লগইনগুলি অ্যাক্সেস করতে Firefox এর ফেস আইডির প্রয়োজন।";
