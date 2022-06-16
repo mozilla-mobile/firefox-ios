@@ -203,9 +203,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
             guard let self = self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
-            else {
-                return nil
-            }
+            else { return nil }
 
             return viewModel.section(for: layoutEnvironment.traitCollection)
         }
