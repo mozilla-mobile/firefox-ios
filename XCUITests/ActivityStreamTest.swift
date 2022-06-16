@@ -167,7 +167,6 @@ class ActivityStreamTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts.element(boundBy: 0), timeout: 10)
-        print(app.debugDescription)
 
         navigator.nowAt(TabTray)
         waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
@@ -202,7 +201,6 @@ class ActivityStreamTest: BaseTestCase {
 
         waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
         var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
-        print(app.debugDescription)
         if iPad() {
             navigator.goto(TabTray)
             numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
