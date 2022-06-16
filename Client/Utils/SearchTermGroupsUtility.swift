@@ -58,7 +58,7 @@ class SearchTermGroupsUtility {
         using ordering: ComparisonResult,
         completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void
     ) {
-        guard (items is [Tab] || items is [Site] || items is [HistoryHighlight]) else { return completion(nil, [T]()) }
+        guard items is [Tab] || items is [Site] || items is [HistoryHighlight] else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.global(qos: .userInteractive)) { result in

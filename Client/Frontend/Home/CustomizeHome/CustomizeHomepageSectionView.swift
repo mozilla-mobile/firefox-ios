@@ -5,15 +5,15 @@
 import Foundation
 
 class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
-    
+
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
-    
+
     private struct UX {
         static let buttonHeight: CGFloat = 36
         static let buttonMaxFontSize: CGFloat = 49
         static let buttonTrailingSpace: CGFloat = 12
     }
-    
+
     // MARK: - UI Elements
     private let goToSettingsButton: ActionButton = .build { button in
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
@@ -22,34 +22,34 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
         button.layer.cornerRadius = 5
         button.accessibilityIdentifier = a11y.customizeHome
     }
-    
+
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         applyTheme()
-        
+
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         notificationCenter.removeObserver(self)
     }
-    
+
     // MARK: - UI Setup
-    
+
     func setupView() {
         contentView.backgroundColor = .clear
         contentView.addSubview(goToSettingsButton)
-        
+
         NSLayoutConstraint.activate([
             goToSettingsButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -58,7 +58,7 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
             goToSettingsButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -UX.buttonTrailingSpace)
         ])
     }
-    
+
     func configure(onTapAction: ((UIButton) -> Void)?) {
         goToSettingsButton.touchUpAction = onTapAction
     }

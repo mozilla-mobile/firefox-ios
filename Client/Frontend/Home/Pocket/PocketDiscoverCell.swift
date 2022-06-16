@@ -7,7 +7,7 @@ import Foundation
 // MARK: - FxHomePocketDiscoverMoreCell
 /// A cell to be placed at the last position in the Pocket section
 class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
-    
+
     // MARK: - UI Elements
     let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -16,42 +16,42 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
         label.numberOfLines = 0
         label.textAlignment = .left
     }
-    
+
     // MARK: - Variables
     var notificationCenter = NotificationCenter.default
-    
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        
+
         applyTheme()
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
         setupLayout()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         itemTitle.text = nil
     }
-    
+
     deinit {
         notificationCenter.removeObserver(self)
     }
-    
+
     // MARK: - Helpers
-    
+
     private func setupLayout() {
         contentView.layer.cornerRadius = PocketStandardCell.UX.generalCornerRadius
         contentView.layer.shadowRadius = PocketStandardCell.UX.stackViewShadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: PocketStandardCell.UX.stackViewShadowOffset)
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
-        
+
         contentView.addSubviews(itemTitle)
         NSLayoutConstraint.activate([
             itemTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -69,7 +69,7 @@ extension PocketDiscoverCell: NotificationThemeable {
         } else {
             itemTitle.textColor = UIColor.Photon.DarkGrey90
         }
-        
+
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
     }
 }
