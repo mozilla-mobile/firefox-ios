@@ -221,19 +221,18 @@ class DynamicFontHelper: NSObject {
         let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
         let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
 
-        var size = fontDescriptor.pointSize
-        if let maxSize = maxSize {
-            size = min(fontDescriptor.pointSize, maxSize)
-        }
-
         var font: UIFont
         if let weight = weight {
-            font = UIFont.systemFont(ofSize: size, weight: weight)
+            font = UIFont.systemFont(ofSize: fontDescriptor.pointSize, weight: weight)
         } else {
-            font = UIFont.systemFont(ofSize: size)
+            font = UIFont.systemFont(ofSize: fontDescriptor.pointSize)
         }
 
-        return fontMetrics.scaledFont(for: font)
+        guard let maxSize = maxSize else {
+            return fontMetrics.scaledFont(for: font)
+        }
+
+        return fontMetrics.scaledFont(for: font, maximumPointSize: min(fontDescriptor.pointSize, maxSize))
     }
 
     /// Return a bold font that will dynamically scale up to a certain size
