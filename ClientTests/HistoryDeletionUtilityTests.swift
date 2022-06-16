@@ -147,9 +147,9 @@ private extension HistoryDeletionUtilityTests {
         XCTAssertTrue(profile.history.removeHistoryFromDate(Date(timeIntervalSince1970: 0)).value.isSuccess, file: file, line: line)
     }
 
-    func assertDBIsEmpty() {
-        assertMetadataIsEmpty()
-        assertHistoryIsEmpty()
+    func assertDBIsEmpty(file: StaticString = #filePath, line: UInt = #line) {
+        assertMetadataIsEmpty(file: file, line: line)
+        assertHistoryIsEmpty(file: file, line: line)
     }
 
     func assertMetadataIsEmpty(file: StaticString = #filePath, line: UInt = #line) {

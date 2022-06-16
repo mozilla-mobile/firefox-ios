@@ -116,7 +116,7 @@ class SiteImageHelperTests: XCTestCase {
                 expectation.fulfill()
             })
         })
-        waitForExpectations(timeout: 1.0, handler: nil)
+        waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     // MARK: Favicon image
@@ -158,7 +158,7 @@ class SiteImageHelperTests: XCTestCase {
                 expectation.fulfill()
             })
         })
-        waitForExpectations(timeout: 1.0, handler: nil)
+        waitForExpectations(timeout: 5.0, handler: nil)
     }
 }
 

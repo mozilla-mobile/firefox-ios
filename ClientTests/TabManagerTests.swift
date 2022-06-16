@@ -632,6 +632,6 @@ private extension TabManagerTests {
             completion()
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
     }
 }
