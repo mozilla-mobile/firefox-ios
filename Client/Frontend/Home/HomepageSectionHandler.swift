@@ -6,38 +6,38 @@ import Foundation
 
 // Protocol for each section in Firefox Home page view controller
 // to handle click and cell setup
-protocol FxHomeSectionHandler {
-
+protocol HomepageSectionHandler {
+    
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell
-
+    
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell
-
+    
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?)
-
+    
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath)
 }
 
-extension FxHomeSectionHandler {
-
+extension HomepageSectionHandler {
+    
     // Default configure use the FirefoxHomeSectionType cellIdentifier, when there's only one cell type in that section
     func configure(_ collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let viewModel = self as? FXHomeViewModelProtocol else { return UICollectionViewCell() }
-
+        guard let viewModel = self as? HomepageViewModelProtocol else { return UICollectionViewCell() }
+        
         let identifier = viewModel.sectionType.cellIdentifier
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
         return configure(cell, at: indexPath)
     }
-
+    
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
         // Action on cell is sometimes handled with a button, or gesture recognizers with closures
     }
-
+    
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         // Not all sections have long press
     }

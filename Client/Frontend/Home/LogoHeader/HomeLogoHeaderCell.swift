@@ -11,9 +11,9 @@ fileprivate struct LogoViewUX {
     static let imageWidth: CGFloat = 214.74
 }
 
-class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
+class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
-
+    
     // MARK: - UI Elements
     lazy var logoButton: ActionButton = .build { button in
         button.setTitle("", for: .normal)
@@ -21,11 +21,11 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         button.accessibilityIdentifier = a11y.logoButton
         button.accessibilityLabel = .Settings.Homepage.Wallpaper.AccessibilityLabels.FxHomepageWallpaperButton
     }
-
+    
     // MARK: - Variables
     var notificationCenter: NotificationCenter = NotificationCenter.default
     private var userDefaults: UserDefaults = UserDefaults.standard
-
+    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,20 +34,20 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         setupNotifications(forObserver: self,
                            observing: [.DisplayThemeChanged])
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     deinit {
         notificationCenter.removeObserver(self)
     }
-
+    
     // MARK: - UI Setup
     func setupView() {
         contentView.backgroundColor = .clear
         contentView.addSubview(logoButton)
-
+        
         NSLayoutConstraint.activate([
             logoButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
             logoButton.widthAnchor.constraint(equalToConstant: LogoViewUX.imageWidth),
@@ -56,14 +56,14 @@ class FxHomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
             logoButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
-
+    
     func configure(onTapAction: ((UIButton) -> Void)?) {
         logoButton.touchUpAction = onTapAction
     }
 }
 
 // MARK: - Theme
-extension FxHomeLogoHeaderCell: NotificationThemeable {
+extension HomeLogoHeaderCell: NotificationThemeable {
     func applyTheme() {
         let resourceName = "fxHomeHeaderLogo"
         let resourceNameDark = "fxHomeHeaderLogo_dark"
@@ -73,7 +73,7 @@ extension FxHomeLogoHeaderCell: NotificationThemeable {
 }
 
 // MARK: - Notifiable
-extension FxHomeLogoHeaderCell: Notifiable {
+extension HomeLogoHeaderCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:

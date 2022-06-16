@@ -8,7 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 
-class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageManagable {
+class HomepageViewController: UIViewController, HomePanel, GleanPlumbMessageManagable {
 
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -25,15 +25,15 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     var notificationCenter: NotificationCenter = NotificationCenter.default
 
     private var isZeroSearch: Bool
-    private var viewModel: FirefoxHomeViewModel
-    private var contextMenuHelper: FirefoxHomeContextMenuHelper
+    private var viewModel: HomepageViewModel
+    private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
     private var wallpaperManager: WallpaperManager
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var contextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
 
-    private var homeTabBanner: HomeTabBanner?
+    private var homeTabBanner: HomepageTabBanner?
 
     // Content stack views contains the home tab banner and collection view.
     // Home tab banner cannot be added to collection view since it's pinned at the top of the view.
@@ -56,14 +56,14 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         self.tabManager = tabManager
         self.wallpaperManager = wallpaperManager
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
-        self.viewModel = FirefoxHomeViewModel(profile: profile,
-                                              isZeroSearch: isZeroSearch,
-                                              isPrivate: isPrivate)
+        self.viewModel = HomepageViewModel(profile: profile,
+                                           isZeroSearch: isZeroSearch,
+                                           isPrivate: isPrivate)
 
         let contextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                           with: viewModel.profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
-        self.contextMenuHelper = FirefoxHomeContextMenuHelper(viewModel: viewModel)
+        self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
 
         contextMenuHelper.delegate = self
@@ -157,12 +157,12 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         collectionView = UICollectionView(frame: view.bounds,
                                           collectionViewLayout: createLayout())
 
-        FirefoxHomeSectionType.cellTypes.forEach {
+        HomepageSectionType.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
         }
-        collectionView.register(ASHeaderView.self,
+        collectionView.register(LabelButtonHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: ASHeaderView.cellIdentifier)
+                                withReuseIdentifier: LabelButtonHeaderView.cellIdentifier)
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
@@ -204,7 +204,6 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
             else { return nil }
-
             return viewModel.section(for: layoutEnvironment.traitCollection)
         }
         return layout
@@ -221,7 +220,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
         let point = longPressGestureRecognizer.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: point),
-              let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? FxHomeSectionHandler
+              let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler
         else { return }
 
         viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
@@ -281,7 +280,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Find visible pocket cells that holds pocket stories
-        let cells = self.collectionView.visibleCells.filter { $0.reuseIdentifier == FxPocketHomeHorizontalCell.cellIdentifier }
+        let cells = self.collectionView.visibleCells.filter { $0.reuseIdentifier == PocketStandardCell.cellIdentifier }
 
         // Relative frame is the collectionView frame plus the status bar height
         let relativeRect = CGRect(
@@ -299,7 +298,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
     }
 
     // MARK: - Contextual hint
-    private func prepareJumpBackInContextualHint(onView headerView: ASHeaderView) {
+    private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard contextualHintViewController.shouldPresentHint(),
               !shouldDisplayHomeTabBanner
         else { return }
@@ -339,7 +338,7 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
         createHomeTabBannerCard()
 
         guard let homeTabBanner = homeTabBanner,
-                !contentStackView.subviews.contains(homeTabBanner) else { return }
+              !contentStackView.subviews.contains(homeTabBanner) else { return }
 
         contentStackView.addArrangedViewToTop(homeTabBanner)
 
@@ -365,14 +364,14 @@ class FirefoxHomeViewController: UIViewController, HomePanel, GleanPlumbMessageM
 
 // MARK: -  CollectionView Data Source
 
-extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension HomepageViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
               let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: ASHeaderView.cellIdentifier,
-                for: indexPath) as? ASHeaderView,
+                withReuseIdentifier: LabelButtonHeaderView.cellIdentifier,
+                for: indexPath) as? LabelButtonHeaderView,
               let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
         else { return UICollectionReusableView() }
 
@@ -383,7 +382,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
         }
 
         // Configure header only if section is shown
-        let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : ASHeaderViewModel.emptyHeader
+        let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
         headerView.configure(viewModel: headerViewModel)
         return headerView
     }
@@ -397,7 +396,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? FxHomeSectionHandler else {
+        guard let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler else {
             return UICollectionViewCell()
         }
 
@@ -405,14 +404,14 @@ extension FirefoxHomeViewController: UICollectionViewDelegate, UICollectionViewD
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? FxHomeSectionHandler else { return }
+        guard let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler else { return }
         viewModel.didSelectItem(at: indexPath, homePanelDelegate: homePanelDelegate, libraryPanelDelegate: libraryPanelDelegate)
     }
 }
 
 // MARK: - Data Management
 
-extension FirefoxHomeViewController {
+extension HomepageViewController {
 
     /// Reload all data including refreshing cells content and fetching data from backend
     func reloadAll() {
@@ -425,7 +424,7 @@ extension FirefoxHomeViewController {
 
 // MARK: - Actions Handling
 
-private extension FirefoxHomeViewController {
+private extension HomepageViewController {
 
     // Setup all the tap and long press actions on cells in each sections
     private func setupSectionsAction() {
@@ -492,7 +491,7 @@ private extension FirefoxHomeViewController {
 
         viewModel.pocketViewModel.onScroll = { [weak self] in
             guard let window = UIWindow.keyWindow, let self = self else { return }
-            let cells = self.collectionView.visibleCells.filter { $0.reuseIdentifier == FxPocketHomeHorizontalCell.cellIdentifier }
+            let cells = self.collectionView.visibleCells.filter { $0.reuseIdentifier == PocketStandardCell.cellIdentifier }
             self.updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: window.bounds)
         }
 
@@ -600,7 +599,7 @@ private extension FirefoxHomeViewController {
 }
 
 // MARK: FirefoxHomeContextMenuHelperDelegate
-extension FirefoxHomeViewController: FirefoxHomeContextMenuHelperDelegate {
+extension HomepageViewController: HomepageContextMenuHelperDelegate {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool) {
         homePanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
@@ -612,7 +611,7 @@ extension FirefoxHomeViewController: FirefoxHomeContextMenuHelperDelegate {
 
 // MARK: - Popover Presentation Delegate
 
-extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
+extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 
     // Dismiss the popover if the device is being rotated.
     // This is used by the Share UIActivityViewController action sheet on iPad
@@ -632,9 +631,9 @@ extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
 }
 
 // MARK: FirefoxHomeViewModelDelegate
-extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
+extension HomepageViewController: HomepageViewModelDelegate {
 
-    func reloadSection(section: FXHomeViewModelProtocol) {
+    func reloadSection(section: HomepageViewModelProtocol) {
         ensureMainThread { [weak self] in
             guard let self = self else { return }
             self.viewModel.updateEnabledSections()
@@ -644,7 +643,7 @@ extension FirefoxHomeViewController: FirefoxHomeViewModelDelegate {
 }
 
 // MARK: - Notifiable
-extension FirefoxHomeViewController: Notifiable {
+extension HomepageViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             guard let self = self else { return }

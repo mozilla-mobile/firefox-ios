@@ -7,7 +7,7 @@ import XCTest
 import WebKit
 
 class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
-    var subject: FirefoxHomeJumpBackInViewModel!
+    var subject: JumpBackInViewModel!
 
     var mockBrowserProfile: MockBrowserProfile!
     var mockTabManager: MockTabManager!
@@ -30,7 +30,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         )
         mockBrowserBarViewDelegate = MockBrowserBarViewDelegate()
 
-        subject = FirefoxHomeJumpBackInViewModel(
+        subject = JumpBackInViewModel(
             isZeroSearch: false,
             profile: mockBrowserProfile,
             isPrivate: false,

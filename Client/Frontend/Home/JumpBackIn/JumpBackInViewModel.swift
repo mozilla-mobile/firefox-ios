@@ -23,7 +23,7 @@ struct JumpBackInList {
     }
 }
 
-class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
+class JumpBackInViewModel: FeatureFlaggable {
 
     struct UX {
         static let verticalCellSpacing: CGFloat = 8
@@ -67,7 +67,7 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     // The dimension of a cell
     static var widthDimension: NSCollectionLayoutDimension {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            return .absolute(FxHomeHorizontalCell.UX.cellWidth) // iPad
+            return .absolute(HomeHorizontalCell.UX.cellWidth) // iPad
         } else if UIWindow.isLandscape {
             return .fractionalWidth(UX.iPhoneLandscapeCellWidth) // iPhone in landscape
         } else {
@@ -219,20 +219,20 @@ class FirefoxHomeJumpBackInViewModel: FeatureFlaggable {
     }
 }
 
-// MARK: FXHomeViewModelProtocol
-extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
+// MARK: HomeViewModelProtocol
+extension JumpBackInViewModel: HomepageViewModelProtocol {
 
-    var sectionType: FirefoxHomeSectionType {
+    var sectionType: HomepageSectionType {
         return .jumpBackIn
     }
 
-    var headerViewModel: ASHeaderViewModel {
-        return ASHeaderViewModel(title: FirefoxHomeSectionType.jumpBackIn.title,
-                                 titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
-                                 isButtonHidden: false,
-                                 buttonTitle: .RecentlySavedShowAllText,
-                                 buttonAction: headerButtonAction,
-                                 buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
+    var headerViewModel: LabelButtonHeaderViewModel {
+        return LabelButtonHeaderViewModel(title: HomepageSectionType.jumpBackIn.title,
+                                          titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+                                          isButtonHidden: false,
+                                          buttonTitle: .RecentlySavedShowAllText,
+                                          buttonAction: headerButtonAction,
+                                          buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn)
     }
 
     var isEnabled: Bool {
@@ -249,22 +249,22 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(FxHomeHorizontalCell.UX.cellHeight)
+            heightDimension: .estimated(HomeHorizontalCell.UX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: FirefoxHomeJumpBackInViewModel.widthDimension,
-            heightDimension: .estimated(FxHomeHorizontalCell.UX.cellHeight)
+            widthDimension: JumpBackInViewModel.widthDimension,
+            heightDimension: .estimated(HomeHorizontalCell.UX.cellHeight)
         )
 
         let itemsNumber = numberOfItemsInSection(for: traitCollection)
-        let count = min(FirefoxHomeJumpBackInViewModel.maxNumberOfItemsInColumn, itemsNumber)
+        let count = min(JumpBackInViewModel.maxNumberOfItemsInColumn, itemsNumber)
         let subItems = Array(repeating: item, count: count)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = FxHomeHorizontalCell.UX.interItemSpacing
+        group.interItemSpacing = HomeHorizontalCell.UX.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0,
-                                                      bottom: 0, trailing: FxHomeHorizontalCell.UX.interGroupSpacing)
+                                                      bottom: 0, trailing: HomeHorizontalCell.UX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -274,9 +274,9 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
                                                                  alignment: .top)
         section.boundarySupplementaryItems = [header]
 
-        let leadingInset = FirefoxHomeViewModel.UX.leadingInset(traitCollection: traitCollection)
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: leadingInset,
-                                                        bottom: FirefoxHomeViewModel.UX.spacingBetweenSections, trailing: 0)
+                                                        bottom: HomepageViewModel.UX.spacingBetweenSections, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         return section
     }
@@ -309,13 +309,13 @@ extension FirefoxHomeJumpBackInViewModel: FXHomeViewModelProtocol {
 }
 
 // MARK: FxHomeSectionHandler
-extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
+extension JumpBackInViewModel: HomepageSectionHandler {
 
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: sectionType.cellIdentifier, for: indexPath)
-        guard let jumpBackInCell = cell as? FxHomeHorizontalCell else { return UICollectionViewCell() }
+        guard let jumpBackInCell = cell as? HomeHorizontalCell else { return UICollectionViewCell() }
 
         if indexPath.row == (jumpBackInList.itemsToDisplay - 1),
            let group = jumpBackInList.group {
@@ -352,7 +352,7 @@ extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
         }
     }
 
-    private func configureCellForGroups(group: ASGroup<Tab>, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
+    private func configureCellForGroups(group: ASGroup<Tab>, cell: HomeHorizontalCell, indexPath: IndexPath) {
         let firstGroupItem = group.groupedItems.first
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
 
@@ -371,7 +371,7 @@ extension FirefoxHomeJumpBackInViewModel: FxHomeSectionHandler {
         }
     }
 
-    private func configureCellForTab(item: Tab, cell: FxHomeHorizontalCell, indexPath: IndexPath) {
+    private func configureCellForTab(item: Tab, cell: HomeHorizontalCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
         let descriptionText = site.tileURL.shortDisplayString.capitalized
