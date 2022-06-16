@@ -168,7 +168,7 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testDisableTopSitesSettingsRemovesSection() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)

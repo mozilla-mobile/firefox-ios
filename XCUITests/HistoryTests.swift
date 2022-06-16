@@ -81,13 +81,15 @@ class HistoryTests: BaseTestCase {
 
     // Smoketest
     func testClearPrivateDataButtonDisabled() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        sleep(5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         //Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
+        waitForExistence(app.tables.cells["ClearPrivateData"], timeout: 10)
         app.alerts.buttons["OK"].tap()
         
         //Wait for OK pop-up to disappear after confirming
@@ -300,7 +302,7 @@ class HistoryTests: BaseTestCase {
         // Workaround as the item does not appear if there is only that tab open
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)

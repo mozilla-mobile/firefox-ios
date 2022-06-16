@@ -50,7 +50,8 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testDefaultSites() {
-        waitForExistence(TopSiteCellgroup, timeout: 15)
+        sleep(15)
+        waitForExistence(TopSiteCellgroup, timeout: 60)
         XCTAssertTrue(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].exists)
 
         // There should be 5 top sites by default
@@ -82,7 +83,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
-        waitForExistence(app.cells.staticTexts["Mozilla"])
+        waitForExistence(app.cells.staticTexts["Mozilla"], timeout: 15)
         XCTAssertTrue(app.cells.staticTexts["Mozilla"].exists)
         // A new site has been added to the top sites
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
@@ -152,7 +153,8 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        sleep(3)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on apple top site, second cell
@@ -182,7 +184,8 @@ class ActivityStreamTest: BaseTestCase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+        sleep(3)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)

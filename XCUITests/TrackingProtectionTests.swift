@@ -43,7 +43,12 @@ class TrackingProtectionTests: BaseTestCase {
         // Make sure TP is also there in PBM
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
-        navigator.goto(SettingsScreen)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.settings], timeout: 5)
+        app.tables.otherElements[ImageIdentifiers.settings].tap()
+        navigator.nowAt(SettingsScreen)
+        waitForExistence(app.tables.cells["NewTab"], timeout: 5)
+        app.tables.cells["NewTab"].swipeUp()
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
         // Turn on ETP
