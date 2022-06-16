@@ -12,7 +12,8 @@ class FxHomePocketViewModel {
     struct UX {
         static let numberOfItemsInColumn = 3
         static let discoverMoreMaxFontSize: CGFloat = 55 // Title 3 xxxLarge
-        static let numberOfItemsInSection = 11
+        static let numberOfPocketStories = 11
+        static let numberOfPocketStoriesWithSponsoredContent = 9
         static let fractionalWidthiPhonePortrait: CGFloat = 0.93
         static let fractionalWidthiPhoneLanscape: CGFloat = 0.46
         static let numberOfSponsoredItemsInSection = 2
@@ -104,8 +105,6 @@ class FxHomePocketViewModel {
     }
 
     // MARK: - Private
-    // MARK: - TODO: Use settings toggle to determine if we show sponsored stories
-    var showSponsors = true
 
     private func insert(sponsored: inout [PocketStory], into globalFeed: inout [PocketStory], indexes: [Int]) {
         for index in indexes {
@@ -117,28 +116,31 @@ class FxHomePocketViewModel {
             }
         }
     }
+    
+    private var showSponsoredStories: Bool { self.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly) == true }
 
     private func updatePocketSites() async {
         do {
-            let global = try await pocketAPI.globalFeed(items: UX.numberOfItemsInSection)
-
+            let storyCount = showSponsoredStories ? UX.numberOfPocketStoriesWithSponsoredContent : UX.numberOfPocketStories
+            let global = try await pocketAPI.globalFeed(items: storyCount)
             // Convert global feed to PocketStory
             var globalTemp = global.map(PocketStory.init)
-            let sponsored = try await pocketSponsoredAPI.fetchSponsoredStories()
-
-            if self.featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .userOnly)  == true {
+            
+            if showSponsoredStories {
+                let sponsored = try await pocketSponsoredAPI.fetchSponsoredStories()
                 // Convert sponsored feed to PocketStory, take the desired number of sponsored stories
                 var sponsoredTemp = Array(sponsored.map(PocketStory.init).prefix(UX.numberOfSponsoredItemsInSection))
-                self.insert(
+                insert(
                     sponsored: &sponsoredTemp,
                     into: &globalTemp,
                     indexes: [UX.indexOfFirstSponsoredItem, UX.indexOfSecondSponsoredItem]
                 )
             }
-
+            
+            pocketStoriesViewModels = []
             // Add the story in the view models list
             for story in globalTemp {
-                self.bind(pocketStoryViewModel: .init(story: story))
+                bind(pocketStoryViewModel: .init(story: story))
             }
         } catch { }
     }
