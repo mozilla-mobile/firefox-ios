@@ -19,7 +19,7 @@ app_cycle:
     description: |
       Records when the app comes to foreground
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
@@ -30,7 +30,7 @@ app_cycle:
     description: |
       Records when the app goes to background
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
@@ -48,7 +48,7 @@ accessibility:
         description: |
           If is running or not (true / false)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10179
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
@@ -64,7 +64,7 @@ accessibility:
         description: |
           If is running or not (true / false)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10179
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
@@ -80,7 +80,7 @@ accessibility:
         description: |
           If is enabled or not (true / false)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10179
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
@@ -96,7 +96,7 @@ accessibility:
         description: |
           If is enabled or not (true / false)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10179
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
@@ -112,7 +112,7 @@ accessibility:
         description: |
           If is enabled or not (true / false)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3874
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10179
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
@@ -388,7 +388,7 @@ default_browser_card:
     description: |
       Reports events of Home Tab Banner evergreen impressions.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3560
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9696
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10600
     notification_emails:
@@ -447,7 +447,7 @@ downloads:
     description: |
       Records when the download now button is pressed
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
@@ -458,7 +458,7 @@ downloads:
     description: |
       Records when a row is pressed in the downloads panel
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
@@ -469,7 +469,7 @@ downloads:
     description: |
       Records when the toast message is tapped after a download is completed
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
@@ -488,7 +488,7 @@ key_commands:
           Records the action:
           "close-tab/close-all-tabs/enter-tab/new-tab/select-tab/previous-tab/etc"
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4232
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
@@ -506,7 +506,7 @@ onboarding:
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
@@ -522,7 +522,7 @@ onboarding:
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
@@ -538,7 +538,7 @@ onboarding:
         description: |
           Presented onboarding card (welcome / wallpapers / sign to sync)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
@@ -559,7 +559,7 @@ onboarding:
         description: |
           The name of the wallpaper set.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
@@ -575,7 +575,7 @@ onboarding:
         description: |
           The card presented when the onboarding was closed
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4217
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
@@ -633,7 +633,7 @@ top_sites:
         description: |
           Type of contextual action
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3834
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10514
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10514
     notification_emails:
@@ -649,7 +649,7 @@ top_sites:
     send_in_pings:
       - topsites-impression
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_sensitivity:
@@ -668,7 +668,7 @@ top_sites:
     send_in_pings:
       - topsites-impression
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_sensitivity:
@@ -689,7 +689,7 @@ top_sites:
     send_in_pings:
       - topsites-impression
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_sensitivity:
@@ -710,7 +710,7 @@ top_sites:
     send_in_pings:
       - topsites-impression
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_sensitivity:
@@ -737,7 +737,7 @@ top_sites:
       - topsites-impression
       - events
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_sensitivity:
@@ -763,7 +763,7 @@ top_sites:
       - topsites-impression
       - events
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-4120
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10696
     data_sensitivity:
@@ -810,7 +810,7 @@ firefox_home_page:
       Counts the number of times a user taps the Show All
       button of the Recently Saved Section
     bugs:
-      - https://jira.mozilla.com/browse/FXIOS-1807
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8656
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8656
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -840,7 +840,7 @@ firefox_home_page:
       Counts the number of times a bookmarked item in
       the Recently Saved section is tapped
     bugs:
-      - https://jira.mozilla.com/browse/FXIOS-1807
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8656
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8656
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -876,7 +876,7 @@ firefox_home_page:
           The number of bookmarked items in the
           Recently Saved section.
     bugs:
-      - https://jira.mozilla.com/browse/FXIOS-1807
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8656
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8656
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -896,7 +896,7 @@ firefox_home_page:
           The number of reading list items in the
           Recently Saved section.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1808
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8753
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8753
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -909,7 +909,7 @@ firefox_home_page:
       Counts the number of times a reading list
       item in the Recently Saved section is tapped.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1808
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8753
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8753
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -926,7 +926,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -939,7 +939,7 @@ firefox_home_page:
       Counts the number of times a user taps the
       Show All button in the Jump Back In section.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8905
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -956,7 +956,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -969,7 +969,7 @@ firefox_home_page:
       Counts the number of times a user sees the
       Jump Back In section on the homepage
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8905
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -982,7 +982,7 @@ firefox_home_page:
       Counts the number of times a user taps to open an
       existing tab from the Jump Back In section
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1806
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8905
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -999,7 +999,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1012,7 +1012,7 @@ firefox_home_page:
       Counts the number of times a user taps to open an
       existing group from the Jump Back In section
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2907
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8905
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8905
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1029,7 +1029,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1042,7 +1042,7 @@ firefox_home_page:
       Counts the number of times a user taps to open the
       settings menu to customize the Firefox Homepage
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3151
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9272
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9272
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1054,7 +1054,7 @@ firefox_home_page:
     description: |
       The number of times a user sees the Firefox Homepage
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3250
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9405
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9405
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1070,7 +1070,7 @@ firefox_home_page:
       - zero-search
       - origin-other
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9308
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9494
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1083,7 +1083,7 @@ firefox_home_page:
       Counts the number of times a user taps the
       Show All button in the History section
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9563
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1096,7 +1096,7 @@ firefox_home_page:
       Counts the number of times a user sees the
       History Highlights section on the homepage
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9563
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1109,7 +1109,7 @@ firefox_home_page:
       Counts the number of times a user taps to open an
       existing tab from the History Highlights section
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3470
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9563
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1123,7 +1123,7 @@ firefox_home_page:
       Records the event where a user taps on a group item
       within the History Highlights (Recently Visited) section.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2912
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10516
     notification_emails:
@@ -1140,7 +1140,7 @@ firefox_home_page:
         description: |
           Type of contextual action
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3147
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11003
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11003
     notification_emails:
@@ -1180,7 +1180,7 @@ history:
       this item will navigate them to a view containing a list
       of all Site items that appear in that group.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2931
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10212
     notification_emails:
@@ -1196,7 +1196,7 @@ history:
       - group-item
       - non-grouped-item
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2931
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10212
     notification_emails:
@@ -1237,7 +1237,6 @@ legacy.ids:
       - metrics
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
-      - https://jira.mozilla.com/browse/FXIOS-1415
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
       - https://github.com/mozilla-mobile/firefox-ios/pull/8522#issuecomment-846313960
@@ -1474,7 +1473,7 @@ preferences:
       The setting a user chooses as their Home page. By default,
       it is initially set to Firefox Home.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1739
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8887
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8887
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -1527,7 +1526,7 @@ preferences:
         description: |
           If the button is tapped or not (true / false)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
@@ -1716,9 +1715,9 @@ search:
       Counts the number of times the google top site button
       is pressed
     bugs:
-      - https://jira.mozilla.com/browse/FXIOS-1223
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7965
     data_reviews:
-      - https://jira.mozilla.com/browse/FXIOS-1223
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7965
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -1987,7 +1986,7 @@ tabs:
       Record the number of times a user pulls down
       on a page to reload.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3166
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9118
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9136
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -2010,7 +2009,7 @@ tabs:
     description: |
       Recorded when a user opens the tab tray with grouped tab
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2906
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9134
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9134
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -2043,7 +2042,7 @@ tabs:
     description: |
       Recorded when a user closes the tab in a group
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2906
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9134
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9134
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -2056,7 +2055,7 @@ tabs:
       This counts the number of times a user has tapped the search
       icon for grouped tabs in the tab tray.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3141
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9267
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9267
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
@@ -2116,7 +2115,7 @@ tabs:
     description: |
       Records when tab view button is pressed
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
@@ -2127,7 +2126,7 @@ tabs:
     description: |
       Records when a top tab is pressed
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
@@ -2300,9 +2299,9 @@ wallpaper_analytics:
         description: |
           The value the switch was set to.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
       - https://github.com/mozilla-mobile/firefox-ios/pull/9930
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -2323,9 +2322,9 @@ wallpaper_analytics:
         description: |
           The type of wallpaper set.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
       - https://github.com/mozilla-mobile/firefox-ios/pull/9930
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -2346,9 +2345,9 @@ wallpaper_analytics:
         description: |
           The name of the wallpaper set.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3487
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9930
       - https://github.com/mozilla-mobile/firefox-ios/pull/9930
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -2368,9 +2367,9 @@ cfr_analytics:
         description: |
           The type of CFR being interacted with.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -2386,9 +2385,9 @@ cfr_analytics:
         description: |
           The type of CFR being interacted with.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -2404,9 +2403,9 @@ cfr_analytics:
         description: |
           The type of CFR being interacted with.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3610
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10064
       - https://github.com/mozilla-mobile/firefox-ios/pull/10064
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -2425,7 +2424,7 @@ inactive_tabs_tray:
         description: |
           We either send "collapsed" or "expanded"
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-1738
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9993
       - https://github.com/mozilla-mobile/firefox-ios/pull/8799
@@ -2438,7 +2437,7 @@ inactive_tabs_tray:
     description: |
       Recorded when a user taps on an inactive tab
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3065
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     notification_emails:
@@ -2449,7 +2448,7 @@ inactive_tabs_tray:
     description: |
       Recorded when a user taps on close all inactive tabs button
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3065
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     notification_emails:
@@ -2460,7 +2459,7 @@ inactive_tabs_tray:
     description: |
       Recorded when a user swipes to close an inactive tab
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3065
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     notification_emails:
@@ -2471,7 +2470,7 @@ inactive_tabs_tray:
     description: |
       Recorded when a user is shown inactive tab view
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3065
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9993
     notification_emails:
@@ -2556,7 +2555,7 @@ awesomebar:
         description: |
           The location of awesomebar (top or bottom)
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3906
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10537
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10537
     notification_emails:
@@ -2567,7 +2566,7 @@ awesomebar:
     description: |
       Records when dragging the location bar
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-2911
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
@@ -2585,7 +2584,7 @@ awesomebar:
           bookmark-item, search-suggestion
         type: string
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-3751
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9996
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10867
     notification_emails:
